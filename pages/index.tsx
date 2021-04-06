@@ -12,7 +12,7 @@ function index({}: Props): ReactElement {
     <>
     {!session && <>
       Not signed in <br/>
-      <button onClick={() => signIn()}>Sign in</button>
+      <button className={'primaryButton'} onClick={() => signIn()}>Sign in</button>
     </>}
     {session && <>
       Signed in as {session.user.email} <br/>
