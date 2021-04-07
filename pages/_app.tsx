@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
+import "./../styles/forms.scss";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { appWithTranslation } from 'next-i18next'
 

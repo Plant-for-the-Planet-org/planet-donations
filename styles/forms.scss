@@ -1,0 +1,16 @@
+@import './theme';
+
+.formField{
+    position: relative;
+    max-width: 320px;
+    margin-bottom: 20px;
+    .formErrors{
+        position: absolute;
+        bottom: -20px;
+        left: 0px;
+        font-family: $primaryFontFamily;
+        font-size: 12px;
+        color: $dangerColor;
+        margin-left: 6px;
+    }
+}
