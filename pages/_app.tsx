@@ -6,6 +6,8 @@ import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 // if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 //   const config = getConfig();
 //   const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
@@ -54,6 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider>
+      <CssBaseline />
       <style jsx global>
         {theme}
       </style>

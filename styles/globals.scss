@@ -127,4 +127,18 @@ button {
   cursor: pointer;
 }
 
+.MuiFormControlLabel-root {
+  margin: 0;
+}
 
+.MuiInput-underline:after {
+  border-bottom: 2px solid $primaryColor !important;
+}
+
+:focus {
+  outline: none !important;
+}
+
+a {
+  text-decoration: none;
+}
