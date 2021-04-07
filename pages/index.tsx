@@ -1,11 +1,14 @@
 import React, { ReactElement } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import MaterialTextField from "./../src/Common/InputTypes/MaterialTextField";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
 interface Props {}
 
 function index({}: Props): ReactElement {
   const [session, loading] = useSession();
-
+  const { t } = useTranslation('common')
   return (
     <div> 
       {!session && (
@@ -22,9 +25,16 @@ function index({}: Props): ReactElement {
           <button onClick={() => signOut()}>Sign out</button>
         </>
       )}
+      <p>{t('description')}</p>
       <MaterialTextField label={"New input"} variant="outlined" name="name" />
     </div>
   );
 }
 
 export default index;
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...await serverSideTranslations(locale, ['common']),
+  }
+})

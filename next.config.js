@@ -5,6 +5,7 @@ const withSourceMaps = require('@zeit/next-source-maps')();
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+const { i18n } = require('./next-i18next.config')
 
 // Use the SentryWebpack plugin to upload the source maps during build step
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
@@ -130,4 +131,5 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
   assetPrefix: hasAssetPrefix ? `${scheme}://${process.env.ASSET_PREFIX}` : '',
   // Asset Prefix allows to use CDN for the generated js files
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
+  i18n
 });

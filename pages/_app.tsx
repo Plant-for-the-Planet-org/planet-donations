@@ -7,6 +7,7 @@ import { RewriteFrames } from "@sentry/integrations";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { appWithTranslation } from 'next-i18next'
 
 // if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 //   const config = getConfig();
@@ -81,4 +82,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 //   return { ...appProps }
 // }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
