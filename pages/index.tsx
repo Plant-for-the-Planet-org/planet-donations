@@ -11,7 +11,6 @@ function index({}: Props): ReactElement {
   const [session, loading] = useSession();
   const { t } = useTranslation("common");
   const { register, handleSubmit, watch, errors } = useForm({ mode: 'all'});
-  console.log('errors',errors);
   
   return (
     <div>
