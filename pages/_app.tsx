@@ -7,8 +7,9 @@ import { RewriteFrames } from "@sentry/integrations";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
 import "./../styles/forms.scss";
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { appWithTranslation } from 'next-i18next'
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { appWithTranslation } from "next-i18next";
+import QueryParamProvider from "../src/Layout/QueryParamContext";
 
 // if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 //   const config = getConfig();
@@ -58,15 +59,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider>
-      <CssBaseline />
-      <style jsx global>
-        {theme}
-      </style>
-      <div className={`${themeType}`}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </div>
+      <QueryParamProvider>
+        <CssBaseline />
+        <style jsx global>
+          {theme}
+        </style>
+        <div className={`${themeType}`}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </div>
+      </QueryParamProvider>
     </ThemeProvider>
   );
 }

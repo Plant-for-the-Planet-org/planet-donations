@@ -4,7 +4,7 @@ import MaterialTextField from "./../src/Common/InputTypes/MaterialTextField";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useForm } from "react-hook-form";
-
+import Donations from './../src/Donations'
 interface Props {}
 
 function index({}: Props): ReactElement {
@@ -14,7 +14,7 @@ function index({}: Props): ReactElement {
   
   return (
     <div>
-      {!session && (
+      {/* {!session && (
         <>
           Not signed in <br />
           <button className={"primaryButton"} onClick={() => signIn()}>
@@ -27,26 +27,8 @@ function index({}: Props): ReactElement {
           Signed in as {session.user.email} <br />
           <button onClick={() => signOut()}>Sign out</button>
         </>
-      )}
-      <p>{t("description")}</p>
-      <div className="formField">
-        <MaterialTextField
-          label={"New input"}
-          variant="outlined"
-          name="name"
-          inputRef={register({
-            required: {
-              value: true,
-              message: "This is required",
-            },
-          })}
-        />
-        {errors.name && (
-          <span className={"formErrors"}>
-            {t("Name requried")}
-          </span>
-        )}
-      </div>
+      )} */}
+      <Donations/>
     </div>
   );
 }

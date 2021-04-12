@@ -142,3 +142,12 @@ button {
 a {
   text-decoration: none;
 }
+
+.modalContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+}
