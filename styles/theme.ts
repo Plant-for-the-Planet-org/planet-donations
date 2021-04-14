@@ -1,7 +1,7 @@
 import css from 'styled-jsx/css';
 import theme from './themeProperties';
 
-const { light, dark, fontSizes, primaryColor,primaryDarkColor,fontFamily } = theme;
+const { light, dark, fontSizes, primaryColor,primaryDarkColor,fontFamily,darkGrey , grey} = theme;
 
 const globalStyles = css.global`
   :root {
@@ -10,6 +10,8 @@ const globalStyles = css.global`
     --sub-title-size: ${fontSizes.subTitleSize};
     --primary-color: ${primaryColor};
     --primary-dark-color: ${primaryDarkColor};
+    --grey-color: ${grey};
+    --dark-grey-color: ${darkGrey};
   }
   .theme-light {
     --primary-font-color: ${light.primaryFontColor};

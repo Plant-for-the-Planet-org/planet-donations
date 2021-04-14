@@ -28,6 +28,9 @@ const MaterialTextField = withStyles({
     },
     '& .MuiOutlinedInput-input':{
         padding:'14px'
+    },
+    '& .MuiOutlinedInput-multiline':{
+      padding:'0px'
     }
   },
 })(TextField);

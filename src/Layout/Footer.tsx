@@ -1,15 +1,30 @@
-import React, { ReactElement } from 'react'
-import Link from 'next/Link'
-interface Props {
-    
-}
+import React, { ReactElement } from "react";
+import Link from "next/Link";
+import Image from "next/image";
+
+interface Props {}
 
 function Footer({}: Props): ReactElement {
-    return (
-        <div>
-            Footer
-        </div>
-    )
+  return (
+    <div className="footer-container">
+      <button>Cancel and return to the organisation</button>
+      <div className="footer-links">
+        <button>English</button>
+        <Link href="/privacy-terms">Privacy & Terms</Link>
+        <Link href="/imprint">Imprint</Link>
+        <Link href="/contact">Contact</Link>
+        <Link href="/faqs">FAQs</Link>
+        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
+          <Image
+            src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
+            alt="Plant-for-the-Planet logo"
+            width={33}
+            height={34}
+          />
+        </a>
+      </div>
+    </div>
+  );
 }
 
-export default Footer
+export default Footer;

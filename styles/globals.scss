@@ -87,10 +87,11 @@ button {
   font: inherit;
   vertical-align: baseline;
   font-family: $primaryFontFamily;
+  background-color: transparent;
 }
 
 
-.primaryButton, .secondaryButton {
+.primary-button, .secondary-button {
   color:$light;
   font-weight: bold;
   background-color: $primaryColor;
@@ -99,10 +100,9 @@ button {
   padding: 0px;
   text-align: center;
   border: 0px;
-  border-radius: 52px;
+  border-radius: 10px;
   min-width: 200px;
   width: 100%;
-  max-width: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,7 +110,7 @@ button {
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
   text-decoration: none;
 }
-.secondaryButton {
+.secondary-button {
   min-width: 240px;
   background-image: none;
   background-color: $blueishGrey;
@@ -122,7 +122,7 @@ button {
     height: 12px;
   }
 }
-.primaryButton:hover, .secondaryButton:hover{
+.primary-button:hover, .secondary-button:hover{
   transform: translateY(-7px);
   cursor: pointer;
 }
@@ -143,11 +143,30 @@ a {
   text-decoration: none;
 }
 
-.modalContainer {
+.modal-container {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   overflow-y: auto;
   background: rgba(0, 0, 0, 0.6);
+}
+
+button{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.form-field{
+  position: relative;
+  .form-errors{
+      position: absolute;
+      bottom: -20px;
+      left: 0px;
+      font-family: $primaryFontFamily;
+      font-size: 12px;
+      color: $dangerColor;
+      margin-left: 6px;
+  }
 }

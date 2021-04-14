@@ -1,0 +1,181 @@
+@import "./theme";
+
+.donations-container {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@include lgLaptopView {
+  .donations-card-container {
+    width: 840px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 20px;
+    box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
+    height: 560px;
+    background-color: $backgroundColor;
+  }
+  .donations-info-container {
+    width: 420px;
+    flex: 1;
+    background-color: black;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+  .donations-project-name {
+    color: $light !important;
+  }
+  .donations-info {
+    flex-grow: 1;
+  }
+  .donations-transaction-details {
+    font-size: 14px;
+    font-weight: 800;
+    color: $light;
+    > p {
+      margin-top: 8px;
+    }
+  }
+  .donations-forms-container {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    width: 100%;
+    flex: 1;
+    overflow-y: scroll;
+    margin-bottom: 30px;
+  }
+  .donations-form {
+    width: 100%;
+    .login-continue {
+      color: $primaryDarkColor;
+      font-weight: 600;
+      width: 100%;
+      text-align: right;
+      margin-bottom: 20px;
+    }
+  }
+  .donations-gift-container {
+    .donations-gift-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > label {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .tree-selection-options-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .tree-selection-option {
+      width: 100px;
+      height: 54px;
+      border: 1px solid $greyColor;
+      border-radius: 4px;
+      display: flex;
+      padding: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+      &:hover {
+        cursor: pointer;
+        border: 1px solid $primaryColor;
+        > svg {
+          filter: grayscale(0%) opacity(1);
+        }
+        .tree-selection-option-text {
+          color: $primaryFontColor;
+        }
+      }
+      > svg {
+        filter: grayscale(100%) opacity(0.5);
+      }
+      .tree-selection-option-text {
+        text-align: center;
+        line-height: 1;
+        margin-left: 10px;
+        color: $darkGreyColor;
+        > p {
+          font-size: 14px;
+          font-weight: 800;
+        }
+        > span {
+          font-size: 9px;
+        }
+      }
+    }
+  }
+
+  .contacts-isCompany-toggle {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    > label {
+      &:hover {
+        cursor: pointer;
+      }
+      > span {
+        display: block;
+      }
+    }
+  }
+
+  .payment-methods-tabs-container {
+    display: flex;
+    padding-top: 30px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    > .payment-method {
+      box-sizing: border-box;
+      margin-right: 12px;
+      margin-bottom: 12px;
+      border: 1px solid $dividerColor;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 64px;
+      height: 40px;
+      color: $dividerColor;
+      justify-content: center;
+      position: relative;
+      > label {
+        margin-top: 6px;
+        font-size: 10px;
+      }
+      &:hover {
+        cursor: pointer;
+        color: $primaryFontColor;
+        background-color: $blueishGrey;
+        border: 0.5px solid $blueishGrey;
+      }
+      .check-mark {
+        display: none;
+      }
+    }
+    .payment-method-selected {
+      background-color: $blueishGrey;
+      border: 0.5px solid $blueishGrey;
+      color: $primaryFontColor;
+      font-weight: 600;
+
+      > .check-mark {
+        display: block;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+      }
+    }
+  }
+}
