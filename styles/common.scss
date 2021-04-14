@@ -1,0 +1,34 @@
+@import "./theme";
+
+.d-flex {
+  display: flex;
+}
+.row {
+  flex-direction: row;
+}
+
+.flex-1{
+  flex: 1;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-30 {
+  margin-top: 30px;
+}
+.w-100 {
+  width: 100% !important;
+}
+
+.title-text {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: $primaryFontColor;
+}
+
+.display-none {
+  display: none;
+}

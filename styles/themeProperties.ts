@@ -6,6 +6,8 @@ const themeProperties = {
   fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
   primaryColor: '#68B030',
   primaryDarkColor: '#007a49',
+  grey:'#e6e6e6',
+  darkGrey:'#B2B2B2',
   light: {
     primaryFontColor: '#2f3336',
     dividerColor: '#d5d5d5',

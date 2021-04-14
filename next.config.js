@@ -131,5 +131,8 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
   assetPrefix: hasAssetPrefix ? `${scheme}://${process.env.ASSET_PREFIX}` : '',
   // Asset Prefix allows to use CDN for the generated js files
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
-  i18n
+  i18n,
+  images: {
+    domains: ['cdn.plant-for-the-planet.org'],
+  },
 });
