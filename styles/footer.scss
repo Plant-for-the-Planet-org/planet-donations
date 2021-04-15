@@ -28,6 +28,11 @@
             font-weight: bold;
         }
         > button{
+            display: flex;
+            align-items: center;
+            > svg {
+                margin-left: 4px;
+            }
             &:hover{
                 cursor: pointer;
             }

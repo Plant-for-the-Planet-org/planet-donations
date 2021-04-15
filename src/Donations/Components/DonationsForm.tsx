@@ -2,6 +2,9 @@ import React, { ReactElement } from "react";
 import CustomIcon from "../../../public/assets/icons/CustomIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "./GiftForm";
+import { useTranslation } from "next-i18next";
+import getFormatedCurrency from "../../Utils/getFormattedCurrency";
+import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
 
 interface Props {}
 
@@ -12,7 +15,12 @@ function DonationsForm() {
     setdonationStep,
     treeCount,
     settreeCount,
+    currency,
+    paymentSetup,
+    projectDetails,
+    country,
   } = React.useContext(QueryParamContext);
+  const { t, i18n } = useTranslation(["common", "country"]);
 
   return (
     <div className="donations-forms-container">
@@ -28,13 +36,13 @@ function DonationsForm() {
               isGift ? "display-none" : ""
             }`}
           >
-            <div className="tree-selection-options-container mt-20">
+            <div className="tree-selection-options-container">
               {treeSelectionOptions.map((option, key) => {
                 return (
                   <div
                     onClick={() => settreeCount(option.treeCount)}
                     key={key}
-                    className={`tree-selection-option ${
+                    className={`tree-selection-option mt-20 ${
                       option.treeCount === treeCount
                         ? "tree-selection-option-selected"
                         : ""
@@ -50,7 +58,7 @@ function DonationsForm() {
               })}
 
               <div
-                className="tree-selection-option"
+                className="tree-selection-option mt-20"
                 style={{ flexGrow: 1, marginLeft: "30px" }}
               >
                 <CustomIcon />
@@ -60,10 +68,46 @@ function DonationsForm() {
                 </div>
               </div>
             </div>
-            <p>
-              You will receive a tax deduction receipt for Germany in time for
-              tax returns.
+            <p className="currency-selection mt-20 mb-20">
+              <button>
+                {currency}{" "}
+                {getFormatedCurrency(
+                  i18n.language,
+                  "",
+                  Number(paymentSetup.treeCost)
+                )}{" "}
+                <DownArrowIcon />
+              </button>
+              {t("perTree")}
             </p>
+
+            {projectDetails &&
+            projectDetails.taxDeductionCountries &&
+            projectDetails.taxDeductionCountries.length > 0 ? (
+              <div className={"mt-20 d-inline"}>
+                {projectDetails.taxDeductionCountries.includes(country)
+                  ? t("youWillReceiveTaxDeduction")
+                  : t("taxDeductionNotYetAvailable")}
+                <button className={'tax-country-selection'}>
+                  {t(`country:${country.toLowerCase()}`)}
+                  <DownArrowIcon />
+                </button>
+
+                <div>
+                  {projectDetails &&
+                  projectDetails.taxDeductionCountries.includes(country)
+                    ? t("inTimeOfTaxReturns")
+                    : null}
+                </div>
+              </div>
+            ) : (
+              <div className={"isTaxDeductible"}>
+                <div className={"isTaxDeductibleText"}>
+                  {t("taxDeductionNotAvailableForProject")}
+                </div>
+              </div>
+            )}
+
             <button
               onClick={() => setdonationStep(2)}
               className="primary-button w-100 mt-30"

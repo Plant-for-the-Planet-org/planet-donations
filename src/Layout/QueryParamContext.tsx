@@ -4,6 +4,7 @@ import LeafIcon from "../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
+import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
 
 export const QueryParamContext = React.createContext({
@@ -11,30 +12,31 @@ export const QueryParamContext = React.createContext({
   setisGift: (value: boolean) => {},
   giftDetails: {},
   setgiftDetails: (value: {}) => {},
-  treeSelectionOptions: [],
+  treeSelectionOptions: [{
+    treeCount:50,
+    iconFile:Component
+  }],
   contactDetails: {},
   setContactDetails: (value: {}) => {},
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  currency:"",
-  donationStep:0, 
+  currency: "",
+  donationStep: 0,
   setdonationStep: (value: number) => {},
-  projectDetails:{},
-  treeCount:50, 
-  settreeCount: (value: number) => {}
+  projectDetails: {},
+  treeCount: 50,
+  settreeCount: (value: number) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
-  const [paymentSetup, setpaymentSetup] = useState<null | Object>(
-    null
-  );
+  const [paymentSetup, setpaymentSetup] = useState<Object>({});
 
-  const [projectDetails, setprojectDetails] = useState<null | Object>(null)
+  const [projectDetails, setprojectDetails] = useState<Object>({});
 
-  const [donationStep, setdonationStep] = useState(1)
+  const [donationStep, setdonationStep] = useState(1);
 
   // PARAMS that can be received and managed
   // Language => Can be received from the URL, can also be set by the user, can be extracted from browser language
@@ -45,7 +47,7 @@ export default function QueryParamProvider({ children }: any) {
   // Transaction ID => This will be received from the URL params
   // isGift =>
   // Gift Details =>
-  // Currency => 
+  // Currency =>
 
   const treeSelectionOptions = [
     {
@@ -88,7 +90,6 @@ export default function QueryParamProvider({ children }: any) {
   const [country, setcountry] = useState("");
   const [currency, setcurrency] = useState("");
 
-
   React.useEffect(() => {
     if (router.query.project) {
       async function loadPaymentSetup() {
@@ -96,12 +97,16 @@ export default function QueryParamProvider({ children }: any) {
           const paymentSetupData = await getRequest(
             `/app/projects/${router.query.project}/paymentOptions`
           );
-          const project = await getRequest(`/app/projects/${router.query.project}?_scope=extended`);
-          if(project.data){
+          const project:ProjectTypes = await getRequest(
+            `/app/projects/${router.query.project}?_scope=extended`
+          );
+          if (project.data) {
             setprojectDetails(project.data);
           }
           if (paymentSetupData.data) {
             setpaymentSetup(paymentSetupData.data);
+            setcurrency(paymentSetupData.data.currency);
+            setcountry(paymentSetupData.data.effectiveCountry);
           }
         } catch (err) {
           // console.log(err);
@@ -129,7 +134,7 @@ export default function QueryParamProvider({ children }: any) {
         setdonationStep,
         projectDetails,
         treeCount,
-        settreeCount
+        settreeCount,
       }}
     >
       {children}

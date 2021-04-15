@@ -24,5 +24,10 @@
     "companyRequired": "Company Name is required",
     "orgNamePublishedTax": "Company name is visible on our leaderboard and app. Tax-deduction receipts will be issued for the same name.",
     "orgNamePublished": "Company name is visible on our leaderboard and app.",
-    "paymentDetails":"Payment Details"
+    "paymentDetails":"Payment Details",
+    "perTree":"per tree",
+    "youWillReceiveTaxDeduction":"You will receive a tax deduction receipt for ",
+    "taxDeductionNotYetAvailable":"Tax deduction is not yet available for ",
+    "taxDeductionNotAvailableForProject": "Tax deduction is not yet available for this project",
+    "inTimeOfTaxReturns": "in time for tax returns."
 }

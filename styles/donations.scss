@@ -73,6 +73,28 @@
     }
   }
 
+  .currency-selection {
+    display: flex;
+    align-items: center;
+    > button {
+      display: flex;
+      align-items: center;
+    }
+    svg {
+      margin-left: 6px;
+      margin-right: 6px;
+    }
+  }
+
+  .tax-country-selection {
+    display: inline-flex;
+    align-items: center;
+    svg {
+      margin-left: 6px;
+      margin-right: 6px;
+    }
+  }
+
   .tree-selection-options-container {
     display: flex;
     flex-direction: row;
@@ -87,8 +109,9 @@
       padding: 12px;
       justify-content: center;
       align-items: center;
-      margin-bottom: 24px;
-      &.tree-selection-option-selected, &:hover, &:focus {
+      &.tree-selection-option-selected,
+      &:hover,
+      &:focus {
         cursor: pointer;
         border: 1px solid $primaryColor;
         > svg {
@@ -101,7 +124,7 @@
       &:hover {
         transform: scale(1.05);
       }
-      &:active{
+      &:active {
         transform: scale(0.98);
       }
       > svg {

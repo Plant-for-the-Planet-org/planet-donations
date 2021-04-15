@@ -1,6 +1,6 @@
 {
   "pages": {
-    "*": ["common"],
+    "*": ["common","country"],
     "/": ["common","country"]
   }
 }

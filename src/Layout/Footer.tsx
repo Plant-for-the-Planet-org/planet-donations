@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import Link from "next/Link";
 import Image from "next/image";
+import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 
 interface Props {}
 
@@ -9,7 +10,10 @@ function Footer({}: Props): ReactElement {
     <div className="footer-container">
       <button>Cancel and return to the organisation</button>
       <div className="footer-links">
-        <button>English</button>
+        <button>
+          English
+          <DownArrowIcon/>
+        </button>
         <Link href="/privacy-terms">Privacy & Terms</Link>
         <Link href="/imprint">Imprint</Link>
         <Link href="/contact">Contact</Link>
