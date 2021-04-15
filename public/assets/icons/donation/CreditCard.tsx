@@ -4,16 +4,40 @@ function CreditCard() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="25"
-      height="20"
-      viewBox="0 0 20 16"
+      width="33.106"
+      height="19.841"
+      viewBox="0 0 33.106 19.841"
     >
-      <path
-        fill="#4d5153"
-        d="M20 4H4a1.985 1.985 0 00-1.99 2L2 18a1.993 1.993 0 002 2h16a1.993 1.993 0 002-2V6a1.993 1.993 0 00-2-2zm-1 14H5a1 1 0 01-1-1v-5h16v5a1 1 0 01-1 1zm1-10H4V6h16z"
-        data-name="Path 3011"
-        transform="translate(-2 -4)"
-      ></path>
+      <g
+        id="Group_3366"
+        data-name="Group 3366"
+        transform="translate(-8.644 -7.208)"
+      >
+        <path
+          id="Path_9886"
+          data-name="Path 9886"
+          d="M22.553,22.5A10.066,10.066,0,0,1,6,14.951,10.066,10.066,0,0,1,22.553,7.4a10.066,10.066,0,0,1,16.553,7.551A10.066,10.066,0,0,1,22.553,22.5Z"
+          transform="translate(2.644 2.178)"
+          fill="#ed0006"
+          fill-rule="evenodd"
+        />
+        <path
+          id="Path_9887"
+          data-name="Path 9887"
+          d="M17.179,22.5a9.845,9.845,0,0,0,0-15.1,10.066,10.066,0,0,1,16.553,7.551A10.066,10.066,0,0,1,17.179,22.5Z"
+          transform="translate(8.018 2.178)"
+          fill="#f9a000"
+          fill-rule="evenodd"
+        />
+        <path
+          id="Path_9888"
+          data-name="Path 9888"
+          d="M18.324,21.732a9.845,9.845,0,0,0,0-15.1,9.845,9.845,0,0,0,0,15.1Z"
+          transform="translate(6.872 2.947)"
+          fill="#ff5e00"
+          fill-rule="evenodd"
+        />
+      </g>
     </svg>
   );
 }

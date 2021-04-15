@@ -17,7 +17,12 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  currency:""
+  currency:"",
+  donationStep:0, 
+  setdonationStep: (value: number) => {},
+  projectDetails:{},
+  treeCount:50, 
+  settreeCount: (value: number) => {}
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -26,6 +31,10 @@ export default function QueryParamProvider({ children }: any) {
   const [paymentSetup, setpaymentSetup] = useState<null | Object>(
     null
   );
+
+  const [projectDetails, setprojectDetails] = useState<null | Object>(null)
+
+  const [donationStep, setdonationStep] = useState(1)
 
   // PARAMS that can be received and managed
   // Language => Can be received from the URL, can also be set by the user, can be extracted from browser language
@@ -56,7 +65,7 @@ export default function QueryParamProvider({ children }: any) {
       iconFile: <TreeIcon />,
     },
   ];
-  const [treeCount, settreeCount] = useState(treeSelectionOptions[2].treeCount);
+  const [treeCount, settreeCount] = useState(50);
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
     recipientName: "",
@@ -86,7 +95,11 @@ export default function QueryParamProvider({ children }: any) {
         try {
           const paymentSetupData = await getRequest(
             `/app/projects/${router.query.project}/paymentOptions`
-          );          
+          );
+          const project = await getRequest(`/app/projects/${router.query.project}?_scope=extended`);
+          if(project.data){
+            setprojectDetails(project.data);
+          }
           if (paymentSetupData.data) {
             setpaymentSetup(paymentSetupData.data);
           }
@@ -111,7 +124,12 @@ export default function QueryParamProvider({ children }: any) {
         country,
         setcountry,
         paymentSetup,
-        currency
+        currency,
+        donationStep,
+        setdonationStep,
+        projectDetails,
+        treeCount,
+        settreeCount
       }}
     >
       {children}

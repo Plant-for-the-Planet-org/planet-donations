@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
+import BackButton from "../../../public/assets/icons/BackButton";
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
@@ -18,7 +19,7 @@ function ContactsForm({}: Props): ReactElement {
     defaultValues: {},
   });
 
-  const { contactDetails, setContactDetails } = React.useContext(
+  const { contactDetails, setContactDetails, setdonationStep } = React.useContext(
     QueryParamContext
   );
 
@@ -39,6 +40,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const onSubmit = (data: any) => {
     console.log("data", data);
+    setdonationStep(3)
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -50,6 +52,9 @@ function ContactsForm({}: Props): ReactElement {
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
+        <button onClick={()=>setdonationStep(1)} className="mb-10">
+          <BackButton/>
+        </button>
         {/* <button className="login-continue">{t("loginContinue")}</button> */}
         <p className="title-text">{t("contactDetails")}</p>
 

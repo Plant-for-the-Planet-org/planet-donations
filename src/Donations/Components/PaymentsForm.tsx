@@ -2,13 +2,14 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "./PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import BackButton from "../../../public/assets/icons/BackButton";
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
-  const { paymentSetup, country, currency } = React.useContext(
+  const { paymentSetup, country, currency, setdonationStep } = React.useContext(
     QueryParamContext
   );
   const [paymentType, setPaymentType] = React.useState("CARD");
@@ -17,6 +18,9 @@ function PaymentsForm({}: Props): ReactElement {
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
+        <button onClick={() => setdonationStep(2)} className="mb-10">
+          <BackButton />
+        </button>
         <p className="title-text">{t("paymentDetails")}</p>
 
         {paymentSetup && paymentSetup.gateways && (

@@ -1,14 +1,14 @@
-import React from 'react';
-import CreditCard from '../../../public/assets/icons/donation/CreditCard';
-import GiroPayIcon from '../../../public/assets/icons/donation/GiroPay';
-import PaypalIcon from '../../../public/assets/icons/donation/PaypalIcon';
-import SepaIcon from '../../../public/assets/icons/donation/SepaIcon';
-import SofortIcon from '../../../public/assets/icons/donation/SofortIcon';
+import React from "react";
+import CreditCard from "../../../public/assets/icons/donation/CreditCard";
+import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
+import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
+import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
+import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 
 function a11yProps(index: any) {
   return {
     id: `scrollable-force-tab-${index}`,
-    'aria-controls': `payment-methods-tabpanel-${index}`,
+    "aria-controls": `payment-methods-tabpanel-${index}`,
   };
 }
 
@@ -27,40 +27,40 @@ export default function PaymentMethodTabs({
 
   function CheckMark() {
     return (
-      <div className={'check-mark'}>
+      <div className={"check-mark"}>
         <svg
-          height="20px"
-          width="20px"
-          viewBox="0 0 30 30"
           xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 30 30"
         >
-          <g transform="translate(-39 -408)" data-name="Group 3308">
+          <g data-name="Group 3308">
             <path
-              transform="translate(39 408)"
-              d="M15,0A15,15,0,1,1,0,15,15,15,0,0,1,15,0Z"
               fill="#48aadd"
+              d="M54 408a15 15 0 11-15 15 15 15 0 0115-15z"
               data-name="Path 2171"
-            />
+              transform="translate(-39 -408)"
+            ></path>
             <path
-              transform="translate(44.957 351.72)"
-              d="M6.143,77.228.265,71.836a.782.782,0,0,1,0-1.173l1.279-1.173a.963.963,0,0,1,1.279,0l3.96,3.633,8.481-7.781a.963.963,0,0,1,1.279,0l1.279,1.173a.782.782,0,0,1,0,1.173l-10.4,9.541a.963.963,0,0,1-1.279,0Z"
               fill="#fff"
-            />
+              d="M51.1 428.948l-5.878-5.392a.782.782 0 010-1.173l1.279-1.173a.963.963 0 011.279 0l3.96 3.633 8.481-7.781a.963.963 0 011.279 0l1.279 1.173a.782.782 0 010 1.173l-10.4 9.541a.963.963 0 01-1.279 0z"
+              transform="translate(-39 -408)"
+            ></path>
           </g>
         </svg>
       </div>
     );
   }
-  
+
   return (
-    <div className={'payment-methods-tabs-container'}>
+    <div className={"payment-methods-tabs-container"}>
       {showCC && (
         <button
-          className={`${'payment-method'} ${
-            paymentType === 'CARD' ? 'payment-method-selected' : ''
+          className={`${"payment-method"} ${
+            paymentType === "CARD" ? "payment-method-selected" : ""
           }`}
-          onClick={(e) => handleChange(e, 'CARD')}
-          {...a11yProps('CARD')}
+          onClick={(e) => handleChange(e, "CARD")}
+          {...a11yProps("CARD")}
         >
           <CreditCard />
           <CheckMark />
@@ -69,11 +69,11 @@ export default function PaymentMethodTabs({
 
       {showSofort && (
         <button
-          className={`${'paymentMethod'} ${
-            paymentType === 'Sofort' ? 'payment-method-selected' : ''
+          className={`${"payment-method"} ${
+            paymentType === "Sofort" ? "payment-method-selected" : ""
           }`}
-          onClick={(e) => handleChange(e, 'Sofort')}
-          {...a11yProps('Sofort')}
+          onClick={(e) => handleChange(e, "Sofort")}
+          {...a11yProps("Sofort")}
         >
           <SofortIcon />
           <CheckMark />
@@ -82,11 +82,11 @@ export default function PaymentMethodTabs({
 
       {showPaypal ? (
         <button
-          className={`${'paymentMethod'} ${
-            paymentType === 'Paypal' ? 'payment-method-selected' : ''
+          className={`${"payment-method"} ${
+            paymentType === "Paypal" ? "payment-method-selected" : ""
           }`}
-          onClick={(e) => handleChange(e, 'Paypal')}
-          {...a11yProps('Paypal')}
+          onClick={(e) => handleChange(e, "Paypal")}
+          {...a11yProps("Paypal")}
         >
           <PaypalIcon />
           <CheckMark />
@@ -95,11 +95,11 @@ export default function PaymentMethodTabs({
 
       {showGiroPay && (
         <button
-          className={`${'paymentMethod'} ${
-            paymentType === 'GiroPay' ? 'payment-method-selected' : ''
+          className={`${"payment-method"} ${
+            paymentType === "GiroPay" ? "payment-method-selected" : ""
           }`}
-          onClick={(e) => handleChange(e, 'GiroPay')}
-          {...a11yProps('GiroPay')}
+          onClick={(e) => handleChange(e, "GiroPay")}
+          {...a11yProps("GiroPay")}
         >
           <GiroPayIcon />
           <CheckMark />
@@ -108,11 +108,11 @@ export default function PaymentMethodTabs({
 
       {showSepa && (
         <button
-          className={`${'paymentMethod'} ${
-            paymentType === 'SEPA' ? 'payment-method-selected' : ''
+          className={`${"payment-method"} ${
+            paymentType === "SEPA" ? "payment-method-selected" : ""
           }`}
-          onClick={(e) => handleChange(e, 'SEPA')}
-          {...a11yProps('SEPA')}
+          onClick={(e) => handleChange(e, "SEPA")}
+          {...a11yProps("SEPA")}
         >
           <SepaIcon />
           <CheckMark />
