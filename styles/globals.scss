@@ -170,3 +170,27 @@ button{
       margin-left: 6px;
   }
 }
+
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal {
+  background-color: $backgroundColor;
+  border: 0px;
+  border-radius: 8px;
+  max-height: 80vh;
+  max-width: 1200px;
+  overflow: hidden;
+  outline: none;
+  min-width: 320px;
+}
+
+.MuiTypography-root{
+  font-family: $primaryFontFamily!important;
+}

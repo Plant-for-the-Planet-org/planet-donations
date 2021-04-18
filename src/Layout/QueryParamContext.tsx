@@ -27,6 +27,8 @@ export const QueryParamContext = React.createContext({
   projectDetails: {},
   treeCount: 50,
   settreeCount: (value: number) => {},
+  language:'en', 
+  setlanguage:  (value: string) => 'en',
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -37,6 +39,7 @@ export default function QueryParamProvider({ children }: any) {
   const [projectDetails, setprojectDetails] = useState<Object>({});
 
   const [donationStep, setdonationStep] = useState(1);
+  const [language, setlanguage] = useState('en');
 
   // PARAMS that can be received and managed
   // Language => Can be received from the URL, can also be set by the user, can be extracted from browser language
@@ -135,6 +138,8 @@ export default function QueryParamProvider({ children }: any) {
         projectDetails,
         treeCount,
         settreeCount,
+        language,
+        setlanguage
       }}
     >
       {children}
