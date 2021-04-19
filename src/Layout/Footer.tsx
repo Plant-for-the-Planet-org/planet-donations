@@ -26,10 +26,21 @@ function Footer({}: Props): ReactElement {
           English
           <DownArrowIcon />
         </button>
-        <Link href="/privacy-terms">Privacy & Terms</Link>
-        <Link href="/imprint">Imprint</Link>
-        <Link href="/contact">Contact</Link>
-        <Link href="/faqs">FAQs</Link>
+        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
+          About Us
+        </a>
+        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/privacy-terms">
+          Privacy & Terms
+        </a>
+        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/imprint">
+          Imprint
+        </a>
+        <a rel="noreferrer" href="mailto:info@plant-for-the-planet.org">
+          Contact
+        </a>
+        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/faq">
+          FAQs
+        </a>
         <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
           <Image
             src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
