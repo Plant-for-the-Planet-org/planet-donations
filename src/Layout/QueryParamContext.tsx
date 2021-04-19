@@ -41,16 +41,10 @@ export default function QueryParamProvider({ children }: any) {
   const [donationStep, setdonationStep] = useState(1);
   const [language, setlanguage] = useState('en');
 
-  // PARAMS that can be received and managed
-  // Language => Can be received from the URL, can also be set by the user, can be extracted from browser language
-  // Organisation URL => This will be received from the URL params - this goes back to the organisation's page
-  // Return URL => This will be received from the URL params - this is where the user will be redirected after the donation is complete
-  // Project ID => This will be received from the URL params - this is the project the for which the donation will happen
-  // Country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-  // Transaction ID => This will be received from the URL params
-  // isGift =>
-  // Gift Details =>
-  // Currency =>
+  const [tenantkey, settenantkey] = useState('ten_I9TW3ncG')
+  const [donationId, setdonationId] = useState(null);
+  const [accessToken, setaccessToken] = useState(null);
+
 
   const treeSelectionOptions = [
     {
@@ -92,6 +86,25 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState("");
   const [currency, setcurrency] = useState("");
+  const [returnTo, setreturnTo] = useState("");
+
+  // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
+
+  React.useEffect(()=>{
+    if(router.query.locale){
+      setlanguage(router.query.locale)
+    }
+  },[router.query.locale]);
+
+  // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
+
+  React.useEffect(()=>{
+    if(router.query.returnTo){
+      setreturnTo(router.query.returnTo)
+    }
+  },[router.query.returnTo]);
+
+  // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
 
   React.useEffect(() => {
     if (router.query.project) {
@@ -117,7 +130,53 @@ export default function QueryParamProvider({ children }: any) {
       }
       loadPaymentSetup();
     }
-  }, [router.query]);
+  }, [router.query.project]);
+
+  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
+
+  React.useEffect(()=>{
+    if(router.query.country){
+      setcountry(router.query.country)
+    }
+  },[router.query.country]);
+
+  // Donation ID = donationId => This will be received from the URL params
+
+  React.useEffect(()=>{
+    if(router.query.donationId){
+      setdonationId(router.query.donationId)
+    }
+  },[router.query.donationId]);
+
+  // support = s => Fetch the user data from api and load in gift details
+
+
+  // Access token = accessToken => 
+
+  React.useEffect(()=>{
+    if(router.query.accessToken){
+      setaccessToken(router.query.accessToken)
+    }
+  },[router.query.accessToken]);
+
+  // Tenant key = tenantkey => 
+
+  React.useEffect(()=>{
+    if(router.query.tenantkey){
+      settenantkey(router.query.tenantkey)
+    }
+  },[router.query.tenantkey]);
+
+  // Tree Count = treecount => Received from the URL
+
+  React.useEffect(()=>{
+    if(router.query.treecount){
+      settreeCount(Number(router.query.treecount))
+      if(![10,20,50,150].includes(Number(router.query.treecount))){
+        // Set custom tree count true
+      }
+    }
+  },[router.query.treecount])
 
   return (
     <QueryParamContext.Provider
