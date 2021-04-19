@@ -8,5 +8,5 @@ export default NextAuth({
       domain: process.env.AUTH0_CUSTOM_DOMAIN,
     })
   ],
-  debug: true,
+  debug: false,
 })

@@ -5,6 +5,7 @@ import GiftForm from "./GiftForm";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
+import { useSession, signIn, signOut } from "next-auth/client";
 
 interface Props {}
 
@@ -23,11 +24,13 @@ function DonationsForm() {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [showGiftForm, setshowGiftForm] = React.useState(true);
+  const [session, loading] = useSession();
 
   return (
     <div className="donations-forms-container">
       <div className="donations-form">
-        <button className="login-continue">Login & Continue</button>
+        {!session && <button className="login-continue" onClick={() => signIn()}>Login & Continue</button>}
+        
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
           <div className="donations-gift-container">
