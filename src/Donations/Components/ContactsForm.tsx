@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import AutoCompleteCountry from "../../Common/InputTypes/AutoCompleteCountry";
 import { useTranslation } from "next-i18next";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
@@ -14,18 +14,29 @@ function ContactsForm({}: Props): ReactElement {
 
   const [isCompany, setIsCompany] = React.useState(false);
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
-  const { register, errors, handleSubmit } = useForm({
+  const {
+    contactDetails,
+    setContactDetails,
+    setdonationStep,
+  } = React.useContext(QueryParamContext);
+
+
+  React.useEffect(()=>{
+    if(contactDetails){
+      reset(contactDetails);
+      if(contactDetails.companyName){
+        setIsCompany(true)
+      }
+    }
+  },[contactDetails])
+
+  const { register, errors, handleSubmit, control, reset } = useForm({
     mode: "all",
     defaultValues: {},
   });
 
-  const { contactDetails, setContactDetails, setdonationStep } = React.useContext(
-    QueryParamContext
-  );
 
-    const defaultCountry = isTaxDeductible
-      ? country
-      : 'IN';
+  const defaultCountry = isTaxDeductible ? country : "IN";
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
@@ -34,12 +45,8 @@ function ContactsForm({}: Props): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const changeCountry = (country: any) => {
-    setContactDetails({ ...contactDetails, country });
-  };
-
   const onSubmit = (data: any) => {
-    console.log("data", data);
+    setContactDetails(data)
     setdonationStep(3)
   };
 
@@ -52,14 +59,13 @@ function ContactsForm({}: Props): ReactElement {
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
-        <button onClick={()=>setdonationStep(1)} className="mb-10">
-          <BackButton/>
+        <button onClick={() => setdonationStep(1)} className="mb-10">
+          <BackButton />
         </button>
         {/* <button className="login-continue">{t("loginContinue")}</button> */}
         <p className="title-text">{t("contactDetails")}</p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-
           <div className="d-flex row">
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
@@ -153,17 +159,32 @@ function ContactsForm({}: Props): ReactElement {
           </div>
 
           <div className={"form-field mt-30"}>
-            <AutoCompleteCountry
-                inputRef={register({ required: true })}
-                label={t("country")}
-                name="country"
-                onChange={changeCountry}
-                defaultValue={
-                  contactDetails.country
-                    ? contactDetails.country
-                    : defaultCountry
-                }
-              />
+            <Controller
+              control={control}
+              rules={{
+                required: {
+                  value: true,
+                  message: t("countryRequired"),
+                },
+              }}
+              name="country"
+              render={({ onChange, onBlur, value, name, ref }) => (
+                <AutoCompleteCountry
+                  inputRef={ref}
+                  label={t("country")}
+                  name="country"
+                  onChange={(data: any) => {
+                    onChange(data);
+                  }}
+                  defaultValue={
+                    contactDetails.country
+                      ? contactDetails.country
+                      : defaultCountry
+                  }
+                />
+              )}
+            />
+
             {errors.country && (
               <span className={"form-errors"}>{t("countryRequired")}</span>
             )}

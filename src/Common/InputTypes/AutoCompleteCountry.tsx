@@ -71,8 +71,8 @@ export default function CountrySelect(props: {
   
   if (ready) {
     countries.sort((a, b) => {
-        const nameA = t(`country:${a.code.toLowerCase()}`);
-        const nameB = t(`country:${b.code.toLowerCase()}`);
+        const nameA = t(a.code.toLowerCase());
+        const nameB = t(b.code.toLowerCase());
         if (nameA > nameB) {
           return 1;
         } if (nameA < nameB) {
@@ -92,11 +92,11 @@ export default function CountrySelect(props: {
       }}
       value={value}
       autoHighlight
-      getOptionLabel={(option) => t(`country:${option.code.toLowerCase()}`)}
+      getOptionLabel={(option) => t(option.code.toLowerCase())}
       renderOption={(option) => (
         <>
           <span>{countryToFlag(option.code)}</span>
-          {(t(`country:${option.code.toLowerCase()}`))}
+          {(t(option.code.toLowerCase()))}
         </>
       )}
       onChange={(event: any, newValue: CountryType | null) => {
