@@ -11,7 +11,7 @@ function index({}: Props): ReactElement {
   const [session, loading] = useSession();
   const { t } = useTranslation("common");
   const { register, handleSubmit, watch, errors } = useForm({ mode: 'all'});
-  
+
   return (
     <div>
       {/* {!session && (
@@ -37,6 +37,6 @@ export default index;
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common"])),
+    ...(await serverSideTranslations(locale, ["common", "country"])),
   },
 });
