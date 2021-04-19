@@ -22,6 +22,8 @@ function DonationsForm() {
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
+  const [showGiftForm, setshowGiftForm] = React.useState(true);
+
   return (
     <div className="donations-forms-container">
       <div className="donations-form">
@@ -29,11 +31,11 @@ function DonationsForm() {
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
           <div className="donations-gift-container">
-            <GiftForm />
+            <GiftForm showGiftForm={showGiftForm} setshowGiftForm={setshowGiftForm}  />
           </div>
           <div
             className={`donations-tree-selection ${
-              isGift ? "display-none" : ""
+              isGift && showGiftForm ? "display-none" : ""
             }`}
           >
             <div className="tree-selection-options-container">

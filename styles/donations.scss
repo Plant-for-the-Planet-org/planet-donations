@@ -71,6 +71,20 @@
         }
       }
     }
+    .donation-supports-info{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      button {
+        display: flex;
+      align-items: center;
+      }
+      svg {
+        >path {
+          fill: $dangerColor;
+        }
+      }
+    }
   }
 
   .currency-selection {

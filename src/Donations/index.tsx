@@ -10,8 +10,6 @@ interface Props {}
 function Donations({}: Props): ReactElement {
   const { paymentSetup, donationStep,projectDetails } = React.useContext(QueryParamContext);
 
-  console.log('projectDetails',projectDetails);
-  
   return paymentSetup ? (
     <div className="donations-container">
       <div className="donations-card-container">
