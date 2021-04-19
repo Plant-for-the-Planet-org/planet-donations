@@ -51,6 +51,19 @@ axiosInstance.interceptors.request.use(
     }
     // sets the content type to json
     config.headers['Content-Type'] = 'application/json';
+
+    config.headers['x-locale']= `${
+      localStorage.getItem('locale')
+        ? localStorage.getItem('locale')
+        : 'en'
+    }`
+
+    config.headers['tenant-key']= `${
+      localStorage.getItem('tenantkey')
+        ? localStorage.getItem('tenantkey')
+        : 'ten_I9TW3ncG'
+    }`
+
     return config;
   },
   (error) => {

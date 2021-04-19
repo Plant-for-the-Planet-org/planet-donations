@@ -28,7 +28,7 @@ export const QueryParamContext = React.createContext({
   treeCount: 50,
   settreeCount: (value: number) => {},
   language:'en', 
-  setlanguage:  (value: string) => 'en',
+  setlanguage:  (value: string) => 'en'
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -92,7 +92,8 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(()=>{
     if(router.query.locale){
-      setlanguage(router.query.locale)
+      setlanguage(router.query.locale);
+      localStorage.setItem('locale',router.query.locale);
     }
   },[router.query.locale]);
 
@@ -107,28 +108,31 @@ export default function QueryParamProvider({ children }: any) {
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
 
   React.useEffect(() => {
-    if (router.query.project) {
-      async function loadPaymentSetup() {
-        try {
-          const paymentSetupData = await getRequest(
-            `/app/projects/${router.query.project}/paymentOptions`
-          );
-          const project:ProjectTypes = await getRequest(
-            `/app/projects/${router.query.project}?_scope=extended`
-          );
-          if (project.data) {
-            setprojectDetails(project.data);
-          }
-          if (paymentSetupData.data) {
-            setpaymentSetup(paymentSetupData.data);
-            setcurrency(paymentSetupData.data.currency);
-            setcountry(paymentSetupData.data.effectiveCountry);
-          }
-        } catch (err) {
-          // console.log(err);
+    async function loadPaymentSetup(projectGUID) {
+      try {
+        const paymentSetupData = await getRequest(
+          `/app/projects/${projectGUID}/paymentOptions`
+        );
+        const project:ProjectTypes = await getRequest(
+          `/app/projects/${projectGUID}?_scope=extended`
+        );
+        if (project.data) {
+          setprojectDetails(project.data);
         }
+        if (paymentSetupData.data) {
+          setpaymentSetup(paymentSetupData.data);
+          setcurrency(paymentSetupData.data.currency);
+          setcountry(paymentSetupData.data.effectiveCountry);
+        }
+      } catch (err) {
+        // console.log(err);
       }
-      loadPaymentSetup();
+    }
+    if (router.query.project) {
+      loadPaymentSetup(router.query.project);
+    }
+    else {
+      loadPaymentSetup('proj_WZkyugryh35sMmZMmXCwq7YY');
     }
   }, [router.query.project]);
 
@@ -163,7 +167,8 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(()=>{
     if(router.query.tenantkey){
-      settenantkey(router.query.tenantkey)
+      settenantkey(router.query.tenantkey);
+      localStorage.setItem('tenantkey',router.query.tenantkey);
     }
   },[router.query.tenantkey]);
 

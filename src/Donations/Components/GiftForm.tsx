@@ -45,15 +45,10 @@ export default function GiftForm({}: Props): ReactElement {
       email: '',
       giftMessage: '',
     };
-    console.log('defaultDeails',defaultDeails);
     setgiftDetails(defaultDeails)
     reset(defaultDeails);
-    console.log('giftDetails',giftDetails);
   }
 
-
-  console.log('giftDetails',giftDetails);
-  
   return (
     <div>
       {giftDetails && giftDetails.recipientName === "" ? (
