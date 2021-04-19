@@ -6,11 +6,10 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
 interface Props {
-  showGiftForm:boolean;
-  setshowGiftForm:Function;
+
 }
 
-export default function GiftForm({showGiftForm,setshowGiftForm}: Props): ReactElement {
+export default function GiftForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
   const { giftDetails, setgiftDetails, isGift, setisGift } = React.useContext(
@@ -23,7 +22,7 @@ export default function GiftForm({showGiftForm,setshowGiftForm}: Props): ReactEl
     giftMessage: giftDetails.giftMessage,
   };
 
-  const { register, errors, handleSubmit } = useForm({
+  const { register, errors, handleSubmit,reset } = useForm({
     mode: "all",
     defaultValues: defaultDeails,
   });
@@ -31,7 +30,6 @@ export default function GiftForm({showGiftForm,setshowGiftForm}: Props): ReactEl
   React.useEffect(() => {
     if (isGift && giftDetails) {
       setgiftDetails({ ...giftDetails, type: "invitation" });
-      setshowGiftForm(false)
     } else {
       setgiftDetails({ ...giftDetails, type: null });
     }
@@ -39,13 +37,26 @@ export default function GiftForm({showGiftForm,setshowGiftForm}: Props): ReactEl
 
   const onSubmit = (data: any) => {
     setgiftDetails({ ...giftDetails, ...data });
-    setshowGiftForm(false)
   };
 
+  const resetGiftForm = () =>{ 
+    const defaultDeails = {
+      recipientName: '',
+      email: '',
+      giftMessage: '',
+    };
+    console.log('defaultDeails',defaultDeails);
+    setgiftDetails(defaultDeails)
+    reset(defaultDeails);
+    console.log('giftDetails',giftDetails);
+  }
 
+
+  console.log('giftDetails',giftDetails);
+  
   return (
     <div>
-      {showGiftForm ? (
+      {giftDetails && giftDetails.recipientName === "" ? (
         <div>
           <div className="donations-gift-toggle">
             <label htmlFor="show-gift-form-toggle">
@@ -111,7 +122,7 @@ export default function GiftForm({showGiftForm,setshowGiftForm}: Props): ReactEl
       ) : (
         <div className="donation-supports-info mt-10">
           <p>This donation supports {giftDetails.recipientName}</p>
-          <button onClick={()=>{setshowGiftForm(true)}}>
+          <button onClick={()=>resetGiftForm()}>
             <CloseIcon />
           </button>
         </div>

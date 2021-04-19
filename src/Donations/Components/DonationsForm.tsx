@@ -20,25 +20,25 @@ function DonationsForm() {
     paymentSetup,
     projectDetails,
     country,
+    giftDetails
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
-  const [showGiftForm, setshowGiftForm] = React.useState(true);
   const [session, loading] = useSession();
 
   return (
     <div className="donations-forms-container">
       <div className="donations-form">
-        {!session && <button className="login-continue" onClick={() => signIn()}>Login & Continue</button>}
+        {!session && <button className="login-continue" onClick={() => signIn('auth0')}>Login & Continue</button>}
         
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
           <div className="donations-gift-container">
-            <GiftForm showGiftForm={showGiftForm} setshowGiftForm={setshowGiftForm}  />
+            <GiftForm />
           </div>
           <div
             className={`donations-tree-selection ${
-              isGift && showGiftForm ? "display-none" : ""
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
             }`}
           >
             <div className="tree-selection-options-container">
