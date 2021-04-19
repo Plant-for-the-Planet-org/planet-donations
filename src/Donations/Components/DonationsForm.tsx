@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
 import { useSession, signIn, signOut } from "next-auth/client";
+import { getMinimumAmountForCurrency } from "../../Utils/getExchange";
 
 interface Props {}
 
@@ -20,17 +21,26 @@ function DonationsForm() {
     paymentSetup,
     projectDetails,
     country,
-    giftDetails
+    giftDetails,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [session, loading] = useSession();
+  const [minAmt, setMinAmt] = React.useState(0);
+
+  React.useEffect(() => {
+    setMinAmt(getMinimumAmountForCurrency(currency));
+  }, []);
 
   return (
     <div className="donations-forms-container">
       <div className="donations-form">
-        {!session && <button className="login-continue" onClick={() => signIn('auth0')}>Login & Continue</button>}
-        
+        {!session && (
+          <button className="login-continue" onClick={() => signIn("auth0")}>
+            Login & Continue
+          </button>
+        )}
+
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
           <div className="donations-gift-container">
@@ -93,7 +103,7 @@ function DonationsForm() {
                 {projectDetails.taxDeductionCountries.includes(country)
                   ? t("youWillReceiveTaxDeduction")
                   : t("taxDeductionNotYetAvailable")}
-                <button className={'tax-country-selection'}>
+                <button className={"tax-country-selection"}>
                   {t(`country:${country.toLowerCase()}`)}
                   <DownArrowIcon />
                 </button>
@@ -111,6 +121,21 @@ function DonationsForm() {
                   {t("taxDeductionNotAvailableForProject")}
                 </div>
               </div>
+            )}
+
+            {paymentSetup?.gateways?.stripe?.isLive === false ? (
+              <div className={"text-danger mt-20"}>
+                Test Mode: Your donations will not be charged
+              </div>
+            ) : null}
+
+            {!(paymentSetup.treeCost * treeCount >= minAmt) && (
+              <p className={"text-danger mt-20"}>
+                {t("minDonate")}
+                <span>
+                  {getFormatedCurrency(i18n.language, currency, minAmt)}
+                </span>
+              </p>
             )}
 
             <button

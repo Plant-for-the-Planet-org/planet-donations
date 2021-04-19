@@ -9,6 +9,10 @@ interface Props {}
 function PaymentsForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
+  const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+  const [publishName, setpublishName] = React.useState(false);
+  const [askpublishName, setaskpublishName] = React.useState(false);
+
   const { paymentSetup, country, currency, setdonationStep } = React.useContext(
     QueryParamContext
   );

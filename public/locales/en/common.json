@@ -29,5 +29,6 @@
     "youWillReceiveTaxDeduction":"You will receive a tax deduction receipt for ",
     "taxDeductionNotYetAvailable":"Tax deduction is not yet available for ",
     "taxDeductionNotAvailableForProject": "Tax deduction is not yet available for this project",
-    "inTimeOfTaxReturns": "in time for tax returns."
+    "inTimeOfTaxReturns": "in time for tax returns.",
+    "minDonate": "Minimum donation amount is"
 }
