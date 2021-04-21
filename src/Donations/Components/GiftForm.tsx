@@ -18,7 +18,7 @@ export default function GiftForm({}: Props): ReactElement {
 
   const defaultDeails = {
     recipientName: giftDetails.recipientName,
-    email: giftDetails.email,
+    recipientEmail: giftDetails.email,
     giftMessage: giftDetails.giftMessage,
   };
 
@@ -84,7 +84,7 @@ export default function GiftForm({}: Props): ReactElement {
             </div>
             <div className={"form-field mt-30"}>
               <MaterialTextField
-                name={"email"}
+                name={"recipientEmail"}
                 label={t("email")}
                 variant="outlined"
                 inputRef={register({
@@ -92,7 +92,7 @@ export default function GiftForm({}: Props): ReactElement {
                   pattern: /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
                 })}
               />
-              {errors.email && (
+              {errors.recipientEmail && (
                 <span className={"form-errors"}>{t("emailRequired")}</span>
               )}
             </div>

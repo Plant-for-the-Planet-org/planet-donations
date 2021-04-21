@@ -22,6 +22,7 @@ function DonationsForm() {
     projectDetails,
     country,
     giftDetails,
+    setIsTaxDeductible
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
@@ -31,6 +32,14 @@ function DonationsForm() {
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, []);
+
+  React.useEffect(() => {
+    if (projectDetails && projectDetails.taxDeductionCountries && projectDetails.taxDeductionCountries.includes(country)) {
+      setIsTaxDeductible(true);
+    } else {
+      setIsTaxDeductible(false);
+    }
+  }, [country]);
 
   return (
     <div className="donations-forms-container">
@@ -117,9 +126,7 @@ function DonationsForm() {
               </div>
             ) : (
               <div className={"isTaxDeductible"}>
-                <div className={"isTaxDeductibleText"}>
                   {t("taxDeductionNotAvailableForProject")}
-                </div>
               </div>
             )}
 

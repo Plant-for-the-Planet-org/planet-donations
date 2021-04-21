@@ -72,10 +72,10 @@ function ContactsForm({}: Props): ReactElement {
                 inputRef={register({ required: true })}
                 label={t("firstName")}
                 variant="outlined"
-                name="firstName"
-                defaultValue={contactDetails.firstName}
+                name="firstname"
+                defaultValue={contactDetails.firstname}
               />
-              {errors.firstName && (
+              {errors.firstname && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
               )}
             </div>
@@ -85,10 +85,10 @@ function ContactsForm({}: Props): ReactElement {
                 inputRef={register({ required: true })}
                 label={t("lastName")}
                 variant="outlined"
-                name="lastName"
-                defaultValue={contactDetails.lastName}
+                name="lastname"
+                defaultValue={contactDetails.lastname}
               />
-              {errors.lastName && (
+              {errors.lastname && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
               )}
             </div>
@@ -214,21 +214,21 @@ function ContactsForm({}: Props): ReactElement {
             <div className={"form-field mt-20"}>
               <MaterialTextField
                 label={t("companyName")}
-                name="companyName"
+                name="companyname"
                 variant="outlined"
                 inputRef={
                   isCompany ? register({ required: true }) : register({})
                 }
-                defaultValue={contactDetails.companyName}
+                defaultValue={contactDetails.companyname}
               />
-              {errors.companyName && (
+              {errors.companyname && (
                 <span className={"form-errors"}>{t("companyRequired")}</span>
               )}
             </div>
           ) : null}
 
-          {errors.firstName ||
-          errors.lastName ||
+          {errors.firstname ||
+          errors.lastname ||
           errors.email ||
           errors.address ||
           errors.city ||

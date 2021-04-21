@@ -73,3 +73,27 @@ export interface ProjectTypes {
     _scope: string;
   };
 }
+
+export interface giftDetailsProps {
+  type:String|null;
+  recipientName: String|null;
+  email: String|null;
+  giftMessage: String|null;
+  recipientTreecounter: Number|null;
+  receipients: {}|null;
+}
+
+export interface CreateDonationFunctionProps {
+  isTaxDeductible:Boolean | null;
+  country:any;
+  projectDetails: Object;
+  treeCount: number;
+  treeCost: number;
+  currency: String;
+  contactDetails: Object;
+  giftDetails: giftDetailsProps;
+  isGift: Boolean;
+  setIsPaymentProcessing: Function;
+  setPaymentError: Function;
+  setdonationID:any;
+}

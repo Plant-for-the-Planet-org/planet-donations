@@ -19,7 +19,7 @@ function CreditCard() {
           d="M22.553,22.5A10.066,10.066,0,0,1,6,14.951,10.066,10.066,0,0,1,22.553,7.4a10.066,10.066,0,0,1,16.553,7.551A10.066,10.066,0,0,1,22.553,22.5Z"
           transform="translate(2.644 2.178)"
           fill="#ed0006"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
         <path
           id="Path_9887"
@@ -27,7 +27,7 @@ function CreditCard() {
           d="M17.179,22.5a9.845,9.845,0,0,0,0-15.1,10.066,10.066,0,0,1,16.553,7.551A10.066,10.066,0,0,1,17.179,22.5Z"
           transform="translate(8.018 2.178)"
           fill="#f9a000"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
         <path
           id="Path_9888"
@@ -35,7 +35,7 @@ function CreditCard() {
           d="M18.324,21.732a9.845,9.845,0,0,0,0-15.1,9.845,9.845,0,0,0,0,15.1Z"
           transform="translate(6.872 2.947)"
           fill="#ff5e00"
-          fill-rule="evenodd"
+          fillRule="evenodd"
         />
       </g>
     </svg>
