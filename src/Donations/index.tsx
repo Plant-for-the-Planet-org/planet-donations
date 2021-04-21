@@ -13,8 +13,7 @@ function Donations({}: Props): ReactElement {
   const { paymentSetup, donationStep, projectDetails } = React.useContext(
     QueryParamContext
   );
-
-  console.log("projectDetails", projectDetails);
+  
 
   return paymentSetup && projectDetails ? (
     <div className="donations-container">

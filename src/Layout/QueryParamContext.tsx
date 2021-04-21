@@ -38,7 +38,8 @@ export const QueryParamContext = React.createContext({
   shouldCreateDonation:false, 
   setshouldCreateDonation:(value: boolean) => {},
   setIsTaxDeductible:(value: boolean) => {},
-  isTaxDeductible: false
+  isTaxDeductible: false,
+  isPaymentOptionsLoading: false
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -270,7 +271,8 @@ export default function QueryParamProvider({ children }: any) {
         setshouldCreateDonation,
         shouldCreateDonation,
         isTaxDeductible,
-        setIsTaxDeductible
+        setIsTaxDeductible,
+        isPaymentOptionsLoading
       }}
     >
       {children}

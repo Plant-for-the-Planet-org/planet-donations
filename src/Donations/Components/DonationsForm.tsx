@@ -7,6 +7,11 @@ import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
 import { useSession, signIn, signOut } from "next-auth/client";
 import { getMinimumAmountForCurrency } from "../../Utils/getExchange";
+import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
+import { NativePay } from "../PaymentMethods/PaymentRequestCustomButton";
+import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
+import { createDonationFunction, payDonationFunction } from "../PaymentFunctions";
+import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 
 interface Props {}
 
@@ -22,7 +27,11 @@ function DonationsForm() {
     projectDetails,
     country,
     giftDetails,
-    setIsTaxDeductible
+    setIsTaxDeductible,
+    isPaymentOptionsLoading,
+    setPaymentType,
+    setdonationID,
+    isTaxDeductible,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
@@ -34,14 +43,73 @@ function DonationsForm() {
   }, []);
 
   React.useEffect(() => {
-    if (projectDetails && projectDetails.taxDeductionCountries && projectDetails.taxDeductionCountries.includes(country)) {
+    if (
+      projectDetails &&
+      projectDetails.taxDeductionCountries &&
+      projectDetails.taxDeductionCountries.includes(country)
+    ) {
       setIsTaxDeductible(true);
     } else {
       setIsTaxDeductible(false);
     }
   }, [country]);
 
-  return (
+  const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+
+  console.log("currency", currency);
+  const [paymentError, setPaymentError] = React.useState("");
+
+
+  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+    // eslint-disable-next-line no-underscore-dangle
+    setPaymentType(paymentRequest._activeBackingLibraryName);
+
+    let fullName = paymentMethod.billing_details.name;
+    fullName = String(fullName).split(' ');
+    const firstName = fullName[0];
+    fullName.shift();
+    const lastName = String(fullName).replace(/,/g, ' ');
+
+    const contactDetails = {
+      firstname: firstName,
+      lastname: lastName,
+      email: paymentMethod.billing_details.email,
+      address: paymentMethod.billing_details.address.line1,
+      zipCode: paymentMethod.billing_details.address.postal_code,
+      city: paymentMethod.billing_details.address.city,
+      country: paymentMethod.billing_details.address.country,
+    };
+
+    await createDonationFunction({
+      isTaxDeductible,
+      country,
+      projectDetails,
+      treeCost: paymentSetup.treeCost,
+      treeCount,
+      currency,
+      contactDetails,
+      isGift,
+      giftDetails,
+      setIsPaymentProcessing,
+      setPaymentError,
+      setdonationID,
+    }).then((res) => {
+      payDonationFunction({
+        gateway: 'stripe',
+        paymentMethod,
+        setIsPaymentProcessing,
+        setPaymentError,
+        t,
+        paymentSetup,
+        donationID: res.id,
+        setdonationStep,
+      });
+    });
+  };
+
+  return  isPaymentProcessing ? (
+    <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
+  ) : (
     <div className="donations-forms-container">
       <div className="donations-form">
         {!session && (
@@ -126,7 +194,7 @@ function DonationsForm() {
               </div>
             ) : (
               <div className={"isTaxDeductible"}>
-                  {t("taxDeductionNotAvailableForProject")}
+                {t("taxDeductionNotAvailableForProject")}
               </div>
             )}
 
@@ -136,7 +204,25 @@ function DonationsForm() {
               </div>
             ) : null}
 
-            {!(paymentSetup.treeCost * treeCount >= minAmt) && (
+            {projectDetails.treeCost * treeCount >= minAmt ? (
+              !isPaymentOptionsLoading &&
+              paymentSetup?.gateways?.stripe?.account &&
+              currency ? (
+                  <NativePay
+                    country={country}
+                    currency={currency}
+                    amount={formatAmountForStripe(
+                      projectDetails.treeCost * treeCount,
+                      currency.toLowerCase()
+                    )}
+                    onPaymentFunction={onPaymentFunction}
+                    paymentSetup={paymentSetup}
+                    continueNext={() => setdonationStep(2)}
+                  />
+              ) : (
+                <ButtonLoader />
+              )
+            ) : (
               <p className={"text-danger mt-20"}>
                 {t("minDonate")}
                 <span>
@@ -144,13 +230,6 @@ function DonationsForm() {
                 </span>
               </p>
             )}
-
-            <button
-              onClick={() => setdonationStep(2)}
-              className="primary-button w-100 mt-30"
-            >
-              Continue
-            </button>
           </div>
         </div>
       </div>
