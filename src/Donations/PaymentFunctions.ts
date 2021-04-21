@@ -1,4 +1,4 @@
-import { postRequest, putAuthenticatedRequest } from '../Utils/api';
+import { postRequest, putAuthenticatedRequest, putRequest } from '../Utils/api';
 import {CreateDonationFunctionProps} from './../Common/Types/';
 
 export function getPaymentProviderRequest(gateway, paymentSetup, paymentMethod){
@@ -194,36 +194,36 @@ export async function payDonationFunction({
   let payDonationData = getPaymentProviderRequest(gateway,paymentSetup,paymentMethod);
   
   try {
-    const paidDonation = await putAuthenticatedRequest(`/app/donations/${donationID}`,payDonationData);
+    const paidDonation = await putRequest(`/app/donations/${donationID}`,payDonationData);
 
-    if (paidDonation) {
-      if (paidDonation.code === 400 || paidDonation.code === 401) {
+    if (paidDonation && paidDonation.data) {
+      if (paidDonation.data.code === 400 || paidDonation.data.code === 401) {
         setIsPaymentProcessing(false);
-        setPaymentError(paidDonation.message);
+        setPaymentError(paidDonation.data.message);
         return;
-      } if (paidDonation.code === 500) {
+      } if (paidDonation.data.code === 500) {
         setIsPaymentProcessing(false);
         setPaymentError('Something went wrong please try again soon!');
         return;
-      } if (paidDonation.code === 503) {
+      } if (paidDonation.data.code === 503) {
         setIsPaymentProcessing(false);
         setPaymentError(
           'App is undergoing maintenance, please check status.plant-for-the-planet.org for details',
         );
         return;
       }
-      if (paidDonation.status === 'failed') {
+      if (paidDonation.data.status === 'failed') {
         setIsPaymentProcessing(false);
-        setPaymentError(paidDonation.message);
-      } else if (paidDonation.paymentStatus === 'success' || paidDonation.paymentStatus === 'pending') {
+        setPaymentError(paidDonation.data.message);
+      } else if (paidDonation.data.paymentStatus === 'success' || paidDonation.data.paymentStatus === 'pending') {
         setIsPaymentProcessing(false);
         setdonationStep(4);
         
-        return paidDonation;
-      } else if (paidDonation.status === 'action_required') {
+        return paidDonation.data;
+      } else if (paidDonation.data.status === 'action_required') {
         handleSCAPaymentFunction({
           gateway,
-          paidDonation,
+          paidDonation:paidDonation.data,
           paymentSetup,
           window,
           setIsPaymentProcessing,
@@ -277,15 +277,15 @@ export async function handleSCAPaymentFunction({
               },
             },
           };
-          const SCAPaidDonation = await putAuthenticatedRequest(`/app/donations/${donationID}`,payDonationData);
-          if (SCAPaidDonation) {
-            if (SCAPaidDonation.paymentStatus) {
+          const SCAPaidDonation = await putRequest(`/app/donations/${donationID}`,payDonationData);
+          if (SCAPaidDonation && SCAPaidDonation.data)  {
+            if (SCAPaidDonation.data.paymentStatus) {
               setIsPaymentProcessing(false);
               setdonationStep(4);
-              return SCAPaidDonation;
+              return SCAPaidDonation.data;
             } else {
               setIsPaymentProcessing(false);
-              setPaymentError(SCAPaidDonation.error ? SCAPaidDonation.error.message : SCAPaidDonation.message);
+              setPaymentError(SCAPaidDonation.data.error ? SCAPaidDonation.data.error.message : SCAPaidDonation.data.message);
             }
           }
         }

@@ -37,6 +37,7 @@ function Donations({}: Props): ReactElement {
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
+        {donationStep === 4 && <p>Thank you</p>}
       </div>
     </div>
   ) : (
