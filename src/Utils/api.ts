@@ -1,6 +1,5 @@
 import getsessionId from './getSessionId';
 import axios from 'axios';
-import { getSession } from 'next-auth/client';
 
 
 // export async function getRequest(){
@@ -98,18 +97,18 @@ const request = async (url:string, method:string = 'GET', isAuthenticated:boolea
 
     // if request needs to be authenticated the Authorization is added in headers.
     // if access token is not present then throws error for the same
-    if (isAuthenticated) {
-      const session = await getSession();
-      const accessToken = session.accessToken;
-      if (!accessToken) {
-        throw new Error('Access token is not available.');
-      }
+    // if (isAuthenticated) {
+    //   const session = await getSession();
+    //   const accessToken = session.accessToken;
+    //   if (!accessToken) {
+    //     throw new Error('Access token is not available.');
+    //   }
 
-      // adds Authorization to headers in options
-      options.headers = {
-        Authorization: `OAuth ${accessToken}`,
-      };
-    }
+    //   // adds Authorization to headers in options
+    //   options.headers = {
+    //     Authorization: `OAuth ${accessToken}`,
+    //   };
+    // }
 
     // returns a promise with axios instance
     return new Promise((resolve, reject) => {

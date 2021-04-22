@@ -5,13 +5,16 @@ import GiftForm from "./GiftForm";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
-import { useSession, signIn, signOut } from "next-auth/client";
 import { getMinimumAmountForCurrency } from "../../Utils/getExchange";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "../PaymentMethods/PaymentRequestCustomButton";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
-import { createDonationFunction, payDonationFunction } from "../PaymentFunctions";
+import {
+  createDonationFunction,
+  payDonationFunction,
+} from "../PaymentFunctions";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {}
 
@@ -35,7 +38,6 @@ function DonationsForm() {
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
-  const [session, loading] = useSession();
   const [minAmt, setMinAmt] = React.useState(0);
 
   React.useEffect(() => {
@@ -56,19 +58,26 @@ function DonationsForm() {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
-  console.log("currency", currency);
-  const [paymentError, setPaymentError] = React.useState("");
+  const {
+    isLoading,
+    isAuthenticated,
+    error,
+    user,
+    loginWithPopup,
+    logout,
+  } = useAuth0();
 
+  const [paymentError, setPaymentError] = React.useState("");
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
 
     let fullName = paymentMethod.billing_details.name;
-    fullName = String(fullName).split(' ');
+    fullName = String(fullName).split(" ");
     const firstName = fullName[0];
     fullName.shift();
-    const lastName = String(fullName).replace(/,/g, ' ');
+    const lastName = String(fullName).replace(/,/g, " ");
 
     const contactDetails = {
       firstname: firstName,
@@ -95,7 +104,7 @@ function DonationsForm() {
       setdonationID,
     }).then((res) => {
       payDonationFunction({
-        gateway: 'stripe',
+        gateway: "stripe",
         paymentMethod,
         setIsPaymentProcessing,
         setPaymentError,
@@ -107,13 +116,16 @@ function DonationsForm() {
     });
   };
 
-  return  isPaymentProcessing ? (
+  return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
     <div className="donations-forms-container">
       <div className="donations-form">
-        {!session && (
-          <button className="login-continue" onClick={() => signIn("auth0")}>
+        {!isLoading && !isAuthenticated && (
+          <button
+            className="login-continue"
+            onClick={() => loginWithPopup()}
+          >
             Login & Continue
           </button>
         )}
@@ -208,17 +220,17 @@ function DonationsForm() {
               !isPaymentOptionsLoading &&
               paymentSetup?.gateways?.stripe?.account &&
               currency ? (
-                  <NativePay
-                    country={country}
-                    currency={currency}
-                    amount={formatAmountForStripe(
-                      projectDetails.treeCost * treeCount,
-                      currency.toLowerCase()
-                    )}
-                    onPaymentFunction={onPaymentFunction}
-                    paymentSetup={paymentSetup}
-                    continueNext={() => setdonationStep(2)}
-                  />
+                <NativePay
+                  country={country}
+                  currency={currency}
+                  amount={formatAmountForStripe(
+                    projectDetails.treeCost * treeCount,
+                    currency.toLowerCase()
+                  )}
+                  onPaymentFunction={onPaymentFunction}
+                  paymentSetup={paymentSetup}
+                  continueNext={() => setdonationStep(2)}
+                />
               ) : (
                 <ButtonLoader />
               )

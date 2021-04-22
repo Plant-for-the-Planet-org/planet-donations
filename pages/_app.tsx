@@ -12,67 +12,74 @@ import "./../styles/common.scss";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
- const config = getConfig();
- const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
- Sentry.init({
-   enabled: process.env.NODE_ENV === "production",
-   integrations: [
-     new RewriteFrames({
-       iteratee: (frame) => {
-         frame.filename = frame.filename?.replace(distDir, "app:///_next");
-         return frame;
-       },
-     }),
-   ],
-   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-   // from https://gist.github.com/pioug/b006c983538538066ea871d299d8e8bc,
-   // also see https://docs.sentry.io/platforms/javascript/configuration/filtering/#decluttering-sentry
-   ignoreErrors: [
-     /^No error$/,
-     /__show__deepen/,
-     /_avast_submit/,
-     /Access is denied/,
-     /anonymous function: captureException/,
-     /Blocked a frame with origin/,
-     /console is not defined/,
-     /cordova/,
-     /DataCloneError/,
-     /Error: AccessDeny/,
-     /event is not defined/,
-     /feedConf/,
-     /ibFindAllVideos/,
-     /myGloFrameList/,
-     /SecurityError/,
-     /MyIPhoneApp/,
-     /snapchat.com/,
-     /vid_mate_check is not defined/,
-     /win\.document\.body/,
-     /window\._sharedData\.entry_data/,
-     /ztePageScrollModule/,
-   ],
-   denyUrls: [],
- });
+  const config = getConfig();
+  const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
+  Sentry.init({
+    enabled: process.env.NODE_ENV === "production",
+    integrations: [
+      new RewriteFrames({
+        iteratee: (frame) => {
+          frame.filename = frame.filename?.replace(distDir, "app:///_next");
+          return frame;
+        },
+      }),
+    ],
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    // from https://gist.github.com/pioug/b006c983538538066ea871d299d8e8bc,
+    // also see https://docs.sentry.io/platforms/javascript/configuration/filtering/#decluttering-sentry
+    ignoreErrors: [
+      /^No error$/,
+      /__show__deepen/,
+      /_avast_submit/,
+      /Access is denied/,
+      /anonymous function: captureException/,
+      /Blocked a frame with origin/,
+      /console is not defined/,
+      /cordova/,
+      /DataCloneError/,
+      /Error: AccessDeny/,
+      /event is not defined/,
+      /feedConf/,
+      /ibFindAllVideos/,
+      /myGloFrameList/,
+      /SecurityError/,
+      /MyIPhoneApp/,
+      /snapchat.com/,
+      /vid_mate_check is not defined/,
+      /win\.document\.body/,
+      /window\._sharedData\.entry_data/,
+      /ztePageScrollModule/,
+    ],
+    denyUrls: [],
+  });
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { theme: themeType } = useTheme();
 
   return (
-    <ThemeProvider>
-      <QueryParamProvider>
-        <CssBaseline />
-        <style jsx global>
-          {theme}
-        </style>
-        <div className={`${themeType}`}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </div>
-      </QueryParamProvider>
-    </ThemeProvider>
+    <Auth0Provider
+      domain={process.env.AUTH0_CUSTOM_DOMAIN}
+      clientId={process.env.AUTH0_CLIENT_ID}
+      redirectUri={process.env.NEXTAUTH_URL}
+    >
+      <ThemeProvider>
+        <QueryParamProvider>
+          <CssBaseline />
+          <style jsx global>
+            {theme}
+          </style>
+          <div className={`${themeType}`}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </div>
+        </QueryParamProvider>
+      </ThemeProvider>
+    </Auth0Provider>
   );
 }
 

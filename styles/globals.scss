@@ -90,7 +90,6 @@ button {
   background-color: transparent;
 }
 
-
 .primary-button, .secondary-button {
   color:$light;
   font-weight: bold;
@@ -143,14 +142,7 @@ a {
   text-decoration: none;
 }
 
-.modal-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.6);
-}
+
 
 button{
   &:hover{
@@ -169,10 +161,6 @@ button{
       color: $dangerColor;
       margin-left: 6px;
   }
-}
-
-.text-danger{
-  color: $dangerColor;
 }
 
 .modal-container {
