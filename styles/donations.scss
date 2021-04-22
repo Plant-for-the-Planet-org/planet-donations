@@ -4,244 +4,301 @@
   min-height: 80vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+
 }
 
-@include lgLaptopView {
-  .donations-card-container {
-    width: 840px;
-    display: flex;
-    flex-direction: row;
-    border-radius: 20px;
-    box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
-    height: 560px;
-    background-color: $backgroundColor;
+.donations-card-container {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
+  background-color: $backgroundColor;
+  border-radius: 10px;
+}
+.donations-info-container {
+  width: 100%;
+  background-color: black;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.donations-info {
+  flex-grow: 1;
+}
+.donations-transaction-details {
+  font-size: 10px;
+  font-weight: 600;
+  color: $light;
+  > p {
+    margin-top: 4px;
   }
-  .donations-info-container {
-    width: 420px;
-    flex: 1;
-    background-color: black;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-  }
-  .donations-info {
-    flex-grow: 1;
-  }
-  .donations-transaction-details {
-    font-size: 14px;
-    font-weight: 800;
-    color: $light;
-    > p {
-      margin-top: 8px;
-    }
-  }
-  .donations-forms-container {
-    display: flex;
-    justify-content: center;
-    padding: 30px;
+}
+.donations-forms-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  flex: 1;
+  overflow-y: scroll;
+  margin: auto;
+  margin-bottom: 20px;
+  max-width: 360px;
+}
+.donations-form {
+  width: 100%;
+  .login-continue {
+    color: $primaryDarkColor;
+    font-weight: 600;
     width: 100%;
-    flex: 1;
-    overflow-y: scroll;
-    margin-bottom: 30px;
+    text-align: right;
+    margin-bottom: 10px;
   }
-  .donations-form {
-    width: 100%;
-    .login-continue {
-      color: $primaryDarkColor;
-      font-weight: 600;
-      width: 100%;
-      text-align: right;
-      margin-bottom: 20px;
-    }
-  }
-  .donations-gift-container {
-    .donations-gift-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      > label {
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-    .donation-supports-info{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      button {
-        display: flex;
-      align-items: center;
-      }
-      svg {
-        >path {
-          fill: $dangerColor;
-        }
-      }
-    }
-  }
-
-  .currency-selection {
+}
+.donations-gift-container {
+  .donations-gift-toggle {
     display: flex;
     align-items: center;
-    > button {
-      display: flex;
-      align-items: center;
-    }
-    svg {
-      margin-left: 6px;
-      margin-right: 6px;
-    }
-  }
-
-  .tax-country-selection {
-    display: inline-flex;
-    align-items: center;
-    svg {
-      margin-left: 6px;
-      margin-right: 6px;
-    }
-  }
-
-  .tree-selection-options-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    .tree-selection-option {
-      width: 100px;
-      height: 54px;
-      border: 1px solid $greyColor;
-      border-radius: 4px;
-      display: flex;
-      padding: 12px;
-      justify-content: center;
-      align-items: center;
-      &.tree-selection-option-selected,
-      &:hover,
-      &:focus {
-        cursor: pointer;
-        border: 1px solid $primaryColor;
-        > svg {
-          filter: grayscale(0%) opacity(1);
-        }
-        .tree-selection-option-text {
-          color: $primaryFontColor;
-        }
-      }
-      &:hover {
-        transform: scale(1.05);
-      }
-      &:active {
-        transform: scale(0.98);
-      }
-      > svg {
-        filter: grayscale(100%) opacity(0.5);
-      }
-      .tree-selection-option-text {
-        text-align: center;
-        line-height: 1;
-        margin-left: 10px;
-        color: $darkGreyColor;
-        > p {
-          font-size: 14px;
-          font-weight: 800;
-        }
-        > span {
-          font-size: 9px;
-        }
-      }
-    }
-  }
-
-  .contacts-isCompany-toggle {
-    display: flex;
-    align-items: baseline;
     justify-content: space-between;
     > label {
       &:hover {
         cursor: pointer;
       }
-      > span {
-        display: block;
+    }
+  }
+  .donation-supports-info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    button {
+      display: flex;
+    align-items: center;
+    }
+    svg {
+      >path {
+        fill: $dangerColor;
       }
     }
   }
+}
 
-  .payment-methods-tabs-container {
+.currency-selection {
+  display: flex;
+  align-items: center;
+  > button {
     display: flex;
-    padding-top: 30px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    > .payment-method {
-      box-sizing: border-box;
-      margin-right: 12px;
-      margin-bottom: 12px;
-      border: 1px solid $dividerColor;
-      border-radius: 4px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 64px;
-      height: 36px;
-      color: $dividerColor;
-      justify-content: center;
-      position: relative;
-      > label {
-        margin-top: 6px;
-        font-size: 10px;
+    align-items: center;
+  }
+  svg {
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+}
+
+.tax-country-selection {
+  display: inline-flex;
+  align-items: center;
+  svg {
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+}
+
+.tree-selection-options-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .tree-selection-option {
+    width: 90px; // Width 100px supported from 
+    height: 54px;
+    border: 1px solid $greyColor;
+    border-radius: 4px;
+    display: flex;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    &.tree-selection-option-selected,
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      border: 1px solid $primaryColor;
+      > svg {
+        filter: grayscale(0%) opacity(1);
       }
-      &:hover {
-        cursor: pointer;
+      .tree-selection-option-text {
         color: $primaryFontColor;
-        background-color: $blueishGrey;
-        border: 0.5px solid $blueishGrey;
-      }
-      .check-mark {
-        display: none;
       }
     }
-    .payment-method-selected {
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:active {
+      transform: scale(0.98);
+    }
+    > svg {
+      filter: grayscale(100%) opacity(0.5);
+    }
+    .tree-selection-option-text {
+      text-align: center;
+      line-height: 1;
+      margin-left: 10px;
+      color: $darkGreyColor;
+      > p {
+        font-size: 14px;
+        font-weight: 800;
+      }
+      > span {
+        font-size: 9px;
+      }
+    }
+  }
+}
+
+.contacts-isCompany-toggle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  > label {
+    &:hover {
+      cursor: pointer;
+    }
+    > span {
+      display: block;
+    }
+  }
+}
+
+.payment-methods-tabs-container {
+  display: flex;
+  padding-top: 30px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  > .payment-method {
+    box-sizing: border-box;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    border: 1px solid $dividerColor;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 64px;
+    height: 36px;
+    color: $dividerColor;
+    justify-content: center;
+    position: relative;
+    > label {
+      margin-top: 6px;
+      font-size: 10px;
+    }
+    &:hover {
+      cursor: pointer;
+      color: $primaryFontColor;
       background-color: $blueishGrey;
       border: 0.5px solid $blueishGrey;
-      color: $primaryFontColor;
-      font-weight: 600;
-
-      > .check-mark {
-        display: block;
-        position: absolute;
-        right: -6px;
-        top: -6px;
-      }
+    }
+    .check-mark {
+      display: none;
     }
   }
-
-  .disclaimer-container {
-    display: flex;
-    flex-direction: row;
-    background-color: rgb(231, 237, 255);
-    border-radius: 10px;
-    width: 100%;
-    padding: 14px;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-top: 20px;
-    > svg {
-      width: 48px;
-      height: 20px;
-    }
-    > p {
-      margin-left: 8px;
-    }
-  }
-  .mandate-acceptance {
-    font-family: $primaryFontFamily;
-    font-size: 12px;
+  .payment-method-selected {
+    background-color: $blueishGrey;
+    border: 0.5px solid $blueishGrey;
     color: $primaryFontColor;
-    margin-top: 20px;
-    text-align: center;
+    font-weight: 600;
+
+    > .check-mark {
+      display: block;
+      position: absolute;
+      right: -6px;
+      top: -6px;
+    }
   }
+}
+
+.disclaimer-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(231, 237, 255);
+  border-radius: 10px;
+  width: 100%;
+  padding: 14px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 20px;
+  > svg {
+    width: 48px;
+    height: 20px;
+  }
+  > p {
+    margin-left: 8px;
+  }
+}
+.mandate-acceptance {
+  font-family: $primaryFontFamily;
+  font-size: 12px;
+  color: $primaryFontColor;
+  margin-top: 20px;
+  text-align: center;
+}
+
+@include smTabletView{
+  .donations-info-container {
+    padding: 30px;
+    border-radius: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .donations-forms-container {
+    max-width: 420px;
+    padding: 30px;
+    margin-bottom: 0px;
+  }
+  .tree-selection-options-container {
+    .tree-selection-option {
+      width: 100px;
+      padding: 12px;
+    }
+  }
+  .donations-container{
+    align-items: center;
+    padding-top: 50px;
+  }
+}
+
+@include lgLaptopView {
+
+  .donations-card-container {
+    width: 840px;
+    flex-direction: row;
+    border-radius: 20px;
+    height: 560px;
+    max-width: 840px;
+  }
+  .donations-info-container {
+    width: 420px;
+    flex: 1;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 0px;
+  }
+  .donations-forms-container {
+    margin-bottom: 30px;
+  }
+  .donations-transaction-details {
+    font-size: 14px;
+    > p {
+      margin-top: 8px;
+    }
+  }
+
+  .donations-form {
+    .login-continue {
+      margin-bottom: 20px;
+    }
+  }
+
 }

@@ -21,6 +21,11 @@ $darkGreyColor: var(--dark-grey-color);
     @content;
   }
 }
+@mixin lgPhoneView {
+  @media screen and (min-width: 420px) {
+    @content;
+  }
+}
 @mixin smTabletView {
   @media screen and (min-width: 481px) {
     @content;
