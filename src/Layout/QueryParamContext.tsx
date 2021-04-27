@@ -164,24 +164,40 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.returnTo]);
 
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
+  async function loadProject(projectGUID:string) {
+    try {
+      const project: ProjectTypes = await getRequest(
+        `/app/projects/${projectGUID}?_scope=extended`
+      );
+      if (project.data) {
+        setprojectDetails(project.data);
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+
+  React.useEffect(() => {
+    if (router.query.project) {
+      loadProject(router.query.project);
+    } else {
+      loadProject("proj_WZkyugryh35sMmZMmXCwq7YY");
+    }
+  }, [router.query.project]);
 
   React.useEffect(() => {
     async function loadPaymentSetup(projectGUID) {
       setIsPaymentOptionsLoading(true);
       try {
         const paymentSetupData = await getRequest(
-          `/app/projects/${projectGUID}/paymentOptions`
+          `/app/projects/${projectGUID}/paymentOptions?country=${country}`
         );
-        const project: ProjectTypes = await getRequest(
-          `/app/projects/${projectGUID}?_scope=extended`
-        );
-        if (project.data) {
-          setprojectDetails(project.data);
-        }
         if (paymentSetupData.data) {
           setpaymentSetup(paymentSetupData.data);
           setcurrency(paymentSetupData.data.currency);
-          setcountry(paymentSetupData.data.effectiveCountry);
+          if(!country){
+            setcountry(paymentSetupData.data.effectiveCountry);
+          }
         }
         setIsPaymentOptionsLoading(false);
       } catch (err) {
@@ -193,7 +209,7 @@ export default function QueryParamProvider({ children }: any) {
     } else {
       loadPaymentSetup("proj_WZkyugryh35sMmZMmXCwq7YY");
     }
-  }, [router.query.project]);
+  }, [router.query.project, country]);
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
 

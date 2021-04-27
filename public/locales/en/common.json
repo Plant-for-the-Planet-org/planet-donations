@@ -46,5 +46,6 @@
     "fortreeCountTrees": "for {{treeCount}} Tree",
     "fortreeCountTrees_plural": "for {{treeCount}} Trees",
     "selectCountry":"Select Country",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "selectCurrency":"Select Currency"
 }

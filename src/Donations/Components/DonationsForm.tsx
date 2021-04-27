@@ -16,8 +16,9 @@ import {
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
-import TaxDeductionCountryModal from './../Micros/TaxDeductionCountryModal'
+import TaxDeductionCountryModal from "./../Micros/TaxDeductionCountryModal";
 import themeProperties from "../../../styles/themeProperties";
+import SelectCurrencyModal from "./../Micros/SelectCurrencyModal";
 interface Props {}
 
 function DonationsForm() {
@@ -131,7 +132,10 @@ function DonationsForm() {
     }
   };
 
-  const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(false)
+  const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(
+    false
+  );
+  const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -161,7 +165,7 @@ function DonationsForm() {
                     onClick={() => {
                       settreeCount(option.treeCount);
                       setisCustomDonation(false);
-                      setCustomTreeInputValue('');
+                      setCustomTreeInputValue("");
                     }}
                     key={key}
                     className={`tree-selection-option mt-20 ${
@@ -213,15 +217,21 @@ function DonationsForm() {
                 </div>
               </div>
             </div>
+
             <p className="currency-selection mt-20 mb-20">
-              <button>
+              <button
+                onClick={() => {
+                  setopenCurrencyModal(true);
+                }}
+                className="text-bold text-primary"
+              >
                 {currency}{" "}
                 {getFormatedCurrency(
                   i18n.language,
                   "",
                   Number(paymentSetup.treeCost)
                 )}{" "}
-                <DownArrowIcon />
+                <DownArrowIcon color={themeProperties.primaryColor} />
               </button>
               {t("perTree")}
             </p>
@@ -234,8 +244,9 @@ function DonationsForm() {
                   ? t("youWillReceiveTaxDeduction")
                   : t("taxDeductionNotYetAvailable")}
                 <button
-                onClick={() => setopenTaxDeductionModal(true)}
-                className={"tax-country-selection text-primary text-bold"}>
+                  onClick={() => setopenTaxDeductionModal(true)}
+                  className={"tax-country-selection text-primary text-bold"}
+                >
                   {t(`country:${country.toLowerCase()}`)}
                   <DownArrowIcon color={themeProperties.primaryColor} />
                 </button>
@@ -252,21 +263,18 @@ function DonationsForm() {
 
             <div className={"horizontal-line"} />
 
-            <div className={'w-100 text-center text-bold mt-20'}>
-              <span className={'text-primary'} style={{marginRight:'4px'}}>
+            <div className={"w-100 text-center text-bold mt-20"}>
+              <span className={"text-primary"} style={{ marginRight: "4px" }}>
                 {getFormatedCurrency(
                   i18n.language,
                   currency,
                   paymentSetup.treeCost * treeCount
                 )}
               </span>
-                {t('fortreeCountTrees', {
-                  count: Number(treeCount),
-                  treeCount: getFormattedNumber(
-                    i18n.language,
-                    Number(treeCount)
-                  )
-                })}
+              {t("fortreeCountTrees", {
+                count: Number(treeCount),
+                treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+              })}
             </div>
 
             {projectDetails.treeCost * treeCount >= minAmt ? (
@@ -299,10 +307,15 @@ function DonationsForm() {
         </div>
       </div>
       <TaxDeductionCountryModal
-          openModal={openTaxDeductionModal}
-          handleModalClose={() => setopenTaxDeductionModal(false)}
-          taxDeductionCountries={projectDetails.taxDeductionCountries}
-        />
+        openModal={openTaxDeductionModal}
+        handleModalClose={() => setopenTaxDeductionModal(false)}
+        taxDeductionCountries={projectDetails.taxDeductionCountries}
+      />
+
+      <SelectCurrencyModal
+        openModal={openCurrencyModal}
+        handleModalClose={() => setopenCurrencyModal(false)}
+      />
     </div>
   );
 }

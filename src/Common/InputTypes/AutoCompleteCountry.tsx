@@ -16,7 +16,7 @@ function countryToFlag(isoCode: string) {
     : isoCode;
 }
 
-const useStyles = makeStyles({
+export const useStylesAutoComplete = makeStyles({
   option: {
     color: '#2F3336',
     fontFamily: themeProperties.fontFamily,
@@ -41,7 +41,7 @@ export default function CountrySelect(props: {
 }) {
   const { t, ready } = useTranslation('country');
 
-  const classes = useStyles();
+  const classes = useStylesAutoComplete();
 
   // This value is in country code - eg. DE, IN, US
   const { defaultValue, onChange } = props;
