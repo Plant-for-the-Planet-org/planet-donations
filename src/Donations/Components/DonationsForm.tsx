@@ -15,7 +15,9 @@ import {
 } from "../PaymentFunctions";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import { getFormattedNumber } from "../../Utils/getFormattedNumber";
+import TaxDeductionCountryModal from './../Micros/TaxDeductionCountryModal'
+import themeProperties from "../../../styles/themeProperties";
 interface Props {}
 
 function DonationsForm() {
@@ -129,6 +131,8 @@ function DonationsForm() {
     }
   };
 
+  const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(false)
+
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
@@ -157,6 +161,7 @@ function DonationsForm() {
                     onClick={() => {
                       settreeCount(option.treeCount);
                       setisCustomDonation(false);
+                      setCustomTreeInputValue('');
                     }}
                     key={key}
                     className={`tree-selection-option mt-20 ${
@@ -180,7 +185,6 @@ function DonationsForm() {
                 }`}
                 style={{ flexGrow: 1, marginLeft: "30px" }}
                 onClick={() => {
-                  settreeCount(0);
                   setisCustomDonation(true);
                 }}
               >
@@ -191,7 +195,6 @@ function DonationsForm() {
                     onInput={(e) => {
                       // replaces any character other than number to blank
                       e.target.value = e.target.value.replace(/[^0-9]/g, "");
-
                       //  if length of input more than 12, display only 12 digits
                       if (e.target.value.toString().length >= 12) {
                         e.target.value = e.target.value.toString().slice(0, 12);
@@ -230,17 +233,16 @@ function DonationsForm() {
                 {projectDetails.taxDeductionCountries.includes(country)
                   ? t("youWillReceiveTaxDeduction")
                   : t("taxDeductionNotYetAvailable")}
-                <button className={"tax-country-selection"}>
+                <button
+                onClick={() => setopenTaxDeductionModal(true)}
+                className={"tax-country-selection text-primary text-bold"}>
                   {t(`country:${country.toLowerCase()}`)}
-                  <DownArrowIcon />
+                  <DownArrowIcon color={themeProperties.primaryColor} />
                 </button>
-
-                <div>
-                  {projectDetails &&
-                  projectDetails.taxDeductionCountries.includes(country)
-                    ? t("inTimeOfTaxReturns")
-                    : null}
-                </div>
+                {projectDetails &&
+                projectDetails.taxDeductionCountries.includes(country)
+                  ? t("inTimeOfTaxReturns")
+                  : null}
               </div>
             ) : (
               <div className={"isTaxDeductible"}>
@@ -249,6 +251,23 @@ function DonationsForm() {
             )}
 
             <div className={"horizontal-line"} />
+
+            <div className={'w-100 text-center text-bold mt-20'}>
+              <span className={'text-primary'} style={{marginRight:'4px'}}>
+                {getFormatedCurrency(
+                  i18n.language,
+                  currency,
+                  paymentSetup.treeCost * treeCount
+                )}
+              </span>
+                {t('fortreeCountTrees', {
+                  count: Number(treeCount),
+                  treeCount: getFormattedNumber(
+                    i18n.language,
+                    Number(treeCount)
+                  )
+                })}
+            </div>
 
             {projectDetails.treeCost * treeCount >= minAmt ? (
               !isPaymentOptionsLoading &&
@@ -269,7 +288,7 @@ function DonationsForm() {
                 <ButtonLoader />
               )
             ) : (
-              <p className={"text-danger mt-20"}>
+              <p className={"text-danger mt-20 text-center"}>
                 {t("minDonate")}
                 <span>
                   {getFormatedCurrency(i18n.language, currency, minAmt)}
@@ -279,6 +298,11 @@ function DonationsForm() {
           </div>
         </div>
       </div>
+      <TaxDeductionCountryModal
+          openModal={openTaxDeductionModal}
+          handleModalClose={() => setopenTaxDeductionModal(false)}
+          taxDeductionCountries={projectDetails.taxDeductionCountries}
+        />
     </div>
   );
 }

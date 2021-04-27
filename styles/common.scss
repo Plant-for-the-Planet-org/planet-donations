@@ -12,6 +12,12 @@
 .column{
   flex-direction: column;
 }
+.justify-content-center{
+  justify-content: center;
+}
+.justify-content-between{
+  justify-content: space-between;
+}
 .flex-1{
   flex: 1;
 }
@@ -44,8 +50,16 @@
   text-align: center;
 }
 
+.text-bold{
+  font-weight: bold;
+}
+
 .text-danger{
   color: $dangerColor;
+}
+
+.text-primary{
+  color: $primaryColor;
 }
 
 .text-white{
