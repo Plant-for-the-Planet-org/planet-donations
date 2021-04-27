@@ -1,0 +1,160 @@
+import React, { useRef } from 'react';
+import EmailIcon from '../../../public/assets/icons/share/Email';
+import EmailSolid from '../../../public/assets/icons/share/EmailSolid';
+import FacebookIcon from '../../../public/assets/icons/share/Facebook';
+import TwitterIcon from '../../../public/assets/icons/share/Twitter';
+import DownloadIcon from '../../../public/assets/icons/share/Download';
+import DownloadSolid from '../../../public/assets/icons/share/DownloadSolid';
+import InstagramIcon from '../../../public/assets/icons/share/Instagram';
+// import tenantConfig from '../../../../tenant.config';
+import ReactDOM from 'react-dom';
+import domtoimage from 'dom-to-image';
+import { useTranslation } from 'react-i18next';
+
+interface ShareOptionsProps {
+  treeCount: String;
+  sendRef: any;
+  donor: Object
+}
+const ShareOptions = ({
+  treeCount,
+  sendRef,
+  donor,
+}: ShareOptionsProps) => {
+  const { t, ready } = useTranslation(['common']);
+  // const config = tenantConfig();
+
+  const titleToShare = ready ? t('donate:titleToShare') : '';
+  const urlToShare = '';
+  const linkToShare = '';
+  let textToShare = '';
+  // donor may be undefined or empty for legacy donations or redeem
+  if (donor && (donor.name)) {
+    textToShare = ready ? t('donate:textToShareLinkedin', { name: `${donor.name}` }) : '';
+  } else {
+    textToShare = ready ? t('donate:textToShareForMe') : '';
+  }
+
+  const exportComponent = (node, fileName, backgroundColor, type) => {
+    const element = ReactDOM.findDOMNode(node.current);
+    const options = {
+      quality: 1,
+    };
+    domtoimage
+      .toJpeg(element, options)
+      .then((dataUrl) => {
+        domtoimage.toJpeg(element, options).then((dataUrl) => {
+          domtoimage.toJpeg(element, options).then((dataUrl) => {
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = dataUrl;
+            link.click();
+          });
+        });
+      })
+      .catch(function (error) {
+        console.error('Image cannot be downloaded', error);
+      });
+  };
+
+  const exportComponentAsJPEG = (
+    node,
+    fileName = `My_${treeCount}_tree_donation.jpeg`,
+    backgroundColor = null,
+    type = 'image/jpeg'
+  ) => {
+    return exportComponent(node, fileName, backgroundColor, type);
+  };
+
+  const openWindowLinks = (shareUrl) => {
+    window.open(shareUrl, '_blank');
+  };
+
+  const [currentHover, setCurrentHover] = React.useState(-1);
+
+  const shareClicked = async (shareUrl) => {
+    openWindowLinks(shareUrl);
+  };
+
+  return ready ? (
+    <div
+      className={'shareRow'}
+      onMouseOut={() => setCurrentHover(-1)}
+      style={{ cursor: 'pointer' }}
+    >
+      <button id={'shareButton'}
+        className={'shareIcon'}
+        onClick={() => {
+          if (sendRef) {
+            exportComponentAsJPEG(
+              sendRef(),
+              `My_${treeCount}_tree_donation.jpeg`
+            );
+          }
+        }}
+        onMouseOver={() => setCurrentHover(1)}
+      >
+        {currentHover === 1 ? (
+          <DownloadSolid color={'blueishGrey'} />
+        ) : (
+          <DownloadIcon color={'blueishGrey'} />
+        )}
+      </button>
+
+      <button id={'shareFacebook'}
+        className={'shareIcon'}
+        onClick={() =>
+          shareClicked(
+            `https://www.facebook.com/sharer.php?u=${urlToShare}&quote=${textToShare}&hashtag=%23StopTalkingStartPlanting`,
+            '_blank'
+          )
+        }
+        onMouseOver={() => setCurrentHover(2)}
+      >
+        <FacebookIcon
+          color={currentHover === 2 ? '#3b5998' : 'blueishGrey'}
+        />
+      </button>
+
+      <button id={'shareInstagram'}
+        className={'shareIcon'}
+        onMouseOver={() => setCurrentHover(3)}
+        onClick={() =>
+          shareClicked(`https://www.instagram.com/plantfortheplanet_official/`)
+        }
+      >
+        <InstagramIcon
+          color={currentHover === 3 ? '#dd217b' : 'blueishGrey'}
+        />
+      </button>
+
+      <button id={'shareTwitter'}
+        className={'shareIcon'}
+        onMouseOver={() => setCurrentHover(4)}
+        onClick={() =>
+          shareClicked(`https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&via=trilliontrees&url=${linkToShare}&text=${textToShare}`)
+        }
+      >
+        <TwitterIcon
+          color={currentHover === 4 ? '#00acee' : 'blueishGrey'}
+        />
+      </button>
+
+      <button id={'shareMail'}
+        className={'shareIcon'}
+        onClick={() =>
+          shareClicked(`mailto:?subject=${titleToShare}&body=${textToShare}`)
+        }
+        onMouseOver={() => setCurrentHover(5)}
+      >
+        {currentHover === 5 ? (
+          <EmailSolid color={'blueishGrey'} />
+        ) : (
+          <EmailIcon color={'blueishGrey'} />
+        )}
+      </button>
+    </div>
+  ) : null;
+};
+
+export default ShareOptions;

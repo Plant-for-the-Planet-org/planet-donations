@@ -5,6 +5,7 @@ import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
 import { useTranslation } from "react-i18next";
+import ThankYou from "./Components/ThankYouComponent";
 
 interface Props {}
 
@@ -13,15 +14,13 @@ function Donations({}: Props): ReactElement {
   const { paymentSetup, donationStep, projectDetails } = React.useContext(
     QueryParamContext
   );
-  
 
   return paymentSetup && projectDetails ? (
     <div className="donations-container">
+      
       <div className="donations-card-container">
         <div className="donations-info-container">
-          <p className="title-text text-white">
-            {projectDetails.name}
-          </p>
+          <p className="title-text text-white">{projectDetails.name}</p>
           <p className="text-white">
             {t("byOrganization", {
               organizationName: projectDetails.tpo.name,
@@ -36,7 +35,7 @@ function Donations({}: Props): ReactElement {
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
-        {donationStep === 4 && <p>Thank you</p>}
+        {donationStep === 4 && <ThankYou />}
       </div>
     </div>
   ) : (

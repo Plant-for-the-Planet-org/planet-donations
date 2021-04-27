@@ -4,9 +4,21 @@
   min-height: 80vh;
   display: flex;
   justify-content: center;
-
+  // position: relative;
 }
 
+.test-donation-bar{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background-color: $dangerColor;
+  color: $light;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  z-index: 10;
+}
 .donations-card-container {
   width: 100%;
   max-width: 420px;
@@ -38,14 +50,12 @@
 }
 .donations-forms-container {
   display: flex;
-  justify-content: center;
   padding: 20px;
   width: 100%;
-  flex: 1;
   overflow-y: scroll;
-  margin: auto;
-  margin-bottom: 20px;
+  padding-bottom: 30px;
   max-width: 360px;
+  align-self: center;
 }
 .donations-form {
   width: 100%;
@@ -68,16 +78,16 @@
       }
     }
   }
-  .donation-supports-info{
+  .donation-supports-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
     button {
       display: flex;
-    align-items: center;
+      align-items: center;
     }
     svg {
-      >path {
+      > path {
         fill: $dangerColor;
       }
     }
@@ -112,7 +122,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   .tree-selection-option {
-    width: 90px; // Width 100px supported from 
+    width: 90px; // Width 100px supported from
     height: 54px;
     border: 1px solid $greyColor;
     border-radius: 4px;
@@ -169,6 +179,29 @@
       display: block;
     }
   }
+}
+
+.custom-tree-input {
+  border: 0px;
+  border-bottom: 1px solid $primaryFontColor;
+  margin: 0px 10px;
+  width: 70%;
+  font-family: $primaryFontFamily;
+  font-weight: bold;
+  font-size: $fontSubTitleSize;
+  color: $primaryColor;
+  text-align: center;
+  background-color: transparent;
+  outline: 0px;
+}
+
+.tree-selection-option > .custom-tree-input:focus {
+  display: block;
+  outline: none;
+}
+
+.tree-selection-option-selected > .custom-tree-input {
+  border-bottom: 1px solid $primaryColor;
 }
 
 .payment-methods-tabs-container {
@@ -245,7 +278,13 @@
   text-align: center;
 }
 
-@include smTabletView{
+.horizontal-line {
+  height: 1px;
+  background-color: $dividerColor;
+  margin-top: 20px;
+}
+
+@include smTabletView {
   .donations-info-container {
     padding: 30px;
     border-radius: 0px;
@@ -263,14 +302,17 @@
       padding: 12px;
     }
   }
-  .donations-container{
+  .donations-container {
     align-items: center;
     padding-top: 50px;
   }
 }
 
 @include lgLaptopView {
-
+  .test-donation-bar{
+    top: 0px;
+    bottom: auto;
+  }
   .donations-card-container {
     width: 840px;
     flex-direction: row;
@@ -284,9 +326,12 @@
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
   }
   .donations-forms-container {
-    margin-bottom: 30px;
+    max-height: 560px;
+    padding-bottom: 30px;
+    align-self: auto;
   }
   .donations-transaction-details {
     font-size: 14px;
@@ -300,5 +345,4 @@
       margin-bottom: 20px;
     }
   }
-
 }

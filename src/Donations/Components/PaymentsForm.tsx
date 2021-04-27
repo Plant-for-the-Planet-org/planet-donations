@@ -94,9 +94,7 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
     });
-    
-    console.log('donation',donation);
-    
+        
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
       setpublishName(donation.hasPublicProfile);

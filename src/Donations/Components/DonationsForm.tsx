@@ -116,16 +116,26 @@ function DonationsForm() {
     });
   };
 
+  const [customTreeInputValue, setCustomTreeInputValue] = React.useState("");
+
+  const [isCustomDonation, setisCustomDonation] = React.useState(false);
+
+  const setCustomTreeValue = (e: any) => {
+    if (e.target.value === "" || e.target.value < 1) {
+      // if input is '', default 1
+      settreeCount(1);
+    } else if (e.target.value.toString().length <= 12) {
+      settreeCount(e.target.value);
+    }
+  };
+
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
     <div className="donations-forms-container">
       <div className="donations-form">
         {!isLoading && !isAuthenticated && (
-          <button
-            className="login-continue"
-            onClick={() => loginWithPopup()}
-          >
+          <button className="login-continue" onClick={() => loginWithPopup()}>
             Login & Continue
           </button>
         )}
@@ -144,10 +154,13 @@ function DonationsForm() {
               {treeSelectionOptions.map((option, key) => {
                 return (
                   <div
-                    onClick={() => settreeCount(option.treeCount)}
+                    onClick={() => {
+                      settreeCount(option.treeCount);
+                      setisCustomDonation(false);
+                    }}
                     key={key}
                     className={`tree-selection-option mt-20 ${
-                      option.treeCount === treeCount
+                      option.treeCount === treeCount && !isCustomDonation
                         ? "tree-selection-option-selected"
                         : ""
                     }`}
@@ -162,13 +175,38 @@ function DonationsForm() {
               })}
 
               <div
-                className="tree-selection-option mt-20"
+                className={`tree-selection-option mt-20 ${
+                  isCustomDonation ? "tree-selection-option-selected" : ""
+                }`}
                 style={{ flexGrow: 1, marginLeft: "30px" }}
+                onClick={() => {
+                  settreeCount(0);
+                  setisCustomDonation(true);
+                }}
               >
                 <CustomIcon />
                 <div className="tree-selection-option-text">
-                  <p style={{ letterSpacing: "-2px" }}>_________________</p>
-                  <span>Custom trees</span>
+                  <input
+                    className={"custom-tree-input"}
+                    onInput={(e) => {
+                      // replaces any character other than number to blank
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+
+                      //  if length of input more than 12, display only 12 digits
+                      if (e.target.value.toString().length >= 12) {
+                        e.target.value = e.target.value.toString().slice(0, 12);
+                      }
+                    }}
+                    value={customTreeInputValue}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    onChange={(e) => {
+                      setCustomTreeValue(e);
+                      setCustomTreeInputValue(e.target.value);
+                    }}
+                  />
+                  <span>trees</span>
                 </div>
               </div>
             </div>
@@ -210,11 +248,7 @@ function DonationsForm() {
               </div>
             )}
 
-            {paymentSetup?.gateways?.stripe?.isLive === false ? (
-              <div className={"text-danger mt-20"}>
-                Test Mode: Your donations will not be charged
-              </div>
-            ) : null}
+            <div className={"horizontal-line"} />
 
             {projectDetails.treeCost * treeCount >= minAmt ? (
               !isPaymentOptionsLoading &&

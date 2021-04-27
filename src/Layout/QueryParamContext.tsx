@@ -39,7 +39,8 @@ export const QueryParamContext = React.createContext({
   setshouldCreateDonation:(value: boolean) => {},
   setIsTaxDeductible:(value: boolean) => {},
   isTaxDeductible: false,
-  isPaymentOptionsLoading: false
+  isPaymentOptionsLoading: false,
+  redirectstatus:""
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -140,6 +141,8 @@ export default function QueryParamProvider({ children }: any) {
   const [currency, setcurrency] = useState("");
   const [returnTo, setreturnTo] = useState("");
 
+  const [redirectstatus, setredirectstatus] = useState(null)
+
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false)
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
@@ -237,6 +240,20 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.treecount]);
 
+
+  React.useEffect(() => {
+    if (router.query.paymentType) {
+      setPaymentType(router.query.paymentType);
+    }
+  }, [router.query.paymentType]);
+
+
+  React.useEffect(() => {
+    if (router.query.redirect_status) {
+      setredirectstatus(router.query.redirect_status);
+    }
+  }, [router.query.redirect_status]);
+
   // TO DO - Login user, fetch details and store default values for contact details
 
   React.useEffect(() => {
@@ -272,7 +289,8 @@ export default function QueryParamProvider({ children }: any) {
         shouldCreateDonation,
         isTaxDeductible,
         setIsTaxDeductible,
-        isPaymentOptionsLoading
+        isPaymentOptionsLoading,
+        redirectstatus
       }}
     >
       {children}
