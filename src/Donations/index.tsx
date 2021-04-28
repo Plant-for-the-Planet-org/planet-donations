@@ -6,6 +6,11 @@ import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
 import { useTranslation } from "react-i18next";
 import ThankYou from "./Components/ThankYouComponent";
+import getFormatedCurrency from "../Utils/getFormattedCurrency";
+import { getFormattedNumber } from "../Utils/getFormattedNumber";
+import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
+import themeProperties from "../../styles/themeProperties";
+import { getCountryDataBy } from "../Utils/countryUtils";
 
 interface Props {}
 
@@ -17,21 +22,11 @@ function Donations({}: Props): ReactElement {
 
   return paymentSetup && projectDetails ? (
     <div className="donations-container">
-      
       <div className="donations-card-container">
-        <div className="donations-info-container">
-          <p className="title-text text-white">{projectDetails.name}</p>
-          <p className="text-white">
-            {t("byOrganization", {
-              organizationName: projectDetails.tpo.name,
-            })}
-          </p>
-          <div className="donations-info"></div>
-          <div className="donations-transaction-details">
-            <p>Transaction ID - 3343FDFD3434</p>
-            <p>This donation is processed by Plant-for-the-Planet</p>
-          </div>
-        </div>
+        {/* Left panel */}
+        <DonationInfo />
+
+        {/* Right panel */}
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
@@ -40,6 +35,77 @@ function Donations({}: Props): ReactElement {
     </div>
   ) : (
     <></>
+  );
+}
+
+function DonationInfo() {
+  const { t, i18n } = useTranslation("common");
+  const {
+    projectDetails,
+    donationID,
+    donationStep,
+    treeCount,
+    paymentSetup,
+    currency,
+    contactDetails,
+  } = React.useContext(QueryParamContext);
+
+  const [showContactDetails, setshowContactDetails] = React.useState(false);
+  return (
+    <div className="donations-info-container">
+      <p className="title-text text-white">{projectDetails.name}</p>
+      <p className="text-white mt-10">
+        {t("byOrganization", {
+          organizationName: projectDetails.tpo.name,
+        })}
+      </p>
+      <div className="donations-info">
+        {(donationStep === 2 || donationStep === 3) && (
+          <div className={"w-100  text-white mt-10"}>
+            <span className="text-bold" style={{ marginRight: "4px" }}>
+              {getFormatedCurrency(
+                i18n.language,
+                currency,
+                paymentSetup.treeCost * treeCount
+              )}
+            </span>
+            {t("fortreeCountTrees", {
+              count: Number(treeCount),
+              treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+            })}
+          </div>
+        )}
+        {donationStep === 3 && (
+          <div className={"contact-details-info w-100 mt-10"}>
+            <button
+              onClick={() => setshowContactDetails(!showContactDetails)}
+              className={`text-white ${showContactDetails ? 'button-reverse' : ''}`}
+            >
+              {contactDetails.firstname && contactDetails.firstname}{" "}
+              {contactDetails.lastname && contactDetails.lastname}
+              <DownArrowIcon color={themeProperties.light.light} />
+            </button>
+            {showContactDetails && (
+              <div className="text-white">
+                <p>{contactDetails.email && contactDetails.email}</p>
+                <p>
+                  {contactDetails.address && contactDetails.address}
+                  {", "}
+                  {contactDetails.city && contactDetails.city}
+                  {", "}
+                  {contactDetails.zipCode && contactDetails.zipCode}
+                </p>
+                <p>{contactDetails.country && getCountryDataBy('countryCode',contactDetails.country)?.countryName}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      <div className="donations-transaction-details">
+        {donationID && <p>Donation ID - {donationID}</p>}
+        <p>This donation is processed by Plant-for-the-Planet</p>
+      </div>
+    </div>
   );
 }
 

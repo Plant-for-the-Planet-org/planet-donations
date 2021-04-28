@@ -129,11 +129,11 @@ export default function QueryParamProvider({ children }: any) {
   });
 
   const [contactDetails, setContactDetails] = React.useState({
-    firstname: "H",
-    lastname: "V",
-    email: "h@v.om",
-    address: "Ne",
-    city: "N",
+    firstname: "Harsh",
+    lastname: "Vitra",
+    email: "harshvitra@gmail.com",
+    address: "B-108, Bhairav Shrusti",
+    city: "Thane",
     zipCode: "401001",
     country: "IN",
     companyname: "",

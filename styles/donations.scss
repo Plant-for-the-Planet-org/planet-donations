@@ -391,6 +391,29 @@
   }  
 }
 
+.contact-details-info{
+  button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    svg {
+      margin-left: 6px;
+    }
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .button-reverse{
+    svg{
+      transform: rotate(180deg);
+    }
+  }
+  p{
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}
 
 @include smTabletView {
   .donations-info-container {
