@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react";
-import Link from "next/Link";
 import Image from "next/image";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import {
@@ -18,9 +17,16 @@ interface Props {}
 
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
+
+  const {returnTo} = React.useContext(QueryParamContext)
   return (
     <div className="footer-container">
-      <button>Cancel and return to the organisation</button>
+      {returnTo ? (
+        <a href={returnTo} >Cancel and return to the organisation</a>
+      ): (
+        <p></p>
+      )}
+      
       <div className="footer-links">
         <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
           English

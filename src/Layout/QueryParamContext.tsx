@@ -41,7 +41,8 @@ export const QueryParamContext = React.createContext({
   setIsTaxDeductible:(value: boolean) => {},
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
-  redirectstatus:""
+  redirectstatus:"",
+  returnTo:""
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -158,10 +159,10 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   React.useEffect(() => {
-    if (router.query.returnTo) {
-      setreturnTo(router.query.returnTo);
+    if (router.query.returnto) {
+      setreturnTo(router.query.returnto);
     }
-  }, [router.query.returnTo]);
+  }, [router.query.returnto]);
 
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
   async function loadProject(projectGUID:string) {
@@ -219,23 +220,23 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.country]);
 
-  // Donation ID = donationId => This will be received from the URL params
+  // Donation ID = donationid => This will be received from the URL params
 
   React.useEffect(() => {
-    if (router.query.donationId) {
-      setdonationID(router.query.donationId);
+    if (router.query.donationid) {
+      setdonationID(router.query.donationid);
     }
-  }, [router.query.donationId]);
+  }, [router.query.donationid]);
 
   // support = s => Fetch the user data from api and load in gift details
 
   // Access token = accessToken =>
 
   React.useEffect(() => {
-    if (router.query.accessToken) {
-      setaccessToken(router.query.accessToken);
+    if (router.query.accesstoken) {
+      setaccessToken(router.query.accesstoken);
     }
-  }, [router.query.accessToken]);
+  }, [router.query.accesstoken]);
 
   // Tenant key = tenantkey =>
 
@@ -259,10 +260,10 @@ export default function QueryParamProvider({ children }: any) {
 
 
   React.useEffect(() => {
-    if (router.query.paymentType) {
-      setPaymentType(router.query.paymentType);
+    if (router.query.paymenttype) {
+      setPaymentType(router.query.paymenttype);
     }
-  }, [router.query.paymentType]);
+  }, [router.query.paymenttype]);
 
 
   React.useEffect(() => {
@@ -308,7 +309,8 @@ export default function QueryParamProvider({ children }: any) {
         isTaxDeductible,
         setIsTaxDeductible,
         isPaymentOptionsLoading,
-        redirectstatus
+        redirectstatus,
+        returnTo
       }}
     >
       {children}

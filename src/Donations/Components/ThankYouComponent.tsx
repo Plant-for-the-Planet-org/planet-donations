@@ -14,6 +14,7 @@ import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import { getRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import themeProperties from "../../../styles/themeProperties";
+import { useRouter } from "next/dist/client/router";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country"]);
@@ -23,9 +24,12 @@ function ThankYou() {
     paymentType,
     setdonationStep,
     redirectstatus,
+    returnTo
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
+
+  const router = useRouter();
 
   async function loadDonation() {
     const donation = await getRequest(`/app/donations/${donationID}`);
@@ -83,6 +87,10 @@ function ThankYou() {
     setTextCopiedSnackbarOpen(false);
   };
 
+  const sendToReturn =()=>{
+    router.push(returnTo)
+  }
+
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
@@ -94,7 +102,7 @@ function ThankYou() {
       <div className="d-flex column justify-content-center">
         <button
           id={"thank-you-close"}
-          onClick={() => setdonationStep(1)}
+          onClick={() => sendToReturn()}
           className="mb-10"
           style={{ alignSelf: "flex-start" }}
         >
@@ -208,7 +216,7 @@ function ThankYou() {
       <div>
         <button
           id={"thank-you-close"}
-          onClick={() => setdonationStep(1)}
+          onClick={() => sendToReturn()}
           className="mb-10"
           style={{ alignSelf: "flex-start" }}
         >
@@ -228,7 +236,7 @@ function ThankYou() {
       <div>
         <button
           id={"thank-you-close"}
-          onClick={() => setdonationStep(1)}
+          onClick={() => sendToReturn()}
           className="mb-10"
           style={{ alignSelf: "flex-start" }}
         >
@@ -245,8 +253,6 @@ function ThankYou() {
       </div>
     );
   }
-
-  console.log("donation", donation);
 
   return !ready && !donation ? (
     <PaymentProgress isPaymentProcessing={true} />
