@@ -11,6 +11,7 @@ import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import themeProperties from "../../styles/themeProperties";
 import { getCountryDataBy } from "../Utils/countryUtils";
+import Image from "next/image";
 
 interface Props {}
 
@@ -53,57 +54,73 @@ function DonationInfo() {
   const [showContactDetails, setshowContactDetails] = React.useState(false);
   return (
     <div className="donations-info-container">
-      <p className="title-text text-white">{projectDetails.name}</p>
-      <p className="text-white mt-10">
-        {t("byOrganization", {
-          organizationName: projectDetails.tpo.name,
-        })}
-      </p>
+      <img
+        className="background-image"
+        src="/assets/images/forest2.jpg"
+        width="420"
+        height="560"
+      />
+      {/* <div className="background-image-overlay"></div> */}
       <div className="donations-info">
-        {(donationStep === 2 || donationStep === 3) && (
-          <div className={"w-100  text-white mt-10"}>
-            <span className="text-bold" style={{ marginRight: "4px" }}>
-              {getFormatedCurrency(
-                i18n.language,
-                currency,
-                paymentSetup.treeCost * treeCount
-              )}
-            </span>
-            {t("fortreeCountTrees", {
-              count: Number(treeCount),
-              treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+        <div className="donations-info-header">
+          <p className="title-text text-white">{projectDetails.name}</p>
+          <p className="text-white mt-10">
+            {t("byOrganization", {
+              organizationName: projectDetails.tpo.name,
             })}
-          </div>
-        )}
-        {donationStep === 3 && (
-          <div className={"contact-details-info w-100 mt-10"}>
-            <button
-              onClick={() => setshowContactDetails(!showContactDetails)}
-              className={`text-white ${showContactDetails ? 'button-reverse' : ''}`}
-            >
-              {contactDetails.firstname && contactDetails.firstname}{" "}
-              {contactDetails.lastname && contactDetails.lastname}
-              <DownArrowIcon color={themeProperties.light.light} />
-            </button>
-            {showContactDetails && (
-              <div className="text-white">
-                <p>{contactDetails.email && contactDetails.email}</p>
-                <p>
-                  {contactDetails.address && contactDetails.address}
-                  {", "}
-                  {contactDetails.city && contactDetails.city}
-                  {", "}
-                  {contactDetails.zipCode && contactDetails.zipCode}
-                </p>
-                <p>{contactDetails.country && getCountryDataBy('countryCode',contactDetails.country)?.countryName}</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      <div className="donations-transaction-details">
-        {donationID && <p>Donation ID - {donationID}</p>}
-        <p>This donation is processed by Plant-for-the-Planet</p>
+          </p>
+          {(donationStep === 2 || donationStep === 3) && (
+            <div className={"w-100  text-white mt-10"}>
+              <span className="text-bold" style={{ marginRight: "4px" }}>
+                {getFormatedCurrency(
+                  i18n.language,
+                  currency,
+                  paymentSetup.treeCost * treeCount
+                )}
+              </span>
+              {t("fortreeCountTrees", {
+                count: Number(treeCount),
+                treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+              })}
+            </div>
+          )}
+          {donationStep === 3 && (
+            <div className={"contact-details-info w-100 mt-10"}>
+              <button
+                onClick={() => setshowContactDetails(!showContactDetails)}
+                className={`text-white ${
+                  showContactDetails ? "button-reverse" : ""
+                }`}
+              >
+                {contactDetails.firstname && contactDetails.firstname}{" "}
+                {contactDetails.lastname && contactDetails.lastname}
+                <DownArrowIcon color={themeProperties.light.light} />
+              </button>
+              {showContactDetails && (
+                <div className="text-white">
+                  <p>{contactDetails.email && contactDetails.email}</p>
+                  <p>
+                    {contactDetails.address && contactDetails.address}
+                    {", "}
+                    {contactDetails.city && contactDetails.city}
+                    {", "}
+                    {contactDetails.zipCode && contactDetails.zipCode}
+                  </p>
+                  <p>
+                    {contactDetails.country &&
+                      getCountryDataBy("countryCode", contactDetails.country)
+                        ?.countryName}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="donations-transaction-details">
+          {donationID && <p>Donation ID - {donationID}</p>}
+          <p>This donation is processed by Plant-for-the-Planet</p>
+        </div>
       </div>
     </div>
   );
