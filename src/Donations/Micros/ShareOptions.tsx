@@ -78,12 +78,11 @@ const ShareOptions = ({
 
   return ready ? (
     <div
-      className={'shareRow'}
+      className={'share-options'}
       onMouseOut={() => setCurrentHover(-1)}
       style={{ cursor: 'pointer' }}
     >
       <button id={'shareButton'}
-        className={'shareIcon'}
         onClick={() => {
           if (sendRef) {
             exportComponentAsJPEG(
@@ -102,7 +101,6 @@ const ShareOptions = ({
       </button>
 
       <button id={'shareFacebook'}
-        className={'shareIcon'}
         onClick={() =>
           shareClicked(
             `https://www.facebook.com/sharer.php?u=${urlToShare}&quote=${textToShare}&hashtag=%23StopTalkingStartPlanting`,
@@ -117,7 +115,6 @@ const ShareOptions = ({
       </button>
 
       <button id={'shareInstagram'}
-        className={'shareIcon'}
         onMouseOver={() => setCurrentHover(3)}
         onClick={() =>
           shareClicked(`https://www.instagram.com/plantfortheplanet_official/`)
@@ -129,7 +126,6 @@ const ShareOptions = ({
       </button>
 
       <button id={'shareTwitter'}
-        className={'shareIcon'}
         onMouseOver={() => setCurrentHover(4)}
         onClick={() =>
           shareClicked(`https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&via=trilliontrees&url=${linkToShare}&text=${textToShare}`)
@@ -141,7 +137,6 @@ const ShareOptions = ({
       </button>
 
       <button id={'shareMail'}
-        className={'shareIcon'}
         onClick={() =>
           shareClicked(`mailto:?subject=${titleToShare}&body=${textToShare}`)
         }

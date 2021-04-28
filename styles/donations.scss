@@ -7,7 +7,7 @@
   // position: relative;
 }
 
-.test-donation-bar{
+.test-donation-bar {
   position: fixed;
   bottom: 0px;
   left: 0px;
@@ -284,6 +284,114 @@
   margin-top: 20px;
 }
 
+.thankyou-image {
+  background-image: url("/assets/images/donationCompletion.jpg");
+  background-position: center;
+  background-size: cover;
+  border-radius: 7px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 280px;
+  height: 280px;
+  align-self: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.donation-count {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  color: $light;
+  font-variant-ligatures: none;
+}
+
+.donation-url {
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  text-align: center;
+  margin-top: 16px;
+  color: $light;
+  font-variant-ligatures: none;
+}
+
+
+.thankyou-image-header {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  color: $light;
+  font-variant-ligatures: none;
+  padding-top: 15%;
+  white-space: pre-line;
+}
+
+.thankyou-image-header p h1 {
+  font-size: 34px;
+  font-weight: bolder;
+}
+
+.temp-image {
+  height: 0px;
+  width: 0px;
+  overflow: hidden;
+  .thankyou-image {
+    border-radius: 0px;
+    margin: 0px;
+    width: 2300px;
+    height: 2300px;
+  }
+  .donation-count{
+    font-size: 130px;
+    bottom: 300px;
+    padding: 0px 80px;
+  }
+  .donation-url {
+    font-size: 75px;
+    margin: 0px;
+    position: absolute;
+    bottom: 60px;
+  }
+  .thankyou-image-header{
+    font-size: 100px;
+    width: 100%;
+    padding-top: 17%;
+  }
+  .thankyou-image-header p h1 {
+    font-size: 150px;
+  }
+}
+
+.share-options{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  top: -30px;
+  width: fit-content;
+  left: 50%;
+  border-radius: 30px;
+  height: 36px;
+  width: 200px;
+  padding-left: 24px;
+  padding-right: 24px;
+  transform: translate(-50%, 0%);
+  background-color: $light;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.12);
+  svg{
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }  
+}
+
+
 @include smTabletView {
   .donations-info-container {
     padding: 30px;
@@ -306,10 +414,14 @@
     align-items: center;
     padding-top: 50px;
   }
+  .thankyou-image {
+    width: 360px;
+    height: 360px;
+  }
 }
 
 @include lgLaptopView {
-  .test-donation-bar{
+  .test-donation-bar {
     top: 0px;
     bottom: auto;
   }
@@ -344,5 +456,9 @@
     .login-continue {
       margin-bottom: 20px;
     }
+  }
+  .thankyou-image {
+    width: 360px;
+    height: 360px;
   }
 }

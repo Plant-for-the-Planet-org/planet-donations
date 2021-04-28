@@ -13,6 +13,7 @@ import ShareOptions from "../Micros/ShareOptions";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import { getRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import themeProperties from "../../../styles/themeProperties";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country"]);
@@ -28,7 +29,9 @@ function ThankYou() {
 
   async function loadDonation() {
     const donation = await getRequest(`/app/donations/${donationID}`);
-    setdonation(donation);
+    if (donation.status === 200) {
+      setdonation(donation.data);
+    }
   }
 
   React.useEffect(() => {
@@ -88,57 +91,65 @@ function ThankYou() {
 
   function SuccessfulDonation() {
     return (
-      <div className={"cardContainer"}>
-        <div className={"contributionMessageContainer"}>
-          <div className={"contributionMessage"} style={{ marginTop: "0px" }}>
-            {t(
-              paymentTypeUsed === "GOOGLE_PAY" ||
-                paymentTypeUsed === "APPLE_PAY"
-                ? "donate:donationSuccessfulWith"
-                : "donate:donationSuccessful",
-              {
-                totalAmount: currencyFormat(),
-                paymentTypeUsed,
-              }
-            )}
-            {donation.gift
-              ? " " +
-                t("donate:giftSentMessage", {
-                  recipientName: donation.gift.recipientName,
-                })
-              : null}
-            {" " +
-              t("donate:yourTreesPlantedByOnLocation", {
-                treeCount: getFormattedNumber(
-                  i18n.language,
-                  Number(donation.treeCount)
-                ),
-                projectName: donation.project.name,
-                location: t(
-                  "country:" + donation.project.country.toLowerCase()
-                ),
-              })}
-          </div>
+      <div className="d-flex column justify-content-center">
+        <button
+          id={"thank-you-close"}
+          onClick={() => setdonationStep(1)}
+          className="mb-10"
+          style={{ alignSelf: "flex-start" }}
+        >
+          <CloseIcon color={themeProperties.light.primaryFontColor} />
+        </button>
+        <div className={"title-text"}>{t("common:thankYou")}</div>
 
-          <div className={"contributionMessage"}>
-            {t("donate:contributionMessage")}
-          </div>
+        <div className={"mt-20 text-center"}>
+          {t(
+            paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
+              ? "common:donationSuccessfulWith"
+              : "common:donationSuccessful",
+            {
+              totalAmount: currencyFormat(),
+              paymentTypeUsed,
+            }
+          )}
+          {donation.gift
+            ? " " +
+              t("common:giftSentMessage", {
+                recipientName: donation.gift.recipientName,
+              })
+            : null}
+          {" " +
+            t("common:yourTreesPlantedByOnLocation", {
+              treeCount: getFormattedNumber(
+                i18n.language,
+                Number(donation.treeCount)
+              ),
+              projectName: donation.project.name,
+              location: t("country:" + donation.project.country.toLowerCase()),
+            })}
+        </div>
+
+        <div className={"mt-20 text-center"}>
+          {t("common:contributionMessage")}
         </div>
 
         {/* <div className={'horizontalLine} /> */}
 
         {/* hidden div for image download */}
-        <div style={{ width: "0px", height: "0px", overflow: "hidden" }}>
-          <div className={"tempThankYouImage"} ref={imageRef}>
-            <div className={"tempthankyouImageHeader"}>
+        <div
+          className="temp-image"
+          style={{ width: "0px", height: "0px", overflow: "hidden" }}
+        >
+          <div className={"thankyou-image"} ref={imageRef}>
+            <div className={"thankyou-image-header"}>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: t("donate:thankyouHeaderText"),
+                  __html: t("common:thankyouHeaderText"),
                 }}
               />
             </div>
-            <p className={"tempDonationCount"}>
-              {t("donate:myTreesPlantedByOnLocation", {
+            <p className={"donation-count"}>
+              {t("common:myTreesPlantedByOnLocation", {
                 treeCount: getFormattedNumber(
                   i18n.language,
                   Number(donation.treeCount)
@@ -148,37 +159,34 @@ function ThankYou() {
                 ),
               })}
             </p>
-            <p className={"tempDonationTenant"}>
-              {/* {t('donate:plantTreesAtURL', { url: config.tenantURL })} */}
+            <p className={"donation-url"}>
+              {t("common:plantTreesAtURL", {
+                url: "www.plant-for-the-planet.org",
+              })}
             </p>
           </div>
         </div>
 
-        <div className={"treeDonationContainer"}>
-          <div className={"thankyouImageContainer"}>
-            <div className={"thankyouImage"}>
-              <div className={"thankyouImageHeader"}>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: t("donate:thankyouHeaderText"),
-                  }}
-                />
-              </div>
-              <div className={"donationCount"}>
-                {t("donate:myTreesPlantedByOnLocation", {
-                  treeCount: getFormattedNumber(
-                    i18n.language,
-                    Number(donation.treeCount)
-                  ),
-                  location: t(
-                    "country:" + donation.project.country.toLowerCase()
-                  ),
-                })}
-                <p className={"donationTenant"}>
-                  {/* {t('donate:plantTreesAtURL', { url: config.tenantURL })} */}
-                </p>
-              </div>
-            </div>
+        <div className={"thankyou-image"}>
+          <p
+            className={"thankyou-image-header"}
+            dangerouslySetInnerHTML={{
+              __html: t("common:thankyouHeaderText"),
+            }}
+          />
+          <div className={"donation-count"}>
+            {t("common:myTreesPlantedByOnLocation", {
+              treeCount: getFormattedNumber(
+                i18n.language,
+                Number(donation.treeCount)
+              ),
+              location: t("country:" + donation.project.country.toLowerCase()),
+            })}
+            <p className={"donation-url"}>
+              {t("common:plantTreesAtURL", {
+                url: "www.plant-for-the-planet.org",
+              })}
+            </p>
           </div>
         </div>
 
@@ -197,58 +205,54 @@ function ThankYou() {
 
   function FailedDonation() {
     return (
-      <div className={"cardContainer"} style={{ paddingBottom: "24px" }}>
-        <div className={"contributionMessageContainer"}>
-          <div className={"contributionMessage"} style={{ margin: "0px" }}>
-            {t("donate:donationFailedMessage")}
-          </div>
+      <div>
+        <button
+          id={"thank-you-close"}
+          onClick={() => setdonationStep(1)}
+          className="mb-10"
+          style={{ alignSelf: "flex-start" }}
+        >
+          <CloseIcon color={themeProperties.light.primaryFontColor} />
+        </button>
+        <div className={"title-text"}>{t("common:donationFailed")}</div>
+        <div className={"mt-20 text-center"}>
+          {t("common:donationFailedMessage")}
         </div>
-        <div className={"treeDonationContainer"}>
-          <PaymentFailedIllustration />
-        </div>
+        <PaymentFailedIllustration />
       </div>
     );
   }
-
-  const titleMessage = "";
 
   function PendingDonation() {
     return (
       <div>
-        <div className={"contributionMessageContainer"}>
-          <div className={"contributionMessage"}>
-            {t("donate:donationPendingMessage")}
-          </div>
-          <div
-            className={"contributionMessage"}
-            style={{ marginBottom: "24px", fontStyle: "italic" }}
-          >
-            {t("donate:donationRef")} {donationID}
-          </div>
+        <button
+          id={"thank-you-close"}
+          onClick={() => setdonationStep(1)}
+          className="mb-10"
+          style={{ alignSelf: "flex-start" }}
+        >
+          <CloseIcon color={themeProperties.light.primaryFontColor} />
+        </button>
+        <div className={"title-text"}>{t("common:donationPending")}</div>
+        <div className={"mt-20 text-center"}>
+          {t("common:donationPendingMessage")}
         </div>
-        <div className={"treeDonationContainer"}>
-          <PaymentPendingIllustration />
+        <div className={"mt-20 text-center"} style={{ fontStyle: "italic" }}>
+          {t("common:donationRef")} {donationID}
         </div>
+        <PaymentPendingIllustration />
       </div>
     );
   }
+
+  console.log("donation", donation);
 
   return !ready && !donation ? (
     <PaymentProgress isPaymentProcessing={true} />
   ) : (
     <div className="donations-forms-container">
       <div className="donations-form">
-        <div className={"header-title-container"}>
-          <button
-            id={"thank-you-close"}
-            //onClick={onClose}
-            className={"headerCloseIcon"}
-          >
-            <CloseIcon />
-          </button>
-          <div className={"header-title"}>{t("thankYou")}</div>
-        </div>
-
         {redirectstatus ? (
           redirectstatus === "succeeded" ? (
             <SuccessfulDonation />
@@ -261,7 +265,7 @@ function ThankYou() {
           <></>
         )}
 
-        {donation.paymentStatus ? (
+        {donation && donation.paymentStatus ? (
           donation.paymentStatus === "success" ||
           donation.paymentStatus === "paid" ? (
             <SuccessfulDonation />
