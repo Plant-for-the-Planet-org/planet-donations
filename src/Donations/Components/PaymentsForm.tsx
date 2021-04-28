@@ -18,6 +18,7 @@ import SepaPayments from "../PaymentMethods/SepaPayments";
 import PaypalPayments from "../PaymentMethods/PaypalPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
+import TaxDeductionOption from "../Micros/TaxDeductionOption";
 
 interface Props {}
 
@@ -121,6 +122,8 @@ function PaymentsForm({}: Props): ReactElement {
             <BackButton />
           </button>
           <p className="title-text">{t("paymentDetails")}</p>
+
+          <TaxDeductionOption/>
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 

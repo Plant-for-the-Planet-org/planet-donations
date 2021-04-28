@@ -19,6 +19,7 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import TaxDeductionCountryModal from "./../Micros/TaxDeductionCountryModal";
 import themeProperties from "../../../styles/themeProperties";
 import SelectCurrencyModal from "./../Micros/SelectCurrencyModal";
+import TaxDeductionOption from './../Micros/TaxDeductionOption';
 interface Props {}
 
 function DonationsForm() {
@@ -132,9 +133,7 @@ function DonationsForm() {
     }
   };
 
-  const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(
-    false
-  );
+
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
   return isPaymentProcessing ? (
@@ -218,7 +217,7 @@ function DonationsForm() {
               </div>
             </div>
 
-            <p className="currency-selection mt-20 mb-20">
+            <p className="currency-selection mt-20">
               <button
                 onClick={() => {
                   setopenCurrencyModal(true);
@@ -236,30 +235,7 @@ function DonationsForm() {
               {t("perTree")}
             </p>
 
-            {projectDetails &&
-            projectDetails.taxDeductionCountries &&
-            projectDetails.taxDeductionCountries.length > 0 ? (
-              <div className={"mt-20 d-inline"}>
-                {projectDetails.taxDeductionCountries.includes(country)
-                  ? t("youWillReceiveTaxDeduction")
-                  : t("taxDeductionNotYetAvailable")}
-                <button
-                  onClick={() => setopenTaxDeductionModal(true)}
-                  className={"tax-country-selection text-primary text-bold"}
-                >
-                  {t(`country:${country.toLowerCase()}`)}
-                  <DownArrowIcon color={themeProperties.primaryColor} />
-                </button>
-                {projectDetails &&
-                projectDetails.taxDeductionCountries.includes(country)
-                  ? t("inTimeOfTaxReturns")
-                  : null}
-              </div>
-            ) : (
-              <div className={"isTaxDeductible"}>
-                {t("taxDeductionNotAvailableForProject")}
-              </div>
-            )}
+           <TaxDeductionOption/>
 
             <div className={"horizontal-line"} />
 
@@ -306,11 +282,7 @@ function DonationsForm() {
           </div>
         </div>
       </div>
-      <TaxDeductionCountryModal
-        openModal={openTaxDeductionModal}
-        handleModalClose={() => setopenTaxDeductionModal(false)}
-        taxDeductionCountries={projectDetails.taxDeductionCountries}
-      />
+      
 
       <SelectCurrencyModal
         openModal={openCurrencyModal}
