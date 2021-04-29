@@ -54,12 +54,12 @@ function DonationInfo() {
   const [showContactDetails, setshowContactDetails] = React.useState(false);
   return (
     <div className="donations-info-container">
-      <img
+      {/* <img
         className="background-image"
         src="/assets/images/forest2.jpg"
         width="420"
         height="560"
-      />
+      /> */}
       {/* <div className="background-image-overlay"></div> */}
       <div className="donations-info">
         <div className="donations-info-header">
