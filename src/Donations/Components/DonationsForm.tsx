@@ -67,7 +67,7 @@ function DonationsForm() {
     isAuthenticated,
     error,
     user,
-    loginWithPopup,
+    loginWithRedirect,
     logout,
   } = useAuth0();
 
@@ -142,7 +142,7 @@ function DonationsForm() {
     <div className="donations-forms-container">
       <div className="donations-form">
         {!isLoading && !isAuthenticated && (
-          <button className="login-continue" onClick={() => loginWithPopup()}>
+          <button className="login-continue" onClick={() => loginWithRedirect({redirectUri:`${process.env.NEXTAUTH_URL}`, ui_locales: localStorage.getItem('locale') || 'en' })}>
             Login & Continue
           </button>
         )}
