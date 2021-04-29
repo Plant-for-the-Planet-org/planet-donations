@@ -71,6 +71,14 @@ function DonationsForm() {
     logout,
   } = useAuth0();
 
+  React.useEffect(()=>{
+    if(!isLoading && isAuthenticated){
+      // Fetch the profile data
+      // If details present store in contact details
+      // If details are not present show message and logout user
+    }
+  },[isAuthenticated,isLoading])
+
   const [paymentError, setPaymentError] = React.useState("");
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {

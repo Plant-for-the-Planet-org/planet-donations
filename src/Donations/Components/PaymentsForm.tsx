@@ -50,6 +50,7 @@ function PaymentsForm({}: Props): ReactElement {
     isGift,
     giftDetails,
     isTaxDeductible,
+    isDirectDonation
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -103,13 +104,11 @@ function PaymentsForm({}: Props): ReactElement {
       setshouldCreateDonation(false);
     }
   }
-  React.useEffect(() => {
-    if (shouldCreateDonation) {
+  React.useEffect(() => {    
+    if (!isDirectDonation && shouldCreateDonation) {
       getDonation();
     }
   }, [shouldCreateDonation]);
-
-  console.log('donationID',donationID);
   
 
   return ready ? (
@@ -118,9 +117,11 @@ function PaymentsForm({}: Props): ReactElement {
     ) : (
       <div className={"donations-forms-container"}>
         <div className="donations-form">
-          <button onClick={() => setdonationStep(2)} className="mb-10">
+          {!isDirectDonation ? (
+            <button onClick={() => setdonationStep(2)} className="mb-10">
             <BackButton />
           </button>
+          ): <></>}
           <p className="title-text">{t("paymentDetails")}</p>
 
           <TaxDeductionOption/>

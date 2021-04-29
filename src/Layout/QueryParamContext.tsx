@@ -36,13 +36,14 @@ export const QueryParamContext = React.createContext({
   setdonationID: (value: string) => {},
   paymentType: "",
   setPaymentType: (value: string) => "",
-  shouldCreateDonation:false, 
-  setshouldCreateDonation:(value: boolean) => {},
-  setIsTaxDeductible:(value: boolean) => {},
+  shouldCreateDonation: false,
+  setshouldCreateDonation: (value: boolean) => {},
+  setIsTaxDeductible: (value: boolean) => {},
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
-  redirectstatus:"",
-  returnTo:""
+  redirectstatus: "",
+  returnTo: "",
+  isDirectDonation:false
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -62,6 +63,8 @@ export default function QueryParamProvider({ children }: any) {
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
 
+  const [isDirectDonation, setisDirectDonation] = React.useState(false);
+  
   const [
     isPaymentOptionsLoading,
     setIsPaymentOptionsLoading,
@@ -129,13 +132,13 @@ export default function QueryParamProvider({ children }: any) {
   });
 
   const [contactDetails, setContactDetails] = React.useState({
-    firstname: "Harsh",
-    lastname: "Vitra",
-    email: "harshvitra@gmail.com",
-    address: "B-108, Bhairav Shrusti",
-    city: "Thane",
-    zipCode: "401001",
-    country: "IN",
+    firstname: "",
+    lastname: "",
+    email: "",
+    address: "",
+    city: "",
+    zipCode: "",
+    country: "",
     companyname: "",
   });
 
@@ -143,9 +146,9 @@ export default function QueryParamProvider({ children }: any) {
   const [currency, setcurrency] = useState("");
   const [returnTo, setreturnTo] = useState("");
 
-  const [redirectstatus, setredirectstatus] = useState(null)
+  const [redirectstatus, setredirectstatus] = useState(null);
 
-  const [shouldCreateDonation, setshouldCreateDonation] = useState(false)
+  const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -165,7 +168,7 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.returnto]);
 
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
-  async function loadProject(projectGUID:string) {
+  async function loadProject(projectGUID: string) {
     try {
       const project: ProjectTypes = await getRequest(
         `/app/projects/${projectGUID}?_scope=extended`
@@ -186,25 +189,26 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.project]);
 
-  React.useEffect(() => {
-    async function loadPaymentSetup(projectGUID) {
-      setIsPaymentOptionsLoading(true);
-      try {
-        const paymentSetupData = await getRequest(
-          `/app/projects/${projectGUID}/paymentOptions?country=${country}`
-        );
-        if (paymentSetupData.data) {
-          setpaymentSetup(paymentSetupData.data);
-          setcurrency(paymentSetupData.data.currency);
-          if(!country){
-            setcountry(paymentSetupData.data.effectiveCountry);
-          }
+  async function loadPaymentSetup(projectGUID) {
+    setIsPaymentOptionsLoading(true);
+    try {
+      const paymentSetupData = await getRequest(
+        `/app/projects/${projectGUID}/paymentOptions?country=${country}`
+      );
+      if (paymentSetupData.data) {
+        setpaymentSetup(paymentSetupData.data);
+        setcurrency(paymentSetupData.data.currency);
+        if (!country) {
+          setcountry(paymentSetupData.data.effectiveCountry);
         }
-        setIsPaymentOptionsLoading(false);
-      } catch (err) {
-        // console.log(err);
       }
+      setIsPaymentOptionsLoading(false);
+    } catch (err) {
+      // console.log(err);
     }
+  }
+
+  React.useEffect(() => {
     if (router.query.project) {
       loadPaymentSetup(router.query.project);
     } else {
@@ -221,10 +225,40 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.country]);
 
   // Donation ID = donationid => This will be received from the URL params
+  async function loadDonation() {
+    const donation = await getRequest(
+      `/app/donations/${router.query.donationid}`
+    );
 
+    if (donation.status === 200) {
+      setdonationID(router.query.donationid);
+      // if the donation is present means the donation is already created
+      // Set shouldCreateDonation as false
+      setshouldCreateDonation(false)
+       // fetch project - payment setup
+      loadProject(donation.data.project.id);
+      loadPaymentSetup(donation.data.project.id);
+      settreeCount(donation.data.treeCount);
+
+      // Check if the donation status is paid or successful - if yes directly show thank you page
+      // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
+      if(donation.data.paymentStatus === 'success' || donation.data.paymentStatus === 'paid' || donation.data.paymentStatus === 'failed' || donation.data.paymentStatus === 'pending'){
+        setdonationStep(4)
+      }
+      else if(donation.data.paymentStatus === 'initiated' ){
+        // Check if all contact details are present - if not send user to step 2 else step 3
+        // Check if all payment cards are present - if yes then show it on step 3
+        setisDirectDonation(true)
+        setdonationStep(3)
+      }
+
+    } else {
+      // SET Error that no donation is found
+    }
+  }
   React.useEffect(() => {
     if (router.query.donationid) {
-      setdonationID(router.query.donationid);
+      loadDonation();
     }
   }, [router.query.donationid]);
 
@@ -258,13 +292,11 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.treecount]);
 
-
   React.useEffect(() => {
     if (router.query.paymenttype) {
       setPaymentType(router.query.paymenttype);
     }
   }, [router.query.paymenttype]);
-
 
   React.useEffect(() => {
     if (router.query.redirect_status) {
@@ -276,7 +308,21 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     setshouldCreateDonation(true);
-  }, [paymentSetup, treeCount, isGift, giftDetails, contactDetails.firstname, contactDetails.lastname, contactDetails.email, contactDetails.address, contactDetails.city, contactDetails.zipCode, contactDetails.country, contactDetails.companyname, isTaxDeductible])
+  }, [
+    paymentSetup,
+    treeCount,
+    isGift,
+    giftDetails,
+    contactDetails.firstname,
+    contactDetails.lastname,
+    contactDetails.email,
+    contactDetails.address,
+    contactDetails.city,
+    contactDetails.zipCode,
+    contactDetails.country,
+    contactDetails.companyname,
+    isTaxDeductible,
+  ]);
 
   return (
     <QueryParamContext.Provider
@@ -310,7 +356,8 @@ export default function QueryParamProvider({ children }: any) {
         setIsTaxDeductible,
         isPaymentOptionsLoading,
         redirectstatus,
-        returnTo
+        returnTo,
+        isDirectDonation
       }}
     >
       {children}

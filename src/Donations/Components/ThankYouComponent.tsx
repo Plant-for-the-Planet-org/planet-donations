@@ -24,7 +24,7 @@ function ThankYou() {
     paymentType,
     setdonationStep,
     redirectstatus,
-    returnTo
+    returnTo,
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
@@ -87,9 +87,9 @@ function ThankYou() {
     setTextCopiedSnackbarOpen(false);
   };
 
-  const sendToReturn =()=>{
-    router.push(returnTo)
-  }
+  const sendToReturn = () => {
+    router.push(returnTo);
+  };
 
   let currencyFormat = () => {};
   if (donation) {
@@ -100,14 +100,19 @@ function ThankYou() {
   function SuccessfulDonation() {
     return (
       <div className="d-flex column justify-content-center">
-        <button
-          id={"thank-you-close"}
-          onClick={() => sendToReturn()}
-          className="mb-10"
-          style={{ alignSelf: "flex-start" }}
-        >
-          <CloseIcon color={themeProperties.light.primaryFontColor} />
-        </button>
+        {returnTo ? (
+          <button
+            id={"thank-you-close"}
+            onClick={() => sendToReturn()}
+            className="mb-10"
+            style={{ alignSelf: "flex-start" }}
+          >
+            <CloseIcon color={themeProperties.light.primaryFontColor} />
+          </button>
+        ) : (
+          <></>
+        )}
+
         <div className={"title-text"}>{t("common:thankYou")}</div>
 
         <div className={"mt-20 text-center"}>

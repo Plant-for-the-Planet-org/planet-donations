@@ -11,7 +11,6 @@ import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import themeProperties from "../../styles/themeProperties";
 import { getCountryDataBy } from "../Utils/countryUtils";
-import Image from "next/image";
 
 interface Props {}
 
@@ -84,7 +83,7 @@ function DonationInfo() {
               })}
             </div>
           )}
-          {donationStep === 3 && (
+          {donationStep  === 3 &&  contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-10"}>
               <button
                 onClick={() => setshowContactDetails(!showContactDetails)}

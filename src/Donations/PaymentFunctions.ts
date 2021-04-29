@@ -156,7 +156,7 @@ export function createDonationData({
           gift: {
             type: "invitation",
             recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.email,
+            recipientEmail: giftDetails.recipientEmail,
             message: giftDetails.giftMessage,
           },
         },

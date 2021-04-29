@@ -18,7 +18,7 @@ export default function GiftForm({}: Props): ReactElement {
 
   const defaultDeails = {
     recipientName: giftDetails.recipientName,
-    recipientEmail: giftDetails.email,
+    recipientEmail: giftDetails.recipientEmail,
     giftMessage: giftDetails.giftMessage,
   };
 
