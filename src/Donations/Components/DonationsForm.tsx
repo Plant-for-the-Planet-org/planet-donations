@@ -153,6 +153,8 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
+  const customInputRef = React.useRef(null);
+
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
@@ -206,6 +208,7 @@ function DonationsForm() {
                 style={{ flexGrow: 1, marginLeft: "30px" }}
                 onClick={() => {
                   setisCustomDonation(true);
+                  customInputRef.current.focus();
                 }}
               >
                 <CustomIcon />
@@ -228,6 +231,7 @@ function DonationsForm() {
                       setCustomTreeValue(e);
                       setCustomTreeInputValue(e.target.value);
                     }}
+                    ref={customInputRef}
                   />
                   <span>trees</span>
                 </div>
