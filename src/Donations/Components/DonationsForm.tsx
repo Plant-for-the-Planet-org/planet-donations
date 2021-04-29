@@ -133,14 +133,23 @@ function DonationsForm() {
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
 
   const setCustomTreeValue = (e: any) => {
-    if (e.target.value === "" || e.target.value < 1) {
-      // if input is '', default 1
-      settreeCount(1);
-    } else if (e.target.value.toString().length <= 12) {
-      settreeCount(e.target.value);
+    if(e.target){
+      if (e.target.value === "" || e.target.value < 1) {
+        // if input is '', default 1
+        settreeCount(1);
+      } else if (e.target.value.toString().length <= 12) {
+        settreeCount(e.target.value);
+      }
     }
   };
 
+  React.useEffect(()=>{
+    if(![10,20,50,150].includes(treeCount)){
+      setisCustomDonation(true)
+      setCustomTreeValue(treeCount)
+      setCustomTreeInputValue(treeCount)
+    }
+  },[treeCount])  
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
