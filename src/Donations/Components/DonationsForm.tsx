@@ -19,7 +19,7 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import TaxDeductionCountryModal from "./../Micros/TaxDeductionCountryModal";
 import themeProperties from "../../../styles/themeProperties";
 import SelectCurrencyModal from "./../Micros/SelectCurrencyModal";
-import TaxDeductionOption from './../Micros/TaxDeductionOption';
+import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 interface Props {}
 
 function DonationsForm() {
@@ -48,18 +48,6 @@ function DonationsForm() {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, []);
 
-  React.useEffect(() => {
-    if (
-      projectDetails &&
-      projectDetails.taxDeductionCountries &&
-      projectDetails.taxDeductionCountries.includes(country)
-    ) {
-      setIsTaxDeductible(true);
-    } else {
-      setIsTaxDeductible(false);
-    }
-  }, [country]);
-
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
   const {
@@ -71,13 +59,13 @@ function DonationsForm() {
     logout,
   } = useAuth0();
 
-  React.useEffect(()=>{
-    if(!isLoading && isAuthenticated){
+  React.useEffect(() => {
+    if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       // If details present store in contact details
       // If details are not present show message and logout user
     }
-  },[isAuthenticated,isLoading])
+  }, [isAuthenticated, isLoading]);
 
   const [paymentError, setPaymentError] = React.useState("");
 
@@ -133,7 +121,7 @@ function DonationsForm() {
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
 
   const setCustomTreeValue = (e: any) => {
-    if(e.target){
+    if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         settreeCount(1);
@@ -143,13 +131,13 @@ function DonationsForm() {
     }
   };
 
-  React.useEffect(()=>{
-    if(![10,20,50,150].includes(treeCount)){
-      setisCustomDonation(true)
-      setCustomTreeValue(treeCount)
-      setCustomTreeInputValue(treeCount)
+  React.useEffect(() => {
+    if (![10, 20, 50, 150].includes(treeCount)) {
+      setisCustomDonation(true);
+      setCustomTreeValue(treeCount);
+      setCustomTreeInputValue(treeCount);
     }
-  },[treeCount])  
+  }, [treeCount]);
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
@@ -161,7 +149,15 @@ function DonationsForm() {
     <div className="donations-forms-container">
       <div className="donations-form">
         {!isLoading && !isAuthenticated && (
-          <button className="login-continue" onClick={() => loginWithRedirect({redirectUri:`${process.env.NEXTAUTH_URL}`, ui_locales: localStorage.getItem('locale') || 'en' })}>
+          <button
+            className="login-continue"
+            onClick={() =>
+              loginWithRedirect({
+                redirectUri: `${process.env.NEXTAUTH_URL}`,
+                ui_locales: localStorage.getItem("locale") || "en",
+              })
+            }
+          >
             Login & Continue
           </button>
         )}
@@ -256,7 +252,7 @@ function DonationsForm() {
               {t("perTree")}
             </p>
 
-           <TaxDeductionOption/>
+            <TaxDeductionOption />
 
             <div className={"horizontal-line"} />
 
@@ -290,7 +286,9 @@ function DonationsForm() {
                   continueNext={() => setdonationStep(2)}
                 />
               ) : (
-                <ButtonLoader />
+                <div className="mt-20 w-100">
+                  <ButtonLoader />
+                </div>
               )
             ) : (
               <p className={"text-danger mt-20 text-center"}>
@@ -303,7 +301,6 @@ function DonationsForm() {
           </div>
         </div>
       </div>
-      
 
       <SelectCurrencyModal
         openModal={openCurrencyModal}

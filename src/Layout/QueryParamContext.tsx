@@ -171,7 +171,7 @@ export default function QueryParamProvider({ children }: any) {
   async function loadProject(projectGUID: string) {
     try {
       const project: ProjectTypes = await getRequest(
-        `/app/projects/${projectGUID}?_scope=extended`
+        `/app/projects/${projectGUID}`
       );
       if (project.data) {
         setprojectDetails(project.data);

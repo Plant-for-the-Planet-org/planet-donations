@@ -10,10 +10,23 @@ interface Props {}
 function TaxDeductionOption({}: Props): ReactElement {
   const { t } = useTranslation(["common"]);
 
-  const { projectDetails, country } = React.useContext(QueryParamContext);
+  const { projectDetails, country,setIsTaxDeductible } = React.useContext(QueryParamContext);
   const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(
     false
   );
+
+  React.useEffect(() => {
+    if (
+      projectDetails &&
+      projectDetails.taxDeductionCountries &&
+      projectDetails.taxDeductionCountries.includes(country)
+    ) {
+      setIsTaxDeductible(true);
+    } else {
+      setIsTaxDeductible(false);
+    }
+  }, [country]);
+
   return (
     <div className="mt-20">
       {projectDetails &&

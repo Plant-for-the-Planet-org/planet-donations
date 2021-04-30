@@ -63,11 +63,14 @@ function DonationInfo() {
       <div className="donations-info">
         <div className="donations-info-header">
           <p className="title-text text-white">{projectDetails.name}</p>
-          <p className="text-white mt-10">
+          {projectDetails.tpo && (
+            <p className="text-white mt-10">
             {t("byOrganization", {
               organizationName: projectDetails.tpo.name,
             })}
           </p>
+          )}
+          
           {(donationStep === 2 || donationStep === 3) && (
             <div className={"w-100  text-white mt-10"}>
               <span className="text-bold" style={{ marginRight: "4px" }}>

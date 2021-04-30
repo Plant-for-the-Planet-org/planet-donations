@@ -3,7 +3,7 @@ function ButtonLoader() {
   return (
     <svg
       role="img"
-      width="150"
+      width="100%"
       height="36"
       aria-labelledby="loading-aria"
       viewBox="0 0 150 36"

@@ -259,47 +259,50 @@ function ThankYou() {
     );
   }
 
-  return !ready && !donation ? (
-    <PaymentProgress isPaymentProcessing={true} />
-  ) : (
+  return (
     <div className="donations-forms-container">
-      <div className="donations-form">
-        {redirectstatus ? (
-          redirectstatus === "succeeded" ? (
-            <SuccessfulDonation />
-          ) : redirectstatus === "failed" ? (
-            <FailedDonation />
-          ) : (
-            <PendingDonation />
-          )
+      <div className="donations-form w-100">
+        {!ready && !donation ? (
+          <PaymentProgress isPaymentProcessing={true} />
         ) : (
-          <></>
+          <div>
+            {redirectstatus ? (
+              redirectstatus === "succeeded" ? (
+                <SuccessfulDonation />
+              ) : redirectstatus === "failed" ? (
+                <FailedDonation />
+              ) : (
+                <PendingDonation />
+              )
+            ) : (
+              <></>
+            )}
+
+            {donation && donation.paymentStatus ? (
+              donation.paymentStatus === "success" ||
+              donation.paymentStatus === "paid" ? (
+                <SuccessfulDonation />
+              ) : donation.paymentStatus === "failed" ? (
+                <FailedDonation />
+              ) : (
+                <PendingDonation />
+              )
+            ) : (
+              <></>
+            )}
+          </div>
         )}
 
-        {donation && donation.paymentStatus ? (
-          donation.paymentStatus === "success" ||
-          donation.paymentStatus === "paid" ? (
-            <SuccessfulDonation />
-          ) : donation.paymentStatus === "failed" ? (
-            <FailedDonation />
-          ) : (
-            <PendingDonation />
-          )
-        ) : (
-          <></>
-        )}
+        <Snackbar
+          open={textCopiedsnackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleTextCopiedSnackbarClose}
+        >
+          <Alert onClose={handleTextCopiedSnackbarClose} severity="success">
+            {t("donate:copiedToClipboard")}
+          </Alert>
+        </Snackbar>
       </div>
-
-      {/* snackbar for showing text copied to clipboard */}
-      <Snackbar
-        open={textCopiedsnackbarOpen}
-        autoHideDuration={4000}
-        onClose={handleTextCopiedSnackbarClose}
-      >
-        <Alert onClose={handleTextCopiedSnackbarClose} severity="success">
-          {t("donate:copiedToClipboard")}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

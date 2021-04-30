@@ -200,6 +200,7 @@ export const PaymentRequestCustomButton = ({
       >
         Continue
       </button>
+      <div style={{height:'30px'}}></div>
     </div>
   ) : null;
 };
