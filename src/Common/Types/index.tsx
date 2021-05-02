@@ -96,4 +96,5 @@ export interface CreateDonationFunctionProps {
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   setdonationID:any;
+  token:any;
 }

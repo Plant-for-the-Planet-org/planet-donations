@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import CustomIcon from "../../../public/assets/icons/CustomIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import GiftForm from "./GiftForm";
+import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../public/assets/icons/DownArrowIcon";
@@ -12,15 +12,16 @@ import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import {
   createDonationFunction,
   payDonationFunction,
-} from "../PaymentFunctions";
+} from "../PaymentMethods/PaymentFunctions";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
-import { useAuth0 } from "@auth0/auth0-react";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
-import TaxDeductionCountryModal from "./../Micros/TaxDeductionCountryModal";
 import themeProperties from "../../../styles/themeProperties";
 import SelectCurrencyModal from "./../Micros/SelectCurrencyModal";
 import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
+import Authentication from "./../Micros/Authentication";
+import { useAuth0 } from "@auth0/auth0-react";
+
 interface Props {}
 
 function DonationsForm() {
@@ -44,29 +45,13 @@ function DonationsForm() {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, []);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-
-  const {
-    isLoading,
-    isAuthenticated,
-    error,
-    user,
-    loginWithRedirect,
-    logout,
-  } = useAuth0();
-
-  React.useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      // Fetch the profile data
-      // If details present store in contact details
-      // If details are not present show message and logout user
-    }
-  }, [isAuthenticated, isLoading]);
 
   const [paymentError, setPaymentError] = React.useState("");
 
@@ -90,6 +75,11 @@ function DonationsForm() {
       country: paymentMethod.billing_details.address.country,
     };
 
+    let token = null;
+    if (!isLoading && isAuthenticated) {
+      token = await getAccessTokenSilently();
+    }
+
     await createDonationFunction({
       isTaxDeductible,
       country,
@@ -103,7 +93,12 @@ function DonationsForm() {
       setIsPaymentProcessing,
       setPaymentError,
       setdonationID,
-    }).then((res) => {
+      token,
+    }).then(async (res) => {
+      let token = null;
+      if (!isLoading && isAuthenticated) {
+        token = await getAccessTokenSilently();
+      }
       payDonationFunction({
         gateway: "stripe",
         paymentMethod,
@@ -113,6 +108,7 @@ function DonationsForm() {
         paymentSetup,
         donationID: res.id,
         setdonationStep,
+        token,
       });
     });
   };
@@ -149,20 +145,7 @@ function DonationsForm() {
   ) : (
     <div className="donations-forms-container">
       <div className="donations-form">
-        {!isLoading && !isAuthenticated && (
-          <button
-            className="login-continue"
-            onClick={() =>
-              loginWithRedirect({
-                redirectUri: `${process.env.NEXTAUTH_URL}`,
-                ui_locales: localStorage.getItem("locale") || "en",
-              })
-            }
-          >
-            Login & Continue
-          </button>
-        )}
-
+        <Authentication />
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
           <div className="donations-gift-container">
@@ -236,23 +219,23 @@ function DonationsForm() {
             </div>
 
             {paymentSetup && paymentSetup.treeCost ? (
-            <p className="currency-selection mt-20">
-              <button
-                onClick={() => {
-                  setopenCurrencyModal(true);
-                }}
-                className="text-bold text-primary"
-              >
-                {currency}{" "}
-                {getFormatedCurrency(
-                  i18n.language,
-                  "",
-                  Number(paymentSetup.treeCost)
-                )}{" "}
-                <DownArrowIcon color={themeProperties.primaryColor} />
-              </button>
-              {t("perTree")}
-            </p>
+              <p className="currency-selection mt-20">
+                <button
+                  onClick={() => {
+                    setopenCurrencyModal(true);
+                  }}
+                  className="text-bold text-primary"
+                >
+                  {currency}{" "}
+                  {getFormatedCurrency(
+                    i18n.language,
+                    "",
+                    Number(paymentSetup.treeCost)
+                  )}{" "}
+                  <DownArrowIcon color={themeProperties.primaryColor} />
+                </button>
+                {t("perTree")}
+              </p>
             ) : (
               <div className={"mt-20"}>
                 <TreeCostLoader width={150} />
@@ -285,34 +268,36 @@ function DonationsForm() {
               </div>
             )}
 
-            {paymentSetup && projectDetails ? minAmt && (projectDetails.treeCost * treeCount >= minAmt) ? (
-              !isPaymentOptionsLoading &&
-              paymentSetup?.gateways?.stripe?.account &&
-              currency ? (
-                <NativePay
-                  country={country}
-                  currency={currency}
-                  amount={formatAmountForStripe(
-                    projectDetails.treeCost * treeCount,
-                    currency.toLowerCase()
-                  )}
-                  onPaymentFunction={onPaymentFunction}
-                  paymentSetup={paymentSetup}
-                  continueNext={() => setdonationStep(2)}
-                />
+            {paymentSetup && projectDetails ? (
+              minAmt && projectDetails.treeCost * treeCount >= minAmt ? (
+                !isPaymentOptionsLoading &&
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
+                  <NativePay
+                    country={country}
+                    currency={currency}
+                    amount={formatAmountForStripe(
+                      projectDetails.treeCost * treeCount,
+                      currency.toLowerCase()
+                    )}
+                    onPaymentFunction={onPaymentFunction}
+                    paymentSetup={paymentSetup}
+                    continueNext={() => setdonationStep(2)}
+                  />
+                ) : (
+                  <div className="mt-20 w-100">
+                    <ButtonLoader />
+                  </div>
+                )
               ) : (
-                <div className="mt-20 w-100">
-                  <ButtonLoader />
-                </div>
+                <p className={"text-danger mt-20 text-center"}>
+                  {t("minDonate")}
+                  <span>
+                    {getFormatedCurrency(i18n.language, currency, minAmt)}
+                  </span>
+                </p>
               )
             ) : (
-              <p className={"text-danger mt-20 text-center"}>
-                {t("minDonate")}
-                <span>
-                  {getFormatedCurrency(i18n.language, currency, minAmt)}
-                </span>
-              </p>
-            ): (
               <div className="mt-20 w-100">
                 <ButtonLoader />
               </div>

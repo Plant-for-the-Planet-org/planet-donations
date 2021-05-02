@@ -13,11 +13,12 @@ function ContactsForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
   const [isCompany, setIsCompany] = React.useState(false);
-  const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
   const {
     contactDetails,
     setContactDetails,
     setdonationStep,
+    country,
+    isTaxDeductible
   } = React.useContext(QueryParamContext);
 
 
@@ -36,7 +37,7 @@ function ContactsForm({}: Props): ReactElement {
   });
 
 
-  const defaultCountry = isTaxDeductible ? country : "IN";
+  const defaultCountry = isTaxDeductible ? country : "DE";
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
@@ -193,6 +194,7 @@ function ContactsForm({}: Props): ReactElement {
           <div className="contacts-isCompany-toggle mt-20">
             <label htmlFor="isCompany-toggle">
               {t("isACompanyDonation")}
+              {isCompany && (
               <span
                 className={"isCompanyText"}
                 style={{ fontSize: "12px", fontStyle: "italic" }}
@@ -201,6 +203,7 @@ function ContactsForm({}: Props): ReactElement {
                   ? t("orgNamePublishedTax")
                   : t("orgNamePublished")}
               </span>
+              )}
             </label>
             <ToggleSwitch
               name="isCompany-toggle"

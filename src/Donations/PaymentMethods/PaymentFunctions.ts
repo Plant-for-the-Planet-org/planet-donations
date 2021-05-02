@@ -1,5 +1,10 @@
-import { postRequest, putAuthenticatedRequest, putRequest } from "../Utils/api";
-import { CreateDonationFunctionProps } from "./../Common/Types/";
+import {
+  postAuthenticatedRequest,
+  postRequest,
+  putAuthenticatedRequest,
+  putRequest,
+} from "../../Utils/api";
+import { CreateDonationFunctionProps } from "../../Common/Types";
 
 export function getPaymentProviderRequest(
   gateway,
@@ -89,6 +94,7 @@ export async function createDonationFunction({
   setIsPaymentProcessing,
   setPaymentError,
   setdonationID,
+  token,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -102,7 +108,16 @@ export async function createDonationFunction({
     giftDetails,
   });
   try {
-    const donation = await postRequest("/app/donations", donationData);
+    let donation;
+    if (token) {
+      donation = await postAuthenticatedRequest(
+        "/app/donations",
+        token,
+        donationData
+      );
+    } else {
+      donation = await postRequest("/app/donations", donationData);
+    }
     if (donation && donation.data) {
       setdonationID(donation.data.id);
       return donation.data;
@@ -189,6 +204,7 @@ export async function payDonationFunction({
   donationID,
   setdonationStep,
   contactDetails,
+  token,
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -204,10 +220,19 @@ export async function payDonationFunction({
   );
 
   try {
-    const paidDonation = await putRequest(
-      `/app/donations/${donationID}`,
-      payDonationData
-    );
+    let paidDonation;
+    if (token) {
+      paidDonation = await putAuthenticatedRequest(
+        `/app/donations/${donationID}`,
+        token,
+        payDonationData
+      );
+    } else {
+      paidDonation = await putRequest(
+        `/app/donations/${donationID}`,
+        payDonationData
+      );
+    }
     if (paidDonation && paidDonation.data) {
       if (paidDonation.data.status === "failed") {
         setIsPaymentProcessing(false);
@@ -231,9 +256,9 @@ export async function payDonationFunction({
           donationID,
           setdonationStep,
           contactDetails,
+          token,
         });
       }
-      
     }
   } catch (error) {
     if (error.status === 400 || error.status === 401) {
@@ -264,6 +289,7 @@ export async function handleSCAPaymentFunction({
   donationID,
   setdonationStep,
   contactDetails,
+  token,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -292,15 +318,25 @@ export async function handleSCAPaymentFunction({
           };
 
           try {
-            const SCAPaidDonation = await putRequest(
-              `/app/donations/${donationID}`,
-              payDonationData
-            );
+            let SCAPaidDonation;
+            if (token) {
+              SCAPaidDonation = await putAuthenticatedRequest(
+                `/app/donations/${donationID}`,
+                token,
+                payDonationData
+              );
+            } else {
+              SCAPaidDonation = await putRequest(
+                `/app/donations/${donationID}`,
+                payDonationData
+              );
+            }
+
             if (SCAPaidDonation.data.paymentStatus) {
               setIsPaymentProcessing(false);
               setdonationStep(4);
               return SCAPaidDonation.data;
-            } 
+            }
           } catch (error) {
             if (error.status === 400) {
               setPaymentError(error.data.message);
@@ -313,9 +349,7 @@ export async function handleSCAPaymentFunction({
             } else {
               setIsPaymentProcessing(false);
               setPaymentError(
-                error.data.error
-                  ? error.data.error.message
-                  : error.data.message
+                error.data.error ? error.data.error.message : error.data.message
               );
             }
             setIsPaymentProcessing(false);

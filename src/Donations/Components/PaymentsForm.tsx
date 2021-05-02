@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import PaymentMethodTabs from "./PaymentMethodTabs";
+import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import BackButton from "../../../public/assets/icons/BackButton";
 import { putRequest } from "../../Utils/api";
@@ -11,7 +11,7 @@ import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import {
   createDonationFunction,
   payDonationFunction,
-} from "../PaymentFunctions";
+} from "../PaymentMethods/PaymentFunctions";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
@@ -20,6 +20,7 @@ import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface Props {}
 
@@ -33,6 +34,20 @@ function PaymentsForm({}: Props): ReactElement {
   // This feature allows the user to show or hide their names in the leaderboard
   const [publishName, setpublishName] = React.useState(false);
   const [askpublishName, setaskpublishName] = React.useState(false);
+
+  React.useEffect(() => {
+    if (donationID) {
+      putRequest(`/app/donations/${donationID}/publish`, {
+        publish: publishName,
+      });
+    }
+  }, [publishName, donationID]);
+
+  const {
+    isLoading,
+    isAuthenticated,
+    getAccessTokenSilently,
+  } = useAuth0();
 
   const {
     paymentSetup,
@@ -58,17 +73,15 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
-  React.useEffect(() => {
-    if (donationID) {
-      putRequest(`/app/donations/${donationID}/publish`, {
-        publish: publishName,
-      });
-    }
-  }, [publishName, donationID]);
+
 
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
-  const onSubmitPayment = (gateway: any, paymentMethod: any) => {
+  const onSubmitPayment = async(gateway: any, paymentMethod: any) => {
+    let token = null;
+    if (!isLoading && isAuthenticated) {
+      token = await getAccessTokenSilently();
+    }
     payDonationFunction({
       gateway,
       paymentMethod,
@@ -79,10 +92,15 @@ function PaymentsForm({}: Props): ReactElement {
       donationID,
       setdonationStep,
       contactDetails,
+      token
     });
   };
 
   async function getDonation() {
+    let token = null;
+    if (!isLoading && isAuthenticated) {
+      token = await getAccessTokenSilently();
+    }
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -96,6 +114,7 @@ function PaymentsForm({}: Props): ReactElement {
       setIsPaymentProcessing,
       setPaymentError,
       setdonationID,
+      token
     });
 
     if (donation) {

@@ -46,6 +46,8 @@ function DonationInfo() {
     paymentSetup,
     currency,
     contactDetails,
+    giftDetails,
+    isGift,
   } = React.useContext(QueryParamContext);
 
   const [showContactDetails, setshowContactDetails] = React.useState(false);
@@ -70,18 +72,28 @@ function DonationInfo() {
           )}
 
           {(donationStep === 2 || donationStep === 3) && (
-            <div className={"w-100  text-white mt-10"}>
-              <span className="text-bold" style={{ marginRight: "4px" }}>
-                {getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.treeCost * treeCount
-                )}
-              </span>
-              {t("fortreeCountTrees", {
-                count: Number(treeCount),
-                treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
-              })}
+            <div>
+              <div className={"w-100  text-white mt-10"}>
+                <span className="text-bold" style={{ marginRight: "4px" }}>
+                  {getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.treeCost * treeCount
+                  )}
+                </span>
+                {t("fortreeCountTrees", {
+                  count: Number(treeCount),
+                  treeCount: getFormattedNumber(
+                    i18n.language,
+                    Number(treeCount)
+                  ),
+                })}
+              </div>
+              {giftDetails && isGift && giftDetails.recipientName && (
+                <div className="donation-supports-info mt-10 text-white">
+                  <p>This donation supports {giftDetails.recipientName}</p>
+                </div>
+              )}
             </div>
           )}
           {donationStep === 3 && contactDetails.firstname && (

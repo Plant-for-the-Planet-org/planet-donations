@@ -3,7 +3,7 @@ import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import React from "react";
 // import tenantConfig from '../../../../tenant.config';
 import { useTranslation } from "react-i18next";
-import { getPaymentType } from "../PaymentFunctions";
+import { getPaymentType } from "../PaymentMethods/PaymentFunctions";
 import PaymentFailedIllustration from "../../../public/assets/icons/donation/PaymentFailed";
 import PaymentPendingIllustration from "../../../public/assets/icons/donation/PaymentPending";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
