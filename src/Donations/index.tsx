@@ -20,7 +20,7 @@ function Donations({}: Props): ReactElement {
     QueryParamContext
   );
 
-  return paymentSetup && projectDetails ? (
+  return (
     <div className="donations-container">
       <div className="donations-card-container">
         {/* Left panel */}
@@ -33,8 +33,6 @@ function Donations({}: Props): ReactElement {
         {donationStep === 4 && <ThankYou />}
       </div>
     </div>
-  ) : (
-    <></>
   );
 }
 
@@ -51,7 +49,7 @@ function DonationInfo() {
   } = React.useContext(QueryParamContext);
 
   const [showContactDetails, setshowContactDetails] = React.useState(false);
-  return (
+  return projectDetails && paymentSetup ? (
     <div className="donations-info-container">
       {/* <img
         className="background-image"
@@ -65,12 +63,12 @@ function DonationInfo() {
           <p className="title-text text-white">{projectDetails.name}</p>
           {projectDetails.tpo && (
             <p className="text-white mt-10">
-            {t("byOrganization", {
-              organizationName: projectDetails.tpo.name,
-            })}
-          </p>
+              {t("byOrganization", {
+                organizationName: projectDetails.tpo.name,
+              })}
+            </p>
           )}
-          
+
           {(donationStep === 2 || donationStep === 3) && (
             <div className={"w-100  text-white mt-10"}>
               <span className="text-bold" style={{ marginRight: "4px" }}>
@@ -86,7 +84,7 @@ function DonationInfo() {
               })}
             </div>
           )}
-          {donationStep  === 3 &&  contactDetails.firstname && (
+          {donationStep === 3 && contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-10"}>
               <button
                 onClick={() => setshowContactDetails(!showContactDetails)}
@@ -123,6 +121,15 @@ function DonationInfo() {
           {donationID && <p>Donation ID - {donationID}</p>}
           <p>This donation is processed by Plant-for-the-Planet</p>
         </div>
+      </div>
+    </div>
+  ) : (
+    <div
+      className="donations-info-container"
+      style={{ padding: "0px", backgroundColor: "white" }}
+    >
+      <div className="donations-info">
+        <div className="donations-info-loader"></div>
       </div>
     </div>
   );

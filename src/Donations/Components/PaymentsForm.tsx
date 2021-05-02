@@ -19,6 +19,7 @@ import PaypalPayments from "../PaymentMethods/PaypalPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
+import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 
 interface Props {}
 
@@ -50,7 +51,7 @@ function PaymentsForm({}: Props): ReactElement {
     isGift,
     giftDetails,
     isTaxDeductible,
-    isDirectDonation
+    isDirectDonation,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -96,7 +97,7 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
     });
-        
+
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
       setpublishName(donation.hasPublicProfile);
@@ -104,12 +105,11 @@ function PaymentsForm({}: Props): ReactElement {
       setshouldCreateDonation(false);
     }
   }
-  React.useEffect(() => {    
+  React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
       getDonation();
     }
   }, [shouldCreateDonation]);
-  
 
   return ready ? (
     isPaymentProcessing ? (
@@ -119,12 +119,14 @@ function PaymentsForm({}: Props): ReactElement {
         <div className="donations-form">
           {!isDirectDonation ? (
             <button onClick={() => setdonationStep(2)} className="mb-10">
-            <BackButton />
-          </button>
-          ): <></>}
+              <BackButton />
+            </button>
+          ) : (
+            <></>
+          )}
           <p className="title-text">{t("paymentDetails")}</p>
 
-          <TaxDeductionOption/>
+          <TaxDeductionOption />
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
@@ -186,7 +188,7 @@ function PaymentsForm({}: Props): ReactElement {
             ) : null}
           </div>
 
-          {donationID && (
+          {donationID ? (
             <div className="mt-30">
               <div
                 role="tabpanel"
@@ -267,7 +269,7 @@ function PaymentsForm({}: Props): ReactElement {
                 </Elements>
               </div>
             </div>
-          )}
+          ): <ButtonLoader/>}
         </div>
       </div>
     )

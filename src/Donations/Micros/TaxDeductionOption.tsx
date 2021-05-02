@@ -10,7 +10,9 @@ interface Props {}
 function TaxDeductionOption({}: Props): ReactElement {
   const { t } = useTranslation(["common"]);
 
-  const { projectDetails, country,setIsTaxDeductible } = React.useContext(QueryParamContext);
+  const { projectDetails, country, setIsTaxDeductible } = React.useContext(
+    QueryParamContext
+  );
   const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(
     false
   );
@@ -27,10 +29,9 @@ function TaxDeductionOption({}: Props): ReactElement {
     }
   }, [country]);
 
-  return (
+  return projectDetails ? (
     <div className="mt-20">
-      {projectDetails &&
-      projectDetails.taxDeductionCountries &&
+      {projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries.length > 0 ? (
         <div className={"mt-20 d-inline"}>
           {projectDetails.taxDeductionCountries.includes(country)
@@ -59,6 +60,8 @@ function TaxDeductionOption({}: Props): ReactElement {
         taxDeductionCountries={projectDetails.taxDeductionCountries}
       />
     </div>
+  ) : (
+    <></>
   );
 }
 

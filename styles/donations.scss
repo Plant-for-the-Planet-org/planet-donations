@@ -42,7 +42,7 @@
   overflow: hidden;
 }
 
-.background-image{
+.background-image {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -55,7 +55,36 @@
   height: 100%;
   z-index: 3;
 }
-.donations-info-header{
+.donations-info-loader {
+  width: 100%;
+  height: 100%;
+  animation: loader 3s infinite ease-in-out;
+  -webkit-animation: loader 3s infinite ease-in-out;
+}
+@keyframes loader {
+  0% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+  50% {
+    background-color: rgba(#f3f3f3, 0.5);
+  }
+  100% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+}
+
+@-webkit-keyframes loader {
+  0% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+  50% {
+    background-color: rgba(#f3f3f3, 0.5);
+  }
+  100% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+}
+.donations-info-header {
   flex-grow: 1;
 }
 .donations-transaction-details {
@@ -338,7 +367,6 @@
   font-variant-ligatures: none;
 }
 
-
 .thankyou-image-header {
   font-size: 20px;
   font-weight: 600;
@@ -364,7 +392,7 @@
     width: 2300px;
     height: 2300px;
   }
-  .donation-count{
+  .donation-count {
     font-size: 130px;
     bottom: 300px;
     padding: 0px 80px;
@@ -375,7 +403,7 @@
     position: absolute;
     bottom: 60px;
   }
-  .thankyou-image-header{
+  .thankyou-image-header {
     font-size: 100px;
     width: 100%;
     padding-top: 17%;
@@ -385,7 +413,7 @@
   }
 }
 
-.share-options{
+.share-options {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -402,16 +430,16 @@
   transform: translate(-50%, 0%);
   background-color: $light;
   box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.12);
-  svg{
+  svg {
     height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }  
+  }
 }
 
-.contact-details-info{
-  button{
+.contact-details-info {
+  button {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -419,16 +447,16 @@
     svg {
       margin-left: 6px;
     }
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
   }
-  .button-reverse{
-    svg{
+  .button-reverse {
+    svg {
       transform: rotate(180deg);
     }
   }
-  p{
+  p {
     font-size: 12px;
     margin-top: 4px;
   }

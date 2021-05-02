@@ -20,6 +20,7 @@ import TaxDeductionCountryModal from "./../Micros/TaxDeductionCountryModal";
 import themeProperties from "../../../styles/themeProperties";
 import SelectCurrencyModal from "./../Micros/SelectCurrencyModal";
 import TaxDeductionOption from "./../Micros/TaxDeductionOption";
+import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 interface Props {}
 
 function DonationsForm() {
@@ -234,6 +235,7 @@ function DonationsForm() {
               </div>
             </div>
 
+            {paymentSetup && paymentSetup.treeCost ? (
             <p className="currency-selection mt-20">
               <button
                 onClick={() => {
@@ -251,26 +253,39 @@ function DonationsForm() {
               </button>
               {t("perTree")}
             </p>
+            ) : (
+              <div className={"mt-20"}>
+                <TreeCostLoader width={150} />
+              </div>
+            )}
 
             <TaxDeductionOption />
 
             <div className={"horizontal-line"} />
+            {paymentSetup && paymentSetup.treeCost ? (
+              <div className={"w-100 text-center text-bold mt-20"}>
+                <span className={"text-primary"} style={{ marginRight: "4px" }}>
+                  {getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.treeCost * treeCount
+                  )}
+                </span>
+                {t("fortreeCountTrees", {
+                  count: Number(treeCount),
+                  treeCount: getFormattedNumber(
+                    i18n.language,
+                    Number(treeCount)
+                  ),
+                })}
+              </div>
+            ) : (
+              <div className={"text-center mt-20"}>
+                <TreeCostLoader width={150} />
+              </div>
+            )}
 
-            <div className={"w-100 text-center text-bold mt-20"}>
-              <span className={"text-primary"} style={{ marginRight: "4px" }}>
-                {getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.treeCost * treeCount
-                )}
-              </span>
-              {t("fortreeCountTrees", {
-                count: Number(treeCount),
-                treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
-              })}
-            </div>
-
-            {projectDetails.treeCost * treeCount >= minAmt ? (
+            {paymentSetup && projectDetails ? minAmt && (projectDetails.treeCost * treeCount >= minAmt) ? (
               !isPaymentOptionsLoading &&
               paymentSetup?.gateways?.stripe?.account &&
               currency ? (
@@ -297,6 +312,10 @@ function DonationsForm() {
                   {getFormatedCurrency(i18n.language, currency, minAmt)}
                 </span>
               </p>
+            ): (
+              <div className="mt-20 w-100">
+                <ButtonLoader />
+              </div>
             )}
           </div>
         </div>
