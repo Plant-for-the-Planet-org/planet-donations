@@ -125,7 +125,7 @@ function ThankYou() {
               paymentTypeUsed,
             }
           )}
-          {donation.gift
+          {donation && donation.gift
             ? " " +
               t("common:giftSentMessage", {
                 recipientName: donation.gift.recipientName,
