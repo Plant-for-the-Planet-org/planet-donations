@@ -219,14 +219,19 @@ function ThankYou() {
   function FailedDonation() {
     return (
       <div>
-        <button
-          id={"thank-you-close"}
-          onClick={() => sendToReturn()}
-          className="mb-10"
-          style={{ alignSelf: "flex-start" }}
-        >
-          <CloseIcon color={themeProperties.light.primaryFontColor} />
-        </button>
+        {returnTo ? (
+          <button
+            id={"thank-you-close"}
+            onClick={() => sendToReturn()}
+            className="mb-10"
+            style={{ alignSelf: "flex-start" }}
+          >
+            <CloseIcon color={themeProperties.light.primaryFontColor} />
+          </button>
+        ) : (
+          <></>
+        )}
+
         <div className={"title-text"}>{t("common:donationFailed")}</div>
         <div className={"mt-20 text-center"}>
           {t("common:donationFailedMessage")}
@@ -239,14 +244,19 @@ function ThankYou() {
   function PendingDonation() {
     return (
       <div>
-        <button
-          id={"thank-you-close"}
-          onClick={() => sendToReturn()}
-          className="mb-10"
-          style={{ alignSelf: "flex-start" }}
-        >
-          <CloseIcon color={themeProperties.light.primaryFontColor} />
-        </button>
+        {returnTo ? (
+          <button
+            id={"thank-you-close"}
+            onClick={() => sendToReturn()}
+            className="mb-10"
+            style={{ alignSelf: "flex-start" }}
+          >
+            <CloseIcon color={themeProperties.light.primaryFontColor} />
+          </button>
+        ) : (
+          <></>
+        )}
+
         <div className={"title-text"}>{t("common:donationPending")}</div>
         <div className={"mt-20 text-center"}>
           {t("common:donationPendingMessage")}
@@ -302,6 +312,7 @@ function ThankYou() {
             {t("donate:copiedToClipboard")}
           </Alert>
         </Snackbar>
+        <div style={{ height: "30px" }}></div>
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ function SepaPayments({
       type: "sepa_debit",
       sepa_debit: sepaElement,
       billing_details: {
-        name: contactDetails.firstName,
+        name: contactDetails.firstname,
         email: contactDetails.email,
       },
     });

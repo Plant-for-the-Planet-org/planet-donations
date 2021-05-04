@@ -43,11 +43,7 @@ function PaymentsForm({}: Props): ReactElement {
     }
   }, [publishName, donationID]);
 
-  const {
-    isLoading,
-    isAuthenticated,
-    getAccessTokenSilently,
-  } = useAuth0();
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const {
     paymentSetup,
@@ -73,11 +69,9 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
-
-
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
-  const onSubmitPayment = async(gateway: any, paymentMethod: any) => {
+  const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
     if (!isLoading && isAuthenticated) {
       token = await getAccessTokenSilently();
@@ -92,7 +86,7 @@ function PaymentsForm({}: Props): ReactElement {
       donationID,
       setdonationStep,
       contactDetails,
-      token
+      token,
     });
   };
 
@@ -114,7 +108,7 @@ function PaymentsForm({}: Props): ReactElement {
       setIsPaymentProcessing,
       setPaymentError,
       setdonationID,
-      token
+      token,
     });
 
     if (donation) {
@@ -288,7 +282,10 @@ function PaymentsForm({}: Props): ReactElement {
                 </Elements>
               </div>
             </div>
-          ): <ButtonLoader/>}
+          ) : (
+            <ButtonLoader />
+          )}
+          <div style={{ height: "30px" }}></div>
         </div>
       </div>
     )
