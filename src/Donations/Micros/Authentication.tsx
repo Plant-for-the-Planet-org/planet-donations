@@ -68,7 +68,7 @@ function Authentication({}: Props): ReactElement {
       )}
 
       {!isLoading && isAuthenticated && (
-        <button className="login-continue" onClick={() => logout()}>
+        <button className="login-continue" onClick={() =>  logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })}>
           Logout
         </button>
       )}
