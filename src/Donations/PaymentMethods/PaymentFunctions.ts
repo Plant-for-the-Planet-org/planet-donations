@@ -372,13 +372,17 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationID=${donationID}&paymentType=Giropay`,
+          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&paymenttype=Giropay`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        setPaymentError(error);
+        if(error.message){
+          setPaymentError(error.message);
+        }else{
+          setPaymentError(error);
+        }
       } else {
         return;
       }
@@ -401,13 +405,17 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationID=${donationID}&paymentType=Sofort`,
+          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&paymenttype=Sofort`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        setPaymentError(error);
+        if(error.message){
+          setPaymentError(error.message);
+        }else{
+          setPaymentError(error);
+        }
       } else {
         console.log("paymentIntent", paymentIntent);
       }

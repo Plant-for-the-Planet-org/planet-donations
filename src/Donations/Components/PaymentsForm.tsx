@@ -156,7 +156,6 @@ function PaymentsForm({}: Props): ReactElement {
               }
               showSepa={
                 currency === "EUR" &&
-                //   (config.enableGuestSepa || token) &&
                 paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
               }
               showSofort={
