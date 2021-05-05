@@ -131,7 +131,6 @@ function DonationInfo() {
 
         <div className="donations-transaction-details">
           {donationID && <p>Donation ID - {donationID}</p>}
-          <p>This donation is processed by Plant-for-the-Planet</p>
         </div>
       </div>
     </div>

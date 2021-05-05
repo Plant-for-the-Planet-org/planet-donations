@@ -38,7 +38,8 @@
   flex-direction: column;
   position: relative;
   z-index: 3;
-  background-color: black;
+  background-color: $primaryDarkColor;
+  background-image: linear-gradient(180deg, $primaryColor 5%, $primaryDarkColor 116%);
   overflow: hidden;
 }
 
@@ -524,11 +525,6 @@
     }
   }
 
-  .donations-form {
-    .login-continue {
-      margin-bottom: 20px;
-    }
-  }
   .thankyou-image {
     width: 360px;
     height: 360px;

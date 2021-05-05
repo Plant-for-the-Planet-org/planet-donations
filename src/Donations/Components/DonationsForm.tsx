@@ -148,7 +148,7 @@ function DonationsForm() {
         <Authentication />
         <div className="donations-tree-selection-step">
           <p className="title-text">Donate</p>
-          <div className="donations-gift-container">
+          <div className="donations-gift-container mt-10">
             <GiftForm />
           </div>
           <div
@@ -219,7 +219,7 @@ function DonationsForm() {
             </div>
 
             {paymentSetup && paymentSetup.treeCost ? (
-              <p className="currency-selection mt-20">
+              <p className="currency-selection mt-30">
                 <button
                   onClick={() => {
                     setopenCurrencyModal(true);

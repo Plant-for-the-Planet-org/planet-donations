@@ -18,48 +18,54 @@ interface Props {}
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
 
-  const {returnTo} = React.useContext(QueryParamContext)
+  const { returnTo } = React.useContext(QueryParamContext);
   return (
-    <div className="footer-container">
-      {returnTo ? (
-        <a href={returnTo} >Cancel and return to the organisation</a>
-      ): (
-        <p></p>
-      )}
-      
-      <div className="footer-links">
-        <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
-          English
-          <DownArrowIcon />
-        </button>
-        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
-          About Us
-        </a>
-        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/privacy-terms">
-          Privacy & Terms
-        </a>
-        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/imprint">
-          Imprint
-        </a>
-        <a rel="noreferrer" href="mailto:info@plant-for-the-planet.org">
-          Contact
-        </a>
-        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/faq">
-          FAQs
-        </a>
-        <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
-          <Image
-            src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
-            alt="Plant-for-the-Planet logo"
-            width={33}
-            height={34}
-          />
-        </a>
+    <div>
+      <p className="text-center mt-30">This donation is processed by Plant-for-the-Planet</p>
+      <div className="footer-container">
+        {returnTo ? (
+          <a href={returnTo}>Cancel and return to the organisation</a>
+        ) : (
+          <p></p>
+        )}
+
+        <div className="footer-links">
+          <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
+            English
+            <DownArrowIcon />
+          </button>
+          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
+            About Us
+          </a>
+          <a
+            rel="noreferrer"
+            href="https://a.plant-for-the-planet.org/privacy-terms"
+          >
+            Privacy & Terms
+          </a>
+          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/imprint">
+            Imprint
+          </a>
+          <a rel="noreferrer" href="mailto:info@plant-for-the-planet.org">
+            Contact
+          </a>
+          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/faq">
+            FAQs
+          </a>
+          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
+            <Image
+              src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
+              alt="Plant-for-the-Planet logo"
+              width={33}
+              height={34}
+            />
+          </a>
+        </div>
+        <LanguageModal
+          languageModalOpen={languageModalOpen}
+          setlanguageModalOpen={setlanguageModalOpen}
+        />
       </div>
-      <LanguageModal
-        languageModalOpen={languageModalOpen}
-        setlanguageModalOpen={setlanguageModalOpen}
-      />
     </div>
   );
 }

@@ -172,14 +172,12 @@ function PaymentsForm({}: Props): ReactElement {
             />
           )}
 
-          <div className={"treeDonationContainer"}>
+          <div className={"mt-20"}>
             {!contactDetails.companyname ||
             contactDetails.companyname === "" ? (
               askpublishName ? (
-                <div className={"isCompany"}>
-                  <label htmlFor="publishName" className={"isCompanyText"}>
-                    {t("askPublishName")}
-                  </label>
+                <div>
+                  <label htmlFor="publishName">{t("askPublishName")}</label>
                   <ToggleSwitch
                     id="publishName"
                     checked={publishName}
@@ -191,11 +189,8 @@ function PaymentsForm({}: Props): ReactElement {
                   />
                 </div>
               ) : (
-                <div className={"isCompany"}>
-                  <label
-                    className={"isCompanyText"}
-                    style={{ textAlign: "center" }}
-                  >
+                <div>
+                  <label style={{ textAlign: "center" }}>
                     {t("nameAlreadyPublished")}
                   </label>
                 </div>
