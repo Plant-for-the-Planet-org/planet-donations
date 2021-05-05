@@ -31,18 +31,6 @@ function PaymentsForm({}: Props): ReactElement {
 
   const [paymentError, setPaymentError] = React.useState("");
 
-  // This feature allows the user to show or hide their names in the leaderboard
-  const [publishName, setpublishName] = React.useState(false);
-  const [askpublishName, setaskpublishName] = React.useState(false);
-
-  React.useEffect(() => {
-    if (donationID) {
-      putRequest(`/app/donations/${donationID}/publish`, {
-        publish: publishName,
-      });
-    }
-  }, [publishName, donationID]);
-
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const {
@@ -118,11 +106,26 @@ function PaymentsForm({}: Props): ReactElement {
       setshouldCreateDonation(false);
     }
   }
+
+  // This feature allows the user to show or hide their names in the leaderboard
+  const [publishName, setpublishName] = React.useState(null);
+  const [askpublishName, setaskpublishName] = React.useState(false);
+
+  React.useEffect(() => {
+    if (donationID && publishName !== null) {
+      putRequest(`/app/donations/${donationID}/publish`, {
+        publish: publishName,
+      });
+    }
+  }, [publishName, donationID]);
+
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
       getDonation();
     }
   }, [shouldCreateDonation]);
+
+  console.log("contactDetails", contactDetails);
 
   return ready ? (
     isPaymentProcessing ? (
@@ -170,7 +173,7 @@ function PaymentsForm({}: Props): ReactElement {
           )}
 
           <div className={"treeDonationContainer"}>
-            {!contactDetails.companyname &&
+            {!contactDetails.companyname ||
             contactDetails.companyname === "" ? (
               askpublishName ? (
                 <div className={"isCompany"}>
