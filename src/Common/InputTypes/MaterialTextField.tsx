@@ -31,6 +31,15 @@ const MaterialTextField = withStyles({
     },
     '& .MuiOutlinedInput-multiline':{
       padding:'0px'
+    },
+    '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]':{
+      padding:'14px'
+    },
+    '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input':{
+      padding:'0px'
+    },
+    '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-child':{
+      paddingLeft:'0px'
     }
   },
 })(TextField);

@@ -18,26 +18,22 @@ function ContactsForm({}: Props): ReactElement {
     setContactDetails,
     setdonationStep,
     country,
-    isTaxDeductible
+    isTaxDeductible,
   } = React.useContext(QueryParamContext);
 
-
-  React.useEffect(()=>{
-    if(contactDetails){
+  React.useEffect(() => {
+    if (contactDetails) {
       reset(contactDetails);
-      if(contactDetails.companyName){
-        setIsCompany(true)
+      if (contactDetails.companyName) {
+        setIsCompany(true);
       }
     }
-  },[contactDetails])
+  }, [contactDetails]);
 
   const { register, errors, handleSubmit, control, reset } = useForm({
     mode: "all",
     defaultValues: {},
   });
-
-
-  const defaultCountry = isTaxDeductible ? country : "DE";
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
@@ -47,8 +43,8 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
-    setContactDetails(data)
-    setdonationStep(3)
+    setContactDetails(data);
+    setdonationStep(3);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -177,11 +173,7 @@ function ContactsForm({}: Props): ReactElement {
                   onChange={(data: any) => {
                     onChange(data);
                   }}
-                  defaultValue={
-                    contactDetails.country
-                      ? contactDetails.country
-                      : defaultCountry
-                  }
+                  defaultValue={contactDetails.country ? contactDetails.country : country}
                 />
               )}
             />
@@ -195,14 +187,14 @@ function ContactsForm({}: Props): ReactElement {
             <label htmlFor="isCompany-toggle">
               {t("isACompanyDonation")}
               {isCompany && (
-              <span
-                className={"isCompanyText"}
-                style={{ fontSize: "12px", fontStyle: "italic" }}
-              >
-                {isTaxDeductible
-                  ? t("orgNamePublishedTax")
-                  : t("orgNamePublished")}
-              </span>
+                <span
+                  className={"isCompanyText"}
+                  style={{ fontSize: "12px", fontStyle: "italic" }}
+                >
+                  {isTaxDeductible
+                    ? t("orgNamePublishedTax")
+                    : t("orgNamePublished")}
+                </span>
               )}
             </label>
             <ToggleSwitch
@@ -249,7 +241,7 @@ function ContactsForm({}: Props): ReactElement {
               {t("continue")}
             </button>
           )}
-          <div style={{height:'30px'}}></div>
+          <div style={{ height: "30px" }}></div>
         </form>
       </div>
     </div>
