@@ -194,6 +194,11 @@
   }
 }
 
+.custom-selection{
+  flex-grow: 1;
+  margin-left: 25px;
+}
+
 .contacts-isCompany-toggle {
   display: flex;
   align-items: baseline;
@@ -456,6 +461,9 @@
       width: 100px;
       padding: 12px;
     }
+  }
+  .custom-selection{
+    margin-left: 30px;
   }
   .donations-container {
     align-items: center;

@@ -182,10 +182,9 @@ function DonationsForm() {
               })}
 
               <div
-                className={`tree-selection-option mt-20 ${
+                className={`tree-selection-option mt-20 custom-selection ${
                   isCustomDonation ? "tree-selection-option-selected" : ""
                 }`}
-                style={{ flexGrow: 1, marginLeft: "30px" }}
                 onClick={() => {
                   setisCustomDonation(true);
                   customInputRef.current.focus();
