@@ -1,5 +1,8 @@
 @import './theme';
 
+.footer{
+    position: relative;
+}
 .footer-container{
     margin: 20px;
     display: flex;
@@ -46,7 +49,32 @@
     font-size: 20px;
     margin-bottom: 10px;
 }
-
+.cookie-policy{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background-color: #3498db;
+    color: $light;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    z-index: 10;
+    a {
+        font-weight: bold;
+        color: $light;
+        text-decoration: none;
+    }
+    svg {
+        position: absolute;
+        right: 16px;
+        height: 12px;
+        width: 12px;
+        top: 12px;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
 @include lgLaptopView {
     .footer-container{
         margin: 60px;

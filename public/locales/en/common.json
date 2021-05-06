@@ -63,5 +63,7 @@
   "donationFailedMessage": "Something went wrong while completing your payment. If you continue having issues please reach out to us at support@plant-for-the-planet.org",
   "donationPending": "Completing your donation",
   "donationPendingMessage": "We are currently waiting for the confirmation from your bank. This might take some time so, please feel free to close this page. We’ll send your receipt via email shortly.",
-  "donationRef": "Donation Ref"
+  "donationRef": "Donation Ref",
+  "privacyPolicyNotice": "By using this website, you agree to Plant-for-the-Planet's",
+  "privacyPolicy": "privacy & cookie policy"
 }

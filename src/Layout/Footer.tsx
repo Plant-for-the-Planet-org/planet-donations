@@ -13,15 +13,23 @@ import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
 import supportedLanguages from "./../../supportedLanguages.json";
+import { useTranslation } from "react-i18next";
+import CloseIcon from "../../public/assets/icons/CloseIcon";
+import { useAuth0 } from "@auth0/auth0-react";
+
 interface Props {}
 
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
 
   const { returnTo } = React.useContext(QueryParamContext);
+  const { t, ready } = useTranslation(["common"]);
+
   return (
-    <div>
-      <p className="text-center mt-30">This donation is processed by Plant-for-the-Planet</p>
+    <div className="footer">
+      <p className="text-center mt-30">
+        This donation is processed by Plant-for-the-Planet
+      </p>
       <div className="footer-container">
         {returnTo ? (
           <a href={returnTo}>Cancel and return to the organisation</a>
@@ -66,8 +74,50 @@ function Footer({}: Props): ReactElement {
           setlanguageModalOpen={setlanguageModalOpen}
         />
       </div>
+      <CookiePolicy />
     </div>
   );
+}
+
+function CookiePolicy() {
+  const { t, ready } = useTranslation(["common"]);
+  const [showCookieNotice, setShowCookieNotice] = React.useState(false);
+
+  const { isLoading, isAuthenticated } = useAuth0();
+
+  React.useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      setShowCookieNotice(false);
+    }
+  }, [isAuthenticated, isLoading]);
+
+  React.useEffect(() => {
+    const prev = localStorage.getItem("cookieNotice");
+    if (!prev) {
+      setShowCookieNotice(true);
+    } else {
+      setShowCookieNotice(prev === "true");
+    }
+  }, []);
+
+  React.useEffect(() => {
+    localStorage.setItem("cookieNotice", showCookieNotice);
+  }, [showCookieNotice]);
+
+  return showCookieNotice ? (
+    <div className={"cookie-policy"}>
+      {t("privacyPolicyNotice")}{" "}
+      <a href="https://www.plant-for-the-planet.org/en/footermenu/privacy-policy">
+        {t("privacyPolicy")}
+      </a>
+      <button
+        id={"cookieCloseButton"}
+        onClick={() => setShowCookieNotice(false)}
+      >
+        <CloseIcon />
+      </button>
+    </div>
+  ): <></>;
 }
 
 interface ModalProps {
