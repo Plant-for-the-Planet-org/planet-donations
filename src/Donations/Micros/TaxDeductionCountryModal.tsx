@@ -12,45 +12,25 @@ import { useTranslation } from "react-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 export default function TaxDeductionCountryModal(props: any) {
-  const {
-    openModal,
-    handleModalClose,
-    taxDeductionCountries,
-  } = props;
+  const { openModal, handleModalClose, taxDeductionCountries } = props;
 
-  const {
-    setcountry,
-    country,
-    setcurrency,
-    currency,
-  } = React.useContext(QueryParamContext);  
+  const { setcountry, country, setcurrency, currency } = React.useContext(
+    QueryParamContext
+  );
 
   const { t, ready } = useTranslation("common");
 
   const [countriesData, setCountriesData] = useState([]);
-  const [selectedModalValue, setSelectedModalValue] = useState(
-    `${country},${currency}`
-  );
 
   const { theme } = React.useContext(ThemeContext);
 
   // changes the currency in when a currency is selected
   const handleCountryChange = (event: any) => {
-    setSelectedModalValue(event.target.value);
-  };
-
-  // changes the language and currency code in footer state and local storage
-  // when user clicks on OK
-  function handleOKClick() {
-    const selectedData = selectedModalValue.split(",");
+    const selectedData = event.target.value.split(",");
     setcountry(selectedData[0]);
     setcurrency(selectedData[1]);
     handleModalClose();
-  }
-
-  React.useEffect(() => {
-    setSelectedModalValue(`${country},${currency}`);
-  }, [country, currency]);
+  };
 
   React.useEffect(() => {
     const tempCountriesData: any = [];
@@ -74,69 +54,34 @@ export default function TaxDeductionCountryModal(props: any) {
       }}
     >
       <Fade in={openModal}>
-        <div className={'modal p-20'}>
-          <div className={'radioButtonsContainer'}>
-            <p className={'select-language-title'}>{t("selectCountry")}</p>
+        <div className={"modal p-20"}>
+          <div className={"radioButtonsContainer"}>
+            <p className={"select-language-title"}>{t("selectCountry")}</p>
             {/* maps the radio button for country */}
-            <MapCountry
-              countriesData={countriesData}
-              // this is selectedValue,
-              value={selectedModalValue}
-              handleChange={handleCountryChange}
-            />
-          </div>
-
-          {/* modal buttons */}
-          <div className={'mt-20 d-flex row justify-content-between'}>
-            <button
-              id={"selectTaxDedCan"}
-              className={'secondary-button'}
-              style={{minWidth:'130px',width:'130px'}}
-              onClick={handleModalClose}
-            >
-              <p>{t("cancel")}</p>
-            </button>
-            <button
-              id={"selectTaxDedOk"}
-              className={'primary-button'}
-              style={{minWidth:'130px',width:'130px'}}
-              onClick={handleOKClick}
-            >
-              <p>{t("selectCountry")}</p>
-            </button>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="language"
+                name="language"
+                value={`${country},${currency}`}
+                onChange={handleCountryChange}
+              >
+                {countriesData.map((country: any, index: number) => (
+                  <FormControlLabel
+                    key={country.countryCode + "-" + index}
+                    value={`${country.countryCode},${country.currencyCode}`} // need both info
+                    control={<GreenRadio />}
+                    label={
+                      t("country:" + country.countryCode.toLowerCase()) +
+                      " · " +
+                      country.currencyCode
+                    }
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
           </div>
         </div>
       </Fade>
     </Modal>
-  ) : null;
-}
-
-// Maps the radio buttons for currency
-function MapCountry(props: any) {
-  const { t, ready } = useTranslation(["country"]);
-
-  const { countriesData, value, handleChange } = props;
-  return ready ? (
-    <FormControl component="fieldset">
-      <RadioGroup
-        aria-label="language"
-        name="language"
-        value={value}
-        onChange={handleChange}
-      >
-        {countriesData.map((country: any, index: number) => (
-          <FormControlLabel
-            key={country.countryCode + "-" + index}
-            value={`${country.countryCode},${country.currencyCode}`} // need both info
-            control={<GreenRadio />}
-            label={
-              t("country:" + country.countryCode.toLowerCase()) +
-              " · " +
-              country.currencyCode
-            }
-          />
-        ))}
-      </RadioGroup>
-    </FormControl>
   ) : null;
 }

@@ -29,25 +29,17 @@ export default function TransitionsModal(props: any) {
 
   const [importantList, setImportantList] = React.useState<Array<Object>>([]);
 
-  const [selectedCountry, setselectedCountry] = React.useState(country);
-
   React.useEffect(() => {
     // sets two default country as important country which is US(United States) and DE (Germany)
     const impCountryList = ["US", "DE"];
-
     // if the selected country is other than US and DE then add that country to important country list
     if (country && country != "US" && country != "DE") {
       impCountryList.push(country);
     }
-
     // adds the important country list to state
     setImportantList(impCountryList);
   }, [currency]);
 
-  const handleOKClick = () => {
-    setcountry(selectedCountry);
-    handleModalClose();
-  };  
 
   return ready ? (
     <div>
@@ -70,32 +62,15 @@ export default function TransitionsModal(props: any) {
               <MapCurrency
                 // this is selectedValue, country wala object
                 priorityCountries={importantList}
-                value={selectedCountry}
+                value={country}
                 handleChange={(value) => {
-                  setselectedCountry(value.countryCode);
+                  setcountry(value.countryCode);
+    handleModalClose();
                 }}
               />
             </div>
 
-            {/* modal buttons */}
-            <div className={"mt-20 d-flex row justify-content-between"}>
-              <button
-                id={"SelCurrencyModalCan"}
-                className={"secondary-button"}
-                style={{ minWidth: "130px", width: "130px" }}
-                onClick={handleModalClose}
-              >
-                <p>{t("cancel")}</p>
-              </button>
-              <button
-                id={"SelCurrencyModalOk"}
-                className={"primary-button"}
-                style={{ minWidth: "130px", width: "130px" }}
-                onClick={handleOKClick}
-              >
-                <p>{t("selectCurrency")}</p>
-              </button>
-            </div>
+            
           </div>
         </Fade>
       </Modal>
