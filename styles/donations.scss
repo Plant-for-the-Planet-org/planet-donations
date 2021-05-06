@@ -4,7 +4,6 @@
   min-height: 80vh;
   display: flex;
   justify-content: center;
-  // position: relative;
 }
 
 .test-donation-bar {
@@ -24,7 +23,6 @@
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
 }
 
 .donations-info-container {
@@ -41,6 +39,22 @@
   overflow: hidden;
   box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
   background-color: $backgroundColor;
+  max-width: 360px;
+  align-self: center;
+}
+.donations-forms-container {
+  display: flex;
+  padding: 20px;
+  width: 100%;
+  overflow-y: scroll;
+  padding-bottom: 30px;
+  max-width: 360px;
+  align-self: center;
+  background-color: $light;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
 }
 
 .background-image {
@@ -56,35 +70,7 @@
   height: 100%;
   z-index: 3;
 }
-.donations-info-loader {
-  width: 100%;
-  height: 100%;
-  animation: loader 3s infinite ease-in-out;
-  -webkit-animation: loader 3s infinite ease-in-out;
-}
-@keyframes loader {
-  0% {
-    background-color: rgba(#ecebeb, 0.3);
-  }
-  50% {
-    background-color: rgba(#f3f3f3, 0.5);
-  }
-  100% {
-    background-color: rgba(#ecebeb, 0.3);
-  }
-}
 
-@-webkit-keyframes loader {
-  0% {
-    background-color: rgba(#ecebeb, 0.3);
-  }
-  50% {
-    background-color: rgba(#f3f3f3, 0.5);
-  }
-  100% {
-    background-color: rgba(#ecebeb, 0.3);
-  }
-}
 .donations-info-header {
   flex-grow: 1;
 }
@@ -97,15 +83,7 @@
     margin-top: 4px;
   }
 }
-.donations-forms-container {
-  display: flex;
-  padding: 20px;
-  width: 100%;
-  overflow-y: scroll;
-  padding-bottom: 30px;
-  max-width: 360px;
-  align-self: center;
-}
+
 .donations-form {
   width: 100%;
   .login-continue {
@@ -466,14 +444,12 @@
 @include smTabletView {
   .donations-info-container {
     padding: 30px;
-    border-radius: 0px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 10px;
+    max-width: 420px;
   }
   .donations-forms-container {
     max-width: 420px;
     padding: 30px;
-    margin-bottom: 0px;
   }
   .tree-selection-options-container {
     .tree-selection-option {
@@ -506,17 +482,22 @@
   .donations-info-container {
     width: 420px;
     flex: 1;
-    max-width: 420px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
+    height: 100%;
   }
   .donations-forms-container {
     width: 420px;
     max-height: 560px;
     padding-bottom: 30px;
     align-self: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
   .donations-transaction-details {
     font-size: 14px;
@@ -528,5 +509,35 @@
   .thankyou-image {
     width: 360px;
     height: 360px;
+  }
+}
+
+.donations-info-loader {
+  width: 100%;
+  height: 100%;
+  animation: loader 3s infinite ease-in-out;
+  -webkit-animation: loader 3s infinite ease-in-out;
+}
+@keyframes loader {
+  0% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+  50% {
+    background-color: rgba(#f3f3f3, 0.5);
+  }
+  100% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+}
+
+@-webkit-keyframes loader {
+  0% {
+    background-color: rgba(#ecebeb, 0.3);
+  }
+  50% {
+    background-color: rgba(#f3f3f3, 0.5);
+  }
+  100% {
+    background-color: rgba(#ecebeb, 0.3);
   }
 }
