@@ -72,37 +72,6 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentType, setPaymentType] = React.useState("");
 
-  // const [directGift, setDirectGift] = React.useState(null);
-  // React.useEffect(() => {
-  //   const getdirectGift = localStorage.getItem('directGift');
-  //   if (getdirectGift) {
-  //     setDirectGift(JSON.parse(getdirectGift));
-  //   }
-  // }, []);
-  // React.useEffect(() => {
-  //   if (directGift) {
-  //     setIsGift(true);
-  //     setGiftDetails({
-  //       type: 'direct',
-  //       recipientName: directGift.displayName,
-  //       email: null,
-  //       giftMessage: '',
-  //       recipientTreecounter: directGift.id,
-  //       receipients: null,
-  //     });
-  //   } else {
-  //     setIsGift(false);
-  //     setGiftDetails({
-  //       type: null,
-  //       recipientName: null,
-  //       email: null,
-  //       giftMessage: '',
-  //       recipientTreecounter: null,
-  //       receipients: null,
-  //     });
-  //   }
-  // }, [directGift]);
-
   const treeSelectionOptions = [
     {
       treeCount: 10,
@@ -263,6 +232,25 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.donationid]);
 
   // support = s => Fetch the user data from api and load in gift details
+  async function loadPublicUserData(slug: any) {
+    const newProfile = await getRequest(`/app/profiles/${slug}`);
+    if (newProfile.data.type !== 'tpo') {
+      setisGift(true);
+      setgiftDetails({
+        recipientName: newProfile.data.displayName,
+        recipientEmail: "",
+        giftMessage: "",
+        type: "direct",
+        recipientTreecounter: newProfile.data.slug,
+      })
+    }
+  }
+
+  React.useEffect(() => {
+    if (router && router.query.s) {
+      loadPublicUserData(router.query.s);
+    }
+  }, [router.query.s]);
 
   // Access token = accessToken =>
 
@@ -286,9 +274,6 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.treecount) {
       settreeCount(Number(router.query.treecount));
-      if (![10, 20, 50, 150].includes(Number(router.query.treecount))) {
-        // Set custom tree count true
-      }
     }
   }, [router.query.treecount]);
 
@@ -303,8 +288,6 @@ export default function QueryParamProvider({ children }: any) {
       setredirectstatus(router.query.redirect_status);
     }
   }, [router.query.redirect_status]);
-
-  // TO DO - Login user, fetch details and store default values for contact details
 
   React.useEffect(() => {
     setshouldCreateDonation(true);
