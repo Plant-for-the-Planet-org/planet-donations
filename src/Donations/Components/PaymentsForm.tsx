@@ -75,6 +75,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationStep,
       contactDetails,
       token,
+      country
     });
   };
 

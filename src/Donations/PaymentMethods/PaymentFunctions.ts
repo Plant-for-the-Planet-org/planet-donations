@@ -205,6 +205,7 @@ export async function payDonationFunction({
   setdonationStep,
   contactDetails,
   token,
+  country
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -257,6 +258,7 @@ export async function payDonationFunction({
           setdonationStep,
           contactDetails,
           token,
+          country
         });
       }
     }
@@ -290,6 +292,7 @@ export async function handleSCAPaymentFunction({
   setdonationStep,
   contactDetails,
   token,
+  country
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -392,7 +395,7 @@ export async function handleSCAPaymentFunction({
         {
           payment_method: {
             sofort: {
-              country: contactDetails.country,
+              country: country,
             },
             billing_details: {
               name: `${contactDetails.firstname} ${contactDetails.lastname}`,

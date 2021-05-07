@@ -109,6 +109,7 @@ function DonationsForm() {
         donationID: res.id,
         setdonationStep,
         token,
+        country
       });
     });
   };
