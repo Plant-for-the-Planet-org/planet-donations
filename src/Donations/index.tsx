@@ -51,6 +51,7 @@ function DonationInfo() {
   } = React.useContext(QueryParamContext);
 
   const [showContactDetails, setshowContactDetails] = React.useState(false);
+  
   return projectDetails && paymentSetup ? (
     <div className="donations-info-container">
       {/* <img
@@ -58,22 +59,24 @@ function DonationInfo() {
         src="/assets/images/forest2.jpg"
         width="420"
         height="560"
-      /> */}
-      {/* <div className="background-image-overlay"></div> */}
+      />
+      <div className="background-image-overlay"></div> */}
       <div className="donations-info">
         <div className="donations-info-header">
-          <p className="title-text text-white">{projectDetails.name}</p>
+          <a target="_blank" href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`} className="title-text text-white">{projectDetails.name}</a>
+          <div style={{marginTop:'8px'}}/>
           {projectDetails.tpo && (
-            <p className="text-white mt-10">
+            <a target="_blank" href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`} className="text-white">
               {t("byOrganization", {
                 organizationName: projectDetails.tpo.name,
               })}
-            </p>
+            </a>
           )}
 
           {(donationStep === 2 || donationStep === 3) && (
             <div>
               <div className={"w-100  text-white mt-10"}>
+                Donating {" "}
                 <span className="text-bold" style={{ marginRight: "4px" }}>
                   {getFormatedCurrency(
                     i18n.language,
@@ -130,7 +133,7 @@ function DonationInfo() {
         </div>
 
         <div className="donations-transaction-details">
-          {donationID && <p>Donation ID - {donationID}</p>}
+          {donationID && `Donation ID - ${donationID}`}
         </div>
       </div>
     </div>

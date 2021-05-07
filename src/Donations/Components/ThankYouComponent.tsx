@@ -187,7 +187,7 @@ function ThankYou() {
               __html: t("common:thankyouHeaderText"),
             }}
           />
-          <div className={"donation-count"}>
+          <div className={"donation-count p-20"}>
             {t("common:myTreesPlantedByOnLocation", {
               treeCount: getFormattedNumber(
                 i18n.language,

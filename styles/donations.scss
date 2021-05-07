@@ -27,6 +27,7 @@
 
 .donations-info-container {
   width: 100%;
+  border-radius: 0px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   padding: 20px;
@@ -35,7 +36,11 @@
   position: relative;
   z-index: 3;
   background-color: $primaryDarkColor;
-  background-image: linear-gradient(180deg, $primaryColor 5%, $primaryDarkColor 116%);
+  background-image: linear-gradient(
+    180deg,
+    $primaryColor 5%,
+    $primaryDarkColor 116%
+  );
   overflow: hidden;
   box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
   background-color: $backgroundColor;
@@ -75,13 +80,11 @@
   flex-grow: 1;
 }
 .donations-transaction-details {
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
   color: $light;
   z-index: 3;
-  > p {
-    margin-top: 4px;
-  }
+  margin-top: 8px;
 }
 
 .donations-form {
@@ -194,7 +197,7 @@
   }
 }
 
-.custom-selection{
+.custom-selection {
   flex-grow: 1;
   margin-left: 25px;
 }
@@ -332,7 +335,7 @@
 }
 
 .donation-count {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
   text-align: center;
   position: absolute;
@@ -462,7 +465,7 @@
       padding: 12px;
     }
   }
-  .custom-selection{
+  .custom-selection {
     margin-left: 30px;
   }
   .donations-container {
@@ -472,6 +475,9 @@
   .thankyou-image {
     width: 360px;
     height: 360px;
+  }
+  .donation-count {
+    font-size: 22px;
   }
 }
 
@@ -507,13 +513,6 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
   }
-  .donations-transaction-details {
-    font-size: 14px;
-    > p {
-      margin-top: 8px;
-    }
-  }
-
   .thankyou-image {
     width: 360px;
     height: 360px;
