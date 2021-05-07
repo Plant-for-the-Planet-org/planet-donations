@@ -178,19 +178,35 @@ export const PaymentRequestCustomButton = ({
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability ? (
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
-          <button onClick={()=>paymentRequest.show()} className="primary-button dark-pay w-100 mb-20">
-            Donate with{" "}
-            <AppleIcon/>
-          </button>
+          <div className="w-100">
+            <button
+              onClick={() => paymentRequest.show()}
+              className="primary-button dark-pay w-100 mb-10"
+            >
+              Donate with <AppleIcon />
+            </button>
+            <div className="separator-text mb-10">OR</div>
+          </div>
         ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
-          <button  onClick={()=>paymentRequest.show()} className="primary-button dark-pay w-100 mb-20">
-            Donate with{" "}
-            <GooglePayIcon/>
-          </button>
+          <div className="w-100">
+            <button
+              onClick={() => paymentRequest.show()}
+              className="primary-button dark-pay w-100 mb-10"
+            >
+              Donate with <GooglePayIcon />
+            </button>
+            <div className="separator-text mb-10">OR</div>
+          </div>
         ) : (
-          <button  onClick={()=>paymentRequest.show()} className="primary-button donate-now w-100 mb-20">
-            Donate Now
-          </button>
+          <div className="w-100">
+            <button
+              onClick={() => paymentRequest.show()}
+              className="primary-button donate-now w-100 mb-10"
+            >
+              Donate Now
+            </button>
+            <div className="separator-text mb-10">OR</div>
+          </div>
         )
       ) : null}
 
