@@ -16,7 +16,6 @@ function Authentication({}: Props): ReactElement {
   } = useAuth0();
 
   const [profile, setprofile] = React.useState<null | Object>(null);
-  console.log("profile", profile);
 
   const loadUserProfile = async () => {
     const token = await getAccessTokenSilently();

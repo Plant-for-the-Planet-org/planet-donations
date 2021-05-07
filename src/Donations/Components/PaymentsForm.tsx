@@ -126,8 +126,6 @@ function PaymentsForm({}: Props): ReactElement {
     }
   }, [shouldCreateDonation]);
 
-  console.log("contactDetails", contactDetails);
-
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />

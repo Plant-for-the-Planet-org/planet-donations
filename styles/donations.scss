@@ -548,3 +548,16 @@
     background-color: rgba(#ecebeb, 0.3);
   }
 }
+
+.dark-pay{
+  background-image: none;
+  background-color: #000;
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
+}
+.donate-now{
+  background-image: linear-gradient(103deg, #383461 5%, #684889 116%);
+}

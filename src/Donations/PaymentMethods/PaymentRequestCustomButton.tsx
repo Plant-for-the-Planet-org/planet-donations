@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "react-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
+import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
+import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
 
 export const useOptions = (paymentRequest: null) => {
   const typeOfButton = "donate";
@@ -173,34 +175,29 @@ export const PaymentRequestCustomButton = ({
     <div className="d-flex column mt-20" style={{ alignItems: "center" }}>
       {stripeAllowedCountries.includes(country) &&
       canMakePayment &&
-      paymentRequest ? (
-        <div className="mb-20" style={{ width: "100%" }}>
-          <PaymentRequestButtonElement
-            className="PaymentRequestButton"
-            options={options}
-            onReady={() => {
-              // console.log('PaymentRequestButton [ready]');
-            }}
-            onClick={(event) => {
-              // console.log('PaymentRequestButton [click]', event);
-            }}
-            onBlur={() => {
-              // console.log('PaymentRequestButton [blur]');
-            }}
-            onFocus={() => {
-              // console.log('PaymentRequestButton [focus]');
-            }}
-          />
-        </div>
+      paymentRequest &&
+      paymentRequest._canMakePaymentAvailability ? (
+        paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
+          <button onClick={()=>paymentRequest.show()} className="primary-button dark-pay w-100 mb-20">
+            Donate with{" "}
+            <AppleIcon/>
+          </button>
+        ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
+          <button  onClick={()=>paymentRequest.show()} className="primary-button dark-pay w-100 mb-20">
+            Donate with{" "}
+            <GooglePayIcon/>
+          </button>
+        ) : (
+          <button  onClick={()=>paymentRequest.show()} className="primary-button donate-now w-100 mb-20">
+            Donate Now
+          </button>
+        )
       ) : null}
-      <button
-        onClick={()=>continueNext()}
-        className="primary-button"
-        style={{borderRadius:'4px',height:'36px'}}
-      >
+
+      <button onClick={() => continueNext()} className="primary-button">
         Continue
       </button>
-      <div style={{height:'30px'}}></div>
+      <div style={{ height: "30px" }}></div>
     </div>
   ) : null;
 };

@@ -236,7 +236,6 @@ function ContactsForm({}: Props): ReactElement {
             <button
               onClick={handleSubmit(onSubmit)}
               className={"primary-button mt-30"}
-              style={{ borderRadius: "10px" }}
             >
               {t("continue")}
             </button>
