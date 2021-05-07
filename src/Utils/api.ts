@@ -68,7 +68,7 @@ const request = async (url:string, method:string = 'GET', token:any = false, dat
     if (token) {
       // adds Authorization to headers in options
       options.headers = {
-        Authorization: `OAuth ${token}`,
+        Authorization: `Bearer ${token}`,
       };
     }
 
