@@ -56,9 +56,7 @@ export default function QueryParamProvider({ children }: any) {
   const [donationStep, setdonationStep] = useState(1);
   const [language, setlanguage] = useState("en");
 
-  const [tenantkey, settenantkey] = useState("ten_I9TW3ncG");
   const [donationID, setdonationID] = useState(null);
-  const [accessToken, setaccessToken] = useState(null);
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
@@ -255,19 +253,10 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.s]);
 
-  // Access token = accessToken =>
-
-  React.useEffect(() => {
-    if (router.query.accesstoken) {
-      setaccessToken(router.query.accesstoken);
-    }
-  }, [router.query.accesstoken]);
-
   // Tenant key = tenantkey =>
 
   React.useEffect(() => {
     if (router.query.tenantkey) {
-      settenantkey(router.query.tenantkey);
       localStorage.setItem("tenantkey", router.query.tenantkey);
     }
   }, [router.query.tenantkey]);
