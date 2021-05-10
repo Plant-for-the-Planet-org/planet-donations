@@ -65,5 +65,10 @@
   "donationPendingMessage": "We are currently waiting for the confirmation from your bank. This might take some time so, please feel free to close this page. We’ll send your receipt via email shortly.",
   "donationRef": "Donation Ref",
   "privacyPolicyNotice": "By using this website, you agree to Plant-for-the-Planet's",
-  "privacyPolicy": "privacy & cookie policy"
+  "privacyPolicy": "privacy & cookie policy",
+  "verifyEmail": "Verify Email",
+  "verifyEmailHeader": "Please confirm your email",
+  "verifyEmailText": "To secure your account, we need to verify your email. Please check your inbox or spam/junk folder for a confirmation email and then continue to login.",
+  "verifyEmailInfo": "If you didn’t receive an email please try logging in again and we’ll send you another email.",
+  "skipLogout":"Skip and Logout"
 }
