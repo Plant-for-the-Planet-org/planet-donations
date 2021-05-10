@@ -561,3 +561,18 @@
 .donate-now{
   background-image: linear-gradient(103deg, #383461 5%, #684889 116%);
 }
+
+.mailing-buttons{
+  a{
+    margin-left: 12px;
+    margin-right: 12px;
+    svg{
+      height: 30px;
+      filter: grayscale(100%);
+      &:hover{
+        cursor: pointer;
+        filter: grayscale(0%);
+      }
+    }
+  }
+}

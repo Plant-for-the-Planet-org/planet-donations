@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import { Backdrop, Fade, Modal } from "@material-ui/core";
 import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
+import GmailIcon from "../../../public/assets/icons/GmailIcon";
+import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
+import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 
 interface Props {}
 
@@ -125,27 +128,33 @@ function VerifyEmailModal({ openModal, handleModalClose, logout }) {
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
-          <p className={"select-language-title mb-20"}>{t("verifyEmailHeader")}</p>
-          <VerifyEmailIcon/>
+          <p className={"select-language-title mb-20"}>
+            {t("verifyEmailHeader")}
+          </p>
+          <VerifyEmailIcon />
           <p className="text-center mt-30">{t("verifyEmailText")}</p>
           <p className="text-center mt-20">{t("verifyEmailInfo")}</p>
-          <div className={"mt-20 d-flex row justify-content-between"}>
+          <div className={"mt-30 d-flex column"}>
+            <div className={"d-flex row w-100 justify-content-center align-items-center mailing-buttons"}>
+              <a href="https://mail.google.com/" target="_blank" rel="noopener">
+                <GmailIcon />
+              </a>
+              <a href="https://www.icloud.com/mail" target="_blank" rel="noopener">
+                <AppleMailIcon />
+              </a>
+              <a href="https://outlook.office.com/mail/" target="_blank" rel="noopener">
+                <OutlookIcon />
+              </a>
+            </div>
             <button
               id={"VerifyEmailModalCan"}
-              className={"secondary-button"}
+              className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() => logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })}
+              onClick={() =>
+                logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })
+              }
             >
               <p>{t("skipLogout")}</p>
-            </button>
-            <div style={{width:'20px'}}></div>
-            <button
-              id={"VerifyEmailModalOk"}
-              className={"primary-button"}
-              style={{ minWidth: "130px" }}
-              onClick={() => console.log("verify email")}
-            >
-              <p>{t("verifyEmail")}</p>
             </button>
           </div>
         </div>
