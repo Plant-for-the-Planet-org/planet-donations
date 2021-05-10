@@ -98,7 +98,7 @@ function ThankYou() {
   }
 
   function SuccessfulDonation() {
-    return (
+    return donation ? (
       <div className="d-flex column justify-content-center">
         {returnTo ? (
           <button
@@ -213,6 +213,8 @@ function ThankYou() {
           donor={donation.donor}
         />
       </div>
+    ) : (
+      <></>
     );
   }
 
@@ -276,19 +278,17 @@ function ThankYou() {
           <PaymentProgress isPaymentProcessing={true} />
         ) : (
           <div>
-            {redirectstatus ? (
-              redirectstatus === "succeeded" ? (
+            {redirectstatus && donation && donation.paymentStatus ? (
+              redirectstatus === "succeeded" &&
+              (donation.paymentStatus === "success" ||
+                donation.paymentStatus === "paid") ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />
               ) : (
                 <PendingDonation />
               )
-            ) : (
-              <></>
-            )}
-
-            {donation && donation.paymentStatus ? (
+            ) : donation && donation.paymentStatus ? (
               donation.paymentStatus === "success" ||
               donation.paymentStatus === "paid" ? (
                 <SuccessfulDonation />
@@ -300,6 +300,8 @@ function ThankYou() {
             ) : (
               <></>
             )}
+
+            {}
           </div>
         )}
 

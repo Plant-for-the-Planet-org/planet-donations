@@ -211,7 +211,7 @@ export const PaymentRequestCustomButton = ({
       ) : null}
 
       <button onClick={() => continueNext()} className="primary-button">
-        Continue
+        Use PayPal or Card
       </button>
       <div style={{ height: "30px" }}></div>
     </div>

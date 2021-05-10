@@ -211,7 +211,10 @@ export default function QueryParamProvider({ children }: any) {
 
       // Check if the donation status is paid or successful - if yes directly show thank you page
       // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
-      if(donation.data.paymentStatus === 'success' || donation.data.paymentStatus === 'paid' || donation.data.paymentStatus === 'failed' || donation.data.paymentStatus === 'pending'){
+      if((router.query.paymenttype === 'Sofort' || router.query.paymenttype === 'Giropay') && (router.query.redirect_status === 'succeeded' || router.query.redirect_status === 'failed') && router.query.payment_intent){
+        setdonationStep(4)
+      }
+      else if(donation.data.paymentStatus === 'success' || donation.data.paymentStatus === 'paid' || donation.data.paymentStatus === 'failed' || donation.data.paymentStatus === 'pending'){
         setdonationStep(4)
       }
       else if(donation.data.paymentStatus === 'initiated' ){
