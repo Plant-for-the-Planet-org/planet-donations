@@ -6,7 +6,7 @@ interface Props {
 }
 
 function GiroPayPayments({ onSubmitPayment }: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   return (
     <button

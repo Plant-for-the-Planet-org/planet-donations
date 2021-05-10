@@ -214,7 +214,7 @@ export async function payDonationFunction({
     setPaymentError(t("donate:noPaymentMethodError"));
     return;
   }
-  let payDonationData = getPaymentProviderRequest(
+  const payDonationData = getPaymentProviderRequest(
     gateway,
     paymentSetup,
     paymentMethod

@@ -1,12 +1,10 @@
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Modal from "@material-ui/core/Modal";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import { withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
@@ -19,7 +17,7 @@ import { useStylesAutoComplete } from "./../../Common/InputTypes/AutoCompleteCou
 export default function TransitionsModal(props: any) {
   const { openModal, handleModalClose } = props;
 
-  const { setcountry, country, setcurrency, currency } = React.useContext(
+  const { setcountry, country, currency } = React.useContext(
     QueryParamContext
   );
 
@@ -39,7 +37,6 @@ export default function TransitionsModal(props: any) {
     // adds the important country list to state
     setImportantList(impCountryList);
   }, [currency]);
-
 
   return ready ? (
     <div>
@@ -65,12 +62,10 @@ export default function TransitionsModal(props: any) {
                 value={country}
                 handleChange={(value) => {
                   setcountry(value.countryCode);
-    handleModalClose();
+                  handleModalClose();
                 }}
               />
             </div>
-
-            
           </div>
         </Fade>
       </Modal>

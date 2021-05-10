@@ -1,7 +1,6 @@
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import React from "react";
-// import tenantConfig from '../../../../tenant.config';
 import { useTranslation } from "react-i18next";
 import { getPaymentType } from "../PaymentMethods/PaymentFunctions";
 import PaymentFailedIllustration from "../../../public/assets/icons/donation/PaymentFailed";

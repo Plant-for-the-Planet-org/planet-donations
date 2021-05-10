@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import EmailIcon from '../../../public/assets/icons/share/Email';
 import EmailSolid from '../../../public/assets/icons/share/EmailSolid';
 import FacebookIcon from '../../../public/assets/icons/share/Facebook';

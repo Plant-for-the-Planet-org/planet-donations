@@ -21,6 +21,7 @@ module.exports = {
   plugins: [
     'react',
     '@typescript-eslint',
+    'i18next'
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
@@ -36,7 +37,8 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'off',
     'no-empty-pattern': 'off',
     'react/display-name': 'off',
-    'react/no-find-dom-node': 'off'
+    'react/no-find-dom-node': 'off',
+    'i18next/no-literal-string': 'off'
   },
   globals: {
     React: 'writable',

@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import CustomIcon from "../../../public/assets/icons/CustomIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
@@ -21,8 +21,6 @@ import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
-
-interface Props {}
 
 function DonationsForm() {
   const {
@@ -176,7 +174,9 @@ function DonationsForm() {
                     {option.iconFile}
                     <div className="tree-selection-option-text">
                       <p>{option.treeCount}</p>
-                      <span>trees</span>
+                      <span>
+                        {t('trees')}
+                      </span>
                     </div>
                   </div>
                 );
@@ -213,7 +213,7 @@ function DonationsForm() {
                     }}
                     ref={customInputRef}
                   />
-                  <span>trees</span>
+                  <span>{t('trees')}</span>
                 </div>
               </div>
             </div>

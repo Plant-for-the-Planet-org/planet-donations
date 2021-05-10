@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import ContactsForm from "./Components/ContactsForm";
 
 import { QueryParamContext } from "../Layout/QueryParamContext";
@@ -51,7 +51,7 @@ function DonationInfo() {
   } = React.useContext(QueryParamContext);
 
   const [showContactDetails, setshowContactDetails] = React.useState(false);
-  
+
   return projectDetails && paymentSetup ? (
     <div className="donations-info-container">
       {/* <img
@@ -63,10 +63,22 @@ function DonationInfo() {
       <div className="background-image-overlay"></div> */}
       <div className="donations-info">
         <div className="donations-info-header">
-          <a target="_blank" href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`} className="title-text text-white">{projectDetails.name}</a>
-          <div style={{marginTop:'8px'}}/>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+            className="title-text text-white"
+          >
+            {projectDetails.name}
+          </a>
+          <div style={{ marginTop: "8px" }} />
           {projectDetails.tpo && (
-            <a target="_blank" href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`} className="text-white">
+            <a
+              rel="noreferrer"
+              target="_blank"
+              href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+              className="text-white"
+            >
               {t("byOrganization", {
                 organizationName: projectDetails.tpo.name,
               })}
@@ -76,7 +88,7 @@ function DonationInfo() {
           {(donationStep === 2 || donationStep === 3) && (
             <div>
               <div className={"w-100  text-white mt-10"}>
-                Donating {" "}
+                {t('donating')}
                 <span className="text-bold" style={{ marginRight: "4px" }}>
                   {getFormatedCurrency(
                     i18n.language,
@@ -94,7 +106,11 @@ function DonationInfo() {
               </div>
               {giftDetails && isGift && giftDetails.recipientName && (
                 <div className="donation-supports-info mt-10 text-white">
-                  <p>This donation supports {giftDetails.recipientName}</p>
+                  <p>
+                    {t("directGiftRecipient", {
+                      name: giftDetails.recipientName,
+                    })}
+                  </p>
                 </div>
               )}
             </div>

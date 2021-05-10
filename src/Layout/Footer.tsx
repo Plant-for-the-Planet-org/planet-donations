@@ -27,40 +27,55 @@ function Footer({}: Props): ReactElement {
 
   return (
     <div className="footer">
-      <p className="text-center mt-30">
-        This donation is processed by Plant-for-the-Planet
-      </p>
+      <p className="text-center mt-30">{t("donationProcessedBy")}</p>
       <div className="footer-container">
-        {returnTo ? (
-          <a href={returnTo}>Cancel and return to the organisation</a>
-        ) : (
-          <p></p>
-        )}
+        {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
 
         <div className="footer-links">
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
             English
             <DownArrowIcon />
           </button>
-          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
-            About Us
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://a.plant-for-the-planet.org/"
+          >
+            {t("aboutUs")}
           </a>
           <a
             rel="noreferrer"
+            target="_blank"
             href="https://a.plant-for-the-planet.org/privacy-terms"
           >
-            Privacy & Terms
+            {t("privacyTerms")}
           </a>
-          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/imprint">
-            Imprint
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://a.plant-for-the-planet.org/imprint"
+          >
+            {t("imprint")}
           </a>
-          <a rel="noreferrer" href="mailto:info@plant-for-the-planet.org">
-            Contact
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="mailto:info@plant-for-the-planet.org"
+          >
+            {t("contact")}
           </a>
-          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/faq">
-            FAQs
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://a.plant-for-the-planet.org/faq"
+          >
+            {t("faqs")}
           </a>
-          <a rel="noreferrer" href="https://a.plant-for-the-planet.org/">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://a.plant-for-the-planet.org/"
+          >
             <Image
               src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
               alt="Plant-for-the-Planet logo"
@@ -113,11 +128,14 @@ function CookiePolicy() {
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
+        style={{marginLeft:'12px'}}
       >
         <CloseIcon />
       </button>
     </div>
-  ): <></>;
+  ) : (
+    <></>
+  );
 }
 
 interface ModalProps {
@@ -132,6 +150,7 @@ function LanguageModal({
   const { theme } = React.useContext(ThemeContext);
 
   const { language, setlanguage } = React.useContext(QueryParamContext);
+  const { t, ready } = useTranslation(["common"]);
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -147,7 +166,9 @@ function LanguageModal({
     >
       <Fade in={languageModalOpen}>
         <div className="modal p-20">
-          <p className="select-language-title">Select Language</p>
+          <p className="select-language-title">
+            {t('selectLanguage')}
+          </p>
           <FormControl component="fieldset">
             <RadioGroup
               aria-label="language"

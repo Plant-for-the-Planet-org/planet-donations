@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     // stores the session id present in AsyncStorage
-    let sessionId = await getsessionId();
+    const sessionId = await getsessionId();
 
     // if there's session id then adds the same into the header
     if (sessionId) {
@@ -50,10 +50,10 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-const request = async (url:string, method:string = 'GET', token:any = false, data:any = undefined) => {
+const request = async (url:string, method = 'GET', token:any = false, data:any = undefined) => {
   try {
     //  sets the options which is passed to axios to make the request
-    let options = {
+    const options = {
       method,
       url,
     };

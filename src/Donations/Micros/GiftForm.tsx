@@ -5,9 +5,7 @@ import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
-interface Props {
-
-}
+interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
@@ -22,7 +20,7 @@ export default function GiftForm({}: Props): ReactElement {
     giftMessage: giftDetails.giftMessage,
   };
 
-  const { register, errors, handleSubmit,reset } = useForm({
+  const { register, errors, handleSubmit, reset } = useForm({
     mode: "all",
     defaultValues: defaultDeails,
   });
@@ -39,15 +37,15 @@ export default function GiftForm({}: Props): ReactElement {
     setgiftDetails({ ...giftDetails, ...data });
   };
 
-  const resetGiftForm = () =>{ 
+  const resetGiftForm = () => {
     const defaultDeails = {
-      recipientName: '',
-      email: '',
-      giftMessage: '',
+      recipientName: "",
+      email: "",
+      giftMessage: "",
     };
-    setgiftDetails(defaultDeails)
+    setgiftDetails(defaultDeails);
     reset(defaultDeails);
-  }
+  };
 
   return (
     <div>
@@ -55,7 +53,7 @@ export default function GiftForm({}: Props): ReactElement {
         <div>
           <div className="donations-gift-toggle">
             <label htmlFor="show-gift-form-toggle">
-              My donation is a gift to someone
+              {t('giftSomeone')}
             </label>
             <ToggleSwitch
               name="show-gift-form-toggle"
@@ -110,14 +108,18 @@ export default function GiftForm({}: Props): ReactElement {
               onClick={handleSubmit(onSubmit)}
               className="primary-button w-100 mt-30"
             >
-              Save Gift Details
+              {t('saveGiftDetails')}
             </button>
           </div>
         </div>
       ) : (
         <div className="donation-supports-info mt-10">
-          <p>This donation supports {giftDetails.recipientName}</p>
-          <button onClick={()=>resetGiftForm()}>
+          <p>
+            {t("directGiftRecipient", {
+              name: giftDetails.recipientName,
+            })}
+          </p>
+          <button onClick={() => resetGiftForm()}>
             <CloseIcon />
           </button>
         </div>

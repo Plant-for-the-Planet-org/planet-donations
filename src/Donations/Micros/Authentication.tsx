@@ -72,6 +72,7 @@ function Authentication({}: Props): ReactElement {
     }
   }, [isAuthenticated, isLoading]);
 
+  const { t, ready } = useTranslation("common");
   return (
     <div>
       {!isLoading && !isAuthenticated && (
@@ -84,7 +85,7 @@ function Authentication({}: Props): ReactElement {
             })
           }
         >
-          Login & Continue
+          {t('loginContinue')}
         </button>
       )}
 
@@ -93,7 +94,7 @@ function Authentication({}: Props): ReactElement {
           className="login-continue"
           onClick={() => logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })}
         >
-          Logout
+          {t('logout')}
         </button>
       )}
       <VerifyEmailModal
@@ -107,7 +108,17 @@ function Authentication({}: Props): ReactElement {
 
 export default Authentication;
 
-function VerifyEmailModal({ openModal, handleModalClose, logout }) {
+interface VerifyEmailProps {
+  openModal: boolean;
+  handleModalClose: Function;
+  logout: Function;
+}
+
+function VerifyEmailModal({
+  openModal,
+  handleModalClose,
+  logout,
+}: VerifyEmailProps) {
   const { t, ready } = useTranslation("common");
 
   const { theme } = React.useContext(ThemeContext);
@@ -135,14 +146,30 @@ function VerifyEmailModal({ openModal, handleModalClose, logout }) {
           <p className="text-center mt-30">{t("verifyEmailText")}</p>
           <p className="text-center mt-20">{t("verifyEmailInfo")}</p>
           <div className={"mt-30 d-flex column"}>
-            <div className={"d-flex row w-100 justify-content-center align-items-center mailing-buttons"}>
-              <a href="https://mail.google.com/" target="_blank" rel="noopener">
+            <div
+              className={
+                "d-flex row w-100 justify-content-center align-items-center mailing-buttons"
+              }
+            >
+              <a
+                href="https://mail.google.com/"
+                rel="noreferrer"
+                target="_blank"
+              >
                 <GmailIcon />
               </a>
-              <a href="https://www.icloud.com/mail" target="_blank" rel="noopener">
+              <a
+                href="https://www.icloud.com/mail"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <AppleMailIcon />
               </a>
-              <a href="https://outlook.office.com/mail/" target="_blank" rel="noopener">
+              <a
+                href="https://outlook.office.com/mail/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <OutlookIcon />
               </a>
             </div>

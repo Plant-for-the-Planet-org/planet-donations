@@ -1,5 +1,4 @@
 import {
-  PaymentRequestButtonElement,
   useStripe,
 } from "@stripe/react-stripe-js";
 import { useEffect, useMemo, useState } from "react";
@@ -183,7 +182,7 @@ export const PaymentRequestCustomButton = ({
               onClick={() => paymentRequest.show()}
               className="primary-button dark-pay w-100 mb-10"
             >
-              Donate with <AppleIcon />
+              {t('donateWith')} <AppleIcon />
             </button>
             <div className="separator-text mb-10">OR</div>
           </div>
@@ -193,7 +192,7 @@ export const PaymentRequestCustomButton = ({
               onClick={() => paymentRequest.show()}
               className="primary-button dark-pay w-100 mb-10"
             >
-              Donate with <GooglePayIcon />
+              {t('donateWith')} <GooglePayIcon />
             </button>
             <div className="separator-text mb-10">OR</div>
           </div>
@@ -203,15 +202,18 @@ export const PaymentRequestCustomButton = ({
               onClick={() => paymentRequest.show()}
               className="primary-button donate-now w-100 mb-10"
             >
-              Donate Now
+              
+              {t('donateNow')}
             </button>
-            <div className="separator-text mb-10">OR</div>
+            <div className="separator-text mb-10">
+            {t('or')}
+            </div>
           </div>
         )
       ) : null}
 
       <button onClick={() => continueNext()} className="primary-button">
-        Use PayPal or Card
+        {t('payPalCard')}
       </button>
       <div style={{ height: "30px" }}></div>
     </div>
