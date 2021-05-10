@@ -165,6 +165,9 @@ function ContactsForm({}: Props): ReactElement {
                 },
               }}
               name="country"
+              defaultValue={
+                contactDetails.country ? contactDetails.country : country
+              }
               render={({ onChange, onBlur, value, name, ref }) => (
                 <AutoCompleteCountry
                   inputRef={ref}
@@ -173,7 +176,7 @@ function ContactsForm({}: Props): ReactElement {
                   onChange={(data: any) => {
                     onChange(data);
                   }}
-                  defaultValue={contactDetails.country ? contactDetails.country : country}
+                  defaultValue={value}
                 />
               )}
             />
@@ -212,7 +215,9 @@ function ContactsForm({}: Props): ReactElement {
                 name="companyname"
                 variant="outlined"
                 inputRef={
-                  isCompany ? register({ required: true }) : register({})
+                  isCompany
+                    ? register({ required: true })
+                    : register({ required: false })
                 }
                 defaultValue={contactDetails.companyname}
               />

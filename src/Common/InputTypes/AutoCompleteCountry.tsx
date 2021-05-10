@@ -60,7 +60,7 @@ export default function CountrySelect(props: {
       // set contact details
       onChange(defaultCountry[0].code);
     }
-  }, []);
+  }, [defaultValue]);
 
   // Set contact details everytime value changes
   React.useEffect(() => {
