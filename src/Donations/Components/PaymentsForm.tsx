@@ -75,7 +75,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationStep,
       contactDetails,
       token,
-      country
+      country,
     });
   };
 
@@ -132,14 +132,16 @@ function PaymentsForm({}: Props): ReactElement {
     ) : (
       <div className={"donations-forms-container"}>
         <div className="donations-form">
-          {!isDirectDonation ? (
-            <button onClick={() => setdonationStep(2)} className="mb-10">
-              <BackButton />
-            </button>
-          ) : (
-            <></>
-          )}
-          <p className="title-text">{t("paymentDetails")}</p>
+          <div className="d-flex w-100 align-items-center">
+            {!isDirectDonation ? (
+              <button onClick={() => setdonationStep(2)} className="d-flex" style={{marginRight:'12px'}}>
+                <BackButton />
+              </button>
+            ) : (
+              <></>
+            )}
+            <p className="title-text">{t("paymentDetails")}</p>
+          </div>
 
           <TaxDeductionOption />
 

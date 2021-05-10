@@ -30,7 +30,7 @@ function TaxDeductionOption({}: Props): ReactElement {
   }, [country]);
 
   return projectDetails ? (
-    <div className="mt-30">
+    <div className="mt-20">
       {projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries.length > 0 ? (
         <div className={"d-inline"}>

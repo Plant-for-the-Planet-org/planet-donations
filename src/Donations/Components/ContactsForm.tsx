@@ -56,11 +56,12 @@ function ContactsForm({}: Props): ReactElement {
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
-        <button onClick={() => setdonationStep(1)} className="mb-10">
-          <BackButton />
-        </button>
-        {/* <button className="login-continue">{t("loginContinue")}</button> */}
-        <p className="title-text">{t("contactDetails")}</p>
+        <div className="d-flex w-100 align-items-center">
+          <button className="d-flex" onClick={() => setdonationStep(1)} style={{marginRight:'12px'}}>
+            <BackButton />
+          </button>
+          <p className="title-text">{t("contactDetails")}</p>
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex row">

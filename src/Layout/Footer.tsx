@@ -27,7 +27,14 @@ function Footer({}: Props): ReactElement {
 
   return (
     <div className="footer">
-      <p className="text-center mt-30">{t("donationProcessedBy")}</p>
+      <a
+        href="https://a.plant-for-the-planet.org/"
+        target="_blank"
+        rel="noreferrer"
+        className="text-center mt-30"
+      >
+        {t("donationProcessedBy")}
+      </a>
       <div className="footer-container">
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
 
@@ -128,7 +135,7 @@ function CookiePolicy() {
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
-        style={{marginLeft:'12px'}}
+        style={{ marginLeft: "12px" }}
       >
         <CloseIcon />
       </button>
@@ -166,9 +173,7 @@ function LanguageModal({
     >
       <Fade in={languageModalOpen}>
         <div className="modal p-20">
-          <p className="select-language-title">
-            {t('selectLanguage')}
-          </p>
+          <p className="select-language-title">{t("selectLanguage")}</p>
           <FormControl component="fieldset">
             <RadioGroup
               aria-label="language"
