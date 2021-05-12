@@ -1,0 +1,92 @@
+@import './theme';
+
+.footer{
+    position: relative;
+    text-align: center;
+}
+.footer-container{
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    > a {
+        margin-top: 24px;
+        font-style: italic;
+        font-weight: bold;
+        color: $primaryFontColor;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+    .footer-links{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        > a, > button {
+            color: $primaryFontColor;
+            margin-left: 24px;
+            margin-top: 24px;
+            font-weight: 600;
+        }
+        > button{
+            display: flex;
+            align-items: center;
+            > svg {
+                margin-left: 4px;
+            }
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.select-language-title{
+    font-weight: bold;
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.cookie-policy{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background-color: #3498db;
+    color: $light;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div {
+        max-width: 90%;
+    }
+    a {
+        font-weight: bold;
+        color: $light;
+        text-decoration: none;
+    }
+    button {
+        position: absolute;
+        right: 16px;
+        top: 12px;
+    }
+    svg {
+        height: 12px;
+        width: 12px;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+@include lgLaptopView {
+    .footer-container{
+        margin: 60px;
+        justify-content: space-between;
+    }
+}

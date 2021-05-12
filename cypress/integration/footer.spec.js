@@ -15,13 +15,6 @@ describe('Footer Menu Testing', () => {
             it('Should visit home page', () => {
                 cy.visit('/')
             });
-
-            describe('nav', () => {
-                it('Should navigate to About page', () => {
-                    cy.get('[data-cy=nav-item]').contains('About').click()
-                    cy.url().should('include', '/about')
-                })
-            })
         })
     })
 
@@ -39,19 +32,7 @@ describe('Footer Menu Testing', () => {
             it('Should visit home page', () => {
                 cy.visit('/')
             });
-
-            describe('Mmenu', () => {
-                it('Should open the mmenu', () => {
-                    cy.get('[data-cy=mmenu-btn]').click();
-                })
-
-                describe('nav', () => {
-                    it('Should navigate to About page', () => {
-                        cy.get('[data-cy=nav-item]').contains('About').click()
-                        cy.url().should('include', '/about')
-                    })
-                })
-            })
+           
         })
     })
 })

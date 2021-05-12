@@ -1,0 +1,6 @@
+{
+  "pages": {
+    "*": ["common","country"],
+    "/": ["common","country"]
+  }
+}

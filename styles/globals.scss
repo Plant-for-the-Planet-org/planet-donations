@@ -1,0 +1,196 @@
+@import './theme';
+// Reseting User agent styles to maintain cross browser interferences
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  font-family: $primaryFontFamily;
+  background-color: transparent;
+  box-sizing: border-box;
+}
+
+.primary-button, .secondary-button {
+  color:$light;
+  font-weight: bold;
+  background-color: $primaryColor;
+  background-image: linear-gradient(103deg, $primaryColor 5%, $primaryDarkColor 116%);
+  height: 40px;
+  padding: 0px;
+  text-align: center;
+  border: 0px;
+  border-radius: 40px;
+  min-width: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  text-decoration: none;
+}
+.secondary-button {
+  min-width: 240px;
+  background-image: none;
+  background-color: $blueishGrey;
+  color: $primaryFontColor;
+  p {
+    margin-left: 6px;
+  }
+  svg {
+    height: 12px;
+  }
+}
+.primary-button:hover, .secondary-button:hover{
+  transform: scale(1.04);
+  cursor: pointer;
+}
+
+.MuiFormControlLabel-root {
+  margin: 0;
+}
+
+.MuiInput-underline:after {
+  border-bottom: 2px solid $primaryColor !important;
+}
+
+:focus {
+  outline: none !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+
+button{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+.form-field{
+  position: relative;
+  .form-errors{
+      position: absolute;
+      bottom: -20px;
+      left: 0px;
+      font-family: $primaryFontFamily;
+      font-size: 12px;
+      color: $dangerColor;
+      margin-left: 6px;
+  }
+}
+
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal {
+  background-color: $backgroundColor;
+  border: 0px;
+  border-radius: 8px;
+  max-height: 80vh;
+  max-width: 440px;
+  overflow: hidden;
+  outline: none;
+  min-width: 320px;
+  overflow-y: scroll;
+}
+
+.MuiTypography-root{
+  font-family: $primaryFontFamily!important;
+}
+
+.nolink{
+  text-decoration: none;
+  color: $primaryFontColor;
+  font-weight: 500;
+}

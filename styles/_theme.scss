@@ -1,0 +1,48 @@
+$primaryFontFamily: var(--primary-font-family);
+$fontSubTitleSize: var(--sub-title-size);
+$secondaryFontFamily: var(--secondary-font-family);
+
+$primaryColor: var(--primary-color);
+$primaryDarkColor: var(--primary-dark-color);
+$primaryFontColor: var(--primary-font-color);
+$dividerColor: var(--divider-color);
+$secondaryColor: var(--secondary-color);
+$blueishGrey: var(--blueish-grey);
+$backgroundColor: var(--background-color);
+$highlightBackground: var(--highlight-background);
+$light: var(--light);
+$dark: var(--dark);
+$dangerColor: var(--danger-color);
+$greyColor: var(--grey-color);
+$darkGreyColor: var(--dark-grey-color);
+
+@mixin xsPhoneView {
+  @media screen and (max-width: 481px) {
+    @content;
+  }
+}
+@mixin lgPhoneView {
+  @media screen and (min-width: 420px) {
+    @content;
+  }
+}
+@mixin smTabletView {
+  @media screen and (min-width: 481px) {
+    @content;
+  }
+}
+@mixin mdTabletView {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+@mixin lgLaptopView {
+  @media screen and (min-width: 980px) {
+    @content;
+  }
+}
+@mixin xlDesktopView {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}

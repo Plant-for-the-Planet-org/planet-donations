@@ -1,0 +1,105 @@
+@import "./theme";
+
+.d-flex {
+  display: flex;
+}
+.d-inline{
+  display: inline;
+}
+.row {
+  flex-direction: row;
+}
+.column{
+  flex-direction: column;
+}
+.justify-content-center{
+  justify-content: center;
+}
+.justify-content-between{
+  justify-content: space-between;
+}
+.align-items-center{
+  align-items: center;
+}
+.flex-1{
+  flex: 1;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mt-30 {
+  margin-top: 30px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.mb-30 {
+  margin-bottom: 30px;
+}
+.p-20{
+  padding: 20px;
+}
+.w-100 {
+  width: 100% !important;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-bold{
+  font-weight: bold;
+}
+
+.text-danger{
+  color: $dangerColor;
+}
+
+.text-primary{
+  color: $primaryColor;
+}
+
+.text-white{
+  color: $light!important;
+}
+
+.title-text {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: $primaryFontColor;
+}
+
+.display-none {
+  display: none;
+}
+
+.separator-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 12px;
+}
+
+.separator-text::before,
+.separator-text::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: $dividerColor;
+}
+
+.separator-text:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.separator-text:not(:empty)::after {
+  margin-left: .5em;
+}
