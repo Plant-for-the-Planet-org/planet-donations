@@ -112,7 +112,7 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text"}>{t("common:thankYou")}</div>
+        <div className={"title-text text-center"}>{t("common:thankYou")}</div>
 
         <div className={"mt-20 text-center"}>
           {t(
@@ -233,7 +233,7 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text"}>{t("common:donationFailed")}</div>
+        <div className={"title-text text-center"}>{t("common:donationFailed")}</div>
         <div className={"mt-20 text-center"}>
           {t("common:donationFailedMessage")}
         </div>
@@ -258,7 +258,7 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text"}>{t("common:donationPending")}</div>
+        <div className={"title-text text-center"}>{t("common:donationPending")}</div>
         <div className={"mt-20 text-center"}>
           {t("common:donationPendingMessage")}
         </div>
@@ -313,7 +313,6 @@ function ThankYou() {
             {t("donate:copiedToClipboard")}
           </Alert>
         </Snackbar>
-        <div style={{ height: "30px" }}></div>
       </div>
     </div>
   );

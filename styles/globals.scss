@@ -188,3 +188,9 @@ button{
 .MuiTypography-root{
   font-family: $primaryFontFamily!important;
 }
+
+.nolink{
+  text-decoration: none;
+  color: $primaryFontColor;
+  font-weight: 500;
+}

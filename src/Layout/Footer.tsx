@@ -31,7 +31,7 @@ function Footer({}: Props): ReactElement {
         href="https://a.plant-for-the-planet.org/"
         target="_blank"
         rel="noreferrer"
-        className="text-center mt-30"
+        className="text-center mt-30 nolink"
       >
         {t("donationProcessedBy")}
       </a>
@@ -128,14 +128,15 @@ function CookiePolicy() {
 
   return showCookieNotice ? (
     <div className={"cookie-policy"}>
-      {t("privacyPolicyNotice")}{" "}
-      <a href="https://www.plant-for-the-planet.org/en/footermenu/privacy-policy">
-        {t("privacyPolicy")}
-      </a>
+      <div>
+        {t("privacyPolicyNotice")}{" "}
+        <a href="https://www.plant-for-the-planet.org/en/footermenu/privacy-policy">
+          {t("privacyPolicy")}
+        </a>
+      </div>
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
-        style={{ marginLeft: "12px" }}
       >
         <CloseIcon />
       </button>

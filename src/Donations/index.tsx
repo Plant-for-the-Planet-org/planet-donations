@@ -50,7 +50,7 @@ function DonationInfo() {
     isGift,
   } = React.useContext(QueryParamContext);
 
-  const [showContactDetails, setshowContactDetails] = React.useState(false);
+  const [showContactDetails, setshowContactDetails] = React.useState(true);
 
   return projectDetails && paymentSetup ? (
     <div className="donations-info-container">

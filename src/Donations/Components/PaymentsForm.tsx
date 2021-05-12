@@ -159,7 +159,7 @@ function PaymentsForm({}: Props): ReactElement {
                 paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
               }
               showSepa={
-                currency === "EUR" &&
+                currency === "EUR" && isAuthenticated &&
                 paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
               }
               showSofort={

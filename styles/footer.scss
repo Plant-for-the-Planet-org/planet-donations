@@ -60,17 +60,25 @@
     width: 100%;
     padding: 10px;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div {
+        max-width: 90%;
+    }
     a {
         font-weight: bold;
         color: $light;
         text-decoration: none;
     }
-    svg {
+    button {
         position: absolute;
         right: 16px;
+        top: 12px;
+    }
+    svg {
         height: 12px;
         width: 12px;
-        top: 12px;
         &:hover{
             cursor: pointer;
         }
