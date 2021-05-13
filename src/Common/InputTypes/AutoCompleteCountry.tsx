@@ -36,8 +36,7 @@ export default function CountrySelect(props: {
   onChange:
   | ((
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void)
-  | undefined;
+  ) => void);
 }) {
   const { t, ready } = useTranslation('country');
 
@@ -65,7 +64,7 @@ export default function CountrySelect(props: {
   // Set contact details everytime value changes
   React.useEffect(() => {
     if (value) {
-      onChange(value.code);
+      onChange(value?.code);
     }
   }, [value]);
 

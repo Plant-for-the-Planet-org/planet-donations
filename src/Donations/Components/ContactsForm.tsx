@@ -53,11 +53,19 @@ function ContactsForm({}: Props): ReactElement {
     )[0]?.postal
   );
 
+  const changeCountry = (country: any) => {
+    setContactDetails({ ...contactDetails, country });
+  };
+
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
         <div className="d-flex w-100 align-items-center">
-          <button className="d-flex" onClick={() => setdonationStep(1)} style={{marginRight:'12px'}}>
+          <button
+            className="d-flex"
+            onClick={() => setdonationStep(1)}
+            style={{ marginRight: "12px" }}
+          >
             <BackButton />
           </button>
           <p className="title-text">{t("contactDetails")}</p>
@@ -96,7 +104,8 @@ function ContactsForm({}: Props): ReactElement {
             <MaterialTextField
               inputRef={register({
                 required: true,
-                pattern: /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                pattern:
+                  /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
               })}
               label={t("email")}
               variant="outlined"
@@ -169,14 +178,12 @@ function ContactsForm({}: Props): ReactElement {
               defaultValue={
                 contactDetails.country ? contactDetails.country : country
               }
-              render={({ onChange, onBlur, value, name, ref }) => (
+              render={({ value, ref }) => (
                 <AutoCompleteCountry
                   inputRef={ref}
                   label={t("country")}
                   name="country"
-                  onChange={(data: any) => {
-                    onChange(data);
-                  }}
+                  onChange={changeCountry}
                   defaultValue={value}
                 />
               )}
