@@ -26,8 +26,8 @@ axiosInstance.interceptors.request.use(
     }`
 
     config.headers['tenant-key']= `${
-      localStorage.getItem('tenantkey')
-        ? localStorage.getItem('tenantkey')
+      localStorage.getItem('tenant')
+        ? localStorage.getItem('tenant')
         : 'ten_I9TW3ncG'
     }`
 

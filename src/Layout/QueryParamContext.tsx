@@ -129,10 +129,10 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   React.useEffect(() => {
-    if (router.query.returnto) {
-      setreturnTo(router.query.returnto);
+    if (router.query.return_to) {
+      setreturnTo(router.query.return_to);
     }
-  }, [router.query.returnto]);
+  }, [router.query.return_to]);
 
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
   async function loadProject(projectGUID: string) {
@@ -149,12 +149,12 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   React.useEffect(() => {
-    if (router.query.project) {
-      loadProject(router.query.project);
+    if (router.query.to) {
+      loadProject(router.query.to);
     } else {
       loadProject("proj_WZkyugryh35sMmZMmXCwq7YY");
     }
-  }, [router.query.project]);
+  }, [router.query.to]);
 
   async function loadPaymentSetup(projectGUID) {
     setIsPaymentOptionsLoading(true);
@@ -176,12 +176,12 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   React.useEffect(() => {
-    if (router.query.project) {
-      loadPaymentSetup(router.query.project);
+    if (router.query.to) {
+      loadPaymentSetup(router.query.to);
     } else {
       loadPaymentSetup("proj_WZkyugryh35sMmZMmXCwq7YY");
     }
-  }, [router.query.project, country]);
+  }, [router.query.to, country]);
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
 
@@ -194,11 +194,11 @@ export default function QueryParamProvider({ children }: any) {
   // Donation ID = donationid => This will be received from the URL params
   async function loadDonation() {
     const donation = await getRequest(
-      `/app/donations/${router.query.donationid}`
+      `/app/donations/${router.query.context}`
     );
 
     if (donation.status === 200) {
-      setdonationID(router.query.donationid);
+      setdonationID(router.query.context);
       // if the donation is present means the donation is already created
       // Set shouldCreateDonation as false
       setshouldCreateDonation(false)
@@ -209,7 +209,7 @@ export default function QueryParamProvider({ children }: any) {
 
       // Check if the donation status is paid or successful - if yes directly show thank you page
       // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
-      if((router.query.paymenttype === 'Sofort' || router.query.paymenttype === 'Giropay') && (router.query.redirect_status === 'succeeded' || router.query.redirect_status === 'failed') && router.query.payment_intent){
+      if((router.query.method === 'Sofort' || router.query.method === 'Giropay') && (router.query.redirect_status === 'succeeded' || router.query.redirect_status === 'failed') && router.query.payment_intent){
         setdonationStep(4)
       }
       else if(donation.data.paymentStatus === 'success' || donation.data.paymentStatus === 'paid' || donation.data.paymentStatus === 'failed' || donation.data.paymentStatus === 'pending'){
@@ -227,10 +227,10 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
   React.useEffect(() => {
-    if (router.query.donationid) {
+    if (router.query.context) {
       loadDonation();
     }
-  }, [router.query.donationid]);
+  }, [router.query.context]);
 
   // support = s => Fetch the user data from api and load in gift details
   async function loadPublicUserData(slug: any) {
@@ -253,27 +253,25 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.s]);
 
-  // Tenant key = tenantkey =>
-
   React.useEffect(() => {
-    if (router.query.tenantkey) {
-      localStorage.setItem("tenantkey", router.query.tenantkey);
+    if (router.query.tenant) {
+      localStorage.setItem("tenant", router.query.tenant);
     }
-  }, [router.query.tenantkey]);
+  }, [router.query.tenant]);
 
   // Tree Count = treecount => Received from the URL
 
   React.useEffect(() => {
-    if (router.query.treecount) {
-      settreeCount(Number(router.query.treecount));
+    if (router.query.trees) {
+      settreeCount(Number(router.query.trees));
     }
-  }, [router.query.treecount]);
+  }, [router.query.trees]);
 
   React.useEffect(() => {
-    if (router.query.paymenttype) {
-      setPaymentType(router.query.paymenttype);
+    if (router.query.method) {
+      setPaymentType(router.query.method);
     }
-  }, [router.query.paymenttype]);
+  }, [router.query.method]);
 
   React.useEffect(() => {
     if (router.query.redirect_status) {

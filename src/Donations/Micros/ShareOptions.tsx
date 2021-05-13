@@ -6,7 +6,6 @@ import TwitterIcon from '../../../public/assets/icons/share/Twitter';
 import DownloadIcon from '../../../public/assets/icons/share/Download';
 import DownloadSolid from '../../../public/assets/icons/share/DownloadSolid';
 import InstagramIcon from '../../../public/assets/icons/share/Instagram';
-// import tenantConfig from '../../../../tenant.config';
 import ReactDOM from 'react-dom';
 import domtoimage from 'dom-to-image';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +21,6 @@ const ShareOptions = ({
   donor,
 }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(['common']);
-  // const config = tenantConfig();
 
   const titleToShare = ready ? t('donate:titleToShare') : '';
   const urlToShare = '';
