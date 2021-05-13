@@ -52,36 +52,21 @@
 }
 .cookie-policy{
     position: fixed;
-    bottom: 0px;
-    left: 0px;
+    bottom: 20px;
+    right: 20px;
     background-color: #3498db;
     color: $light;
-    text-align: center;
-    width: 100%;
-    padding: 10px;
+    width: 280px;
+    border-radius: 4px;
+    padding: 20px;
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     div {
-        max-width: 90%;
+        max-width: 240px;
     }
     a {
         font-weight: bold;
         color: $light;
         text-decoration: none;
-    }
-    button {
-        position: absolute;
-        right: 16px;
-        top: 12px;
-    }
-    svg {
-        height: 12px;
-        width: 12px;
-        &:hover{
-            cursor: pointer;
-        }
     }
 }
 @include lgLaptopView {
