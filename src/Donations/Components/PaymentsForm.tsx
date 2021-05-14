@@ -283,7 +283,6 @@ function PaymentsForm({}: Props): ReactElement {
           ) : (
             <ButtonLoader />
           )}
-          <div style={{ height: "30px" }}></div>
         </div>
       </div>
     )

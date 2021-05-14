@@ -215,7 +215,6 @@ export const PaymentRequestCustomButton = ({
       <button onClick={() => continueNext()} className="primary-button">
         {t('payPalCard')}
       </button>
-      <div style={{ height: "30px" }}></div>
     </div>
   ) : null;
 };
