@@ -58,7 +58,6 @@ function ThankYou() {
     };
   }, [donation]);
 
-  //   const config = tenantConfig();
   const imageRef = React.createRef();
 
   const paymentTypeUsed = getPaymentType(paymentType);

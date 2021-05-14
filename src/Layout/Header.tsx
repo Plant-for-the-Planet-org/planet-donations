@@ -104,10 +104,7 @@ export default function Header() {
 
       <title>{`Pay with Planet | Plant trees around the world - Plant-for-the-Planet`}</title>
       <meta property="og:site_name" content={'Plant trees around the world - Plant-for-the-Planet'} />
-      {/* <meta
-        property="og:url"
-        content={`${process.env.SCHEME}://${config.tenantURL}`}
-      /> */}
+
       <meta property="og:title" content={`Pay with Planet | ${'Plant trees around the world - Plant-for-the-Planet'}`} />
       <meta property="og:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
       <meta name="description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
@@ -116,8 +113,7 @@ export default function Header() {
       <link rel="alternate" href="android-app://org.pftp/projects" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" content={'Plant trees around the world - Plant-for-the-Planet'} />
-      {/* <meta name="twitter:site" content={config.meta.twitterHandle} />
-      <meta name="twitter:url" content={config.tenantURL} /> */}
+     
       <meta name="twitter:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
     </Head>
   );
