@@ -31,7 +31,7 @@ function Footer({}: Props): ReactElement {
         href="https://a.plant-for-the-planet.org/"
         target="_blank"
         rel="noreferrer"
-        className="text-center mt-30 nolink"
+        className="text-center nolink"
       >
         {t("donationProcessedBy")}
       </a>

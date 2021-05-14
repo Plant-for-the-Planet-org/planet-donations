@@ -469,8 +469,7 @@
     margin-left: 30px;
   }
   .donations-container {
-    align-items: center;
-    padding-top: 50px;
+    padding-top: 80px;
   }
   .thankyou-image {
     width: 360px;
@@ -490,7 +489,7 @@
     width: 840px;
     flex-direction: row;
     border-radius: 20px;
-    height: 560px;
+    min-height: 560px;
     max-width: 840px;
   }
   .donations-info-container {
@@ -500,18 +499,17 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
-    height: 100%;
+    align-self: auto;
   }
   .donations-forms-container {
     width: 420px;
-    max-height: 560px;
     padding-bottom: 30px;
-    align-self: auto;
     margin-top: 0px;
     margin-bottom: 0px;
     border-radius: 20px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    align-self: auto;
   }
   .thankyou-image {
     width: 360px;

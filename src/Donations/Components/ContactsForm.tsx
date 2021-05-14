@@ -253,7 +253,6 @@ function ContactsForm({}: Props): ReactElement {
               {t("continue")}
             </button>
           )}
-          <div style={{ height: "30px" }}></div>
         </form>
       </div>
     </div>
