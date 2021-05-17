@@ -183,7 +183,10 @@ function LanguageModal({
               aria-label="language"
               name="language"
               value={language}
-              onChange={(event) => setlanguage(event.target.value)}
+              onChange={(event) => {
+                setlanguage(event.target.value);
+                setlanguageModalOpen(false);
+              }}
             >
               {supportedLanguages.map((lang) => (
                 <FormControlLabel
