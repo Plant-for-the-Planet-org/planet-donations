@@ -24,6 +24,7 @@ export default function PaymentMethodTabs({
   showSofort,
   showCC,
   showNativePay,
+  onNativePaymentFunction
 }: any) {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
@@ -139,9 +140,10 @@ export default function PaymentMethodTabs({
             projectDetails.treeCost * treeCount,
             currency.toLowerCase()
           )}
-          onPaymentFunction={() => console.log("Payment done")}
+          onPaymentFunction={onNativePaymentFunction}
           paymentSetup={paymentSetup}
           continueNext={() => {}}
+          isPaymentPage
         />
       )}
     </div>

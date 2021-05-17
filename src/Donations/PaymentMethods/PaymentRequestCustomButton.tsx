@@ -1,31 +1,13 @@
-import {
-  useStripe,
-} from "@stripe/react-stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "react-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
 import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
 import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
-
-export const useOptions = (paymentRequest: null) => {
-  const typeOfButton = "donate";
-  const options = useMemo(
-    () => ({
-      paymentRequest,
-      style: {
-        paymentRequestButton: {
-          theme: "dark",
-          height: "36px",
-          type: typeOfButton,
-        },
-      },
-    }),
-    [paymentRequest]
-  );
-
-  return options;
-};
+import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon";
+import themeProperties from "../../../styles/themeProperties";
+import { stripeAllowedCountries } from "../../Utils/countryUtils";
 
 interface PaymentButtonProps {
   country: string;
@@ -33,6 +15,7 @@ interface PaymentButtonProps {
   amount: number;
   onPaymentFunction: Function;
   continueNext: Function;
+  isPaymentPage: boolean;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -40,6 +23,7 @@ export const PaymentRequestCustomButton = ({
   amount,
   onPaymentFunction,
   continueNext,
+  isPaymentPage,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -47,60 +31,6 @@ export const PaymentRequestCustomButton = ({
   const [paymentRequest, setPaymentRequest] = useState(null);
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const stripeAllowedCountries = [
-    "AE",
-    "AT",
-    "AU",
-    "BE",
-    "BG",
-    "BR",
-    "CA",
-    "CH",
-    "CI",
-    "CR",
-    "CY",
-    "CZ",
-    "DE",
-    "DK",
-    "DO",
-    "EE",
-    "ES",
-    "FI",
-    "FR",
-    "GB",
-    "GR",
-    "GT",
-    "HK",
-    "HU",
-    "ID",
-    "IE",
-    "IN",
-    "IT",
-    "JP",
-    "LT",
-    "LU",
-    "LV",
-    "MT",
-    "MX",
-    "MY",
-    "NL",
-    "NO",
-    "NZ",
-    "PE",
-    "PH",
-    "PL",
-    "PT",
-    "RO",
-    "SE",
-    "SG",
-    "SI",
-    "SK",
-    "SN",
-    "TH",
-    "TT",
-    "US",
-    "UY",
-  ];
 
   useEffect(() => {
     if (stripe && !paymentRequest && stripeAllowedCountries.includes(country)) {
@@ -168,10 +98,14 @@ export const PaymentRequestCustomButton = ({
     };
   }, [paymentRequest, onPaymentFunction]);
 
-  const options = useOptions(paymentRequest);
-
   return ready ? (
-    <div className="d-flex column mt-20" style={{ alignItems: "center" }}>
+    <div
+      className="d-flex column"
+      style={{
+        alignItems: "center",
+        marginTop: isPaymentPage ? "0px" : "20px",
+      }}
+    >
       {stripeAllowedCountries.includes(country) &&
       canMakePayment &&
       paymentRequest &&
@@ -180,41 +114,61 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => paymentRequest.show()}
-              className="primary-button dark-pay w-100 mb-10"
+              className={`${
+                isPaymentPage
+                  ? "donate-small"
+                  : "primary-button dark-pay mb-10 w-100"
+              }`}
             >
-              {t('donateWith')} <AppleIcon />
+              {isPaymentPage ? "" : t("donateWith")}{" "}
+              <AppleIcon textColor={themeProperties.light.primaryFontColor} />
             </button>
-            <div className="separator-text mb-10">OR</div>
+            {!isPaymentPage && (
+              <div className="separator-text mb-10">{t("or")}</div>
+            )}
           </div>
         ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
           <div className="w-100">
             <button
               onClick={() => paymentRequest.show()}
-              className="primary-button dark-pay w-100 mb-10"
+              className={`${
+                isPaymentPage
+                  ? "donate-small"
+                  : "primary-button dark-pay mb-10 w-100"
+              }`}
             >
-              {t('donateWith')} <GooglePayIcon />
+              {isPaymentPage ? "" : t("donateWith")}{" "}
+              <GooglePayIcon
+                textColor={themeProperties.light.primaryFontColor}
+              />
             </button>
-            <div className="separator-text mb-10">OR</div>
+            {!isPaymentPage && (
+              <div className="separator-text mb-10">{t("or")}</div>
+            )}
           </div>
         ) : (
           <div className="w-100">
             <button
               onClick={() => paymentRequest.show()}
-              className="primary-button donate-now w-100 mb-10"
+              className={`donate-now ${
+                isPaymentPage ? "donate-small" : "primary-button mb-10 w-100"
+              }`}
+              style={{ border: "none" }}
             >
-              
-              {t('donateNow')}
+              {isPaymentPage ? "" : t("donateNow")} <BrowserPayIcon />
             </button>
-            <div className="separator-text mb-10">
-            {t('or')}
-            </div>
+            {!isPaymentPage && (
+              <div className="separator-text mb-10">{t("or")}</div>
+            )}
           </div>
         )
       ) : null}
 
-      <button onClick={() => continueNext()} className="primary-button">
-        {t('payPalCard')}
-      </button>
+      {!isPaymentPage && (
+        <button onClick={() => continueNext()} className="primary-button">
+          {t("payPalCard")}
+        </button>
+      )}
     </div>
   ) : null;
 };
@@ -226,6 +180,7 @@ interface NativePayProps {
   onPaymentFunction: Function;
   paymentSetup: Object;
   continueNext: Function;
+  isPaymentPage: boolean;
 }
 export const NativePay = ({
   country,
@@ -234,6 +189,7 @@ export const NativePay = ({
   onPaymentFunction,
   paymentSetup,
   continueNext,
+  isPaymentPage,
 }: NativePayProps) => {
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)
@@ -266,6 +222,7 @@ export const NativePay = ({
         amount={amount}
         onPaymentFunction={onPaymentFunction}
         continueNext={continueNext}
+        isPaymentPage={isPaymentPage}
       />
     </Elements>
   );

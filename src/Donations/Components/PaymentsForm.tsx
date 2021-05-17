@@ -79,6 +79,12 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
+  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName);
+    let gateway= "stripe";
+    onSubmitPayment(gateway,paymentMethod)
+  };
+
   async function getDonation() {
     let token = null;
     if (!isLoading && isAuthenticated) {
@@ -151,7 +157,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
-          {paymentSetup && paymentSetup.gateways && (
+          {donationID && paymentSetup && paymentSetup.gateways && (
             <PaymentMethodTabs
               paymentType={paymentType}
               setPaymentType={setPaymentType}
@@ -178,6 +184,7 @@ function PaymentsForm({}: Props): ReactElement {
               showNativePay={
                 paymentSetup?.gateways?.stripe?.account && currency
               }
+              onNativePaymentFunction={onPaymentFunction}
             />
           )}
 
