@@ -6,6 +6,7 @@ import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
+import { useTranslation } from "react-i18next";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -49,6 +50,8 @@ export const QueryParamContext = React.createContext({
 export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
+  const { i18n } = useTranslation();
+
   const [paymentSetup, setpaymentSetup] = useState<Object>({});
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
@@ -62,7 +65,7 @@ export default function QueryParamProvider({ children }: any) {
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
 
   const [isDirectDonation, setisDirectDonation] = React.useState(false);
-  
+
   const [
     isPaymentOptionsLoading,
     setIsPaymentOptionsLoading,
@@ -122,9 +125,19 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
-      localStorage.setItem("locale", router.query.locale);
     }
   }, [router.query.locale]);
+
+  React.useEffect(() => {
+    if (router.locale) {
+      setlanguage(router.locale);
+    }
+  }, [router.locale]);
+
+  React.useEffect(() => {
+    i18n.changeLanguage(language);
+    localStorage.setItem("language", language); // value name also used by i18n
+  }, [language]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
