@@ -283,6 +283,7 @@ function DonationsForm() {
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
+                    isPaymentPage={false}
                   />
                 ) : (
                   <div className="mt-20 w-100">

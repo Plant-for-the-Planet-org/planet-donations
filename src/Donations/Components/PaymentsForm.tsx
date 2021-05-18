@@ -79,6 +79,12 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
+  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName);
+    let gateway= "stripe";
+    onSubmitPayment(gateway,paymentMethod)
+  };
+
   async function getDonation() {
     let token = null;
     if (!isLoading && isAuthenticated) {
@@ -134,7 +140,11 @@ function PaymentsForm({}: Props): ReactElement {
         <div className="donations-form">
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
-              <button onClick={() => setdonationStep(2)} className="d-flex" style={{marginRight:'12px'}}>
+              <button
+                onClick={() => setdonationStep(2)}
+                className="d-flex"
+                style={{ marginRight: "12px" }}
+              >
                 <BackButton />
               </button>
             ) : (
@@ -173,7 +183,7 @@ function PaymentsForm({}: Props): ReactElement {
           
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
-          {paymentSetup && paymentSetup.gateways && (
+          {donationID && paymentSetup && paymentSetup.gateways && (
             <PaymentMethodTabs
               paymentType={paymentType}
               setPaymentType={setPaymentType}
@@ -185,7 +195,8 @@ function PaymentsForm({}: Props): ReactElement {
                 paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
               }
               showSepa={
-                currency === "EUR" && isAuthenticated &&
+                currency === "EUR" &&
+                isAuthenticated &&
                 paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
               }
               showSofort={
@@ -196,6 +207,10 @@ function PaymentsForm({}: Props): ReactElement {
                 paypalCurrencies.includes(currency) &&
                 paymentSetup?.gateways.paypal
               }
+              showNativePay={
+                paymentSetup?.gateways?.stripe?.account && currency
+              }
+              onNativePaymentFunction={onPaymentFunction}
             />
           )}
 
