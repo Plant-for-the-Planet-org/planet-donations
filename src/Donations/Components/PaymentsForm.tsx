@@ -145,6 +145,32 @@ function PaymentsForm({}: Props): ReactElement {
 
           <TaxDeductionOption />
 
+          <div className={"mt-20"}>
+            {!contactDetails.companyname ||
+            contactDetails.companyname === "" ? (
+              askpublishName ? (
+                <div>
+                  <label htmlFor="publishName">{t("askPublishName")}</label>
+                  <ToggleSwitch
+                    id="publishName"
+                    checked={publishName}
+                    onChange={() => {
+                      setpublishName(!publishName);
+                    }}
+                    name="checkedB"
+                    inputProps={{ "aria-label": "secondary checkbox" }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label style={{ textAlign: "center" }}>
+                    {t("nameAlreadyPublished")}
+                  </label>
+                </div>
+              )
+            ) : null}
+          </div>
+          
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
           {paymentSetup && paymentSetup.gateways && (
@@ -172,32 +198,6 @@ function PaymentsForm({}: Props): ReactElement {
               }
             />
           )}
-
-          <div className={"mt-20"}>
-            {!contactDetails.companyname ||
-            contactDetails.companyname === "" ? (
-              askpublishName ? (
-                <div>
-                  <label htmlFor="publishName">{t("askPublishName")}</label>
-                  <ToggleSwitch
-                    id="publishName"
-                    checked={publishName}
-                    onChange={() => {
-                      setpublishName(!publishName);
-                    }}
-                    name="checkedB"
-                    inputProps={{ "aria-label": "secondary checkbox" }}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label style={{ textAlign: "center" }}>
-                    {t("nameAlreadyPublished")}
-                  </label>
-                </div>
-              )
-            ) : null}
-          </div>
 
           {donationID ? (
             <div className="mt-30">
@@ -283,6 +283,15 @@ function PaymentsForm({}: Props): ReactElement {
           ) : (
             <ButtonLoader />
           )}
+          <br />
+          <a
+        href="https://a.plant-for-the-planet.org/"
+        target="_blank"
+        rel="noreferrer"
+        className="text-center nolink"
+      >
+        {t("donationProcessedBy")}
+      </a>
         </div>
       </div>
     )

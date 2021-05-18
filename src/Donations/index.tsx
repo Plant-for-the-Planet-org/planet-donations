@@ -50,8 +50,6 @@ function DonationInfo() {
     isGift,
   } = React.useContext(QueryParamContext);
 
-  const [showContactDetails, setshowContactDetails] = React.useState(true);
-
   return projectDetails && paymentSetup ? (
     <div className="donations-info-container">
       {/* <img
@@ -117,17 +115,12 @@ function DonationInfo() {
           )}
           {donationStep === 3 && contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-10"}>
-              <button
-                onClick={() => setshowContactDetails(!showContactDetails)}
-                className={`text-white ${
-                  showContactDetails ? "button-reverse" : ""
-                }`}
+              <div
+                className={`text-white button-reverse`}
               >
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname}
-                <DownArrowIcon color={themeProperties.light.light} />
-              </button>
-              {showContactDetails && (
+              </div>
                 <div className="text-white">
                   <p>{contactDetails.email && contactDetails.email}</p>
                   <p>
@@ -143,13 +136,12 @@ function DonationInfo() {
                         ?.countryName}
                   </p>
                 </div>
-              )}
             </div>
           )}
         </div>
 
         <div className="donations-transaction-details">
-          {donationID && `Donation ID - ${donationID}`}
+          {donationID && `Ref - ${donationID}`}
         </div>
       </div>
     </div>
