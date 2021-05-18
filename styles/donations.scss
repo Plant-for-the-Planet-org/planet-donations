@@ -1,7 +1,6 @@
 @import "./theme";
 
 .donations-container {
-  min-height: 80vh;
   display: flex;
   justify-content: center;
 }
@@ -81,7 +80,6 @@
 }
 .donations-transaction-details {
   font-size: 12px;
-  font-weight: 600;
   color: $light;
   z-index: 3;
   margin-top: 8px;

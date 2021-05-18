@@ -27,14 +27,6 @@ function Footer({}: Props): ReactElement {
 
   return (
     <div className="footer">
-      <a
-        href="https://a.plant-for-the-planet.org/"
-        target="_blank"
-        rel="noreferrer"
-        className="text-center nolink"
-      >
-        {t("donationProcessedBy")}
-      </a>
       <div className="footer-container">
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
 
@@ -43,13 +35,6 @@ function Footer({}: Props): ReactElement {
             English
             <DownArrowIcon />
           </button>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://a.plant-for-the-planet.org/"
-          >
-            {t("aboutUs")}
-          </a>
           <a
             rel="noreferrer"
             target="_blank"
