@@ -12,7 +12,8 @@ import {
 import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
-import supportedLanguages from "./../../supportedLanguages.json";
+import supportedLanguages from "../../supportedLanguages.json";
+import getLanguageName from '../Utils/getLanguageName';
 import { useTranslation } from "react-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -21,6 +22,7 @@ interface Props {}
 
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
+  const { language, setlanguage } = React.useContext(QueryParamContext);
 
   const { returnTo } = React.useContext(QueryParamContext);
   const { t, ready } = useTranslation(["common"]);
@@ -32,7 +34,7 @@ function Footer({}: Props): ReactElement {
 
         <div className="footer-links">
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
-            English
+            {`${getLanguageName(language)}`}
             <DownArrowIcon />
           </button>
           <a
@@ -166,7 +168,10 @@ function LanguageModal({
               aria-label="language"
               name="language"
               value={language}
-              onChange={(event) => setlanguage(event.target.value)}
+              onChange={(event) => {
+                setlanguage(event.target.value);
+                setlanguageModalOpen(false);
+              }}
             >
               {supportedLanguages.map((lang) => (
                 <FormControlLabel

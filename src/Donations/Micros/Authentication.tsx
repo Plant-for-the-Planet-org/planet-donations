@@ -81,7 +81,7 @@ function Authentication({}: Props): ReactElement {
           onClick={() =>
             loginWithRedirect({
               redirectUri: `${process.env.NEXTAUTH_URL}`,
-              ui_locales: localStorage.getItem("locale") || "en",
+              ui_locales: localStorage.getItem("language") || "en",
             })
           }
         >
