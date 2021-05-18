@@ -9,7 +9,7 @@ interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
-
+  const [showEmail, setshowEmail] = React.useState(false);
   const { giftDetails, setgiftDetails, isGift, setisGift } = React.useContext(
     QueryParamContext
   );
@@ -80,7 +80,22 @@ export default function GiftForm({}: Props): ReactElement {
                 </span>
               )}
             </div>
+            
             <div className={"form-field mt-30"}>
+              <MaterialTextField
+                multiline
+                rows="3"
+                rowsMax="4"
+                label={t("giftMessage")}
+                variant="outlined"
+                name={"giftMessage"}
+                inputRef={register()}
+
+              />
+            </div>
+
+            {showEmail ?
+             (<div className={"form-field mt-30"}>
               <MaterialTextField
                 name={"recipientEmail"}
                 label={t("email")}
@@ -89,21 +104,32 @@ export default function GiftForm({}: Props): ReactElement {
                   required: true,
                   pattern: /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
                 })}
+                InputProps={{
+                  endAdornment: (
+                    
+                      <button
+                        onClick={() => setshowEmail(false)}
+                        className={"singleGiftRemove"}
+                      >
+                        {t('removeRecipient')}
+                      </button>
+                    
+                  ),
+                }}
               />
               {errors.recipientEmail && (
                 <span className={"form-errors"}>{t("emailRequired")}</span>
               )}
-            </div>
-            <div className={"form-field mt-30"}>
-              <MaterialTextField
-                multiline
-                rowsMax="4"
-                label={t("giftMessage")}
-                variant="outlined"
-                name={"giftMessage"}
-                inputRef={register()}
-              />
-            </div>
+            </div>) : (
+          <div className={"form-field mt-30"}>
+            <button
+              onClick={() => setshowEmail(true)}
+              className={"addEmailButton"}
+            >
+              {t("addEmail")}
+            </button>
+          </div>
+        )}
             <button
               onClick={handleSubmit(onSubmit)}
               className="primary-button w-100 mt-30"

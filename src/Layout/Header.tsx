@@ -102,7 +102,7 @@ export default function Header() {
         <meta name="theme-color" content={styles.primaryColor} />
       ) : null} */}
 
-      <title>{`Pay with Planet | Plant trees around the world - Plant-for-the-Planet`}</title>
+      <title>{`Plant-for-the-Planet`}</title>
       <meta property="og:site_name" content={'Plant trees around the world - Plant-for-the-Planet'} />
 
       <meta property="og:title" content={`Pay with Planet | ${'Plant trees around the world - Plant-for-the-Planet'}`} />

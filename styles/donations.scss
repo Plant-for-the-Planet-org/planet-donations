@@ -1,7 +1,6 @@
 @import "./theme";
 
 .donations-container {
-  min-height: 80vh;
   display: flex;
   justify-content: center;
 }
@@ -81,7 +80,6 @@
 }
 .donations-transaction-details {
   font-size: 12px;
-  font-weight: 600;
   color: $light;
   z-index: 3;
   margin-top: 8px;
@@ -547,7 +545,7 @@
   }
 }
 
-.dark-pay{
+.dark-pay {
   background-image: none;
   background-color: #000;
   svg {
@@ -556,18 +554,52 @@
     width: 47.15px;
   }
 }
-.donate-now{
+.donate-now {
+  svg {
+    height: 20px;
+    width: 47.15px;
+  }
   background-image: linear-gradient(103deg, #383461 5%, #684889 116%);
 }
+.donate-small {
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
+  box-sizing: border-box;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  border: 1px solid $dividerColor;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+  height: 36px;
+  color: $dividerColor;
+  justify-content: center;
+  position: relative;
+  > label {
+    margin-top: 6px;
+    font-size: 10px;
+  }
+  &:hover {
+    cursor: pointer;
+    color: $primaryFontColor;
+    background-color: $blueishGrey;
+    border: 0.5px solid $blueishGrey;
+  }
+}
 
-.mailing-buttons{
-  a{
+.mailing-buttons {
+  a {
     margin-left: 12px;
     margin-right: 12px;
-    svg{
+    svg {
       height: 30px;
       filter: grayscale(100%);
-      &:hover{
+      &:hover {
         cursor: pointer;
         filter: grayscale(0%);
       }

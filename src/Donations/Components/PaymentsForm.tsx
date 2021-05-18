@@ -79,6 +79,12 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
+  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName);
+    let gateway= "stripe";
+    onSubmitPayment(gateway,paymentMethod)
+  };
+
   async function getDonation() {
     let token = null;
     if (!isLoading && isAuthenticated) {
@@ -134,7 +140,11 @@ function PaymentsForm({}: Props): ReactElement {
         <div className="donations-form">
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
-              <button onClick={() => setdonationStep(2)} className="d-flex" style={{marginRight:'12px'}}>
+              <button
+                onClick={() => setdonationStep(2)}
+                className="d-flex"
+                style={{ marginRight: "12px" }}
+              >
                 <BackButton />
               </button>
             ) : (
@@ -144,34 +154,6 @@ function PaymentsForm({}: Props): ReactElement {
           </div>
 
           <TaxDeductionOption />
-
-          {paymentError && <div className={"text-danger"}>{paymentError}</div>}
-
-          {paymentSetup && paymentSetup.gateways && (
-            <PaymentMethodTabs
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              showCC={paymentSetup?.gateways.stripe.methods.includes(
-                "stripe_cc"
-              )}
-              showGiroPay={
-                country === "DE" &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
-              }
-              showSepa={
-                currency === "EUR" && isAuthenticated &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
-              }
-              showSofort={
-                sofortCountries.includes(country) &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sofort")
-              }
-              showPaypal={
-                paypalCurrencies.includes(currency) &&
-                paymentSetup?.gateways.paypal
-              }
-            />
-          )}
 
           <div className={"mt-20"}>
             {!contactDetails.companyname ||
@@ -198,6 +180,39 @@ function PaymentsForm({}: Props): ReactElement {
               )
             ) : null}
           </div>
+          
+          {paymentError && <div className={"text-danger"}>{paymentError}</div>}
+
+          {donationID && paymentSetup && paymentSetup.gateways && (
+            <PaymentMethodTabs
+              paymentType={paymentType}
+              setPaymentType={setPaymentType}
+              showCC={paymentSetup?.gateways.stripe.methods.includes(
+                "stripe_cc"
+              )}
+              showGiroPay={
+                country === "DE" &&
+                paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
+              }
+              showSepa={
+                currency === "EUR" &&
+                isAuthenticated &&
+                paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+              }
+              showSofort={
+                sofortCountries.includes(country) &&
+                paymentSetup?.gateways.stripe.methods.includes("stripe_sofort")
+              }
+              showPaypal={
+                paypalCurrencies.includes(currency) &&
+                paymentSetup?.gateways.paypal
+              }
+              showNativePay={
+                paymentSetup?.gateways?.stripe?.account && currency
+              }
+              onNativePaymentFunction={onPaymentFunction}
+            />
+          )}
 
           {donationID ? (
             <div className="mt-30">
@@ -283,6 +298,15 @@ function PaymentsForm({}: Props): ReactElement {
           ) : (
             <ButtonLoader />
           )}
+          <br />
+          <a
+        href="https://a.plant-for-the-planet.org/"
+        target="_blank"
+        rel="noreferrer"
+        className="text-center nolink"
+      >
+        {t("donationProcessedBy")}
+      </a>
         </div>
       </div>
     )

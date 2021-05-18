@@ -164,6 +164,12 @@ button{
   }
 }
 
+.singleGiftRemove {
+  cursor: pointer;
+  color: $dangerColor;
+  font-size: 12px;
+}
+
 .modal-container {
   display: flex;
   align-items: center;
@@ -193,4 +199,12 @@ button{
   text-decoration: none;
   color: $primaryFontColor;
   font-weight: 500;
+}
+.addEmailButton{
+  font-family: $primaryFontFamily;
+  color: $primaryColor;
+  font-weight: 600;
+  &:hover{
+    cursor: pointer;
+  }
 }
