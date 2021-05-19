@@ -88,8 +88,11 @@ function ThankYou() {
   const sendToReturn = () => {
     router.push(returnTo);
   };
+  let returnDisplay;
+  if(returnTo){
   const x = returnTo.slice(8);
-  const returnDisplay = x.split("/", 2)
+  returnDisplay = x.split("/", 2)
+}
   let currencyFormat = () => { };
   if (donation) {
     currencyFormat = () =>
