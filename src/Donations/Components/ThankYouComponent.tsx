@@ -97,7 +97,7 @@ function ThankYou() {
 
   function SuccessfulDonation() {
     return donation ? (
-      <div className="d-flex column justify-content-center">
+      <div>
         {returnTo ? (
           <button
             id={"thank-you-close"}
@@ -270,7 +270,7 @@ function ThankYou() {
   }
 
   return (
-    <div className="donations-forms-container">
+    <div className="donations-forms-container" style={{paddingBottom:'0px'}}>
       <div className="donations-form w-100">
         {!ready && !donation ? (
           <PaymentProgress isPaymentProcessing={true} />

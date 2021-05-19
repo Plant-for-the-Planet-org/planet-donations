@@ -45,6 +45,7 @@
   background-color: $backgroundColor;
   max-width: 360px;
   align-self: center;
+  max-height: 560px;
 }
 .donations-forms-container {
   display: flex;
@@ -66,6 +67,21 @@
   top: 0px;
   left: 0px;
   z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.background-image-overlay{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  // background-color: rgba($color: #000000, $alpha: 0.3);
+  background-image: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
+  height: 100%;
+  width: 100%;
 }
 
 .donations-info {
@@ -73,16 +89,13 @@
   flex-direction: column;
   height: 100%;
   z-index: 3;
+  justify-content: flex-end;
 }
 
-.donations-info-header {
-  flex-grow: 1;
-}
 .donations-transaction-details {
   font-size: 12px;
   color: $light;
   z-index: 3;
-  margin-top: 8px;
 }
 
 .donations-form {
@@ -436,11 +449,7 @@
       cursor: pointer;
     }
   }
-  .button-reverse {
-    svg {
-      transform: rotate(180deg);
-    }
-  }
+
   p {
     font-size: 12px;
     margin-top: 4px;
