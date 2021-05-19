@@ -166,7 +166,7 @@ export const PaymentRequestCustomButton = ({
 
       {!isPaymentPage && (
         <button onClick={() => continueNext()} className="primary-button">
-          {t("payPalCard")}
+          {canMakePayment ? t("payPalCard") : t("continue")}
         </button>
       )}
     </div>

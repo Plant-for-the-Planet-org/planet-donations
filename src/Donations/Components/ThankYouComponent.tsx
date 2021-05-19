@@ -88,13 +88,13 @@ function ThankYou() {
   const sendToReturn = () => {
     router.push(returnTo);
   };
-
-  let currencyFormat = () => {};
+  const x = returnTo.slice(8);
+  const returnDisplay = x.split("/", 2)
+  let currencyFormat = () => { };
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
-
   function SuccessfulDonation() {
     return donation ? (
       <div className="d-flex column justify-content-center">
@@ -102,10 +102,10 @@ function ThankYou() {
           <button
             id={"thank-you-close"}
             onClick={() => sendToReturn()}
-            className="mb-10"
+            className="mb-10 text-primary"
             style={{ alignSelf: "flex-start" }}
           >
-            <CloseIcon color={themeProperties.light.primaryFontColor} />
+            Back to {returnDisplay[0]}          
           </button>
         ) : (
           <></>
@@ -125,9 +125,9 @@ function ThankYou() {
           )}
           {donation && donation.gift
             ? " " +
-              t("common:giftSentMessage", {
-                recipientName: donation.gift.recipientName,
-              })
+            t("common:giftSentMessage", {
+              recipientName: donation.gift.recipientName,
+            })
             : null}
           {" " +
             t("common:yourTreesPlantedByOnLocation", {
@@ -278,8 +278,8 @@ function ThankYou() {
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
               redirectstatus === "succeeded" &&
-              (donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid") ? (
+                (donation.paymentStatus === "success" ||
+                  donation.paymentStatus === "paid") ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />
@@ -288,7 +288,7 @@ function ThankYou() {
               )
             ) : donation && donation.paymentStatus ? (
               donation.paymentStatus === "success" ||
-              donation.paymentStatus === "paid" ? (
+                donation.paymentStatus === "paid" ? (
                 <SuccessfulDonation />
               ) : donation.paymentStatus === "failed" ? (
                 <FailedDonation />
