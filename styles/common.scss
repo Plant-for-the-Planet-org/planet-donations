@@ -76,11 +76,7 @@
   text-transform: uppercase;
   color: $primaryFontColor;
 }
-@media screen and (min-width: 980px) {
-  .text-center{
-    text-align: left;
-  }
-}
+
 .display-none {
   display: none;
 }

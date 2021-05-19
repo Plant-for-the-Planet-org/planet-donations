@@ -114,9 +114,9 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:thankYou")}</div>
+        <div className={"title-text thankyouText"}>{t("common:thankYou")}</div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t(
             paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
               ? "common:donationSuccessfulWith"
@@ -143,7 +143,7 @@ function ThankYou() {
             })}
         </div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t("common:contributionMessage")}
         </div>
 
