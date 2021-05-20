@@ -84,12 +84,12 @@
   "logout": "Logout",
   "directGiftRecipient": "This donation supports {{name}}",
   "saveGiftDetails": "Save Gift Details",
-  "giftSomeone": "My donation is a dedicated to someone",
+  "giftSomeone": "My donation is dedicated to someone",
   "payPalCard": "Use PayPal or Card",
   "donateNow": "Donate Now",
   "or": "OR",
   "donateWith": "Donate with",
   "donating": "Donating ",
-  "addEmail":"Add Email & Send Invitation",
+  "addEmail": "Add Email & Send Invitation",
   "removeRecipient": "Remove"
 }
