@@ -146,7 +146,7 @@ function DonationsForm() {
       <div className="donations-form">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">Donate</p>
+          <p className="title-text">{t('donate')}</p>
           <div className="donations-gift-container mt-10">
             <GiftForm />
           </div>
