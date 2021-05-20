@@ -110,6 +110,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    p{
+      cursor: pointer;
+    }
     button {
       display: flex;
       align-items: center;
