@@ -81,8 +81,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
-    let gateway= "stripe";
-    onSubmitPayment(gateway,paymentMethod)
+    let gateway = "stripe";
+    onSubmitPayment(gateway, paymentMethod);
   };
 
   async function getDonation() {
@@ -180,7 +180,7 @@ function PaymentsForm({}: Props): ReactElement {
               )
             ) : null}
           </div>
-          
+
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
           {donationID && paymentSetup && paymentSetup.gateways && (
@@ -300,13 +300,15 @@ function PaymentsForm({}: Props): ReactElement {
           )}
           <br />
           <a
-        href="https://a.plant-for-the-planet.org/"
-        target="_blank"
-        rel="noreferrer"
-        className="text-center nolink"
-      >
-        {t("donationProcessedBy")}
-      </a>
+            href="https://a.plant-for-the-planet.org/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-center nolink"
+            style={{ fontStyle: "italic" }}
+          >
+            {t("donationProcessedBy")}
+            {/* Needs break */}
+          </a>
         </div>
       </div>
     )

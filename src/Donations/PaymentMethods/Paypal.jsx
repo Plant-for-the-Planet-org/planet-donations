@@ -56,7 +56,7 @@ class Paypal extends React.Component {
         // users client id here
       [mode]: clientID
     };
-    const invoice_number = `ttc-${donationId}`;
+    const invoice_number = `planet-${donationId}`;
     //debug('invoice we are sending to paypal as donationId:', invoice_number);
     const payment = () => {
       return paypal.rest.payment.create(mode, CLIENT, {
