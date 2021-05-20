@@ -44,7 +44,8 @@ export const QueryParamContext = React.createContext({
   isPaymentOptionsLoading: false,
   redirectstatus: "",
   returnTo: "",
-  isDirectDonation:false
+  isDirectDonation:false,
+  tenant:''
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -60,6 +61,7 @@ export default function QueryParamProvider({ children }: any) {
   const [language, setlanguage] = useState("en");
 
   const [donationID, setdonationID] = useState(null);
+  const [tenant, settenant] = useState('ten_I9TW3ncG');
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
@@ -268,6 +270,7 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.tenant) {
+      settenant(router.query.tenant);
       localStorage.setItem("tenant", router.query.tenant);
     }
   }, [router.query.tenant]);
@@ -343,7 +346,8 @@ export default function QueryParamProvider({ children }: any) {
         isPaymentOptionsLoading,
         redirectstatus,
         returnTo,
-        isDirectDonation
+        isDirectDonation,
+        tenant
       }}
     >
       {children}

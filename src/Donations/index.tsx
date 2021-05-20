@@ -11,14 +11,14 @@ import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import themeProperties from "../../styles/themeProperties";
 import { getCountryDataBy } from "../Utils/countryUtils";
-
+import { getTenantBackground } from "./../Utils/getTenantBackground";
+import getImageUrl from "../Utils/getImageURL";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
-  const { paymentSetup, donationStep, projectDetails } = React.useContext(
-    QueryParamContext
-  );
+  const { paymentSetup, donationStep, projectDetails } =
+    React.useContext(QueryParamContext);
 
   return (
     <div className="donations-container">
@@ -48,101 +48,94 @@ function DonationInfo() {
     contactDetails,
     giftDetails,
     isGift,
+    tenant,
   } = React.useContext(QueryParamContext);
 
   return projectDetails && paymentSetup ? (
     <div className="donations-info-container">
-      {/* <img
-        className="background-image"
-        src="/assets/images/forest2.jpg"
-        width="420"
-        height="560"
-      />
-      <div className="background-image-overlay"></div> */}
-      <div className="donations-info">
-        <div className="donations-info-header">
+      <img className="background-image" src={getTenantBackground(tenant)} />
+      <div className="background-image-overlay"></div>
+      <div className="donations-info text-white">
+        {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
+        {(donationStep === 2 || donationStep === 3) && (
+          <div className="contact-details-info">
+            <div className={"w-100  mt-10"}>
+              {t("donating")}
+              <span className="text-bold" style={{ marginRight: "4px" }}>
+                {getFormatedCurrency(
+                  i18n.language,
+                  currency,
+                  paymentSetup.treeCost * treeCount
+                )}
+              </span>
+              {t("fortreeCountTrees", {
+                count: Number(treeCount),
+                treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+              })}
+            </div>
+          </div>
+        )}
+        <a
+          rel="noreferrer"
+          target="_blank"
+          href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+          className="title-text text-white"
+        >
+          {projectDetails.name}
+        </a>
+        {projectDetails.tpo && (
           <a
             rel="noreferrer"
             target="_blank"
-            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-            className="title-text text-white"
+            href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+            className="text-white"
           >
-            {projectDetails.name}
+            {t("byOrganization", {
+              organizationName: projectDetails.tpo.name,
+            })}
           </a>
-          <div style={{ marginTop: "8px" }} />
-          {projectDetails.tpo && (
-            <a
-              rel="noreferrer"
-              target="_blank"
-              href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-              className="text-white"
-            >
-              {t("byOrganization", {
-                organizationName: projectDetails.tpo.name,
-              })}
-            </a>
-          )}
+        )}
 
-          {(donationStep === 2 || donationStep === 3) && (
-            <div>
-              <div className={"w-100  text-white mt-10"}>
-                {t('donating')}
-                <span className="text-bold" style={{ marginRight: "4px" }}>
-                  {getFormatedCurrency(
-                    i18n.language,
-                    currency,
-                    paymentSetup.treeCost * treeCount
-                  )}
-                </span>
-                {t("fortreeCountTrees", {
-                  count: Number(treeCount),
-                  treeCount: getFormattedNumber(
-                    i18n.language,
-                    Number(treeCount)
-                  ),
-                })}
-              </div>
-              {giftDetails && isGift && giftDetails.recipientName && (
-                <div className="donation-supports-info mt-10 text-white">
-                  <p>
-                    {t("directGiftRecipient", {
-                      name: giftDetails.recipientName,
-                    })}
-                  </p>
-                </div>
+        {(donationStep === 2 || donationStep === 3) &&
+          giftDetails &&
+          isGift &&
+          giftDetails.recipientName && (
+            <div className="contact-details-info  mt-20 donation-supports-info">
+              <p>Dedicated to</p>
+              <p className="text-bold">{giftDetails.recipientName}</p>
+              {giftDetails.giftMessage && (
+                <p>Message: {giftDetails.giftMessage}</p>
               )}
             </div>
           )}
-          {donationStep === 3 && contactDetails.firstname && (
-            <div className={"contact-details-info w-100 mt-10"}>
-              <div
-                className={`text-white button-reverse`}
-              >
-                {contactDetails.firstname && contactDetails.firstname}{" "}
-                {contactDetails.lastname && contactDetails.lastname}
-              </div>
-                <div className="text-white">
-                  <p>{contactDetails.email && contactDetails.email}</p>
-                  <p>
-                    {contactDetails.address && contactDetails.address}
-                    {", "}
-                    {contactDetails.city && contactDetails.city}
-                    {", "}
-                    {contactDetails.zipCode && contactDetails.zipCode}
-                  </p>
-                  <p>
-                    {contactDetails.country &&
-                      getCountryDataBy("countryCode", contactDetails.country)
-                        ?.countryName}
-                  </p>
-                </div>
-            </div>
-          )}
-        </div>
+        {donationStep === 3 && contactDetails.firstname && (
+          <div className={"contact-details-info w-100 mt-20"}>
+            <p>Billing Address</p>
+            <p className={`text-bold`}>
+              {contactDetails.firstname && contactDetails.firstname}{" "}
+              {contactDetails.lastname && contactDetails.lastname}
+            </p>
+            <p>{contactDetails.email && contactDetails.email}</p>
+            <p>
+              {contactDetails.address && contactDetails.address}
+              {", "}
+              {contactDetails.city && contactDetails.city}
+              {", "}
+              {contactDetails.zipCode && contactDetails.zipCode}
+            </p>
+            <p>
+              {contactDetails.country &&
+                getCountryDataBy("countryCode", contactDetails.country)
+                  ?.countryName}
+            </p>
+          </div>
+        )}
 
-        <div className="donations-transaction-details">
-          {donationID && `Ref - ${donationID}`}
-        </div>
+        {donationID && (
+          <p className="donations-transaction-details mt-20">
+            {`Ref - ${donationID}`}
+          </p>
+        )}
       </div>
     </div>
   ) : (
