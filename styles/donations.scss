@@ -477,8 +477,13 @@
     font-size: 22px;
   }
 }
-
+.thankyouText{
+  text-align: center;
+}
 @include lgLaptopView {
+  .thankyouText{
+    text-align: left;
+  }
   .test-donation-bar {
     top: 0px;
     bottom: auto;

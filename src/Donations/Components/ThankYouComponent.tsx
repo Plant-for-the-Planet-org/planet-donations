@@ -88,13 +88,16 @@ function ThankYou() {
   const sendToReturn = () => {
     router.push(returnTo);
   };
-
-  let currencyFormat = () => {};
+  let returnDisplay;
+  if(returnTo){
+  const x = returnTo.slice(8);
+  returnDisplay = x.split("/", 2)
+}
+  let currencyFormat = () => { };
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
-
   function SuccessfulDonation() {
     return donation ? (
       <div className="d-flex column justify-content-center">
@@ -102,18 +105,18 @@ function ThankYou() {
           <button
             id={"thank-you-close"}
             onClick={() => sendToReturn()}
-            className="mb-10"
+            className="mb-10 text-primary"
             style={{ alignSelf: "flex-start" }}
           >
-            <CloseIcon color={themeProperties.light.primaryFontColor} />
+            Back to {returnDisplay[0]}          
           </button>
         ) : (
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:thankYou")}</div>
+        <div className={"title-text thankyouText"}>{t("common:thankYou")}</div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t(
             paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
               ? "common:donationSuccessfulWith"
@@ -125,9 +128,9 @@ function ThankYou() {
           )}
           {donation && donation.gift
             ? " " +
-              t("common:giftSentMessage", {
-                recipientName: donation.gift.recipientName,
-              })
+            t("common:giftSentMessage", {
+              recipientName: donation.gift.recipientName,
+            })
             : null}
           {" " +
             t("common:yourTreesPlantedByOnLocation", {
@@ -140,7 +143,7 @@ function ThankYou() {
             })}
         </div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t("common:contributionMessage")}
         </div>
 
@@ -278,8 +281,8 @@ function ThankYou() {
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
               redirectstatus === "succeeded" &&
-              (donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid") ? (
+                (donation.paymentStatus === "success" ||
+                  donation.paymentStatus === "paid") ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />
@@ -288,7 +291,7 @@ function ThankYou() {
               )
             ) : donation && donation.paymentStatus ? (
               donation.paymentStatus === "success" ||
-              donation.paymentStatus === "paid" ? (
+                donation.paymentStatus === "paid" ? (
                 <SuccessfulDonation />
               ) : donation.paymentStatus === "failed" ? (
                 <FailedDonation />
