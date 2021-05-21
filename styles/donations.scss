@@ -106,12 +106,38 @@
 
 .donations-form {
   width: 100%;
+  .user-profile{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    p{
+      color: $primaryFontColor!important;
+      transition-duration: 0.4s;
+      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+      &:hover{
+        cursor: pointer;
+        font-weight: 600;
+      }
+    }
+    .profile-pic{
+      height: 30px;
+      width: 30px;
+      border-radius: 30px;
+      margin-right: 6px;
+    }
+    .no-pic{
+      background-color: #B2B2B2;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
   .login-continue {
     color: $primaryDarkColor;
     font-weight: 600;
-    width: 100%;
     text-align: right;
-    margin-bottom: 10px;
   }
 }
 .donations-gift-container {
