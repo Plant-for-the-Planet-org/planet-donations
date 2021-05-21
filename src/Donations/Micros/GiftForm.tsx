@@ -4,7 +4,6 @@ import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
-import CloseIcon from "../../../public/assets/icons/CloseIcon";
 interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
@@ -136,14 +135,17 @@ export default function GiftForm({}: Props): ReactElement {
         </div>
       ) : (
         <div className="donation-supports-info mt-10">
-          <p>
+          <p onClick={() => resetGiftForm()}>
             {t("directGiftRecipient", {
               name: giftDetails.recipientName,
             })}
           </p>
-          <button onClick={() => resetGiftForm()}>
-            <CloseIcon />
-          </button>
+            <button
+              onClick={() => resetGiftForm()}
+              className={"singleGiftRemove"}
+            >
+              {t('removeRecipient')}
+            </button>
         </div>
       )}
     </div>
