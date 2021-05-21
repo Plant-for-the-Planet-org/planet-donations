@@ -177,7 +177,7 @@ export default function QueryParamProvider({ children }: any) {
       );
       if (paymentSetupData.data) {
         setpaymentSetup(paymentSetupData.data);
-        setcurrency(paymentSetupData.data.currency);
+        setcurrency(paymentSetupData.data.currency);        
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
@@ -189,12 +189,40 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   React.useEffect(() => {
-    if (router.query.to) {
+    if (router.query.to && country) {
       loadPaymentSetup(router.query.to);
-    } else {
-      loadPaymentSetup("proj_WZkyugryh35sMmZMmXCwq7YY");
     }
   }, [router.query.to, country]);
+
+  async function loadConfig() {
+    let userLang;
+    if (localStorage) {
+      userLang = localStorage.getItem('language') || 'en';
+    } else {
+      userLang = 'en';
+    }
+    try {
+      const config = await getRequest(
+        `/public/v1.2/${userLang}/config`
+      );
+      if (config.data) {
+        setcountry(config.data.country);
+        setContactDetails({
+          ...contactDetails,
+          city: (config.data.loc && config.data.loc.city) ? config.data.loc.city : '',
+          zipCode: (config.data.loc && config.data.loc.postalCode) ? config.data.loc.postalCode : ''
+        })
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+
+  React.useEffect(()=>{
+    loadConfig();
+  },[])
+
+
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
 

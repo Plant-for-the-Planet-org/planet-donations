@@ -108,7 +108,12 @@ button {
   justify-content: center;
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-  text-decoration: none;
+  text-decoration: none;  
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
 }
 .secondary-button {
   min-width: 240px;

@@ -375,7 +375,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Giropay`,
+          return_url: `${process.env.NEXTAUTH_URL}/?context=${donationID}&method=Giropay`,
         }
       );
 
@@ -408,7 +408,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Sofort`,
+          return_url: `${process.env.NEXTAUTH_URL}/?context=${donationID}&method=Sofort`,
         }
       );
 

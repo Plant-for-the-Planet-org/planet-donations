@@ -27,7 +27,7 @@ function TaxDeductionOption({}: Props): ReactElement {
     } else {
       setIsTaxDeductible(false);
     }
-  }, [country]);
+  }, [projectDetails,country]);
 
   return projectDetails ? (
     <div className="mt-20">
