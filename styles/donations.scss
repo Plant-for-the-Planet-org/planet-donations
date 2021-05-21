@@ -91,6 +91,11 @@
   z-index: 3;
   justify-content: flex-end;
   min-height: 236px;
+  > a {
+    &:hover{
+      text-decoration: underline;
+    }
+  }
 }
 
 .donations-transaction-details {
