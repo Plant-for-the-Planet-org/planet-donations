@@ -23,6 +23,9 @@ function Authentication({}: Props): ReactElement {
     user,
   } = useAuth0();
 
+  console.log('user',user);
+  
+
   const [profile, setprofile] = React.useState<null | Object>(null);
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
@@ -75,12 +78,15 @@ function Authentication({}: Props): ReactElement {
   const { t, ready } = useTranslation("common");
   return (
     <div>
+      {/* {!isLoading && !isAuthenticated && (
+
+      )} */}
       {!isLoading && !isAuthenticated && (
         <button
           className="login-continue"
           onClick={() =>
             loginWithRedirect({
-              redirectUri: `${process.env.NEXTAUTH_URL}`,
+              redirectUri: window?.location.href,
               ui_locales: localStorage.getItem("language") || "en",
             })
           }
@@ -92,7 +98,7 @@ function Authentication({}: Props): ReactElement {
       {!isLoading && isAuthenticated && (
         <button
           className="login-continue"
-          onClick={() => logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })}
+          onClick={() => logout({ returnTo: window?.location.href })}
         >
           {t('logout')}
         </button>
