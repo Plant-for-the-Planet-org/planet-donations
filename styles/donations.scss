@@ -547,6 +547,7 @@
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
     align-self: auto;
+    margin-right: -10px;
   }
   .donations-forms-container {
     width: 420px;
@@ -554,9 +555,9 @@
     margin-top: 0px;
     margin-bottom: 0px;
     border-radius: 20px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     align-self: auto;
+    margin-left: -10px;
+    z-index: 3;
   }
   .thankyou-image {
     width: 360px;
