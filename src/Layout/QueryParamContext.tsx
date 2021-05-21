@@ -166,8 +166,6 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.to) {
       loadProject(router.query.to);
-    } else {
-      loadProject("proj_WZkyugryh35sMmZMmXCwq7YY");
     }
   }, [router.query.to]);
 
