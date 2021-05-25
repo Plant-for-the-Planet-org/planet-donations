@@ -91,6 +91,11 @@
   z-index: 3;
   justify-content: flex-end;
   min-height: 236px;
+  > a {
+    &:hover{
+      text-decoration: underline;
+    }
+  }
 }
 
 .donations-transaction-details {
@@ -101,12 +106,38 @@
 
 .donations-form {
   width: 100%;
+  .user-profile{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    p{
+      color: $primaryFontColor!important;
+      transition-duration: 0.4s;
+      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+      &:hover{
+        cursor: pointer;
+        font-weight: 600;
+      }
+    }
+    .profile-pic{
+      height: 30px;
+      width: 30px;
+      border-radius: 30px;
+      margin-right: 6px;
+    }
+    .no-pic{
+      background-color: #B2B2B2;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
   .login-continue {
     color: $primaryDarkColor;
     font-weight: 600;
-    width: 100%;
     text-align: right;
-    margin-bottom: 10px;
   }
 }
 .donations-gift-container {
@@ -124,6 +155,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    p{
+      cursor: pointer;
+    }
     button {
       display: flex;
       align-items: center;
@@ -513,6 +547,7 @@
     border-bottom-right-radius: 0px;
     border-top-right-radius: 0px;
     align-self: auto;
+    margin-right: -10px;
   }
   .donations-forms-container {
     width: 420px;
@@ -520,9 +555,9 @@
     margin-top: 0px;
     margin-bottom: 0px;
     border-radius: 20px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     align-self: auto;
+    margin-left: -10px;
+    z-index: 3;
   }
   .thankyou-image {
     width: 360px;

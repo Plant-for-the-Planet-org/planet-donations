@@ -87,5 +87,7 @@
   "donateNow": "Dona ahora",
   "or": "O",
   "donateWith": "Donar con",
-  "donating": "Donar "
+  "donating": "Donar ",
+  "addEmail": "Añadir correo electrónico y enviar invitación",
+  "removeRecipient": "Eliminar"
 }

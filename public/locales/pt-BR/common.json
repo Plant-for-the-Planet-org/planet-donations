@@ -87,5 +87,7 @@
   "donateNow": "Doe Agora",
   "or": "OU",
   "donateWith": "Doe com",
-  "donating": "Doando "
+  "donating": "Doando ",
+  "addEmail": "Adicionar e-mail e enviar convite",
+  "removeRecipient": "Remover"
 }

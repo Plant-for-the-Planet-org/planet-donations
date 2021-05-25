@@ -65,7 +65,7 @@
   "donationPendingMessage": "Wir warten derzeit auf die Bestätigung von deiner Bank. Dies kann einige Zeit dauern, daher kannst du diese Seite auch schließen. Wir werden dir den Beleg in Kürze per E-Mail zusenden.",
   "donationRef": "Spendenreferenznummer",
   "privacyPolicyNotice": "Durch die Nutzung dieser Website akzeptierst Du unsere",
-  "privacyPolicy": "Datenschutzerklärung & Cookie-Richtlinie",
+  "privacyPolicy": "Cookie-Richtlinie",
   "acceptClose": "Bestätigen und schließen",
   "verifyEmail": "E-Mail bestätigen",
   "verifyEmailHeader": "Bitte bestätige Dein E-Mail",
@@ -73,7 +73,7 @@
   "verifyEmailInfo": "Wenn Du keine E-Mail erhalten hast, versuche bitte erneut, Dich anzumelden, und wir senden Dir eine weitere E-Mail.",
   "skipLogout": "Weiter als Gast",
   "donationProcessedBy": "Diese Spende wird von Plant-for-the-Planet bearbeitet",
-  "cancelReturn": "Abbrechen und zur Organisation zurückkehren",
+  "cancelReturn": "Abbrechen und zurückkehren",
   "aboutUs": "Über uns",
   "imprint": "Impressum",
   "privacyTerms": "Datenschutz & AGB",
@@ -89,5 +89,7 @@
   "donateNow": "Jetzt spenden",
   "or": "ODER",
   "donateWith": "Spende mit",
-  "donating": "Spenden "
+  "donating": "Spenden ",
+  "addEmail": "E-Mail hinzufügen & Einladung senden",
+  "removeRecipient": "Entfernen"
 }
