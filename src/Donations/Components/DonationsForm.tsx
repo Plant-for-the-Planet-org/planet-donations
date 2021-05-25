@@ -225,14 +225,16 @@ function DonationsForm() {
                     setopenCurrencyModal(true);
                   }}
                   className="text-bold text-primary"
+                  style={{marginRight:'4px'}}
                 >
                   {currency}{" "}
+                  <DownArrowIcon color={themeProperties.primaryColor} />
                   {getFormatedCurrency(
                     i18n.language,
                     "",
                     Number(paymentSetup.treeCost)
                   )}{" "}
-                  <DownArrowIcon color={themeProperties.primaryColor} />
+                  
                 </button>
                 {t("perTree")}
               </p>

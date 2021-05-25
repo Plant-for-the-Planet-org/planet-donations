@@ -96,7 +96,7 @@ function DonationInfo() {
           </a>
         )}
 
-        {(donationStep === 2 || donationStep === 3) &&
+        {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
           giftDetails &&
           isGift &&
           giftDetails.recipientName && (
