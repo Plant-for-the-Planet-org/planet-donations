@@ -78,7 +78,7 @@ function Authentication({}: Props): ReactElement {
     <div>
       {!isLoading && !isAuthenticated && (
         <button
-          className="login-continue"
+          className="w-100 login-continue"
           onClick={() =>
             loginWithRedirect({
               redirectUri: window?.location.href,

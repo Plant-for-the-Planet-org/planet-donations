@@ -7,6 +7,7 @@ import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
 import { useTranslation } from "react-i18next";
+import { getFilteredProjects, getRandomProjects } from "../Utils/projects/filterProjects";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -26,7 +27,7 @@ export const QueryParamContext = React.createContext({
   paymentSetup: {},
   currency: "",
   setcurrency: (value: "") => {},
-  donationStep: 0,
+  donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
   treeCount: 50,
@@ -45,7 +46,10 @@ export const QueryParamContext = React.createContext({
   redirectstatus: "",
   returnTo: "",
   isDirectDonation:false,
-  tenant:''
+  tenant:'',
+  selectedProjects:[],
+  setSelectedProjects:(value: Array<any>) => {},
+  allProjects:[]
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -57,7 +61,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
-  const [donationStep, setdonationStep] = useState(1);
+  const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState("en");
 
   const [donationID, setdonationID] = useState(null);
@@ -122,6 +126,10 @@ export default function QueryParamProvider({ children }: any) {
 
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
 
+  const [selectedProjects,setSelectedProjects] = useState([]);
+  const [allProjects,setAllProjects] = useState([]);
+
+
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
   React.useEffect(() => {
@@ -163,9 +171,37 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
+  async function loadselectedProjects() {
+    try {
+      const projects = await getRequest(
+        `/app/projects?_scope=map`
+      );
+      if (projects.data) {
+        console.log('projects.data',projects.data);
+        
+        setAllProjects(projects.data);
+        // const allowedDonationsProjects = getFilteredProjects(projects.data,'allow');
+        const featuredProjects = getFilteredProjects(projects.data,'featured');
+        if(featuredProjects?.length < 6){
+          setSelectedProjects(selectedProjects);
+        }else{
+          const randomProjects = getRandomProjects(featuredProjects,6);
+          setSelectedProjects(randomProjects)
+        }
+  
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+
   React.useEffect(() => {
     if (router.query.to) {
       loadProject(router.query.to);
+      setdonationStep(1);
+    }else{
+      loadselectedProjects();
+      setdonationStep(0);
     }
   }, [router.query.to]);
 
@@ -373,7 +409,10 @@ export default function QueryParamProvider({ children }: any) {
         redirectstatus,
         returnTo,
         isDirectDonation,
-        tenant
+        tenant,
+        selectedProjects,
+        setSelectedProjects,
+        allProjects
       }}
     >
       {children}

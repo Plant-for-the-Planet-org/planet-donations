@@ -124,7 +124,7 @@ function CookiePolicy() {
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
-        className="secondary-button mt-20"
+        className="primary-button mt-20"
       >
         {t("acceptClose")}
       </button>

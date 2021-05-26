@@ -73,13 +73,19 @@
   width: 100%;
 }
 
-.background-image-overlay{
+.background-image-overlay {
   position: absolute;
   top: 0px;
   left: 0px;
   z-index: 2;
   // background-color: rgba($color: #000000, $alpha: 0.3);
-  background-image: linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+  background-image: linear-gradient(
+    to top,
+    rgb(0, 0, 0),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0)
+  );
   height: 100%;
   width: 100%;
 }
@@ -92,7 +98,7 @@
   justify-content: flex-end;
   min-height: 236px;
   > a {
-    &:hover{
+    &:hover {
       text-decoration: underline;
     }
   }
@@ -104,41 +110,38 @@
   z-index: 3;
 }
 
-.donations-form {
-  width: 100%;
-  .user-profile{
+.user-profile {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  p {
+    color: $primaryFontColor !important;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+  .profile-pic {
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    margin-right: 6px;
+  }
+  .no-pic {
+    background-color: #b2b2b2;
+    color: white;
+    font-weight: bold;
     display: flex;
+    justify-content: center;
     align-items: center;
-    text-decoration: none;
-    p{
-      color: $primaryFontColor!important;
-      transition-duration: 0.4s;
-      transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-      &:hover{
-        cursor: pointer;
-        font-weight: 600;
-      }
-    }
-    .profile-pic{
-      height: 30px;
-      width: 30px;
-      border-radius: 30px;
-      margin-right: 6px;
-    }
-    .no-pic{
-      background-color: #B2B2B2;
-      color: white;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
-  .login-continue {
-    color: $primaryDarkColor;
-    font-weight: 600;
-    text-align: right;
-  }
+}
+.login-continue {
+  color: $primaryDarkColor;
+  font-weight: 600;
+  text-align: right;
 }
 .donations-gift-container {
   .donations-gift-toggle {
@@ -155,7 +158,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    p{
+    p {
       cursor: pointer;
     }
     button {
@@ -521,11 +524,11 @@
     font-size: 22px;
   }
 }
-.thankyouText{
+.thankyouText {
   text-align: center;
 }
 @include lgLaptopView {
-  .thankyouText{
+  .thankyouText {
     text-align: left;
   }
   .test-donation-bar {
@@ -571,6 +574,7 @@
   animation: loader 3s infinite ease-in-out;
   -webkit-animation: loader 3s infinite ease-in-out;
 }
+
 @keyframes loader {
   0% {
     background-color: rgba(#ecebeb, 0.3);

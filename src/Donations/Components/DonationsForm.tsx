@@ -143,7 +143,7 @@ function DonationsForm() {
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
     <div className="donations-forms-container">
-      <div className="donations-form">
+      <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
           <p className="title-text">{t('donate')}</p>

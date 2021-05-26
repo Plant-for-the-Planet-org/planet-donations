@@ -93,5 +93,8 @@
   "donateWith": "Donate with",
   "donating": "Donating ",
   "addEmail": "Add Gift Notification",
-  "removeRecipient": "Remove"
+  "removeRecipient": "Remove",
+  "findProjects":"Find Projects",
+  "search":"Search",
+  "noProjectsFound": "No projects found"
 }
