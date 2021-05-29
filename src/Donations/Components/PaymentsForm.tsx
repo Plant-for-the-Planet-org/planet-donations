@@ -15,12 +15,12 @@ import {
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
-import PaypalPayments from "../PaymentMethods/PaypalPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
+import NewPaypal from "../PaymentMethods/NewPaypal";
 
 interface Props {}
 
@@ -33,6 +33,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  const [isDonationLoading, setisDonationLoading] = React.useState(false)
   const {
     paymentSetup,
     country,
@@ -90,6 +91,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       token = await getAccessTokenSilently();
     }
+    setisDonationLoading(true)
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -112,6 +114,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationID(donation.id);
       setshouldCreateDonation(false);
     }
+    setisDonationLoading(false)
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
@@ -131,6 +134,10 @@ function PaymentsForm({}: Props): ReactElement {
       getDonation();
     }
   }, [shouldCreateDonation]);
+
+  React.useEffect(()=>{
+    setPaymentType("CARD")
+  },[currency])
 
   return ready ? (
     isPaymentProcessing ? (
@@ -263,7 +270,7 @@ function PaymentsForm({}: Props): ReactElement {
                 aria-labelledby={`scrollable-force-tab-${"Paypal"}`}
               >
                 {paymentType === "Paypal" && (
-                  <PaypalPayments
+                  <NewPaypal
                     paymentSetup={paymentSetup}
                     treeCount={treeCount}
                     treeCost={paymentSetup.treeCost}

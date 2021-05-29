@@ -177,7 +177,6 @@ export default function QueryParamProvider({ children }: any) {
         `/app/projects?_scope=map`
       );
       if (projects.data) {
-        console.log('projects.data',projects.data);
         
         setAllProjects(projects.data);
         // const allowedDonationsProjects = getFilteredProjects(projects.data,'allow');
