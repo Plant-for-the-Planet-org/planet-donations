@@ -48,20 +48,10 @@ function NewPaypal({
           brand_name: "Plant-for-the-Planet",
         },
       })
-      .then((data) => {
-        console.log("new data", data);
-      });
   }
 
   function onApprove(data, actions) {
-    // This function captures the funds from the transaction.
-    return actions.order.capture().then(function (details) {
-      console.log("details", details);
-      console.log("data", data);
-
-      // This function shows a transaction success message to your buyer.
-      payDonationFunction("paypal", data);
-    });
+    payDonationFunction("paypal", data);
   }
 
   const onError = (data) => {
