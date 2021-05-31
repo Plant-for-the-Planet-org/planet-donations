@@ -1,5 +1,25 @@
 @import "./theme";
 
+.project-search-input{
+  height: 48px;
+  width: 100%;
+  border-radius: 24px;
+  // border: 1px solid $dividerColor;
+  border: 0px;
+  box-shadow: 1px 1px 1px 0px rgba($color: #000000, $alpha: 0.16);
+  padding-left: 18px;
+  display: flex;
+  align-items: center;
+  svg {
+    height: 20px;
+    margin-right: 8px;
+  }
+  > input{
+    border: 0px;
+    flex-grow: 1;
+    background-color: transparent;
+  }
+}
 .select-project-container {
   display: flex;
   padding: 30px;
