@@ -239,6 +239,7 @@ export async function payDonationFunction({
         setIsPaymentProcessing(false);
         setPaymentError(paidDonation.data.message);
       } else if (
+        paidDonation.data.status === "success" ||
         paidDonation.data.paymentStatus === "success" ||
         paidDonation.data.paymentStatus === "pending"
       ) {

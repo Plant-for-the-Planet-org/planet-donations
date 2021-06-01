@@ -51,6 +51,10 @@ function NewPaypal({
   function onApprove(data, actions) {
     return actions.order.capture().then(function (details) {
       // This function shows a transaction success message to your buyer.
+      data = {
+        ...data,
+        type:"sdk"
+      }
       payDonationFunction("paypal", data);
     });
   }
