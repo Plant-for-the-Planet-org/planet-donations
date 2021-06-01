@@ -28,7 +28,8 @@ export default function TaxDeductionCountryModal(props: any) {
   const handleCountryChange = (event: any) => {
     const selectedData = event.target.value.split(",");
     setcountry(selectedData[0]);
-    setcurrency(selectedData[1]);
+    // Not needed as new payment setup will be fetched
+    // setcurrency(selectedData[1]);
     handleModalClose();
   };
 

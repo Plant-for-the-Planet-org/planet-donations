@@ -205,7 +205,7 @@ export async function payDonationFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -240,7 +240,8 @@ export async function payDonationFunction({
         setPaymentError(paidDonation.data.message);
       } else if (
         paidDonation.data.paymentStatus === "success" ||
-        paidDonation.data.paymentStatus === "pending"
+        paidDonation.data.paymentStatus === "pending" ||
+        paidDonation.data.status === "success"
       ) {
         setIsPaymentProcessing(false);
         setdonationStep(4);
@@ -258,7 +259,7 @@ export async function payDonationFunction({
           setdonationStep,
           contactDetails,
           token,
-          country
+          country,
         });
       }
     }
@@ -292,7 +293,7 @@ export async function handleSCAPaymentFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -381,9 +382,9 @@ export async function handleSCAPaymentFunction({
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {
@@ -414,9 +415,9 @@ export async function handleSCAPaymentFunction({
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {
