@@ -28,6 +28,7 @@ function PaymentsForm({}: Props): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+  const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");
 
@@ -111,6 +112,7 @@ function PaymentsForm({}: Props): ReactElement {
       setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
+      setisCreatingDonation(false)
     }
   }
 
@@ -128,6 +130,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
+      setisCreatingDonation(true)
       getDonation();
     }
   }, [shouldCreateDonation]);
@@ -183,7 +186,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
-          {donationID && paymentSetup && paymentSetup.gateways && (
+          {!isCreatingDonation && donationID && paymentSetup && paymentSetup.gateways && (
             <PaymentMethodTabs
               paymentType={paymentType}
               setPaymentType={setPaymentType}
@@ -214,7 +217,7 @@ function PaymentsForm({}: Props): ReactElement {
             />
           )}
 
-          {donationID ? (
+          {!isCreatingDonation && donationID ? (
             <div className="mt-30">
               <div
                 role="tabpanel"

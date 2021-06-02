@@ -242,15 +242,19 @@ export default function QueryParamProvider({ children }: any) {
       const config = await getRequest(`/public/v1.2/${userLang}/config`);
       if (config.data) {
         setcountry(config.data.country);
-        setContactDetails({
-          ...contactDetails,
-          city:
-            config.data.loc && config.data.loc.city ? config.data.loc.city : "",
-          zipCode:
-            config.data.loc && config.data.loc.postalCode
-              ? config.data.loc.postalCode
-              : "",
-        });
+        if (!router.query.context) {
+          setContactDetails({
+            ...contactDetails,
+            city:
+              config.data.loc && config.data.loc.city
+                ? config.data.loc.city
+                : "",
+            zipCode:
+              config.data.loc && config.data.loc.postalCode
+                ? config.data.loc.postalCode
+                : "",
+          });
+        }
       }
     } catch (err) {
       // console.log(err);
@@ -258,8 +262,10 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   React.useEffect(() => {
-    loadConfig();
-  }, []);
+    if (router.isReady) {
+      loadConfig();
+    }
+  }, [router.isReady]);
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
 
@@ -282,8 +288,33 @@ export default function QueryParamProvider({ children }: any) {
       await loadProject(donation.data.project.id);
       await loadPaymentSetup(donation.data.project.id);
       settreeCount(donation.data.treeCount);
+      if (donation.data.donor) {
+        let contactDetails = {
+          firstname: donation.data.donor.firstname
+            ? donation.data.donor.firstname
+            : "",
+          lastname: donation.data.donor.lastname
+            ? donation.data.donor.lastname
+            : "",
+          email: donation.data.donor.email ? donation.data.donor.email : "",
+          address: donation.data.donor.address
+            ? donation.data.donor.address
+            : "",
+          city: donation.data.donor.city ? donation.data.donor.city : "",
+          zipCode: donation.data.donor.zipCode
+            ? donation.data.donor.zipCode
+            : "",
+          country: donation.data.donor.country
+            ? donation.data.donor.country
+            : "",
+          companyname: donation.data.donor.companyname
+            ? donation.data.donor.companyname
+            : "",
+        };
+        setContactDetails(contactDetails);
+      }
 
-      // We can also take taxdeduction country from here 
+      // We can also take taxdeduction country from here
       // Check if the donation status is paid or successful - if yes directly show thank you page
       // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
       if (
@@ -342,12 +373,12 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.tenant) {
       settenant(router.query.tenant);
       localStorage.setItem("tenant", router.query.tenant);
-    } else{
+    } else {
       localStorage.removeItem("tenant");
     }
-    return ()=>{
+    return () => {
       localStorage.removeItem("tenant");
-    }
+    };
   }, [router.query.tenant]);
 
   // Tree Count = treecount => Received from the URL
