@@ -194,7 +194,7 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.isReady) {
-      if (router.query.to) {
+      if (router.query.to && !router.query.context) {
         loadProject(router.query.to);
         setdonationStep(1);
       } else {
@@ -283,6 +283,7 @@ export default function QueryParamProvider({ children }: any) {
       await loadPaymentSetup(donation.data.project.id);
       settreeCount(donation.data.treeCount);
 
+      // We can also take taxdeduction country from here 
       // Check if the donation status is paid or successful - if yes directly show thank you page
       // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
       if (
