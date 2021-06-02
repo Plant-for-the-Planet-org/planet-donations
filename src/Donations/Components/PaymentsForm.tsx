@@ -26,7 +26,7 @@ interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
-
+  
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
 
@@ -112,7 +112,7 @@ function PaymentsForm({}: Props): ReactElement {
       setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
-      setisCreatingDonation(false)
+      setisCreatingDonation(false);
     }
   }
 
@@ -130,7 +130,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
-      setisCreatingDonation(true)
+      setisCreatingDonation(true);
       getDonation();
     }
   }, [shouldCreateDonation]);
@@ -186,36 +186,43 @@ function PaymentsForm({}: Props): ReactElement {
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
-          {!isCreatingDonation && donationID && paymentSetup && paymentSetup.gateways && (
-            <PaymentMethodTabs
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              showCC={paymentSetup?.gateways.stripe.methods.includes(
-                "stripe_cc"
-              )}
-              showGiroPay={
-                country === "DE" &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
-              }
-              showSepa={
-                currency === "EUR" &&
-                isAuthenticated &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
-              }
-              showSofort={
-                sofortCountries.includes(country) &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sofort")
-              }
-              showPaypal={
-                paypalCurrencies.includes(currency) &&
-                paymentSetup?.gateways.paypal
-              }
-              showNativePay={
-                paymentSetup?.gateways?.stripe?.account && currency
-              }
-              onNativePaymentFunction={onPaymentFunction}
-            />
-          )}
+          {!isCreatingDonation &&
+            donationID &&
+            paymentSetup &&
+            paymentSetup.gateways && (
+              <PaymentMethodTabs
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+                showCC={paymentSetup?.gateways.stripe.methods.includes(
+                  "stripe_cc"
+                )}
+                showGiroPay={
+                  country === "DE" &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_giropay"
+                  )
+                }
+                showSepa={
+                  currency === "EUR" &&
+                  isAuthenticated &&
+                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                }
+                showSofort={
+                  sofortCountries.includes(country) &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_sofort"
+                  )
+                }
+                showPaypal={
+                  paypalCurrencies.includes(currency) &&
+                  paymentSetup?.gateways.paypal
+                }
+                showNativePay={
+                  paymentSetup?.gateways?.stripe?.account && currency
+                }
+                onNativePaymentFunction={onPaymentFunction}
+              />
+            )}
 
           {!isCreatingDonation && donationID ? (
             <div className="mt-30">
@@ -299,7 +306,9 @@ function PaymentsForm({}: Props): ReactElement {
               </div>
             </div>
           ) : (
-            <ButtonLoader />
+            <div className="mt-20">
+              <ButtonLoader />
+            </div>
           )}
           <br />
           <a
