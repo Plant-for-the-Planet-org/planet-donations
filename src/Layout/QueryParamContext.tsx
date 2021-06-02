@@ -341,6 +341,11 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.tenant) {
       settenant(router.query.tenant);
       localStorage.setItem("tenant", router.query.tenant);
+    } else{
+      localStorage.removeItem("tenant");
+    }
+    return ()=>{
+      localStorage.removeItem("tenant");
     }
   }, [router.query.tenant]);
 
