@@ -57,12 +57,9 @@ function SelectProject({}: Props): ReactElement {
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
-    <div className="select-project-container column">
-      <p className="title-text text-center">{t("findProjects")}</p>
-      <div
-        className={"form-field mt-30 w-100"}
-        style={{ maxWidth: "380px", alignSelf: "center" }}
-      >
+    <div className="donations-forms-container column">
+      <p className="title-text">{t("findProjects")}</p>
+      <div className={"form-field mt-30 w-100"} style={{ alignSelf: "center" }}>
         <div className="project-search-input">
           <SearchIcon color={themeProperties.darkGrey} />
           <input
@@ -85,7 +82,7 @@ function SelectProject({}: Props): ReactElement {
                 key={index}
                 className="project"
               >
-                {project.properties.tpo.image && (
+                {project.properties.tpo.image ? (
                   <img
                     className="project-organisation-image"
                     src={getImageUrl(
@@ -94,6 +91,10 @@ function SelectProject({}: Props): ReactElement {
                       project.properties.tpo.image
                     )}
                   />
+                ) : (
+                  <div className="project-organisation-image no-project-organisation-image">
+                    {project.properties.tpo.name.charAt(0)}
+                  </div>
                 )}
                 {project.properties.country && (
                   <p className="project-country">
@@ -105,19 +106,6 @@ function SelectProject({}: Props): ReactElement {
                     }
                   </p>
                 )}
-                {project.properties.image ? (
-                  <img
-                    className="project-background-image"
-                    src={getImageUrl(
-                      "project",
-                      "medium",
-                      project.properties.image
-                    )}
-                  />
-                ) : (
-                  <div className="project-background-image no-image"></div>
-                )}
-
                 <p className="project-name">{project.properties.tpo.name}</p>
               </div>
             );

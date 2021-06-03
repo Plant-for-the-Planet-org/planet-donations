@@ -175,11 +175,14 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const projects = await getRequest(`/app/projects?_scope=map`);
       if (projects.data) {
-        console.log("projects.data", projects.data);
 
-        setAllProjects(projects.data);
-        // const allowedDonationsProjects = getFilteredProjects(projects.data,'allow');
-        const featuredProjects = getFilteredProjects(projects.data, "featured");
+        let allowedDonationsProjects = projects.data.filter(
+          (project: { properties: { allowDonations: boolean } }) =>
+            project.properties.allowDonations === true
+        );
+
+        setAllProjects(allowedDonationsProjects);
+        const featuredProjects = getFilteredProjects(allowedDonationsProjects, "featured");
         if (featuredProjects?.length < 6) {
           setSelectedProjects(selectedProjects);
         } else {
