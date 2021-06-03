@@ -31,6 +31,7 @@
 
 .donations-info-container {
   width: 100%;
+  min-width: 320px;
   border-radius: 0px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -275,12 +276,14 @@
   margin: 0px 10px;
   width: 70%;
   font-family: $primaryFontFamily;
-  font-weight: bold;
+  font-weight: 800;
   font-size: $fontSubTitleSize;
   color: $primaryColor;
   text-align: center;
   background-color: transparent;
   outline: 0px;
+  font-size: 16px;
+  letter-spacing: 0.5px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
@@ -502,6 +505,7 @@
   .donations-info-container {
     padding: 30px;
     border-radius: 10px;
+    min-width: 420px;
     max-width: 420px;
   }
   .donations-forms-container {

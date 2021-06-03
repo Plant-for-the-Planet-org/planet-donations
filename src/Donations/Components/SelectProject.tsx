@@ -54,7 +54,7 @@ function SelectProject({}: Props): ReactElement {
 
   const donateToProject = (slug) => {
     router.push(`?to=${slug}`);
-  };
+  };  
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
     <div className="donations-forms-container column">
@@ -106,7 +106,7 @@ function SelectProject({}: Props): ReactElement {
                     }
                   </p>
                 )}
-                <p className="project-name">{project.properties.tpo.name}</p>
+                <p className="project-name">{project.properties.name}</p>
               </div>
             );
           })}
