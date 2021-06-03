@@ -11,6 +11,7 @@ import {
   getFilteredProjects,
   getRandomProjects,
 } from "../Utils/projects/filterProjects";
+import { getCountryDataBy } from "../Utils/countryUtils";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -53,6 +54,7 @@ export const QueryParamContext = React.createContext({
   selectedProjects: [],
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
+  allowTaxDeductionChange: true
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -72,6 +74,7 @@ export default function QueryParamProvider({ children }: any) {
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
+  const [allowTaxDeductionChange, setallowTaxDeductionChange] = useState(true)
 
   const [isDirectDonation, setisDirectDonation] = React.useState(false);
 
@@ -182,7 +185,10 @@ export default function QueryParamProvider({ children }: any) {
         );
 
         setAllProjects(allowedDonationsProjects);
-        const featuredProjects = getFilteredProjects(allowedDonationsProjects, "featured");
+        const featuredProjects = getFilteredProjects(
+          allowedDonationsProjects,
+          "featured"
+        );
         if (featuredProjects?.length < 6) {
           setSelectedProjects(selectedProjects);
         } else {
@@ -209,11 +215,11 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.to, router.isReady]);
 
-  async function loadPaymentSetup(projectGUID) {
+  async function loadPaymentSetup(projectGUID, paymentSetupCountry: "DE") {
     setIsPaymentOptionsLoading(true);
     try {
       const paymentSetupData = await getRequest(
-        `/app/projects/${projectGUID}/paymentOptions?country=${country}`
+        `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`
       );
       if (paymentSetupData.data) {
         setpaymentSetup(paymentSetupData.data);
@@ -230,7 +236,7 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      loadPaymentSetup(router.query.to);
+      loadPaymentSetup(router.query.to, country);
     }
   }, [router.query.to, country]);
 
@@ -289,7 +295,23 @@ export default function QueryParamProvider({ children }: any) {
       setshouldCreateDonation(false);
       // fetch project - payment setup
       await loadProject(donation.data.project.id);
-      await loadPaymentSetup(donation.data.project.id);
+
+      const newcountry = getCountryDataBy(
+        "currencyCode",
+        donation.data.currency
+      )?.countryCode;
+      
+      if (donation.data.taxDeductionCountry) {
+        setcountry(donation.data.taxDeductionCountry);
+        setIsTaxDeductible(true);
+        await loadPaymentSetup(donation.data.project.id, donation.data.taxDeductionCountry);
+      } else {
+        setcountry(newcountry);
+        await loadPaymentSetup(donation.data.project.id, newcountry);
+      }
+
+      setallowTaxDeductionChange(false);
+      
       settreeCount(donation.data.treeCount);
       if (donation.data.donor) {
         let contactDetails = {
@@ -317,7 +339,6 @@ export default function QueryParamProvider({ children }: any) {
         setContactDetails(contactDetails);
       }
 
-      // We can also take taxdeduction country from here
       // Check if the donation status is paid or successful - if yes directly show thank you page
       // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
       if (
@@ -335,7 +356,7 @@ export default function QueryParamProvider({ children }: any) {
         donation.data.paymentStatus === "pending"
       ) {
         setdonationStep(4);
-      } else if (donation.data.paymentStatus === "initiated") {
+      } else if (donation.data.paymentStatus === "initiated" || donation.data.paymentStatus === 'draft') {
         // Check if all contact details are present - if not send user to step 2 else step 3
         // Check if all payment cards are present - if yes then show it on step 3
         setisDirectDonation(true);
@@ -460,6 +481,7 @@ export default function QueryParamProvider({ children }: any) {
         selectedProjects,
         setSelectedProjects,
         allProjects,
+        allowTaxDeductionChange
       }}
     >
       {children}
