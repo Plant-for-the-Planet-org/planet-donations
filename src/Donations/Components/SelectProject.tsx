@@ -1,13 +1,18 @@
 import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
-import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import getImageUrl from "../../Utils/getImageURL";
 import { getCountryDataBy } from "../../Utils/countryUtils";
-import { getFilteredProjects, getRandomProjects, getSearchProjects } from "../../Utils/projects/filterProjects";
+import {
+  getFilteredProjects,
+  getRandomProjects,
+  getSearchProjects,
+} from "../../Utils/projects/filterProjects";
 import { useDebouncedEffect } from "../../Utils/useDebouncedEffect";
 import NotFound from "./../../../public/assets/icons/NotFound";
 import { useRouter } from "next/dist/client/router";
+import SearchIcon from "../../../public/assets/icons/SearchIcon";
+import themeProperties from "../../../styles/themeProperties";
 interface Props {}
 
 function SelectProject({}: Props): ReactElement {
@@ -34,47 +39,50 @@ function SelectProject({}: Props): ReactElement {
   React.useEffect(() => {
     if (trottledSearchValue && searchProjectResults) {
       setSelectedProjects(searchProjectResults);
-    }
-    else if(!trottledSearchValue){
-      const featuredProjects = getFilteredProjects(allProjects,'featured');
-      if(featuredProjects?.length < 6){
+    } else if (!trottledSearchValue) {
+      const featuredProjects = getFilteredProjects(allProjects, "featured");
+      if (featuredProjects?.length < 6) {
         setSelectedProjects(selectedProjects);
-      }else{
-        const randomProjects = getRandomProjects(featuredProjects,6);
-        setSelectedProjects(randomProjects)
+      } else {
+        const randomProjects = getRandomProjects(featuredProjects, 6);
+        setSelectedProjects(randomProjects);
       }
     }
   }, [searchProjectResults]);
 
   const router = useRouter();
 
-  const donateToProject=(slug)=>{
-    router.push(`?to=${slug}`)
-  }
+  const donateToProject = (slug) => {
+    router.push(`?to=${slug}`);
+  };  
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
-    <div className="select-project-container column">
-      <p className="title-text text-center">{t("findProjects")}</p>
-      <div
-        className={"form-field mt-30 w-100"}
-        style={{ maxWidth: "380px", alignSelf: "center" }}
-      >
-        <MaterialTextField
-          label={t("search")}
-          variant="outlined"
-          name="search"
-          onChange={(e) => setSearchValue(e.target.value)}
-          value={searchValue}
-          autoFocus
-        />
+    <div className="donations-forms-container column">
+      <p className="title-text">{t("findProjects")}</p>
+      <div className={"form-field mt-30 w-100"} style={{ alignSelf: "center" }}>
+        <div className="project-search-input">
+          <SearchIcon color={themeProperties.darkGrey} />
+          <input
+            type="text"
+            value={searchValue}
+            name="search"
+            placeholder={t("search")}
+            autoFocus
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
       </div>
 
       {selectedProjects.length > 0 ? (
         <div className="project-container mt-30">
           {selectedProjects.map((project: any, index) => {
             return (
-              <div onClick={()=>donateToProject(project.properties.slug)} key={index} className="project">
-                {project.properties.tpo.image && (
+              <div
+                onClick={() => donateToProject(project.properties.slug)}
+                key={index}
+                className="project"
+              >
+                {project.properties.tpo.image ? (
                   <img
                     className="project-organisation-image"
                     src={getImageUrl(
@@ -83,6 +91,10 @@ function SelectProject({}: Props): ReactElement {
                       project.properties.tpo.image
                     )}
                   />
+                ) : (
+                  <div className="project-organisation-image no-project-organisation-image">
+                    {project.properties.tpo.name.charAt(0)}
+                  </div>
                 )}
                 {project.properties.country && (
                   <p className="project-country">
@@ -94,20 +106,7 @@ function SelectProject({}: Props): ReactElement {
                     }
                   </p>
                 )}
-                {project.properties.image ? (
-                  <img
-                    className="project-background-image"
-                    src={getImageUrl(
-                      "project",
-                      "medium",
-                      project.properties.image
-                    )}
-                  />
-                ) : (
-                  <div className="project-background-image no-image"></div>
-                )}
-
-                <p className="project-name">{project.properties.tpo.name}</p>
+                <p className="project-name">{project.properties.name}</p>
               </div>
             );
           })}

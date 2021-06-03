@@ -9,6 +9,8 @@ import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
 import GmailIcon from "../../../public/assets/icons/GmailIcon";
 import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
+import getImageUrl from "../../Utils/getImageURL";
+import { useRouter } from "next/dist/client/router";
 
 interface Props {}
 
@@ -62,11 +64,16 @@ function Authentication({}: Props): ReactElement {
       setopenVerifyEmailModal(true);
     }
   };
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
+      if(localStorage.getItem('queryparams')){
+        const queryparams = localStorage.getItem('queryparams');
+        router.push(queryparams);
+      }
       // If details present store in contact details
       // If details are not present show message and logout user
     }
@@ -74,27 +81,39 @@ function Authentication({}: Props): ReactElement {
 
   const { t, ready } = useTranslation("common");
 
+  const loginUser = () => {
+    localStorage.setItem('queryparams',router.asPath);
+    loginWithRedirect({
+      redirectUri: window?.location.href,
+      ui_locales: localStorage.getItem("language") || "en",
+    });
+  };
   return (
     <div>
       {!isLoading && !isAuthenticated && (
-        <button
-          className="w-100 login-continue"
-          onClick={() =>
-            loginWithRedirect({
-              redirectUri: window?.location.href,
-              ui_locales: localStorage.getItem("language") || "en",
-            })
-          }
-        >
+        <button className="w-100 login-continue" onClick={() => loginUser()}>
           {t("loginContinue")}
         </button>
       )}
 
       {!isLoading && isAuthenticated && profile && (
         <div className="d-flex row justify-content-between w-100 mb-20">
-          <a href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`} target={"_blank"} className="user-profile">
-            {user.picture ? <img className="profile-pic" src={user.picture} alt={user.name} /> : <div className="profile-pic no-pic">{user.name.charAt(0)}</div> }
-            
+          <a
+            href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
+            target={"_blank"}
+            className="user-profile"
+          >
+            {profile.image ? (
+              <img
+                className="profile-pic"
+                src={getImageUrl("profile", "avatar", profile.image)}
+                alt={user.name}
+              />
+            ) : user.picture ? (
+              <img className="profile-pic" src={user.picture} alt={user.name} />
+            ) : (
+              <div className="profile-pic no-pic">{user.name.charAt(0)}</div>
+            )}
             <p>{user.name}</p>
           </a>
           <button

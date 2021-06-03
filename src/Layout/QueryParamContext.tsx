@@ -7,7 +7,11 @@ import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
 import { useTranslation } from "react-i18next";
-import { getFilteredProjects, getRandomProjects } from "../Utils/projects/filterProjects";
+import {
+  getFilteredProjects,
+  getRandomProjects,
+} from "../Utils/projects/filterProjects";
+import { getCountryDataBy } from "../Utils/countryUtils";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -45,11 +49,12 @@ export const QueryParamContext = React.createContext({
   isPaymentOptionsLoading: false,
   redirectstatus: "",
   returnTo: "",
-  isDirectDonation:false,
-  tenant:'',
-  selectedProjects:[],
-  setSelectedProjects:(value: Array<any>) => {},
-  allProjects:[]
+  isDirectDonation: false,
+  tenant: "",
+  selectedProjects: [],
+  setSelectedProjects: (value: Array<any>) => {},
+  allProjects: [],
+  allowTaxDeductionChange: true,
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -65,17 +70,16 @@ export default function QueryParamProvider({ children }: any) {
   const [language, setlanguage] = useState("en");
 
   const [donationID, setdonationID] = useState(null);
-  const [tenant, settenant] = useState('ten_I9TW3ncG');
+  const [tenant, settenant] = useState("ten_I9TW3ncG");
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
+  const [allowTaxDeductionChange, setallowTaxDeductionChange] = useState(true);
 
   const [isDirectDonation, setisDirectDonation] = React.useState(false);
 
-  const [
-    isPaymentOptionsLoading,
-    setIsPaymentOptionsLoading,
-  ] = React.useState<boolean>(false);
+  const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
+    React.useState<boolean>(false);
 
   const [paymentType, setPaymentType] = React.useState("");
 
@@ -118,7 +122,7 @@ export default function QueryParamProvider({ children }: any) {
     companyname: "",
   });
 
-  const [country, setcountry] = useState("");
+  const [country, setcountry] = useState<string|string[]>("");
   const [currency, setcurrency] = useState("");
   const [returnTo, setreturnTo] = useState("");
 
@@ -126,9 +130,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
 
-  const [selectedProjects,setSelectedProjects] = useState([]);
-  const [allProjects,setAllProjects] = useState([]);
-
+  const [selectedProjects, setSelectedProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]);
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -151,9 +154,20 @@ export default function QueryParamProvider({ children }: any) {
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
+  function testURL(url:string){
+    let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(url);
+  }
   React.useEffect(() => {
     if (router.query.return_to) {
-      setreturnTo(router.query.return_to);
+      if(testURL(router.query.return_to)){
+        setreturnTo(router.query.return_to);
+      }
     }
   }, [router.query.return_to]);
 
@@ -167,27 +181,31 @@ export default function QueryParamProvider({ children }: any) {
         setprojectDetails(project.data);
       }
     } catch (err) {
-      // console.log(err);
+      loadselectedProjects();
+      setdonationStep(0);
     }
   }
 
   async function loadselectedProjects() {
     try {
-      const projects = await getRequest(
-        `/app/projects?_scope=map`
-      );
+      const projects:any = await getRequest(`/app/projects?_scope=map`);
       if (projects.data) {
-        
-        setAllProjects(projects.data);
-        // const allowedDonationsProjects = getFilteredProjects(projects.data,'allow');
-        const featuredProjects = getFilteredProjects(projects.data,'featured');
-        if(featuredProjects?.length < 6){
+        let allowedDonationsProjects = projects.data.filter(
+          (project: { properties: { allowDonations: boolean } }) =>
+            project.properties.allowDonations === true
+        );
+
+        setAllProjects(allowedDonationsProjects);
+        const featuredProjects = getFilteredProjects(
+          allowedDonationsProjects,
+          "featured"
+        );
+        if (featuredProjects?.length < 6) {
           setSelectedProjects(selectedProjects);
-        }else{
-          const randomProjects = getRandomProjects(featuredProjects,6);
-          setSelectedProjects(randomProjects)
+        } else {
+          const randomProjects = getRandomProjects(featuredProjects, 6);
+          setSelectedProjects(randomProjects);
         }
-  
       }
     } catch (err) {
       // console.log(err);
@@ -195,24 +213,28 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   React.useEffect(() => {
-    if (router.query.to) {
-      loadProject(router.query.to);
-      setdonationStep(1);
-    }else{
-      loadselectedProjects();
-      setdonationStep(0);
+    if (router.isReady) {
+      if (router.query.to && !router.query.context) {
+        loadProject(router.query.to);
+        setdonationStep(1);
+      } else {
+        if (!router.query.context) {
+          loadselectedProjects();
+          setdonationStep(0);
+        }
+      }
     }
-  }, [router.query.to]);
+  }, [router.query.to, router.isReady]);
 
-  async function loadPaymentSetup(projectGUID) {
+  async function loadPaymentSetup(projectGUID:string | string[], paymentSetupCountry: string) {
     setIsPaymentOptionsLoading(true);
     try {
-      const paymentSetupData = await getRequest(
-        `/app/projects/${projectGUID}/paymentOptions?country=${country}`
+      const paymentSetupData:any = await getRequest(
+        `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`
       );
       if (paymentSetupData.data) {
         setpaymentSetup(paymentSetupData.data);
-        setcurrency(paymentSetupData.data.currency);        
+        setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
@@ -225,39 +247,47 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      loadPaymentSetup(router.query.to);
+      loadPaymentSetup(router.query.to, country);
     }
   }, [router.query.to, country]);
 
   async function loadConfig() {
     let userLang;
     if (localStorage) {
-      userLang = localStorage.getItem('language') || 'en';
+      userLang = localStorage.getItem("language") || "en";
     } else {
-      userLang = 'en';
+      userLang = "en";
     }
     try {
-      const config = await getRequest(
-        `/public/v1.2/${userLang}/config`
-      );
+      const config:any = await getRequest(`/public/v1.2/${userLang}/config`);
       if (config.data) {
-        setcountry(config.data.country);
-        setContactDetails({
-          ...contactDetails,
-          city: (config.data.loc && config.data.loc.city) ? config.data.loc.city : '',
-          zipCode: (config.data.loc && config.data.loc.postalCode) ? config.data.loc.postalCode : ''
-        })
+        if(!router.query.country){
+          setcountry(config.data.country);
+        }
+        if (!router.query.context) {
+          setContactDetails({
+            ...contactDetails,
+            city:
+              config.data.loc && config.data.loc.city
+                ? config.data.loc.city
+                : "",
+            zipCode:
+              config.data.loc && config.data.loc.postalCode
+                ? config.data.loc.postalCode
+                : "",
+          });
+        }
       }
     } catch (err) {
       // console.log(err);
     }
   }
 
-  React.useEffect(()=>{
-    loadConfig();
-  },[])
-
-
+  React.useEffect(() => {
+    if (router.isReady) {
+      loadConfig();
+    }
+  }, [router.isReady]);
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
 
@@ -269,37 +299,98 @@ export default function QueryParamProvider({ children }: any) {
 
   // Donation ID = donationid => This will be received from the URL params
   async function loadDonation() {
-    const donation = await getRequest(
-      `/app/donations/${router.query.context}`
-    );
+    try {
+      const donation:any = await getRequest(
+        `/app/donations/${router.query.context}`
+      );
 
-    if (donation.status === 200) {
-      setdonationID(router.query.context);
-      // if the donation is present means the donation is already created
-      // Set shouldCreateDonation as false
-      setshouldCreateDonation(false)
-       // fetch project - payment setup
-      loadProject(donation.data.project.id);
-      loadPaymentSetup(donation.data.project.id);
-      settreeCount(donation.data.treeCount);
+      if (donation.status === 200) {
+        setdonationID(router.query.context);
+        // if the donation is present means the donation is already created
+        // Set shouldCreateDonation as false
+        setshouldCreateDonation(false);
+        // fetch project - payment setup
+        await loadProject(donation.data.project.id);
 
-      // Check if the donation status is paid or successful - if yes directly show thank you page
-      // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
-      if((router.query.method === 'Sofort' || router.query.method === 'Giropay') && (router.query.redirect_status === 'succeeded' || router.query.redirect_status === 'failed') && router.query.payment_intent){
-        setdonationStep(4)
-      }
-      else if(donation.data.paymentStatus === 'success' || donation.data.paymentStatus === 'paid' || donation.data.paymentStatus === 'failed' || donation.data.paymentStatus === 'pending'){
-        setdonationStep(4)
-      }
-      else if(donation.data.paymentStatus === 'initiated' ){
-        // Check if all contact details are present - if not send user to step 2 else step 3
-        // Check if all payment cards are present - if yes then show it on step 3
-        setisDirectDonation(true)
-        setdonationStep(3)
-      }
+        const newcountry = getCountryDataBy(
+          "currencyCode",
+          donation.data.currency
+        )?.countryCode;
 
-    } else {
-      // SET Error that no donation is found
+        if (donation.data.taxDeductionCountry) {
+          setcountry(donation.data.taxDeductionCountry);
+          setIsTaxDeductible(true);
+          await loadPaymentSetup(
+            donation.data.project.id,
+            donation.data.taxDeductionCountry
+          );
+        } else {
+          setcountry(newcountry);
+          await loadPaymentSetup(donation.data.project.id, newcountry);
+        }
+
+        setallowTaxDeductionChange(false);
+
+        settreeCount(donation.data.treeCount);
+        if (donation.data.donor) {
+          let contactDetails = {
+            firstname: donation.data.donor.firstname
+              ? donation.data.donor.firstname
+              : "",
+            lastname: donation.data.donor.lastname
+              ? donation.data.donor.lastname
+              : "",
+            email: donation.data.donor.email ? donation.data.donor.email : "",
+            address: donation.data.donor.address
+              ? donation.data.donor.address
+              : "",
+            city: donation.data.donor.city ? donation.data.donor.city : "",
+            zipCode: donation.data.donor.zipCode
+              ? donation.data.donor.zipCode
+              : "",
+            country: donation.data.donor.country
+              ? donation.data.donor.country
+              : "",
+            companyname: donation.data.donor.companyname
+              ? donation.data.donor.companyname
+              : "",
+          };
+          setContactDetails(contactDetails);
+        }
+
+        // Check if the donation status is paid or successful - if yes directly show thank you page
+        // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
+        if (
+          (router.query.method === "Sofort" ||
+            router.query.method === "Giropay") &&
+          (router.query.redirect_status === "succeeded" ||
+            router.query.redirect_status === "failed") &&
+          router.query.payment_intent
+        ) {
+          setdonationStep(4);
+        } else if (
+          donation.data.paymentStatus === "success" ||
+          donation.data.paymentStatus === "paid" ||
+          donation.data.paymentStatus === "failed" ||
+          donation.data.paymentStatus === "pending"
+        ) {
+          setdonationStep(4);
+        } else if (
+          donation.data.paymentStatus === "initiated" ||
+          donation.data.paymentStatus === "draft"
+        ) {
+          // Check if all contact details are present - if not send user to step 2 else step 3
+          // Check if all payment cards are present - if yes then show it on step 3
+          setisDirectDonation(true);
+          setdonationStep(3);
+        }
+      } else {
+        // SET Error that no donation is found
+        setdonationStep(1);
+      }
+    } catch(err) {
+      loadselectedProjects();
+      setdonationStep(0);
     }
   }
   React.useEffect(() => {
@@ -310,16 +401,20 @@ export default function QueryParamProvider({ children }: any) {
 
   // support = s => Fetch the user data from api and load in gift details
   async function loadPublicUserData(slug: any) {
-    const newProfile = await getRequest(`/app/profiles/${slug}`);
-    if (newProfile.data.type !== 'tpo') {
-      setisGift(true);
-      setgiftDetails({
-        recipientName: newProfile.data.displayName,
-        recipientEmail: "",
-        giftMessage: "",
-        type: "direct",
-        recipientTreecounter: newProfile.data.slug,
-      })
+    try {
+      const newProfile = await getRequest(`/app/profiles/${slug}das`);
+      if (newProfile.data.type !== "tpo") {
+        setisGift(true);
+        setgiftDetails({
+          recipientName: newProfile.data.displayName,
+          recipientEmail: "",
+          giftMessage: "",
+          type: "direct",
+          recipientTreecounter: newProfile.data.slug,
+        });
+      }
+    } catch(err) {
+      // console.log("Error",err);
     }
   }
 
@@ -331,21 +426,32 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.tenant) {
+      // TODO => verify tenant before setting it
       settenant(router.query.tenant);
       localStorage.setItem("tenant", router.query.tenant);
+    } else {
+      localStorage.removeItem("tenant");
     }
+    return () => {
+      localStorage.removeItem("tenant");
+    };
   }, [router.query.tenant]);
 
   // Tree Count = treecount => Received from the URL
-
   React.useEffect(() => {
     if (router.query.trees) {
-      settreeCount(Number(router.query.trees));
+      // Do not allow 0 or negative numbers and string
+      if(Number(router.query.trees) > 0){
+        settreeCount(Number(router.query.trees));
+      }else{
+        settreeCount(50)
+      }
     }
   }, [router.query.trees]);
 
   React.useEffect(() => {
     if (router.query.method) {
+      // TODO => only allow the ones which we use, add an array and check if it exists in that array
       setPaymentType(router.query.method);
     }
   }, [router.query.method]);
@@ -411,7 +517,8 @@ export default function QueryParamProvider({ children }: any) {
         tenant,
         selectedProjects,
         setSelectedProjects,
-        allProjects
+        allProjects,
+        allowTaxDeductionChange,
       }}
     >
       {children}

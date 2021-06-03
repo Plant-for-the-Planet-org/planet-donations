@@ -54,7 +54,7 @@ function Footer({}: Props): ReactElement {
           <a
             target="_blank"
             rel="noreferrer"
-            href="mailto:info@plant-for-the-planet.org"
+            href="mailto:support@plant-for-the-planet.org"
           >
             {t("contact")}
           </a>

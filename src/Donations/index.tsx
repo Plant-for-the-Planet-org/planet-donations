@@ -22,7 +22,7 @@ function Donations({}: Props): ReactElement {
     <div className="donations-container">
       <div className="donations-card-container">
         {/* Left panel */}
-        {donationStep !== 0 && <DonationInfo /> }
+        <DonationInfo />
 
         {/* Right panel */}
         {donationStep === 0 && <SelectProject />}
