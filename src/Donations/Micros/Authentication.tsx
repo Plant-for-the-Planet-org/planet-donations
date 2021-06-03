@@ -9,6 +9,7 @@ import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
 import GmailIcon from "../../../public/assets/icons/GmailIcon";
 import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
+import getImageUrl from "../../Utils/getImageURL";
 
 interface Props {}
 
@@ -93,8 +94,7 @@ function Authentication({}: Props): ReactElement {
       {!isLoading && isAuthenticated && profile && (
         <div className="d-flex row justify-content-between w-100 mb-20">
           <a href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`} target={"_blank"} className="user-profile">
-            {user.picture ? <img className="profile-pic" src={user.picture} alt={user.name} /> : <div className="profile-pic no-pic">{user.name.charAt(0)}</div> }
-            
+            {profile.image ? <img className="profile-pic" src={getImageUrl('profile', 'avatar',profile.image)} alt={user.name} /> : user.picture ? <img className="profile-pic" src={user.picture} alt={user.name} /> : <div className="profile-pic no-pic">{user.name.charAt(0)}</div> }
             <p>{user.name}</p>
           </a>
           <button
