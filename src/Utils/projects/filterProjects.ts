@@ -61,8 +61,6 @@ export function getSearchProjects(projects: Array<any>, keyword: string) {
 }
 
 export function getRandomProjects(arr:Array<any>, n:number) {
-  console.log('arr',arr);
-  
   var result = new Array(n),
       len = arr.length,
       taken = new Array(len);
