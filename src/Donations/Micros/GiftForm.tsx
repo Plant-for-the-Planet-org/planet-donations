@@ -77,43 +77,44 @@ export default function GiftForm({}: Props): ReactElement {
               )}
             </div>
 
-            <div className={"form-field mt-30"}>
-              <MaterialTextField
-                multiline
-                rows="3"
-                rowsMax="4"
-                label={t("giftMessage")}
-                variant="outlined"
-                name={"giftMessage"}
-                inputRef={register()}
-              />
-            </div>
-
             {showEmail ? (
-              <div className={"form-field mt-30"}>
-                <div className="d-flex row justify-content-between mb-10">
-                  <p>{t("giftNotification")}</p>
-                  <button
-                    onClick={() => setshowEmail(false)}
-                    className={"singleGiftRemove"}
-                  >
-                    {t("removeRecipient")}
-                  </button>
-                </div>
+              <div>
+                <div className={"form-field mt-30"}>
+                  <div className="d-flex row justify-content-between mb-10">
+                    <p>{t("giftNotification")}</p>
+                    <button
+                      onClick={() => setshowEmail(false)}
+                      className={"singleGiftRemove"}
+                    >
+                      {t("removeRecipient")}
+                    </button>
+                  </div>
 
-                <MaterialTextField
-                  name={"recipientEmail"}
-                  label={t("recipientEmail")}
-                  variant="outlined"
-                  inputRef={register({
-                    required: true,
-                    pattern:
-                      /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                  })}
-                />
-                {errors.recipientEmail && (
-                  <span className={"form-errors"}>{t("emailRequired")}</span>
-                )}
+                  <MaterialTextField
+                    name={"recipientEmail"}
+                    label={t("recipientEmail")}
+                    variant="outlined"
+                    inputRef={register({
+                      required: true,
+                      pattern:
+                        /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                    })}
+                  />
+                  {errors.recipientEmail && (
+                    <span className={"form-errors"}>{t("emailRequired")}</span>
+                  )}
+                </div>
+                <div className={"form-field mt-30"}>
+                  <MaterialTextField
+                    multiline
+                    rows="3"
+                    rowsMax="4"
+                    label={t("giftMessage")}
+                    variant="outlined"
+                    name={"giftMessage"}
+                    inputRef={register()}
+                  />
+                </div>
               </div>
             ) : (
               <div className={"form-field mt-30"}>
@@ -140,12 +141,12 @@ export default function GiftForm({}: Props): ReactElement {
               name: giftDetails.recipientName,
             })}
           </p>
-            <button
-              onClick={() => resetGiftForm()}
-              className={"singleGiftRemove"}
-            >
-              {t('removeRecipient')}
-            </button>
+          <button
+            onClick={() => resetGiftForm()}
+            className={"singleGiftRemove"}
+          >
+            {t("removeRecipient")}
+          </button>
         </div>
       )}
     </div>

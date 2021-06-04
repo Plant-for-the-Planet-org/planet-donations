@@ -24,6 +24,9 @@
 .flex-1{
   flex: 1;
 }
+.flex-wrap{
+  flex-wrap: wrap;
+}
 .mt-10 {
   margin-top: 10px;
 }
@@ -42,11 +45,26 @@
 .mb-30 {
   margin-bottom: 30px;
 }
+.mr-10 {
+  margin-right: 10px;
+}
+.mr-20 {
+  margin-right: 20px;
+}
+.mr-30 {
+  margin-right: 30px;
+}
 .p-20{
   padding: 20px;
 }
 .w-100 {
   width: 100% !important;
+}
+.w-80 {
+  width: 80% !important;
+}
+.w-60 {
+  width: 60% !important;
 }
 
 .text-center{
@@ -102,4 +120,32 @@
 
 .separator-text:not(:empty)::after {
   margin-left: .5em;
+}
+
+.spinner {
+  border: 2px solid $primaryDarkColor;
+  border-radius: 50%;
+  border-top: 2px solid transparent;
+  width: 24px !important;
+  height: 24px !important;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

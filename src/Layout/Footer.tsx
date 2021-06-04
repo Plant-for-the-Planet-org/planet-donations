@@ -54,7 +54,7 @@ function Footer({}: Props): ReactElement {
           <a
             target="_blank"
             rel="noreferrer"
-            href="mailto:info@plant-for-the-planet.org"
+            href="mailto:support@plant-for-the-planet.org"
           >
             {t("contact")}
           </a>
@@ -124,7 +124,7 @@ function CookiePolicy() {
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
-        className="secondary-button mt-20"
+        className="primary-button mt-20"
       >
         {t("acceptClose")}
       </button>
