@@ -4,6 +4,7 @@ import {
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
+import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 interface Props {
   paymentSetup: any;
@@ -12,6 +13,7 @@ interface Props {
   currency: string;
   donationID: any;
   payDonationFunction: Function;
+  setPaymentError: Function;
 }
 
 function NewPaypal({
@@ -21,6 +23,7 @@ function NewPaypal({
   currency,
   donationID,
   payDonationFunction,
+  setPaymentError
 }: Props): ReactElement {
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
@@ -29,23 +32,24 @@ function NewPaypal({
     currency: currency,
   };
 
+  const { donationUid } = React.useContext(QueryParamContext);
+
   function createOrder(data, actions) {
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: {
-              value: treeCount * treeCost,
-              currency: currency,
-            },
-            invoice_id: `planet-${donationID}`,
-            custom_id:donationID
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: (treeCount * treeCost).toFixed(2),
+            currency: currency,
           },
-        ],
-        application_context: {
-          brand_name: "Plant-for-the-Planet",
+          invoice_id: `planet-${donationID}`,
+          custom_id: donationUid,
         },
-      })
+      ],
+      application_context: {
+        brand_name: "Plant-for-the-Planet",
+      },
+    });
   }
 
   function onApprove(data, actions) {
@@ -53,23 +57,18 @@ function NewPaypal({
       // This function shows a transaction success message to your buyer.
       data = {
         ...data,
-        type:"sdk"
-      }
+        type: "sdk",
+      };
       payDonationFunction("paypal", data);
     });
   }
 
   const onError = (data) => {
-    payDonationFunction("paypal", data);
+    setPaymentError(`Your order ${data.orderID} failed due to some error.`)
   };
 
   const onCancel = (data) => {
-    let error = {
-      ...data,
-      type: "error",
-      error: { message: "Transaction cancelled" },
-    };
-    payDonationFunction("paypal", error);
+    setPaymentError('Order was cancelled, please try again')
   };
 
   return (

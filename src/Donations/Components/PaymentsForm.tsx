@@ -53,6 +53,7 @@ function PaymentsForm({}: Props): ReactElement {
     giftDetails,
     isTaxDeductible,
     isDirectDonation,
+    setDonationUid
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -115,6 +116,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
+      setDonationUid(donation.uid)
     }
     setisDonationLoading(false)
   }
@@ -287,6 +289,7 @@ function PaymentsForm({}: Props): ReactElement {
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}
+                    setPaymentError={setPaymentError}
                   />
                 )}
               </div>
