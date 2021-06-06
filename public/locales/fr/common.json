@@ -91,5 +91,8 @@
   "donateWith": "Faites un don avec",
   "donating": "Donation ",
   "addEmail": "Ajouter un courriel et envoyer une invitation",
-  "removeRecipient": "Retirer"
+  "removeRecipient": "Retirer",
+  "findProjects": "Trouver des projets",
+  "search": "Recherche",
+  "noProjectsFound": "Aucun projet trouvé"
 }

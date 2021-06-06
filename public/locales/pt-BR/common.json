@@ -91,5 +91,8 @@
   "donateWith": "Doe com",
   "donating": "Doando ",
   "addEmail": "Adicionar e-mail e enviar convite",
-  "removeRecipient": "Remover"
+  "removeRecipient": "Remover",
+  "findProjects": "Encontrar Projetos",
+  "search": "Pesquisa",
+  "noProjectsFound": "Nenhum projeto encontrado"
 }
