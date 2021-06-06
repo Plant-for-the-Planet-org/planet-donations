@@ -8,6 +8,7 @@ import theme from "./../styles/theme";
 import "./../styles/globals.scss";
 import "./../styles/footer.scss";
 import "./../styles/donations.scss";
+import "./../styles/projects.scss";
 import "./../styles/common.scss";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { appWithTranslation } from "next-i18next";

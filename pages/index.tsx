@@ -5,7 +5,7 @@ interface Props {}
 
 function index({}: Props): ReactElement {
   return (
-    <div>
+    <div style={{flexGrow:1}}>
       <Donations/>
     </div>
   );

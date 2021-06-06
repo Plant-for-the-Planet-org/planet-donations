@@ -39,6 +39,7 @@ axiosInstance.interceptors.request.use(
 );
 
 // Add a response interceptor which checks for error code for all the requests
+// TODO: handle 401 and 403 (logout or retry)
 axiosInstance.interceptors.response.use(
   undefined,
   async (err) => {
@@ -50,7 +51,7 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-const request = async (url:string, method = 'GET', token:any = false, data:any = undefined) => {
+const request = async (url:string, method = 'GET', token:any = false, data:any = undefined):Promise<any> => {
   try {
     //  sets the options which is passed to axios to make the request
     const options = {

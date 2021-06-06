@@ -4,8 +4,10 @@
   "recipientName": "Name des Empfängers",
   "recipientNameRequired": "Name des Empfängers ist erforderlich",
   "email": "E-Mail",
+  "recipientEmail": "E-Mail des Empfängers",
   "emailRequired": "E-Mail ist erforderlich",
   "giftMessage": "Nachricht zum Geschenk",
+  "giftNotification": "Geschenkbenachrichtigung",
   "continue": "Weiter",
   "loginContinue": "Einloggen & Weiter",
   "contactDetails": "Kontaktdetails",
@@ -90,6 +92,6 @@
   "or": "ODER",
   "donateWith": "Spende mit",
   "donating": "Spenden ",
-  "addEmail": "E-Mail hinzufügen & Einladung senden",
+  "addEmail": "Geschenkbenachrichtigung hinzufügen",
   "removeRecipient": "Entfernen"
 }

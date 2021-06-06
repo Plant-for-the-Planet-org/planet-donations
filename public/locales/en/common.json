@@ -4,10 +4,10 @@
   "recipientName": "Recipient Name",
   "recipientNameRequired": "Recipient Name is required",
   "email": "Email",
-  "recipientEmail":"Recipient Email",
+  "recipientEmail": "Recipient Email",
   "emailRequired": "Email is required",
   "giftMessage": "Gift Message",
-  "giftNotification":"Gift Notification",
+  "giftNotification": "Gift Notification",
   "continue": "Continue",
   "loginContinue": "Login & Continue",
   "contactDetails": "Contact Details",
@@ -93,5 +93,8 @@
   "donateWith": "Donate with",
   "donating": "Donating ",
   "addEmail": "Add Gift Notification",
-  "removeRecipient": "Remove"
+  "removeRecipient": "Remove",
+  "findProjects":"Find Projects",
+  "search":"Search",
+  "noProjectsFound": "No projects found"
 }
