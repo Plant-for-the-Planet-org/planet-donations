@@ -93,5 +93,8 @@
   "donateWith": "Spende mit",
   "donating": "Spenden ",
   "addEmail": "Geschenkbenachrichtigung hinzufügen",
-  "removeRecipient": "Entfernen"
+  "removeRecipient": "Entfernen",
+  "findProjects": "Projekte finden",
+  "search": "Suche",
+  "noProjectsFound": "Keine Projekte gefunden"
 }
