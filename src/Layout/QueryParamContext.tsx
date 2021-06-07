@@ -55,6 +55,8 @@ export const QueryParamContext = React.createContext({
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
   allowTaxDeductionChange: true,
+  donationUid:null, 
+  setDonationUid: (value: string) => ""
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -77,6 +79,8 @@ export default function QueryParamProvider({ children }: any) {
   const [allowTaxDeductionChange, setallowTaxDeductionChange] = useState(true);
 
   const [isDirectDonation, setisDirectDonation] = React.useState(false);
+
+  const [donationUid, setDonationUid] = useState(null)
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
@@ -519,6 +523,8 @@ export default function QueryParamProvider({ children }: any) {
         setSelectedProjects,
         allProjects,
         allowTaxDeductionChange,
+        donationUid,
+        setDonationUid
       }}
     >
       {children}
