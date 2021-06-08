@@ -1,7 +1,7 @@
 import { useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
 import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
 import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";

@@ -4,7 +4,7 @@ import ContactsForm from "./Components/ContactsForm";
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";

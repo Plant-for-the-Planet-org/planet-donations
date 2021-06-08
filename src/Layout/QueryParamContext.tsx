@@ -6,7 +6,7 @@ import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   getFilteredProjects,
   getRandomProjects,
