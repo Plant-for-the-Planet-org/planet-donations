@@ -69,7 +69,7 @@ export default function QueryParamProvider({ children }: any) {
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
-  const [language, setlanguage] = useState("en");
+  const [language, setlanguage] = useState(typeof window !== 'undefined' && localStorage.getItem("language") ? localStorage.getItem("language") : "en");
 
   const [donationID, setdonationID] = useState(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
@@ -145,16 +145,16 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
-    if (router.locale) {
-      setlanguage(router.locale);
-    }
-  }, [router.locale]);
+  // React.useEffect(() => {
+  //   if (router.locale) {
+  //     setlanguage(router.locale);
+  //   }
+  // }, [router.locale]);
 
-  React.useEffect(() => {
+  React.useEffect(() => {    
     i18n.changeLanguage(language);
-    localStorage.setItem("language", language); // value name also used by i18n
-  }, [language]);
+    localStorage.setItem("language", language)
+  }, [language,router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
