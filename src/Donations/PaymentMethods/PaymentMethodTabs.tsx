@@ -144,6 +144,7 @@ export default function PaymentMethodTabs({
           paymentSetup={paymentSetup}
           continueNext={() => {}}
           isPaymentPage
+          paymentLabel={`${treeCount} trees in ${projectDetails.country}, Plant-for-the-Planet`}
         />
       )}
     </div>

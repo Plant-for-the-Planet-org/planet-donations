@@ -286,6 +286,7 @@ function DonationsForm() {
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
                     isPaymentPage={false}
+                    paymentLabel={`${treeCount} trees in ${projectDetails.country}, Plant-for-the-Planet`}
                   />
                 ) : (
                   <div className="mt-20 w-100">
