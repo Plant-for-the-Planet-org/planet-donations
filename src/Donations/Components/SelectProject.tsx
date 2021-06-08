@@ -53,7 +53,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push(`/?to=${slug}`);
+    router.push(`?to=${slug}`);
   };  
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
