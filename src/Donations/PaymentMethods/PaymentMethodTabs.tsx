@@ -5,6 +5,7 @@ import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
 import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { getCountryDataBy } from "../../Utils/countryUtils";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
 
@@ -24,7 +25,7 @@ export default function PaymentMethodTabs({
   showSofort,
   showCC,
   showNativePay,
-  onNativePaymentFunction
+  onNativePaymentFunction,
 }: any) {
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
@@ -57,13 +58,8 @@ export default function PaymentMethodTabs({
     );
   }
 
-  const {
-    country,
-    currency,
-    projectDetails,
-    paymentSetup,
-    treeCount,
-  } = React.useContext(QueryParamContext);
+  const { country, currency, projectDetails, paymentSetup, treeCount } =
+    React.useContext(QueryParamContext);
 
   return (
     <div className={"payment-methods-tabs-container"}>
@@ -144,7 +140,9 @@ export default function PaymentMethodTabs({
           paymentSetup={paymentSetup}
           continueNext={() => {}}
           isPaymentPage
-          paymentLabel={`${treeCount} trees in ${projectDetails.country}, Plant-for-the-Planet`}
+          paymentLabel={`${treeCount} trees in ${
+            getCountryDataBy("countryCode", projectDetails.country)?.countryName
+          }, Plant-for-the-Planet`}
         />
       )}
     </div>

@@ -21,6 +21,7 @@ import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getCountryDataBy } from "../../Utils/countryUtils";
 
 function DonationsForm() {
   const {
@@ -286,7 +287,9 @@ function DonationsForm() {
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
                     isPaymentPage={false}
-                    paymentLabel={`${treeCount} trees in ${projectDetails.country}, Plant-for-the-Planet`}
+                    paymentLabel={`${treeCount} trees in ${
+                      getCountryDataBy("countryCode", projectDetails.country)?.countryName
+                    }, Plant-for-the-Planet`}
                   />
                 ) : (
                   <div className="mt-20 w-100">
