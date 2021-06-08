@@ -80,6 +80,7 @@ function ContactsForm({}: Props): ReactElement {
                 variant="outlined"
                 name="firstname"
                 defaultValue={contactDetails.firstname}
+                data-test-id="test-firstName"
               />
               {errors.firstname && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
@@ -93,6 +94,7 @@ function ContactsForm({}: Props): ReactElement {
                 variant="outlined"
                 name="lastname"
                 defaultValue={contactDetails.lastname}
+                data-test-id="test-lastName"
               />
               {errors.lastname && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
@@ -111,6 +113,7 @@ function ContactsForm({}: Props): ReactElement {
               variant="outlined"
               name="email"
               defaultValue={contactDetails.email}
+              data-test-id="test-email"
             />
             {errors.email && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
@@ -124,6 +127,7 @@ function ContactsForm({}: Props): ReactElement {
               variant="outlined"
               name="address"
               defaultValue={contactDetails.address}
+              data-test-id="test-address"
             />
             {errors.address && (
               <span className={"form-errors"}>{t("addressRequired")}</span>
@@ -138,6 +142,7 @@ function ContactsForm({}: Props): ReactElement {
                 variant="outlined"
                 name="city"
                 defaultValue={contactDetails.city}
+                data-test-id="test-city"
               />
               {errors.city && (
                 <span className={"form-errors"}>{t("cityRequired")}</span>
@@ -155,6 +160,7 @@ function ContactsForm({}: Props): ReactElement {
                   variant="outlined"
                   name="zipCode"
                   defaultValue={contactDetails.zipCode}
+                  data-test-id="test-zipCode"
                 />
               )}
               {errors.zipCode && (
@@ -249,6 +255,7 @@ function ContactsForm({}: Props): ReactElement {
             <button
               onClick={handleSubmit(onSubmit)}
               className={"primary-button mt-30"}
+              data-test-id="test-continueToPayment"
             >
               {t("continue")}
             </button>
