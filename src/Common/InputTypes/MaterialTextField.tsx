@@ -11,8 +11,8 @@ const MaterialTextField = withStyles({
     '& label': {
       color: '#2F3336',
       fontFamily: themeProperties.fontFamily,
-      fontSize: '12px',
-      top:'-2px'
+      fontSize: '14px',
+      top:'-3px'
     },
     '& .MuiInputLabel-outlined.MuiInputLabel-shrink':{
         transform:'translate(14px, -4px) scale(0.75)'

@@ -1,17 +1,18 @@
 import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Donations from './../src/Donations'
+import { useRouter } from "next/dist/client/router";
+
 interface Props {}
 
-function index({}: Props): ReactElement {
-  return (
-    <div style={{flexGrow:1}}>
-      <Donations/>
-    </div>
-  );
+function Custom404({}: Props): ReactElement {
+  const router = useRouter();
+  if (typeof window !== 'undefined') {
+    router.push('/');
+  }
+  return <div>Loading...</div>;
 }
 
-export default index;
+export default Custom404;
 
 export const getStaticProps = async ({ locale }) => ({
   props: {

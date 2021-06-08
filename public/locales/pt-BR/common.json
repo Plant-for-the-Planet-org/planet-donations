@@ -2,8 +2,10 @@
   "recipientName": "Nome do Destinatário",
   "recipientNameRequired": "Nome do destinatário é obrigatório",
   "email": "Email",
+  "recipientEmail": "E-mail do destinatário",
   "emailRequired": "O e-mail é obrigatório",
   "giftMessage": "Mensagem de Presente",
+  "giftNotification": "Notificação de Presente",
   "continue": "Continuar",
   "loginContinue": "Login e Continuar",
   "contactDetails": "Detalhes para contato",
@@ -87,5 +89,10 @@
   "donateNow": "Doe Agora",
   "or": "OU",
   "donateWith": "Doe com",
-  "donating": "Doando "
+  "donating": "Doando ",
+  "addEmail": "Adicionar e-mail e enviar convite",
+  "removeRecipient": "Remover",
+  "findProjects": "Encontrar Projetos",
+  "search": "Pesquisa",
+  "noProjectsFound": "Nenhum projeto encontrado"
 }

@@ -108,7 +108,12 @@ button {
   justify-content: center;
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-  text-decoration: none;
+  text-decoration: none;  
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
 }
 .secondary-button {
   min-width: 240px;
@@ -169,6 +174,7 @@ button{
   cursor: pointer;
   color: $dangerColor;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .modal-container {
@@ -189,7 +195,6 @@ button{
   overflow: hidden;
   outline: none;
   min-width: 320px;
-  overflow-y: scroll;
 }
 
 .MuiTypography-root{

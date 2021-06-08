@@ -30,13 +30,6 @@ export function formatAmountForStripe(
   const parts = numberFormat.formatToParts(amount);
   let zeroDecimalCurrency = true;
 
-  // https://gist.github.com/ljharb/58faf1cfcb4e6808f74aae4ef7944cff
-  // for (const part of parts) {
-  //   if (part.type === 'decimal') {
-  //     zeroDecimalCurrency = false;
-  //   }
-  // }
-
   parts.forEach((part) => {
     if (part.type === 'decimal') {
       zeroDecimalCurrency = false;

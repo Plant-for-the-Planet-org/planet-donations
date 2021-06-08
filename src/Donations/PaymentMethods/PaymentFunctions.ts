@@ -205,7 +205,7 @@ export async function payDonationFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -240,7 +240,10 @@ export async function payDonationFunction({
         setPaymentError(paidDonation.data.message);
       } else if (
         paidDonation.data.paymentStatus === "success" ||
-        paidDonation.data.paymentStatus === "pending"
+        paidDonation.data.paymentStatus === "pending" ||
+        paidDonation.data.status === "success" || 
+        paidDonation.data.status === "paid" ||
+        paidDonation.data.paymentStatus === "paid"
       ) {
         setIsPaymentProcessing(false);
         setdonationStep(4);
@@ -258,7 +261,7 @@ export async function payDonationFunction({
           setdonationStep,
           contactDetails,
           token,
-          country
+          country,
         });
       }
     }
@@ -292,7 +295,7 @@ export async function handleSCAPaymentFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -375,15 +378,15 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Giropay`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {
@@ -408,15 +411,15 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Sofort`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {

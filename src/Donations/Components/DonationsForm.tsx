@@ -143,10 +143,10 @@ function DonationsForm() {
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
     <div className="donations-forms-container">
-      <div className="donations-form">
+      <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">Donate</p>
+          <p className="title-text">{t('donate')}</p>
           <div className="donations-gift-container mt-10">
             <GiftForm />
           </div>
@@ -225,14 +225,16 @@ function DonationsForm() {
                     setopenCurrencyModal(true);
                   }}
                   className="text-bold text-primary"
+                  style={{marginRight:'4px'}}
                 >
                   {currency}{" "}
+                  <DownArrowIcon color={themeProperties.primaryColor} />
                   {getFormatedCurrency(
                     i18n.language,
                     "",
                     Number(paymentSetup.treeCost)
                   )}{" "}
-                  <DownArrowIcon color={themeProperties.primaryColor} />
+                  
                 </button>
                 {t("perTree")}
               </p>

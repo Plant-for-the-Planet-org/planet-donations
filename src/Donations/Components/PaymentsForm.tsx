@@ -15,24 +15,26 @@ import {
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
-import PaypalPayments from "../PaymentMethods/PaypalPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
+import NewPaypal from "../PaymentMethods/NewPaypal";
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
-
+  
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+  const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  const [isDonationLoading, setisDonationLoading] = React.useState(false)
   const {
     paymentSetup,
     country,
@@ -51,6 +53,7 @@ function PaymentsForm({}: Props): ReactElement {
     giftDetails,
     isTaxDeductible,
     isDirectDonation,
+    setDonationUid
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -90,6 +93,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       token = await getAccessTokenSilently();
     }
+    setisDonationLoading(true)
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -111,7 +115,10 @@ function PaymentsForm({}: Props): ReactElement {
       setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
+      setisCreatingDonation(false);
+      setDonationUid(donation.uid)
     }
+    setisDonationLoading(false)
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
@@ -128,9 +135,14 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
+      setisCreatingDonation(true);
       getDonation();
     }
   }, [shouldCreateDonation]);
+
+  React.useEffect(()=>{
+    setPaymentType("CARD")
+  },[currency])
 
   return ready ? (
     isPaymentProcessing ? (
@@ -183,38 +195,45 @@ function PaymentsForm({}: Props): ReactElement {
 
           {paymentError && <div className={"text-danger"}>{paymentError}</div>}
 
-          {donationID && paymentSetup && paymentSetup.gateways && (
-            <PaymentMethodTabs
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              showCC={paymentSetup?.gateways.stripe.methods.includes(
-                "stripe_cc"
-              )}
-              showGiroPay={
-                country === "DE" &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
-              }
-              showSepa={
-                currency === "EUR" &&
-                isAuthenticated &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
-              }
-              showSofort={
-                sofortCountries.includes(country) &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sofort")
-              }
-              showPaypal={
-                paypalCurrencies.includes(currency) &&
-                paymentSetup?.gateways.paypal
-              }
-              showNativePay={
-                paymentSetup?.gateways?.stripe?.account && currency
-              }
-              onNativePaymentFunction={onPaymentFunction}
-            />
-          )}
+          {!isCreatingDonation &&
+            donationID &&
+            paymentSetup &&
+            paymentSetup.gateways && (
+              <PaymentMethodTabs
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+                showCC={paymentSetup?.gateways.stripe.methods.includes(
+                  "stripe_cc"
+                )}
+                showGiroPay={
+                  country === "DE" &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_giropay"
+                  )
+                }
+                showSepa={
+                  currency === "EUR" &&
+                  isAuthenticated &&
+                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                }
+                showSofort={
+                  sofortCountries.includes(country) &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_sofort"
+                  )
+                }
+                showPaypal={
+                  paypalCurrencies.includes(currency) &&
+                  paymentSetup?.gateways.paypal
+                }
+                showNativePay={
+                  paymentSetup?.gateways?.stripe?.account && currency
+                }
+                onNativePaymentFunction={onPaymentFunction}
+              />
+            )}
 
-          {donationID ? (
+          {!isCreatingDonation && donationID ? (
             <div className="mt-30">
               <div
                 role="tabpanel"
@@ -263,13 +282,14 @@ function PaymentsForm({}: Props): ReactElement {
                 aria-labelledby={`scrollable-force-tab-${"Paypal"}`}
               >
                 {paymentType === "Paypal" && (
-                  <PaypalPayments
+                  <NewPaypal
                     paymentSetup={paymentSetup}
                     treeCount={treeCount}
                     treeCost={paymentSetup.treeCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}
+                    setPaymentError={setPaymentError}
                   />
                 )}
               </div>
@@ -296,7 +316,9 @@ function PaymentsForm({}: Props): ReactElement {
               </div>
             </div>
           ) : (
-            <ButtonLoader />
+            <div className="mt-20">
+              <ButtonLoader />
+            </div>
           )}
           <br />
           <a

@@ -10,12 +10,15 @@ interface Props {}
 function TaxDeductionOption({}: Props): ReactElement {
   const { t } = useTranslation(["common"]);
 
-  const { projectDetails, country, setIsTaxDeductible } = React.useContext(
-    QueryParamContext
-  );
-  const [openTaxDeductionModal, setopenTaxDeductionModal] = React.useState(
-    false
-  );
+  const {
+    projectDetails,
+    country,
+    setIsTaxDeductible,
+    allowTaxDeductionChange,
+    isTaxDeductible,
+  } = React.useContext(QueryParamContext);
+  const [openTaxDeductionModal, setopenTaxDeductionModal] =
+    React.useState(false);
 
   React.useEffect(() => {
     if (
@@ -27,28 +30,44 @@ function TaxDeductionOption({}: Props): ReactElement {
     } else {
       setIsTaxDeductible(false);
     }
-  }, [country]);
+  }, [projectDetails, country]);
 
   return projectDetails ? (
     <div className="mt-20">
       {projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries.length > 0 ? (
-        <div className={"d-inline"}>
-          {projectDetails.taxDeductionCountries.includes(country)
-            ? t("youWillReceiveTaxDeduction")
-            : t("taxDeductionNotYetAvailable")}
-          <button
-            onClick={() => setopenTaxDeductionModal(true)}
-            className={"tax-country-selection text-primary text-bold"}
-          >
-            {t(`country:${country.toLowerCase()}`)}
-            <DownArrowIcon color={themeProperties.primaryColor} />
-          </button>
-          {projectDetails &&
-          projectDetails.taxDeductionCountries.includes(country)
-            ? t("inTimeOfTaxReturns")
-            : null}
-        </div>
+        allowTaxDeductionChange ? (
+          <div className={"d-inline"}>
+            {projectDetails.taxDeductionCountries.includes(country)
+              ? t("youWillReceiveTaxDeduction")
+              : t("taxDeductionNotYetAvailable")}
+            <button
+              onClick={() => setopenTaxDeductionModal(true)}
+              className={"tax-country-selection text-primary text-bold"}
+            >
+              {t(`country:${country.toLowerCase()}`)}
+              <DownArrowIcon color={themeProperties.primaryColor} />
+            </button>
+            {projectDetails.taxDeductionCountries.includes(country)
+              ? t("inTimeOfTaxReturns")
+              : null}
+          </div>
+        ) : isTaxDeductible ? (
+          <div className={"d-inline"}>
+            {projectDetails.taxDeductionCountries.includes(country)
+              ? t("youWillReceiveTaxDeduction")
+              : t("taxDeductionNotYetAvailable")}
+            <div className={"tax-country-selection text-primary text-bold"}>
+              {t(`country:${country.toLowerCase()}`)}
+            </div>
+            {" "}
+            {projectDetails.taxDeductionCountries.includes(country)
+              ? t("inTimeOfTaxReturns")
+              : null}
+          </div>
+        ) : (
+          <></>
+        )
       ) : (
         <div className={"isTaxDeductible"}>
           {t("taxDeductionNotAvailableForProject")}

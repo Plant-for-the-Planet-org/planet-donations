@@ -121,7 +121,7 @@ export const PaymentRequestCustomButton = ({
               }`}
             >
               {isPaymentPage ? "" : t("donateWith")}{" "}
-              <AppleIcon textColor={themeProperties.light.primaryFontColor} />
+              <AppleIcon textColor={isPaymentPage ? themeProperties.light.primaryFontColor : '#fff'} />
             </button>
             {!isPaymentPage && (
               <div className="separator-text mb-10">{t("or")}</div>
@@ -139,7 +139,7 @@ export const PaymentRequestCustomButton = ({
             >
               {isPaymentPage ? "" : t("donateWith")}{" "}
               <GooglePayIcon
-                textColor={themeProperties.light.primaryFontColor}
+                textColor={isPaymentPage ? themeProperties.light.primaryFontColor : '#fff'}
               />
             </button>
             {!isPaymentPage && (

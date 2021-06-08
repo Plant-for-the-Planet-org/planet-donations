@@ -4,15 +4,13 @@ import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
-import CloseIcon from "../../../public/assets/icons/CloseIcon";
 interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setshowEmail] = React.useState(false);
-  const { giftDetails, setgiftDetails, isGift, setisGift } = React.useContext(
-    QueryParamContext
-  );
+  const { giftDetails, setgiftDetails, isGift, setisGift } =
+    React.useContext(QueryParamContext);
 
   const defaultDeails = {
     recipientName: giftDetails.recipientName,
@@ -52,9 +50,7 @@ export default function GiftForm({}: Props): ReactElement {
       {giftDetails && giftDetails.recipientName === "" ? (
         <div>
           <div className="donations-gift-toggle">
-            <label htmlFor="show-gift-form-toggle">
-              {t('giftSomeone')}
-            </label>
+            <label htmlFor="show-gift-form-toggle">{t("giftSomeone")}</label>
             <ToggleSwitch
               name="show-gift-form-toggle"
               checked={isGift}
@@ -80,73 +76,76 @@ export default function GiftForm({}: Props): ReactElement {
                 </span>
               )}
             </div>
-            
-            <div className={"form-field mt-30"}>
-              <MaterialTextField
-                multiline
-                rows="3"
-                rowsMax="4"
-                label={t("giftMessage")}
-                variant="outlined"
-                name={"giftMessage"}
-                inputRef={register()}
 
-              />
-            </div>
+            {showEmail ? (
+              <div>
+                <div className={"form-field mt-30"}>
+                  <div className="d-flex row justify-content-between mb-10">
+                    <p>{t("giftNotification")}</p>
+                    <button
+                      onClick={() => setshowEmail(false)}
+                      className={"singleGiftRemove"}
+                    >
+                      {t("removeRecipient")}
+                    </button>
+                  </div>
 
-            {showEmail ?
-             (<div className={"form-field mt-30"}>
-              <MaterialTextField
-                name={"recipientEmail"}
-                label={t("email")}
-                variant="outlined"
-                inputRef={register({
-                  required: true,
-                  pattern: /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                })}
-                InputProps={{
-                  endAdornment: (
-                    
-                      <button
-                        onClick={() => setshowEmail(false)}
-                        className={"singleGiftRemove"}
-                      >
-                        {t('removeRecipient')}
-                      </button>
-                    
-                  ),
-                }}
-              />
-              {errors.recipientEmail && (
-                <span className={"form-errors"}>{t("emailRequired")}</span>
-              )}
-            </div>) : (
-          <div className={"form-field mt-30"}>
-            <button
-              onClick={() => setshowEmail(true)}
-              className={"addEmailButton"}
-            >
-              {t("addEmail")}
-            </button>
-          </div>
-        )}
+                  <MaterialTextField
+                    name={"recipientEmail"}
+                    label={t("recipientEmail")}
+                    variant="outlined"
+                    inputRef={register({
+                      required: true,
+                      pattern:
+                        /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                    })}
+                  />
+                  {errors.recipientEmail && (
+                    <span className={"form-errors"}>{t("emailRequired")}</span>
+                  )}
+                </div>
+                <div className={"form-field mt-30"}>
+                  <MaterialTextField
+                    multiline
+                    rows="3"
+                    rowsMax="4"
+                    label={t("giftMessage")}
+                    variant="outlined"
+                    name={"giftMessage"}
+                    inputRef={register()}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className={"form-field mt-30"}>
+                <button
+                  onClick={() => setshowEmail(true)}
+                  className={"addEmailButton"}
+                >
+                  {t("addEmail")}
+                </button>
+              </div>
+            )}
             <button
               onClick={handleSubmit(onSubmit)}
               className="primary-button w-100 mt-30"
             >
-              {t('saveGiftDetails')}
+              {t("saveGiftDetails")}
             </button>
           </div>
         </div>
       ) : (
         <div className="donation-supports-info mt-10">
-          <p>
+          <p onClick={() => resetGiftForm()}>
             {t("directGiftRecipient", {
               name: giftDetails.recipientName,
             })}
           </p>
-          <button onClick={() => resetGiftForm()}>
-            <CloseIcon />
+          <button
+            onClick={() => resetGiftForm()}
+            className={"singleGiftRemove"}
+          >
+            {t("removeRecipient")}
           </button>
         </div>
       )}
