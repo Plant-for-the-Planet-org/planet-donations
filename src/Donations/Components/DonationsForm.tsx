@@ -294,7 +294,7 @@ function DonationsForm() {
                 )
               ) : (
                 <p className={"text-danger mt-20 text-center"}>
-                  {t("minDonate")}
+                  {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
