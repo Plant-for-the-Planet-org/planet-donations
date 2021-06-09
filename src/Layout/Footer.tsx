@@ -14,7 +14,7 @@ import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
 import supportedLanguages from "../../supportedLanguages.json";
 import getLanguageName from '../Utils/getLanguageName';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 

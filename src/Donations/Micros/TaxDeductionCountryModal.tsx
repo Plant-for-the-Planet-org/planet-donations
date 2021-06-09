@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { getCountryDataBy } from "../../Utils/countryUtils";
 import { ThemeContext } from "../../../styles/themeContext";
 import GreenRadio from "../../Common/InputTypes/GreenRadio";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 export default function TaxDeductionCountryModal(props: any) {
