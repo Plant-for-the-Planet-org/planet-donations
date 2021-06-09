@@ -28,7 +28,7 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
 }: any) {
-  const { t } = useTranslation(["country"]);
+  const { t } = useTranslation(["common", "country"]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
@@ -143,7 +143,12 @@ export default function PaymentMethodTabs({
           paymentSetup={paymentSetup}
           continueNext={() => {}}
           isPaymentPage
-          paymentLabel={`${treeCount} trees in ${t(`country:${projectDetails.country.toLowerCase()}`)}, Plant-for-the-Planet`}
+          paymentLabel={
+            t("treesInCountry", {
+              treeCount: treeCount,
+              country: t(`country:${projectDetails.country.toLowerCase()}`),
+            })
+          }
         />
       )}
     </div>

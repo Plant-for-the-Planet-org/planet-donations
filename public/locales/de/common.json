@@ -97,5 +97,6 @@
   "findProjects": "Projekte finden",
   "search": "Suche",
   "noProjectsFound": "Keine Projekte gefunden",
-  "billingAddress": "Rechnungsadresse"
+  "billingAddress": "Rechnungsadresse",
+  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet"
 }
