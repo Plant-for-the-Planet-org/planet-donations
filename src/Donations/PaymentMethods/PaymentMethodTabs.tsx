@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
@@ -27,6 +28,8 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
 }: any) {
+  const { t } = useTranslation(["country"]);
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
   };
@@ -140,9 +143,7 @@ export default function PaymentMethodTabs({
           paymentSetup={paymentSetup}
           continueNext={() => {}}
           isPaymentPage
-          paymentLabel={`${treeCount} trees in ${
-            getCountryDataBy("countryCode", projectDetails.country)?.countryName
-          }, Plant-for-the-Planet`}
+          paymentLabel={`${treeCount} trees in ${t(`country:${projectDetails.country.toLowerCase()}`)}, Plant-for-the-Planet`}
         />
       )}
     </div>

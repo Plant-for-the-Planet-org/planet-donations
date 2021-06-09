@@ -235,7 +235,7 @@ function DonationsForm() {
                     "",
                     Number(paymentSetup.treeCost)
                   )}{" "}
-                  
+
                 </button>
                 {t("perTree")}
               </p>
@@ -287,9 +287,7 @@ function DonationsForm() {
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
                     isPaymentPage={false}
-                    paymentLabel={`${treeCount} trees in ${
-                      getCountryDataBy("countryCode", projectDetails.country)?.countryName
-                    }, Plant-for-the-Planet`}
+                    paymentLabel={`${treeCount} trees in ${t(`country:${projectDetails.country.toLowerCase()}`)}, Plant-for-the-Planet`}
                   />
                 ) : (
                   <div className="mt-20 w-100">
