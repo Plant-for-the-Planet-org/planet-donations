@@ -13,12 +13,13 @@ import NotFound from "./../../../public/assets/icons/NotFound";
 import { useRouter } from "next/dist/client/router";
 import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
+
 interface Props {}
 
 function SelectProject({}: Props): ReactElement {
   const { selectedProjects, allProjects, setSelectedProjects } =
     React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common"]);
+  const { t, i18n } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
@@ -54,7 +55,7 @@ function SelectProject({}: Props): ReactElement {
 
   const donateToProject = (slug) => {
     router.push(`?to=${slug}`);
-  };  
+  };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
     <div className="donations-forms-container column">
@@ -99,10 +100,7 @@ function SelectProject({}: Props): ReactElement {
                 {project.properties.country && (
                   <p className="project-country">
                     {
-                      getCountryDataBy(
-                        "countryCode",
-                        project.properties.country
-                      )?.countryName
+                      t(`country:${project.properties.country.toLowerCase()}`)
                     }
                   </p>
                 )}
