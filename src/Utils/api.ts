@@ -20,8 +20,8 @@ axiosInstance.interceptors.request.use(
     config.headers['Content-Type'] = 'application/json';
 
     config.headers['x-locale']= `${
-      localStorage.getItem('locale')
-        ? localStorage.getItem('locale')
+      localStorage.getItem('language')
+        ? localStorage.getItem('language')
         : 'en'
     }`
 

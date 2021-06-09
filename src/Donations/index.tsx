@@ -4,7 +4,7 @@ import ContactsForm from "./Components/ContactsForm";
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
@@ -36,7 +36,7 @@ function Donations({}: Props): ReactElement {
 }
 
 function DonationInfo() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common", "country");
   const {
     projectDetails,
     donationID,
@@ -113,7 +113,7 @@ function DonationInfo() {
             )}
           {donationStep === 3 && contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-20"}>
-              <p>Billing Address</p>
+              <p>{t("billingAddress")}</p>
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname}
@@ -127,9 +127,7 @@ function DonationInfo() {
                 {contactDetails.zipCode && contactDetails.zipCode}
               </p>
               <p>
-                {contactDetails.country &&
-                  getCountryDataBy("countryCode", contactDetails.country)
-                    ?.countryName}
+                {contactDetails.country && t(`country:${contactDetails.country.toLowerCase()}`)}
               </p>
             </div>
           )}

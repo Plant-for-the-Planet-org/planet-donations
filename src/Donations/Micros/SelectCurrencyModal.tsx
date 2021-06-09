@@ -5,7 +5,7 @@ import Modal from "@material-ui/core/Modal";
 import { withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import { QueryParamContext } from "../../Layout/QueryParamContext";

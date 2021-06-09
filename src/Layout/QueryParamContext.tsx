@@ -6,7 +6,7 @@ import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
 import { getRequest } from "../Utils/api";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {
   getFilteredProjects,
   getRandomProjects,
@@ -69,7 +69,7 @@ export default function QueryParamProvider({ children }: any) {
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
-  const [language, setlanguage] = useState("en");
+  const [language, setlanguage] = useState(typeof window !== 'undefined' && localStorage.getItem("language") ? localStorage.getItem("language") : "en");
 
   const [donationID, setdonationID] = useState(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
@@ -145,16 +145,16 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
-    if (router.locale) {
-      setlanguage(router.locale);
-    }
-  }, [router.locale]);
+  // React.useEffect(() => {
+  //   if (router.locale) {
+  //     setlanguage(router.locale);
+  //   }
+  // }, [router.locale]);
 
-  React.useEffect(() => {
+  React.useEffect(() => {    
     i18n.changeLanguage(language);
-    localStorage.setItem("language", language); // value name also used by i18n
-  }, [language]);
+    localStorage.setItem("language", language)
+  }, [language,router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
@@ -406,7 +406,7 @@ export default function QueryParamProvider({ children }: any) {
   // support = s => Fetch the user data from api and load in gift details
   async function loadPublicUserData(slug: any) {
     try {
-      const newProfile = await getRequest(`/app/profiles/${slug}das`);
+      const newProfile = await getRequest(`/app/profiles/${slug}`);
       if (newProfile.data.type !== "tpo") {
         setisGift(true);
         setgiftDetails({

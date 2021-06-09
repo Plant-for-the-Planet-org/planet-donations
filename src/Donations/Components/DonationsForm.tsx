@@ -21,6 +21,7 @@ import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getCountryDataBy } from "../../Utils/countryUtils";
 
 function DonationsForm() {
   const {
@@ -234,7 +235,7 @@ function DonationsForm() {
                     "",
                     Number(paymentSetup.treeCost)
                   )}{" "}
-                  
+
                 </button>
                 {t("perTree")}
               </p>
@@ -286,6 +287,12 @@ function DonationsForm() {
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
                     isPaymentPage={false}
+                    paymentLabel={
+                      t("treesInCountry", {
+                        treeCount: treeCount,
+                        country: t(`country:${projectDetails.country.toLowerCase()}`),
+                      })
+                    }
                   />
                 ) : (
                   <div className="mt-20 w-100">
@@ -294,7 +301,7 @@ function DonationsForm() {
                 )
               ) : (
                 <p className={"text-danger mt-20 text-center"}>
-                  {t("minDonate")}
+                  {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
