@@ -66,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       domain={process.env.AUTH0_CUSTOM_DOMAIN}
       clientId={process.env.AUTH0_CLIENT_ID}
       redirectUri={process.env.NEXTAUTH_URL}
+      cacheLocation={'localstorage'}
       audience={'urn:plant-for-the-planet'}
     >
       <ThemeProvider>
