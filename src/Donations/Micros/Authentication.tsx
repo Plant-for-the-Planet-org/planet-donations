@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getAuthenticatedRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import { Backdrop, Fade, Modal } from "@material-ui/core";
 import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";

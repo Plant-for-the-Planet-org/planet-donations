@@ -553,10 +553,7 @@
   .donations-info-container {
     width: 420px;
     flex: 1;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
+    border-radius: 20px;
     align-self: auto;
     margin-right: -10px;
   }
