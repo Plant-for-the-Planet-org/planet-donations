@@ -114,7 +114,7 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text thankyouText"}>{t("common:thankYou")}</div>
+        <div className={"title-text thankyouText"} data-test-id="test-thankYou">{t("common:thankYou")}</div>
 
         <div className={"mt-20 thankyouText"}>
           {t(
