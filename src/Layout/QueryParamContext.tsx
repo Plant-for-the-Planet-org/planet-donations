@@ -406,7 +406,7 @@ export default function QueryParamProvider({ children }: any) {
   // support = s => Fetch the user data from api and load in gift details
   async function loadPublicUserData(slug: any) {
     try {
-      const newProfile = await getRequest(`/app/profiles/${slug}das`);
+      const newProfile = await getRequest(`/app/profiles/${slug}`);
       if (newProfile.data.type !== "tpo") {
         setisGift(true);
         setgiftDetails({
