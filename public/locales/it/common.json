@@ -58,7 +58,7 @@
   "myTreesPlantedByOnLocation": "I miei alberi {{treeCount}} sono stati piantati in {{location}} .",
   "plantTreesAtURL": "Piantare alberi a {{url}}",
   "thankYou": "Grazie",
-  "thankyouHeaderText": "Siamo sulla strada di un \n <h1_0>Trilione di alberi </h1_0>",
+  "thankyouHeaderText": "Siamo sulla strada di un \n <h1>Trilione di alberi</h1>",
   "donationFailed": "Donazione fallita",
   "donationFailedMessage": "Qualcosa è andato storto durante il completamento del pagamento. Se continui ad avere problemi, contattaci all'indirizzo support@plant-for-the-planet.org",
   "donationPending": "Completare la sua donazione",
@@ -94,5 +94,7 @@
   "removeRecipient": "Rimuovi",
   "findProjects": "Trova i progetti",
   "search": "Cerca",
-  "noProjectsFound": "Nessun progetto trovato"
+  "noProjectsFound": "Nessun progetto trovato",
+  "billingAddress": "Indirizzo di fatturazione",
+  "treesInCountry": "{{treeCount}} alberi in{{country}} , Plant-for-the-Planet"
 }
