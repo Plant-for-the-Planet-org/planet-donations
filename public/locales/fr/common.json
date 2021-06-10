@@ -58,7 +58,7 @@
   "myTreesPlantedByOnLocation": "Mes arbres {{treeCount}} sont plantés sur {{location}} .",
   "plantTreesAtURL": "Planter des arbres à {{url}}",
   "thankYou": "Merci",
-  "thankyouHeaderText": "Nous sommes sur la route d'un \n <h1_0>Trillion d'arbres</h1>",
+  "thankyouHeaderText": "Nous sommes sur la route d'un \n <h1>Trillion d'arbres</h1>",
   "donationFailed": "Echec du don",
   "donationFailedMessage": "Un problème est survenu lors de votre paiement. Si vous continuez à avoir des problèmes, veuillez nous contacter à l'adresse suivante : support@plant-for-the-planet.org",
   "donationPending": "Compléter votre don",
