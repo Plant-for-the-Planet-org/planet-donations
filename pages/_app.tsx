@@ -14,6 +14,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { useRouter } from "next/dist/client/router";
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   const config = getConfig();
@@ -60,6 +61,13 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { theme: themeType } = useTheme();
+  const router = useRouter();
+
+  if (process.env.VERCEL_URL && typeof window !== 'undefined') {
+    if (process.env.VERCEL_URL !== window.location.hostname) {
+      router.replace(`https://${process.env.VERCEL_URL}`);
+    }
+  }
 
   return (
     <Auth0Provider
