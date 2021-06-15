@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import ContactsForm from "./Components/ContactsForm";
-
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
@@ -8,7 +7,6 @@ import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
-import { getCountryDataBy } from "../Utils/countryUtils";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 interface Props {}

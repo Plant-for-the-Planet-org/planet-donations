@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getAuthenticatedRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -15,7 +15,7 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails } = React.useContext(QueryParamContext);
+  const { setContactDetails,setErrorType,setshowErrorCard } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -30,13 +30,17 @@ function Authentication({}: Props): ReactElement {
 
   const loadUserProfile = async () => {
     if (user.email_verified) {
-      const token = await getAccessTokenSilently();
 
       try {
-        const profile: any = await getAuthenticatedRequest(
-          "/app/profile",
-          token
-        );
+        const token = await getAccessTokenSilently();
+
+        const requestParams = {
+          url:"/app/profile",
+          token:token,
+          setErrorType,
+          setshowErrorCard
+        }
+        const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
           const newContactDetails = {

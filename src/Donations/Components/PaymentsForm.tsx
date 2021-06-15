@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import BackButton from "../../../public/assets/icons/BackButton";
-import { putRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -55,6 +55,8 @@ function PaymentsForm({}: Props): ReactElement {
     isTaxDeductible,
     isDirectDonation,
     setDonationUid,
+    setErrorType,
+    setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -80,6 +82,8 @@ function PaymentsForm({}: Props): ReactElement {
       contactDetails,
       token,
       country,
+      setErrorType,
+      setshowErrorCard,
     });
   };
 
@@ -109,6 +113,8 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
       token,
+      setErrorType,
+      setshowErrorCard,
     });
 
     if (donation) {
@@ -128,9 +134,14 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (donationID && publishName !== null) {
-      putRequest(`/app/donations/${donationID}/publish`, {
-        publish: publishName,
-      });
+      const requestParams = {
+        url: `/app/donations/${donationID}/publish`,
+        data: {publish: publishName},
+        method: "PUT",
+        setErrorType,
+        setshowErrorCard,
+      };
+      apiRequest(requestParams);
     }
   }, [publishName, donationID]);
 
