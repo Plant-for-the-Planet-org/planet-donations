@@ -77,6 +77,7 @@ function Authentication({}: Props): ReactElement {
       if(localStorage.getItem('queryparams')){
         const queryparams = localStorage.getItem('queryparams');
         router.push(queryparams);
+        localStorage.removeItem('queryparams');
       }
       // If details present store in contact details
       // If details are not present show message and logout user
