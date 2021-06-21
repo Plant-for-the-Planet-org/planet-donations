@@ -29,18 +29,17 @@ export default function Header() {
 
       <meta
         name="application-name"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
       <meta
         name="apple-mobile-web-app-title"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
       <meta
         name="apple-mobile-web-app-title"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
 
-      {/* <!-- New in iOS6  alt, --> */}
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-touch-fullscreen" content="yes" />
       <meta
@@ -98,23 +97,33 @@ export default function Header() {
         sizes="180x180"
         href={`/assets/favicons/apple-touch-icon-180x180.png`}
       />
-      {/* {themeType === 'theme-light' ? (
-        <meta name="theme-color" content={styles.primaryColor} />
-      ) : null} */}
 
-      <title>{`Plant-for-the-Planet`}</title>
-      <meta property="og:site_name" content={'Plant trees around the world - Plant-for-the-Planet'} />
 
-      <meta property="og:title" content={`Pay with Planet | ${'Plant trees around the world - Plant-for-the-Planet'}`} />
-      <meta property="og:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
-      <meta name="description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
+
+      <title>{`Donate with Plant-for-the-Planet`}</title>
+      <meta name="title" content="Donate with Plant-for-the-Planet" />
+      <meta name="description" content="Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here." />
+
+      <meta property="og:site_name" content={'Donate with Plant-for-the-Planet'} />
+
+
+      <meta property="og:title" content={`Donate with Plant-for-the-Planet`} />
+      <meta property="og:description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
+      <meta name="description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
       <meta property="og:type" content="website" />
-      {/* <meta property="og:image" content={config.meta.image} /> */}
+      <meta property="og:image" content="" />
+      <meta property="og:url" content="https://donate.plant-for-the-planet.org/" />
+
+
       <link rel="alternate" href="android-app://org.pftp/projects" />
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content={'Plant trees around the world - Plant-for-the-Planet'} />
-     
-      <meta name="twitter:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
+      <meta name="twitter:title" content={'Donate with Plant-for-the-Planet'} />
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:image" content=""></meta>
+      <meta property="twitter:url" content="https://donate.plant-for-the-planet.org/" />
+      <meta property="twitter:title" content="Donate with Plant-for-the-Planet" /> 
+
+      <meta name="twitter:description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
     </Head>
   );
 }
