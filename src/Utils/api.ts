@@ -1,5 +1,5 @@
-import getsessionId from './getSessionId';
-import axios from 'axios';
+import getsessionId from "./getSessionId";
+import axios from "axios";
 
 // creates and axios instance with base url
 const axiosInstance = axios.create({
@@ -14,28 +14,26 @@ axiosInstance.interceptors.request.use(
 
     // if there's session id then adds the same into the header
     if (sessionId) {
-      config.headers['X-SESSION-ID'] = sessionId;
+      config.headers["X-SESSION-ID"] = sessionId;
     }
     // sets the content type to json
-    config.headers['Content-Type'] = 'application/json';
+    config.headers["Content-Type"] = "application/json";
 
-    config.headers['x-locale']= `${
-      localStorage.getItem('language')
-        ? localStorage.getItem('language')
-        : 'en'
-    }`
+    config.headers["x-locale"] = `${
+      localStorage.getItem("language") ? localStorage.getItem("language") : "en"
+    }`;
 
-    config.headers['tenant-key']= `${
-      localStorage.getItem('tenant')
-        ? localStorage.getItem('tenant')
-        : 'ten_I9TW3ncG'
-    }`
+    config.headers["tenant-key"] = `${
+      localStorage.getItem("tenant")
+        ? localStorage.getItem("tenant")
+        : "ten_I9TW3ncG"
+    }`;
 
     return config;
   },
   (error) => {
-    console.error('Error while setting up axios request interceptor,', error);
-  },
+    console.error("Error while setting up axios request interceptor,", error);
+  }
 );
 
 // Add a response interceptor which checks for error code for all the requests
@@ -47,11 +45,33 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(err);
   },
   (error: any) => {
-    console.error('Error while setting up axios response interceptor', error);
-  },
+    console.error("Error while setting up axios response interceptor", error);
+  }
 );
 
-const request = async (url:string, method = 'GET', token:any = false, data:any = undefined):Promise<any> => {
+interface RequestParams {
+  url: string;
+  token?: any;
+  data?: any;
+  setshowErrorCard: Function;
+  setErrorType: Function;
+}
+interface ExtendedRequestParams extends RequestParams {
+  method?: string | undefined;
+}
+
+export const apiRequest = async (
+  extendedRequestParams: ExtendedRequestParams
+): Promise<any> => {
+  const {
+    method = "GET",
+    url,
+    data = undefined,
+    token = false,
+    setErrorType,
+    setshowErrorCard,
+  } = extendedRequestParams;
+
   try {
     //  sets the options which is passed to axios to make the request
     const options = {
@@ -60,7 +80,10 @@ const request = async (url:string, method = 'GET', token:any = false, data:any =
     };
 
     // if the method is either POST, PUT or DELETE and data is present then adds data property to options
-    if ((method === 'POST' || method === 'PUT' || method === 'DELETE') && data) {
+    if (
+      (method === "POST" || method === "PUT" || method === "DELETE") &&
+      data
+    ) {
       options.data = data;
     }
 
@@ -80,40 +103,17 @@ const request = async (url:string, method = 'GET', token:any = false, data:any =
           resolve(response);
         })
         .catch((err) => {
+          setshowErrorCard(true)
           reject(err);
         });
     });
   } catch (err) {
-    console.error( 
+    console.error(
       `Error while making ${method} request, ${JSON.stringify({
         url,
         token,
         err,
-      })}`,
+      })}`
     );
   }
 };
-
-// calls the [request] function with [url]
-export const getRequest = (url:string) => request(url);
-
-// calls the [request] function with [url] and [token = true]
-export const getAuthenticatedRequest = (url:string,token:any) => request(url, 'GET', token);
-
-// calls the [request] function with [url], [data], [method = 'POST'] and [token = false]
-export const postRequest = (url:string, data:any) => request(url, 'POST', false, data);
-
-// calls the [request] function with [url], [data], [method = 'POST'] and [token = true]
-export const postAuthenticatedRequest = (url:string,token:any, data:any) => request(url, 'POST', token, data);
-
-// calls the [request] function with [url], [data], [method = 'PUT'] and [token = false]
-export const putRequest = (url:string, data:any) => request(url, 'PUT', false, data);
-
-// calls the [request] function with [url], [data], [method = 'PUT'] and [token = true]
-export const putAuthenticatedRequest = (url:string,token:any, data:any) => request(url, 'PUT', token, data);
-
-// calls the [request] function with [url], [data], [method = 'DELETE'] and [token = false]
-export const deleteRequest = (url:string, data = null) => request(url, 'DELETE', false, data);
-
-// calls the [request] function with [url], [data], [method = 'DELETE'] and [token = true]
-export const deleteAuthenticatedRequest = (url:string,token:any, data = null) => request(url, 'DELETE', token, data);

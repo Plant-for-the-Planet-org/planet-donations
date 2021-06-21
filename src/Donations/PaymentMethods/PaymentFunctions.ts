@@ -1,9 +1,4 @@
-import {
-  postAuthenticatedRequest,
-  postRequest,
-  putAuthenticatedRequest,
-  putRequest,
-} from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
 
 export function getPaymentProviderRequest(
@@ -95,6 +90,8 @@ export async function createDonationFunction({
   setPaymentError,
   setdonationID,
   token,
+  setErrorType,
+  setshowErrorCard,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -109,14 +106,26 @@ export async function createDonationFunction({
   });
   try {
     let donation;
+
     if (token) {
-      donation = await postAuthenticatedRequest(
-        "/app/donations",
-        token,
-        donationData
-      );
+      const requestParams = {
+        url: `/app/donations`,
+        data: donationData,
+        method: "POST",
+        setErrorType,
+        setshowErrorCard,
+        token: token,
+      };
+      donation = await apiRequest(requestParams);
     } else {
-      donation = await postRequest("/app/donations", donationData);
+      const requestParams = {
+        url: `/app/donations`,
+        data: donationData,
+        method: "POST",
+        setErrorType,
+        setshowErrorCard,
+      };
+      donation = await apiRequest(requestParams);
     }
     if (donation && donation.data) {
       setdonationID(donation.data.id);
@@ -206,6 +215,8 @@ export async function payDonationFunction({
   contactDetails,
   token,
   country,
+  setErrorType,
+  setshowErrorCard,
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -223,16 +234,24 @@ export async function payDonationFunction({
   try {
     let paidDonation;
     if (token) {
-      paidDonation = await putAuthenticatedRequest(
-        `/app/donations/${donationID}`,
-        token,
-        payDonationData
-      );
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        data: payDonationData,
+        method: "PUT",
+        setErrorType,
+        setshowErrorCard,
+        token: token,
+      };
+      paidDonation = await apiRequest(requestParams);
     } else {
-      paidDonation = await putRequest(
-        `/app/donations/${donationID}`,
-        payDonationData
-      );
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        data: payDonationData,
+        method: "PUT",
+        setErrorType,
+        setshowErrorCard,
+      };
+      paidDonation = await apiRequest(requestParams);
     }
     if (paidDonation && paidDonation.data) {
       if (paidDonation.data.status === "failed") {
@@ -241,7 +260,7 @@ export async function payDonationFunction({
       } else if (
         paidDonation.data.paymentStatus === "success" ||
         paidDonation.data.paymentStatus === "pending" ||
-        paidDonation.data.status === "success" || 
+        paidDonation.data.status === "success" ||
         paidDonation.data.status === "paid" ||
         paidDonation.data.paymentStatus === "paid"
       ) {
@@ -262,6 +281,8 @@ export async function payDonationFunction({
           contactDetails,
           token,
           country,
+          setErrorType,
+          setshowErrorCard,
         });
       }
     }
@@ -296,6 +317,8 @@ export async function handleSCAPaymentFunction({
   contactDetails,
   token,
   country,
+  setErrorType,
+  setshowErrorCard,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -326,16 +349,24 @@ export async function handleSCAPaymentFunction({
           try {
             let SCAPaidDonation;
             if (token) {
-              SCAPaidDonation = await putAuthenticatedRequest(
-                `/app/donations/${donationID}`,
-                token,
-                payDonationData
-              );
+              const requestParams = {
+                url: `/app/donations/${donationID}`,
+                data: payDonationData,
+                method: "PUT",
+                setErrorType,
+                setshowErrorCard,
+                token: token,
+              };
+              SCAPaidDonation = await apiRequest(requestParams);
             } else {
-              SCAPaidDonation = await putRequest(
-                `/app/donations/${donationID}`,
-                payDonationData
-              );
+              const requestParams = {
+                url: `/app/donations/${donationID}`,
+                data: payDonationData,
+                method: "PUT",
+                setErrorType,
+                setshowErrorCard,
+              };
+              SCAPaidDonation = await apiRequest(requestParams);
             }
 
             if (SCAPaidDonation.data.paymentStatus) {
