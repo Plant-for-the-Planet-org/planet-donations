@@ -67,9 +67,9 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
       config.resolve.alias['@sentry/node'] = '@sentry/browser';
     }
     
-    config.node = {
-      fs: 'empty',
-    };
+    // config.node = {
+    //   fs: 'empty',
+    // };
 
     // When all the Sentry configuration env variables are available/configured
     // The Sentry webpack plugin gets pushed to the webpack plugins to build
