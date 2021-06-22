@@ -7,18 +7,12 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
 import BackButton from "../../../public/assets/icons/BackButton";
-import GeocoderArcGIS from "geocoder-arcgis";
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
-  React.useEffect(() => {
-    setaddressSugggestions([]);
-  }, []);
-
   const [isCompany, setIsCompany] = React.useState(false);
-  const geocoder = new GeocoderArcGIS();
   const {
     contactDetails,
     setContactDetails,
@@ -36,12 +30,10 @@ function ContactsForm({}: Props): ReactElement {
     }
   }, [contactDetails]);
 
-  const { register, errors, handleSubmit, control, reset, getValues, setValue } = useForm(
-    {
-      mode: "all",
-      defaultValues: {},
-    }
-  );
+  const { register, errors, handleSubmit, control, reset,getValues } = useForm({
+    mode: "all",
+    defaultValues: {},
+  });
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
@@ -51,7 +43,7 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
-    setContactDetails(data);
+    setContactDetails(data)
     setdonationStep(3);
   };
 
@@ -65,40 +57,9 @@ function ContactsForm({}: Props): ReactElement {
     let data = getValues();
     data = {
       ...data,
-      country,
-    };
-    setContactDetails(data);
-  };
-
-  const [addressSugggestions, setaddressSugggestions] = React.useState([]);
-
-  const suggestAddress = (value) => {
-    if (value.length > 3) {
-      geocoder
-        .suggest(value, {})
-        .then((result) => {
-          setaddressSugggestions(result.suggestions);
-        })
-        .catch(console.log);
+      country
     }
-  };
-
-  const getAddress = (value) => {
-    geocoder
-      .findAddressCandidates(value, { outfields: "*" })
-      .then((result) => {
-        setValue("address",result.candidates[0].attributes.ShortLabel, {
-          shouldValidate: true,
-        });
-        setValue("city",result.candidates[0].attributes.City, {
-          shouldValidate: true,
-        });
-        setValue("zipCode",result.candidates[0].attributes.Postal, {
-          shouldValidate: true,
-        });
-        setaddressSugggestions([])
-      })
-      .catch(console.log);
+    setContactDetails(data)
   };
 
   return (
@@ -161,36 +122,14 @@ function ContactsForm({}: Props): ReactElement {
             )}
           </div>
 
-          <div className={"form-field mt-30"} style={{ position: "relative" }}>
+          <div className={"form-field mt-30"}>
             <MaterialTextField
               inputRef={register({ required: true })}
               label={t("address")}
               variant="outlined"
               name="address"
               defaultValue={contactDetails.address}
-              onChange={(event) => {
-                suggestAddress(event.target.value);
-              }}
-              onBlur={()=>setaddressSugggestions([])}
             />
-            {addressSugggestions
-              ? addressSugggestions.length > 0 && (
-                  <div className="suggestions-container">
-                    {addressSugggestions.map((suggestion) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            getAddress(suggestion.text);
-                          }}
-                          className="suggestion"
-                        >
-                          {suggestion.text}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )
-              : null}
             {errors.address && (
               <span className={"form-errors"}>{t("addressRequired")}</span>
             )}
@@ -241,9 +180,7 @@ function ContactsForm({}: Props): ReactElement {
                 },
               }}
               name="country"
-              defaultValue={
-                contactDetails.country ? contactDetails.country : country
-              }
+              defaultValue={contactDetails.country? contactDetails.country:country}
               render={({ value, ref }) => (
                 <AutoCompleteCountry
                   inputRef={ref}
