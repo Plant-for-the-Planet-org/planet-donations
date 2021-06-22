@@ -30,7 +30,7 @@ function ContactsForm({}: Props): ReactElement {
     }
   }, [contactDetails]);
 
-  const { register, errors, handleSubmit, control, reset } = useForm({
+  const { register, errors, handleSubmit, control, reset,getValues } = useForm({
     mode: "all",
     defaultValues: {},
   });
@@ -43,7 +43,7 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
-    setContactDetails(data);
+    setContactDetails(data)
     setdonationStep(3);
   };
 
@@ -54,7 +54,12 @@ function ContactsForm({}: Props): ReactElement {
   );
 
   const changeCountry = (country: any) => {
-    setContactDetails({ ...contactDetails, country });
+    let data = getValues();
+    data = {
+      ...data,
+      country
+    }
+    setContactDetails(data)
   };
 
   return (
@@ -175,9 +180,7 @@ function ContactsForm({}: Props): ReactElement {
                 },
               }}
               name="country"
-              defaultValue={
-                contactDetails.country ? contactDetails.country : country
-              }
+              defaultValue={contactDetails.country? contactDetails.country:country}
               render={({ value, ref }) => (
                 <AutoCompleteCountry
                   inputRef={ref}

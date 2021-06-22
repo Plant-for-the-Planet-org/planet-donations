@@ -10,7 +10,7 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import ShareOptions from "../Micros/ShareOptions";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
-import { getRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import themeProperties from "../../../styles/themeProperties";
 import { useRouter } from "next/dist/client/router";
@@ -24,6 +24,8 @@ function ThankYou() {
     setdonationStep,
     redirectstatus,
     returnTo,
+    setErrorType,
+    setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
@@ -31,7 +33,12 @@ function ThankYou() {
   const router = useRouter();
 
   async function loadDonation() {
-    const donation = await getRequest(`/app/donations/${donationID}`);
+    const requestParams = {
+      url: `/app/donations/${donationID}`,
+      setErrorType,
+      setshowErrorCard,
+    };
+    const donation = await apiRequest(requestParams);
     if (donation.status === 200) {
       setdonation(donation.data);
     }
@@ -66,9 +73,8 @@ function ThankYou() {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  const [textCopiedsnackbarOpen, setTextCopiedSnackbarOpen] = React.useState(
-    false
-  );
+  const [textCopiedsnackbarOpen, setTextCopiedSnackbarOpen] =
+    React.useState(false);
 
   const sendRef = () => imageRef;
 
@@ -89,11 +95,11 @@ function ThankYou() {
     router.push(returnTo);
   };
   let returnDisplay;
-  if(returnTo){
-  const x = returnTo.slice(8);
-  returnDisplay = x.split("/", 2)
-}
-  let currencyFormat = () => { };
+  if (returnTo) {
+    const x = returnTo.slice(8);
+    returnDisplay = x.split("/", 2);
+  }
+  let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
@@ -108,7 +114,7 @@ function ThankYou() {
             className="mb-10 text-primary"
             style={{ alignSelf: "flex-start" }}
           >
-            Back to {returnDisplay[0]}          
+            Back to {returnDisplay[0]}
           </button>
         ) : (
           <></>
@@ -128,9 +134,9 @@ function ThankYou() {
           )}
           {donation && donation.gift
             ? " " +
-            t("common:giftSentMessage", {
-              recipientName: donation.gift.recipientName,
-            })
+              t("common:giftSentMessage", {
+                recipientName: donation.gift.recipientName,
+              })
             : null}
           {" " +
             t("common:yourTreesPlantedByOnLocation", {
@@ -235,7 +241,9 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:donationFailed")}</div>
+        <div className={"title-text text-center"}>
+          {t("common:donationFailed")}
+        </div>
         <div className={"mt-20 text-center"}>
           {t("common:donationFailedMessage")}
         </div>
@@ -260,7 +268,9 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:donationPending")}</div>
+        <div className={"title-text text-center"}>
+          {t("common:donationPending")}
+        </div>
         <div className={"mt-20 text-center"}>
           {t("common:donationPendingMessage")}
         </div>
@@ -273,7 +283,7 @@ function ThankYou() {
   }
 
   return (
-    <div className="donations-forms-container" style={{paddingBottom:'0px'}}>
+    <div className="donations-forms-container" style={{ paddingBottom: "0px" }}>
       <div className="donations-form w-100">
         {!ready && !donation ? (
           <PaymentProgress isPaymentProcessing={true} />
@@ -281,8 +291,8 @@ function ThankYou() {
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
               redirectstatus === "succeeded" &&
-                (donation.paymentStatus === "success" ||
-                  donation.paymentStatus === "paid") ? (
+              (donation.paymentStatus === "success" ||
+                donation.paymentStatus === "paid") ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />
@@ -291,7 +301,7 @@ function ThankYou() {
               )
             ) : donation && donation.paymentStatus ? (
               donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid" ? (
+              donation.paymentStatus === "paid" ? (
                 <SuccessfulDonation />
               ) : donation.paymentStatus === "failed" ? (
                 <FailedDonation />

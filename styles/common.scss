@@ -79,6 +79,17 @@
   color: $dangerColor;
 }
 
+.callout-danger{
+  background-color: $blueishGrey;
+  padding: 12px;
+  border-radius: 10px;
+  > svg {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+  }
+}
+
 .text-primary{
   color: $primaryColor;
 }

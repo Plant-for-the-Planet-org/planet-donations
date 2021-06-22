@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import ContactsForm from "./Components/ContactsForm";
-
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
@@ -8,9 +7,9 @@ import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
-import { getCountryDataBy } from "../Utils/countryUtils";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
+import Image from "next/image";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
@@ -52,7 +51,14 @@ function DonationInfo() {
 
   return (
     <div className="donations-info-container">
-      <img className="background-image" src={getTenantBackground(tenant)} />
+      <Image
+        layout="fill"
+        objectFit="cover"
+        src={getTenantBackground(tenant)}
+        className="background-image"
+        placeholder={"blur"}
+        alt="Background image with trees"
+      />
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -127,7 +133,8 @@ function DonationInfo() {
                 {contactDetails.zipCode && contactDetails.zipCode}
               </p>
               <p>
-                {contactDetails.country && t(`country:${contactDetails.country.toLowerCase()}`)}
+                {contactDetails.country &&
+                  t(`country:${contactDetails.country.toLowerCase()}`)}
               </p>
             </div>
           )}
@@ -138,7 +145,7 @@ function DonationInfo() {
             </p>
           )}
         </div>
-      ) :  null}
+      ) : null}
     </div>
   );
 }

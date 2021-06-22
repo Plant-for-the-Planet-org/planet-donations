@@ -6,7 +6,7 @@ interface Props {}
 
 function index({}: Props): ReactElement {
   return (
-    <div style={{flexGrow:1}}>
+    <div style={{flexGrow:1}} className="d-flex justify-content-center align-items-center">
       <Donations/>
     </div>
   );
