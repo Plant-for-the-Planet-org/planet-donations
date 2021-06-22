@@ -54,7 +54,6 @@ interface RequestParams {
   token?: any;
   data?: any;
   setshowErrorCard: Function;
-  setErrorType: Function;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -68,7 +67,6 @@ export const apiRequest = async (
     url,
     data = undefined,
     token = false,
-    setErrorType,
     setshowErrorCard,
   } = extendedRequestParams;
 

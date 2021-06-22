@@ -59,7 +59,6 @@ export const QueryParamContext = React.createContext({
   allowTaxDeductionChange: true,
   donationUid: null,
   setDonationUid: (value: string) => "",
-  setErrorType: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
 });
 
@@ -153,12 +152,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  // React.useEffect(() => {
-  //   if (router.locale) {
-  //     setlanguage(router.locale);
-  //   }
-  // }, [router.locale]);
-
   React.useEffect(() => {
     i18n.changeLanguage(language);
     localStorage.setItem("language", language);
@@ -191,7 +184,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects/${projectGUID}`,
-        setErrorType,
         setshowErrorCard,
       };
       const project: ProjectTypes = await apiRequest(requestParams);
@@ -208,7 +200,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects?_scope=map`,
-        setErrorType,
         setshowErrorCard,
       };
       const projects: any = await apiRequest(requestParams);
@@ -257,7 +248,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setErrorType,
         setshowErrorCard,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
@@ -290,7 +280,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/public/v1.2/${userLang}/config`,
-        setErrorType,
         setshowErrorCard,
       };
       const config: any = await apiRequest(requestParams);
@@ -336,7 +325,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/donations/${router.query.context}`,
-        setErrorType,
         setshowErrorCard,
       };
       const donation: any = await apiRequest(requestParams);
@@ -441,7 +429,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/profiles/${slug}`,
-        setErrorType,
         setshowErrorCard,
       };
       const newProfile = await apiRequest(requestParams);
@@ -524,8 +511,6 @@ export default function QueryParamProvider({ children }: any) {
 
   const [showErrorCard, setshowErrorCard] = React.useState(false);
 
-  const [errorType, setErrorType] = React.useState<string | null>(null);
-
   return (
     <QueryParamContext.Provider
       value={{
@@ -567,7 +552,6 @@ export default function QueryParamProvider({ children }: any) {
         allowTaxDeductionChange,
         donationUid,
         setDonationUid,
-        setErrorType,
         setshowErrorCard,
       }}
     >
