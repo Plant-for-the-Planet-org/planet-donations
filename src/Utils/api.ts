@@ -19,15 +19,25 @@ axiosInstance.interceptors.request.use(
     // sets the content type to json
     config.headers["Content-Type"] = "application/json";
 
-    config.headers["x-locale"] = `${
-      localStorage.getItem("language") ? localStorage.getItem("language") : "en"
-    }`;
+    if (typeof Storage !== "undefined") {
+      config.headers["x-locale"] = `${
+        localStorage.getItem("language")
+          ? localStorage.getItem("language")
+          : "en"
+      }`;
+    } else {
+      config.headers["x-locale"] = "en";
+    }
 
-    config.headers["tenant-key"] = `${
-      localStorage.getItem("tenant")
-        ? localStorage.getItem("tenant")
-        : "ten_I9TW3ncG"
-    }`;
+    if (typeof Storage !== "undefined") {
+      config.headers["tenant-key"] = `${
+        localStorage.getItem("tenant")
+          ? localStorage.getItem("tenant")
+          : "ten_I9TW3ncG"
+      }`;
+    } else {
+      config.headers["tenant-key"] = "ten_I9TW3ncG";
+    }
 
     return config;
   },
@@ -101,7 +111,7 @@ export const apiRequest = async (
           resolve(response);
         })
         .catch((err) => {
-          setshowErrorCard(true)
+          setshowErrorCard(true);
           reject(err);
         });
     });

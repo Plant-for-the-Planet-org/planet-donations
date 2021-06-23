@@ -97,33 +97,6 @@ export default function Header() {
         sizes="180x180"
         href={`/assets/favicons/apple-touch-icon-180x180.png`}
       />
-
-
-
-      <title>{`Donate with Plant-for-the-Planet`}</title>
-      <meta name="title" content="Donate with Plant-for-the-Planet" />
-      <meta name="description" content="Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here." />
-
-      <meta property="og:site_name" content={'Donate with Plant-for-the-Planet'} />
-
-
-      <meta property="og:title" content={`Donate with Plant-for-the-Planet`} />
-      <meta property="og:description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
-      <meta name="description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
-      <meta property="og:type" content="website" />
-      <meta property="og:image" content="" />
-      <meta property="og:url" content="https://donate.plant-for-the-planet.org/" />
-
-
-      <link rel="alternate" href="android-app://org.pftp/projects" />
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content={'Donate with Plant-for-the-Planet'} />
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:image" content=""></meta>
-      <meta property="twitter:url" content="https://donate.plant-for-the-planet.org/" />
-      <meta property="twitter:title" content="Donate with Plant-for-the-Planet" /> 
-
-      <meta name="twitter:description" content={`Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`} />
     </Head>
   );
 }
