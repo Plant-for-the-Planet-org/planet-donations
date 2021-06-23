@@ -49,7 +49,7 @@ function index({
   let title = `Donate with Plant-for-the-Planet`;
 
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  let image= `https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdonate.plant-for-the-planet.org%3F%26tenant%3Dten_I9TW3ncG?w=1200&h=770`;
+  const image= `https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdonate.plant-for-the-planet.org%3F%26tenant%3Dten_I9TW3ncG?w=1200&h=770`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
