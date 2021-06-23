@@ -62,8 +62,8 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 function MyApp({ Component, pageProps }: AppProps) {
   const { theme: themeType } = useTheme();
   const router = useRouter();
-
-  if (process.env.VERCEL_URL && typeof window !== 'undefined') {
+  
+  if (process.env.NODE_ENV !== "production" && process.env.VERCEL_URL && typeof window !== 'undefined') {
     if (process.env.VERCEL_URL !== window.location.hostname) {
       router.replace(`https://${process.env.VERCEL_URL}`);
     }
