@@ -77,7 +77,10 @@ function ContactsForm({}: Props): ReactElement {
       geocoder
         .suggest(value, {})
         .then((result) => {
-          setaddressSugggestions(result.suggestions);
+          const filterdSuggestions = result.suggestions.filter((suggestion)=>{
+            return !suggestion.isCollection
+          });
+          setaddressSugggestions(filterdSuggestions);          
         })
         .catch(console.log);
     }
@@ -87,6 +90,7 @@ function ContactsForm({}: Props): ReactElement {
     geocoder
       .findAddressCandidates(value, { outfields: "*" })
       .then((result) => {
+        // console.log('result',result);
         setValue("address",result.candidates[0].attributes.ShortLabel, {
           shouldValidate: true,
         });
@@ -180,7 +184,7 @@ function ContactsForm({}: Props): ReactElement {
                       return (
                         <div
                           onClick={() => {
-                            getAddress(suggestion.text);
+                            getAddress(suggestion.text)
                           }}
                           className="suggestion"
                         >
