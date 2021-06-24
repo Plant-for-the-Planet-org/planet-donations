@@ -155,7 +155,7 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.locale]);
 
   React.useEffect(() => {
-    if(i18n && i18n.hasOwnProperty('changeLanguage')){
+    if(i18n && i18n.isInitialized){
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }
