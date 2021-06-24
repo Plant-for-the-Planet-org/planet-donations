@@ -158,8 +158,7 @@ export default function QueryParamProvider({ children }: any) {
     console.log('language',language);
     console.log('i18n',i18n);
 
-    if(i18n){
-      
+    if(i18n && i18n.hasOwnProperty('changeLanguage')){
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }

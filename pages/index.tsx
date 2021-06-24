@@ -57,7 +57,7 @@ function index({
       getCountryDataBy("countryCode", projectDetails.country)?.countryName
     }. Your journey to a trillion trees starts here.`;
   }
-  if(giftDetails){
+  if(giftDetails && giftDetails.recipientName){
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
 
