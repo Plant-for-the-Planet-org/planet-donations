@@ -97,6 +97,5 @@ export interface CreateDonationFunctionProps {
   setPaymentError: Function;
   setdonationID: any;
   token: any;
-  setErrorType: Function;
   setshowErrorCard: Function;
 }

@@ -15,7 +15,7 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails,setErrorType,setshowErrorCard } = React.useContext(QueryParamContext);
+  const { setContactDetails,setshowErrorCard } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -37,7 +37,6 @@ function Authentication({}: Props): ReactElement {
         const requestParams = {
           url:"/app/profile",
           token:token,
-          setErrorType,
           setshowErrorCard
         }
         const profile: any = await apiRequest(requestParams);
@@ -210,7 +209,7 @@ function VerifyEmailModal({
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
               onClick={() =>
-                logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })
+                logout({ returnTo: `${process.env.APP_URL}/` })
               }
             >
               <p>{t("skipLogout")}</p>

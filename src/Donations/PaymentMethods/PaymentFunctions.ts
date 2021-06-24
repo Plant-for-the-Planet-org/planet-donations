@@ -90,7 +90,6 @@ export async function createDonationFunction({
   setPaymentError,
   setdonationID,
   token,
-  setErrorType,
   setshowErrorCard,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
@@ -112,7 +111,6 @@ export async function createDonationFunction({
         url: `/app/donations`,
         data: donationData,
         method: "POST",
-        setErrorType,
         setshowErrorCard,
         token: token,
       };
@@ -122,7 +120,6 @@ export async function createDonationFunction({
         url: `/app/donations`,
         data: donationData,
         method: "POST",
-        setErrorType,
         setshowErrorCard,
       };
       donation = await apiRequest(requestParams);
@@ -215,7 +212,6 @@ export async function payDonationFunction({
   contactDetails,
   token,
   country,
-  setErrorType,
   setshowErrorCard,
 }: any) {
   setIsPaymentProcessing(true);
@@ -238,7 +234,6 @@ export async function payDonationFunction({
         url: `/app/donations/${donationID}`,
         data: payDonationData,
         method: "PUT",
-        setErrorType,
         setshowErrorCard,
         token: token,
       };
@@ -248,7 +243,6 @@ export async function payDonationFunction({
         url: `/app/donations/${donationID}`,
         data: payDonationData,
         method: "PUT",
-        setErrorType,
         setshowErrorCard,
       };
       paidDonation = await apiRequest(requestParams);
@@ -281,7 +275,6 @@ export async function payDonationFunction({
           contactDetails,
           token,
           country,
-          setErrorType,
           setshowErrorCard,
         });
       }
@@ -317,7 +310,6 @@ export async function handleSCAPaymentFunction({
   contactDetails,
   token,
   country,
-  setErrorType,
   setshowErrorCard,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
@@ -353,7 +345,6 @@ export async function handleSCAPaymentFunction({
                 url: `/app/donations/${donationID}`,
                 data: payDonationData,
                 method: "PUT",
-                setErrorType,
                 setshowErrorCard,
                 token: token,
               };
@@ -363,7 +354,6 @@ export async function handleSCAPaymentFunction({
                 url: `/app/donations/${donationID}`,
                 data: payDonationData,
                 method: "PUT",
-                setErrorType,
                 setshowErrorCard,
               };
               SCAPaidDonation = await apiRequest(requestParams);
