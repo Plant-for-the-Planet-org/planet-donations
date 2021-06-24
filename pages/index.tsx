@@ -82,8 +82,6 @@ function index({
           property="og:url"
           content="https://donate.plant-for-the-planet.org/"
         />
-
-        <link rel="alternate" href="android-app://org.pftp/projects" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
         <meta property="twitter:card" content="summary_large_image" />
