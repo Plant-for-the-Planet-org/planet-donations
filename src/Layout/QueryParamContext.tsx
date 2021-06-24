@@ -224,7 +224,7 @@ export default function QueryParamProvider({ children }: any) {
           "featured"
         );
         if (featuredProjects?.length < 6) {
-          setSelectedProjects(selectedProjects);
+          setSelectedProjects(featuredProjects);
         } else {
           const randomProjects = getRandomProjects(featuredProjects, 6);
           setSelectedProjects(randomProjects);
