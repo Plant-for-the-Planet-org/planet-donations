@@ -16,6 +16,7 @@ interface Props {
   donationStep: any;
   giftDetails: Object;
   isGift: boolean;
+  resolvedUrl:any;
 }
 
 function index({
@@ -23,6 +24,7 @@ function index({
   donationStep,
   giftDetails,
   isGift,
+  resolvedUrl
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -49,7 +51,8 @@ function index({
   let title = `Donate with Plant-for-the-Planet`;
 
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const image= `https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdonate.plant-for-the-planet.org%3F%26tenant%3Dten_I9TW3ncG?w=1200&h=770`;
+  let url = process.env.NEXTAUTH_URL+resolvedUrl;
+  const image= `https://s.wordpress.com/mshots/v1/${encodeURI(url)}?w=1200&h=770`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
@@ -80,7 +83,7 @@ function index({
         <meta property="og:image" content={image} />
         <meta
           property="og:url"
-          content="https://donate.plant-for-the-planet.org/"
+          content={title}
         />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
@@ -88,7 +91,7 @@ function index({
         <meta property="twitter:image" content={image}></meta>
         <meta
           property="twitter:url"
-          content="https://donate.plant-for-the-planet.org/"
+          content={title}
         />
         <meta
           property="twitter:title"
@@ -157,6 +160,7 @@ export async function getServerSideProps(context: any) {
       console.log("Error", err);
     }
   }
+  let resolvedUrl = context.resolvedUrl;
 
   return {
     props: {
@@ -170,6 +174,7 @@ export async function getServerSideProps(context: any) {
       projectDetails: projectDetails,
       giftDetails: giftDetails,
       isGift: isGift,
+      resolvedUrl:resolvedUrl
     }, // will be passed to the page component as props
   };
 }
