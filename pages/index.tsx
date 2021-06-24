@@ -160,7 +160,7 @@ export async function getServerSideProps(context: any) {
       console.log("Error", err);
     }
   }
-  let resolvedUrl = context.resolvedUrl;
+  const resolvedUrl = context.resolvedUrl;
 
   return {
     props: {
