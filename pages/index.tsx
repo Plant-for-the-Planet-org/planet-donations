@@ -83,7 +83,7 @@ function index({
         <meta property="og:image" content={image} />
         <meta
           property="og:url"
-          content={title}
+          content={url}
         />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
@@ -91,7 +91,7 @@ function index({
         <meta property="twitter:image" content={image}></meta>
         <meta
           property="twitter:url"
-          content={title}
+          content={url}
         />
         <meta
           property="twitter:title"
