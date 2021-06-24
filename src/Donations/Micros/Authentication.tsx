@@ -209,7 +209,7 @@ function VerifyEmailModal({
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
               onClick={() =>
-                logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })
+                logout({ returnTo: `${process.env.APP_URL}/` })
               }
             >
               <p>{t("skipLogout")}</p>
