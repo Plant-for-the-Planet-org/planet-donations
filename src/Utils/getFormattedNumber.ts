@@ -51,7 +51,6 @@ export function getFormattedRoundedNumber(
   number: number,
   fractionDigits: number,
 ) {
-  // console.log("getFormattedRoundedNumber", langCode, number, fractionDigits);
   if (Math.round(number) === Math.round(number*fractionDigits*10)/(fractionDigits*10))
     fractionDigits = 0;
   const formatter = new Intl.NumberFormat(langCode, {
@@ -66,7 +65,6 @@ export function getFormattedNumber(
   langCode: string,
   number: number
 ) {
-  // console.log("getFormattedNumber", langCode, number);
   const formatter = new Intl.NumberFormat(langCode);
   return formatter.format(number);
 }

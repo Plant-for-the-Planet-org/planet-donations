@@ -40,7 +40,6 @@ function DonationsForm() {
     setPaymentType,
     setdonationID,
     isTaxDeductible,
-    setErrorType,
     setshowErrorCard,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
@@ -95,7 +94,6 @@ function DonationsForm() {
       setPaymentError,
       setdonationID,
       token,
-      setErrorType,
       setshowErrorCard,
     }).then(async (res) => {
       let token = null;
@@ -113,7 +111,6 @@ function DonationsForm() {
         setdonationStep,
         token,
         country,
-        setErrorType,
         setshowErrorCard,
       });
     });

@@ -24,7 +24,6 @@ function ThankYou() {
     setdonationStep,
     redirectstatus,
     returnTo,
-    setErrorType,
     setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
@@ -35,7 +34,6 @@ function ThankYou() {
   async function loadDonation() {
     const requestParams = {
       url: `/app/donations/${donationID}`,
-      setErrorType,
       setshowErrorCard,
     };
     const donation = await apiRequest(requestParams);

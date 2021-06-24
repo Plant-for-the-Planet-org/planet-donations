@@ -55,7 +55,6 @@ function PaymentsForm({}: Props): ReactElement {
     isTaxDeductible,
     isDirectDonation,
     setDonationUid,
-    setErrorType,
     setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
@@ -82,7 +81,6 @@ function PaymentsForm({}: Props): ReactElement {
       contactDetails,
       token,
       country,
-      setErrorType,
       setshowErrorCard,
     });
   };
@@ -113,7 +111,6 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
       token,
-      setErrorType,
       setshowErrorCard,
     });
 
@@ -138,7 +135,6 @@ function PaymentsForm({}: Props): ReactElement {
         url: `/app/donations/${donationID}/publish`,
         data: {publish: publishName},
         method: "PUT",
-        setErrorType,
         setshowErrorCard,
       };
       apiRequest(requestParams);

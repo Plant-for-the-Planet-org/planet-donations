@@ -59,8 +59,9 @@ export const QueryParamContext = React.createContext({
   allowTaxDeductionChange: true,
   donationUid: null,
   setDonationUid: (value: string) => "",
-  setErrorType: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
+  setprojectDetails: (value: {}) => {},
+  loadselectedProjects: () => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -153,16 +154,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  // React.useEffect(() => {
-  //   if (router.locale) {
-  //     setlanguage(router.locale);
-  //   }
-  // }, [router.locale]);
-
   React.useEffect(() => {
-    i18n.changeLanguage(language);
-    localStorage.setItem("language", language);
-  }, [language, router]);
+    if(i18n && i18n.hasOwnProperty('changeLanguage')){
+      i18n.changeLanguage(language);
+      localStorage.setItem("language", language);
+    }
+  }, [language]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
@@ -191,7 +188,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects/${projectGUID}`,
-        setErrorType,
         setshowErrorCard,
       };
       const project: ProjectTypes = await apiRequest(requestParams);
@@ -208,7 +204,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects?_scope=map`,
-        setErrorType,
         setshowErrorCard,
       };
       const projects: any = await apiRequest(requestParams);
@@ -235,20 +230,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  React.useEffect(() => {
-    if (router.isReady) {
-      if (router.query.to && !router.query.context) {
-        loadProject(router.query.to);
-        setdonationStep(1);
-      } else {
-        if (!router.query.context) {
-          loadselectedProjects();
-          setdonationStep(0);
-        }
-      }
-    }
-  }, [router.query.to, router.isReady]);
-
   async function loadPaymentSetup(
     projectGUID: string | string[],
     paymentSetupCountry: string
@@ -257,7 +238,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setErrorType,
         setshowErrorCard,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
@@ -290,7 +270,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/public/v1.2/${userLang}/config`,
-        setErrorType,
         setshowErrorCard,
       };
       const config: any = await apiRequest(requestParams);
@@ -336,7 +315,6 @@ export default function QueryParamProvider({ children }: any) {
     try {
       const requestParams = {
         url: `/app/donations/${router.query.context}`,
-        setErrorType,
         setshowErrorCard,
       };
       const donation: any = await apiRequest(requestParams);
@@ -436,36 +414,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.context]);
 
-  // support = s => Fetch the user data from api and load in gift details
-  async function loadPublicUserData(slug: any) {
-    try {
-      const requestParams = {
-        url: `/app/profiles/${slug}`,
-        setErrorType,
-        setshowErrorCard,
-      };
-      const newProfile = await apiRequest(requestParams);
-      if (newProfile.data.type !== "tpo") {
-        setisGift(true);
-        setgiftDetails({
-          recipientName: newProfile.data.displayName,
-          recipientEmail: "",
-          giftMessage: "",
-          type: "direct",
-          recipientTreecounter: newProfile.data.slug,
-        });
-      }
-    } catch (err) {
-      // console.log("Error",err);
-    }
-  }
-
-  React.useEffect(() => {
-    if (router && router.query.s) {
-      loadPublicUserData(router.query.s);
-    }
-  }, [router.query.s]);
-
   React.useEffect(() => {
     if (router.query.tenant) {
       // TODO => verify tenant before setting it
@@ -524,8 +472,6 @@ export default function QueryParamProvider({ children }: any) {
 
   const [showErrorCard, setshowErrorCard] = React.useState(false);
 
-  const [errorType, setErrorType] = React.useState<string | null>(null);
-
   return (
     <QueryParamContext.Provider
       value={{
@@ -567,8 +513,9 @@ export default function QueryParamProvider({ children }: any) {
         allowTaxDeductionChange,
         donationUid,
         setDonationUid,
-        setErrorType,
         setshowErrorCard,
+        setprojectDetails,
+        loadselectedProjects
       }}
     >
       {children}
