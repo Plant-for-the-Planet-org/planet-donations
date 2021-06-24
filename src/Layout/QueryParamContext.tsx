@@ -156,9 +156,13 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     console.log('language',language);
-    
-    i18n.changeLanguage(language);
-    localStorage.setItem("language", language);
+    console.log('i18n',i18n);
+
+    if(i18n){
+      
+      i18n.changeLanguage(language);
+      localStorage.setItem("language", language);
+    }
   }, [language]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
