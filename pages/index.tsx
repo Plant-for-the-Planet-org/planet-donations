@@ -51,9 +51,9 @@ function index({
   let title = `Donate with Plant-for-the-Planet`;
 
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = process.env.APP_URL+resolvedUrl;
-  const image= `https://s.wordpress.com/mshots/v1/${encodeURI(url)}?w=1200&h=770`;
-
+  const url = encodeURIComponent(process.env.APP_URL+resolvedUrl);
+  const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770`;
+  
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     description = `Plant trees with ${projectDetails.tpo.name} in ${
