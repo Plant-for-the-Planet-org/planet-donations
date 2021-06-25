@@ -84,7 +84,7 @@ function ContactsForm({}: Props): ReactElement {
   const suggestAddress = (value) => {
     if (value.length > 3) {
       geocoder
-        .suggest(value, {category:"Address,Postal",countryCode:contactDetails.country})
+        .suggest(value, {category:"Street Address",countryCode:contactDetails.country})
         .then((result) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
