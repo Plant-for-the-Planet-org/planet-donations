@@ -3,14 +3,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Donations from "./../src/Donations";
 import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
-import { ProjectTypes } from "../src/Common/Types";
-import {
-  getFilteredProjects,
-  getRandomProjects,
-} from "../src/Utils/projects/filterProjects";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
+import locales from "../public/static/localeList.json";
+import { useRouter } from "next/dist/client/router";
+
 interface Props {
   projectDetails: Object;
   donationStep: any;
@@ -24,7 +22,7 @@ function index({
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl
+  resolvedUrl,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -64,6 +62,7 @@ function index({
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
 
+  const router = useRouter();  
   return (
     <div
       style={{ flexGrow: 1 }}
@@ -73,6 +72,19 @@ function index({
         <title>{title}</title>
         <meta name="title" content={title} />
         <meta name="description" content="" />
+
+        <meta property="og:locale" content={locales.find(locale => locale.key === router.query.locale )?.value} />
+        {locales.map((locale) => {
+          if (locale.key !== router.query.locale) {
+            return (
+              <meta
+                key={`og:locale:alternate${locale.value}`}
+                property="og:locale:alternate"
+                content={locale.value}
+              />
+            );
+          }
+        })}
 
         <meta property="og:site_name" content={title} />
 
@@ -161,7 +173,7 @@ export async function getServerSideProps(context: any) {
     }
   }
   const resolvedUrl = context.resolvedUrl;
-
+  
   return {
     props: {
       ...(await serverSideTranslations(
