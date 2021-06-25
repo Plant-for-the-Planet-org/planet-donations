@@ -1,7 +1,7 @@
 import Head from "next/head";
 import locales from "../../public/static/localeList.json";
 
-export default function Header() {
+export default function Header() {  
   return (
     <Head>
       <link
@@ -17,7 +17,7 @@ export default function Header() {
         if (locale !== "en_US") {
           return (
             <meta
-              key="og:locale:alternate"
+              key={`og:locale:alternate${locale}`}
               property="og:locale:alternate"
               content={locale}
             />
