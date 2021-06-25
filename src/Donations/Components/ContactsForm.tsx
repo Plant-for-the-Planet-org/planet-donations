@@ -18,10 +18,10 @@ function ContactsForm({}: Props): ReactElement {
   }, []);
 
   const [isCompany, setIsCompany] = React.useState(false);
-  const geocoder = new GeocoderArcGIS({
-    client_id: "KrMGMuShQJkHTBRt", // optional, see below
-    client_secret: "916698cc82664ba19467682e363fd50f", // optional, see below
-  });
+  const geocoder = new GeocoderArcGIS(process.env.ESRI_CLIENT_SECRET ? {
+    client_id:process.env.ESRI_CLIENT_ID,
+    client_secret:process.env.ESRI_CLIENT_SECRET,
+  } : null);
   const {
     contactDetails,
     setContactDetails,
