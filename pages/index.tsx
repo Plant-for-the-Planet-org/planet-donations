@@ -52,7 +52,7 @@ function index({
 
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = encodeURIComponent(process.env.APP_URL+resolvedUrl);
-  const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770`;
+  const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
   
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
@@ -92,10 +92,6 @@ function index({
         <meta
           property="twitter:url"
           content={url}
-        />
-        <meta
-          property="twitter:title"
-          content="Donate with Plant-for-the-Planet"
         />
         <meta name="twitter:description" content={description} />
       </Head>
