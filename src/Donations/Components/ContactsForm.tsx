@@ -18,7 +18,10 @@ function ContactsForm({}: Props): ReactElement {
   }, []);
 
   const [isCompany, setIsCompany] = React.useState(false);
-  const geocoder = new GeocoderArcGIS();
+  const geocoder = new GeocoderArcGIS({
+    client_id: "KrMGMuShQJkHTBRt", // optional, see below
+    client_secret: "916698cc82664ba19467682e363fd50f", // optional, see below
+  });
   const {
     contactDetails,
     setContactDetails,
@@ -36,12 +39,18 @@ function ContactsForm({}: Props): ReactElement {
     }
   }, [contactDetails]);
 
-  const { register, errors, handleSubmit, control, reset, getValues, setValue } = useForm(
-    {
-      mode: "all",
-      defaultValues: {},
-    }
-  );
+  const {
+    register,
+    errors,
+    handleSubmit,
+    control,
+    reset,
+    getValues,
+    setValue,
+  } = useForm({
+    mode: "all",
+    defaultValues: {},
+  });
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
@@ -77,10 +86,10 @@ function ContactsForm({}: Props): ReactElement {
       geocoder
         .suggest(value, {})
         .then((result) => {
-          const filterdSuggestions = result.suggestions.filter((suggestion)=>{
-            return !suggestion.isCollection
+          const filterdSuggestions = result.suggestions.filter((suggestion) => {
+            return !suggestion.isCollection;
           });
-          setaddressSugggestions(filterdSuggestions);          
+          setaddressSugggestions(filterdSuggestions);
         })
         .catch(console.log);
     }
@@ -91,16 +100,16 @@ function ContactsForm({}: Props): ReactElement {
       .findAddressCandidates(value, { outfields: "*" })
       .then((result) => {
         // console.log('result',result);
-        setValue("address",result.candidates[0].attributes.ShortLabel, {
+        setValue("address", result.candidates[0].attributes.ShortLabel, {
           shouldValidate: true,
         });
-        setValue("city",result.candidates[0].attributes.City, {
+        setValue("city", result.candidates[0].attributes.City, {
           shouldValidate: true,
         });
-        setValue("zipCode",result.candidates[0].attributes.Postal, {
+        setValue("zipCode", result.candidates[0].attributes.Postal, {
           shouldValidate: true,
         });
-        setaddressSugggestions([])
+        setaddressSugggestions([]);
       })
       .catch(console.log);
   };
@@ -175,7 +184,7 @@ function ContactsForm({}: Props): ReactElement {
               onChange={(event) => {
                 suggestAddress(event.target.value);
               }}
-              onBlur={()=>setaddressSugggestions([])}
+              onBlur={() => setaddressSugggestions([])}
             />
             {addressSugggestions
               ? addressSugggestions.length > 0 && (
@@ -184,7 +193,7 @@ function ContactsForm({}: Props): ReactElement {
                       return (
                         <div
                           onClick={() => {
-                            getAddress(suggestion.text)
+                            getAddress(suggestion.text);
                           }}
                           className="suggestion"
                         >
