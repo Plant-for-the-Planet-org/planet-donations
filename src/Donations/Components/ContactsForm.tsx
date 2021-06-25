@@ -21,7 +21,7 @@ function ContactsForm({}: Props): ReactElement {
   const geocoder = new GeocoderArcGIS(process.env.ESRI_CLIENT_SECRET ? {
     client_id:process.env.ESRI_CLIENT_ID,
     client_secret:process.env.ESRI_CLIENT_SECRET,
-  } : null);
+  } : {});
   const {
     contactDetails,
     setContactDetails,
@@ -84,7 +84,7 @@ function ContactsForm({}: Props): ReactElement {
   const suggestAddress = (value) => {
     if (value.length > 3) {
       geocoder
-        .suggest(value, {category:"Street Address",countryCode:contactDetails.country})
+        .suggest(value, {category:"Address",countryCode:contactDetails.country})
         .then((result) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
