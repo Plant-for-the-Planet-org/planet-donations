@@ -154,12 +154,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
-    if(i18n && i18n.hasOwnProperty('changeLanguage')){
+  React.useEffect(() => {    
+    if(i18n && i18n.isInitialized){
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }
-  }, [language]);
+  }, [language,router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
@@ -219,7 +219,7 @@ export default function QueryParamProvider({ children }: any) {
           "featured"
         );
         if (featuredProjects?.length < 6) {
-          setSelectedProjects(selectedProjects);
+          setSelectedProjects(featuredProjects);
         } else {
           const randomProjects = getRandomProjects(featuredProjects, 6);
           setSelectedProjects(randomProjects);

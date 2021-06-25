@@ -43,6 +43,7 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
+    setContactDetails(data)
     setdonationStep(3);
   };
 
