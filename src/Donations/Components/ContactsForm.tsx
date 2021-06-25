@@ -84,7 +84,7 @@ function ContactsForm({}: Props): ReactElement {
   const suggestAddress = (value) => {
     if (value.length > 3) {
       geocoder
-        .suggest(value, {})
+        .suggest(value, {category:"Address,Postal",countryCode:contactDetails.country})
         .then((result) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
@@ -99,7 +99,6 @@ function ContactsForm({}: Props): ReactElement {
     geocoder
       .findAddressCandidates(value, { outfields: "*" })
       .then((result) => {
-        // console.log('result',result);
         setValue("address", result.candidates[0].attributes.ShortLabel, {
           shouldValidate: true,
         });
@@ -192,7 +191,7 @@ function ContactsForm({}: Props): ReactElement {
                     {addressSugggestions.map((suggestion) => {
                       return (
                         <div
-                          onClick={() => {
+                          onMouseDown={() => {
                             getAddress(suggestion.text);
                           }}
                           className="suggestion"
