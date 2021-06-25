@@ -118,6 +118,8 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     CDN_URL: `${scheme}://${process.env.CDN_URL}`,
     APP_URL: APPUrl,
     VERCEL_URL: process.env.VERCEL_URL,
+    ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,
+    ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
   },
   trailingSlash: false,
   reactStrictMode: true,
