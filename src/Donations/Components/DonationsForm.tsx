@@ -49,7 +49,7 @@ function DonationsForm() {
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
-  }, []);
+  }, [currency]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
@@ -272,7 +272,7 @@ function DonationsForm() {
             )}
 
             {paymentSetup && projectDetails ? (
-              minAmt && projectDetails.treeCost * treeCount >= minAmt ? (
+              minAmt && paymentSetup?.treeCost * treeCount >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
                 currency ? (
