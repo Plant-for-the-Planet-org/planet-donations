@@ -21,6 +21,7 @@ import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getCountryDataBy } from "../../Utils/countryUtils";
 
 function DonationsForm() {
   const {
@@ -39,6 +40,7 @@ function DonationsForm() {
     setPaymentType,
     setdonationID,
     isTaxDeductible,
+    setshowErrorCard,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
@@ -92,6 +94,7 @@ function DonationsForm() {
       setPaymentError,
       setdonationID,
       token,
+      setshowErrorCard,
     }).then(async (res) => {
       let token = null;
       if (!isLoading && isAuthenticated) {
@@ -107,7 +110,8 @@ function DonationsForm() {
         donationID: res.id,
         setdonationStep,
         token,
-        country
+        country,
+        setshowErrorCard,
       });
     });
   };
@@ -146,7 +150,7 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">{t('donate')}</p>
+          <p className="title-text">{t("donate")}</p>
           <div className="donations-gift-container mt-10">
             <GiftForm />
           </div>
@@ -174,9 +178,7 @@ function DonationsForm() {
                     {option.iconFile}
                     <div className="tree-selection-option-text">
                       <p>{option.treeCount}</p>
-                      <span>
-                        {t('trees')}
-                      </span>
+                      <span>{t("trees")}</span>
                     </div>
                   </div>
                 );
@@ -213,7 +215,7 @@ function DonationsForm() {
                     }}
                     ref={customInputRef}
                   />
-                  <span>{t('trees')}</span>
+                  <span>{t("trees")}</span>
                 </div>
               </div>
             </div>
@@ -225,7 +227,7 @@ function DonationsForm() {
                     setopenCurrencyModal(true);
                   }}
                   className="text-bold text-primary"
-                  style={{marginRight:'4px'}}
+                  style={{ marginRight: "4px" }}
                 >
                   {currency}{" "}
                   <DownArrowIcon color={themeProperties.primaryColor} />
@@ -234,7 +236,6 @@ function DonationsForm() {
                     "",
                     Number(paymentSetup.treeCost)
                   )}{" "}
-                  
                 </button>
                 {t("perTree")}
               </p>
@@ -286,6 +287,12 @@ function DonationsForm() {
                     paymentSetup={paymentSetup}
                     continueNext={() => setdonationStep(2)}
                     isPaymentPage={false}
+                    paymentLabel={t("treesInCountry", {
+                      treeCount: treeCount,
+                      country: t(
+                        `country:${projectDetails.country.toLowerCase()}`
+                      ),
+                    })}
                   />
                 ) : (
                   <div className="mt-20 w-100">
@@ -294,7 +301,7 @@ function DonationsForm() {
                 )
               ) : (
                 <p className={"text-danger mt-20 text-center"}>
-                  {t("minDonate")}
+                  {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>

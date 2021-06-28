@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getAuthenticatedRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import { Backdrop, Fade, Modal } from "@material-ui/core";
 import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
@@ -15,7 +15,7 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails } = React.useContext(QueryParamContext);
+  const { setContactDetails,setshowErrorCard } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -30,13 +30,16 @@ function Authentication({}: Props): ReactElement {
 
   const loadUserProfile = async () => {
     if (user.email_verified) {
-      const token = await getAccessTokenSilently();
 
       try {
-        const profile: any = await getAuthenticatedRequest(
-          "/app/profile",
-          token
-        );
+        const token = await getAccessTokenSilently();
+
+        const requestParams = {
+          url:"/app/profile",
+          token:token,
+          setshowErrorCard
+        }
+        const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
           const newContactDetails = {
@@ -73,6 +76,7 @@ function Authentication({}: Props): ReactElement {
       if(localStorage.getItem('queryparams')){
         const queryparams = localStorage.getItem('queryparams');
         router.push(queryparams);
+        localStorage.removeItem('queryparams');
       }
       // If details present store in contact details
       // If details are not present show message and logout user
@@ -205,7 +209,7 @@ function VerifyEmailModal({
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
               onClick={() =>
-                logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })
+                logout({ returnTo: `${process.env.APP_URL}/` })
               }
             >
               <p>{t("skipLogout")}</p>

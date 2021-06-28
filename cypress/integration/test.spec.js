@@ -2,7 +2,7 @@
 
 describe("HomaPage", () => {
     it("PFTP site",() => {
-        cy.visit("http://localhost:3000?to=yucatan")
+        cy.visit("http://localhost:3000?to=plant-for-ethiopia")
         cy.wait(5000)
         cy.get('[data-test-id="continue-next"]').click().then(() => {
             cy.get('[data-test-id="test-firstName"]').type("rish")

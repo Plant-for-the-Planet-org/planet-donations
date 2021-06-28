@@ -1,7 +1,7 @@
 import { useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
 import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
 import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
@@ -16,6 +16,7 @@ interface PaymentButtonProps {
   onPaymentFunction: Function;
   continueNext: Function;
   isPaymentPage: boolean;
+  paymentLabel:string;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -24,6 +25,7 @@ export const PaymentRequestCustomButton = ({
   onPaymentFunction,
   continueNext,
   isPaymentPage,
+  paymentLabel
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -38,7 +40,7 @@ export const PaymentRequestCustomButton = ({
         country: country,
         currency: currency.toLowerCase(),
         total: {
-          label: ready ? t("donate:treeDonationWithPFP") : "",
+          label: paymentLabel,
           amount: amount,
         },
         requestPayerName: true,
@@ -181,6 +183,7 @@ interface NativePayProps {
   paymentSetup: Object;
   continueNext: Function;
   isPaymentPage: boolean;
+  paymentLabel: string;
 }
 export const NativePay = ({
   country,
@@ -190,6 +193,7 @@ export const NativePay = ({
   paymentSetup,
   continueNext,
   isPaymentPage,
+  paymentLabel
 }: NativePayProps) => {
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)
@@ -223,6 +227,7 @@ export const NativePay = ({
         onPaymentFunction={onPaymentFunction}
         continueNext={continueNext}
         isPaymentPage={isPaymentPage}
+        paymentLabel={paymentLabel}
       />
     </Elements>
   );

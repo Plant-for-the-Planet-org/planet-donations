@@ -256,6 +256,28 @@
   margin-left: 25px;
 }
 
+.suggestions-container {
+  position: absolute;
+  z-index: 10;
+  background-color: white;
+  max-height: 200px;
+  overflow: scroll;
+  box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.26);
+  min-width: 100%;
+  .suggestion {
+    min-width: 100%;
+    &:nth-child(even) {
+      background-color: rgba(#f2f2f7,0.6);
+    }
+    padding: 12px;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+    &:hover{
+      cursor: pointer;
+      background-color: $blueishGrey;
+    }
+  }
+}
+
 .contacts-isCompany-toggle {
   display: flex;
   align-items: baseline;
@@ -553,10 +575,7 @@
   .donations-info-container {
     width: 420px;
     flex: 1;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
+    border-radius: 20px;
     align-self: auto;
     margin-right: -10px;
   }

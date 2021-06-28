@@ -8,7 +8,7 @@ import DownloadSolid from '../../../public/assets/icons/share/DownloadSolid';
 import InstagramIcon from '../../../public/assets/icons/share/Instagram';
 import ReactDOM from 'react-dom';
 import domtoimage from 'dom-to-image';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 interface ShareOptionsProps {
   treeCount: String;

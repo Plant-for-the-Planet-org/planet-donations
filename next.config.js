@@ -1,15 +1,14 @@
-const withPlugins = require('next-compose-plugins');
+const withPlugins = require("next-compose-plugins");
 // Use the hidden-source-map option when you don't want the source maps to be
 // publicly available on the servers, only to the error reporting
-const withSourceMaps = require('@zeit/next-source-maps')();
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withSourceMaps = require("@zeit/next-source-maps")();
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
-const { i18n } = require('./next-i18next.config')
+const { i18n } = require("./next-i18next.config");
 
 // Use the SentryWebpack plugin to upload the source maps during build step
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
-
+const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 
 const {
   NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
@@ -30,19 +29,22 @@ const COMMIT_SHA =
   SOURCE_VERSION;
 
 process.env.SENTRY_DSN = SENTRY_DSN;
-const basePath = '';
+const basePath = "";
 
 const scheme =
-  process.env.SCHEME === 'http' || process.env.SCHEME === 'https'
+  process.env.SCHEME === "http" || process.env.SCHEME === "https"
     ? process.env.SCHEME
-    : 'https';
+    : "https";
 
-const nextauthUrl = process.env.NEXTAUTH_URL
-  ? `${process.env.NEXTAUTH_URL}`
-  : `${scheme}://${process.env.VERCEL_URL}`;
+let APPUrl;
+if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
+  APPUrl = `${scheme}://${process.env.VERCEL_URL}`;
+} else {
+  APPUrl = process.env.APP_URL;
+}
 
 const hasAssetPrefix =
-  process.env.ASSET_PREFIX !== '' && process.env.ASSET_PREFIX !== undefined;
+  process.env.ASSET_PREFIX !== "" && process.env.ASSET_PREFIX !== undefined;
 
 module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
   serverRuntimeConfig: {
@@ -64,12 +66,12 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     // So ask Webpack to replace @sentry/node imports with @sentry/browser when
     // building the browser's bundle
     if (!options.isServer) {
-      config.resolve.alias['@sentry/node'] = '@sentry/browser';
+      config.resolve.alias["@sentry/node"] = "@sentry/browser";
     }
-    
-    config.node = {
-      fs: 'empty',
-    };
+
+    // config.node = {
+    //   fs: 'empty',
+    // };
 
     // When all the Sentry configuration env variables are available/configured
     // The Sentry webpack plugin gets pushed to the webpack plugins to build
@@ -82,20 +84,20 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
       SENTRY_PROJECT &&
       SENTRY_AUTH_TOKEN &&
       COMMIT_SHA &&
-      NODE_ENV === 'production'
+      NODE_ENV === "production"
     ) {
       config.plugins.push(
         new SentryWebpackPlugin({
-          include: '.next',
-          ignore: ['node_modules'],
-          stripPrefix: ['webpack://_N_E/'],
+          include: ".next",
+          ignore: ["node_modules"],
+          stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~${basePath}/_next`,
           release: COMMIT_SHA,
         }),
         new SentryWebpackPlugin({
-          include: '.next',
-          ignore: ['node_modules'],
-          stripPrefix: ['webpack://_N_E/'],
+          include: ".next",
+          ignore: ["node_modules"],
+          stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~${basePath}/_next`,
           release: COMMIT_SHA,
         })
@@ -114,8 +116,10 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     SCHEME: scheme,
     API_ENDPOINT: `${scheme}://${process.env.API_ENDPOINT}`,
     CDN_URL: `${scheme}://${process.env.CDN_URL}`,
-    NEXTAUTH_URL: nextauthUrl,
+    APP_URL: APPUrl,
     VERCEL_URL: process.env.VERCEL_URL,
+    ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,
+    ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
   },
   trailingSlash: false,
   reactStrictMode: true,
@@ -127,11 +131,11 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  assetPrefix: hasAssetPrefix ? `${scheme}://${process.env.ASSET_PREFIX}` : '',
+  assetPrefix: hasAssetPrefix ? `${scheme}://${process.env.ASSET_PREFIX}` : "",
   // Asset Prefix allows to use CDN for the generated js files
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
   i18n,
   images: {
-    domains: ['cdn.plant-for-the-planet.org'],
+    domains: ["cdn.plant-for-the-planet.org"],
   },
 });

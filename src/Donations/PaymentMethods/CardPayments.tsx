@@ -8,7 +8,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import React, { ReactElement } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 
 const FormControlNew = withStyles({

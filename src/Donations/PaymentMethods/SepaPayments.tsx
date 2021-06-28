@@ -2,7 +2,7 @@ import { FormControl } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { IbanElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { ReactElement } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 

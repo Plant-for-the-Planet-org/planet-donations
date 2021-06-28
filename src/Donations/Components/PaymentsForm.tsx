@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import BackButton from "../../../public/assets/icons/BackButton";
-import { putRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -21,12 +21,13 @@ import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
 import NewPaypal from "../PaymentMethods/NewPaypal";
+import InfoIcon from "../../../public/assets/icons/InfoIcon";
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
-  
+
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
 
@@ -34,7 +35,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const [isDonationLoading, setisDonationLoading] = React.useState(false)
+  const [isDonationLoading, setisDonationLoading] = React.useState(false);
   const {
     paymentSetup,
     country,
@@ -53,7 +54,8 @@ function PaymentsForm({}: Props): ReactElement {
     giftDetails,
     isTaxDeductible,
     isDirectDonation,
-    setDonationUid
+    setDonationUid,
+    setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -79,6 +81,7 @@ function PaymentsForm({}: Props): ReactElement {
       contactDetails,
       token,
       country,
+      setshowErrorCard,
     });
   };
 
@@ -93,7 +96,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       token = await getAccessTokenSilently();
     }
-    setisDonationLoading(true)
+    setisDonationLoading(true);
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -108,6 +111,7 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
       token,
+      setshowErrorCard,
     });
 
     if (donation) {
@@ -116,9 +120,9 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
-      setDonationUid(donation.uid)
+      setDonationUid(donation.uid);
     }
-    setisDonationLoading(false)
+    setisDonationLoading(false);
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
@@ -127,9 +131,13 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (donationID && publishName !== null) {
-      putRequest(`/app/donations/${donationID}/publish`, {
-        publish: publishName,
-      });
+      const requestParams = {
+        url: `/app/donations/${donationID}/publish`,
+        data: {publish: publishName},
+        method: "PUT",
+        setshowErrorCard,
+      };
+      apiRequest(requestParams);
     }
   }, [publishName, donationID]);
 
@@ -140,9 +148,9 @@ function PaymentsForm({}: Props): ReactElement {
     }
   }, [shouldCreateDonation]);
 
-  React.useEffect(()=>{
-    setPaymentType("CARD")
-  },[currency])
+  React.useEffect(() => {
+    setPaymentType("CARD");
+  }, [currency]);
 
   return ready ? (
     isPaymentProcessing ? (
@@ -193,8 +201,16 @@ function PaymentsForm({}: Props): ReactElement {
             ) : null}
           </div>
 
-          {paymentError && <div className={"text-danger"}>{paymentError}</div>}
-
+          {paymentError && (
+            <div
+              className={
+                "mt-20 d-flex align-items-center callout-danger text-danger"
+              }
+            >
+              <InfoIcon />
+              {paymentError}
+            </div>
+          )}
           {!isCreatingDonation &&
             donationID &&
             paymentSetup &&

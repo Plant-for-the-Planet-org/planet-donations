@@ -1,16 +1,15 @@
 import React, { ReactElement } from "react";
 import ContactsForm from "./Components/ContactsForm";
-
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
-import { getCountryDataBy } from "../Utils/countryUtils";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
+import Image from "next/image";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
@@ -36,7 +35,7 @@ function Donations({}: Props): ReactElement {
 }
 
 function DonationInfo() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common", "country");
   const {
     projectDetails,
     donationID,
@@ -52,7 +51,14 @@ function DonationInfo() {
 
   return (
     <div className="donations-info-container">
-      <img className="background-image" src={getTenantBackground(tenant)} />
+      <Image
+        layout="fill"
+        objectFit="cover"
+        src={getTenantBackground(tenant)}
+        className="background-image"
+        placeholder={"blur"}
+        alt="Background image with trees"
+      />
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -113,7 +119,7 @@ function DonationInfo() {
             )}
           {donationStep === 3 && contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-20"}>
-              <p>Billing Address</p>
+              <p>{t("billingAddress")}</p>
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname}
@@ -128,8 +134,7 @@ function DonationInfo() {
               </p>
               <p>
                 {contactDetails.country &&
-                  getCountryDataBy("countryCode", contactDetails.country)
-                    ?.countryName}
+                  t(`country:${contactDetails.country.toLowerCase()}`)}
               </p>
             </div>
           )}
@@ -140,7 +145,7 @@ function DonationInfo() {
             </p>
           )}
         </div>
-      ) :  null}
+      ) : null}
     </div>
   );
 }

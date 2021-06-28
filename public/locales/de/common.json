@@ -96,5 +96,7 @@
   "removeRecipient": "Entfernen",
   "findProjects": "Projekte finden",
   "search": "Suche",
-  "noProjectsFound": "Keine Projekte gefunden"
+  "noProjectsFound": "Keine Projekte gefunden",
+  "billingAddress": "Adresse",
+  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet"
 }

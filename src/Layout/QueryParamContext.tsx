@@ -1,17 +1,19 @@
 import { useRouter } from "next/dist/client/router";
-import React, { Component, useState } from "react";
+import React, { Component, useState, ReactElement } from "react";
 import LeafIcon from "../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { ProjectTypes } from "../Common/Types";
-import { getRequest } from "../Utils/api";
-import { useTranslation } from "react-i18next";
+import { apiRequest } from "../Utils/api";
+import { useTranslation } from "next-i18next";
 import {
   getFilteredProjects,
   getRandomProjects,
 } from "../Utils/projects/filterProjects";
 import { getCountryDataBy } from "../Utils/countryUtils";
+import { Backdrop, Fade, Modal } from "@material-ui/core";
+import { ThemeContext } from "../../styles/themeContext";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -55,8 +57,11 @@ export const QueryParamContext = React.createContext({
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
   allowTaxDeductionChange: true,
-  donationUid:null, 
-  setDonationUid: (value: string) => ""
+  donationUid: null,
+  setDonationUid: (value: string) => "",
+  setshowErrorCard: (value: boolean) => {},
+  setprojectDetails: (value: {}) => {},
+  loadselectedProjects: () => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -69,7 +74,11 @@ export default function QueryParamProvider({ children }: any) {
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
-  const [language, setlanguage] = useState("en");
+  const [language, setlanguage] = useState(
+    typeof window !== "undefined" && localStorage.getItem("language")
+      ? localStorage.getItem("language")
+      : "en"
+  );
 
   const [donationID, setdonationID] = useState(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
@@ -80,7 +89,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [isDirectDonation, setisDirectDonation] = React.useState(false);
 
-  const [donationUid, setDonationUid] = useState(null)
+  const [donationUid, setDonationUid] = useState(null);
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
@@ -126,7 +135,7 @@ export default function QueryParamProvider({ children }: any) {
     companyname: "",
   });
 
-  const [country, setcountry] = useState<string|string[]>("");
+  const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
   const [returnTo, setreturnTo] = useState("");
 
@@ -145,31 +154,30 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
-    if (router.locale) {
-      setlanguage(router.locale);
+  React.useEffect(() => {    
+    if(i18n && i18n.isInitialized){
+      i18n.changeLanguage(language);
+      localStorage.setItem("language", language);
     }
-  }, [router.locale]);
-
-  React.useEffect(() => {
-    i18n.changeLanguage(language);
-    localStorage.setItem("language", language); // value name also used by i18n
-  }, [language]);
+  }, [language,router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
-  function testURL(url:string){
-    let pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  function testURL(url: string) {
+    let pattern = new RegExp(
+      "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    ); // fragment locator
     return !!pattern.test(url);
   }
   React.useEffect(() => {
     if (router.query.return_to) {
-      if(testURL(router.query.return_to)){
+      if (testURL(router.query.return_to)) {
         setreturnTo(router.query.return_to);
       }
     }
@@ -178,9 +186,11 @@ export default function QueryParamProvider({ children }: any) {
   // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
   async function loadProject(projectGUID: string) {
     try {
-      const project: ProjectTypes = await getRequest(
-        `/app/projects/${projectGUID}`
-      );
+      const requestParams = {
+        url: `/app/projects/${projectGUID}`,
+        setshowErrorCard,
+      };
+      const project: ProjectTypes = await apiRequest(requestParams);
       if (project.data) {
         setprojectDetails(project.data);
       }
@@ -192,7 +202,11 @@ export default function QueryParamProvider({ children }: any) {
 
   async function loadselectedProjects() {
     try {
-      const projects:any = await getRequest(`/app/projects?_scope=map`);
+      const requestParams = {
+        url: `/app/projects?_scope=map`,
+        setshowErrorCard,
+      };
+      const projects: any = await apiRequest(requestParams);
       if (projects.data) {
         let allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
@@ -205,7 +219,7 @@ export default function QueryParamProvider({ children }: any) {
           "featured"
         );
         if (featuredProjects?.length < 6) {
-          setSelectedProjects(selectedProjects);
+          setSelectedProjects(featuredProjects);
         } else {
           const randomProjects = getRandomProjects(featuredProjects, 6);
           setSelectedProjects(randomProjects);
@@ -216,26 +230,17 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  React.useEffect(() => {
-    if (router.isReady) {
-      if (router.query.to && !router.query.context) {
-        loadProject(router.query.to);
-        setdonationStep(1);
-      } else {
-        if (!router.query.context) {
-          loadselectedProjects();
-          setdonationStep(0);
-        }
-      }
-    }
-  }, [router.query.to, router.isReady]);
-
-  async function loadPaymentSetup(projectGUID:string | string[], paymentSetupCountry: string) {
+  async function loadPaymentSetup(
+    projectGUID: string | string[],
+    paymentSetupCountry: string
+  ) {
     setIsPaymentOptionsLoading(true);
     try {
-      const paymentSetupData:any = await getRequest(
-        `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`
-      );
+      const requestParams = {
+        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        setshowErrorCard,
+      };
+      const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
         setpaymentSetup(paymentSetupData.data);
         setcurrency(paymentSetupData.data.currency);
@@ -263,9 +268,13 @@ export default function QueryParamProvider({ children }: any) {
       userLang = "en";
     }
     try {
-      const config:any = await getRequest(`/public/v1.2/${userLang}/config`);
+      const requestParams = {
+        url: `/public/v1.2/${userLang}/config`,
+        setshowErrorCard,
+      };
+      const config: any = await apiRequest(requestParams);
       if (config.data) {
-        if(!router.query.country){
+        if (!router.query.country) {
           setcountry(config.data.country);
         }
         if (!router.query.context) {
@@ -304,9 +313,11 @@ export default function QueryParamProvider({ children }: any) {
   // Donation ID = donationid => This will be received from the URL params
   async function loadDonation() {
     try {
-      const donation:any = await getRequest(
-        `/app/donations/${router.query.context}`
-      );
+      const requestParams = {
+        url: `/app/donations/${router.query.context}`,
+        setshowErrorCard,
+      };
+      const donation: any = await apiRequest(requestParams);
 
       if (donation.status === 200) {
         setdonationID(router.query.context);
@@ -392,7 +403,7 @@ export default function QueryParamProvider({ children }: any) {
         // SET Error that no donation is found
         setdonationStep(1);
       }
-    } catch(err) {
+    } catch (err) {
       loadselectedProjects();
       setdonationStep(0);
     }
@@ -402,31 +413,6 @@ export default function QueryParamProvider({ children }: any) {
       loadDonation();
     }
   }, [router.query.context]);
-
-  // support = s => Fetch the user data from api and load in gift details
-  async function loadPublicUserData(slug: any) {
-    try {
-      const newProfile = await getRequest(`/app/profiles/${slug}das`);
-      if (newProfile.data.type !== "tpo") {
-        setisGift(true);
-        setgiftDetails({
-          recipientName: newProfile.data.displayName,
-          recipientEmail: "",
-          giftMessage: "",
-          type: "direct",
-          recipientTreecounter: newProfile.data.slug,
-        });
-      }
-    } catch(err) {
-      // console.log("Error",err);
-    }
-  }
-
-  React.useEffect(() => {
-    if (router && router.query.s) {
-      loadPublicUserData(router.query.s);
-    }
-  }, [router.query.s]);
 
   React.useEffect(() => {
     if (router.query.tenant) {
@@ -445,10 +431,10 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.trees) {
       // Do not allow 0 or negative numbers and string
-      if(Number(router.query.trees) > 0){
+      if (Number(router.query.trees) > 0) {
         settreeCount(Number(router.query.trees));
-      }else{
-        settreeCount(50)
+      } else {
+        settreeCount(50);
       }
     }
   }, [router.query.trees]);
@@ -483,6 +469,8 @@ export default function QueryParamProvider({ children }: any) {
     contactDetails.companyname,
     isTaxDeductible,
   ]);
+
+  const [showErrorCard, setshowErrorCard] = React.useState(false);
 
   return (
     <QueryParamContext.Provider
@@ -524,11 +512,47 @@ export default function QueryParamProvider({ children }: any) {
         allProjects,
         allowTaxDeductionChange,
         donationUid,
-        setDonationUid
+        setDonationUid,
+        setshowErrorCard,
+        setprojectDetails,
+        loadselectedProjects
       }}
     >
       {children}
+
+      <ErrorCard
+        showErrorCard={showErrorCard}
+        setShowErrorCard={setshowErrorCard}
+      />
     </QueryParamContext.Provider>
+  );
+}
+
+interface CardProps {
+  showErrorCard: boolean;
+  setShowErrorCard: Function;
+}
+
+function ErrorCard({
+  showErrorCard,
+  setShowErrorCard,
+}: CardProps): ReactElement {
+  const { t, ready } = useTranslation(["common"]);
+
+  const { theme } = React.useContext(ThemeContext);
+
+  React.useEffect(() => {
+    if (showErrorCard) {
+      setTimeout(() => {
+        setShowErrorCard(false);
+      }, 3000);
+    }
+  }, [showErrorCard]);
+
+  return showErrorCard ? (
+    <div className={`${theme} test-donation-bar`} style={{zIndex:15}}>{t("errorOccurred")}</div>
+  ) : (
+    <></>
   );
 }
 
