@@ -49,7 +49,7 @@ function DonationsForm() {
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
-  }, []);
+  }, [currency]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
