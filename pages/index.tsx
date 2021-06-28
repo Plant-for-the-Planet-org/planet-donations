@@ -63,6 +63,9 @@ function index({
   }
 
   const router = useRouter();  
+
+  const defaultLanguage = router.query.locale ? router.query.locale : "en"
+  
   return (
     <div
       style={{ flexGrow: 1 }}
@@ -73,9 +76,9 @@ function index({
         <meta name="title" content={title} />
         <meta name="description" content="" />
 
-        <meta property="og:locale" content={locales.find(locale => locale.key === router.query.locale )?.value} />
+        <meta property="og:locale" content={locales.find(locale => locale.key === defaultLanguage )?.value} />
         {locales.map((locale) => {
-          if (locale.key !== router.query.locale) {
+          if (locale.key !== defaultLanguage) {
             return (
               <meta
                 key={`og:locale:alternate${locale.value}`}
