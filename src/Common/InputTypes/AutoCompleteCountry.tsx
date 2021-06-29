@@ -114,6 +114,7 @@ export default function CountrySelect(props: {
             autoComplete: 'new-password', // disable autocomplete and autofill
           }}
           name={'countrydropdown'}
+          data-test-id="test-country"
         />
       )}
     />
