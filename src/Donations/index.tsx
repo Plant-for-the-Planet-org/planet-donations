@@ -84,25 +84,31 @@ function DonationInfo() {
               </div>
             </div>
           )}
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-            className="title-text text-white"
-          >
-            {projectDetails.name}
-          </a>
-          {projectDetails.tpo && (
-            <a
-              rel="noreferrer"
-              target="_blank"
-              href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-              className="text-white"
-            >
-              {t("byOrganization", {
-                organizationName: projectDetails.tpo.name,
-              })}
-            </a>
+          {donationStep > 0 ? (
+            <>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                className="title-text text-white"
+              >
+                {projectDetails.name}
+              </a>
+              {projectDetails.tpo && (
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                  className="text-white"
+                >
+                  {t("byOrganization", {
+                    organizationName: projectDetails.tpo.name,
+                  })}
+                </a>
+              )}
+            </>
+          ) : (
+            <></>
           )}
 
           {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
