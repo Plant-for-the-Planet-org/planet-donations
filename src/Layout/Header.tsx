@@ -1,7 +1,6 @@
 import Head from "next/head";
-import locales from "../../public/static/localeList.json";
 
-export default function Header() {
+export default function Header() {  
   return (
     <Head>
       <link
@@ -12,18 +11,7 @@ export default function Header() {
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=0"
       />
-      <meta property="og:locale" content={"en_US"} />
-      {locales.map((locale) => {
-        if (locale !== "en_US") {
-          return (
-            <meta
-              key="og:locale:alternate"
-              property="og:locale:alternate"
-              content={locale}
-            />
-          );
-        }
-      })}
+   
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
 

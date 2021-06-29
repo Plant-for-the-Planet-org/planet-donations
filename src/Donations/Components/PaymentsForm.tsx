@@ -56,6 +56,7 @@ function PaymentsForm({}: Props): ReactElement {
     isDirectDonation,
     setDonationUid,
     setshowErrorCard,
+    hideTaxDeduction,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -133,7 +134,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (donationID && publishName !== null) {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
-        data: {publish: publishName},
+        data: { publish: publishName },
         method: "PUT",
         setshowErrorCard,
       };
@@ -151,7 +152,7 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     setPaymentType("CARD");
   }, [currency]);
-
+  
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -173,7 +174,7 @@ function PaymentsForm({}: Props): ReactElement {
             <p className="title-text">{t("paymentDetails")}</p>
           </div>
 
-          <TaxDeductionOption />
+          {!hideTaxDeduction && <TaxDeductionOption />}
 
           <div className={"mt-20"}>
             {!contactDetails.companyname ||
@@ -222,7 +223,8 @@ function PaymentsForm({}: Props): ReactElement {
                   "stripe_cc"
                 )}
                 showGiroPay={
-                  country === "DE" &&
+                  currency === "EUR" && 
+                  country === 'DE' &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"
                   )
@@ -233,6 +235,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
                 }
                 showSofort={
+                  currency === "EUR" &&
                   sofortCountries.includes(country) &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_sofort"
