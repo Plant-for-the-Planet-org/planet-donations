@@ -146,9 +146,9 @@ function DonationInfo() {
           )}
 
           {donationID && (
-            <p className="donations-transaction-details mt-20">
+            <a href={`${process.env.APP_URL}/?context=${donationID}`} className="donations-transaction-details mt-20">
               {`Ref - ${donationID}`}
-            </p>
+            </a>
           )}
         </div>
       ) : null}
