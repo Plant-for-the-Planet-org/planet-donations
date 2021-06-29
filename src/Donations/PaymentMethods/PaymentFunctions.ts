@@ -359,7 +359,7 @@ export async function handleSCAPaymentFunction({
               SCAPaidDonation = await apiRequest(requestParams);
             }
 
-            if (SCAPaidDonation.data.paymentStatus) {
+            if (SCAPaidDonation.data.paymentStatus || SCAPaidDonation.data.status) {
               setIsPaymentProcessing(false);
               setdonationStep(4);
               return SCAPaidDonation.data;
