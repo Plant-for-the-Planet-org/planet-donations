@@ -13,7 +13,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": ["cypress", "cypress-plugin-stripe-elements"]
+    "types": ["cypress", "cypress-plugin-stripe-elements"],
+    "baseUrl": "."
   },
   "exclude": ["node_modules"],
   "include": [

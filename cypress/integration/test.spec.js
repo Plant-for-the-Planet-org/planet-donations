@@ -2,7 +2,7 @@
 
 describe("HomePage", () => {
     it("PFTP site",() => {
-        cy.visit("http://localhost:3000?to=plant-for-ethiopia")
+        cy.visit('/?to=plant-for-ethiopia')
         cy.wait(5000)
         cy.get('[data-test-id="continue-next"]').click().then(() => {
             cy.get('[data-test-id="test-firstName"]').type("Peter")
@@ -10,7 +10,7 @@ describe("HomePage", () => {
             cy.get('[data-test-id="test-email"]').type("peter.payer@gmail.com")
           // any known address will trigger a dropdown of suggestions which only get away with a tab key,
           // but Cypress does not support {tab} yet, so we use an unknown address to test here:
-            cy.get('[data-test-id="test-address"]').type("Unknown 1");
+            cy.get('[data-test-id="test-address"]').type("Unbekannt 1");
             cy.get('[data-test-id="test-city"]').clear().type("Uffing am Staffelsee")
             cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}");
             cy.get('[data-test-id="test-zipCode"]').clear().type("82449")
