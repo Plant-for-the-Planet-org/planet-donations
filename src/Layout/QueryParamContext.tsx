@@ -62,6 +62,7 @@ export const QueryParamContext = React.createContext({
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
+  hideTaxDeduction: false
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -145,6 +146,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
+
+  const [hideTaxDeduction, sethideTaxDeduction] = useState(false)
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -327,10 +330,6 @@ export default function QueryParamProvider({ children }: any) {
         // fetch project - payment setup
         await loadProject(donation.data.project.id);
 
-        const newcountry = getCountryDataBy(
-          "currencyCode",
-          donation.data.currency
-        )?.countryCode;
 
         if (donation.data.taxDeductionCountry) {
           setcountry(donation.data.taxDeductionCountry);
@@ -340,6 +339,8 @@ export default function QueryParamProvider({ children }: any) {
             donation.data.taxDeductionCountry
           );
         } else {
+          sethideTaxDeduction(true);
+          const newcountry = donation.data.donor.country;          
           setcountry(newcountry);
           await loadPaymentSetup(donation.data.project.id, newcountry);
         }
@@ -515,7 +516,8 @@ export default function QueryParamProvider({ children }: any) {
         setDonationUid,
         setshowErrorCard,
         setprojectDetails,
-        loadselectedProjects
+        loadselectedProjects,
+        hideTaxDeduction
       }}
     >
       {children}
