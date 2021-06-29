@@ -54,7 +54,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push(`?to=${slug}`);
+    router.push({query: {...router.query, to: slug },})
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
