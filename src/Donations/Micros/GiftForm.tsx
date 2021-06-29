@@ -130,7 +130,7 @@ export default function GiftForm({}: Props): ReactElement {
               onClick={handleSubmit(onSubmit)}
               className="primary-button w-100 mt-30"
             >
-              {t("saveGiftDetails")}
+              {t("continue")}
             </button>
           </div>
         </div>
