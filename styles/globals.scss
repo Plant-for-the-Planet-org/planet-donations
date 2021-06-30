@@ -118,7 +118,7 @@ button {
 .secondary-button {
   min-width: 240px;
   background-image: none;
-  background-color: $blueishGrey;
+  background-color: $backgroundColorDark;
   color: $primaryFontColor;
   p {
     margin-left: 6px;
@@ -152,6 +152,7 @@ a {
 
 
 button{
+  background-color: transparent;
   &:hover{
     cursor: pointer;
   }
@@ -187,7 +188,7 @@ button{
 }
 
 .modal {
-  background-color: $backgroundColor;
+  background-color: $backgroundColorDark;
   border: 0px;
   border-radius: 8px;
   max-height: 80vh;
@@ -213,4 +214,13 @@ button{
   &:hover{
     cursor: pointer;
   }
+}
+
+p,label,body,div{
+  color: $primaryFontColor;
+}
+
+input:autofill, input:-webkit-autofill{
+  background-color: $backgroundColorDark!important;
+  color: $primaryFontColor!important;
 }

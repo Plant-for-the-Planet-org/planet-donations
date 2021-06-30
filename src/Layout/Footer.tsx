@@ -13,10 +13,11 @@ import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
 import supportedLanguages from "../../supportedLanguages.json";
-import getLanguageName from '../Utils/getLanguageName';
+import getLanguageName from "../Utils/getLanguageName";
 import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
+import themeProperties from "../../styles/themeProperties";
 
 interface Props {}
 
@@ -27,6 +28,8 @@ function Footer({}: Props): ReactElement {
   const { returnTo } = React.useContext(QueryParamContext);
   const { t, ready } = useTranslation(["common"]);
 
+  const { theme } = React.useContext(ThemeContext);
+
   return (
     <div className="footer">
       <div className="footer-container">
@@ -35,7 +38,13 @@ function Footer({}: Props): ReactElement {
         <div className="footer-links">
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
             {`${getLanguageName(language)}`}
-            <DownArrowIcon />
+            <DownArrowIcon
+              color={
+                theme === "theme-light"
+                  ? themeProperties.light.primaryFontColor
+                  : themeProperties.dark.primaryFontColor
+              }
+            />
           </button>
           <a
             rel="noreferrer"

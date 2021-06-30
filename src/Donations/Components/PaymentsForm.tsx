@@ -22,6 +22,8 @@ import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
 import NewPaypal from "../PaymentMethods/NewPaypal";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
+import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 
 interface Props {}
 
@@ -152,7 +154,8 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     setPaymentType("CARD");
   }, [currency]);
-  
+  const { theme } = React.useContext(ThemeContext);
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -166,7 +169,13 @@ function PaymentsForm({}: Props): ReactElement {
                 className="d-flex"
                 style={{ marginRight: "12px" }}
               >
-                <BackButton />
+                <BackButton
+                  color={
+                    theme === "theme-light"
+                      ? themeProperties.light.primaryFontColor
+                      : themeProperties.dark.primaryFontColor
+                  }
+                />
               </button>
             ) : (
               <></>
@@ -223,8 +232,8 @@ function PaymentsForm({}: Props): ReactElement {
                   "stripe_cc"
                 )}
                 showGiroPay={
-                  currency === "EUR" && 
-                  country === 'DE' &&
+                  currency === "EUR" &&
+                  country === "DE" &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"
                   )

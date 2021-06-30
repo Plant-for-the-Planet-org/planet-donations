@@ -14,7 +14,7 @@ import themeProperties from "../../../styles/themeProperties";
 const FormControlNew = withStyles({
   root: {
     width: "100%",
-    backgroundColor: "#F2F2F7",
+    backgroundColor: "var(--background-color-dark)",
     border: "0px!important",
     borderRadius: "10px",
     fontFamily: themeProperties.fontFamily,
@@ -26,11 +26,11 @@ const getInputOptions = (placeholder: string) => {
   const ObjectM = {
     style: {
       base: {
-        color: "#32325d",
+        color: "var(--primary-font-color)",
         fontFamily: themeProperties.fontFamily,
         fontSize: "16px",
         "::placeholder": {
-          color: "#2F3336",
+          color: "var(--primary-font-color)",
           fontFamily: themeProperties.fontFamily,
           fontSize: "16px",
         },

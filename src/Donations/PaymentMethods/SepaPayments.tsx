@@ -11,11 +11,11 @@ const SEPA_OPTIONS = {
   style: {
     base: {
       fontSize: "14px",
-      color: "#424770",
+      color: "var(--primary-font-color)",
       letterSpacing: "0.025em",
       fontFamily: themeProperties.fontFamily,
       "::placeholder": {
-        color: "#aab7c4",
+        color: "var(--primary-font-color)",
         fontFamily: themeProperties.fontFamily,
       },
     },
@@ -28,7 +28,7 @@ const SEPA_OPTIONS = {
 const FormControlNew = withStyles({
   root: {
     width: "100%",
-    backgroundColor: "#F2F2F7",
+    backgroundColor: "var(--background-color-dark)",
     border: "0px!important",
     borderRadius: "10px",
     fontFamily: themeProperties.fontFamily,
