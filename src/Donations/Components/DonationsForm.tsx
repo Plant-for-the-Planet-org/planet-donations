@@ -280,7 +280,7 @@ function DonationsForm() {
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      projectDetails.treeCost * treeCount,
+                      paymentSetup.treeCost * treeCount,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}
