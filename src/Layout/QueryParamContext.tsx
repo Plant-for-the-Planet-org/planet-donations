@@ -215,16 +215,11 @@ export default function QueryParamProvider({ children }: any) {
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
-
         setAllProjects(allowedDonationsProjects);
-        const featuredProjects = getFilteredProjects(
-          allowedDonationsProjects,
-          "featured"
-        );
-        if (featuredProjects?.length < 6) {
-          setSelectedProjects(featuredProjects);
+        if (allowedDonationsProjects?.length < 6) {
+          setSelectedProjects(allowedDonationsProjects);
         } else {
-          const randomProjects = getRandomProjects(featuredProjects, 6);
+          const randomProjects = getRandomProjects(allowedDonationsProjects, 6);
           setSelectedProjects(randomProjects);
         }
       }
