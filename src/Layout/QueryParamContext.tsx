@@ -8,11 +8,8 @@ import { ProjectTypes } from "../Common/Types";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import {
-  getFilteredProjects,
   getRandomProjects,
 } from "../Utils/projects/filterProjects";
-import { getCountryDataBy } from "../Utils/countryUtils";
-import { Backdrop, Fade, Modal } from "@material-ui/core";
 import { ThemeContext } from "../../styles/themeContext";
 
 export const QueryParamContext = React.createContext({
