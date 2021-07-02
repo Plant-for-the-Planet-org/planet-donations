@@ -6,7 +6,10 @@ import getFormatedCurrency from '../../../Utils/getFormattedCurrency';
 import themeProperties from "../../../../styles/themeProperties";
 import { useTranslation } from "next-i18next";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
-
+import LeafIcon from "../../../../public/assets/icons/LeafIcon";
+import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
+import TreeIcon from "../../../../public/assets/icons/TreeIcon";
+import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 interface Props {
     setopenCurrencyModal:any;
 }
@@ -14,9 +17,27 @@ interface Props {
 function TreeDonation({setopenCurrencyModal}: Props): ReactElement {
     const { t, i18n } = useTranslation(["common", "country"]);
 
+    const treeSelectionOptions = [
+      {
+        treeCount: 10,
+        iconFile: <LeafIcon />,
+      },
+      {
+        treeCount: 20,
+        iconFile: <TwoLeafIcon />,
+      },
+      {
+        treeCount: 50,
+        iconFile: <PlantPotIcon />,
+      },
+      {
+        treeCount: 150,
+        iconFile: <TreeIcon />,
+      },
+    ];
+
     const {
         isGift,
-        treeSelectionOptions,
         treeCount,
         settreeCount,
         currency,

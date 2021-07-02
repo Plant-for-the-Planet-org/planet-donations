@@ -56,7 +56,7 @@ function index({
   
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    description = `Plant trees with ${projectDetails.tpo.name} in ${
+    description = `Plant trees with ${projectDetails.tpo ? projectDetails.tpo?.name : projectDetails.tpoData?.name} in ${
       getCountryDataBy("countryCode", projectDetails.country)?.countryName
     }. Your journey to a trillion trees starts here.`;
   }

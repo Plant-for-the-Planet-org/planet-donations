@@ -1,9 +1,6 @@
 import { useRouter } from "next/dist/client/router";
-import React, { Component, useState, ReactElement } from "react";
-import LeafIcon from "../../public/assets/icons/LeafIcon";
-import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
-import TreeIcon from "../../public/assets/icons/TreeIcon";
-import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
+import React, { useState, ReactElement } from "react";
+
 import { ProjectTypes } from "../Common/Types";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
@@ -12,7 +9,6 @@ import {
   getRandomProjects,
 } from "../Utils/projects/filterProjects";
 import { getCountryDataBy } from "../Utils/countryUtils";
-import { Backdrop, Fade, Modal } from "@material-ui/core";
 import { ThemeContext } from "../../styles/themeContext";
 
 export const QueryParamContext = React.createContext({
@@ -20,12 +16,6 @@ export const QueryParamContext = React.createContext({
   setisGift: (value: boolean) => {},
   giftDetails: {},
   setgiftDetails: (value: {}) => {},
-  treeSelectionOptions: [
-    {
-      treeCount: 50,
-      iconFile: Component,
-    },
-  ],
   contactDetails: {},
   setContactDetails: (value: {}) => {},
   country: "",
@@ -96,24 +86,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentType, setPaymentType] = React.useState("");
 
-  const treeSelectionOptions = [
-    {
-      treeCount: 10,
-      iconFile: <LeafIcon />,
-    },
-    {
-      treeCount: 20,
-      iconFile: <TwoLeafIcon />,
-    },
-    {
-      treeCount: 50,
-      iconFile: <PlantPotIcon />,
-    },
-    {
-      treeCount: 150,
-      iconFile: <TreeIcon />,
-    },
-  ];
+ 
   const [treeCount, settreeCount] = useState(50);
 
   const [isGift, setisGift] = useState<boolean>(false);
@@ -479,7 +452,6 @@ export default function QueryParamProvider({ children }: any) {
         setisGift,
         giftDetails,
         setgiftDetails,
-        treeSelectionOptions,
         contactDetails,
         setContactDetails,
         country,

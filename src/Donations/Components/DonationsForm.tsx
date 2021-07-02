@@ -17,14 +17,14 @@ import TaxDeductionOption from "./../Micros/TaxDeductionOption";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
 import DonationAmount from "../Micros/DonationAmount";
-import TreeDonation from "../Micros/DonationTypes/TreeDonation"
+import TreeDonation from "../Micros/DonationTypes/TreeDonation";
+import FundingDonations from "../Micros/DonationTypes/FundingDonations";
+
 function DonationsForm() {
   const {
     isGift,
-    treeSelectionOptions,
     setdonationStep,
     treeCount,
-    settreeCount,
     currency,
     paymentSetup,
     projectDetails,
@@ -111,13 +111,9 @@ function DonationsForm() {
     });
   };
 
-
-
-
-
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
-
+  console.log("paymentSetup", paymentSetup);
 
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -130,15 +126,18 @@ function DonationsForm() {
           <div className="donations-gift-container mt-10">
             <GiftForm />
           </div>
-          
-          <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />
+
+          {projectDetails.purpose === "funds" ? (
+            <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
+          ) : (
+            <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />
+          )}
 
           <TaxDeductionOption />
 
           <div className={"horizontal-line"} />
 
-
-          <DonationAmount/>
+          <DonationAmount />
 
           {paymentSetup && projectDetails ? (
             minAmt && paymentSetup?.treeCost * treeCount >= minAmt ? (
