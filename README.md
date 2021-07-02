@@ -5,7 +5,7 @@ Welcome to the Donation Gateway that powers the [Plant-for-the-Planet Platform](
 Donate with Plant-for-the-Planet relies on the Plant-for-the-Planet Open APIs. The Foundation takes no commission from donations made through the gateway, however payment portal fees eg: Stripe, PayPal will still apply.
 
 Donations made through the application are tax deductible in several countries and can be managed from the Plant-for-the-Planet account.
-
+<img src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdonate.plant-for-the-planet.org%2F?w=4400&h=1540.jpg">
 ## For Restoration Organisations
 
 Please sign up at: [https://pp.eco](https://pp.eco) to use the features. Questions? Please write us at support@plant-for-the-planet.org
