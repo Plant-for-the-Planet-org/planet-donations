@@ -26,7 +26,7 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
-  const { t, ready, i18n } = useTranslation("common");
+  const { t, ready, i18n } = useTranslation("common", "donate");
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
@@ -152,7 +152,7 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     setPaymentType("CARD");
   }, [currency]);
-  
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -223,7 +223,7 @@ function PaymentsForm({}: Props): ReactElement {
                   "stripe_cc"
                 )}
                 showGiroPay={
-                  currency === "EUR" && 
+                  currency === "EUR" &&
                   country === 'DE' &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"

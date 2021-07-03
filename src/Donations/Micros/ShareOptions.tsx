@@ -20,7 +20,7 @@ const ShareOptions = ({
   sendRef,
   donor,
 }: ShareOptionsProps) => {
-  const { t, ready } = useTranslation(['common']);
+  const { t, ready } = useTranslation(['common', 'donate']);
 
   const titleToShare = ready ? t('donate:titleToShare') : '';
   const urlToShare = '';
