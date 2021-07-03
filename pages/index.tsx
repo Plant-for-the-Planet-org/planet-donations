@@ -51,7 +51,7 @@ function index({
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = encodeURIComponent(process.env.APP_URL+resolvedUrl);
   const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
-  
+
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     description = `Plant trees with ${projectDetails.tpo.name} in ${
@@ -62,10 +62,10 @@ function index({
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
 
-  const router = useRouter();  
+  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en"
-  
+
   return (
     <div
       style={{ flexGrow: 1 }}
@@ -172,12 +172,12 @@ export async function getServerSideProps(context: any) {
     }
   }
   const resolvedUrl = context.resolvedUrl;
-  
+
   return {
     props: {
       ...(await serverSideTranslations(
         context.locale,
-        ["common", "country"],
+        ["common", "country", "donate"],
         nextI18NextConfig
       )),
       donationStep: donationStep,
