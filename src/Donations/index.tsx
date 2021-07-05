@@ -116,7 +116,7 @@ function DonationInfo() {
             isGift &&
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
-                <p>Dedicated to</p>
+                <p>{t("dedicatedTo")}</p>
                 <p className="text-bold">{giftDetails.recipientName}</p>
                 {giftDetails.giftMessage && (
                   <p>Message: {giftDetails.giftMessage}</p>
