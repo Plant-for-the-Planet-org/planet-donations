@@ -100,5 +100,6 @@
   "billingAddress": "Billing Address",
   "treesInCountry": "{{treeCount}} trees in {{country}}, Plant-for-the-Planet",
   "errorOccurred": "Something went wrong",
-  "dedicatedTo": "Dedicated to"
+  "dedicatedTo": "Dedicated to",
+  "message": "Message"
 }

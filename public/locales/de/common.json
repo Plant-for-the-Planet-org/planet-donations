@@ -100,5 +100,6 @@
   "billingAddress": "Adresse",
   "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet",
   "errorOccurred": "Etwas ist schief gelaufen",
-  "dedicatedTo": "Unterstützt"
+  "dedicatedTo": "Unterstützt",
+  "message": "Nachricht"
 }

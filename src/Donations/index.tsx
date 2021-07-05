@@ -119,7 +119,7 @@ function DonationInfo() {
                 <p>{t("dedicatedTo")}</p>
                 <p className="text-bold">{giftDetails.recipientName}</p>
                 {giftDetails.giftMessage && (
-                  <p>Message: {giftDetails.giftMessage}</p>
+                  <p>{t("message")}: {giftDetails.giftMessage}</p>
                 )}
               </div>
             )}
