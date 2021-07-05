@@ -40,7 +40,6 @@
   "cardNumber": "Kartennummer",
   "expDate": "Gültigkeitsdatum (MM/JJJJ)",
   "donate": "Spenden",
-  "noPaymentMethodError": "Deine Zahlung konnte nicht verarbeitet werden, bitte versuche es erneut.",
   "sofortDisclaimer": "SOFORT Zahlungen dauern 2-14 Werktage (in der Regel 2-3 Tage). Sobald sie eingegangen ist, senden wir dir eine Bestätigung per E-Mail mit deinem Baumzertifikat und erhöhen deinen Baumzähler.",
   "payWithSofort": "Spende mit SOFORT",
   "payWithGiroPay": "Spende mit GiroPay",
@@ -92,11 +91,12 @@
   "or": "ODER",
   "donateWith": "Spende mit",
   "donating": "Spenden ",
-  "addEmail": "Geschenkbenachrichtigung hinzufügen",
+  "addEmail": "Informiere Empfänger per E-Mail",
   "removeRecipient": "Entfernen",
   "findProjects": "Projekte finden",
   "search": "Suche",
   "noProjectsFound": "Keine Projekte gefunden",
   "billingAddress": "Adresse",
-  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet"
+  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet",
+  "errorOccurred": "Etwas ist schief gelaufen"
 }

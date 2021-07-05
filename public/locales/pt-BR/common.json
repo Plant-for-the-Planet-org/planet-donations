@@ -38,7 +38,6 @@
   "cardNumber": "Número do cartão",
   "expDate": "Exp. Data (MM/AAA)",
   "donate": "Doe",
-  "noPaymentMethodError": "Não consegui processar o seu pagamento, por favor tente novamente.",
   "sofortDisclaimer": "Os pagamentos SOFORT demoram 2-14 dias úteis (geralmente 2-3 dias). Assim que chegar, enviamos-lhe um e-mail de confirmação com o seu certificado de árvore e levantamos o contador de árvores.",
   "payWithSofort": "Doe com Sofort",
   "payWithGiroPay": "Doe com GiroPay",
@@ -96,5 +95,6 @@
   "search": "Pesquisa",
   "noProjectsFound": "Nenhum projeto encontrado",
   "billingAddress": "Endereço para faturamento",
-  "treesInCountry": "{{treeCount}} árvores em{{country}} , Planta para o Planeta"
+  "treesInCountry": "{{treeCount}} árvores em{{country}} , Planta para o Planeta",
+  "errorOccurred": "Algo correu mal"
 }

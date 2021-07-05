@@ -38,7 +38,6 @@
   "cardNumber": "Numero di carta",
   "expDate": "Scadenza. Data (MM/AA)",
   "donate": "Donare",
-  "noPaymentMethodError": "Impossibile elaborare il pagamento, si prega di riprovare.",
   "sofortDisclaimer": "I pagamenti SOFORT richiedono 2-14 giorni lavorativi (di solito 2-3 giorni). Appena arriva ti mandiamo una mail di conferma con il tuo certificato dell'albero e alziamo il contatore dell'albero.",
   "payWithSofort": "Donare con Sofort",
   "payWithGiroPay": "Dona con GiroPay",
@@ -96,5 +95,6 @@
   "search": "Cerca",
   "noProjectsFound": "Nessun progetto trovato",
   "billingAddress": "Indirizzo di fatturazione",
-  "treesInCountry": "{{treeCount}} alberi in{{country}} , Plant-for-the-Planet"
+  "treesInCountry": "{{treeCount}} alberi in{{country}} , Plant-for-the-Planet",
+  "errorOccurred": "Qualcosa è andato storto"
 }

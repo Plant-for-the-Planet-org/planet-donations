@@ -40,7 +40,6 @@
   "cardNumber": "Card Number",
   "expDate": "Exp. Date (MM/YY)",
   "donate": "Donate",
-  "noPaymentMethodError": "Could not process your payment, please try again.",
   "sofortDisclaimer": "SOFORT payments take 2-14 business days (usually 2-3 days). As soon as it arrives we send you a confirmation email with your tree certificate and raise the tree counter.",
   "payWithSofort": "Donate with SOFORT",
   "payWithGiroPay": "Donate with GiroPay",
@@ -99,5 +98,5 @@
   "noProjectsFound": "No projects found",
   "billingAddress": "Billing Address",
   "treesInCountry": "{{treeCount}} trees in {{country}}, Plant-for-the-Planet",
-  "errorOccurred":"Something went wrong"
+  "errorOccurred": "Something went wrong"
 }
