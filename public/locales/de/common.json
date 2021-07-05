@@ -99,6 +99,6 @@
   "noProjectsFound": "Keine Projekte gefunden",
   "billingAddress": "Adresse",
   "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet",
-  "errorOccurred":"Etwas ist schief gelaufen",
+  "errorOccurred": "Etwas ist schief gelaufen",
   "dedicatedTo": "Unterstützt"
 }
