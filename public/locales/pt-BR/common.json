@@ -98,5 +98,6 @@
   "billingAddress": "Endereço para faturamento",
   "treesInCountry": "{{treeCount}} árvores em{{country}} , Planta para o Planeta",
   "errorOccurred": "Algo correu mal",
-  "dedicatedTo": "Dedicado a"
+  "dedicatedTo": "Dedicado a",
+  "message": "Mensagem"
 }

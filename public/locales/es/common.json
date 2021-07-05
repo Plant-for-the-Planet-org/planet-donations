@@ -98,5 +98,6 @@
   "billingAddress": "Dirección de facturación",
   "treesInCountry": "{{treeCount}} árboles en{{country}} , Plant-for-the-Planet",
   "errorOccurred": "Algo salió mal",
-  "dedicatedTo": "Dedicado a"
+  "dedicatedTo": "Dedicado a",
+  "message": "Mensaje"
 }
