@@ -28,7 +28,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
-  const { t, ready, i18n } = useTranslation("common");
+  const { t, ready, i18n } = useTranslation("common", "donate");
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);

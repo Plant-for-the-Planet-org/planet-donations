@@ -42,7 +42,7 @@ function DonationsForm() {
     isTaxDeductible,
     setshowErrorCard,
   } = React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common", "country"]);
+  const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -300,12 +300,14 @@ function DonationsForm() {
                   </div>
                 )
               ) : (
+                minAmt > 0 ?
                 <p className={"text-danger mt-20 text-center"}>
                   {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
                 </p>
+                : <></>
               )
             ) : (
               <div className="mt-20 w-100">
