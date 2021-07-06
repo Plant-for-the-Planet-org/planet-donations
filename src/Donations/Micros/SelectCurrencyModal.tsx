@@ -2,7 +2,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import FormControl from "@material-ui/core/FormControl";
 import Modal from "@material-ui/core/Modal";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import React from "react";
 import { useTranslation } from "next-i18next";
@@ -13,13 +13,11 @@ import {
   getCountryDataBy,
   sortCountriesByTranslation,
 } from "../../Utils/countryUtils";
-import { useStylesAutoComplete } from "./../../Common/InputTypes/AutoCompleteCountry";
+import themeProperties from "../../../styles/themeProperties";
 export default function TransitionsModal(props: any) {
   const { openModal, handleModalClose } = props;
 
-  const { setcountry, country, currency } = React.useContext(
-    QueryParamContext
-  );
+  const { setcountry, country, currency } = React.useContext(QueryParamContext);
 
   const { t, ready } = useTranslation(["common", "country"]);
 
@@ -103,6 +101,30 @@ function MapCurrency(props: any) {
 
   const { priorityCountries, value, handleChange } = props;
 
+  const { theme } = React.useContext(ThemeContext);
+
+  const useStylesAutoComplete = makeStyles({
+    root: {
+      color:
+        theme === "theme-light"
+          ? themeProperties.light.primaryFontColor
+          : themeProperties.dark.primaryFontColor,
+    },
+    option: {
+      // color: theme === "theme-light"
+      // ? themeProperties.light.primaryFontColor
+      // : themeProperties.dark.primaryFontColor,
+      fontFamily: themeProperties.fontFamily,
+      fontSize: "14px",
+      // backgroundColor: theme === "theme-light"
+      // ? themeProperties.light.backgroundColor
+      // : themeProperties.dark.backgroundColor,
+      "& > span": {
+        marginRight: 10,
+        fontSize: 18,
+      },
+    },
+  });
   const classes = useStylesAutoComplete();
 
   const sortedCountriesData = ready

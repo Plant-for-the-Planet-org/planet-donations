@@ -36,8 +36,8 @@ function Footer({}: Props): ReactElement {
     <div className="footer">
       <div className="footer-container">
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
-
         <div className="footer-links">
+        <DarkModeSwitch />
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
             {`${getLanguageName(language)}`}
             <DownArrowIcon
@@ -76,7 +76,6 @@ function Footer({}: Props): ReactElement {
           >
             {t("faqs")}
           </a>
-          <DarkModeSwitch />
           <a
             target="_blank"
             rel="noreferrer"
@@ -100,19 +99,27 @@ function Footer({}: Props): ReactElement {
   );
 }
 
-function DarkModeSwitch(){
-  const {theme,toggleTheme} = React.useContext(ThemeContext);
-  
-  return(
-    <button style={{position:'relative'}}>
-      	<input onChange={()=>toggleTheme()} type="checkbox" className="darkmodeCheckbox" id="chk" />
-        <label className="darkmodeLabel" htmlFor="chk">
-          <MoonIcon/>
-          <SunIcon/>
-          <div className="darkmodeBall"></div>
-        </label>
+function DarkModeSwitch() {
+  const { theme, setTheme } = React.useContext(ThemeContext);
+
+  return (
+    <button style={{ position: "relative" }}>
+      <input
+        onClick={() =>
+          setTheme(theme === "theme-light" ? "theme-dark" : "theme-light")
+        }
+        defaultChecked={theme === "theme-dark" ? true : false}
+        type="checkbox"
+        className="darkmodeCheckbox"
+        id="chk"
+      />
+      <label className="darkmodeLabel" htmlFor="chk">
+        <MoonIcon />
+        <SunIcon />
+        <div className="darkmodeBall"></div>
+      </label>
     </button>
-  )
+  );
 }
 
 function CookiePolicy() {

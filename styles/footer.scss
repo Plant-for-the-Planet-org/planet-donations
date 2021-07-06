@@ -83,7 +83,7 @@
 }
 
 .darkmodeLabel {
-  background-color: #111;
+  background-color: $backgroundColor;
   border-radius: 50px;
   cursor: pointer;
   display: flex;
@@ -101,7 +101,7 @@
   }
 }
 .darkmodeBall {
-  background-color: #fff;
+  background-color: $backgroundColorDark;
   border-radius: 50%;
   position: absolute;
   top: 4px;
