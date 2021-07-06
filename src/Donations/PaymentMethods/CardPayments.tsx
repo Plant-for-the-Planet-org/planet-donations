@@ -10,6 +10,7 @@ import {
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 
 const FormControlNew = withStyles({
   root: {
@@ -22,15 +23,19 @@ const FormControlNew = withStyles({
   },
 })(FormControl);
 
-const getInputOptions = (placeholder: string) => {
+const getInputOptions = (placeholder: string,theme:string) => {
   const ObjectM = {
     style: {
       base: {
-        color: "var(--primary-font-color)",
+        color: theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
         fontFamily: themeProperties.fontFamily,
         fontSize: "16px",
         "::placeholder": {
-          color: "var(--primary-font-color)",
+          color: theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
           fontFamily: themeProperties.fontFamily,
           fontSize: "16px",
         },
@@ -182,6 +187,8 @@ function CardPayments({
     validateCard();
   }, [cardDate, cardNumber, cardCvv]);
 
+  const {theme} = React.useContext(ThemeContext)
+
   return ready ? (
     <div>
       {paymentError && <div className={"paymentError"}>{paymentError}</div>}
@@ -191,7 +198,7 @@ function CardPayments({
           <FormControlNew variant="outlined">
             <CardNumberElement
               id="cardNumber"
-              options={getInputOptions(t("cardNumber"))}
+              options={getInputOptions(t("cardNumber"),theme)}
               onChange={handleChange}
             />
           </FormControlNew>
@@ -199,7 +206,7 @@ function CardPayments({
             <FormControlNew variant="outlined">
               <CardExpiryElement
                 id="expiry"
-                options={getInputOptions(t("expDate"))}
+                options={getInputOptions(t("expDate"),theme)}
                 onChange={handleChangeCardDate}
               />
             </FormControlNew>
@@ -207,7 +214,7 @@ function CardPayments({
             <FormControlNew variant="outlined">
               <CardCvcElement
                 id="cvc"
-                options={getInputOptions("CVV")}
+                options={getInputOptions("CVV",theme)}
                 onChange={handleChangeCvv}
               />
             </FormControlNew>

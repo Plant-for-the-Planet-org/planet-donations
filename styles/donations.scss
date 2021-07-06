@@ -144,7 +144,7 @@
   }
 }
 .login-continue {
-  color: $primaryDarkColor;
+  color: $primaryColor;
   font-weight: 600;
   text-align: right;
 }
@@ -224,6 +224,9 @@
       }
       .tree-selection-option-text {
         color: $primaryFontColor;
+        p{
+          color: $primaryFontColor;
+        }
       }
     }
     &:hover {
@@ -243,6 +246,7 @@
       > p {
         font-size: 14px;
         font-weight: 800;
+        color: $darkGreyColor;
       }
       > span {
         font-size: 9px;
@@ -336,6 +340,7 @@
     color: $dividerColor;
     justify-content: center;
     position: relative;
+    background-color: $light;
     > label {
       margin-top: 6px;
       font-size: 10px;
@@ -343,16 +348,16 @@
     &:hover {
       cursor: pointer;
       color: $primaryFontColor;
-      background-color: $backgroundColorDark;
-      border: 0.5px solid $backgroundColorDark;
+      background-color: #F2F2F7;
+      border: 0.5px solid #F2F2F7;
     }
     .check-mark {
       display: none;
     }
   }
   .payment-method-selected {
-    background-color: $backgroundColorDark;
-    border: 0.5px solid $backgroundColorDark;
+    background-color: #F2F2F7;
+    border: 0.5px solid #F2F2F7;
     color: $primaryFontColor;
     font-weight: 600;
 
@@ -378,6 +383,7 @@
   > svg {
     width: 48px;
     height: 20px;
+    fill: $primaryFontColor;
   }
   > p {
     margin-left: 8px;
@@ -686,4 +692,8 @@
       }
     }
   }
+}
+
+.ElementsApp .Icon-fill{
+  fill: $primaryFontColor;
 }

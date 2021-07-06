@@ -1,6 +1,8 @@
 import React, { ReactElement } from "react";
 import Image from "next/image";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
+import SunIcon from "../../public/assets/icons/SunIcon";
+import MoonIcon from "../../public/assets/icons/MoonIcon";
 import {
   Backdrop,
   Fade,
@@ -74,6 +76,7 @@ function Footer({}: Props): ReactElement {
           >
             {t("faqs")}
           </a>
+          <DarkModeSwitch />
           <a
             target="_blank"
             rel="noreferrer"
@@ -95,6 +98,21 @@ function Footer({}: Props): ReactElement {
       <CookiePolicy />
     </div>
   );
+}
+
+function DarkModeSwitch(){
+  const {theme,toggleTheme} = React.useContext(ThemeContext);
+  
+  return(
+    <button style={{position:'relative'}}>
+      	<input onChange={()=>toggleTheme()} type="checkbox" className="darkmodeCheckbox" id="chk" />
+        <label className="darkmodeLabel" htmlFor="chk">
+          <MoonIcon/>
+          <SunIcon/>
+          <div className="darkmodeBall"></div>
+        </label>
+    </button>
+  )
 }
 
 function CookiePolicy() {

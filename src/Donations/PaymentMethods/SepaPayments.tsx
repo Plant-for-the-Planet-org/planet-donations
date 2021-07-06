@@ -5,25 +5,9 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 
-const SEPA_OPTIONS = {
-  supportedCountries: ["SEPA"],
-  style: {
-    base: {
-      fontSize: "14px",
-      color: "var(--primary-font-color)",
-      letterSpacing: "0.025em",
-      fontFamily: themeProperties.fontFamily,
-      "::placeholder": {
-        color: "var(--primary-font-color)",
-        fontFamily: themeProperties.fontFamily,
-      },
-    },
-    invalid: {
-      color: themeProperties.light.dangerColor,
-    },
-  },
-};
+
 
 const FormControlNew = withStyles({
   root: {
@@ -47,6 +31,30 @@ function SepaPayments({
 
   const [paymentError, setPaymentError] = React.useState("");
   const [showContinue, setShowContinue] = React.useState(false);
+
+  const {theme} = React.useContext(ThemeContext);
+  const SEPA_OPTIONS = {
+    supportedCountries: ["SEPA"],
+    style: {
+      base: {
+        fontSize: "14px",
+        color: theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+        letterSpacing: "0.025em",
+        fontFamily: themeProperties.fontFamily,
+        "::placeholder": {
+          color: theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+          fontFamily: themeProperties.fontFamily,
+        },
+      },
+      invalid: {
+        color: themeProperties.light.dangerColor,
+      },
+    },
+  };
 
   const validateChange = () => {
     const sepaElement = elements.getElement(IbanElement)!;

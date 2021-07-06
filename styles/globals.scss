@@ -188,7 +188,7 @@ button{
 }
 
 .modal {
-  background-color: $backgroundColorDark;
+  background-color: $backgroundColor;
   border: 0px;
   border-radius: 8px;
   max-height: 80vh;
@@ -223,4 +223,8 @@ p,label,body,div{
 input:autofill, input:-webkit-autofill{
   background-color: $backgroundColorDark!important;
   color: $primaryFontColor!important;
+}
+
+label:hover{
+  cursor: pointer;
 }
