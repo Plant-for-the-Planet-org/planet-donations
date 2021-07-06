@@ -251,6 +251,62 @@
   }
 }
 
+
+.funding-selection-options-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .funding-selection-option {
+    width: 170px;
+    height: 80px;
+    border: 1px solid $greyColor;
+    border-radius: 4px;
+    display: flex;
+    padding: 12px;
+    margin-top: 20px;
+    align-items: center;
+    &.funding-selection-option-selected,
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      border: 1px solid $primaryColor;
+      > .funding-icon {
+        filter: grayscale(0%) opacity(1);
+      }
+      .funding-selection-option-text {
+        color: $primaryFontColor;
+      }
+    }
+    &:hover {
+      transform: scale(1.05);
+    }
+    &:active {
+      transform: scale(0.98);
+    }
+    > .funding-icon {
+      filter: grayscale(100%) opacity(0.5);
+      height: 40px;
+      width: 40px;
+    }
+    .funding-selection-option-text {
+      text-align: left;
+      line-height: 1;
+      margin-left: 12px;
+      color: $darkGreyColor;
+      font-size: 14px;
+      font-weight: 700;
+      > p {
+        margin-bottom: 6px;
+      }
+      > span {
+        margin-top: 6px;
+      }
+    }
+  }
+}
+
+
 .custom-selection {
   flex-grow: 1;
   margin-left: 25px;
@@ -292,7 +348,7 @@
   }
 }
 
-.custom-tree-input {
+.custom-tree-input, .funding-custom-tree-input {
   border: 0px;
   border-bottom: 1px solid $primaryFontColor;
   margin: 0px 10px;
@@ -306,6 +362,12 @@
   outline: 0px;
   font-size: 16px;
   letter-spacing: 0.5px;
+}
+.funding-custom-tree-input{
+  text-align: left;
+  margin: 0px;
+  width: 100%;
+  font-size: 14px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {

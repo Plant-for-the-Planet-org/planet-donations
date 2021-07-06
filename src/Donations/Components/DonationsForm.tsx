@@ -137,7 +137,9 @@ function DonationsForm() {
 
           <div className={"horizontal-line"} />
 
+          {projectDetails.purpose !== "funds" && (
           <DonationAmount />
+          )}
 
           {paymentSetup && projectDetails ? (
             minAmt && paymentSetup?.treeCost * treeCount >= minAmt ? (
