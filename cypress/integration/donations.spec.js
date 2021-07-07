@@ -31,11 +31,11 @@ function createDonation(project="yucatan", cusomTrees, firstName, lastName, emai
     })
 }
 
-describe("HomePage", () => {
-    it("PFTP site Germany",() => {
+describe("Donations", () => {
+    it("Testing with Germany address ",() => {
         createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449", "4242424242424242", "424", "242")
     });
-    // it("PFTP site India",() => {
+    // it("Testing with Indian address",() => {
     //     createDonation("yucatan", "15", "Rishabh", "Singh", "rish.singh@gmail.com", "Mira Bhayanderrr", "Mumbai", "India{enter}", "401107", "4242424242424242", "424", "242")
     // });
 
