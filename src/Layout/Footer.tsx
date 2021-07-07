@@ -35,9 +35,9 @@ function Footer({}: Props): ReactElement {
   return (
     <div className="footer">
       <div className="footer-container">
+        <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
         <div className="footer-links">
-        <DarkModeSwitch />
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
             {`${getLanguageName(language)}`}
             <DownArrowIcon
