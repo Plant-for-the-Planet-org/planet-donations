@@ -228,6 +228,7 @@ function DonationsForm() {
                   }}
                   className="text-bold text-primary"
                   style={{ marginRight: "4px" }}
+                  data-test-id='selectCurrency'
                 >
                   {currency}{" "}
                   <DownArrowIcon color={themeProperties.primaryColor} />

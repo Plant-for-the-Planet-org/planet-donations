@@ -1,29 +1,51 @@
 /// <reference types="cypress" />
+function createDonation(project="yucatan", cusomTrees, firstName, lastName, email, address, city, country, zipCode, cardNumber, cardExpiry, cardCvc) {
+    cy.visit(`/?to=${project}`)
+    cy.wait(5000)
+    cy.get('.custom-tree-input').type(cusomTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+    })
+    cy.get('[data-test-id="continue-next"]').click().then(() => {
+        cy.get('[data-test-id="test-firstName"]').type(firstName)
+        cy.get('[data-test-id="test-lastName"]').type(lastName)
+        cy.get('[data-test-id="test-email"]').type(email)
+      // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+      // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+        cy.get('[data-test-id="test-address"]').type(address);
+        cy.get('[data-test-id="test-city"]').clear().type(city)
+        cy.get('[data-test-id="test-country"]').clear().type(country);
+        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('[data-test-id="test-continueToPayment"]').click().then(() => {
+            cy.get('#card-element').within(() => {
+                cy.fillElementsInput('cardNumber', cardNumber);
+                cy.fillElementsInput('cardExpiry', cardExpiry); // MMYY
+                cy.fillElementsInput('cardCvc', cardCvc);
+              });
+            cy.get('[data-test-id="test-donateButton"]').click().then(() => {
+                cy.wait(5000)
+                cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
+            })
+        })
+        
+    })
+}
 
 describe("HomePage", () => {
-    it("PFTP site",() => {
-        cy.visit('/?to=plant-for-ethiopia')
-        cy.wait(5000)
-        cy.get('[data-test-id="continue-next"]').click().then(() => {
-            cy.get('[data-test-id="test-firstName"]').type("Peter")
-            cy.get('[data-test-id="test-lastName"]').type("Payer")
-            cy.get('[data-test-id="test-email"]').type("peter.payer@gmail.com")
-          // any known address will trigger a dropdown of suggestions which only get away with a tab key,
-          // but Cypress does not support {tab} yet, so we use an unknown address to test here:
-            cy.get('[data-test-id="test-address"]').type("Unbekannt 1");
-            cy.get('[data-test-id="test-city"]').clear().type("Uffing am Staffelsee")
-            cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}");
-            cy.get('[data-test-id="test-zipCode"]').clear().type("82449")
-            cy.get('[data-test-id="test-continueToPayment"]').click().then(() => {
-                cy.get('#card-element').within(() => {
-                    cy.fillElementsInput('cardNumber', '4242424242424242');
-                    cy.fillElementsInput('cardExpiry', '424'); // MMYY
-                    cy.fillElementsInput('cardCvc', '242');
-                  });
-                cy.get('[data-test-id="test-donateButton"]').click()
-            })
-            cy.wait(5000)
-            cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
-        })
+    it("PFTP site Germany",() => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449", "4242424242424242", "424", "242")
     });
+    // it("PFTP site India",() => {
+    //     createDonation("yucatan", "15", "Rishabh", "Singh", "rish.singh@gmail.com", "Mira Bhayanderrr", "Mumbai", "India{enter}", "401107", "4242424242424242", "424", "242")
+    // });
+
+    // To search project
+    // it('localhost', () => {
+    //     cy.visit('localhost:3000')
+    // })
+    // it('should search', () => {    
+    //     cy.wait(5000)
+    //     cy.SearchProject('yucatan')
+    //     cy.get('#yucatan').click()
+    // });
 })

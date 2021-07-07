@@ -70,6 +70,7 @@ function SelectProject({}: Props): ReactElement {
             placeholder={t("search")}
             autoFocus
             onChange={(e) => setSearchValue(e.target.value)}
+            id="searchProject"
           />
         </div>
       </div>
@@ -82,6 +83,7 @@ function SelectProject({}: Props): ReactElement {
                 onClick={() => donateToProject(project.properties.slug)}
                 key={index}
                 className="project"
+                id={project.properties.slug}
               >
                 {project.properties.tpo.image ? (
                   <img
