@@ -69,6 +69,7 @@ export default function GiftForm({}: Props): ReactElement {
                 label={t("recipientName")}
                 variant="outlined"
                 inputRef={register({ required: true })}
+                data-test-id='recipientName'
               />
               {errors.recipientName && (
                 <span className={"form-errors"}>
@@ -99,6 +100,7 @@ export default function GiftForm({}: Props): ReactElement {
                       pattern:
                         /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
                     })}
+                    data-test-id='giftRecipient'
                   />
                   {errors.recipientEmail && (
                     <span className={"form-errors"}>{t("emailRequired")}</span>
@@ -113,6 +115,7 @@ export default function GiftForm({}: Props): ReactElement {
                     variant="outlined"
                     name={"giftMessage"}
                     inputRef={register()}
+                    data-test-id='giftMessage'
                   />
                 </div>
               </div>
@@ -121,6 +124,7 @@ export default function GiftForm({}: Props): ReactElement {
                 <button
                   onClick={() => setshowEmail(true)}
                   className={"addEmailButton"}
+                  data-test-id='addEmailButton'
                 >
                   {t("addEmail")}
                 </button>
@@ -129,6 +133,7 @@ export default function GiftForm({}: Props): ReactElement {
             <button
               onClick={handleSubmit(onSubmit)}
               className="primary-button w-100 mt-30"
+              data-test-id='giftSubmit'
             >
               {t("continue")}
             </button>

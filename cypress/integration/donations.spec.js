@@ -2,6 +2,13 @@
 function createDonation(project="yucatan", cusomTrees, firstName, lastName, email, address, city, country, zipCode, cardNumber, cardExpiry, cardCvc) {
     cy.visit(`/?to=${project}`)
     cy.wait(5000)
+    cy.get('.donations-gift-toggle').click().then(() => {
+        cy.get('[data-test-id="recipientName"]').type('Rishabh')
+        cy.get('[data-test-id="addEmailButton"]').click()
+        cy.get('[data-test-id="giftRecipient"]').type('peter.payer@gmail.com')
+        cy.get('[data-test-id="giftMessage"]').type('This gift is for Peter')
+        cy.get('[data-test-id="giftSubmit"]').click()
+    })
     cy.get('.custom-tree-input').type(cusomTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
