@@ -104,21 +104,31 @@ function MapCurrency(props: any) {
   const { theme } = React.useContext(ThemeContext);
 
   const useStylesAutoComplete = makeStyles({
-    root: {
+    paper: {
       color:
         theme === "theme-light"
           ? themeProperties.light.primaryFontColor
           : themeProperties.dark.primaryFontColor,
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColor
+          : themeProperties.dark.backgroundColor,
     },
     option: {
-      // color: theme === "theme-light"
-      // ? themeProperties.light.primaryFontColor
-      // : themeProperties.dark.primaryFontColor,
       fontFamily: themeProperties.fontFamily,
       fontSize: "14px",
-      // backgroundColor: theme === "theme-light"
-      // ? themeProperties.light.backgroundColor
-      // : themeProperties.dark.backgroundColor,
+      "&:hover": {
+        backgroundColor:
+          theme === "theme-light"
+            ? themeProperties.light.backgroundColorDark
+            : themeProperties.dark.backgroundColorDark,
+      },
+      "&:active": {
+        backgroundColor:
+          theme === "theme-light"
+            ? themeProperties.light.backgroundColorDark
+            : themeProperties.dark.backgroundColorDark,
+      },
       "& > span": {
         marginRight: 10,
         fontSize: 18,
@@ -143,6 +153,7 @@ function MapCurrency(props: any) {
             options={sortedCountriesData as CountryType[]}
             classes={{
               option: classes.option,
+              paper: classes.paper,
             }}
             value={selectedCountry}
             autoHighlight
