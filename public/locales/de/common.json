@@ -92,11 +92,14 @@
   "or": "ODER",
   "donateWith": "Spende mit",
   "donating": "Spenden ",
-  "addEmail": "Geschenkbenachrichtigung hinzufügen",
+  "addEmail": "Informiere Empfänger per E-Mail",
   "removeRecipient": "Entfernen",
   "findProjects": "Projekte finden",
   "search": "Suche",
   "noProjectsFound": "Keine Projekte gefunden",
   "billingAddress": "Adresse",
-  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet"
+  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet",
+  "errorOccurred": "Etwas ist schief gelaufen",
+  "dedicatedTo": "Unterstützt",
+  "message": "Nachricht"
 }

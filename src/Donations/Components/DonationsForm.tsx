@@ -42,7 +42,7 @@ function DonationsForm() {
     isTaxDeductible,
     setshowErrorCard,
   } = React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common", "country"]);
+  const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();

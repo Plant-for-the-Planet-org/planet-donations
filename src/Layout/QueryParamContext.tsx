@@ -237,11 +237,11 @@ export default function QueryParamProvider({ children }: any) {
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
-        setpaymentSetup(paymentSetupData.data);
         setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
+        setpaymentSetup(paymentSetupData.data);
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
