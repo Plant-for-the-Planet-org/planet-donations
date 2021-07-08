@@ -5,6 +5,7 @@ import React from 'react';
 import MaterialTextField from './MaterialTextField';
 import { useTranslation } from "next-i18next";
 import themeProperties from './../../../styles/themeProperties';
+import { ThemeContext } from '../../../styles/themeContext';
 
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
@@ -15,18 +16,6 @@ function countryToFlag(isoCode: string) {
       .replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + 127397))
     : isoCode;
 }
-
-export const useStylesAutoComplete = makeStyles({
-  option: {
-    color: '#2F3336',
-    fontFamily: themeProperties.fontFamily,
-    fontSize: '14px',
-    '& > span': {
-      marginRight: 10,
-      fontSize: 18,
-    },
-  },
-});
 
 export default function CountrySelect(props: {
   label: React.ReactNode;
@@ -39,6 +28,40 @@ export default function CountrySelect(props: {
   ) => void);
 }) {
   const { t, ready } = useTranslation('country');
+  const {theme} = React.useContext(ThemeContext)
+  const useStylesAutoComplete = makeStyles({
+    paper: {
+      color:
+        theme === "theme-light"
+          ? themeProperties.light.primaryFontColor
+          : themeProperties.dark.primaryFontColor,
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColor
+          : themeProperties.dark.backgroundColor,
+    },
+    option: {
+      // color: '#2F3336',
+      fontFamily: themeProperties.fontFamily,
+      "&:hover": {
+        backgroundColor:
+          theme === "theme-light"
+            ? themeProperties.light.backgroundColorDark
+            : themeProperties.dark.backgroundColorDark,
+      },
+      "&:active": {
+        backgroundColor:
+          theme === "theme-light"
+            ? themeProperties.light.backgroundColorDark
+            : themeProperties.dark.backgroundColorDark,
+      },
+      fontSize: '14px',
+      '& > span': {
+        marginRight: 10,
+        fontSize: 18,
+      },
+    },
+  });
 
   const classes = useStylesAutoComplete();
 
@@ -88,6 +111,7 @@ export default function CountrySelect(props: {
       options={countries as CountryType[]}
       classes={{
         option: classes.option,
+        paper: classes.paper,
       }}
       value={value}
       autoHighlight

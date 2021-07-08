@@ -68,7 +68,7 @@ function index({
 
   return (
     <div
-      style={{ flexGrow: 1 }}
+      style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
       className="d-flex justify-content-center align-items-center"
     >
       <Head>
