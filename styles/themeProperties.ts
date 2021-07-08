@@ -27,7 +27,7 @@ const themeProperties = {
     highlightBackground: '#f2f2f2',
     light: '#fff',
     dark: '#000',
-    dangerColor:'#e74c3c',
+    dangerColor:'#ff5252',
     backgroundColorDark: '#252627'
   },
 };
