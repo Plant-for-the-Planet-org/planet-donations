@@ -10,7 +10,7 @@ interface Props {}
 function DonationAmount({}: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
-  const { treeCount, currency, paymentSetup } =
+  const { quantity, currency, paymentSetup } =
     React.useContext(QueryParamContext);
   return (
     <div>
@@ -20,12 +20,12 @@ function DonationAmount({}: Props): ReactElement {
             {getFormatedCurrency(
               i18n.language,
               currency,
-              paymentSetup.treeCost * treeCount
+              paymentSetup.unitCost * quantity
             )}
           </span>
           {t("fortreeCountTrees", {
-            count: Number(treeCount),
-            treeCount: getFormattedNumber(i18n.language, Number(treeCount)),
+            count: Number(quantity),
+            treeCount: getFormattedNumber(i18n.language, Number(quantity)),
           })}
         </div>
       ) : (

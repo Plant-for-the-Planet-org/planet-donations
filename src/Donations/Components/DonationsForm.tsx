@@ -24,7 +24,7 @@ function DonationsForm() {
   const {
     isGift,
     setdonationStep,
-    treeCount,
+    quantity,
     currency,
     paymentSetup,
     projectDetails,
@@ -79,8 +79,8 @@ function DonationsForm() {
       isTaxDeductible,
       country,
       projectDetails,
-      treeCost: paymentSetup.treeCost,
-      treeCount,
+      unitCost: paymentSetup.unitCost,
+      quantity,
       currency,
       contactDetails,
       isGift,
@@ -142,7 +142,7 @@ function DonationsForm() {
           )}
 
           {paymentSetup && projectDetails ? (
-            minAmt && paymentSetup?.treeCost * treeCount >= minAmt ? (
+            minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
               !isPaymentOptionsLoading &&
               paymentSetup?.gateways?.stripe?.account &&
               currency ? (
@@ -150,7 +150,7 @@ function DonationsForm() {
                   country={country}
                   currency={currency}
                   amount={formatAmountForStripe(
-                    paymentSetup?.treeCost * treeCount,
+                    paymentSetup?.unitCost * quantity,
                     currency.toLowerCase()
                   )}
                   onPaymentFunction={onPaymentFunction}
@@ -158,7 +158,7 @@ function DonationsForm() {
                   continueNext={() => setdonationStep(2)}
                   isPaymentPage={false}
                   paymentLabel={t("treesInCountry", {
-                    treeCount: treeCount,
+                    treeCount: quantity,
                     country: t(
                       `country:${projectDetails.country.toLowerCase()}`
                     ),

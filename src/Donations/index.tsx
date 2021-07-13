@@ -40,7 +40,7 @@ function DonationInfo() {
     projectDetails,
     donationID,
     donationStep,
-    treeCount,
+    quantity,
     paymentSetup,
     currency,
     contactDetails,
@@ -71,14 +71,14 @@ function DonationInfo() {
                   {getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.treeCost * treeCount
+                    paymentSetup.unitCost * quantity
                   )}
                 </span>
                 {t("fortreeCountTrees", {
-                  count: Number(treeCount),
+                  count: Number(quantity),
                   treeCount: getFormattedNumber(
                     i18n.language,
-                    Number(treeCount)
+                    Number(quantity)
                   ),
                 })}
               </div>

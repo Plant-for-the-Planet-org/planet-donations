@@ -8,7 +8,7 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 interface Props {
   paymentSetup: any;
-  treeCount: number;
+  quantity: number;
   treeCost: number;
   currency: string;
   donationID: any;
@@ -18,7 +18,7 @@ interface Props {
 
 function NewPaypal({
   paymentSetup,
-  treeCount,
+  quantity,
   treeCost,
   currency,
   donationID,
@@ -39,7 +39,7 @@ function NewPaypal({
       purchase_units: [
         {
           amount: {
-            value: (treeCount * treeCost).toFixed(2),
+            value: (quantity * treeCost).toFixed(2),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,

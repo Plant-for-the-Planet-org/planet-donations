@@ -26,8 +26,8 @@ export const QueryParamContext = React.createContext({
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
-  treeCount: 50,
-  settreeCount: (value: number) => {},
+  quantity: 50,
+  setquantity: (value: number) => {},
   language: "en",
   setlanguage: (value: string) => {},
   donationID: null,
@@ -87,7 +87,7 @@ export default function QueryParamProvider({ children }: any) {
   const [paymentType, setPaymentType] = React.useState("");
 
  
-  const [treeCount, settreeCount] = useState(50);
+  const [quantity, setquantity] = useState(50);
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -319,7 +319,7 @@ export default function QueryParamProvider({ children }: any) {
 
         setallowTaxDeductionChange(false);
 
-        settreeCount(donation.data.treeCount);
+        setquantity(donation.data.treeCount);
         if (donation.data.donor) {
           let contactDetails = {
             firstname: donation.data.donor.firstname
@@ -405,9 +405,9 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.trees) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.trees) > 0) {
-        settreeCount(Number(router.query.trees));
+        setquantity(Number(router.query.trees));
       } else {
-        settreeCount(50);
+        setquantity(50);
       }
     }
   }, [router.query.trees]);
@@ -429,7 +429,7 @@ export default function QueryParamProvider({ children }: any) {
     setshouldCreateDonation(true);
   }, [
     paymentSetup,
-    treeCount,
+    quantity,
     isGift,
     giftDetails,
     contactDetails.firstname,
@@ -462,8 +462,8 @@ export default function QueryParamProvider({ children }: any) {
         donationStep,
         setdonationStep,
         projectDetails,
-        treeCount,
-        settreeCount,
+        quantity,
+        setquantity,
         language,
         setlanguage,
         donationID,

@@ -48,7 +48,7 @@ function PaymentsForm({}: Props): ReactElement {
     contactDetails,
     shouldCreateDonation,
     setshouldCreateDonation,
-    treeCount,
+    quantity,
     projectDetails,
     isGift,
     giftDetails,
@@ -101,8 +101,8 @@ function PaymentsForm({}: Props): ReactElement {
       isTaxDeductible,
       country,
       projectDetails,
-      treeCost: paymentSetup.treeCost,
-      treeCount,
+      unitCost: paymentSetup.unitCost,
+      quantity,
       currency,
       contactDetails,
       isGift,
@@ -263,7 +263,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      treeCount * paymentSetup.treeCost
+                      quantity * paymentSetup.unitCost
                     )}
                     onPaymentFunction={(data) =>
                       onSubmitPayment("stripe", data)
@@ -300,8 +300,8 @@ function PaymentsForm({}: Props): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    treeCount={treeCount}
-                    treeCost={paymentSetup.treeCost}
+                    quantity={quantity}
+                    treeCost={paymentSetup.unitCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

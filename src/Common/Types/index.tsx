@@ -87,8 +87,8 @@ export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
   projectDetails: Object;
-  treeCount: number;
-  treeCost: number;
+  quantity: number;
+  unitCost: number;
   currency: String;
   contactDetails: Object;
   giftDetails: giftDetailsProps;

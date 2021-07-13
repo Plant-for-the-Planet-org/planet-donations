@@ -22,29 +22,28 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     "/assets/images/funding/sprout.png",
   ];
 
-  const { paymentSetup, currency } = React.useContext(QueryParamContext);
-
-  const [quantity, setquantity] = React.useState(50);
+  const { paymentSetup, currency, quantity, setquantity, projectDetails } =
+    React.useContext(QueryParamContext);
 
   const setCustomValue = (e: any) => {
     if (e.target) {
-      // if (e.target.value === "" || e.target.value < 1) {
-      //   // if input is '', default 1
-      //   settreeCount(1);
-      // } else if (e.target.value.toString().length <= 12) {
-      //   settreeCount(e.target.value);
-      // }
+      if (e.target.value === "" || e.target.value < 1) {
+        // if input is '', default 1
+        setquantity(1/paymentSetup.unitCost);
+      } else if (e.target.value.toString().length <= 12) {
+        setquantity(e.target.value/paymentSetup.unitCost);
+      }
     }
   };
   // React.useEffect(() => {
-  //     if (![10, 20, 50, 150].includes(treeCount)) {
+  //     if (![10, 20, 50, 150].includes(quantity)) {
   //       setisCustomDonation(true);
-  //       setCustomValue(treeCount);
-  //       setCustomInputValue(treeCount);
+  //       setCustomValue(quantity);
+  //       setCustomInputValue(quantity);
   //     }
-  //   }, [treeCount]);
+  //   }, [quantity]);
   const customInputRef = React.useRef(null);
-
+  
   return (
     <div>
       <div className="funding-selection-options-container">
@@ -71,7 +70,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.cost * option.quantity
+                      paymentSetup.unitCost * option.quantity
                     )}
                   </span>
                 </div>

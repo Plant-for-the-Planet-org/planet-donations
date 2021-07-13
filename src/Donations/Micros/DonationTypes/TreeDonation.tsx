@@ -19,27 +19,27 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
 
   const treeSelectionOptions = [
     {
-      treeCount: 10,
+      quantity: 10,
       iconFile: <LeafIcon />,
     },
     {
-      treeCount: 20,
+      quantity: 20,
       iconFile: <TwoLeafIcon />,
     },
     {
-      treeCount: 50,
+      quantity: 50,
       iconFile: <PlantPotIcon />,
     },
     {
-      treeCount: 150,
+      quantity: 150,
       iconFile: <TreeIcon />,
     },
   ];
 
   const {
     isGift,
-    treeCount,
-    settreeCount,
+    quantity,
+    setquantity,
     currency,
     paymentSetup,
     giftDetails,
@@ -53,19 +53,19 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        settreeCount(1);
+        setquantity(1);
       } else if (e.target.value.toString().length <= 12) {
-        settreeCount(e.target.value);
+        setquantity(e.target.value);
       }
     }
   };
   React.useEffect(() => {
-    if (![10, 20, 50, 150].includes(treeCount)) {
+    if (![10, 20, 50, 150].includes(quantity)) {
       setisCustomDonation(true);
-      setCustomTreeValue(treeCount);
-      setCustomTreeInputValue(treeCount);
+      setCustomTreeValue(quantity);
+      setCustomTreeInputValue(quantity);
     }
-  }, [treeCount]);
+  }, [quantity]);
 
   const customInputRef = React.useRef(null);
   return (
@@ -79,20 +79,20 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
           return (
             <div
               onClick={() => {
-                settreeCount(option.treeCount);
+                setquantity(option.quantity);
                 setisCustomDonation(false);
                 setCustomTreeInputValue("");
               }}
               key={key}
               className={`tree-selection-option mt-20 ${
-                option.treeCount === treeCount && !isCustomDonation
+                option.quantity === quantity && !isCustomDonation
                   ? "tree-selection-option-selected"
                   : ""
               }`}
             >
               {option.iconFile}
               <div className="tree-selection-option-text">
-                <p>{option.treeCount}</p>
+                <p>{option.quantity}</p>
                 <span>{t("trees")}</span>
               </div>
             </div>

@@ -80,8 +80,8 @@ export async function createDonationFunction({
   isTaxDeductible,
   country,
   projectDetails,
-  treeCost,
-  treeCount,
+  unitCost,
+  quantity,
   currency,
   contactDetails,
   isGift,
@@ -95,8 +95,8 @@ export async function createDonationFunction({
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
     projectDetails,
-    treeCount,
-    treeCost,
+    quantity,
+    unitCost,
     currency,
     contactDetails,
     taxDeductionCountry,
@@ -146,8 +146,8 @@ export async function createDonationFunction({
 
 export function createDonationData({
   projectDetails,
-  treeCount,
-  treeCost,
+  quantity,
+  unitCost,
   currency,
   contactDetails,
   taxDeductionCountry,
@@ -155,10 +155,10 @@ export function createDonationData({
   giftDetails,
 }: any) {
   let donationData = {
-    type: "trees",
+    purpose: projectDetails.purpose,
     project: projectDetails.id,
-    treeCount,
-    amount: Math.round((treeCost * treeCount + Number.EPSILON) * 100) / 100,
+    quantity:quantity,
+    amount: Math.round((unitCost * quantity + Number.EPSILON) * 100) / 100,
     currency,
     donor: { ...contactDetails },
   };
