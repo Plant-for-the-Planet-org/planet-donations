@@ -84,25 +84,31 @@ function DonationInfo() {
               </div>
             </div>
           )}
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-            className="title-text text-white"
-          >
-            {projectDetails.name}
-          </a>
-          {projectDetails.tpo && (
-            <a
-              rel="noreferrer"
-              target="_blank"
-              href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-              className="text-white"
-            >
-              {t("byOrganization", {
-                organizationName: projectDetails.tpo.name,
-              })}
-            </a>
+          {donationStep > 0 ? (
+            <>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                className="title-text text-white"
+              >
+                {projectDetails.name}
+              </a>
+              {projectDetails.tpo && (
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                  className="text-white"
+                >
+                  {t("byOrganization", {
+                    organizationName: projectDetails.tpo.name,
+                  })}
+                </a>
+              )}
+            </>
+          ) : (
+            <></>
           )}
 
           {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
@@ -110,10 +116,10 @@ function DonationInfo() {
             isGift &&
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
-                <p>Dedicated to</p>
+                <p>{t("dedicatedTo")}</p>
                 <p className="text-bold">{giftDetails.recipientName}</p>
                 {giftDetails.giftMessage && (
-                  <p>Message: {giftDetails.giftMessage}</p>
+                  <p>{t("message")}: {giftDetails.giftMessage}</p>
                 )}
               </div>
             )}
@@ -140,9 +146,9 @@ function DonationInfo() {
           )}
 
           {donationID && (
-            <p className="donations-transaction-details mt-20">
+            <a href={`${process.env.APP_URL}/?context=${donationID}`} className="donations-transaction-details mt-20">
               {`Ref - ${donationID}`}
-            </p>
+            </a>
           )}
         </div>
       ) : null}

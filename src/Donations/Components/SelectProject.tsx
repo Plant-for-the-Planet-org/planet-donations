@@ -41,11 +41,10 @@ function SelectProject({}: Props): ReactElement {
     if (trottledSearchValue && searchProjectResults) {
       setSelectedProjects(searchProjectResults);
     } else if (!trottledSearchValue) {
-      const featuredProjects = getFilteredProjects(allProjects, "featured");
-      if (featuredProjects?.length < 6) {
-        setSelectedProjects(selectedProjects);
-      } else {
-        const randomProjects = getRandomProjects(featuredProjects, 6);
+      if (allProjects?.length < 6) {
+        setSelectedProjects(allProjects);
+      } else { 
+        const randomProjects = getRandomProjects(allProjects, 6);
         setSelectedProjects(randomProjects);
       }
     }
@@ -54,7 +53,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push(`?to=${slug}`);
+    router.push({query: {...router.query, to: slug },})
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (

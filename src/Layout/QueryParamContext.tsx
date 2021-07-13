@@ -5,10 +5,8 @@ import { ProjectTypes } from "../Common/Types";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import {
-  getFilteredProjects,
   getRandomProjects,
 } from "../Utils/projects/filterProjects";
-import { getCountryDataBy } from "../Utils/countryUtils";
 import { ThemeContext } from "../../styles/themeContext";
 
 export const QueryParamContext = React.createContext({
@@ -52,6 +50,7 @@ export const QueryParamContext = React.createContext({
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
+  hideTaxDeduction: false
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -119,6 +118,8 @@ export default function QueryParamProvider({ children }: any) {
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
 
+  const [hideTaxDeduction, sethideTaxDeduction] = useState(false)
+
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
   React.useEffect(() => {
@@ -185,16 +186,11 @@ export default function QueryParamProvider({ children }: any) {
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
-
         setAllProjects(allowedDonationsProjects);
-        const featuredProjects = getFilteredProjects(
-          allowedDonationsProjects,
-          "featured"
-        );
-        if (featuredProjects?.length < 6) {
-          setSelectedProjects(featuredProjects);
+        if (allowedDonationsProjects?.length < 6) {
+          setSelectedProjects(allowedDonationsProjects);
         } else {
-          const randomProjects = getRandomProjects(featuredProjects, 6);
+          const randomProjects = getRandomProjects(allowedDonationsProjects, 6);
           setSelectedProjects(randomProjects);
         }
       }
@@ -215,11 +211,11 @@ export default function QueryParamProvider({ children }: any) {
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
-        setpaymentSetup(paymentSetupData.data);
         setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
+        setpaymentSetup(paymentSetupData.data);
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -300,10 +296,6 @@ export default function QueryParamProvider({ children }: any) {
         // fetch project - payment setup
         await loadProject(donation.data.project.id);
 
-        const newcountry = getCountryDataBy(
-          "currencyCode",
-          donation.data.currency
-        )?.countryCode;
 
         if (donation.data.taxDeductionCountry) {
           setcountry(donation.data.taxDeductionCountry);
@@ -313,6 +305,8 @@ export default function QueryParamProvider({ children }: any) {
             donation.data.taxDeductionCountry
           );
         } else {
+          sethideTaxDeduction(true);
+          const newcountry = donation.data.donor.country;          
           setcountry(newcountry);
           await loadPaymentSetup(donation.data.project.id, newcountry);
         }
@@ -487,7 +481,8 @@ export default function QueryParamProvider({ children }: any) {
         setDonationUid,
         setshowErrorCard,
         setprojectDetails,
-        loadselectedProjects
+        loadselectedProjects,
+        hideTaxDeduction
       }}
     >
       {children}

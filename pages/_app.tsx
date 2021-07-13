@@ -60,7 +60,6 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { theme: themeType } = useTheme();
   const router = useRouter();
   
   if (process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" && process.env.VERCEL_URL && typeof window !== 'undefined') {
@@ -83,11 +82,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <style jsx global>
             {theme}
           </style>
-          <div className={`${themeType}`}>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </div>
         </QueryParamProvider>
       </ThemeProvider>
     </Auth0Provider>

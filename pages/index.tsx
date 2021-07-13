@@ -3,14 +3,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Donations from "./../src/Donations";
 import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
-import { ProjectTypes } from "../src/Common/Types";
-import {
-  getFilteredProjects,
-  getRandomProjects,
-} from "../src/Utils/projects/filterProjects";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
+import locales from "../public/static/localeList.json";
+import { useRouter } from "next/dist/client/router";
+
 interface Props {
   projectDetails: Object;
   donationStep: any;
@@ -24,7 +22,7 @@ function index({
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl
+  resolvedUrl,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -53,7 +51,7 @@ function index({
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = encodeURIComponent(process.env.APP_URL+resolvedUrl);
   const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
-  
+
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     description = `Plant trees with ${projectDetails.tpo ? projectDetails.tpo?.name : projectDetails.tpoData?.name} in ${
@@ -64,15 +62,32 @@ function index({
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
 
+  const router = useRouter();
+
+  const defaultLanguage = router.query.locale ? router.query.locale : "en"
+
   return (
     <div
-      style={{ flexGrow: 1 }}
+      style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
       className="d-flex justify-content-center align-items-center"
     >
       <Head>
         <title>{title}</title>
         <meta name="title" content={title} />
         <meta name="description" content="" />
+
+        <meta property="og:locale" content={locales.find(locale => locale.key === defaultLanguage )?.value} />
+        {locales.map((locale) => {
+          if (locale.key !== defaultLanguage) {
+            return (
+              <meta
+                key={`og:locale:alternate${locale.value}`}
+                property="og:locale:alternate"
+                content={locale.value}
+              />
+            );
+          }
+        })}
 
         <meta property="og:site_name" content={title} />
 
@@ -162,7 +177,7 @@ export async function getServerSideProps(context: any) {
     props: {
       ...(await serverSideTranslations(
         context.locale,
-        ["common", "country"],
+        ["common", "country", "donate"],
         nextI18NextConfig
       )),
       donationStep: donationStep,
