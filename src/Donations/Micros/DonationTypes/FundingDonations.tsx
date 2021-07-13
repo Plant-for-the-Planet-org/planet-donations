@@ -22,16 +22,16 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     "/assets/images/funding/sprout.png",
   ];
 
-  const { paymentSetup, currency, quantity, setquantity, projectDetails } =
+  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
 
   const setCustomValue = (e: any) => {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1/paymentSetup.unitCost);
+        setquantity(1 / paymentSetup.unitCost);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value/paymentSetup.unitCost);
+        setquantity(e.target.value / paymentSetup.unitCost);
       }
     }
   };
@@ -43,85 +43,82 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   //     }
   //   }, [quantity]);
   const customInputRef = React.useRef(null);
-  
+
   return (
-    <div>
-      <div className="funding-selection-options-container">
-        {paymentSetup.options &&
-          paymentSetup.options.map((option, index) => {
-            return option.quantity ? (
-              <div
-                key={index}
-                onClick={() => {
-                  setquantity(option.quantity);
-                  setisCustomDonation(false);
-                  setCustomInputValue("");
-                }}
-                className={`funding-selection-option ${
-                  option.quantity === quantity && !isCustomDonation
-                    ? "funding-selection-option-selected"
-                    : ""
-                }`}
-              >
-                <img className="funding-icon" src={AllIcons[index]} />
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                  <span>
-                    {getFormatedCurrency(
-                      i18n.language,
-                      currency,
-                      paymentSetup.unitCost * option.quantity
-                    )}
-                  </span>
+    <div
+      className={`funding-selection-options-container ${
+        isGift && giftDetails.recipientName === "" ? "display-none" : ""
+      }`}
+    >
+      {paymentSetup.options &&
+        paymentSetup.options.map((option, index) => {
+          return option.quantity ? (
+            <div
+              key={index}
+              onClick={() => {
+                setquantity(option.quantity);
+                setisCustomDonation(false);
+                setCustomInputValue("");
+              }}
+              className={`funding-selection-option ${
+                option.quantity === quantity && !isCustomDonation
+                  ? "funding-selection-option-selected"
+                  : ""
+              }`}
+            >
+              <img className="funding-icon" src={AllIcons[index]} />
+              <div className="funding-selection-option-text">
+                <p>{option.caption}</p>
+                <span>
+                  {getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.unitCost * option.quantity
+                  )}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div
+              key={index}
+              className={`funding-selection-option ${
+                isCustomDonation ? "funding-selection-option-selected" : ""
+              }`}
+              onClick={() => {
+                setisCustomDonation(true);
+                customInputRef.current.focus();
+              }}
+            >
+              <img className="funding-icon" src={AllIcons[index]} />
+              <div className="funding-selection-option-text">
+                <p>{option.caption}</p>
+                <div className="d-flex row text-align-center justify-content-center">
+                  <p>{currency}</p>
+                  <input
+                    className={"funding-custom-tree-input"}
+                    onInput={(e) => {
+                      // replaces any character other than number to blank
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                      //  if length of input more than 12, display only 12 digits
+                      if (e.target.value.toString().length >= 12) {
+                        e.target.value = e.target.value.toString().slice(0, 12);
+                      }
+                    }}
+                    value={customInputValue}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    onChange={(e) => {
+                      setCustomValue(e);
+                      setCustomInputValue(e.target.value);
+                    }}
+                    ref={customInputRef}
+                  />
                 </div>
               </div>
-            ) : (
-              <div
-                key={index}
-                className={`funding-selection-option ${
-                  isCustomDonation ? "funding-selection-option-selected" : ""
-                }`}
-                onClick={() => {
-                  setisCustomDonation(true);
-                  customInputRef.current.focus();
-                }}
-              >
-                <img className="funding-icon" src={AllIcons[index]} />
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                  <div className="d-flex row text-align-center justify-content-center">
-                    <p>{currency}</p>
-                    <input
-                      className={"funding-custom-tree-input"}
-                      onInput={(e) => {
-                        // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                        //  if length of input more than 12, display only 12 digits
-                        if (e.target.value.toString().length >= 12) {
-                          e.target.value = e.target.value
-                            .toString()
-                            .slice(0, 12);
-                        }
-                      }}
-                      value={customInputValue}
-                      type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
-                      onChange={(e) => {
-                        setCustomValue(e);
-                        setCustomInputValue(e.target.value);
-                      }}
-                      ref={customInputRef}
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-      </div>
-      {/* <Image src={ShovelIcon} />
-      <Image src={SunshineIcon} />
-      <Image src={SproutIcon} /> */}
+            </div>
+          );
+        })}
     </div>
   );
 }

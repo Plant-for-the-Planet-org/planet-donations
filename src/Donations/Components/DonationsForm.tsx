@@ -133,57 +133,61 @@ function DonationsForm() {
             <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />
           )}
 
-          <TaxDeductionOption />
+          <div
+            className={`${
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+            }`}
+          >
+            <TaxDeductionOption />
 
-          <div className={"horizontal-line"} />
+            <div className={"horizontal-line"} />
 
-          {projectDetails.purpose !== "funds" && (
-          <DonationAmount />
-          )}
+            {projectDetails.purpose !== "funds" && <DonationAmount />}
 
-          {paymentSetup && projectDetails ? (
-            minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
-              !isPaymentOptionsLoading &&
-              paymentSetup?.gateways?.stripe?.account &&
-              currency ? (
-                <NativePay
-                  country={country}
-                  currency={currency}
-                  amount={formatAmountForStripe(
-                    paymentSetup?.unitCost * quantity,
-                    currency.toLowerCase()
-                  )}
-                  onPaymentFunction={onPaymentFunction}
-                  paymentSetup={paymentSetup}
-                  continueNext={() => setdonationStep(2)}
-                  isPaymentPage={false}
-                  paymentLabel={t("treesInCountry", {
-                    treeCount: quantity,
-                    country: t(
-                      `country:${projectDetails.country.toLowerCase()}`
-                    ),
-                  })}
-                />
+            {paymentSetup && projectDetails ? (
+              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+                !isPaymentOptionsLoading &&
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
+                  <NativePay
+                    country={country}
+                    currency={currency}
+                    amount={formatAmountForStripe(
+                      paymentSetup?.unitCost * quantity,
+                      currency.toLowerCase()
+                    )}
+                    onPaymentFunction={onPaymentFunction}
+                    paymentSetup={paymentSetup}
+                    continueNext={() => setdonationStep(2)}
+                    isPaymentPage={false}
+                    paymentLabel={t("treesInCountry", {
+                      treeCount: quantity,
+                      country: t(
+                        `country:${projectDetails.country.toLowerCase()}`
+                      ),
+                    })}
+                  />
+                ) : (
+                  <div className="mt-20 w-100">
+                    <ButtonLoader />
+                  </div>
+                )
+              ) : minAmt > 0 ? (
+                <p className={"text-danger mt-20 text-center"}>
+                  {t("minDonate")}{" "}
+                  <span>
+                    {getFormatedCurrency(i18n.language, currency, minAmt)}
+                  </span>
+                </p>
               ) : (
-                <div className="mt-20 w-100">
-                  <ButtonLoader />
-                </div>
+                <></>
               )
             ) : (
-              minAmt > 0 ?
-              <p className={"text-danger mt-20 text-center"}>
-                {t("minDonate")}{" "}
-                <span>
-                  {getFormatedCurrency(i18n.language, currency, minAmt)}
-                </span>
-              </p>
-               : <></>
-            )
-          ) : (
-            <div className="mt-20 w-100">
-              <ButtonLoader />
-            </div>
-          )}
+              <div className="mt-20 w-100">
+                <ButtonLoader />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
