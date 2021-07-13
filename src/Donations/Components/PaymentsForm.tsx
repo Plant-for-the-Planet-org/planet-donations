@@ -313,7 +313,7 @@ function PaymentsForm({}: Props): ReactElement {
                   <NewPaypal
                     paymentSetup={paymentSetup}
                     quantity={quantity}
-                    treeCost={paymentSetup.unitCost}
+                    unitCost={paymentSetup.unitCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

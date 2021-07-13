@@ -135,7 +135,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
         </div>
       </div>
 
-      {paymentSetup && paymentSetup.treeCost ? (
+      {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
           <button
             onClick={() => {
@@ -148,7 +148,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
             {getFormatedCurrency(
               i18n.language,
               "",
-              Number(paymentSetup.treeCost)
+              Number(paymentSetup.unitCost)
             )}{" "}
           </button>
           {t("perTree")}

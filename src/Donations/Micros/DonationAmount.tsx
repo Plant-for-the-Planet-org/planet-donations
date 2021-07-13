@@ -14,7 +14,7 @@ function DonationAmount({}: Props): ReactElement {
     React.useContext(QueryParamContext);
   return (
     <div>
-      {paymentSetup && paymentSetup.treeCost ? (
+      {paymentSetup && paymentSetup.unitCost ? (
         <div className={"w-100 text-center text-bold mt-20"}>
           <span className={"text-primary"} style={{ marginRight: "4px" }}>
             {getFormatedCurrency(
