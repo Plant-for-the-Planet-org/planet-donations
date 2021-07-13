@@ -3,6 +3,8 @@ import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import getFormatedCurrency from "../../../Utils/getFormattedCurrency";
+import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
+import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -119,6 +121,26 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             </div>
           );
         })}
+
+      {paymentSetup && paymentSetup.unitCost ? (
+        <p className="currency-selection mt-30">
+          <button
+            onClick={() => {
+              setopenCurrencyModal(true);
+            }}
+            className="text-bold text-primary"
+            style={{ marginRight: "4px" }}
+          >
+            <span style={{marginRight:'4px'}} className={"text-normal"}>{t("selectCurrency")}</span> 
+            {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            
+          </button>
+        </p>
+      ) : (
+        <div className={"mt-20"}>
+          <TreeCostLoader width={150} />
+        </div>
+      )}
     </div>
   );
 }
