@@ -262,7 +262,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   .funding-selection-option {
-    width: 170px;
+    width: 140px;
     height: 80px;
     border: 1px solid $greyColor;
     border-radius: 4px;
@@ -609,6 +609,11 @@
     .tree-selection-option {
       width: 100px;
       padding: 12px;
+    }
+  }
+  .funding-selection-options-container {
+    .funding-selection-option {
+      width: 170px;
     }
   }
   .custom-selection {
