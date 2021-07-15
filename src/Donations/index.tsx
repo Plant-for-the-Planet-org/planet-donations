@@ -55,7 +55,7 @@ function DonationInfo() {
         layout="fill"
         objectFit="cover"
         src={
-          projectDetails.purpose !== "trees" && projectDetails.image
+          projectDetails && projectDetails.purpose !== "trees" && projectDetails.image
             ? projectDetails.image
             : getTenantBackground(tenant)
         }

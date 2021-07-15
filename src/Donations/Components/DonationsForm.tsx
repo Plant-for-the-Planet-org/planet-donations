@@ -113,8 +113,6 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
-  console.log("paymentSetup", paymentSetup);
-
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
