@@ -106,10 +106,10 @@ function Authentication({}: Props): ReactElement {
   }, [router.query]);
   return (
     <div>
-      {!isLoading && !isAuthenticated && (
-        <button className="w-100 login-continue" onClick={() => loginUser()}>
-          {t("loginContinue")}
-        </button>
+      {!queryToken && !isLoading && !isAuthenticated && (
+        <div className="w-100 d-flex" style={{justifyContent:'flex-end'}}>
+          <button onClick={() => loginUser()} className="login-continue">{t("loginContinue")}</button>
+        </div>
       )}
 
       {!isLoading && isAuthenticated && profile && (
