@@ -117,9 +117,23 @@ function DonationInfo() {
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
                 <p>{t("dedicatedTo")}</p>
-                <p className="text-bold">{giftDetails.recipientName}</p>
+                {giftDetails.recipientTreecounter ? (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
+                    className="text-white"
+                  >
+                    <p className="text-bold">{giftDetails.recipientName}</p>
+                  </a>
+                ) : (
+                  <p className="text-bold">{giftDetails.recipientName}</p>
+                )}
+
                 {giftDetails.giftMessage && (
-                  <p>{t("message")}: {giftDetails.giftMessage}</p>
+                  <p>
+                    {t("message")}: {giftDetails.giftMessage}
+                  </p>
                 )}
               </div>
             )}
@@ -146,7 +160,10 @@ function DonationInfo() {
           )}
 
           {donationID && (
-            <a href={`${process.env.APP_URL}/?context=${donationID}`} className="donations-transaction-details mt-20">
+            <a
+              href={`${process.env.APP_URL}/?context=${donationID}`}
+              className="donations-transaction-details mt-20"
+            >
               {`Ref - ${donationID}`}
             </a>
           )}
