@@ -15,7 +15,8 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails,setshowErrorCard } = React.useContext(QueryParamContext);
+  const { setContactDetails, setshowErrorCard, setqueryToken, queryToken } =
+    React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -29,17 +30,19 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if (user.email_verified) {
-
+    if (user && user.email_verified || queryToken) {
       try {
-        const token = await getAccessTokenSilently();
-
+        const token =queryToken ? queryToken : await getAccessTokenSilently();
         const requestParams = {
-          url:"/app/profile",
-          token:token,
-          setshowErrorCard
-        }
+          url: "/app/profile",
+          token: token,
+          setshowErrorCard,
+        };
+        console.log('token',token);
+
         const profile: any = await apiRequest(requestParams);
+        console.log('profile',profile);
+        
         if (profile.data) {
           setprofile(profile.data);
           const newContactDetails = {
@@ -63,7 +66,7 @@ function Authentication({}: Props): ReactElement {
       } catch (err) {
         // console.log(err);
       }
-    } else {
+    }  else {
       setopenVerifyEmailModal(true);
     }
   };
@@ -73,25 +76,34 @@ function Authentication({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      if(localStorage.getItem('queryparams')){
-        const queryparams = localStorage.getItem('queryparams');
+      if (localStorage.getItem("queryparams")) {
+        const queryparams = localStorage.getItem("queryparams");
         router.push(queryparams);
-        localStorage.removeItem('queryparams');
+        localStorage.removeItem("queryparams");
       }
       // If details present store in contact details
       // If details are not present show message and logout user
     }
-  }, [isAuthenticated, isLoading]);
+    else if(queryToken){
+      loadUserProfile();
+    }
+  }, [isAuthenticated, isLoading,queryToken]);
 
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
-    localStorage.setItem('queryparams',router.asPath);
+    localStorage.setItem("queryparams", router.asPath);
     loginWithRedirect({
       redirectUri: window?.location.href,
       ui_locales: localStorage.getItem("language") || "en",
     });
   };
+
+  React.useEffect(() => {
+    if (router.query.token) {
+      setqueryToken(router.query.token);
+    }
+  }, [router.query]);
   return (
     <div>
       {!isLoading && !isAuthenticated && (
@@ -208,9 +220,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() =>
-                logout({ returnTo: `${process.env.APP_URL}/` })
-              }
+              onClick={() => logout({ returnTo: `${process.env.APP_URL}/` })}
             >
               <p>{t("skipLogout")}</p>
             </button>

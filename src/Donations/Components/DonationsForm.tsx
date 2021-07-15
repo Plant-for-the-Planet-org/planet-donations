@@ -41,6 +41,7 @@ function DonationsForm() {
     setdonationID,
     isTaxDeductible,
     setshowErrorCard,
+    queryToken
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -77,7 +78,7 @@ function DonationsForm() {
 
     let token = null;
     if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
     await createDonationFunction({
@@ -98,7 +99,7 @@ function DonationsForm() {
     }).then(async (res) => {
       let token = null;
       if (!isLoading && isAuthenticated) {
-        token = await getAccessTokenSilently();
+        token = queryToken ? queryToken :await getAccessTokenSilently();
       }
       payDonationFunction({
         gateway: "stripe",
