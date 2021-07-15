@@ -86,14 +86,19 @@ function DonationInfo() {
           )}
           {donationStep > 0 ? (
             <>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-                className="title-text text-white"
-              >
-                {projectDetails.name}
-              </a>
+              {projectDetails.purpose === "trees" ? (
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                  className="title-text text-white"
+                >
+                  {projectDetails.name}
+                </a>
+              ) : (
+                <p className="title-text text-white">{projectDetails.name}</p>
+              )}
+
               {projectDetails.tpo && (
                 <a
                   rel="noreferrer"
@@ -119,7 +124,9 @@ function DonationInfo() {
                 <p>{t("dedicatedTo")}</p>
                 <p className="text-bold">{giftDetails.recipientName}</p>
                 {giftDetails.giftMessage && (
-                  <p>{t("message")}: {giftDetails.giftMessage}</p>
+                  <p>
+                    {t("message")}: {giftDetails.giftMessage}
+                  </p>
                 )}
               </div>
             )}
@@ -146,7 +153,10 @@ function DonationInfo() {
           )}
 
           {donationID && (
-            <a href={`${process.env.APP_URL}/?context=${donationID}`} className="donations-transaction-details mt-20">
+            <a
+              href={`${process.env.APP_URL}/?context=${donationID}`}
+              className="donations-transaction-details mt-20"
+            >
               {`Ref - ${donationID}`}
             </a>
           )}
