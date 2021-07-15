@@ -32,7 +32,7 @@ function Authentication({}: Props): ReactElement {
   const loadUserProfile = async () => {
     if ((user && user.email_verified) || queryToken) {
       try {
-        // if we have access token in the query params we use it instead of using the 
+        // if we have access token in the query params we use it instead of using the
         const token = queryToken ? queryToken : await getAccessTokenSilently();
         const requestParams = {
           url: "/app/profile",
@@ -105,7 +105,7 @@ function Authentication({}: Props): ReactElement {
       }
     }
   }, [router.query,isLoading,isAuthenticated]);
-  
+
   return (
     <div>
       {!queryToken && !isLoading && !isAuthenticated && (
@@ -127,21 +127,23 @@ function Authentication({}: Props): ReactElement {
               <img
                 className="profile-pic"
                 src={getImageUrl("profile", "avatar", profile.image)}
-                alt={profile ? profile.displayName :user.name}
+                alt={profile ? profile.displayName : user?.name}
               />
-            ) : user.picture ? (
+            ) : user?.picture ? (
               <img className="profile-pic" src={user.picture} alt={user.name} />
             ) : (
-              <div className="profile-pic no-pic">{user.name.charAt(0)}</div>
+              <div className="profile-pic no-pic">{profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}</div>
             )}
-            <p>{profile ? profile.displayName : user.name}</p>
+            <p>{profile ? profile.displayName : user?.name}</p>
           </a>
-          <button
-            className="login-continue"
-            onClick={() => logout({ returnTo: window?.location.href })}
-          >
-            {t("logout")}
-          </button>
+          {user ? (
+            <button
+              className="login-continue"
+              onClick={() => logout({ returnTo: window?.location.href })}
+            >
+              {t("logout")}
+            </button>
+          ) : null}
         </div>
       )}
       <VerifyEmailModal
