@@ -77,7 +77,7 @@ function DonationsForm() {
     };
 
     let token = null;
-    if (!isLoading && isAuthenticated) {
+    if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
@@ -98,7 +98,7 @@ function DonationsForm() {
       setshowErrorCard,
     }).then(async (res) => {
       let token = null;
-      if (!isLoading && isAuthenticated) {
+      if ((!isLoading && isAuthenticated) || queryToken) {
         token = queryToken ? queryToken :await getAccessTokenSilently();
       }
       payDonationFunction({

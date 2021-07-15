@@ -30,19 +30,16 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if (user && user.email_verified || queryToken) {
+    if ((user && user.email_verified) || queryToken) {
       try {
-        const token =queryToken ? queryToken : await getAccessTokenSilently();
+        // if we have access token in the query params we use it instead of using the 
+        const token = queryToken ? queryToken : await getAccessTokenSilently();
         const requestParams = {
           url: "/app/profile",
           token: token,
           setshowErrorCard,
         };
-        console.log('token',token);
-
         const profile: any = await apiRequest(requestParams);
-        console.log('profile',profile);
-        
         if (profile.data) {
           setprofile(profile.data);
           const newContactDetails = {
@@ -66,7 +63,7 @@ function Authentication({}: Props): ReactElement {
       } catch (err) {
         // console.log(err);
       }
-    }  else {
+    } else {
       setopenVerifyEmailModal(true);
     }
   };
@@ -83,11 +80,10 @@ function Authentication({}: Props): ReactElement {
       }
       // If details present store in contact details
       // If details are not present show message and logout user
-    }
-    else if(queryToken){
+    } else if (queryToken) {
       loadUserProfile();
     }
-  }, [isAuthenticated, isLoading,queryToken]);
+  }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, ready } = useTranslation("common");
 
@@ -100,19 +96,27 @@ function Authentication({}: Props): ReactElement {
   };
 
   React.useEffect(() => {
+    // if there is token in the query params use it
     if (router.query.token) {
       setqueryToken(router.query.token);
+      // If user is logged in via auth0, log them out
+      if (!isLoading && isAuthenticated) {
+        logout({ returnTo: window?.location.href })
+      }
     }
-  }, [router.query]);
+  }, [router.query,isLoading,isAuthenticated]);
+  
   return (
     <div>
       {!queryToken && !isLoading && !isAuthenticated && (
-        <div className="w-100 d-flex" style={{justifyContent:'flex-end'}}>
-          <button onClick={() => loginUser()} className="login-continue">{t("loginContinue")}</button>
+        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+          <button onClick={() => loginUser()} className="login-continue">
+            {t("loginContinue")}
+          </button>
         </div>
       )}
 
-      {!isLoading && isAuthenticated && profile && (
+      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) && (
         <div className="d-flex row justify-content-between w-100 mb-20">
           <a
             href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
@@ -123,14 +127,14 @@ function Authentication({}: Props): ReactElement {
               <img
                 className="profile-pic"
                 src={getImageUrl("profile", "avatar", profile.image)}
-                alt={user.name}
+                alt={profile ? profile.displayName :user.name}
               />
             ) : user.picture ? (
               <img className="profile-pic" src={user.picture} alt={user.name} />
             ) : (
               <div className="profile-pic no-pic">{user.name.charAt(0)}</div>
             )}
-            <p>{user.name}</p>
+            <p>{profile ? profile.displayName : user.name}</p>
           </a>
           <button
             className="login-continue"

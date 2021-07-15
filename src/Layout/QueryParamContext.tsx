@@ -73,6 +73,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
+  // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
