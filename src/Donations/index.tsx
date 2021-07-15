@@ -69,7 +69,7 @@ function DonationInfo() {
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {(donationStep === 2 || donationStep === 3) && (
             <div className="contact-details-info">
-              <div className={"w-100  mt-10"}>
+              <div className={"w-100 mt-10 text-white"}>
                 {t("donating")}
                 <span className="text-bold" style={{ marginRight: "4px" }}>
                   {getFormatedCurrency(
