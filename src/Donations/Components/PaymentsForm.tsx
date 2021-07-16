@@ -185,31 +185,35 @@ function PaymentsForm({}: Props): ReactElement {
 
           {!hideTaxDeduction && <TaxDeductionOption />}
 
-          <div className={"mt-20"}>
-            {!contactDetails.companyname ||
-            contactDetails.companyname === "" ? (
-              askpublishName ? (
-                <div>
-                  <label htmlFor="publishName">{t("askPublishName")}</label>
-                  <ToggleSwitch
-                    id="publishName"
-                    checked={publishName}
-                    onChange={() => {
-                      setpublishName(!publishName);
-                    }}
-                    name="checkedB"
-                    inputProps={{ "aria-label": "secondary checkbox" }}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label style={{ textAlign: "center" }}>
-                    {t("nameAlreadyPublished")}
-                  </label>
-                </div>
-              )
-            ) : null}
-          </div>
+          {projectDetails.purpose !== "funds" ? (
+            <div className={"mt-20"}>
+              {!contactDetails.companyname ||
+              contactDetails.companyname === "" ? (
+                askpublishName ? (
+                  <div>
+                    <label htmlFor="publishName">{t("askPublishName")}</label>
+                    <ToggleSwitch
+                      id="publishName"
+                      checked={publishName}
+                      onChange={() => {
+                        setpublishName(!publishName);
+                      }}
+                      name="checkedB"
+                      inputProps={{ "aria-label": "secondary checkbox" }}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <label style={{ textAlign: "center" }}>
+                      {t("nameAlreadyPublished")}
+                    </label>
+                  </div>
+                )
+              ) : null}
+            </div>
+          ) : (
+            <></>
+          )}
 
           {paymentError && (
             <div
