@@ -280,6 +280,9 @@
       }
       .funding-selection-option-text {
         color: $primaryFontColor;
+        p {
+          color: $primaryFontColor;
+        }
       }
     }
     &:hover {
@@ -300,7 +303,8 @@
       color: $darkGreyColor;
       font-size: 14px;
       font-weight: 700;
-      > p {
+      p {
+        color: $darkGreyColor;
         margin-bottom: 6px;
       }
       > span {

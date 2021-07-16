@@ -103,7 +103,7 @@ function DonationInfo() {
                 <p className="title-text text-white">{projectDetails.name}</p>
               )}
 
-              {projectDetails.tpo && (
+              {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a
                   rel="noreferrer"
                   target="_blank"

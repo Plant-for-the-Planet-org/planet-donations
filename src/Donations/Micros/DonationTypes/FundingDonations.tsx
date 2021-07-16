@@ -5,6 +5,7 @@ import themeProperties from "../../../../styles/themeProperties";
 import getFormatedCurrency from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
+import { getCountryDataBy } from "../../../Utils/countryUtils";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -93,9 +94,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             >
               <img className="funding-icon" src={AllIcons[index]} />
               <div className="funding-selection-option-text">
-                <p>{option.caption}</p>
-                <div className="d-flex row text-align-center justify-content-center">
-                  <p>{currency}</p>
+                <p style={{marginBottom:'0px'}}>{option.caption}</p>
+                <div className="d-flex row" style={{alignItems:'flex-end'}}>
+                  <p style={{marginBottom:'0px',marginRight:'6px'}}>
+                    {currency}
+                  </p>
                   <input
                     className={"funding-custom-tree-input"}
                     onInput={(e) => {
