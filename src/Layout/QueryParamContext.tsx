@@ -59,7 +59,9 @@ export const QueryParamContext = React.createContext({
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
-  hideTaxDeduction: false
+  hideTaxDeduction: false,
+  queryToken:"", 
+  setqueryToken: (value: string) => ""
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -70,6 +72,9 @@ export default function QueryParamProvider({ children }: any) {
   const [paymentSetup, setpaymentSetup] = useState<Object>({});
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
+
+  // Query token is the access token which is passed in the query params
+  const [queryToken, setqueryToken] = useState<string | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
@@ -509,7 +514,9 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         setprojectDetails,
         loadselectedProjects,
-        hideTaxDeduction
+        hideTaxDeduction,
+        queryToken,
+        setqueryToken
       }}
     >
       {children}

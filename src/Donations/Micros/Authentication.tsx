@@ -15,7 +15,8 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails,setshowErrorCard } = React.useContext(QueryParamContext);
+  const { setContactDetails, setshowErrorCard, setqueryToken, queryToken } =
+    React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -29,16 +30,15 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if (user.email_verified) {
-
+    if ((user && user.email_verified) || queryToken) {
       try {
-        const token = await getAccessTokenSilently();
-
+        // if we have access token in the query params we use it instead of using the
+        const token = queryToken ? queryToken : await getAccessTokenSilently();
         const requestParams = {
-          url:"/app/profile",
-          token:token,
-          setshowErrorCard
-        }
+          url: "/app/profile",
+          token: token,
+          setshowErrorCard,
+        };
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
@@ -73,34 +73,50 @@ function Authentication({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      if(localStorage.getItem('queryparams')){
-        const queryparams = localStorage.getItem('queryparams');
+      if (localStorage.getItem("queryparams")) {
+        const queryparams = localStorage.getItem("queryparams");
         router.push(queryparams);
-        localStorage.removeItem('queryparams');
+        localStorage.removeItem("queryparams");
       }
       // If details present store in contact details
       // If details are not present show message and logout user
+    } else if (queryToken) {
+      loadUserProfile();
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
-    localStorage.setItem('queryparams',router.asPath);
+    localStorage.setItem("queryparams", router.asPath);
     loginWithRedirect({
       redirectUri: window?.location.href,
       ui_locales: localStorage.getItem("language") || "en",
     });
   };
+
+  React.useEffect(() => {
+    // if there is token in the query params use it
+    if (router.query.token) {
+      setqueryToken(router.query.token);
+      // If user is logged in via auth0, log them out
+      if (!isLoading && isAuthenticated) {
+        logout({ returnTo: window?.location.href })
+      }
+    }
+  }, [router.query,isLoading,isAuthenticated]);
+
   return (
     <div>
-      {!isLoading && !isAuthenticated && (
-        <button className="w-100 login-continue" onClick={() => loginUser()}>
-          {t("loginContinue")}
-        </button>
+      {!queryToken && !isLoading && !isAuthenticated && (
+        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+          <button onClick={() => loginUser()} className="login-continue">
+            {t("loginContinue")}
+          </button>
+        </div>
       )}
 
-      {!isLoading && isAuthenticated && profile && (
+      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
           <a
             href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
@@ -111,23 +127,25 @@ function Authentication({}: Props): ReactElement {
               <img
                 className="profile-pic"
                 src={getImageUrl("profile", "avatar", profile.image)}
-                alt={user.name}
+                alt={profile ? profile.displayName : user?.name}
               />
-            ) : user.picture ? (
+            ) : user?.picture ? (
               <img className="profile-pic" src={user.picture} alt={user.name} />
             ) : (
-              <div className="profile-pic no-pic">{user.name.charAt(0)}</div>
+              <div className="profile-pic no-pic">{profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}</div>
             )}
-            <p>{user.name}</p>
+            <p>{profile ? profile.displayName : user?.name}</p>
           </a>
-          <button
-            className="login-continue"
-            onClick={() => logout({ returnTo: window?.location.href })}
-          >
-            {t("logout")}
-          </button>
+          {user ? (
+            <button
+              className="login-continue"
+              onClick={() => logout({ returnTo: window?.location.href })}
+            >
+              {t("logout")}
+            </button>
+          ) : null}
         </div>
-      )}
+      ):<></>}
       <VerifyEmailModal
         logout={logout}
         openModal={openVerifyEmailModal}
@@ -208,9 +226,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() =>
-                logout({ returnTo: `${process.env.APP_URL}/` })
-              }
+              onClick={() => logout({ returnTo: `${process.env.APP_URL}/` })}
             >
               <p>{t("skipLogout")}</p>
             </button>
