@@ -116,7 +116,7 @@ function Authentication({}: Props): ReactElement {
         </div>
       )}
 
-      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) && (
+      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
           <a
             href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
@@ -143,7 +143,7 @@ function Authentication({}: Props): ReactElement {
             {t("logout")}
           </button>
         </div>
-      )}
+      ):<></>}
       <VerifyEmailModal
         logout={logout}
         openModal={openVerifyEmailModal}
