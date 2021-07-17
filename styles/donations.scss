@@ -249,7 +249,7 @@
         color: $darkGreyColor;
       }
       > span {
-        font-size: 9px;
+        font-size: 12px;
       }
     }
   }
@@ -510,6 +510,9 @@
 }
 
 .contact-details-info {
+  p{
+    color: white!important;
+  }
   button {
     display: flex;
     flex-direction: row;

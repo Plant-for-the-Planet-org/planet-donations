@@ -4,7 +4,7 @@
   height: 48px;
   width: 100%;
   border-radius: 24px;
-  border: 1px solid $dividerColor;
+  border: 1px solid $greyColor;
   padding-left: 18px;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@
   position: relative;
   border-radius: 10px;
   padding: 10px;
-  border: 1px solid $backgroundColorDark;
+  border: 1px solid $greyColor;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,6 +39,7 @@
   &:hover {
     cursor: pointer;
     background-color: $backgroundColorDark;
+    border: 1px solid $primaryColor;
   }
   .project-organisation-image {
     width: 30px;
