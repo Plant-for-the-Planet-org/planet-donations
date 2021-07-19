@@ -122,7 +122,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background-color: $dividerColor;
+  background-color: $greyColor;
 }
 
 .separator-text:not(:empty)::before {

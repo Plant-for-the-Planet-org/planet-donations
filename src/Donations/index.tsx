@@ -10,6 +10,7 @@ import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
+import getImageUrl from "../Utils/getImageURL";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
@@ -48,6 +49,8 @@ function DonationInfo() {
     isGift,
     tenant,
   } = React.useContext(QueryParamContext);
+
+  console.log("projectDetails", projectDetails);
 
   return (
     <div className="donations-info-container">
@@ -90,6 +93,41 @@ function DonationInfo() {
                 rel="noreferrer"
                 target="_blank"
                 href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+              >
+                {projectDetails.tpo.image ? (
+                  <img
+                    className="project-organisation-image mb-10"
+                    src={getImageUrl(
+                      "profile",
+                      "thumb",
+                      projectDetails.tpo.image
+                    )}
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "48px",
+                      border: "1px solid #fff",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "48px",
+                      border: "1px solid #fff",
+                    }}
+                    className="project-organisation-image no-project-organisation-image mb-10"
+                  >
+                    {projectDetails.tpo.name.charAt(0)}
+                  </div>
+                )}
+              </a>
+
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
                 className="title-text text-white"
               >
                 {projectDetails.name}
@@ -122,9 +160,9 @@ function DonationInfo() {
                     rel="noreferrer"
                     target="_blank"
                     href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
-                    className="text-white"
+                    className="text-white text-bold"
                   >
-                    <p className="text-bold">{giftDetails.recipientName}</p>
+                    {giftDetails.recipientName}
                   </a>
                 ) : (
                   <p className="text-bold">{giftDetails.recipientName}</p>

@@ -288,9 +288,7 @@ function ThankYou() {
         ) : (
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
-              redirectstatus === "succeeded" &&
-              (donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid") ? (
+              redirectstatus === "succeeded" ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />
