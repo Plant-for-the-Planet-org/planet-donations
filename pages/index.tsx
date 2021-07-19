@@ -65,18 +65,20 @@ function index({
     setallowTaxDeductionChange
   } = React.useContext(QueryParamContext);
 
-  if(isDirectDonation){
-    sethideTaxDeduction(hideTaxDeduction);
-    setIsTaxDeductible(isTaxDeductible)
-    setdonationID(donationID)
-    setshouldCreateDonation(shouldCreateDonation)
-    setcountry(country)
-    setContactDetails(contactDetails)
-    settreeCount(treecount)
-    setallowTaxDeductionChange(allowTaxDeductionChange)
-    setcurrency(currency)
-    setpaymentSetup(paymentSetup)
-  }
+  React.useEffect(() => {
+    if(isDirectDonation){
+      sethideTaxDeduction(hideTaxDeduction);
+      setIsTaxDeductible(isTaxDeductible)
+      setdonationID(donationID)
+      setshouldCreateDonation(shouldCreateDonation)
+      setcountry(country)
+      setContactDetails(contactDetails)
+      settreeCount(treecount)
+      setallowTaxDeductionChange(allowTaxDeductionChange)
+      setcurrency(currency)
+      setpaymentSetup(paymentSetup)
+    }
+  },[])
 
   // If gift details are present set gift
   if (giftDetails && isGift) {
