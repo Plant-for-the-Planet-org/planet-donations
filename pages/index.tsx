@@ -62,7 +62,8 @@ function index({
     setshouldCreateDonation,
     setdonationID,
     sethideTaxDeduction,
-    setallowTaxDeductionChange
+    setallowTaxDeductionChange,
+    setisDirectDonation
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -77,6 +78,7 @@ function index({
       setallowTaxDeductionChange(allowTaxDeductionChange)
       setcurrency(currency)
       setpaymentSetup(paymentSetup)
+      setisDirectDonation(isDirectDonation)
     }
   },[])
 

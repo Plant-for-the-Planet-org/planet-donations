@@ -64,6 +64,7 @@ export const QueryParamContext = React.createContext({
   queryToken:"", 
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
+  setisDirectDonation:(value: boolean) => {}
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -402,7 +403,8 @@ export default function QueryParamProvider({ children }: any) {
         setqueryToken,
         setpaymentSetup,
         sethideTaxDeduction,
-        setallowTaxDeductionChange
+        setallowTaxDeductionChange,
+        setisDirectDonation
       }}
     >
       {children}
