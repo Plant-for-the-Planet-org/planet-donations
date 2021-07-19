@@ -102,7 +102,7 @@
   z-index: 3;
   justify-content: flex-end;
   min-height: 236px;
-  > a {
+  a {
     &:hover {
       text-decoration: underline;
     }
@@ -399,7 +399,7 @@
 
 .horizontal-line {
   height: 1px;
-  background-color: $dividerColor;
+  background-color: $greyColor;
   margin-top: 20px;
 }
 
