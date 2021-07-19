@@ -71,6 +71,7 @@ function DonationInfo() {
             rel="noreferrer"
             target="_blank"
             href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+            style={{width:'fit-content'}}
           >
             {projectDetails.tpo.image ? (
               <img
