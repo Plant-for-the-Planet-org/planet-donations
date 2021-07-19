@@ -89,34 +89,41 @@ function DonationInfo() {
           )}
           {donationStep > 0 ? (
             <>
-              {projectDetails.tpo.image ? (
-                <img
-                  className="project-organisation-image mb-10"
-                  src={getImageUrl(
-                    "profile",
-                    "thumb",
-                    projectDetails.tpo.image
-                  )}
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "48px",
-                    border:'1px solid #fff'
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "48px",
-                    border:'1px solid #fff'
-                  }}
-                  className="project-organisation-image no-project-organisation-image mb-10"
-                >
-                  {projectDetails.tpo.name.charAt(0)}
-                </div>
-              )}
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+              >
+                {projectDetails.tpo.image ? (
+                  <img
+                    className="project-organisation-image mb-10"
+                    src={getImageUrl(
+                      "profile",
+                      "thumb",
+                      projectDetails.tpo.image
+                    )}
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "48px",
+                      border: "1px solid #fff",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      borderRadius: "48px",
+                      border: "1px solid #fff",
+                    }}
+                    className="project-organisation-image no-project-organisation-image mb-10"
+                  >
+                    {projectDetails.tpo.name.charAt(0)}
+                  </div>
+                )}
+              </a>
+
               <a
                 rel="noreferrer"
                 target="_blank"
