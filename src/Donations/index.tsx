@@ -122,9 +122,9 @@ function DonationInfo() {
                     rel="noreferrer"
                     target="_blank"
                     href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
-                    className="text-white"
+                    className="text-white text-bold"
                   >
-                    <p className="text-bold">{giftDetails.recipientName}</p>
+                    {giftDetails.recipientName}
                   </a>
                 ) : (
                   <p className="text-bold">{giftDetails.recipientName}</p>
