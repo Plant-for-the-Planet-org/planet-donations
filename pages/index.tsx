@@ -162,6 +162,9 @@ function index({
           content={url}
         />
         <meta name="twitter:description" content={description} />
+
+        {isDirectDonation ? (<meta name="robots" content="noindex"/>) : <></>}
+
       </Head>
       <Donations />
     </div>
