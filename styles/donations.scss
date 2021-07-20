@@ -310,11 +310,10 @@
       p {
         color: $darkGreyColor;
         margin-bottom: 10px;
+      }
+      > span {
         margin-top: 10px;
       }
-      // > span {
-      //   margin-top: 6px;
-      // }
     }
   }
 }
@@ -377,9 +376,10 @@
   letter-spacing: 0.5px;
 }
 .funding-custom-tree-input{
-  text-align: left;
+  text-align: center;
   margin: 0px;
-  width: 100%;
+  margin-left: -16px;
+  width: 50%;
   font-size: 14px;
 }
 

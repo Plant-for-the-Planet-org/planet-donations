@@ -69,9 +69,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   : ""
               }`}
             >
-              <img className="funding-icon" src={AllIcons[index]} />
               <div className="funding-selection-option-text">
                 <p>{option.caption}</p>
+              </div>
+              <img className="funding-icon" src={AllIcons[index]} />
+              <div className="funding-selection-option-text mt-10">
                 <span>
                   {getFormatedCurrency(
                     i18n.language,
@@ -92,10 +94,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 customInputRef.current.focus();
               }}
             >
+              <div className="funding-selection-option-text">
+                <p>{option.caption}</p>
+              </div>
               <img className="funding-icon" src={AllIcons[index]} />
               <div className="funding-selection-option-text">
-                <p style={{marginBottom:'0px'}}>{option.caption}</p>
-                <div className="d-flex row" style={{alignItems:'flex-end'}}>
+                <div className="d-flex row" style={{alignItems:'flex-end',justifyContent:'center'}}>
                   <p style={{marginBottom:'0px',marginRight:'6px'}}>
                     {getFormatedCurrencySymbol(currency)}
                   </p>
