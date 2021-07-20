@@ -59,6 +59,7 @@ function PaymentsForm({}: Props): ReactElement {
     setDonationUid,
     setshowErrorCard,
     hideTaxDeduction,
+    queryToken,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -69,8 +70,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -96,8 +97,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   async function getDonation() {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     setisDonationLoading(true);
     const donation = await createDonationFunction({
