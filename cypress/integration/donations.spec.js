@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-function createDonation(project="yucatan", cusomTrees, firstName, lastName, email, address, city, country, zipCode, cardNumber, cardExpiry, cardCvc) {
+function createDonation(project="yucatan", customTrees, firstName, lastName, email, address, city, country, zipCode) {
     cy.visit(`/?to=${project}`)
     cy.wait(5000)
     cy.get('.donations-gift-toggle').click().then(() => {
@@ -9,7 +9,7 @@ function createDonation(project="yucatan", cusomTrees, firstName, lastName, emai
         cy.get('[data-test-id="giftMessage"]').type('This gift is for Peter')
         cy.get('[data-test-id="giftSubmit"]').click()
     })
-    cy.get('.custom-tree-input').type(cusomTrees)
+    cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
     })
@@ -23,25 +23,84 @@ function createDonation(project="yucatan", cusomTrees, firstName, lastName, emai
         cy.get('[data-test-id="test-city"]').clear().type(city)
         cy.get('[data-test-id="test-country"]').clear().type(country);
         cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
-        cy.get('[data-test-id="test-continueToPayment"]').click().then(() => {
-            cy.get('#card-element').within(() => {
-                cy.fillElementsInput('cardNumber', cardNumber);
-                cy.fillElementsInput('cardExpiry', cardExpiry); // MMYY
-                cy.fillElementsInput('cardCvc', cardCvc);
-              });
-            cy.get('[data-test-id="test-donateButton"]').click().then(() => {
-                cy.wait(5000)
-                cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
-            })
+        cy.get('[data-test-id="test-continueToPayment"]').click()
+        
+    })
+}
+
+function cardPayment(cardNumber, cardExpiry, cardCvc) {
+    cy.get('#card-element').within(() => {
+        cy.fillElementsInput('cardNumber', cardNumber);
+        cy.fillElementsInput('cardExpiry', cardExpiry); // MMYY
+        cy.fillElementsInput('cardCvc', cardCvc);
+      });
+    cy.get('[data-test-id="test-donateButton"]').click().then(() => {
+        cy.wait(8000).then(() => {
+            cy.get('#test-source-authorize-3ds').click()
+            cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
         })
         
     })
 }
 
+function sofortPayment(){
+    cy.get('[data-test-id="sofortPayment"]').click()
+    cy.get('[data-test-id="sofortDonateContinue"]').click().then(() => {
+        cy.get('.actions').within(() => {
+            cy.get('button').should("have.text", "AUTHORIZE TEST PAYMENT").click().then(() => {
+                cy.should("have.text", "COMPLETING YOUR DONATION")
+            })
+        })
+    })
+    
+    
+}
+
 describe("Donations", () => {
     it("Testing with Germany address ",() => {
-        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449", "4242424242424242", "424", "242")
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     });
+
+    it("Card Payment", () => {
+        cardPayment("4242424242424242", "424", "242")
+    });
+    
+    International Cards
+    it("Testing with Germany Visa", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cardPayment("4000002760000016", "424", "242")
+    });
+
+    it("Testing with Spain Visa", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cardPayment("4000007240000007", "424", "242")
+    }); 
+    
+    it("Testing with 3D secure", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cardPayment("4000002760003184", "424", "242")
+    });
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // it("Sofort Payment", () => {
+    //     sofortPayment()
+    // })
+    
     // it("Testing with Indian address",() => {
     //     createDonation("yucatan", "15", "Rishabh", "Singh", "rish.singh@gmail.com", "Mira Bhayanderrr", "Mumbai", "India{enter}", "401107", "4242424242424242", "424", "242")
     // });
@@ -50,9 +109,5 @@ describe("Donations", () => {
     // it('localhost', () => {
     //     cy.visit('localhost:3000')
     // })
-    // it('should search', () => {    
-    //     cy.wait(5000)
-    //     cy.SearchProject('yucatan')
-    //     cy.get('#yucatan').click()
-    // });
+    
 })

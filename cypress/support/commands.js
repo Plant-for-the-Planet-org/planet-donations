@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 // Function to search project
-// Cypress.Commands.add('SearchProject', (project) => {
-//     cy.get('#searchProject').type(project)
+Cypress.Commands.add('SearchProject', (project) => {
+    cy.get('#searchProject').type(project)
     
-// })
+})

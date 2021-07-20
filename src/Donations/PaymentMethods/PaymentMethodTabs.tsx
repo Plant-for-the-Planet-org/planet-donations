@@ -86,6 +86,7 @@ export default function PaymentMethodTabs({
           }`}
           onClick={(e) => handleChange(e, "Sofort")}
           {...a11yProps("Sofort")}
+          data-test-id='sofortPayment'
         >
           <SofortIcon />
           <CheckMark />
