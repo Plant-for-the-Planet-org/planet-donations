@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency from "../../../Utils/getFormattedCurrency";
+import getFormatedCurrency, { getFormatedCurrencySymbol } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
@@ -97,7 +97,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 <p style={{marginBottom:'0px'}}>{option.caption}</p>
                 <div className="d-flex row" style={{alignItems:'flex-end'}}>
                   <p style={{marginBottom:'0px',marginRight:'6px'}}>
-                    {currency}
+                    {getFormatedCurrencySymbol(currency)}
                   </p>
                   <input
                     className={"funding-custom-tree-input"}
