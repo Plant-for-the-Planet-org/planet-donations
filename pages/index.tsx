@@ -15,6 +15,17 @@ interface Props {
   giftDetails: Object;
   isGift: boolean;
   resolvedUrl:any;
+  isDirectDonation:boolean;
+  hideTaxDeduction:boolean;
+  isTaxDeductible:boolean;
+  donationID:any;
+  shouldCreateDonation:boolean;
+  country:any;
+  contactDetails:any;
+  treecount:any;
+  allowTaxDeductionChange:boolean;
+  currency:any;
+  paymentSetup:any;
 }
 
 function index({
@@ -23,22 +34,66 @@ function index({
   giftDetails,
   isGift,
   resolvedUrl,
+  isDirectDonation,
+  hideTaxDeduction,
+  isTaxDeductible,
+  donationID,
+  shouldCreateDonation,
+  country,
+  contactDetails,
+  treecount,
+  allowTaxDeductionChange,
+  currency,
+  paymentSetup,
 }: Props): ReactElement {
+
   const {
     setprojectDetails,
     setdonationStep,
     loadselectedProjects,
     setgiftDetails,
     setisGift,
+    setpaymentSetup,
+    setcurrency,
+    settreeCount,
+    setContactDetails,
+    setcountry,
+    setIsTaxDeductible,
+    setshouldCreateDonation,
+    setdonationID,
+    sethideTaxDeduction,
+    setallowTaxDeductionChange,
+    setisDirectDonation
   } = React.useContext(QueryParamContext);
 
+  React.useEffect(() => {
+    if(isDirectDonation){
+      sethideTaxDeduction(hideTaxDeduction);
+      setIsTaxDeductible(isTaxDeductible)
+      setdonationID(donationID)
+      setshouldCreateDonation(shouldCreateDonation)
+      setcountry(country)
+      setContactDetails(contactDetails)
+      settreeCount(treecount)
+      setallowTaxDeductionChange(allowTaxDeductionChange)
+      setcurrency(currency)
+      setpaymentSetup(paymentSetup)
+      setisDirectDonation(isDirectDonation)
+    }
+  },[])
+
+  // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
     setisGift(true);
   }
+
+  // If project details are present set project details
   if (projectDetails) {
     setprojectDetails(projectDetails);
   }
+
+
   React.useEffect(() => {
     setdonationStep(donationStep);
     if (!donationStep) {
@@ -109,6 +164,9 @@ function index({
           content={url}
         />
         <meta name="twitter:description" content={description} />
+
+        {isDirectDonation ? (<meta name="robots" content="noindex"/>) : <></>}
+
       </Head>
       <Donations />
     </div>
@@ -121,13 +179,29 @@ export async function getServerSideProps(context: any) {
   let donationStep = 0;
   let showErrorCard = false;
   let projectDetails = null;
+
+  // Variables that will be affected with Gift details
   let isGift = false;
   let giftDetails = {};
+
+  // Variables that will be affected with context
+  let hideTaxDeduction = false;
+  let isTaxDeductible = false;
+  let donationID = null;
+  let shouldCreateDonation = false;
+  let country= 'DE';
+  let isDirectDonation = false;
+  let contactDetails = {};
+  let treecount = 50;
+  let allowTaxDeductionChange  = true;
+  let currency = 'EUR';
+  let paymentSetup={};
 
   function setshowErrorCard() {
     showErrorCard = true;
   }
 
+  // Set project details if there is to (project slug) in the query params
   if (context.query.to && !context.query.context) {
     donationStep = 1;
     try {
@@ -150,6 +224,125 @@ export async function getServerSideProps(context: any) {
     }
   }
 
+  // Set donation details if context (created donation ID) present in the URL
+  if(context.query.context){
+    try {
+      const requestParams = {
+        url: `/app/donations/${context.query.context}`,
+        setshowErrorCard,
+      };
+      const donation: any = await apiRequest(requestParams);
+
+      if (donation.status === 200) {
+        donationID = context.query.context;
+        // if the donation is present means the donation is already created
+        // Set shouldCreateDonation as false
+        shouldCreateDonation = false;
+        // fetch project - payment setup
+        try {
+          const requestParams = {
+            url: `/app/projects/${donation.data.project.id}`,
+            setshowErrorCard,
+          };
+          const project = await apiRequest(requestParams);
+          if (project.data) {
+            projectDetails = project.data;
+            donationStep = 3;
+          }
+        } catch (err) {
+          donationStep = 0;
+          console.log("err", err);
+        }
+
+        if (donation.data.taxDeductionCountry) {
+          country= donation.data.taxDeductionCountry;
+          isTaxDeductible= true;
+        } else {
+          hideTaxDeduction = true;
+          country = donation.data.donor.country;          
+        }
+
+        // This will fetch the payment options
+        try {
+          const requestParams = {
+            url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
+            setshowErrorCard,
+          };
+          const paymentSetupData: any = await apiRequest(requestParams);
+          if (paymentSetupData.data) {
+            currency = paymentSetupData.data.currency;
+            paymentSetup= paymentSetupData.data;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+
+        allowTaxDeductionChange= false;
+
+        treecount = donation.data.treeCount;
+
+        // Setting contact details from donor details
+        if (donation.data.donor) {
+          contactDetails = {
+            firstname: donation.data.donor.firstname
+              ? donation.data.donor.firstname
+              : "",
+            lastname: donation.data.donor.lastname
+              ? donation.data.donor.lastname
+              : "",
+            email: donation.data.donor.email ? donation.data.donor.email : "",
+            address: donation.data.donor.address
+              ? donation.data.donor.address
+              : "",
+            city: donation.data.donor.city ? donation.data.donor.city : "",
+            zipCode: donation.data.donor.zipCode
+              ? donation.data.donor.zipCode
+              : "",
+            country: donation.data.donor.country
+              ? donation.data.donor.country
+              : "",
+            companyname: donation.data.donor.companyname
+              ? donation.data.donor.companyname
+              : "",
+          };
+        }
+
+        // Check if the donation status is paid or successful - if yes directly show thank you page
+        // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
+        if (
+          (context.query.method === "Sofort" ||
+            context.query.method === "Giropay") &&
+          (context.query.redirect_status === "succeeded" ||
+            context.query.redirect_status === "failed") &&
+          context.query.payment_intent
+        ) {
+          donationStep = 4;
+        } else if (
+          donation.data.paymentStatus === "success" ||
+          donation.data.paymentStatus === "paid" ||
+          donation.data.paymentStatus === "failed" ||
+          donation.data.paymentStatus === "pending"
+        ) {
+          donationStep = 4;
+        } else if (
+          donation.data.paymentStatus === "initiated" ||
+          donation.data.paymentStatus === "draft"
+        ) {
+          // Check if all contact details are present - if not send user to step 2 else step 3
+          // Check if all payment cards are present - if yes then show it on step 3
+          isDirectDonation= true;
+          donationStep = 3;
+        }
+      } else {
+        // SET Error that no donation is found
+        donationStep = 1;
+      }
+    } catch (err) {
+      donationStep = 0;
+    }
+  }
+
+  // Set gift details if there is s (support link) in the query params
   if (context.query.s) {
     try {
       const requestParams = {
@@ -185,7 +378,19 @@ export async function getServerSideProps(context: any) {
       projectDetails: projectDetails,
       giftDetails: giftDetails,
       isGift: isGift,
-      resolvedUrl:resolvedUrl
+      resolvedUrl:resolvedUrl,
+      // Variables below will only be set if the donation is already created
+      isDirectDonation,
+      hideTaxDeduction,
+      isTaxDeductible,
+      donationID,
+      shouldCreateDonation,
+      country,
+      contactDetails,
+      treecount,
+      allowTaxDeductionChange,
+      currency,
+      paymentSetup,
     }, // will be passed to the page component as props
   };
 }
