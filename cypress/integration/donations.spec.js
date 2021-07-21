@@ -65,7 +65,7 @@ describe("Donations", () => {
         cardPayment("4242424242424242", "424", "242")
     });
     
-    International Cards
+    // International Cards
     it("Testing with Germany Visa", () => {
         createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cardPayment("4000002760000016", "424", "242")
@@ -80,22 +80,6 @@ describe("Donations", () => {
         createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cardPayment("4000002760003184", "424", "242")
     });
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // it("Sofort Payment", () => {
     //     sofortPayment()
