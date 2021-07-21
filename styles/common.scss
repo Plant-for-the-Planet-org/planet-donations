@@ -80,7 +80,7 @@
 }
 
 .callout-danger{
-  background-color: $blueishGrey;
+  background-color: $backgroundColorDark;
   padding: 12px;
   border-radius: 10px;
   > svg {
@@ -122,7 +122,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background-color: $dividerColor;
+  background-color: $greyColor;
 }
 
 .separator-text:not(:empty)::before {

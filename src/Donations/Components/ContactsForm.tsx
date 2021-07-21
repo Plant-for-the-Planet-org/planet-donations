@@ -8,6 +8,8 @@ import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
 import BackButton from "../../../public/assets/icons/BackButton";
 import GeocoderArcGIS from "geocoder-arcgis";
+import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
@@ -113,6 +115,7 @@ function ContactsForm({}: Props): ReactElement {
       .catch(console.log);
   };
 
+  const { theme } = React.useContext(ThemeContext);
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
@@ -122,7 +125,11 @@ function ContactsForm({}: Props): ReactElement {
             onClick={() => setdonationStep(1)}
             style={{ marginRight: "12px" }}
           >
-            <BackButton />
+            <BackButton color={
+               theme === "theme-light"
+               ? themeProperties.light.primaryFontColor
+               : themeProperties.dark.primaryFontColor
+            } />
           </button>
           <p className="title-text">{t("contactDetails")}</p>
         </div>

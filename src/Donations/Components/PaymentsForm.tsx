@@ -22,11 +22,13 @@ import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
 import NewPaypal from "../PaymentMethods/NewPaypal";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
+import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
-  const { t, ready, i18n } = useTranslation("common");
+  const { t, ready, i18n } = useTranslation("common", "donate");
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
@@ -56,6 +58,8 @@ function PaymentsForm({}: Props): ReactElement {
     isDirectDonation,
     setDonationUid,
     setshowErrorCard,
+    hideTaxDeduction,
+    queryToken,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -66,8 +70,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -93,8 +97,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   async function getDonation() {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     setisDonationLoading(true);
     const donation = await createDonationFunction({
@@ -133,7 +137,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (donationID && publishName !== null) {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
-        data: {publish: publishName},
+        data: { publish: publishName },
         method: "PUT",
         setshowErrorCard,
       };
@@ -151,6 +155,7 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     setPaymentType("CARD");
   }, [currency]);
+  const { theme } = React.useContext(ThemeContext);
 
   return ready ? (
     isPaymentProcessing ? (
@@ -165,7 +170,13 @@ function PaymentsForm({}: Props): ReactElement {
                 className="d-flex"
                 style={{ marginRight: "12px" }}
               >
-                <BackButton />
+                <BackButton
+                  color={
+                    theme === "theme-light"
+                      ? themeProperties.light.primaryFontColor
+                      : themeProperties.dark.primaryFontColor
+                  }
+                />
               </button>
             ) : (
               <></>
@@ -173,7 +184,7 @@ function PaymentsForm({}: Props): ReactElement {
             <p className="title-text">{t("paymentDetails")}</p>
           </div>
 
-          <TaxDeductionOption />
+          {!hideTaxDeduction && <TaxDeductionOption />}
 
           <div className={"mt-20"}>
             {!contactDetails.companyname ||
@@ -222,6 +233,7 @@ function PaymentsForm({}: Props): ReactElement {
                   "stripe_cc"
                 )}
                 showGiroPay={
+                  currency === "EUR" &&
                   country === "DE" &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"
@@ -233,6 +245,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
                 }
                 showSofort={
+                  currency === "EUR" &&
                   sofortCountries.includes(country) &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_sofort"

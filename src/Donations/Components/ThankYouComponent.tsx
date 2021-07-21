@@ -16,7 +16,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { useRouter } from "next/dist/client/router";
 
 function ThankYou() {
-  const { t, i18n, ready } = useTranslation(["common", "country"]);
+  const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
 
   const {
     donationID,
@@ -288,9 +288,7 @@ function ThankYou() {
         ) : (
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
-              redirectstatus === "succeeded" &&
-              (donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid") ? (
+              redirectstatus === "succeeded" ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />

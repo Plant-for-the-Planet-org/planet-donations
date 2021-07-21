@@ -10,6 +10,7 @@ import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
+import getImageUrl from "../Utils/getImageURL";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
@@ -49,6 +50,8 @@ function DonationInfo() {
     tenant,
   } = React.useContext(QueryParamContext);
 
+  console.log("projectDetails", projectDetails);
+
   return (
     <div className="donations-info-container">
       <Image
@@ -63,9 +66,45 @@ function DonationInfo() {
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
+          {donationStep > 0 && (
+            <a
+            rel="noreferrer"
+            target="_blank"
+            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+            style={{width:'fit-content'}}
+          >
+            {projectDetails.tpo.image ? (
+              <img
+                className="project-organisation-image"
+                src={getImageUrl(
+                  "profile",
+                  "thumb",
+                  projectDetails.tpo.image
+                )}
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "48px",
+                  border: "1px solid #fff",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "48px",
+                  border: "1px solid #fff",
+                }}
+                className="project-organisation-image no-project-organisation-image mb-10"
+              >
+                {projectDetails.tpo.name.charAt(0)}
+              </div>
+            )}
+          </a>)}
           {(donationStep === 2 || donationStep === 3) && (
             <div className="contact-details-info">
-              <div className={"w-100  mt-10"}>
+              <div className={"w-100 mt-10 text-white"}>
                 {t("donating")}
                 <span className="text-bold" style={{ marginRight: "4px" }}>
                   {getFormatedCurrency(
@@ -116,10 +155,24 @@ function DonationInfo() {
             isGift &&
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
-                <p>Dedicated to</p>
-                <p className="text-bold">{giftDetails.recipientName}</p>
+                <p>{t("dedicatedTo")}</p>
+                {giftDetails.recipientTreecounter ? (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
+                    className="text-white text-bold"
+                  >
+                    {giftDetails.recipientName}
+                  </a>
+                ) : (
+                  <p className="text-bold">{giftDetails.recipientName}</p>
+                )}
+
                 {giftDetails.giftMessage && (
-                  <p>Message: {giftDetails.giftMessage}</p>
+                  <p>
+                    {t("message")}: {giftDetails.giftMessage}
+                  </p>
                 )}
               </div>
             )}
@@ -146,7 +199,10 @@ function DonationInfo() {
           )}
 
           {donationID && (
-            <a href={`${process.env.APP_URL}/?context=${donationID}`} className="donations-transaction-details mt-20">
+            <a
+              href={`${process.env.APP_URL}/?context=${donationID}`}
+              className="donations-transaction-details mt-20"
+            >
               {`Ref - ${donationID}`}
             </a>
           )}

@@ -4,6 +4,7 @@ import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
+import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
@@ -44,6 +45,8 @@ export default function GiftForm({}: Props): ReactElement {
     setgiftDetails(defaultDeails);
     reset(defaultDeails);
   };
+
+  const router = useRouter();
 
   return (
     <div>
@@ -146,12 +149,16 @@ export default function GiftForm({}: Props): ReactElement {
               name: giftDetails.recipientName,
             })}
           </p>
-          <button
-            onClick={() => resetGiftForm()}
-            className={"singleGiftRemove"}
-          >
-            {t("removeRecipient")}
-          </button>
+          {router && router.query.s ? (
+            <></>
+          ) : (
+            <button
+              onClick={() => resetGiftForm()}
+              className={"singleGiftRemove"}
+            >
+              {t("removeRecipient")}
+            </button>
+          )}
         </div>
       )}
     </div>

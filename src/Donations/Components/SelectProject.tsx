@@ -41,11 +41,10 @@ function SelectProject({}: Props): ReactElement {
     if (trottledSearchValue && searchProjectResults) {
       setSelectedProjects(searchProjectResults);
     } else if (!trottledSearchValue) {
-      const featuredProjects = getFilteredProjects(allProjects, "featured");
-      if (featuredProjects?.length < 6) {
-        setSelectedProjects(selectedProjects);
-      } else {
-        const randomProjects = getRandomProjects(featuredProjects, 6);
+      if (allProjects?.length < 6) {
+        setSelectedProjects(allProjects);
+      } else { 
+        const randomProjects = getRandomProjects(allProjects, 6);
         setSelectedProjects(randomProjects);
       }
     }

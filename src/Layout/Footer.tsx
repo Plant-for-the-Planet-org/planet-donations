@@ -1,6 +1,8 @@
 import React, { ReactElement } from "react";
 import Image from "next/image";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
+import SunIcon from "../../public/assets/icons/SunIcon";
+import MoonIcon from "../../public/assets/icons/MoonIcon";
 import {
   Backdrop,
   Fade,
@@ -13,10 +15,11 @@ import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
 import supportedLanguages from "../../supportedLanguages.json";
-import getLanguageName from '../Utils/getLanguageName';
+import getLanguageName from "../Utils/getLanguageName";
 import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
+import themeProperties from "../../styles/themeProperties";
 
 interface Props {}
 
@@ -27,15 +30,23 @@ function Footer({}: Props): ReactElement {
   const { returnTo } = React.useContext(QueryParamContext);
   const { t, ready } = useTranslation(["common"]);
 
+  const { theme } = React.useContext(ThemeContext);
+
   return (
     <div className="footer">
       <div className="footer-container">
+        <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
-
         <div className="footer-links">
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
             {`${getLanguageName(language)}`}
-            <DownArrowIcon />
+            <DownArrowIcon
+              color={
+                theme === "theme-light"
+                  ? themeProperties.light.primaryFontColor
+                  : themeProperties.dark.primaryFontColor
+              }
+            />
           </button>
           <a
             rel="noreferrer"
@@ -85,6 +96,29 @@ function Footer({}: Props): ReactElement {
       </div>
       <CookiePolicy />
     </div>
+  );
+}
+
+function DarkModeSwitch() {
+  const { theme, setTheme } = React.useContext(ThemeContext);
+
+  return (
+    <button style={{ position: "relative" }}>
+      <input
+        onClick={() =>
+          setTheme(theme === "theme-light" ? "theme-dark" : "theme-light")
+        }
+        defaultChecked={theme === "theme-dark" ? true : false}
+        type="checkbox"
+        className="darkmodeCheckbox"
+        id="chk"
+      />
+      <label className="darkmodeLabel" htmlFor="chk">
+        <MoonIcon />
+        <SunIcon />
+        <div className="darkmodeBall"></div>
+      </label>
+    </button>
   );
 }
 

@@ -41,8 +41,9 @@ function DonationsForm() {
     setdonationID,
     isTaxDeductible,
     setshowErrorCard,
+    queryToken
   } = React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common", "country"]);
+  const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -76,8 +77,8 @@ function DonationsForm() {
     };
 
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
     await createDonationFunction({
@@ -97,8 +98,8 @@ function DonationsForm() {
       setshowErrorCard,
     }).then(async (res) => {
       let token = null;
-      if (!isLoading && isAuthenticated) {
-        token = await getAccessTokenSilently();
+      if ((!isLoading && isAuthenticated) || queryToken) {
+        token = queryToken ? queryToken :await getAccessTokenSilently();
       }
       payDonationFunction({
         gateway: "stripe",
@@ -281,7 +282,7 @@ function DonationsForm() {
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      projectDetails.treeCost * treeCount,
+                      paymentSetup.treeCost * treeCount,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}
@@ -301,12 +302,14 @@ function DonationsForm() {
                   </div>
                 )
               ) : (
+                minAmt > 0 ?
                 <p className={"text-danger mt-20 text-center"}>
                   {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
                 </p>
+                : <></>
               )
             ) : (
               <div className="mt-20 w-100">
