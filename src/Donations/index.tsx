@@ -50,7 +50,32 @@ function DonationInfo() {
     tenant,
   } = React.useContext(QueryParamContext);
 
-  console.log("projectDetails", projectDetails);
+  const TPOImage = () => {
+    return projectDetails.tpo.image ? (
+      <img
+        className="project-organisation-image"
+        src={getImageUrl("profile", "thumb", projectDetails.tpo.image)}
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "48px",
+          border: "1px solid #fff",
+        }}
+      />
+    ) : (
+      <div
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "48px",
+          border: "1px solid #fff",
+        }}
+        className="project-organisation-image no-project-organisation-image mb-10"
+      >
+        {projectDetails.tpo.name.charAt(0)}
+      </div>
+    );
+  };
 
   return (
     <div className="donations-info-container">
@@ -58,7 +83,9 @@ function DonationInfo() {
         layout="fill"
         objectFit="cover"
         src={
-          projectDetails && projectDetails.purpose !== "trees" && projectDetails.image
+          projectDetails &&
+          projectDetails.purpose !== "trees" &&
+          projectDetails.image
             ? projectDetails.image
             : getTenantBackground(tenant)
         }
@@ -70,42 +97,19 @@ function DonationInfo() {
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
-          {donationStep > 0 && (
-            <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-            style={{width:'fit-content'}}
-          >
-            {projectDetails.tpo.image ? (
-              <img
-                className="project-organisation-image"
-                src={getImageUrl(
-                  "profile",
-                  "thumb",
-                  projectDetails.tpo.image
-                )}
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "48px",
-                  border: "1px solid #fff",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "48px",
-                  height: "48px",
-                  borderRadius: "48px",
-                  border: "1px solid #fff",
-                }}
-                className="project-organisation-image no-project-organisation-image mb-10"
+          {donationStep > 0 &&
+            (projectDetails.purpose === "trees" ? (
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                style={{ width: "fit-content" }}
               >
-                {projectDetails.tpo.name.charAt(0)}
-              </div>
-            )}
-          </a>)}
+                <TPOImage />
+              </a>
+            ) : (
+              <TPOImage />
+            ))}
           {(donationStep === 2 || donationStep === 3) && (
             <div className="contact-details-info">
               <div className={"w-100 mt-10 text-white"}>

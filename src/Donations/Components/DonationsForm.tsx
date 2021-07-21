@@ -36,7 +36,7 @@ function DonationsForm() {
     setdonationID,
     isTaxDeductible,
     setshowErrorCard,
-    queryToken
+    queryToken,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -94,7 +94,7 @@ function DonationsForm() {
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
-        token = queryToken ? queryToken :await getAccessTokenSilently();
+        token = queryToken ? queryToken : await getAccessTokenSilently();
       }
       payDonationFunction({
         gateway: "stripe",
@@ -122,9 +122,13 @@ function DonationsForm() {
         <Authentication />
         <div className="donations-tree-selection-step">
           <p className="title-text">{t("donate")}</p>
-          <div className="donations-gift-container mt-10">
-            <GiftForm />
-          </div>
+          {projectDetails.purpose === "trees" ? (
+            <div className="donations-gift-container mt-10">
+              <GiftForm />
+            </div>
+          ) : (
+            <></>
+          )}
 
           {projectDetails.purpose === "funds" ? (
             <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
