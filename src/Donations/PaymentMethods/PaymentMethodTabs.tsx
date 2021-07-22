@@ -61,7 +61,7 @@ export default function PaymentMethodTabs({
     );
   }
 
-  const { country, currency, projectDetails, paymentSetup, quantity } =
+  const { country, currency, projectDetails, paymentSetup, quantity,frequency } =
     React.useContext(QueryParamContext);
 
   return (
@@ -149,6 +149,7 @@ export default function PaymentMethodTabs({
               country: t(`country:${projectDetails.country.toLowerCase()}`),
             })
           }
+          frequency={frequency}
         />
       )}
     </div>
