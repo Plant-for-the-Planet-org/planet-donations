@@ -8,25 +8,25 @@ import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/dist/client/router";
-import countriesData from './../src/Utils/countriesData.json';
+import countriesData from "./../src/Utils/countriesData.json";
 
 interface Props {
   projectDetails: Object;
   donationStep: any;
   giftDetails: Object;
   isGift: boolean;
-  resolvedUrl:any;
-  isDirectDonation:boolean;
-  hideTaxDeduction:boolean;
-  isTaxDeductible:boolean;
-  donationID:any;
-  shouldCreateDonation:boolean;
-  country:any;
-  contactDetails:any;
-  treecount:any;
-  allowTaxDeductionChange:boolean;
-  currency:any;
-  paymentSetup:any;
+  resolvedUrl: any;
+  isDirectDonation: boolean;
+  hideTaxDeduction: boolean;
+  isTaxDeductible: boolean;
+  donationID: any;
+  shouldCreateDonation: boolean;
+  country: any;
+  contactDetails: any;
+  treecount: any;
+  allowTaxDeductionChange: boolean;
+  currency: any;
+  paymentSetup: any;
 }
 
 function index({
@@ -47,7 +47,6 @@ function index({
   currency,
   paymentSetup,
 }: Props): ReactElement {
-
   const {
     setprojectDetails,
     setdonationStep,
@@ -64,24 +63,24 @@ function index({
     setdonationID,
     sethideTaxDeduction,
     setallowTaxDeductionChange,
-    setisDirectDonation
+    setisDirectDonation,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
-    if(isDirectDonation){
+    if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
-      setIsTaxDeductible(isTaxDeductible)
-      setdonationID(donationID)
-      setshouldCreateDonation(shouldCreateDonation)
-      setcountry(country)
-      setContactDetails(contactDetails)
-      settreeCount(treecount)
-      setallowTaxDeductionChange(allowTaxDeductionChange)
-      setcurrency(currency)
-      setpaymentSetup(paymentSetup)
-      setisDirectDonation(isDirectDonation)
+      setIsTaxDeductible(isTaxDeductible);
+      setdonationID(donationID);
+      setshouldCreateDonation(shouldCreateDonation);
+      setContactDetails(contactDetails);
+      settreeCount(treecount);
+      setallowTaxDeductionChange(allowTaxDeductionChange);
+      setcurrency(currency);
+      setpaymentSetup(paymentSetup);
+      setisDirectDonation(isDirectDonation);
     }
-  },[])
+    setcountry(country);
+  }, []);
 
   // If gift details are present set gift
   if (giftDetails && isGift) {
@@ -94,7 +93,6 @@ function index({
     setprojectDetails(projectDetails);
   }
 
-
   React.useEffect(() => {
     setdonationStep(donationStep);
     if (!donationStep) {
@@ -105,8 +103,8 @@ function index({
   let title = `Donate with Plant-for-the-Planet`;
 
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = encodeURIComponent(process.env.APP_URL+resolvedUrl);
-  const image= `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
+  const url = encodeURIComponent(process.env.APP_URL + resolvedUrl);
+  const image = `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
@@ -114,13 +112,13 @@ function index({
       getCountryDataBy("countryCode", projectDetails.country)?.countryName
     }. Your journey to a trillion trees starts here.`;
   }
-  if(giftDetails && giftDetails.recipientName){
+  if (giftDetails && giftDetails.recipientName) {
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
 
   const router = useRouter();
 
-  const defaultLanguage = router.query.locale ? router.query.locale : "en"
+  const defaultLanguage = router.query.locale ? router.query.locale : "en";
 
   return (
     <div
@@ -132,7 +130,12 @@ function index({
         <meta name="title" content={title} />
         <meta name="description" content="" />
 
-        <meta property="og:locale" content={locales.find(locale => locale.key === defaultLanguage )?.value} />
+        <meta
+          property="og:locale"
+          content={
+            locales.find((locale) => locale.key === defaultLanguage)?.value
+          }
+        />
         {locales.map((locale) => {
           if (locale.key !== defaultLanguage) {
             return (
@@ -152,22 +155,15 @@ function index({
         <meta name="description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={image} />
-        <meta
-          property="og:url"
-          content={url}
-        />
+        <meta property="og:url" content={url} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={title} />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content={image}></meta>
-        <meta
-          property="twitter:url"
-          content={url}
-        />
+        <meta property="twitter:url" content={url} />
         <meta name="twitter:description" content={description} />
 
-        {isDirectDonation ? (<meta name="robots" content="noindex"/>) : <></>}
-
+        {isDirectDonation ? <meta name="robots" content="noindex" /> : <></>}
       </Head>
       <Donations />
     </div>
@@ -190,13 +186,13 @@ export async function getServerSideProps(context: any) {
   let isTaxDeductible = false;
   let donationID = null;
   let shouldCreateDonation = false;
-  let country= 'DE';
+  let country = "DE";
   let isDirectDonation = false;
   let contactDetails = {};
   let treecount = 50;
-  let allowTaxDeductionChange  = true;
-  let currency = 'EUR';
-  let paymentSetup={};
+  let allowTaxDeductionChange = true;
+  let currency = "EUR";
+  let paymentSetup = {};
 
   function setshowErrorCard() {
     showErrorCard = true;
@@ -226,12 +222,17 @@ export async function getServerSideProps(context: any) {
   }
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-  if(context.query.country && countriesData.includes(context.query.country)){
-    country = context.query.country;
+  if (context.query.country) {
+    const found = countriesData.some(
+      (country) => country.countryCode === context.query.country
+    );
+    if (found) {
+      country = context.query.country;
+    }
   }
 
   // Set donation details if context (created donation ID) present in the URL
-  if(context.query.context){
+  if (context.query.context) {
     try {
       const requestParams = {
         url: `/app/donations/${context.query.context}`,
@@ -261,11 +262,11 @@ export async function getServerSideProps(context: any) {
         }
 
         if (donation.data.taxDeductionCountry) {
-          country= donation.data.taxDeductionCountry;
-          isTaxDeductible= true;
+          country = donation.data.taxDeductionCountry;
+          isTaxDeductible = true;
         } else {
           hideTaxDeduction = true;
-          country = donation.data.donor.country;          
+          country = donation.data.donor.country;
         }
 
         // This will fetch the payment options
@@ -277,13 +278,13 @@ export async function getServerSideProps(context: any) {
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {
             currency = paymentSetupData.data.currency;
-            paymentSetup= paymentSetupData.data;
+            paymentSetup = paymentSetupData.data;
           }
         } catch (err) {
           // console.log(err);
         }
 
-        allowTaxDeductionChange= false;
+        allowTaxDeductionChange = false;
 
         treecount = donation.data.treeCount;
 
@@ -336,7 +337,7 @@ export async function getServerSideProps(context: any) {
         ) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
-          isDirectDonation= true;
+          isDirectDonation = true;
           donationStep = 3;
         }
       } else {
@@ -384,7 +385,7 @@ export async function getServerSideProps(context: any) {
       projectDetails: projectDetails,
       giftDetails: giftDetails,
       isGift: isGift,
-      resolvedUrl:resolvedUrl,
+      resolvedUrl: resolvedUrl,
       // Variables below will only be set if the donation is already created
       isDirectDonation,
       hideTaxDeduction,
