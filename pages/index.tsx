@@ -224,6 +224,10 @@ export async function getServerSideProps(context: any) {
     }
   }
 
+  if(context.query.country){
+    country = context.query.country;
+  }
+
   // Set donation details if context (created donation ID) present in the URL
   if(context.query.context){
     try {
