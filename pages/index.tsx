@@ -8,6 +8,7 @@ import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/dist/client/router";
+import countriesData from './../src/Utils/countriesData.json';
 
 interface Props {
   projectDetails: Object;
@@ -224,7 +225,8 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  if(context.query.country){
+  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
+  if(context.query.country && countriesData.includes(context.query.country)){
     country = context.query.country;
   }
 
