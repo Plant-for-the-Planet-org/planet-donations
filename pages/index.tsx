@@ -224,7 +224,7 @@ export async function getServerSideProps(context: any) {
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
     const found = countriesData.some(
-      (country) => country.countryCode === context.query.country
+      (country) => country.countryCode?.toLowerCase() === context.query.country?.toLowerCase()
     );
     if (found) {
       country = context.query.country;
