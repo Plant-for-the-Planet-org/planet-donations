@@ -3,7 +3,7 @@ export default function BrowserNotSupported() {
     <div
       style={{
         margin: "20px",
-        width: "100vw",
+        width: "90vw",
         height: "60vh",
         display: "flex",
         justifyContent: "center",
