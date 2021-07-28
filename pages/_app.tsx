@@ -15,7 +15,9 @@ import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { useRouter } from "next/dist/client/router";
-
+import React from "react";
+import { browserNotCompatible } from "../src/Utils/browsercheck";
+import BrowserNotSupported from "./../src/Common/ContentLoaders/BrowserNotSupported";
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   const config = getConfig();
   const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
@@ -61,34 +63,47 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  
-  if (process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" && process.env.VERCEL_URL && typeof window !== 'undefined') {
+
+  if (
+    process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" &&
+    process.env.VERCEL_URL &&
+    typeof window !== "undefined"
+  ) {
     if (process.env.VERCEL_URL !== window.location.hostname) {
       router.replace(`https://${process.env.VERCEL_URL}`);
     }
   }
 
-  return (
-    <Auth0Provider
-      domain={process.env.AUTH0_CUSTOM_DOMAIN}
-      clientId={process.env.AUTH0_CLIENT_ID}
-      redirectUri={process.env.APP_URL}
-      cacheLocation={'localstorage'}
-      audience={'urn:plant-for-the-planet'}
-    >
-      <ThemeProvider>
-        <QueryParamProvider>
-          <CssBaseline />
-          <style jsx global>
-            {theme}
-          </style>
+  const [browserIncompatible, setBrowserIncompatible] = React.useState(false);
+  React.useEffect(() => {
+    setBrowserIncompatible(browserNotCompatible());
+  }, []);
+
+  if (browserIncompatible) {
+    return <BrowserNotSupported />;
+  } else {
+    return (
+      <Auth0Provider
+        domain={process.env.AUTH0_CUSTOM_DOMAIN}
+        clientId={process.env.AUTH0_CLIENT_ID}
+        redirectUri={process.env.APP_URL}
+        cacheLocation={"localstorage"}
+        audience={"urn:plant-for-the-planet"}
+      >
+        <ThemeProvider>
+          <QueryParamProvider>
+            <CssBaseline />
+            <style jsx global>
+              {theme}
+            </style>
             <Layout>
               <Component {...pageProps} />
             </Layout>
-        </QueryParamProvider>
-      </ThemeProvider>
-    </Auth0Provider>
-  );
+          </QueryParamProvider>
+        </ThemeProvider>
+      </Auth0Provider>
+    );
+  }
 }
 
 // Only uncomment this method if you have blocking data requirements for
