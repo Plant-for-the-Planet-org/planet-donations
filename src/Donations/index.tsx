@@ -50,8 +50,6 @@ function DonationInfo() {
     tenant,
   } = React.useContext(QueryParamContext);
 
-  console.log("projectDetails", projectDetails);
-
   return (
     <div className="donations-info-container">
       <Image

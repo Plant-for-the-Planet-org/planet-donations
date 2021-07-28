@@ -288,14 +288,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.isReady]);
 
-  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-
-  React.useEffect(() => {
-    if (router.query.country) {
-      setcountry(router.query.country);
-    }
-  }, [router.query.country]);
-
   React.useEffect(() => {
     if (router.query.tenant) {
       // TODO => verify tenant before setting it
