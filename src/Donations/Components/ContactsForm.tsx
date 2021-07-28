@@ -116,6 +116,11 @@ function ContactsForm({}: Props): ReactElement {
   };
 
   const { theme } = React.useContext(ThemeContext);
+
+  console.log('contactDetails.country',contactDetails.country);
+  console.log('country',country);
+
+  
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
