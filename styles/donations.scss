@@ -317,6 +317,32 @@
   }
 }
 
+.frequency-selection-container{
+  display: flex;
+  flex-direction: row;
+  background-color: $backgroundColorDark;
+  height: 50px;
+  border-radius: 25px;
+  padding: 8px;
+}
+.frequency-selection-option{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex: 1;
+  border-radius: 25px;
+  color: $primaryFontColor;
+  font-weight: 600;
+  text-transform: capitalize;
+  &:hover{
+    cursor: pointer;
+  }
+}
+.frequency-selection-option-selected{
+  background-color: $primaryColor;
+  color: $light;
+}
 .custom-selection {
   flex-grow: 1;
   margin-left: 25px;
