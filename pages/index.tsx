@@ -67,10 +67,10 @@ function index({
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
+    setdonationID(donationID);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
-      setdonationID(donationID);
       setshouldCreateDonation(shouldCreateDonation);
       setContactDetails(contactDetails);
       settreeCount(treecount);
