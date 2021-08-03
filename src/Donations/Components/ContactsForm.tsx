@@ -116,6 +116,7 @@ function ContactsForm({}: Props): ReactElement {
   };
 
   const { theme } = React.useContext(ThemeContext);
+  
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
