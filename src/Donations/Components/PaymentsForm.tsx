@@ -157,6 +157,29 @@ function PaymentsForm({}: Props): ReactElement {
   }, [currency]);
   const { theme } = React.useContext(ThemeContext);
 
+  const [stripePromise, setStripePromise] = React.useState(() =>
+    getStripe(paymentSetup)
+  );
+
+  React.useEffect(() => {
+    // Only set stripePromise once to avoid error from Elements component
+    if (!stripePromise) {
+      const fetchStripeObject = async () => {
+        if (paymentSetup) {
+          const res = () => getStripe(paymentSetup);
+          // When we have got the Stripe object, pass it into our useState.
+          setStripePromise(res);
+        }
+      };
+      setStripePromise(null);
+      fetchStripeObject();
+    }
+  }, [paymentSetup]);
+
+  if (!stripePromise) {
+    return <></>;
+  }
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -270,7 +293,7 @@ function PaymentsForm({}: Props): ReactElement {
                 id={`payment-methods-tabpanel-${"CARD"}`}
                 aria-labelledby={`scrollable-force-tab-${"CARD"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={stripePromise}>
                   <CardPayments
                     contactDetails={contactDetails}
                     totalCost={getFormatedCurrency(
@@ -294,7 +317,7 @@ function PaymentsForm({}: Props): ReactElement {
                 id={`payment-methods-tabpanel-${"SEPA"}`}
                 aria-labelledby={`scrollable-force-tab-${"SEPA"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={stripePromise}>
                   <SepaPayments
                     paymentType={paymentType}
                     onPaymentFunction={onSubmitPayment}
@@ -328,7 +351,7 @@ function PaymentsForm({}: Props): ReactElement {
                 id={`payment-methods-tabpanel-${"GiroPay"}`}
                 aria-labelledby={`scrollable-force-tab-${"GiroPay"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={stripePromise}>
                   <GiroPayPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
               </div>
@@ -339,7 +362,7 @@ function PaymentsForm({}: Props): ReactElement {
                 id={`payment-methods-tabpanel-${"Sofort"}`}
                 aria-labelledby={`scrollable-force-tab-${"Sofort"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={stripePromise}>
                   <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
               </div>

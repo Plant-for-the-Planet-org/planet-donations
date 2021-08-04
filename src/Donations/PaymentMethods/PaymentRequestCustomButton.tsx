@@ -200,15 +200,18 @@ export const NativePay = ({
   );
 
   useEffect(() => {
-    const fetchStripeObject = async () => {
-      if (paymentSetup) {
-        const res = () => getStripe(paymentSetup);
-        // When we have got the Stripe object, pass it into our useState.
-        setStripePromise(res);
-      }
-    };
-    setStripePromise(null);
-    fetchStripeObject();
+    // Only set stripePromise once to avoid error from Elements component
+    if (!stripePromise) {
+      const fetchStripeObject = async () => {
+        if (paymentSetup) {
+          const res = () => getStripe(paymentSetup);
+          // When we have got the Stripe object, pass it into our useState.
+          setStripePromise(res);
+        }
+      };
+      setStripePromise(null);
+      fetchStripeObject();
+    }
   }, [paymentSetup]);
 
   if (!stripePromise) {
