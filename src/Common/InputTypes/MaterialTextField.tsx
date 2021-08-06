@@ -4,15 +4,19 @@ import themeProperties from './../../../styles/themeProperties';
 const MaterialTextField = withStyles({
   root: {
     width: '100%',
+    color: 'var(--primary-font-color)',
+    '& .MuiInputBase-input.MuiOutlinedInput-input':{
+      color: 'var(--primary-font-color)',
+    },
     '& label.Mui-focused': {
-      color: '#2F3336',
+      color: 'var(--primary-font-color)',
       fontFamily: themeProperties.fontFamily,
     },
     '& label': {
-      color: '#2F3336',
+      color: 'var(--primary-font-color)',
       fontFamily: themeProperties.fontFamily,
-      fontSize: '12px',
-      top:'-2px'
+      fontSize: '14px',
+      top:'-3px'
     },
     '& .MuiInputLabel-outlined.MuiInputLabel-shrink':{
         transform:'translate(14px, -4px) scale(0.75)'
@@ -21,7 +25,7 @@ const MaterialTextField = withStyles({
       border: '0px!important',
     },
     '& .MuiOutlinedInput-root': {
-      backgroundColor: '#F2F2F7',
+      backgroundColor: 'var(--background-color-dark)',
       border: '0px!important',
       borderRadius: '10px',
       fontFamily: themeProperties.fontFamily,

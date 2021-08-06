@@ -1,24 +1,22 @@
 import React, { ReactElement } from "react";
 import ContactsForm from "./Components/ContactsForm";
-
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import ThankYou from "./Components/ThankYouComponent";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
-import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
-import themeProperties from "../../styles/themeProperties";
-import { getCountryDataBy } from "../Utils/countryUtils";
-
+import { getTenantBackground } from "./../Utils/getTenantBackground";
+import SelectProject from "./Components/SelectProject";
+import Image from "next/image";
+import getImageUrl from "../Utils/getImageURL";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
-  const { paymentSetup, donationStep, projectDetails } = React.useContext(
-    QueryParamContext
-  );
+  const { paymentSetup, donationStep, projectDetails } =
+    React.useContext(QueryParamContext);
 
   return (
     <div className="donations-container">
@@ -27,6 +25,7 @@ function Donations({}: Props): ReactElement {
         <DonationInfo />
 
         {/* Right panel */}
+        {donationStep === 0 && <SelectProject />}
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
@@ -37,7 +36,7 @@ function Donations({}: Props): ReactElement {
 }
 
 function DonationInfo() {
-  const { t, i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common", "country");
   const {
     projectDetails,
     donationID,
@@ -48,47 +47,63 @@ function DonationInfo() {
     contactDetails,
     giftDetails,
     isGift,
+    tenant,
   } = React.useContext(QueryParamContext);
 
-  const [showContactDetails, setshowContactDetails] = React.useState(true);
-
-  return projectDetails && paymentSetup ? (
+  return (
     <div className="donations-info-container">
-      {/* <img
+      <Image
+        layout="fill"
+        objectFit="cover"
+        src={getTenantBackground(tenant)}
         className="background-image"
-        src="/assets/images/forest2.jpg"
-        width="420"
-        height="560"
+        placeholder={"blur"}
+        alt="Background image with trees"
       />
-      <div className="background-image-overlay"></div> */}
-      <div className="donations-info">
-        <div className="donations-info-header">
-          <a
+      <div className="background-image-overlay"></div>
+      {projectDetails && paymentSetup ? (
+        <div className="donations-info text-white">
+          {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
+          {donationStep > 0 && (
+            <a
             rel="noreferrer"
             target="_blank"
             href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-            className="title-text text-white"
+            style={{width:'fit-content'}}
           >
-            {projectDetails.name}
-          </a>
-          <div style={{ marginTop: "8px" }} />
-          {projectDetails.tpo && (
-            <a
-              rel="noreferrer"
-              target="_blank"
-              href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-              className="text-white"
-            >
-              {t("byOrganization", {
-                organizationName: projectDetails.tpo.name,
-              })}
-            </a>
-          )}
-
+            {projectDetails.tpo.image ? (
+              <img
+                className="project-organisation-image"
+                src={getImageUrl(
+                  "profile",
+                  "thumb",
+                  projectDetails.tpo.image
+                )}
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "48px",
+                  border: "1px solid #fff",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "48px",
+                  border: "1px solid #fff",
+                }}
+                className="project-organisation-image no-project-organisation-image mb-10"
+              >
+                {projectDetails.tpo.name.charAt(0)}
+              </div>
+            )}
+          </a>)}
           {(donationStep === 2 || donationStep === 3) && (
-            <div>
-              <div className={"w-100  text-white mt-10"}>
-                {t('donating')}
+            <div className="contact-details-info">
+              <div className={"w-100 mt-10 text-white"}>
+                {t("donating")}
                 <span className="text-bold" style={{ marginRight: "4px" }}>
                   {getFormatedCurrency(
                     i18n.language,
@@ -104,63 +119,93 @@ function DonationInfo() {
                   ),
                 })}
               </div>
-              {giftDetails && isGift && giftDetails.recipientName && (
-                <div className="donation-supports-info mt-10 text-white">
-                  <p>
-                    {t("directGiftRecipient", {
-                      name: giftDetails.recipientName,
-                    })}
-                  </p>
-                </div>
-              )}
             </div>
           )}
-          {donationStep === 3 && contactDetails.firstname && (
-            <div className={"contact-details-info w-100 mt-10"}>
-              <button
-                onClick={() => setshowContactDetails(!showContactDetails)}
-                className={`text-white ${
-                  showContactDetails ? "button-reverse" : ""
-                }`}
+          {donationStep > 0 ? (
+            <>
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                className="title-text text-white"
               >
+                {projectDetails.name}
+              </a>
+              {projectDetails.tpo && (
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                  className="text-white"
+                >
+                  {t("byOrganization", {
+                    organizationName: projectDetails.tpo.name,
+                  })}
+                </a>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+
+          {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
+            giftDetails &&
+            isGift &&
+            giftDetails.recipientName && (
+              <div className="contact-details-info  mt-20 donation-supports-info">
+                <p>{t("dedicatedTo")}</p>
+                {giftDetails.recipientTreecounter ? (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
+                    className="text-white text-bold"
+                  >
+                    {giftDetails.recipientName}
+                  </a>
+                ) : (
+                  <p className="text-bold">{giftDetails.recipientName}</p>
+                )}
+
+                {giftDetails.giftMessage && (
+                  <p>
+                    {t("message")}: {giftDetails.giftMessage}
+                  </p>
+                )}
+              </div>
+            )}
+          {donationStep === 3 && contactDetails.firstname && (
+            <div className={"contact-details-info w-100 mt-20"}>
+              <p>{t("billingAddress")}</p>
+              <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname}
-                <DownArrowIcon color={themeProperties.light.light} />
-              </button>
-              {showContactDetails && (
-                <div className="text-white">
-                  <p>{contactDetails.email && contactDetails.email}</p>
-                  <p>
-                    {contactDetails.address && contactDetails.address}
-                    {", "}
-                    {contactDetails.city && contactDetails.city}
-                    {", "}
-                    {contactDetails.zipCode && contactDetails.zipCode}
-                  </p>
-                  <p>
-                    {contactDetails.country &&
-                      getCountryDataBy("countryCode", contactDetails.country)
-                        ?.countryName}
-                  </p>
-                </div>
-              )}
+              </p>
+              <p>{contactDetails.email && contactDetails.email}</p>
+              <p>
+                {contactDetails.address && contactDetails.address}
+                {", "}
+                {contactDetails.city && contactDetails.city}
+                {", "}
+                {contactDetails.zipCode && contactDetails.zipCode}
+              </p>
+              <p>
+                {contactDetails.country &&
+                  t(`country:${contactDetails.country.toLowerCase()}`)}
+              </p>
             </div>
           )}
-        </div>
 
-        <div className="donations-transaction-details">
-          {donationID && `Donation ID - ${donationID}`}
+          {donationID && (
+            <a
+              href={`${process.env.APP_URL}/?context=${donationID}`}
+              className="donations-transaction-details mt-20"
+            >
+              {`Ref - ${donationID}`}
+            </a>
+          )}
         </div>
-      </div>
-    </div>
-  ) : (
-    <div
-      className="donations-info-container"
-      style={{ padding: "0px", backgroundColor: "white" }}
-    >
-      <div className="donations-info">
-        <div className="donations-info-loader"></div>
-      </div>
+      ) : null}
     </div>
   );
 }

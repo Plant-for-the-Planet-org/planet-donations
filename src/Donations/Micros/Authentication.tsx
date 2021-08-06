@@ -1,19 +1,22 @@
 import React, { ReactElement } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getAuthenticatedRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import { Backdrop, Fade, Modal } from "@material-ui/core";
 import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
 import GmailIcon from "../../../public/assets/icons/GmailIcon";
 import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
+import getImageUrl from "../../Utils/getImageURL";
+import { useRouter } from "next/dist/client/router";
 
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails } = React.useContext(QueryParamContext);
+  const { setContactDetails, setshowErrorCard, setqueryToken, queryToken } =
+    React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -27,14 +30,16 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if (user.email_verified) {
-      const token = await getAccessTokenSilently();
-
+    if ((user && user.email_verified) || queryToken) {
       try {
-        const profile: any = await getAuthenticatedRequest(
-          "/app/profile",
-          token
-        );
+        // if we have access token in the query params we use it instead of using the
+        const token = queryToken ? queryToken : await getAccessTokenSilently();
+        const requestParams = {
+          url: "/app/profile",
+          token: token,
+          setshowErrorCard,
+        };
+        const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
           const newContactDetails = {
@@ -62,41 +67,85 @@ function Authentication({}: Props): ReactElement {
       setopenVerifyEmailModal(true);
     }
   };
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
+      if (localStorage.getItem("queryparams")) {
+        const queryparams = localStorage.getItem("queryparams");
+        router.push(queryparams);
+        localStorage.removeItem("queryparams");
+      }
       // If details present store in contact details
       // If details are not present show message and logout user
+    } else if (queryToken) {
+      loadUserProfile();
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, ready } = useTranslation("common");
+
+  const loginUser = () => {
+    localStorage.setItem("queryparams", router.asPath);
+    loginWithRedirect({
+      redirectUri: window?.location.href,
+      ui_locales: localStorage.getItem("language") || "en",
+    });
+  };
+
+  React.useEffect(() => {
+    // if there is token in the query params use it
+    if (router.query.token) {
+      setqueryToken(router.query.token);
+      // If user is logged in via auth0, log them out
+      if (!isLoading && isAuthenticated) {
+        logout({ returnTo: window?.location.href })
+      }
+    }
+  }, [router.query,isLoading,isAuthenticated]);
+
   return (
     <div>
-      {!isLoading && !isAuthenticated && (
-        <button
-          className="login-continue"
-          onClick={() =>
-            loginWithRedirect({
-              redirectUri: `${process.env.NEXTAUTH_URL}`,
-              ui_locales: localStorage.getItem("locale") || "en",
-            })
-          }
-        >
-          {t('loginContinue')}
-        </button>
+      {!queryToken && !isLoading && !isAuthenticated && (
+        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+          <button onClick={() => loginUser()} className="login-continue">
+            {t("loginContinue")}
+          </button>
+        </div>
       )}
 
-      {!isLoading && isAuthenticated && (
-        <button
-          className="login-continue"
-          onClick={() => logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })}
-        >
-          {t('logout')}
-        </button>
-      )}
+      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
+        <div className="d-flex row justify-content-between w-100 mb-20">
+          <a
+            href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
+            target={"_blank"}
+            className="user-profile"
+          >
+            {profile.image ? (
+              <img
+                className="profile-pic"
+                src={getImageUrl("profile", "avatar", profile.image)}
+                alt={profile ? profile.displayName : user?.name}
+              />
+            ) : user?.picture ? (
+              <img className="profile-pic" src={user.picture} alt={user.name} />
+            ) : (
+              <div className="profile-pic no-pic">{profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}</div>
+            )}
+            <p>{profile ? profile.displayName : user?.name}</p>
+          </a>
+          {user ? (
+            <button
+              className="login-continue"
+              onClick={() => logout({ returnTo: window?.location.href })}
+            >
+              {t("logout")}
+            </button>
+          ) : null}
+        </div>
+      ):<></>}
       <VerifyEmailModal
         logout={logout}
         openModal={openVerifyEmailModal}
@@ -177,9 +226,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() =>
-                logout({ returnTo: `${process.env.NEXTAUTH_URL}/` })
-              }
+              onClick={() => logout({ returnTo: `${process.env.APP_URL}/` })}
             >
               <p>{t("skipLogout")}</p>
             </button>

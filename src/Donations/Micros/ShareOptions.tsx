@@ -8,7 +8,7 @@ import DownloadSolid from '../../../public/assets/icons/share/DownloadSolid';
 import InstagramIcon from '../../../public/assets/icons/share/Instagram';
 import ReactDOM from 'react-dom';
 import domtoimage from 'dom-to-image';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 interface ShareOptionsProps {
   treeCount: String;
@@ -20,7 +20,7 @@ const ShareOptions = ({
   sendRef,
   donor,
 }: ShareOptionsProps) => {
-  const { t, ready } = useTranslation(['common']);
+  const { t, ready } = useTranslation(['common', 'donate']);
 
   const titleToShare = ready ? t('donate:titleToShare') : '';
   const urlToShare = '';
@@ -92,9 +92,9 @@ const ShareOptions = ({
         onMouseOver={() => setCurrentHover(1)}
       >
         {currentHover === 1 ? (
-          <DownloadSolid color={'blueishGrey'} />
+          <DownloadSolid color={'backgroundColorDark'} />
         ) : (
-          <DownloadIcon color={'blueishGrey'} />
+          <DownloadIcon color={'backgroundColorDark'} />
         )}
       </button>
 
@@ -108,7 +108,7 @@ const ShareOptions = ({
         onMouseOver={() => setCurrentHover(2)}
       >
         <FacebookIcon
-          color={currentHover === 2 ? '#3b5998' : 'blueishGrey'}
+          color={currentHover === 2 ? '#3b5998' : 'backgroundColorDark'}
         />
       </button>
 
@@ -119,7 +119,7 @@ const ShareOptions = ({
         }
       >
         <InstagramIcon
-          color={currentHover === 3 ? '#dd217b' : 'blueishGrey'}
+          color={currentHover === 3 ? '#dd217b' : 'backgroundColorDark'}
         />
       </button>
 
@@ -130,7 +130,7 @@ const ShareOptions = ({
         }
       >
         <TwitterIcon
-          color={currentHover === 4 ? '#00acee' : 'blueishGrey'}
+          color={currentHover === 4 ? '#00acee' : 'backgroundColorDark'}
         />
       </button>
 
@@ -141,9 +141,9 @@ const ShareOptions = ({
         onMouseOver={() => setCurrentHover(5)}
       >
         {currentHover === 5 ? (
-          <EmailSolid color={'blueishGrey'} />
+          <EmailSolid color={'backgroundColorDark'} />
         ) : (
-          <EmailIcon color={'blueishGrey'} />
+          <EmailIcon color={'backgroundColorDark'} />
         )}
       </button>
     </div>

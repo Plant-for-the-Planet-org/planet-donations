@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import BackButton from "../../../public/assets/icons/BackButton";
-import { putRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -15,24 +15,29 @@ import {
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
-import PaypalPayments from "../PaymentMethods/PaypalPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
+import NewPaypal from "../PaymentMethods/NewPaypal";
+import InfoIcon from "../../../public/assets/icons/InfoIcon";
+import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
-  const { t, ready, i18n } = useTranslation("common");
+  const { t, ready, i18n } = useTranslation("common", "donate");
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
+  const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
+  const [isDonationLoading, setisDonationLoading] = React.useState(false);
   const {
     paymentSetup,
     country,
@@ -51,6 +56,10 @@ function PaymentsForm({}: Props): ReactElement {
     giftDetails,
     isTaxDeductible,
     isDirectDonation,
+    setDonationUid,
+    setshowErrorCard,
+    hideTaxDeduction,
+    queryToken,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -61,8 +70,8 @@ function PaymentsForm({}: Props): ReactElement {
 
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -76,14 +85,22 @@ function PaymentsForm({}: Props): ReactElement {
       contactDetails,
       token,
       country,
+      setshowErrorCard,
     });
+  };
+
+  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName);
+    let gateway = "stripe";
+    onSubmitPayment(gateway, paymentMethod);
   };
 
   async function getDonation() {
     let token = null;
-    if (!isLoading && isAuthenticated) {
-      token = await getAccessTokenSilently();
+    if ((!isLoading && isAuthenticated) || queryToken) {
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
+    setisDonationLoading(true);
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -98,6 +115,7 @@ function PaymentsForm({}: Props): ReactElement {
       setPaymentError,
       setdonationID,
       token,
+      setshowErrorCard,
     });
 
     if (donation) {
@@ -105,7 +123,10 @@ function PaymentsForm({}: Props): ReactElement {
       setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
+      setisCreatingDonation(false);
+      setDonationUid(donation.uid);
     }
+    setisDonationLoading(false);
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
@@ -114,17 +135,27 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (donationID && publishName !== null) {
-      putRequest(`/app/donations/${donationID}/publish`, {
-        publish: publishName,
-      });
+      const requestParams = {
+        url: `/app/donations/${donationID}/publish`,
+        data: { publish: publishName },
+        method: "PUT",
+        setshowErrorCard,
+      };
+      apiRequest(requestParams);
     }
   }, [publishName, donationID]);
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
+      setisCreatingDonation(true);
       getDonation();
     }
   }, [shouldCreateDonation]);
+
+  React.useEffect(() => {
+    setPaymentType("CARD");
+  }, [currency]);
+  const { theme } = React.useContext(ThemeContext);
 
   return ready ? (
     isPaymentProcessing ? (
@@ -134,8 +165,18 @@ function PaymentsForm({}: Props): ReactElement {
         <div className="donations-form">
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
-              <button onClick={() => setdonationStep(2)} className="d-flex" style={{marginRight:'12px'}}>
-                <BackButton />
+              <button
+                onClick={() => setdonationStep(2)}
+                className="d-flex"
+                style={{ marginRight: "12px" }}
+              >
+                <BackButton
+                  color={
+                    theme === "theme-light"
+                      ? themeProperties.light.primaryFontColor
+                      : themeProperties.dark.primaryFontColor
+                  }
+                />
               </button>
             ) : (
               <></>
@@ -143,35 +184,7 @@ function PaymentsForm({}: Props): ReactElement {
             <p className="title-text">{t("paymentDetails")}</p>
           </div>
 
-          <TaxDeductionOption />
-
-          {paymentError && <div className={"text-danger"}>{paymentError}</div>}
-
-          {paymentSetup && paymentSetup.gateways && (
-            <PaymentMethodTabs
-              paymentType={paymentType}
-              setPaymentType={setPaymentType}
-              showCC={paymentSetup?.gateways.stripe.methods.includes(
-                "stripe_cc"
-              )}
-              showGiroPay={
-                country === "DE" &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_giropay")
-              }
-              showSepa={
-                currency === "EUR" && isAuthenticated &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
-              }
-              showSofort={
-                sofortCountries.includes(country) &&
-                paymentSetup?.gateways.stripe.methods.includes("stripe_sofort")
-              }
-              showPaypal={
-                paypalCurrencies.includes(currency) &&
-                paymentSetup?.gateways.paypal
-              }
-            />
-          )}
+          {!hideTaxDeduction && <TaxDeductionOption />}
 
           <div className={"mt-20"}>
             {!contactDetails.companyname ||
@@ -199,7 +212,57 @@ function PaymentsForm({}: Props): ReactElement {
             ) : null}
           </div>
 
-          {donationID ? (
+          {paymentError && (
+            <div
+              className={
+                "mt-20 d-flex align-items-center callout-danger text-danger"
+              }
+            >
+              <InfoIcon />
+              {paymentError}
+            </div>
+          )}
+          {!isCreatingDonation &&
+            donationID &&
+            paymentSetup &&
+            paymentSetup.gateways && (
+              <PaymentMethodTabs
+                paymentType={paymentType}
+                setPaymentType={setPaymentType}
+                showCC={paymentSetup?.gateways.stripe.methods.includes(
+                  "stripe_cc"
+                )}
+                showGiroPay={
+                  currency === "EUR" &&
+                  country === "DE" &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_giropay"
+                  )
+                }
+                showSepa={
+                  currency === "EUR" &&
+                  isAuthenticated &&
+                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                }
+                showSofort={
+                  currency === "EUR" &&
+                  sofortCountries.includes(country) &&
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_sofort"
+                  )
+                }
+                showPaypal={
+                  paypalCurrencies.includes(currency) &&
+                  paymentSetup?.gateways.paypal
+                }
+                showNativePay={
+                  paymentSetup?.gateways?.stripe?.account && currency
+                }
+                onNativePaymentFunction={onPaymentFunction}
+              />
+            )}
+
+          {!isCreatingDonation && donationID ? (
             <div className="mt-30">
               <div
                 role="tabpanel"
@@ -248,13 +311,14 @@ function PaymentsForm({}: Props): ReactElement {
                 aria-labelledby={`scrollable-force-tab-${"Paypal"}`}
               >
                 {paymentType === "Paypal" && (
-                  <PaypalPayments
+                  <NewPaypal
                     paymentSetup={paymentSetup}
                     treeCount={treeCount}
                     treeCost={paymentSetup.treeCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}
+                    setPaymentError={setPaymentError}
                   />
                 )}
               </div>
@@ -281,8 +345,21 @@ function PaymentsForm({}: Props): ReactElement {
               </div>
             </div>
           ) : (
-            <ButtonLoader />
+            <div className="mt-20">
+              <ButtonLoader />
+            </div>
           )}
+          <br />
+          <a
+            href="https://a.plant-for-the-planet.org/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-center nolink"
+            style={{ fontStyle: "italic" }}
+          >
+            {t("donationProcessedBy")}
+            {/* Needs break */}
+          </a>
         </div>
       </div>
     )

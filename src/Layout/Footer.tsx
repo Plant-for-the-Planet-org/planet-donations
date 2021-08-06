@@ -1,6 +1,8 @@
 import React, { ReactElement } from "react";
 import Image from "next/image";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
+import SunIcon from "../../public/assets/icons/SunIcon";
+import MoonIcon from "../../public/assets/icons/MoonIcon";
 import {
   Backdrop,
   Fade,
@@ -12,44 +14,40 @@ import {
 import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
-import supportedLanguages from "./../../supportedLanguages.json";
-import { useTranslation } from "react-i18next";
+import supportedLanguages from "../../supportedLanguages.json";
+import getLanguageName from "../Utils/getLanguageName";
+import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
+import themeProperties from "../../styles/themeProperties";
 
 interface Props {}
 
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
+  const { language, setlanguage } = React.useContext(QueryParamContext);
 
   const { returnTo } = React.useContext(QueryParamContext);
   const { t, ready } = useTranslation(["common"]);
 
+  const { theme } = React.useContext(ThemeContext);
+
   return (
     <div className="footer">
-      <a
-        href="https://a.plant-for-the-planet.org/"
-        target="_blank"
-        rel="noreferrer"
-        className="text-center nolink"
-      >
-        {t("donationProcessedBy")}
-      </a>
       <div className="footer-container">
+        <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
-
         <div className="footer-links">
           <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
-            English
-            <DownArrowIcon />
+            {`${getLanguageName(language)}`}
+            <DownArrowIcon
+              color={
+                theme === "theme-light"
+                  ? themeProperties.light.primaryFontColor
+                  : themeProperties.dark.primaryFontColor
+              }
+            />
           </button>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://a.plant-for-the-planet.org/"
-          >
-            {t("aboutUs")}
-          </a>
           <a
             rel="noreferrer"
             target="_blank"
@@ -67,7 +65,7 @@ function Footer({}: Props): ReactElement {
           <a
             target="_blank"
             rel="noreferrer"
-            href="mailto:info@plant-for-the-planet.org"
+            href="mailto:support@plant-for-the-planet.org"
           >
             {t("contact")}
           </a>
@@ -98,6 +96,29 @@ function Footer({}: Props): ReactElement {
       </div>
       <CookiePolicy />
     </div>
+  );
+}
+
+function DarkModeSwitch() {
+  const { theme, setTheme } = React.useContext(ThemeContext);
+
+  return (
+    <button style={{ position: "relative" }}>
+      <input
+        onClick={() =>
+          setTheme(theme === "theme-light" ? "theme-dark" : "theme-light")
+        }
+        defaultChecked={theme === "theme-dark" ? true : false}
+        type="checkbox"
+        className="darkmodeCheckbox"
+        id="chk"
+      />
+      <label className="darkmodeLabel" htmlFor="chk">
+        <MoonIcon />
+        <SunIcon />
+        <div className="darkmodeBall"></div>
+      </label>
+    </button>
   );
 }
 
@@ -137,7 +158,7 @@ function CookiePolicy() {
       <button
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
-        className="secondary-button mt-20"
+        className="primary-button mt-20"
       >
         {t("acceptClose")}
       </button>
@@ -181,7 +202,10 @@ function LanguageModal({
               aria-label="language"
               name="language"
               value={language}
-              onChange={(event) => setlanguage(event.target.value)}
+              onChange={(event) => {
+                setlanguage(event.target.value);
+                setlanguageModalOpen(false);
+              }}
             >
               {supportedLanguages.map((lang) => (
                 <FormControlLabel

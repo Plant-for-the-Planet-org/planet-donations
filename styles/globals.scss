@@ -108,12 +108,17 @@ button {
   justify-content: center;
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-  text-decoration: none;
+  text-decoration: none;  
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
 }
 .secondary-button {
   min-width: 240px;
   background-image: none;
-  background-color: $blueishGrey;
+  background-color: $backgroundColorDark;
   color: $primaryFontColor;
   p {
     margin-left: 6px;
@@ -141,11 +146,13 @@ button {
 
 a {
   text-decoration: none;
+  display: block;
 }
 
 
 
 button{
+  background-color: transparent;
   &:hover{
     cursor: pointer;
   }
@@ -162,6 +169,13 @@ button{
       color: $dangerColor;
       margin-left: 6px;
   }
+}
+
+.singleGiftRemove {
+  cursor: pointer;
+  color: $dangerColor;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .modal-container {
@@ -182,7 +196,6 @@ button{
   overflow: hidden;
   outline: none;
   min-width: 320px;
-  overflow-y: scroll;
 }
 
 .MuiTypography-root{
@@ -193,4 +206,31 @@ button{
   text-decoration: none;
   color: $primaryFontColor;
   font-weight: 500;
+}
+.addEmailButton{
+  font-family: $primaryFontFamily;
+  color: $primaryColor;
+  font-weight: 600;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+p,label,body,div{
+  color: $primaryFontColor;
+}
+
+input:autofill, input:-webkit-autofill{
+  background-color: $backgroundColorDark!important;
+  color: $primaryFontColor!important;
+}
+
+label:hover{
+  cursor: pointer;
+}
+
+.MuiSvgIcon-root{
+  path{
+    fill: $primaryFontColor;
+  }
 }

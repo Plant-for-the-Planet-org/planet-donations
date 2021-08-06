@@ -1,9 +1,4 @@
-import {
-  postAuthenticatedRequest,
-  postRequest,
-  putAuthenticatedRequest,
-  putRequest,
-} from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
 
 export function getPaymentProviderRequest(
@@ -95,6 +90,7 @@ export async function createDonationFunction({
   setPaymentError,
   setdonationID,
   token,
+  setshowErrorCard,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -109,14 +105,24 @@ export async function createDonationFunction({
   });
   try {
     let donation;
+
     if (token) {
-      donation = await postAuthenticatedRequest(
-        "/app/donations",
-        token,
-        donationData
-      );
+      const requestParams = {
+        url: `/app/donations`,
+        data: donationData,
+        method: "POST",
+        setshowErrorCard,
+        token: token,
+      };
+      donation = await apiRequest(requestParams);
     } else {
-      donation = await postRequest("/app/donations", donationData);
+      const requestParams = {
+        url: `/app/donations`,
+        data: donationData,
+        method: "POST",
+        setshowErrorCard,
+      };
+      donation = await apiRequest(requestParams);
     }
     if (donation && donation.data) {
       setdonationID(donation.data.id);
@@ -205,7 +211,8 @@ export async function payDonationFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
+  setshowErrorCard,
 }: any) {
   setIsPaymentProcessing(true);
 
@@ -223,16 +230,22 @@ export async function payDonationFunction({
   try {
     let paidDonation;
     if (token) {
-      paidDonation = await putAuthenticatedRequest(
-        `/app/donations/${donationID}`,
-        token,
-        payDonationData
-      );
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        data: payDonationData,
+        method: "PUT",
+        setshowErrorCard,
+        token: token,
+      };
+      paidDonation = await apiRequest(requestParams);
     } else {
-      paidDonation = await putRequest(
-        `/app/donations/${donationID}`,
-        payDonationData
-      );
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        data: payDonationData,
+        method: "PUT",
+        setshowErrorCard,
+      };
+      paidDonation = await apiRequest(requestParams);
     }
     if (paidDonation && paidDonation.data) {
       if (paidDonation.data.status === "failed") {
@@ -240,7 +253,10 @@ export async function payDonationFunction({
         setPaymentError(paidDonation.data.message);
       } else if (
         paidDonation.data.paymentStatus === "success" ||
-        paidDonation.data.paymentStatus === "pending"
+        paidDonation.data.paymentStatus === "pending" ||
+        paidDonation.data.status === "success" ||
+        paidDonation.data.status === "paid" ||
+        paidDonation.data.paymentStatus === "paid"
       ) {
         setIsPaymentProcessing(false);
         setdonationStep(4);
@@ -258,7 +274,8 @@ export async function payDonationFunction({
           setdonationStep,
           contactDetails,
           token,
-          country
+          country,
+          setshowErrorCard,
         });
       }
     }
@@ -292,7 +309,8 @@ export async function handleSCAPaymentFunction({
   setdonationStep,
   contactDetails,
   token,
-  country
+  country,
+  setshowErrorCard,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -323,19 +341,25 @@ export async function handleSCAPaymentFunction({
           try {
             let SCAPaidDonation;
             if (token) {
-              SCAPaidDonation = await putAuthenticatedRequest(
-                `/app/donations/${donationID}`,
-                token,
-                payDonationData
-              );
+              const requestParams = {
+                url: `/app/donations/${donationID}`,
+                data: payDonationData,
+                method: "PUT",
+                setshowErrorCard,
+                token: token,
+              };
+              SCAPaidDonation = await apiRequest(requestParams);
             } else {
-              SCAPaidDonation = await putRequest(
-                `/app/donations/${donationID}`,
-                payDonationData
-              );
+              const requestParams = {
+                url: `/app/donations/${donationID}`,
+                data: payDonationData,
+                method: "PUT",
+                setshowErrorCard,
+              };
+              SCAPaidDonation = await apiRequest(requestParams);
             }
 
-            if (SCAPaidDonation.data.paymentStatus) {
+            if (SCAPaidDonation.data.paymentStatus || SCAPaidDonation.data.status) {
               setIsPaymentProcessing(false);
               setdonationStep(4);
               return SCAPaidDonation.data;
@@ -375,15 +399,15 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Giropay`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {
@@ -408,15 +432,15 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${process.env.NEXTAUTH_URL}/?donationid=${donationID}&method=Sofort`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort`,
         }
       );
 
       if (error) {
         setIsPaymentProcessing(false);
-        if(error.message){
+        if (error.message) {
           setPaymentError(error.message);
-        }else{
+        } else {
           setPaymentError(error);
         }
       } else {

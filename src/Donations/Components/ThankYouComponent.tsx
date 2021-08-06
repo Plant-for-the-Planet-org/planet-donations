@@ -1,7 +1,7 @@
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../PaymentMethods/PaymentFunctions";
 import PaymentFailedIllustration from "../../../public/assets/icons/donation/PaymentFailed";
 import PaymentPendingIllustration from "../../../public/assets/icons/donation/PaymentPending";
@@ -10,13 +10,13 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import ShareOptions from "../Micros/ShareOptions";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
-import { getRequest } from "../../Utils/api";
+import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import themeProperties from "../../../styles/themeProperties";
 import { useRouter } from "next/dist/client/router";
 
 function ThankYou() {
-  const { t, i18n, ready } = useTranslation(["common", "country"]);
+  const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
 
   const {
     donationID,
@@ -24,6 +24,7 @@ function ThankYou() {
     setdonationStep,
     redirectstatus,
     returnTo,
+    setshowErrorCard,
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
@@ -31,7 +32,11 @@ function ThankYou() {
   const router = useRouter();
 
   async function loadDonation() {
-    const donation = await getRequest(`/app/donations/${donationID}`);
+    const requestParams = {
+      url: `/app/donations/${donationID}`,
+      setshowErrorCard,
+    };
+    const donation = await apiRequest(requestParams);
     if (donation.status === 200) {
       setdonation(donation.data);
     }
@@ -66,9 +71,8 @@ function ThankYou() {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
-  const [textCopiedsnackbarOpen, setTextCopiedSnackbarOpen] = React.useState(
-    false
-  );
+  const [textCopiedsnackbarOpen, setTextCopiedSnackbarOpen] =
+    React.useState(false);
 
   const sendRef = () => imageRef;
 
@@ -88,32 +92,35 @@ function ThankYou() {
   const sendToReturn = () => {
     router.push(returnTo);
   };
-
+  let returnDisplay;
+  if (returnTo) {
+    const x = returnTo.slice(8);
+    returnDisplay = x.split("/", 2);
+  }
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
-
   function SuccessfulDonation() {
     return donation ? (
-      <div className="d-flex column justify-content-center">
+      <div>
         {returnTo ? (
           <button
             id={"thank-you-close"}
             onClick={() => sendToReturn()}
-            className="mb-10"
+            className="mb-10 text-primary"
             style={{ alignSelf: "flex-start" }}
           >
-            <CloseIcon color={themeProperties.light.primaryFontColor} />
+            Back to {returnDisplay[0]}
           </button>
         ) : (
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:thankYou")}</div>
+        <div className={"title-text thankyouText"}>{t("common:thankYou")}</div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t(
             paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
               ? "common:donationSuccessfulWith"
@@ -140,7 +147,7 @@ function ThankYou() {
             })}
         </div>
 
-        <div className={"mt-20 text-center"}>
+        <div className={"mt-20 thankyouText"}>
           {t("common:contributionMessage")}
         </div>
 
@@ -232,7 +239,9 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:donationFailed")}</div>
+        <div className={"title-text text-center"}>
+          {t("common:donationFailed")}
+        </div>
         <div className={"mt-20 text-center"}>
           {t("common:donationFailedMessage")}
         </div>
@@ -257,7 +266,9 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text text-center"}>{t("common:donationPending")}</div>
+        <div className={"title-text text-center"}>
+          {t("common:donationPending")}
+        </div>
         <div className={"mt-20 text-center"}>
           {t("common:donationPendingMessage")}
         </div>
@@ -270,16 +281,14 @@ function ThankYou() {
   }
 
   return (
-    <div className="donations-forms-container">
+    <div className="donations-forms-container" style={{ paddingBottom: "0px" }}>
       <div className="donations-form w-100">
         {!ready && !donation ? (
           <PaymentProgress isPaymentProcessing={true} />
         ) : (
           <div>
             {redirectstatus && donation && donation.paymentStatus ? (
-              redirectstatus === "succeeded" &&
-              (donation.paymentStatus === "success" ||
-                donation.paymentStatus === "paid") ? (
+              redirectstatus === "succeeded" ? (
                 <SuccessfulDonation />
               ) : redirectstatus === "failed" ? (
                 <FailedDonation />

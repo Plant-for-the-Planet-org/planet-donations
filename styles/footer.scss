@@ -1,78 +1,123 @@
-@import './theme';
+@import "./theme";
 
-.footer{
-    position: relative;
-    text-align: center;
-    padding-top: 30px;
+.footer {
+  position: relative;
+  text-align: center;
+  background-color: $backgroundColorDark;
 }
-.footer-container{
-    margin: 20px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    > a {
-        margin-top: 24px;
-        font-style: italic;
-        font-weight: bold;
-        color: $primaryFontColor;
-        &:hover{
-            cursor: pointer;
-        }
-    }
-    .footer-links{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        > a, > button {
-            color: $primaryFontColor;
-            margin-left: 24px;
-            margin-top: 24px;
-            font-weight: 600;
-        }
-        > button{
-            display: flex;
-            align-items: center;
-            > svg {
-                margin-left: 4px;
-            }
-            &:hover{
-                cursor: pointer;
-            }
-        }
-    }
-}
-
-.select-language-title{
+.footer-container {
+  margin: 20px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  > a {
+    margin-top: 24px;
+    font-style: italic;
     font-weight: bold;
-    text-align: center;
-    font-size: 20px;
-    margin-bottom: 10px;
+    color: $primaryFontColor;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    > a,
+    > button {
+      color: $primaryFontColor;
+      margin-left: 24px;
+      margin-top: 24px;
+      font-weight: 600;
+    }
+    > button {
+      display: flex;
+      align-items: center;
+      > svg {
+        margin-left: 4px;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }
-.cookie-policy{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #3498db;
-    color: $light;
-    width: 280px;
-    border-radius: 4px;
-    padding: 20px;
-    z-index: 10;
-    div {
-        max-width: 240px;
-    }
-    a {
-        font-weight: bold;
-        color: $light;
-        text-decoration: none;
-    }
+
+.select-language-title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.cookie-policy {
+  position: fixed;
+  background-color: $backgroundColor;
+  box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
+  bottom: 20px;
+  left: 20px;
+  width: 280px;
+  border-radius: 4px;
+  padding: 20px;
+  z-index: 10;
+  div {
+    max-width: 240px;
+  }
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    color: $primaryDarkColor;
+    display: inline;
+  }
 }
 @include lgLaptopView {
-    .footer-container{
-        margin: 60px;
-        justify-content: space-between;
-    }
+  .footer-container {
+    margin: 60px;
+    margin-top: 36px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.darkmodeLabel {
+  background-color: rgba($color: #B2B2B2, $alpha: 0.4) ;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+  height: 20px;
+  width: 42px;
+  transform: scale(1.5);
+  margin-top: 24px;
+  svg > path {
+    fill: #f1c40f;
+  }
+  svg {
+    height: 12px;
+  }
+}
+.darkmodeBall {
+  background-color: $backgroundColorDark;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: 14px;
+  width: 14px;
+  transform: translateX(0px);
+  transition: transform 0.2s linear;
+}
+.darkmodeCheckbox {
+  opacity: 0;
+  position: absolute;
+}
+
+.darkmodeCheckbox:checked + .darkmodeLabel .darkmodeBall {
+  transform: translateX(21px);
 }

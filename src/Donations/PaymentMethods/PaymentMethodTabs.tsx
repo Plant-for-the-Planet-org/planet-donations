@@ -1,9 +1,14 @@
 import React from "react";
+import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
 import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
+import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { getCountryDataBy } from "../../Utils/countryUtils";
+import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
+import { NativePay } from "./PaymentRequestCustomButton";
 
 function a11yProps(index: any) {
   return {
@@ -20,7 +25,11 @@ export default function PaymentMethodTabs({
   showSepa,
   showSofort,
   showCC,
+  showNativePay,
+  onNativePaymentFunction,
 }: any) {
+  const { t } = useTranslation(["common", "country"]);
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
   };
@@ -51,6 +60,9 @@ export default function PaymentMethodTabs({
       </div>
     );
   }
+
+  const { country, currency, projectDetails, paymentSetup, treeCount } =
+    React.useContext(QueryParamContext);
 
   return (
     <div className={"payment-methods-tabs-container"}>
@@ -117,6 +129,27 @@ export default function PaymentMethodTabs({
           <SepaIcon />
           <CheckMark />
         </button>
+      )}
+
+      {showNativePay && (
+        <NativePay
+          country={country}
+          currency={currency}
+          amount={formatAmountForStripe(
+            projectDetails.treeCost * treeCount,
+            currency.toLowerCase()
+          )}
+          onPaymentFunction={onNativePaymentFunction}
+          paymentSetup={paymentSetup}
+          continueNext={() => {}}
+          isPaymentPage
+          paymentLabel={
+            t("treesInCountry", {
+              treeCount: treeCount,
+              country: t(`country:${projectDetails.country.toLowerCase()}`),
+            })
+          }
+        />
       )}
     </div>
   );

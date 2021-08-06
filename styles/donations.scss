@@ -1,7 +1,11 @@
 @import "./theme";
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 .donations-container {
-  min-height: 80vh;
   display: flex;
   justify-content: center;
 }
@@ -27,6 +31,7 @@
 
 .donations-info-container {
   width: 100%;
+  min-width: 320px;
   border-radius: 0px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -46,16 +51,16 @@
   background-color: $backgroundColor;
   max-width: 360px;
   align-self: center;
+  max-height: 560px;
 }
 .donations-forms-container {
   display: flex;
   padding: 20px;
   width: 100%;
-  overflow-y: scroll;
   padding-bottom: 30px;
   max-width: 360px;
   align-self: center;
-  background-color: $light;
+  background-color: $backgroundColor;
   border-radius: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -67,6 +72,27 @@
   top: 0px;
   left: 0px;
   z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+}
+
+.background-image-overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  // background-color: rgba($color: #000000, $alpha: 0.3);
+  background-image: linear-gradient(
+    to top,
+    rgb(0, 0, 0),
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0)
+  );
+  height: 100%;
+  width: 100%;
 }
 
 .donations-info {
@@ -74,28 +100,53 @@
   flex-direction: column;
   height: 100%;
   z-index: 3;
+  justify-content: flex-end;
+  min-height: 236px;
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.donations-info-header {
-  flex-grow: 1;
-}
 .donations-transaction-details {
   font-size: 12px;
-  font-weight: 600;
   color: $light;
   z-index: 3;
-  margin-top: 8px;
 }
 
-.donations-form {
-  width: 100%;
-  .login-continue {
-    color: $primaryDarkColor;
-    font-weight: 600;
-    width: 100%;
-    text-align: right;
-    margin-bottom: 10px;
+.user-profile {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  p {
+    color: $primaryFontColor !important;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
+  .profile-pic {
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    margin-right: 6px;
+  }
+  .no-pic {
+    background-color: #b2b2b2;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.login-continue {
+  color: $primaryColor;
+  font-weight: 600;
+  text-align: right;
 }
 .donations-gift-container {
   .donations-gift-toggle {
@@ -112,6 +163,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    p {
+      cursor: pointer;
+    }
     button {
       display: flex;
       align-items: center;
@@ -170,6 +224,9 @@
       }
       .tree-selection-option-text {
         color: $primaryFontColor;
+        p{
+          color: $primaryFontColor;
+        }
       }
     }
     &:hover {
@@ -189,9 +246,10 @@
       > p {
         font-size: 14px;
         font-weight: 800;
+        color: $darkGreyColor;
       }
       > span {
-        font-size: 9px;
+        font-size: 12px;
       }
     }
   }
@@ -200,6 +258,28 @@
 .custom-selection {
   flex-grow: 1;
   margin-left: 25px;
+}
+
+.suggestions-container {
+  position: absolute;
+  z-index: 10;
+  background-color: $backgroundColorDark;
+  max-height: 200px;
+  overflow: scroll;
+  box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.26);
+  min-width: 100%;
+  .suggestion {
+    min-width: 100%;
+    &:nth-child(even) {
+      background-color: rgba(var(--background-color-dark),0.6);
+    }
+    padding: 12px;
+    border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
+    &:hover{
+      cursor: pointer;
+      background-color: $backgroundColorDark;
+    }
+  }
 }
 
 .contacts-isCompany-toggle {
@@ -222,12 +302,14 @@
   margin: 0px 10px;
   width: 70%;
   font-family: $primaryFontFamily;
-  font-weight: bold;
+  font-weight: 800;
   font-size: $fontSubTitleSize;
   color: $primaryColor;
   text-align: center;
   background-color: transparent;
   outline: 0px;
+  font-size: 16px;
+  letter-spacing: 0.5px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
@@ -258,6 +340,7 @@
     color: $dividerColor;
     justify-content: center;
     position: relative;
+    background-color: $light;
     > label {
       margin-top: 6px;
       font-size: 10px;
@@ -265,16 +348,16 @@
     &:hover {
       cursor: pointer;
       color: $primaryFontColor;
-      background-color: $blueishGrey;
-      border: 0.5px solid $blueishGrey;
+      background-color: #F2F2F7;
+      border: 0.5px solid #F2F2F7;
     }
     .check-mark {
       display: none;
     }
   }
   .payment-method-selected {
-    background-color: $blueishGrey;
-    border: 0.5px solid $blueishGrey;
+    background-color: #F2F2F7;
+    border: 0.5px solid #F2F2F7;
     color: $primaryFontColor;
     font-weight: 600;
 
@@ -290,7 +373,7 @@
 .disclaimer-container {
   display: flex;
   flex-direction: row;
-  background-color: rgb(231, 237, 255);
+  background-color: $backgroundColorDark;
   border-radius: 10px;
   width: 100%;
   padding: 14px;
@@ -300,6 +383,7 @@
   > svg {
     width: 48px;
     height: 20px;
+    fill: $primaryFontColor;
   }
   > p {
     margin-left: 8px;
@@ -315,7 +399,7 @@
 
 .horizontal-line {
   height: 1px;
-  background-color: $dividerColor;
+  background-color: $greyColor;
   margin-top: 20px;
 }
 
@@ -426,6 +510,9 @@
 }
 
 .contact-details-info {
+  p{
+    color: white!important;
+  }
   button {
     display: flex;
     flex-direction: row;
@@ -438,11 +525,7 @@
       cursor: pointer;
     }
   }
-  .button-reverse {
-    svg {
-      transform: rotate(180deg);
-    }
-  }
+
   p {
     font-size: 12px;
     margin-top: 4px;
@@ -453,6 +536,7 @@
   .donations-info-container {
     padding: 30px;
     border-radius: 10px;
+    min-width: 420px;
     max-width: 420px;
   }
   .donations-forms-container {
@@ -479,8 +563,13 @@
     font-size: 22px;
   }
 }
-
+.thankyouText {
+  text-align: center;
+}
 @include lgLaptopView {
+  .thankyouText {
+    text-align: left;
+  }
   .test-donation-bar {
     top: 0px;
     bottom: auto;
@@ -495,11 +584,9 @@
   .donations-info-container {
     width: 420px;
     flex: 1;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 0px;
-    border-top-right-radius: 0px;
+    border-radius: 20px;
     align-self: auto;
+    margin-right: -10px;
   }
   .donations-forms-container {
     width: 420px;
@@ -507,9 +594,9 @@
     margin-top: 0px;
     margin-bottom: 0px;
     border-radius: 20px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     align-self: auto;
+    margin-left: -10px;
+    z-index: 3;
   }
   .thankyou-image {
     width: 360px;
@@ -523,6 +610,7 @@
   animation: loader 3s infinite ease-in-out;
   -webkit-animation: loader 3s infinite ease-in-out;
 }
+
 @keyframes loader {
   0% {
     background-color: rgba(#ecebeb, 0.3);
@@ -547,7 +635,7 @@
   }
 }
 
-.dark-pay{
+.dark-pay {
   background-image: none;
   background-color: #000;
   svg {
@@ -556,21 +644,59 @@
     width: 47.15px;
   }
 }
-.donate-now{
+.donate-now {
+  svg {
+    height: 20px;
+    width: 47.15px;
+  }
   background-image: linear-gradient(103deg, #383461 5%, #684889 116%);
 }
+.donate-small {
+  svg {
+    margin-left: 4px;
+    height: 20px;
+    width: 47.15px;
+  }
+  box-sizing: border-box;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  border: 1px solid $dividerColor;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+  height: 36px;
+  color: $dividerColor;
+  justify-content: center;
+  position: relative;
+  > label {
+    margin-top: 6px;
+    font-size: 10px;
+  }
+  &:hover {
+    cursor: pointer;
+    color: $primaryFontColor;
+    background-color: $backgroundColorDark;
+    border: 0.5px solid $backgroundColorDark;
+  }
+}
 
-.mailing-buttons{
-  a{
+.mailing-buttons {
+  a {
     margin-left: 12px;
     margin-right: 12px;
-    svg{
+    svg {
       height: 30px;
       filter: grayscale(100%);
-      &:hover{
+      &:hover {
         cursor: pointer;
         filter: grayscale(0%);
       }
     }
   }
+}
+
+.ElementsApp .Icon-fill{
+  fill: $primaryFontColor;
 }

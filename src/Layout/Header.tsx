@@ -1,7 +1,6 @@
 import Head from "next/head";
-import locales from "../../public/static/localeList.json";
 
-export default function Header() {
+export default function Header() {  
   return (
     <Head>
       <link
@@ -12,35 +11,23 @@ export default function Header() {
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=0"
       />
-      <meta property="og:locale" content={"en_US"} />
-      {locales.map((locale) => {
-        if (locale !== "en_US") {
-          return (
-            <meta
-              key="og:locale:alternate"
-              property="og:locale:alternate"
-              content={locale}
-            />
-          );
-        }
-      })}
+   
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
 
       <meta
         name="application-name"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
       <meta
         name="apple-mobile-web-app-title"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
       <meta
         name="apple-mobile-web-app-title"
-        content={"Plant trees around the world - Plant-for-the-Planet"}
+        content={"Donate with Plant-for-the-Planet"}
       />
 
-      {/* <!-- New in iOS6  alt, --> */}
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-touch-fullscreen" content="yes" />
       <meta
@@ -98,23 +85,6 @@ export default function Header() {
         sizes="180x180"
         href={`/assets/favicons/apple-touch-icon-180x180.png`}
       />
-      {/* {themeType === 'theme-light' ? (
-        <meta name="theme-color" content={styles.primaryColor} />
-      ) : null} */}
-
-      <title>{`Pay with Planet | Plant trees around the world - Plant-for-the-Planet`}</title>
-      <meta property="og:site_name" content={'Plant trees around the world - Plant-for-the-Planet'} />
-
-      <meta property="og:title" content={`Pay with Planet | ${'Plant trees around the world - Plant-for-the-Planet'}`} />
-      <meta property="og:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
-      <meta name="description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
-      <meta property="og:type" content="website" />
-      {/* <meta property="og:image" content={config.meta.image} /> */}
-      <link rel="alternate" href="android-app://org.pftp/projects" />
-      <meta name="twitter:card" content="summary" />
-      <meta name="twitter:title" content={'Plant trees around the world - Plant-for-the-Planet'} />
-     
-      <meta name="twitter:description" content={`We are children and youth on a mission: bring back a trillion trees! No matter where you are, it's never been easier to plant trees and become part of the fight against climate crisis.`} />
     </Head>
   );
 }

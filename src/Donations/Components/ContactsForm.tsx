@@ -7,12 +7,23 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
 import BackButton from "../../../public/assets/icons/BackButton";
+import GeocoderArcGIS from "geocoder-arcgis";
+import themeProperties from "../../../styles/themeProperties";
+import { ThemeContext } from "../../../styles/themeContext";
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
 
+  React.useEffect(() => {
+    setaddressSugggestions([]);
+  }, []);
+
   const [isCompany, setIsCompany] = React.useState(false);
+  const geocoder = new GeocoderArcGIS(process.env.ESRI_CLIENT_SECRET ? {
+    client_id:process.env.ESRI_CLIENT_ID,
+    client_secret:process.env.ESRI_CLIENT_SECRET,
+  } : {});
   const {
     contactDetails,
     setContactDetails,
@@ -30,7 +41,15 @@ function ContactsForm({}: Props): ReactElement {
     }
   }, [contactDetails]);
 
-  const { register, errors, handleSubmit, control, reset } = useForm({
+  const {
+    register,
+    errors,
+    handleSubmit,
+    control,
+    reset,
+    getValues,
+    setValue,
+  } = useForm({
     mode: "all",
     defaultValues: {},
   });
@@ -54,9 +73,50 @@ function ContactsForm({}: Props): ReactElement {
   );
 
   const changeCountry = (country: any) => {
-    setContactDetails({ ...contactDetails, country });
+    let data = getValues();
+    data = {
+      ...data,
+      country,
+    };
+    setContactDetails(data);
   };
 
+  const [addressSugggestions, setaddressSugggestions] = React.useState([]);
+
+  const suggestAddress = (value) => {
+    if (value.length > 3) {
+      geocoder
+        .suggest(value, {category:"Address",countryCode:contactDetails.country})
+        .then((result) => {
+          const filterdSuggestions = result.suggestions.filter((suggestion) => {
+            return !suggestion.isCollection;
+          });
+          setaddressSugggestions(filterdSuggestions);
+        })
+        .catch(console.log);
+    }
+  };
+
+  const getAddress = (value) => {
+    geocoder
+      .findAddressCandidates(value, { outfields: "*" })
+      .then((result) => {
+        setValue("address", result.candidates[0].attributes.ShortLabel, {
+          shouldValidate: true,
+        });
+        setValue("city", result.candidates[0].attributes.City, {
+          shouldValidate: true,
+        });
+        setValue("zipCode", result.candidates[0].attributes.Postal, {
+          shouldValidate: true,
+        });
+        setaddressSugggestions([]);
+      })
+      .catch(console.log);
+  };
+
+  const { theme } = React.useContext(ThemeContext);
+  
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
@@ -66,7 +126,11 @@ function ContactsForm({}: Props): ReactElement {
             onClick={() => setdonationStep(1)}
             style={{ marginRight: "12px" }}
           >
-            <BackButton />
+            <BackButton color={
+               theme === "theme-light"
+               ? themeProperties.light.primaryFontColor
+               : themeProperties.dark.primaryFontColor
+            } />
           </button>
           <p className="title-text">{t("contactDetails")}</p>
         </div>
@@ -117,14 +181,36 @@ function ContactsForm({}: Props): ReactElement {
             )}
           </div>
 
-          <div className={"form-field mt-30"}>
+          <div className={"form-field mt-30"} style={{ position: "relative" }}>
             <MaterialTextField
               inputRef={register({ required: true })}
               label={t("address")}
               variant="outlined"
               name="address"
               defaultValue={contactDetails.address}
+              onChange={(event) => {
+                suggestAddress(event.target.value);
+              }}
+              onBlur={() => setaddressSugggestions([])}
             />
+            {addressSugggestions
+              ? addressSugggestions.length > 0 && (
+                  <div className="suggestions-container">
+                    {addressSugggestions.map((suggestion) => {
+                      return (
+                        <div
+                          onMouseDown={() => {
+                            getAddress(suggestion.text);
+                          }}
+                          className="suggestion"
+                        >
+                          {suggestion.text}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )
+              : null}
             {errors.address && (
               <span className={"form-errors"}>{t("addressRequired")}</span>
             )}
