@@ -172,7 +172,7 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    let pattern = new RegExp(
+    const pattern = new RegExp(
       "^(https?:\\/\\/)?" + // protocol
         "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
         "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
@@ -199,7 +199,7 @@ export default function QueryParamProvider({ children }: any) {
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
-        let allowedDonationsProjects = projects.data.filter(
+        const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
