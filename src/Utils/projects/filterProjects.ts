@@ -61,9 +61,9 @@ export function getSearchProjects(projects: Array<any>, keyword: string) {
 }
 
 export function getRandomProjects(arr:Array<any>, n:number) {
-  const result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
+  const result = new Array(n);
+  let len = arr.length;
+  const taken = new Array(len);
   if (n > len)
       throw new RangeError("getRandom: more elements taken than available");
   while (n--) {
