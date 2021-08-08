@@ -54,7 +54,9 @@ export const QueryParamContext = React.createContext({
   queryToken:"", 
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
-  setisDirectDonation:(value: boolean) => {}
+  setisDirectDonation:(value: boolean) => {},
+  frequency: "", 
+  setfrequency: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -94,6 +96,7 @@ export default function QueryParamProvider({ children }: any) {
 
  
   const [quantity, setquantity] = useState(50);
+  const [frequency, setfrequency] = useState<null|string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -376,7 +379,9 @@ export default function QueryParamProvider({ children }: any) {
         setpaymentSetup,
         sethideTaxDeduction,
         setallowTaxDeductionChange,
-        setisDirectDonation
+        setisDirectDonation,
+        frequency,
+        setfrequency
       }}
     >
       {children}

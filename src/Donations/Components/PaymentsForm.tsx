@@ -60,6 +60,7 @@ function PaymentsForm({}: Props): ReactElement {
     setshowErrorCard,
     hideTaxDeduction,
     queryToken,
+    frequency,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -116,6 +117,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationID,
       token,
       setshowErrorCard,
+      frequency,
     });
 
     if (donation) {
@@ -233,34 +235,65 @@ function PaymentsForm({}: Props): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={paymentSetup?.gateways.stripe.methods.includes(
-                  "stripe_cc"
-                )}
+                showCC={
+                  paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_cc"
+                      )
+                    : true)
+                }
                 showGiroPay={
                   currency === "EUR" &&
                   country === "DE" &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"
-                  )
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_giropay"
+                      )
+                    : true)
                 }
                 showSepa={
                   currency === "EUR" &&
                   isAuthenticated &&
-                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_sepa"
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_sepa"
+                      )
+                    : true)
                 }
                 showSofort={
                   currency === "EUR" &&
                   sofortCountries.includes(country) &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_sofort"
-                  )
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_sofort"
+                      )
+                    : true)
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
-                  paymentSetup?.gateways.paypal
+                  paymentSetup?.gateways.paypal &&
+                  (frequency !== "once"
+                    ? false
+                    : true)
                 }
                 showNativePay={
-                  paymentSetup?.gateways?.stripe?.account && currency
+                  paymentSetup?.gateways?.stripe?.account &&
+                  currency &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_cc"
+                      )
+                    : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
               />

@@ -98,4 +98,5 @@ export interface CreateDonationFunctionProps {
   setdonationID: any;
   token: any;
   setshowErrorCard: Function;
+  frequency: string | null;
 }

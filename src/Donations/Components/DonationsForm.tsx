@@ -19,6 +19,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import DonationAmount from "../Micros/DonationAmount";
 import TreeDonation from "../Micros/DonationTypes/TreeDonation";
 import FundingDonations from "../Micros/DonationTypes/FundingDonations";
+import FrequencyOptions from "../Micros/FrequencyOptions";
 
 function DonationsForm() {
   const {
@@ -37,6 +38,7 @@ function DonationsForm() {
     isTaxDeductible,
     setshowErrorCard,
     queryToken,
+    frequency
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -91,6 +93,7 @@ function DonationsForm() {
       setdonationID,
       token,
       setshowErrorCard,
+      frequency
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
@@ -129,6 +132,15 @@ function DonationsForm() {
           ) : (
             <></>
           )}
+
+          {process.env.RECURRENCY && projectDetails.purpose === "trees" ? (
+            <div className="donations-gift-container mt-10">
+              <FrequencyOptions />
+            </div>
+          ) : (
+            <></>
+          )}
+
 
           {projectDetails.purpose === "funds" ? (
             <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
@@ -169,6 +181,7 @@ function DonationsForm() {
                         `country:${projectDetails.country.toLowerCase()}`
                       ),
                     })}
+                    frequency={frequency}
                   />
                 ) : (
                   <div className="mt-20 w-100">
