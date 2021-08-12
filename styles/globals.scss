@@ -91,11 +91,16 @@ button {
   box-sizing: border-box;
 }
 
-.primary-button, .secondary-button {
-  color:$light;
+.primary-button,
+.secondary-button {
+  color: $light;
   font-weight: bold;
   background-color: $primaryColor;
-  background-image: linear-gradient(103deg, $primaryColor 5%, $primaryDarkColor 116%);
+  background-image: linear-gradient(
+    103deg,
+    $primaryColor 5%,
+    $primaryDarkColor 116%
+  );
   height: 40px;
   padding: 0px;
   text-align: center;
@@ -108,7 +113,7 @@ button {
   justify-content: center;
   transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-  text-decoration: none;  
+  text-decoration: none;
   svg {
     margin-left: 4px;
     height: 20px;
@@ -127,7 +132,8 @@ button {
     height: 12px;
   }
 }
-.primary-button:hover, .secondary-button:hover{
+.primary-button:hover,
+.secondary-button:hover {
   transform: scale(1.04);
   cursor: pointer;
 }
@@ -149,25 +155,23 @@ a {
   display: block;
 }
 
-
-
-button{
+button {
   background-color: transparent;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
 
-.form-field{
+.form-field {
   position: relative;
-  .form-errors{
-      position: absolute;
-      bottom: -20px;
-      left: 0px;
-      font-family: $primaryFontFamily;
-      font-size: 12px;
-      color: $dangerColor;
-      margin-left: 6px;
+  .form-errors {
+    position: absolute;
+    bottom: -20px;
+    left: 0px;
+    font-family: $primaryFontFamily;
+    font-size: 12px;
+    color: $dangerColor;
+    margin-left: 6px;
   }
 }
 
@@ -198,39 +202,47 @@ button{
   min-width: 320px;
 }
 
-.MuiTypography-root{
-  font-family: $primaryFontFamily!important;
+.MuiTypography-root {
+  font-family: $primaryFontFamily !important;
 }
 
-.nolink{
+.nolink {
   text-decoration: none;
   color: $primaryFontColor;
   font-weight: 500;
 }
-.addEmailButton{
+.addEmailButton {
   font-family: $primaryFontFamily;
   color: $primaryColor;
   font-weight: 600;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
 
-p,label,body,div{
+p,
+label,
+body,
+div {
   color: $primaryFontColor;
 }
 
-input:autofill, input:-webkit-autofill{
-  background-color: $backgroundColorDark!important;
-  color: $primaryFontColor!important;
+input:autofill,
+input:-webkit-autofill {
+  background-color: $backgroundColorDark !important;
+  color: $primaryFontColor !important;
 }
 
-label:hover{
+label:hover {
   cursor: pointer;
 }
 
-.MuiSvgIcon-root{
-  path{
+.MuiSvgIcon-root {
+  path {
     fill: $primaryFontColor;
   }
+}
+
+.PrivateSwitchBase-root-4.MuiCheckbox-root {
+  padding: 0px !important;
 }
