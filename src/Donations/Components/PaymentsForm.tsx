@@ -12,8 +12,6 @@ import {
   createDonationFunction,
   payDonationFunction,
 } from "../PaymentMethods/PaymentFunctions";
-// import Checkbox from '@material-ui/core/Checkbox';
-import CheckBox from "../../Common/InputTypes/Checkbox";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
@@ -26,6 +24,7 @@ import NewPaypal from "../PaymentMethods/NewPaypal";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import CheckBox from "../../Common/InputTypes/CheckBox";
 
 interface Props {}
 

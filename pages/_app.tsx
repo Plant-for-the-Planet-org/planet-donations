@@ -89,7 +89,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         redirectUri={process.env.APP_URL}
         cacheLocation={"localstorage"}
         audience={"urn:plant-for-the-planet"}
-        useRefreshTokens={true}
       >
         <ThemeProvider>
           <QueryParamProvider>
