@@ -8,6 +8,7 @@ import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
+import countriesData from "../Utils/countriesData.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -259,10 +260,15 @@ export default function QueryParamProvider({ children }: any) {
       const config: any = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
-          if (config.data.country == "XX" || config.data.country == "T1") {
-            setcountry("DE");
-          } else {
+          const found = countriesData.some(
+            (arrayCountry) =>
+              arrayCountry.countryCode?.toUpperCase() ===
+              config.data.country?.toUpperCase()
+          );
+          if (found) {
             setcountry(config.data.country);
+          } else {
+            setcountry("DE");
           }
         }
         if (!router.query.context) {
