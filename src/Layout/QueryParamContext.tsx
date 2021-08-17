@@ -266,7 +266,7 @@ export default function QueryParamProvider({ children }: any) {
               config.data.country?.toUpperCase()
           );
           if (found) {
-            setcountry(config.data.country);
+            setcountry(config.data.country.toUpperCase());
           } else {
             setcountry("DE");
           }
