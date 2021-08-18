@@ -209,7 +209,7 @@ export async function getServerSideProps(context: any) {
     donationStep = 1;
     try {
       const requestParams = {
-        url: `/app/projects/${context.query.to}`,
+        url: `/app/projects/${to}`,
         setshowErrorCard,
       };
       const project = await apiRequest(requestParams);
