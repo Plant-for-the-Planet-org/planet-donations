@@ -80,10 +80,9 @@ function index({
       setisDirectDonation(isDirectDonation);
     }
     // XX is hidden country and T1 is Tor browser
-    if(country === 'XX' || country === 'T1'){
+    if (country === "XX" || country === "T1") {
       setcountry("DE");
-    }
-    else{
+    } else {
       setcountry(country);
     }
   }, []);
@@ -206,6 +205,7 @@ export async function getServerSideProps(context: any) {
 
   // Set project details if there is to (project slug) in the query params
   if (context.query.to && !context.query.context) {
+    const to = context.query.to.replace(/\//, "");
     donationStep = 1;
     try {
       const requestParams = {
@@ -230,7 +230,9 @@ export async function getServerSideProps(context: any) {
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
     const found = countriesData.some(
-      (country) => country.countryCode?.toUpperCase() === context.query.country?.toUpperCase()
+      (country) =>
+        country.countryCode?.toUpperCase() ===
+        context.query.country?.toUpperCase()
     );
     if (found) {
       country = context.query.country.toUpperCase();
