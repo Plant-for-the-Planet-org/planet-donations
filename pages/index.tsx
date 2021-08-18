@@ -200,7 +200,7 @@ export async function getServerSideProps(context: any) {
 
   // Set project details if there is to (project slug) in the query params
   if (context.query.to && !context.query.context) {
-    let to = context.query.to.replace(/\//g, "");
+    const to = context.query.to.replace(/\//g, "");
     donationStep = 1;
     try {
       const requestParams = {

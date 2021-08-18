@@ -240,7 +240,7 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      let to = String(router.query.to).replace(/\//g, "");
+      const to = String(router.query.to).replace(/\//g, "");
       loadPaymentSetup(to, country);
     }
   }, [router.query.to, country]);
