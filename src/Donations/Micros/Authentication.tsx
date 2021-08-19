@@ -61,9 +61,23 @@ function Authentication({}: Props): ReactElement {
           setContactDetails(newContactDetails);
         }
       } catch (err) {
+        const newContactDetails = {
+          firstname: user.nickname ? user.nickname : "",
+          email: user.email ? user.email : "",
+          displayName: user.nickname,
+        };
+        setprofile(newContactDetails);
+        setContactDetails(newContactDetails);
         // console.log(err);
       }
     } else {
+      const newContactDetails = {
+        firstname: user.nickname ? user.nickname : "",
+        email: user.email ? user.email : "",
+        displayName: user.nickname,
+      };
+      setprofile(newContactDetails);
+      setContactDetails(newContactDetails);
       setopenVerifyEmailModal(true);
     }
   };
@@ -101,10 +115,10 @@ function Authentication({}: Props): ReactElement {
       setqueryToken(router.query.token);
       // If user is logged in via auth0, log them out
       if (!isLoading && isAuthenticated) {
-        logout({ returnTo: window?.location.href })
+        logout({ returnTo: window?.location.href });
       }
     }
-  }, [router.query,isLoading,isAuthenticated]);
+  }, [router.query, isLoading, isAuthenticated]);
 
   return (
     <div>
@@ -124,7 +138,7 @@ function Authentication({}: Props): ReactElement {
             rel="noreferrer"
             className="user-profile"
           >
-            {profile.image ? (
+            {profile?.image ? (
               <img
                 className="profile-pic"
                 src={getImageUrl("profile", "avatar", profile.image)}
@@ -133,7 +147,9 @@ function Authentication({}: Props): ReactElement {
             ) : user?.picture ? (
               <img className="profile-pic" src={user.picture} alt={user.name} />
             ) : (
-              <div className="profile-pic no-pic">{profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}</div>
+              <div className="profile-pic no-pic">
+                {profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}
+              </div>
             )}
             <p>{profile ? profile.displayName : user?.name}</p>
           </a>
@@ -146,7 +162,9 @@ function Authentication({}: Props): ReactElement {
             </button>
           ) : null}
         </div>
-      ):<></>}
+      ) : (
+        <></>
+      )}
       <VerifyEmailModal
         logout={logout}
         openModal={openVerifyEmailModal}
@@ -185,7 +203,7 @@ function VerifyEmailModal({
       BackdropProps={{
         timeout: 500,
       }}
-      disableBackdropClick
+      // disableBackdropClick
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
