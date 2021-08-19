@@ -60,6 +60,7 @@ function PaymentsForm({}: Props): ReactElement {
     setshowErrorCard,
     hideTaxDeduction,
     queryToken,
+    profile,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -97,7 +98,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   async function getDonation() {
     let token = null;
-    if ((!isLoading && isAuthenticated) || queryToken) {
+    if (((!isLoading && isAuthenticated) || queryToken) && profile?.address) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     setisDonationLoading(true);

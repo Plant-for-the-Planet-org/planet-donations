@@ -41,7 +41,8 @@ function DonationsForm() {
     setdonationID,
     isTaxDeductible,
     setshowErrorCard,
-    queryToken
+    queryToken,
+    profile,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -77,7 +78,7 @@ function DonationsForm() {
     };
 
     let token = null;
-    if ((!isLoading && isAuthenticated) || queryToken) {
+    if ((!isLoading && isAuthenticated) || (queryToken && profile.address)) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
@@ -99,7 +100,7 @@ function DonationsForm() {
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
-        token = queryToken ? queryToken :await getAccessTokenSilently();
+        token = queryToken ? queryToken : await getAccessTokenSilently();
       }
       payDonationFunction({
         gateway: "stripe",
@@ -300,15 +301,15 @@ function DonationsForm() {
                     <ButtonLoader />
                   </div>
                 )
-              ) : (
-                minAmt > 0 ?
+              ) : minAmt > 0 ? (
                 <p className={"text-danger mt-20 text-center"}>
                   {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
                 </p>
-                : <></>
+              ) : (
+                <></>
               )
             ) : (
               <div className="mt-20 w-100">

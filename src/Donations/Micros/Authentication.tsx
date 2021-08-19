@@ -15,8 +15,14 @@ import { useRouter } from "next/dist/client/router";
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails, setshowErrorCard, setqueryToken, queryToken } =
-    React.useContext(QueryParamContext);
+  const {
+    setContactDetails,
+    setshowErrorCard,
+    setqueryToken,
+    queryToken,
+    profile,
+    setprofile,
+  } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -26,7 +32,7 @@ function Authentication({}: Props): ReactElement {
     user,
   } = useAuth0();
 
-  const [profile, setprofile] = React.useState<null | Object>(null);
+  // const [profile, setprofile] = React.useState<null | Object>(null);
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
