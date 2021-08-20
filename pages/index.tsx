@@ -79,7 +79,13 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
     }
-    setcountry(country);
+    // XX is hidden country and T1 is Tor browser
+    if(country === 'XX' || country === 'T1'){
+      setcountry("DE");
+    }
+    else{
+      setcountry(country);
+    }
   }, []);
 
   // If gift details are present set gift
