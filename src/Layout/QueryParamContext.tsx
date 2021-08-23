@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React, { Component, useState, ReactElement } from "react";
 import LeafIcon from "../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
@@ -6,9 +6,7 @@ import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
-import {
-  getRandomProjects,
-} from "../Utils/projects/filterProjects";
+import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
 
 export const QueryParamContext = React.createContext({
@@ -27,7 +25,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: ({})=>{},
+  setpaymentSetup: ({}) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -61,10 +59,10 @@ export const QueryParamContext = React.createContext({
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
-  queryToken:"", 
+  queryToken: "",
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
-  setisDirectDonation:(value: boolean) => {}
+  setisDirectDonation: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -152,7 +150,7 @@ export default function QueryParamProvider({ children }: any) {
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
 
-  const [hideTaxDeduction, sethideTaxDeduction] = useState(false)
+  const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -161,13 +159,15 @@ export default function QueryParamProvider({ children }: any) {
       setlanguage(router.query.locale);
     }
   }, [router.query.locale]);
-
-  React.useEffect(() => {    
-    if(i18n && i18n.isInitialized){
+  React.useEffect(() => {
+    console.log(donationStep, "donationStep context");
+  }, [donationStep]);
+  React.useEffect(() => {
+    if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }
-  }, [language,router]);
+  }, [language, router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
@@ -396,7 +396,7 @@ export default function QueryParamProvider({ children }: any) {
         setpaymentSetup,
         sethideTaxDeduction,
         setallowTaxDeductionChange,
-        setisDirectDonation
+        setisDirectDonation,
       }}
     >
       {children}
@@ -431,7 +431,9 @@ function ErrorCard({
   }, [showErrorCard]);
 
   return showErrorCard ? (
-    <div className={`${theme} test-donation-bar`} style={{zIndex:15}}>{t("errorOccurred")}</div>
+    <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
+      {t("errorOccurred")}
+    </div>
   ) : (
     <></>
   );

@@ -7,7 +7,7 @@ import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 
 interface Props {
@@ -197,9 +197,13 @@ export async function getServerSideProps(context: any) {
   function setshowErrorCard() {
     showErrorCard = true;
   }
+  console.log(context.query, donationStep, "context.query");
 
   // Set project details if there is to (project slug) in the query params
-  if (context.query.to && !context.query.context) {
+  if (
+    (context.query.to && !context.query.context) ||
+    context.query.step === "donate"
+  ) {
     donationStep = 1;
     try {
       const requestParams = {
@@ -224,7 +228,9 @@ export async function getServerSideProps(context: any) {
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
     const found = countriesData.some(
-      (country) => country.countryCode?.toUpperCase() === context.query.country?.toUpperCase()
+      (country) =>
+        country.countryCode?.toUpperCase() ===
+        context.query.country?.toUpperCase()
     );
     if (found) {
       country = context.query.country.toUpperCase();

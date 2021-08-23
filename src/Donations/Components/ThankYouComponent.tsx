@@ -13,7 +13,7 @@ import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import themeProperties from "../../../styles/themeProperties";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
