@@ -32,7 +32,6 @@ function Authentication({}: Props): ReactElement {
     user,
   } = useAuth0();
 
-  // const [profile, setprofile] = React.useState<null | Object>(null);
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
