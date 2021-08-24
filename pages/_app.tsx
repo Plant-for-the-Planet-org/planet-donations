@@ -14,7 +14,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
 import { Auth0Provider } from "@auth0/auth0-react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React from "react";
 import { browserNotCompatible } from "../src/Utils/browsercheck";
 import BrowserNotSupported from "./../src/Common/ContentLoaders/BrowserNotSupported";
@@ -89,6 +89,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         redirectUri={process.env.APP_URL}
         cacheLocation={"localstorage"}
         audience={"urn:plant-for-the-planet"}
+        useRefreshTokens={true}
       >
         <ThemeProvider>
           <QueryParamProvider>

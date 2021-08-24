@@ -10,6 +10,8 @@ import BackButton from "../../../public/assets/icons/BackButton";
 import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { useRouter } from "next/router";
+
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
@@ -19,6 +21,7 @@ function ContactsForm({}: Props): ReactElement {
     setaddressSugggestions([]);
   }, []);
 
+  const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
@@ -66,6 +69,9 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
+    router.push({
+      query: { ...router.query, step: "payment" },
+    });
     setContactDetails(data);
     setdonationStep(3);
   };
@@ -131,7 +137,12 @@ function ContactsForm({}: Props): ReactElement {
         <div className="d-flex w-100 align-items-center">
           <button
             className="d-flex"
-            onClick={() => setdonationStep(1)}
+            onClick={() => {
+              setdonationStep(1);
+              router.push({
+                query: { ...router.query, step: "donate" },
+              });
+            }}
             style={{ marginRight: "12px" }}
           >
             <BackButton

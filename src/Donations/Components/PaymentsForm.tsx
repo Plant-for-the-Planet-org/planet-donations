@@ -25,11 +25,15 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
+import { useRouter } from "next/router";
+
 
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
   const { t, ready, i18n } = useTranslation("common", "donate");
+
+  const router = useRouter();
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
@@ -87,6 +91,7 @@ function PaymentsForm({}: Props): ReactElement {
       token,
       country,
       setshowErrorCard,
+      router,
     });
   };
 
@@ -167,7 +172,12 @@ function PaymentsForm({}: Props): ReactElement {
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
               <button
-                onClick={() => setdonationStep(2)}
+                onClick={() => {
+                  setdonationStep(2);
+                  router.push({
+                    query: { ...router.query, step: "contact" },
+                  });
+                }}
                 className="d-flex"
                 style={{ marginRight: "12px" }}
               >
