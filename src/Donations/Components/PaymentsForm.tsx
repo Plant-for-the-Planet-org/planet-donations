@@ -191,7 +191,7 @@ function PaymentsForm({}: Props): ReactElement {
             {!contactDetails.companyname ||
             contactDetails.companyname === "" ? (
               askpublishName ? (
-                <div style={{ display: "flex" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CheckBox
                     id="publishName"
                     name="checkedB"
