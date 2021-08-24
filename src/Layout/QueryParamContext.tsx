@@ -159,9 +159,7 @@ export default function QueryParamProvider({ children }: any) {
       setlanguage(router.query.locale);
     }
   }, [router.query.locale]);
-  React.useEffect(() => {
-    console.log(donationStep, "donationStep context");
-  }, [donationStep]);
+
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);

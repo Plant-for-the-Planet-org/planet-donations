@@ -23,8 +23,8 @@ function Donations({}: Props): ReactElement {
     if (router.query?.step) {
       let step;
       if (donationStep === 4) {
+        //if the last step is 'Thankyou' then this will replace the entire route with the initial one on browser back press
         step = "selectProject";
-        console.log({ ...router.query }, "...router.query");
         router.replace({
           query: {},
         });
@@ -53,7 +53,6 @@ function Donations({}: Props): ReactElement {
     }
     return () => {};
   }, [router.query.step]);
-  console.log(router.query.step, "router");
   return (
     <div className="donations-container">
       <div className="donations-card-container">

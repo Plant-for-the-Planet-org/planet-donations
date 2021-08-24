@@ -69,7 +69,6 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
-    console.log("Clicked");
     router.push({
       query: { ...router.query, step: "payment" },
     });

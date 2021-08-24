@@ -293,7 +293,6 @@ function DonationsForm() {
                       router.push({
                         query: { ...router.query, step: "contact" },
                       });
-                      console.log("Pressed");
                     }}
                     isPaymentPage={false}
                     paymentLabel={t("treesInCountry", {

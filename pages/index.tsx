@@ -197,7 +197,6 @@ export async function getServerSideProps(context: any) {
   function setshowErrorCard() {
     showErrorCard = true;
   }
-  console.log(context.query, donationStep, "context.query");
 
   // Set project details if there is to (project slug) in the query params
   if (
