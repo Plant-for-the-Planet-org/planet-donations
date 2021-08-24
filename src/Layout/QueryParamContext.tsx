@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React, { Component, useState, ReactElement } from "react";
 import LeafIcon from "../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";

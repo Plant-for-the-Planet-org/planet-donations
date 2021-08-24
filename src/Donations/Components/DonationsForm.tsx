@@ -22,6 +22,7 @@ import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import Authentication from "./../Micros/Authentication";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getCountryDataBy } from "../../Utils/countryUtils";
+import { useRouter } from "next/router";
 
 function DonationsForm() {
   const {
@@ -41,13 +42,13 @@ function DonationsForm() {
     setdonationID,
     isTaxDeductible,
     setshowErrorCard,
-    queryToken
+    queryToken,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
-
+  const router = useRouter();
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
@@ -99,7 +100,7 @@ function DonationsForm() {
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
-        token = queryToken ? queryToken :await getAccessTokenSilently();
+        token = queryToken ? queryToken : await getAccessTokenSilently();
       }
       payDonationFunction({
         gateway: "stripe",
@@ -113,6 +114,7 @@ function DonationsForm() {
         token,
         country,
         setshowErrorCard,
+        router,
       });
     });
   };
@@ -286,7 +288,12 @@ function DonationsForm() {
                     )}
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
-                    continueNext={() => setdonationStep(2)}
+                    continueNext={() => {
+                      setdonationStep(2);
+                      router.push({
+                        query: { ...router.query, step: "contact" },
+                      });
+                    }}
                     isPaymentPage={false}
                     paymentLabel={t("treesInCountry", {
                       treeCount: treeCount,
@@ -300,15 +307,15 @@ function DonationsForm() {
                     <ButtonLoader />
                   </div>
                 )
-              ) : (
-                minAmt > 0 ?
+              ) : minAmt > 0 ? (
                 <p className={"text-danger mt-20 text-center"}>
                   {t("minDonate")}{" "}
                   <span>
                     {getFormatedCurrency(i18n.language, currency, minAmt)}
                   </span>
                 </p>
-                : <></>
+              ) : (
+                <></>
               )
             ) : (
               <div className="mt-20 w-100">
