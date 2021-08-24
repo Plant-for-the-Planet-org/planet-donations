@@ -191,7 +191,7 @@ function PaymentsForm({}: Props): ReactElement {
             {!contactDetails.companyname ||
             contactDetails.companyname === "" ? (
               askpublishName ? (
-                <div>
+                <div style={{ display: "flex" }}>
                   <CheckBox
                     id="publishName"
                     name="checkedB"
@@ -200,6 +200,7 @@ function PaymentsForm({}: Props): ReactElement {
                       setpublishName(!publishName);
                     }}
                     inputProps={{ "aria-label": "primary checkbox" }}
+                    color={"primary"}
                   />
                   <label htmlFor="publishName" style={{ paddingLeft: "9px" }}>
                     {t("askPublishName")}

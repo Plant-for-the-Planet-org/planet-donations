@@ -1,14 +1,15 @@
-import { withStyles } from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from "@material-ui/core/styles";
+import Checkbox from "@material-ui/core/Checkbox";
 
 export default function CheckBox(props: any) {
   const CheckBox = withStyles({
-    root: {
-      '& .MuiSvgIcon-root path': {
-        fill: '#68B030',
+    root: {},
+
+    checked: {
+      "& .MuiSvgIcon-root path": {
+        fill: "#68B030",
       },
     },
-    checked: {},
   })(Checkbox);
   return (
     <CheckBox
