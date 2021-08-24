@@ -8,6 +8,7 @@ import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
+import countriesData from "../Utils/countriesData.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -240,7 +241,8 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      loadPaymentSetup(router.query.to, country);
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup(to, country);
     }
   }, [router.query.to, country]);
 
@@ -259,7 +261,16 @@ export default function QueryParamProvider({ children }: any) {
       const config: any = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
-          setcountry(config.data.country);
+          const found = countriesData.some(
+            (arrayCountry) =>
+              arrayCountry.countryCode?.toUpperCase() ===
+              config.data.country?.toUpperCase()
+          );
+          if (found) {
+            setcountry(config.data.country.toUpperCase());
+          } else {
+            setcountry("DE");
+          }
         }
         if (!router.query.context) {
           setContactDetails({

@@ -79,7 +79,12 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
     }
-    setcountry(country);
+    // XX is hidden country and T1 is Tor browser
+    if (country === "XX" || country === "T1") {
+      setcountry("DE");
+    } else {
+      setcountry(country);
+    }
   }, []);
 
   // If gift details are present set gift
@@ -203,10 +208,11 @@ export async function getServerSideProps(context: any) {
     (context.query.to && !context.query.context) ||
     context.query.step === "donate"
   ) {
+    const to = context.query.to.replace(/\//g, "");
     donationStep = 1;
     try {
       const requestParams = {
-        url: `/app/projects/${context.query.to}`,
+        url: `/app/projects/${to}`,
         setshowErrorCard,
       };
       const project = await apiRequest(requestParams);
