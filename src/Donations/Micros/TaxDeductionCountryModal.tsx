@@ -38,8 +38,8 @@ export default function TaxDeductionCountryModal(props: any) {
       tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
     });
     tempCountriesData = tempCountriesData.sort(function (a, b) {
-      var countryA = a.countryName.toUpperCase();
-      var countryB = b.countryName.toUpperCase();
+      let countryA = a.countryName.toUpperCase();
+      let countryB = b.countryName.toUpperCase();
       return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
     });
     setCountriesData(tempCountriesData);
