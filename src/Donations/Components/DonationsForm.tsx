@@ -20,6 +20,7 @@ import DonationAmount from "../Micros/DonationAmount";
 import TreeDonation from "../Micros/DonationTypes/TreeDonation";
 import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
+import { useRouter } from "next/router";
 
 function DonationsForm() {
   const {
@@ -38,13 +39,13 @@ function DonationsForm() {
     isTaxDeductible,
     setshowErrorCard,
     queryToken,
-    frequency
+    frequency,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
-
+  const router = useRouter();
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
@@ -93,7 +94,7 @@ function DonationsForm() {
       setdonationID,
       token,
       setshowErrorCard,
-      frequency
+      frequency,
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
@@ -111,6 +112,7 @@ function DonationsForm() {
         token,
         country,
         setshowErrorCard,
+        router,
       });
     });
   };
@@ -140,7 +142,6 @@ function DonationsForm() {
           ) : (
             <></>
           )}
-
 
           {projectDetails.purpose === "funds" ? (
             <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
@@ -173,7 +174,12 @@ function DonationsForm() {
                     )}
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
-                    continueNext={() => setdonationStep(2)}
+                    continueNext={() => {
+                      setdonationStep(2);
+                      router.push({
+                        query: { ...router.query, step: "contact" },
+                      });
+                    }}
                     isPaymentPage={false}
                     paymentLabel={t("treesInCountry", {
                       treeCount: quantity,
