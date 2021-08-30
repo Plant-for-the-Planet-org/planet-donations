@@ -121,6 +121,7 @@ function Authentication({}: Props): ReactElement {
           <a
             href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
             target={"_blank"}
+            rel="noreferrer"
             className="user-profile"
           >
             {profile.image ? (

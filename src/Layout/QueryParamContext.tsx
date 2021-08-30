@@ -2,10 +2,9 @@ import { useRouter } from "next/dist/client/router";
 import React, { useState, ReactElement } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
-import {
-  getRandomProjects,
-} from "../Utils/projects/filterProjects";
+import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
+import countriesData from "../Utils/countriesData.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -17,7 +16,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: ({})=>{},
+  setpaymentSetup: ({}) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -51,11 +50,11 @@ export const QueryParamContext = React.createContext({
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
-  queryToken:"", 
+  queryToken: "",
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
-  setisDirectDonation:(value: boolean) => {},
-  frequency: "", 
+  setisDirectDonation: (value: boolean) => {},
+  frequency: "",
   setfrequency: (value: string) => {},
 });
 
@@ -94,9 +93,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentType, setPaymentType] = React.useState("");
 
- 
   const [quantity, setquantity] = useState(50);
-  const [frequency, setfrequency] = useState<null|string>("once");
+  const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -128,7 +126,7 @@ export default function QueryParamProvider({ children }: any) {
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
 
-  const [hideTaxDeduction, sethideTaxDeduction] = useState(false)
+  const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -138,17 +136,17 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {    
-    if(i18n && i18n.isInitialized){
+  React.useEffect(() => {
+    if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }
-  }, [language,router]);
+  }, [language, router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    let pattern = new RegExp(
+    const pattern = new RegExp(
       "^(https?:\\/\\/)?" + // protocol
         "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
         "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
@@ -175,7 +173,7 @@ export default function QueryParamProvider({ children }: any) {
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
-        let allowedDonationsProjects = projects.data.filter(
+        const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
@@ -218,7 +216,8 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      loadPaymentSetup(router.query.to, country);
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup(to, country);
     }
   }, [router.query.to, country]);
 
@@ -237,7 +236,16 @@ export default function QueryParamProvider({ children }: any) {
       const config: any = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
-          setcountry(config.data.country);
+          const found = countriesData.some(
+            (arrayCountry) =>
+              arrayCountry.countryCode?.toUpperCase() ===
+              config.data.country?.toUpperCase()
+          );
+          if (found) {
+            setcountry(config.data.country.toUpperCase());
+          } else {
+            setcountry("DE");
+          }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -263,14 +271,6 @@ export default function QueryParamProvider({ children }: any) {
       loadConfig();
     }
   }, [router.isReady]);
-
-  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-
-  React.useEffect(() => {
-    if (router.query.country) {
-      setcountry(router.query.country);
-    }
-  }, [router.query.country]);
 
   React.useEffect(() => {
     if (router.query.tenant) {
@@ -381,7 +381,7 @@ export default function QueryParamProvider({ children }: any) {
         setallowTaxDeductionChange,
         setisDirectDonation,
         frequency,
-        setfrequency
+        setfrequency,
       }}
     >
       {children}
@@ -416,7 +416,9 @@ function ErrorCard({
   }, [showErrorCard]);
 
   return showErrorCard ? (
-    <div className={`${theme} test-donation-bar`} style={{zIndex:15}}>{t("errorOccurred")}</div>
+    <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
+      {t("errorOccurred")}
+    </div>
   ) : (
     <></>
   );
