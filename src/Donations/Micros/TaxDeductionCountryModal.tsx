@@ -33,11 +33,16 @@ export default function TaxDeductionCountryModal(props: any) {
   };
 
   React.useEffect(() => {
+    let tempCountriesData: any = [];
     if (taxDeductionCountries && taxDeductionCountries.length > 0) {
-      const tempCountriesData: any = [];
-      taxDeductionCountries.forEach((countryCode: string) =>
-        tempCountriesData.push(getCountryDataBy("countryCode", countryCode))
-      );
+      taxDeductionCountries.forEach((countryCode: string) => {
+        tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
+      });
+      tempCountriesData = tempCountriesData.sort(function (a, b) {
+        const countryA = a.countryName.toUpperCase();
+        const countryB = b.countryName.toUpperCase();
+        return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
+      });
       setCountriesData(tempCountriesData);
     }
   }, []);
