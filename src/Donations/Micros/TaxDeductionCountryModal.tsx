@@ -14,9 +14,8 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 export default function TaxDeductionCountryModal(props: any) {
   const { openModal, handleModalClose, taxDeductionCountries } = props;
 
-  const { setcountry, country, setcurrency, currency } = React.useContext(
-    QueryParamContext
-  );
+  const { setcountry, country, setcurrency, currency } =
+    React.useContext(QueryParamContext);
 
   const { t, ready } = useTranslation("common");
 
@@ -34,10 +33,15 @@ export default function TaxDeductionCountryModal(props: any) {
   };
 
   React.useEffect(() => {
-    const tempCountriesData: any = [];
-    taxDeductionCountries.forEach((countryCode: string) =>
-      tempCountriesData.push(getCountryDataBy("countryCode", countryCode))
-    );
+    let tempCountriesData: any = [];
+    taxDeductionCountries.forEach((countryCode: string) => {
+      tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
+    });
+    tempCountriesData = tempCountriesData.sort(function (a, b) {
+      const countryA = a.countryName.toUpperCase();
+      const countryB = b.countryName.toUpperCase();
+      return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
+    });
     setCountriesData(tempCountriesData);
   }, []);
 
