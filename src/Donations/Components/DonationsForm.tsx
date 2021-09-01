@@ -49,7 +49,9 @@ function DonationsForm() {
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
-
+  React.useEffect(() => {
+    console.log(projectDetails, "projectDetails");
+  }, []);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");
@@ -135,7 +137,9 @@ function DonationsForm() {
             <></>
           )}
 
-          {process.env.RECURRENCY && projectDetails.purpose === "trees" ? (
+          {process.env.RECURRENCY &&
+          projectDetails.purpose === "trees" &&
+          projectDetails.frequencies ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
