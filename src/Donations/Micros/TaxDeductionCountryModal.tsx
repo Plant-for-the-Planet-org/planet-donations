@@ -40,7 +40,6 @@ export default function TaxDeductionCountryModal(props: any) {
     tempCountriesData = tempCountriesData.sort(function (a, b) {
       const countryA = t(`country:${a.countryCode.toLowerCase()}`);
       const countryB = t(`country:${b.countryCode.toLowerCase()}`);
-      console.log(countryA, countryB);
       return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
     });
     setCountriesData(tempCountriesData);
