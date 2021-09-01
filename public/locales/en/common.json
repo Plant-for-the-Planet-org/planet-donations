@@ -15,6 +15,7 @@
   "firstNameRequired": "First Name is required",
   "lastName": "Last Name",
   "lastNameRequired": "Last Name is required",
+  "atLeast3LettersRequired": "At least 3 letters required",
   "address": "Address",
   "addressRequired": "Address is required",
   "city": "City",
@@ -104,5 +105,5 @@
   "errorOccurred": "Something went wrong",
   "dedicatedTo": "Dedicated to",
   "message": "Message",
-  "contributedToTpo":"I contributed {{amount}} to {{organization}}"
+  "contributedToTpo": "I contributed {{amount}} to {{organization}}"
 }

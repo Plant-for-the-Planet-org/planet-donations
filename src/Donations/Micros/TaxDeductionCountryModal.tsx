@@ -39,13 +39,13 @@ export default function TaxDeductionCountryModal(props: any) {
         tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
       });
       tempCountriesData = tempCountriesData.sort(function (a, b) {
-        const countryA = a.countryName.toUpperCase();
-        const countryB = b.countryName.toUpperCase();
+        const countryA = t(`country:${a.countryCode.toLowerCase()}`);
+        const countryB = t(`country:${b.countryCode.toLowerCase()}`);
         return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
       });
       setCountriesData(tempCountriesData);
     }
-  }, []);
+  }, [t]);
 
   return ready ? (
     <Modal

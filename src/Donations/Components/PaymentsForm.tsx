@@ -24,6 +24,7 @@ import NewPaypal from "../PaymentMethods/NewPaypal";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 
 interface Props {}
@@ -202,17 +203,20 @@ function PaymentsForm({}: Props): ReactElement {
               {!contactDetails.companyname ||
               contactDetails.companyname === "" ? (
                 askpublishName ? (
-                  <div>
-                    <label htmlFor="publishName">{t("askPublishName")}</label>
-                    <ToggleSwitch
+                  <div style={{ display: "flex", alignItems: "flex-start" }}>
+                    <CheckBox
                       id="publishName"
+                      name="checkedB"
                       checked={publishName}
                       onChange={() => {
                         setpublishName(!publishName);
                       }}
-                      name="checkedB"
-                      inputProps={{ "aria-label": "secondary checkbox" }}
+                      inputProps={{ "aria-label": "primary checkbox" }}
+                      color={"primary"}
                     />
+                    <label htmlFor="publishName" style={{ paddingLeft: "9px" }}>
+                      {t("askPublishName")}
+                    </label>
                   </div>
                 ) : (
                   <div>
@@ -291,9 +295,7 @@ function PaymentsForm({}: Props): ReactElement {
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&
-                  (frequency !== "once"
-                    ? false
-                    : true)
+                  (frequency !== "once" ? false : true)
                 }
                 showNativePay={
                   paymentSetup?.gateways?.stripe?.account &&

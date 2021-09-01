@@ -160,27 +160,40 @@ function ContactsForm({}: Props): ReactElement {
           <div className="d-flex row">
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({
+                  required: true,
+                  minLength: 3,
+                })}
                 label={t("firstName")}
                 variant="outlined"
                 name="firstname"
                 defaultValue={contactDetails.firstname}
               />
-              {errors.firstname && (
+              {errors.firstname && errors.firstname.type === "required" && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
+              )}
+              {errors.firstname && errors.firstname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({ required: true, minLength: 3 })}
                 label={t("lastName")}
                 variant="outlined"
                 name="lastname"
                 defaultValue={contactDetails.lastname}
               />
-              {errors.lastname && (
+              {errors.lastname && errors.lastname.type === "required" && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
+              )}
+              {errors.lastname && errors.lastname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
           </div>
