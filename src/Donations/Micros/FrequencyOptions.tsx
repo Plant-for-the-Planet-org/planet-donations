@@ -7,7 +7,7 @@ function FrequencyOptions({}: Props): ReactElement {
   const { paymentSetup, setfrequency, frequency } =
     React.useContext(QueryParamContext);
 
-  const customfrequencies = ["once", "monthly", "annually"];
+  const customfrequencies = ["once", "monthly", "yearly"];
 
   return (
     <div className="d-flex justify-content-between flex-wrap frequency-selection-container mt-20">
