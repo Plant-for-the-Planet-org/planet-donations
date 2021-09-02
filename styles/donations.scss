@@ -128,6 +128,9 @@
       text-decoration: underline;
     }
   }
+  .profile-name {
+    color: $primaryFontColor !important;
+  }
   .profile-pic {
     height: 30px;
     width: 30px;
@@ -224,7 +227,7 @@
       }
       .tree-selection-option-text {
         color: $primaryFontColor;
-        p{
+        p {
           color: $primaryFontColor;
         }
       }
@@ -271,11 +274,11 @@
   .suggestion {
     min-width: 100%;
     &:nth-child(even) {
-      background-color: rgba(var(--background-color-dark),0.6);
+      background-color: rgba(var(--background-color-dark), 0.6);
     }
     padding: 12px;
     border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
-    &:hover{
+    &:hover {
       cursor: pointer;
       background-color: $backgroundColorDark;
     }
@@ -348,16 +351,16 @@
     &:hover {
       cursor: pointer;
       color: $primaryFontColor;
-      background-color: #F2F2F7;
-      border: 0.5px solid #F2F2F7;
+      background-color: #f2f2f7;
+      border: 0.5px solid #f2f2f7;
     }
     .check-mark {
       display: none;
     }
   }
   .payment-method-selected {
-    background-color: #F2F2F7;
-    border: 0.5px solid #F2F2F7;
+    background-color: #f2f2f7;
+    border: 0.5px solid #f2f2f7;
     color: $primaryFontColor;
     font-weight: 600;
 
@@ -510,8 +513,8 @@
 }
 
 .contact-details-info {
-  p{
-    color: white!important;
+  p {
+    color: white !important;
   }
   button {
     display: flex;
@@ -697,6 +700,6 @@
   }
 }
 
-.ElementsApp .Icon-fill{
+.ElementsApp .Icon-fill {
   fill: $primaryFontColor;
 }

@@ -118,27 +118,17 @@ function Authentication({}: Props): ReactElement {
 
       {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
-          <a
-            href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
-            target={"_blank"}
-            rel="noreferrer"
-            className="user-profile"
-          >
-            {profile.image ? (
-              <img
-                className="profile-pic"
-                src={getImageUrl("profile", "avatar", profile.image)}
-                alt={profile ? profile.displayName : user?.name}
-              />
-            ) : user?.picture ? (
-              <img className="profile-pic" src={user.picture} alt={user.name} />
-            ) : (
-              <div className="profile-pic no-pic">
-                {profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}
-              </div>
-            )}
-            <p>{profile ? profile.displayName : user?.name}</p>
-          </a>
+          {!profile.isPrivate ? (
+            <a
+              href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
+              target={"_blank"}
+              rel="noreferrer"
+            >
+              <UserProfile profile={profile} user={user} />
+            </a>
+          ) : (
+            <UserProfile profile={profile} user={user} />
+          )}
           {user ? (
             <button
               className="login-continue"
@@ -240,4 +230,35 @@ function VerifyEmailModal({
       </Fade>
     </Modal>
   ) : null;
+}
+
+interface UserProfileProps {
+  profile: Object;
+  user: Object;
+}
+function UserProfile({ profile, user }: UserProfileProps) {
+  return (
+    <div className="user-profile">
+      {profile.image ? (
+        <img
+          className="profile-pic"
+          src={getImageUrl("profile", "avatar", profile.image)}
+          alt={profile ? profile.displayName : user?.name}
+        />
+      ) : user?.picture ? (
+        <img className="profile-pic" src={user.picture} alt={user.name} />
+      ) : (
+        <div className="profile-pic no-pic">
+          {profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}
+        </div>
+      )}
+      {profile.isPrivate ? (
+        <div className="profile-name">
+          {profile ? profile.displayName : user?.name}
+        </div>
+      ) : (
+        <p>{profile ? profile.displayName : user?.name}</p>
+      )}
+    </div>
+  );
 }
