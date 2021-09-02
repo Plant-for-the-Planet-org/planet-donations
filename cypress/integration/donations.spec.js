@@ -35,13 +35,13 @@ function cardPayment(cardNumber, cardExpiry, cardCvc) {
         cy.fillElementsInput('cardCvc', cardCvc);
       });
     cy.get('[data-test-id="test-donateButton"]').click()
-    // .then(() => {
-    //     cy.wait(8000).then(() => {
-    //         // cy.get('#test-source-authorize-3ds').click()
-    //         cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
-    //     })
+    .then(() => {
+        cy.wait(8000).then(() => {
+            // cy.get('#test-source-authorize-3ds').click()
+            cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
+        })
         
-    // })
+    })
 }
 
 function sofortPayment(){
@@ -58,55 +58,19 @@ function sofortPayment(){
 describe("Donations", () => {
     it("Testing with Germany address ",() => {
         createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    });
-
-    it("Card Payment", () => {
-        cy.fillOutCreditCardForm({ number: '4000002760003184', code: '123' });
-        // cardPayment("4242424242424242", "424", "242")
-    });
+        cardPayment("4242424242424242", "424", "242")
+    });;
     
     // International Cards
-    // it("Testing with Germany Visa", () => {
-    //     createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    //     cardPayment("4000002760000016", "424", "242")
-    // });
+    it("Testing with Germany Visa", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cardPayment("4000002760000016", "424", "242")
+    });
 
-    // it("Testing with Spain Visa", () => {
-    //     createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
-    //     cardPayment("4000007240000007", "424", "242")
-    // }); 
+    it("Testing with Spain Visa", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cardPayment("4000007240000007", "424", "242")
+    }); 
     
-    // it("Testing with 3D secure", () => {
-    //     createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    //     cardPayment("4000002760003184", "424", "242")
-    //     cy.waitForStripe3dIframe(challengeFrames => {
-    //         cy.wrap(challengeFrames[0])
-    //           .contains('button', 'COMPLETE AUTHENTICATION')
-    //           .click();
-    //       });
-    // });
 
-    // it("Sofort Payment", () => {
-    //     sofortPayment()
-    // })
-    
-    // it("Testing with Indian address",() => {
-    //     createDonation("yucatan", "15", "Rishabh", "Singh", "rish.singh@gmail.com", "Mira Bhayanderrr", "Mumbai", "India{enter}", "401107", "4242424242424242", "424", "242")
-    // });
-
-    // To search project
-    // it('localhost', () => {
-    //     cy.visit('localhost:3000')
-    // })
-    
-      
-    //   cy.contains('Payment failed validation assertion');
-    //   cy.contains('button', 'Pay').click();
-      
-    //   cy.waitForStripe3dIframe(challengeFrames => {
-    //     cy.wrap(challengeFrames[0])
-    //       .contains('button', 'Complete')
-    //       .click();
-    //   });
-    
 })
