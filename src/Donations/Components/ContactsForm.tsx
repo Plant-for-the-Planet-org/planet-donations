@@ -116,6 +116,8 @@ function ContactsForm({}: Props): ReactElement {
   };
 
   const { theme } = React.useContext(ThemeContext);
+  let suggestion_counter = 0;
+  
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
@@ -201,7 +203,7 @@ function ContactsForm({}: Props): ReactElement {
                   <div className="suggestions-container">
                     {addressSugggestions.map((suggestion) => {
                       return (
-                        <div
+                        <div key={'suggestion' + suggestion_counter++}
                           onMouseDown={() => {
                             getAddress(suggestion.text);
                           }}

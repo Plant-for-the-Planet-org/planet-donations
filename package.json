@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint pages src",
+    "lint:errors": "eslint pages src --quiet",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },

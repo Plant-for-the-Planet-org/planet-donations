@@ -4,7 +4,6 @@ import LeafIcon from "../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
-import { ProjectTypes } from "../Common/Types";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import {
@@ -28,6 +27,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
+  setpaymentSetup: ({})=>{},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -54,6 +54,7 @@ export const QueryParamContext = React.createContext({
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
   allowTaxDeductionChange: true,
+  setallowTaxDeductionChange: (value: boolean) => {},
   donationUid: null,
   setDonationUid: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
@@ -61,7 +62,9 @@ export const QueryParamContext = React.createContext({
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
   queryToken:"", 
-  setqueryToken: (value: string) => ""
+  setqueryToken: (value: string) => "",
+  sethideTaxDeduction: (value: boolean) => {},
+  setisDirectDonation:(value: boolean) => {}
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -169,7 +172,7 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    let pattern = new RegExp(
+    const pattern = new RegExp(
       "^(https?:\\/\\/)?" + // protocol
         "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
         "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
@@ -188,23 +191,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.return_to]);
 
-  // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
-  async function loadProject(projectGUID: string) {
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}`,
-        setshowErrorCard,
-      };
-      const project: ProjectTypes = await apiRequest(requestParams);
-      if (project.data) {
-        setprojectDetails(project.data);
-      }
-    } catch (err) {
-      loadselectedProjects();
-      setdonationStep(0);
-    }
-  }
-
   async function loadselectedProjects() {
     try {
       const requestParams = {
@@ -213,7 +199,7 @@ export default function QueryParamProvider({ children }: any) {
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
-        let allowedDonationsProjects = projects.data.filter(
+        const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
@@ -301,116 +287,6 @@ export default function QueryParamProvider({ children }: any) {
       loadConfig();
     }
   }, [router.isReady]);
-
-  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-
-  React.useEffect(() => {
-    if (router.query.country) {
-      setcountry(router.query.country);
-    }
-  }, [router.query.country]);
-
-  // Donation ID = donationid => This will be received from the URL params
-  async function loadDonation() {
-    try {
-      const requestParams = {
-        url: `/app/donations/${router.query.context}`,
-        setshowErrorCard,
-      };
-      const donation: any = await apiRequest(requestParams);
-
-      if (donation.status === 200) {
-        setdonationID(router.query.context);
-        // if the donation is present means the donation is already created
-        // Set shouldCreateDonation as false
-        setshouldCreateDonation(false);
-        // fetch project - payment setup
-        await loadProject(donation.data.project.id);
-
-
-        if (donation.data.taxDeductionCountry) {
-          setcountry(donation.data.taxDeductionCountry);
-          setIsTaxDeductible(true);
-          await loadPaymentSetup(
-            donation.data.project.id,
-            donation.data.taxDeductionCountry
-          );
-        } else {
-          sethideTaxDeduction(true);
-          const newcountry = donation.data.donor.country;          
-          setcountry(newcountry);
-          await loadPaymentSetup(donation.data.project.id, newcountry);
-        }
-
-        setallowTaxDeductionChange(false);
-
-        settreeCount(donation.data.treeCount);
-        if (donation.data.donor) {
-          let contactDetails = {
-            firstname: donation.data.donor.firstname
-              ? donation.data.donor.firstname
-              : "",
-            lastname: donation.data.donor.lastname
-              ? donation.data.donor.lastname
-              : "",
-            email: donation.data.donor.email ? donation.data.donor.email : "",
-            address: donation.data.donor.address
-              ? donation.data.donor.address
-              : "",
-            city: donation.data.donor.city ? donation.data.donor.city : "",
-            zipCode: donation.data.donor.zipCode
-              ? donation.data.donor.zipCode
-              : "",
-            country: donation.data.donor.country
-              ? donation.data.donor.country
-              : "",
-            companyname: donation.data.donor.companyname
-              ? donation.data.donor.companyname
-              : "",
-          };
-          setContactDetails(contactDetails);
-        }
-
-        // Check if the donation status is paid or successful - if yes directly show thank you page
-        // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
-        if (
-          (router.query.method === "Sofort" ||
-            router.query.method === "Giropay") &&
-          (router.query.redirect_status === "succeeded" ||
-            router.query.redirect_status === "failed") &&
-          router.query.payment_intent
-        ) {
-          setdonationStep(4);
-        } else if (
-          donation.data.paymentStatus === "success" ||
-          donation.data.paymentStatus === "paid" ||
-          donation.data.paymentStatus === "failed" ||
-          donation.data.paymentStatus === "pending"
-        ) {
-          setdonationStep(4);
-        } else if (
-          donation.data.paymentStatus === "initiated" ||
-          donation.data.paymentStatus === "draft"
-        ) {
-          // Check if all contact details are present - if not send user to step 2 else step 3
-          // Check if all payment cards are present - if yes then show it on step 3
-          setisDirectDonation(true);
-          setdonationStep(3);
-        }
-      } else {
-        // SET Error that no donation is found
-        setdonationStep(1);
-      }
-    } catch (err) {
-      loadselectedProjects();
-      setdonationStep(0);
-    }
-  }
-  React.useEffect(() => {
-    if (router.query.context) {
-      loadDonation();
-    }
-  }, [router.query.context]);
 
   React.useEffect(() => {
     if (router.query.tenant) {
@@ -516,7 +392,11 @@ export default function QueryParamProvider({ children }: any) {
         loadselectedProjects,
         hideTaxDeduction,
         queryToken,
-        setqueryToken
+        setqueryToken,
+        setpaymentSetup,
+        sethideTaxDeduction,
+        setallowTaxDeductionChange,
+        setisDirectDonation
       }}
     >
       {children}
