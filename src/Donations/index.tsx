@@ -76,7 +76,7 @@ function DonationInfo() {
     projectDetails,
     donationID,
     donationStep,
-    treeCount,
+    quantity,
     paymentSetup,
     currency,
     contactDetails,
@@ -85,12 +85,45 @@ function DonationInfo() {
     tenant,
   } = React.useContext(QueryParamContext);
 
+  const TPOImage = () => {
+    return projectDetails.tpo.image ? (
+      <img
+        className="project-organisation-image"
+        src={getImageUrl("profile", "thumb", projectDetails.tpo.image)}
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "48px",
+          border: "1px solid #fff",
+        }}
+      />
+    ) : (
+      <div
+        style={{
+          width: "48px",
+          height: "48px",
+          borderRadius: "48px",
+          border: "1px solid #fff",
+        }}
+        className="project-organisation-image no-project-organisation-image mb-10"
+      >
+        {projectDetails.tpo.name.charAt(0)}
+      </div>
+    );
+  };
+
   return (
     <div className="donations-info-container">
       <Image
         layout="fill"
         objectFit="cover"
-        src={getTenantBackground(tenant)}
+        src={
+          projectDetails &&
+          projectDetails.purpose !== "trees" &&
+          projectDetails.image
+            ? projectDetails.image
+            : getTenantBackground(tenant)
+        }
         className="background-image"
         placeholder={"blur"}
         alt="Background image with trees"
@@ -99,43 +132,19 @@ function DonationInfo() {
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
-          {donationStep > 0 && (
-            <a
-              rel="noreferrer"
-              target="_blank"
-              href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-              style={{ width: "fit-content" }}
-            >
-              {projectDetails.tpo.image ? (
-                <img
-                  className="project-organisation-image"
-                  src={getImageUrl(
-                    "profile",
-                    "thumb",
-                    projectDetails.tpo.image
-                  )}
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "48px",
-                    border: "1px solid #fff",
-                  }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "48px",
-                    border: "1px solid #fff",
-                  }}
-                  className="project-organisation-image no-project-organisation-image mb-10"
-                >
-                  {projectDetails.tpo.name.charAt(0)}
-                </div>
-              )}
-            </a>
-          )}
+          {donationStep > 0 &&
+            (projectDetails.purpose === "trees" ? (
+              <a
+                rel="noreferrer"
+                target="_blank"
+                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                style={{ width: "fit-content" }}
+              >
+                <TPOImage />
+              </a>
+            ) : (
+              <TPOImage />
+            ))}
           {(donationStep === 2 || donationStep === 3) && (
             <div className="contact-details-info">
               <div className={"w-100 mt-10 text-white"}>
@@ -144,14 +153,14 @@ function DonationInfo() {
                   {getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.treeCost * treeCount
+                    paymentSetup.unitCost * quantity
                   )}
                 </span>
                 {t("fortreeCountTrees", {
-                  count: Number(treeCount),
+                  count: Number(quantity),
                   treeCount: getFormattedNumber(
                     i18n.language,
-                    Number(treeCount)
+                    Number(quantity)
                   ),
                 })}
               </div>
@@ -159,15 +168,20 @@ function DonationInfo() {
           )}
           {donationStep > 0 ? (
             <>
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
-                className="title-text text-white"
-              >
-                {projectDetails.name}
-              </a>
-              {projectDetails.tpo && (
+              {projectDetails.purpose === "trees" ? (
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                  className="title-text text-white"
+                >
+                  {projectDetails.name}
+                </a>
+              ) : (
+                <p className="title-text text-white">{projectDetails.name}</p>
+              )}
+
+              {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a
                   rel="noreferrer"
                   target="_blank"

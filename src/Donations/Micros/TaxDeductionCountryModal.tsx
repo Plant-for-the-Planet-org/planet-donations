@@ -34,15 +34,17 @@ export default function TaxDeductionCountryModal(props: any) {
 
   React.useEffect(() => {
     let tempCountriesData: any = [];
-    taxDeductionCountries.forEach((countryCode: string) => {
-      tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
-    });
-    tempCountriesData = tempCountriesData.sort(function (a, b) {
-      const countryA = t(`country:${a.countryCode.toLowerCase()}`);
-      const countryB = t(`country:${b.countryCode.toLowerCase()}`);
-      return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
-    });
-    setCountriesData(tempCountriesData);
+    if (taxDeductionCountries && taxDeductionCountries.length > 0) {
+      taxDeductionCountries.forEach((countryCode: string) => {
+        tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
+      });
+      tempCountriesData = tempCountriesData.sort(function (a, b) {
+        const countryA = t(`country:${a.countryCode.toLowerCase()}`);
+        const countryB = t(`country:${b.countryCode.toLowerCase()}`);
+        return countryA < countryB ? -1 : countryA > countryB ? 1 : 0;
+      });
+      setCountriesData(tempCountriesData);
+    }
   }, [t]);
 
   return ready ? (

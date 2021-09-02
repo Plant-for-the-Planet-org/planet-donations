@@ -27,7 +27,6 @@ import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 
-
 interface Props {}
 
 function PaymentsForm({}: Props): ReactElement {
@@ -55,7 +54,7 @@ function PaymentsForm({}: Props): ReactElement {
     contactDetails,
     shouldCreateDonation,
     setshouldCreateDonation,
-    treeCount,
+    quantity,
     projectDetails,
     isGift,
     giftDetails,
@@ -65,6 +64,7 @@ function PaymentsForm({}: Props): ReactElement {
     setshowErrorCard,
     hideTaxDeduction,
     queryToken,
+    frequency,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -111,8 +111,8 @@ function PaymentsForm({}: Props): ReactElement {
       isTaxDeductible,
       country,
       projectDetails,
-      treeCost: paymentSetup.treeCost,
-      treeCount,
+      unitCost: paymentSetup.unitCost,
+      quantity,
       currency,
       contactDetails,
       isGift,
@@ -122,6 +122,7 @@ function PaymentsForm({}: Props): ReactElement {
       setdonationID,
       token,
       setshowErrorCard,
+      frequency,
     });
 
     if (donation) {
@@ -197,34 +198,38 @@ function PaymentsForm({}: Props): ReactElement {
 
           {!hideTaxDeduction && <TaxDeductionOption />}
 
-          <div className={"mt-20"}>
-            {!contactDetails.companyname ||
-            contactDetails.companyname === "" ? (
-              askpublishName ? (
-                <div style={{ display: "flex", alignItems: "flex-start" }}>
-                  <CheckBox
-                    id="publishName"
-                    name="checkedB"
-                    checked={publishName}
-                    onChange={() => {
-                      setpublishName(!publishName);
-                    }}
-                    inputProps={{ "aria-label": "primary checkbox" }}
-                    color={"primary"}
-                  />
-                  <label htmlFor="publishName" style={{ paddingLeft: "9px" }}>
-                    {t("askPublishName")}
-                  </label>
-                </div>
-              ) : (
-                <div>
-                  <label style={{ textAlign: "center" }}>
-                    {t("nameAlreadyPublished")}
-                  </label>
-                </div>
-              )
-            ) : null}
-          </div>
+          {projectDetails.purpose !== "funds" ? (
+            <div className={"mt-20"}>
+              {!contactDetails.companyname ||
+              contactDetails.companyname === "" ? (
+                askpublishName ? (
+                  <div style={{ display: "flex", alignItems: "flex-start" }}>
+                    <CheckBox
+                      id="publishName"
+                      name="checkedB"
+                      checked={publishName}
+                      onChange={() => {
+                        setpublishName(!publishName);
+                      }}
+                      inputProps={{ "aria-label": "primary checkbox" }}
+                      color={"primary"}
+                    />
+                    <label htmlFor="publishName" style={{ paddingLeft: "9px" }}>
+                      {t("askPublishName")}
+                    </label>
+                  </div>
+                ) : (
+                  <div>
+                    <label style={{ textAlign: "center" }}>
+                      {t("nameAlreadyPublished")}
+                    </label>
+                  </div>
+                )
+              ) : null}
+            </div>
+          ) : (
+            <></>
+          )}
 
           {paymentError && (
             <div
@@ -243,34 +248,63 @@ function PaymentsForm({}: Props): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={paymentSetup?.gateways.stripe.methods.includes(
-                  "stripe_cc"
-                )}
+                showCC={
+                  paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_cc"
+                      )
+                    : true)
+                }
                 showGiroPay={
                   currency === "EUR" &&
                   country === "DE" &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_giropay"
-                  )
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_giropay"
+                      )
+                    : true)
                 }
                 showSepa={
                   currency === "EUR" &&
                   isAuthenticated &&
-                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                  paymentSetup?.gateways.stripe.methods.includes(
+                    "stripe_sepa"
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_sepa"
+                      )
+                    : true)
                 }
                 showSofort={
                   currency === "EUR" &&
                   sofortCountries.includes(country) &&
                   paymentSetup?.gateways.stripe.methods.includes(
                     "stripe_sofort"
-                  )
+                  ) &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_sofort"
+                      )
+                    : true)
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
-                  paymentSetup?.gateways.paypal
+                  paymentSetup?.gateways.paypal &&
+                  (frequency !== "once" ? false : true)
                 }
                 showNativePay={
-                  paymentSetup?.gateways?.stripe?.account && currency
+                  paymentSetup?.gateways?.stripe?.account &&
+                  currency &&
+                  (frequency !== "once"
+                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                        "stripe_cc"
+                      )
+                    : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
               />
@@ -290,7 +324,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      treeCount * paymentSetup.treeCost
+                      quantity * paymentSetup.unitCost
                     )}
                     onPaymentFunction={(data) =>
                       onSubmitPayment("stripe", data)
@@ -327,8 +361,8 @@ function PaymentsForm({}: Props): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    treeCount={treeCount}
-                    treeCost={paymentSetup.treeCost}
+                    quantity={quantity}
+                    unitCost={paymentSetup.unitCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

@@ -87,8 +87,8 @@ export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
   projectDetails: Object;
-  treeCount: number;
-  treeCost: number;
+  quantity: number;
+  unitCost: number;
   currency: String;
   contactDetails: Object;
   giftDetails: giftDetailsProps;
@@ -98,4 +98,5 @@ export interface CreateDonationFunctionProps {
   setdonationID: any;
   token: any;
   setshowErrorCard: Function;
+  frequency: string | null;
 }

@@ -208,24 +208,82 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  .tree-selection-option {
-    width: 90px; // Width 100px supported from
-    height: 54px;
+}
+.tree-selection-option {
+  width: 90px; // Width 100px supported from
+  height: 54px;
+  border: 1px solid $greyColor;
+  border-radius: 4px;
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+  &.tree-selection-option-selected,
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    border: 1px solid $primaryColor;
+    > svg {
+      filter: grayscale(0%) opacity(1);
+    }
+    .tree-selection-option-text {
+      color: $primaryFontColor;
+      p {
+        color: $primaryFontColor;
+      }
+    }
+  }
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+  > svg {
+    filter: grayscale(100%) opacity(0.5);
+  }
+  .tree-selection-option-text {
+    text-align: center;
+    line-height: 1;
+    margin-left: 10px;
+    color: $darkGreyColor;
+    > p {
+      font-size: 14px;
+      font-weight: 800;
+      color: $darkGreyColor;
+    }
+    > span {
+      font-size: 12px;
+    }
+  }
+}
+
+.funding-selection-options-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .funding-selection-option {
+    width: 140px;
+    // height: 80px;
     border: 1px solid $greyColor;
     border-radius: 4px;
     display: flex;
-    padding: 8px;
-    justify-content: center;
+    flex-direction: column;
+    padding: 12px;
+    margin-top: 20px;
     align-items: center;
-    &.tree-selection-option-selected,
+    justify-content: center;
+    text-align: center;
+    &.funding-selection-option-selected,
     &:hover,
     &:focus {
       cursor: pointer;
       border: 1px solid $primaryColor;
-      > svg {
+      > .funding-icon {
         filter: grayscale(0%) opacity(1);
       }
-      .tree-selection-option-text {
+      .funding-selection-option-text {
         color: $primaryFontColor;
         p {
           color: $primaryFontColor;
@@ -238,26 +296,56 @@
     &:active {
       transform: scale(0.98);
     }
-    > svg {
+    > .funding-icon {
       filter: grayscale(100%) opacity(0.5);
+      height: 40px;
+      width: 40px;
     }
-    .tree-selection-option-text {
-      text-align: center;
+    .funding-selection-option-text {
+      text-align: left;
       line-height: 1;
-      margin-left: 10px;
+      // margin-left: 12px;
       color: $darkGreyColor;
-      > p {
-        font-size: 14px;
-        font-weight: 800;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      p {
         color: $darkGreyColor;
+        margin-bottom: 10px;
       }
       > span {
-        font-size: 12px;
+        margin-top: 10px;
       }
     }
   }
 }
 
+.frequency-selection-container{
+  display: flex;
+  flex-direction: row;
+  background-color: $backgroundColorDark;
+  height: 50px;
+  border-radius: 25px;
+  padding: 8px;
+}
+.frequency-selection-option{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex: 1;
+  border-radius: 25px;
+  color: $primaryFontColor;
+  font-weight: 600;
+  text-transform: capitalize;
+  &:hover{
+    cursor: pointer;
+  }
+}
+.frequency-selection-option-selected{
+  background-color: $primaryColor;
+  color: $light;
+}
 .custom-selection {
   flex-grow: 1;
   margin-left: 25px;
@@ -299,7 +387,8 @@
   }
 }
 
-.custom-tree-input {
+.custom-tree-input,
+.funding-custom-tree-input {
   border: 0px;
   border-bottom: 1px solid $primaryFontColor;
   margin: 0px 10px;
@@ -313,6 +402,13 @@
   outline: 0px;
   font-size: 16px;
   letter-spacing: 0.5px;
+}
+.funding-custom-tree-input {
+  text-align: center;
+  margin: 0px;
+  margin-left: -16px;
+  width: 50%;
+  font-size: 14px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
@@ -546,10 +642,13 @@
     max-width: 420px;
     padding: 30px;
   }
-  .tree-selection-options-container {
-    .tree-selection-option {
-      width: 100px;
-      padding: 12px;
+  .tree-selection-option {
+    width: 100px;
+    padding: 12px;
+  }
+  .funding-selection-options-container {
+    .funding-selection-option {
+      width: 170px;
     }
   }
   .custom-selection {

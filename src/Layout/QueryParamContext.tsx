@@ -1,9 +1,5 @@
-import { useRouter } from "next/router";
-import React, { Component, useState, ReactElement } from "react";
-import LeafIcon from "../../public/assets/icons/LeafIcon";
-import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
-import TreeIcon from "../../public/assets/icons/TreeIcon";
-import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
+import { useRouter } from "next/dist/client/router";
+import React, { useState, ReactElement } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
@@ -15,12 +11,6 @@ export const QueryParamContext = React.createContext({
   setisGift: (value: boolean) => {},
   giftDetails: {},
   setgiftDetails: (value: {}) => {},
-  treeSelectionOptions: [
-    {
-      treeCount: 50,
-      iconFile: Component,
-    },
-  ],
   contactDetails: {},
   setContactDetails: (value: {}) => {},
   country: "",
@@ -32,8 +22,8 @@ export const QueryParamContext = React.createContext({
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
-  treeCount: 50,
-  settreeCount: (value: number) => {},
+  quantity: 50,
+  setquantity: (value: number) => {},
   language: "en",
   setlanguage: (value: string) => {},
   donationID: null,
@@ -64,6 +54,8 @@ export const QueryParamContext = React.createContext({
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
   setisDirectDonation: (value: boolean) => {},
+  frequency: "",
+  setfrequency: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -101,25 +93,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentType, setPaymentType] = React.useState("");
 
-  const treeSelectionOptions = [
-    {
-      treeCount: 10,
-      iconFile: <LeafIcon />,
-    },
-    {
-      treeCount: 20,
-      iconFile: <TwoLeafIcon />,
-    },
-    {
-      treeCount: 50,
-      iconFile: <PlantPotIcon />,
-    },
-    {
-      treeCount: 150,
-      iconFile: <TreeIcon />,
-    },
-  ];
-  const [treeCount, settreeCount] = useState(50);
+  const [quantity, setquantity] = useState(50);
+  const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -315,9 +290,9 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.trees) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.trees) > 0) {
-        settreeCount(Number(router.query.trees));
+        setquantity(Number(router.query.trees));
       } else {
-        settreeCount(50);
+        setquantity(50);
       }
     }
   }, [router.query.trees]);
@@ -339,7 +314,7 @@ export default function QueryParamProvider({ children }: any) {
     setshouldCreateDonation(true);
   }, [
     paymentSetup,
-    treeCount,
+    quantity,
     isGift,
     giftDetails,
     contactDetails.firstname,
@@ -362,7 +337,6 @@ export default function QueryParamProvider({ children }: any) {
         setisGift,
         giftDetails,
         setgiftDetails,
-        treeSelectionOptions,
         contactDetails,
         setContactDetails,
         country,
@@ -373,8 +347,8 @@ export default function QueryParamProvider({ children }: any) {
         donationStep,
         setdonationStep,
         projectDetails,
-        treeCount,
-        settreeCount,
+        quantity,
+        setquantity,
         language,
         setlanguage,
         donationID,
@@ -406,6 +380,8 @@ export default function QueryParamProvider({ children }: any) {
         sethideTaxDeduction,
         setallowTaxDeductionChange,
         setisDirectDonation,
+        frequency,
+        setfrequency,
       }}
     >
       {children}
