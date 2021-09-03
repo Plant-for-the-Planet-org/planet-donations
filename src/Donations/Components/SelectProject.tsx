@@ -10,7 +10,7 @@ import {
 } from "../../Utils/projects/filterProjects";
 import { useDebouncedEffect } from "../../Utils/useDebouncedEffect";
 import NotFound from "./../../../public/assets/icons/NotFound";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
 
@@ -43,7 +43,7 @@ function SelectProject({}: Props): ReactElement {
     } else if (!trottledSearchValue) {
       if (allProjects?.length < 6) {
         setSelectedProjects(allProjects);
-      } else { 
+      } else {
         const randomProjects = getRandomProjects(allProjects, 6);
         setSelectedProjects(randomProjects);
       }
@@ -53,7 +53,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push({query: {...router.query, to: slug },})
+    router.push({ query: { ...router.query, to: slug, step: "donate" } });
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
@@ -100,9 +100,7 @@ function SelectProject({}: Props): ReactElement {
                 )}
                 {project.properties.country && (
                   <p className="project-country">
-                    {
-                      t(`country:${project.properties.country.toLowerCase()}`)
-                    }
+                    {t(`country:${project.properties.country.toLowerCase()}`)}
                   </p>
                 )}
                 <p className="project-name">{project.properties.name}</p>

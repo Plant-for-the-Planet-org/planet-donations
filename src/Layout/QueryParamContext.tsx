@@ -1,40 +1,29 @@
 import { useRouter } from "next/dist/client/router";
-import React, { Component, useState, ReactElement } from "react";
-import LeafIcon from "../../public/assets/icons/LeafIcon";
-import PlantPotIcon from "../../public/assets/icons/PlantPotIcon";
-import TreeIcon from "../../public/assets/icons/TreeIcon";
-import TwoLeafIcon from "../../public/assets/icons/TwoLeafIcon";
-import { ProjectTypes } from "../Common/Types";
+import React, { useState, ReactElement } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
-import {
-  getRandomProjects,
-} from "../Utils/projects/filterProjects";
+import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
+import countriesData from "../Utils/countriesData.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
   setisGift: (value: boolean) => {},
   giftDetails: {},
   setgiftDetails: (value: {}) => {},
-  treeSelectionOptions: [
-    {
-      treeCount: 50,
-      iconFile: Component,
-    },
-  ],
   contactDetails: {},
   setContactDetails: (value: {}) => {},
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
+  setpaymentSetup: ({}) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
-  treeCount: 50,
-  settreeCount: (value: number) => {},
+  quantity: 50,
+  setquantity: (value: number) => {},
   language: "en",
   setlanguage: (value: string) => {},
   donationID: null,
@@ -54,14 +43,19 @@ export const QueryParamContext = React.createContext({
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
   allowTaxDeductionChange: true,
+  setallowTaxDeductionChange: (value: boolean) => {},
   donationUid: null,
   setDonationUid: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
-  queryToken:"", 
-  setqueryToken: (value: string) => ""
+  queryToken: "",
+  setqueryToken: (value: string) => "",
+  sethideTaxDeduction: (value: boolean) => {},
+  setisDirectDonation: (value: boolean) => {},
+  frequency: "",
+  setfrequency: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -99,25 +93,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentType, setPaymentType] = React.useState("");
 
-  const treeSelectionOptions = [
-    {
-      treeCount: 10,
-      iconFile: <LeafIcon />,
-    },
-    {
-      treeCount: 20,
-      iconFile: <TwoLeafIcon />,
-    },
-    {
-      treeCount: 50,
-      iconFile: <PlantPotIcon />,
-    },
-    {
-      treeCount: 150,
-      iconFile: <TreeIcon />,
-    },
-  ];
-  const [treeCount, settreeCount] = useState(50);
+  const [quantity, setquantity] = useState(50);
+  const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -149,7 +126,7 @@ export default function QueryParamProvider({ children }: any) {
   const [selectedProjects, setSelectedProjects] = useState([]);
   const [allProjects, setAllProjects] = useState([]);
 
-  const [hideTaxDeduction, sethideTaxDeduction] = useState(false)
+  const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
 
@@ -159,17 +136,17 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {    
-    if(i18n && i18n.isInitialized){
+  React.useEffect(() => {
+    if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     }
-  }, [language,router]);
+  }, [language, router]);
 
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    let pattern = new RegExp(
+    const pattern = new RegExp(
       "^(https?:\\/\\/)?" + // protocol
         "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
         "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
@@ -188,23 +165,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.return_to]);
 
-  // Project GUID = project => This will be received from the URL params - this is the project the for which the donation will happen
-  async function loadProject(projectGUID: string) {
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}`,
-        setshowErrorCard,
-      };
-      const project: ProjectTypes = await apiRequest(requestParams);
-      if (project.data) {
-        setprojectDetails(project.data);
-      }
-    } catch (err) {
-      loadselectedProjects();
-      setdonationStep(0);
-    }
-  }
-
   async function loadselectedProjects() {
     try {
       const requestParams = {
@@ -213,7 +173,7 @@ export default function QueryParamProvider({ children }: any) {
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
-        let allowedDonationsProjects = projects.data.filter(
+        const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
             project.properties.allowDonations === true
         );
@@ -256,7 +216,8 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country) {
-      loadPaymentSetup(router.query.to, country);
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup(to, country);
     }
   }, [router.query.to, country]);
 
@@ -275,7 +236,16 @@ export default function QueryParamProvider({ children }: any) {
       const config: any = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
-          setcountry(config.data.country);
+          const found = countriesData.some(
+            (arrayCountry) =>
+              arrayCountry.countryCode?.toUpperCase() ===
+              config.data.country?.toUpperCase()
+          );
+          if (found) {
+            setcountry(config.data.country.toUpperCase());
+          } else {
+            setcountry("DE");
+          }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -302,116 +272,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.isReady]);
 
-  // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-
-  React.useEffect(() => {
-    if (router.query.country) {
-      setcountry(router.query.country);
-    }
-  }, [router.query.country]);
-
-  // Donation ID = donationid => This will be received from the URL params
-  async function loadDonation() {
-    try {
-      const requestParams = {
-        url: `/app/donations/${router.query.context}`,
-        setshowErrorCard,
-      };
-      const donation: any = await apiRequest(requestParams);
-
-      if (donation.status === 200) {
-        setdonationID(router.query.context);
-        // if the donation is present means the donation is already created
-        // Set shouldCreateDonation as false
-        setshouldCreateDonation(false);
-        // fetch project - payment setup
-        await loadProject(donation.data.project.id);
-
-
-        if (donation.data.taxDeductionCountry) {
-          setcountry(donation.data.taxDeductionCountry);
-          setIsTaxDeductible(true);
-          await loadPaymentSetup(
-            donation.data.project.id,
-            donation.data.taxDeductionCountry
-          );
-        } else {
-          sethideTaxDeduction(true);
-          const newcountry = donation.data.donor.country;          
-          setcountry(newcountry);
-          await loadPaymentSetup(donation.data.project.id, newcountry);
-        }
-
-        setallowTaxDeductionChange(false);
-
-        settreeCount(donation.data.treeCount);
-        if (donation.data.donor) {
-          let contactDetails = {
-            firstname: donation.data.donor.firstname
-              ? donation.data.donor.firstname
-              : "",
-            lastname: donation.data.donor.lastname
-              ? donation.data.donor.lastname
-              : "",
-            email: donation.data.donor.email ? donation.data.donor.email : "",
-            address: donation.data.donor.address
-              ? donation.data.donor.address
-              : "",
-            city: donation.data.donor.city ? donation.data.donor.city : "",
-            zipCode: donation.data.donor.zipCode
-              ? donation.data.donor.zipCode
-              : "",
-            country: donation.data.donor.country
-              ? donation.data.donor.country
-              : "",
-            companyname: donation.data.donor.companyname
-              ? donation.data.donor.companyname
-              : "",
-          };
-          setContactDetails(contactDetails);
-        }
-
-        // Check if the donation status is paid or successful - if yes directly show thank you page
-        // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
-        if (
-          (router.query.method === "Sofort" ||
-            router.query.method === "Giropay") &&
-          (router.query.redirect_status === "succeeded" ||
-            router.query.redirect_status === "failed") &&
-          router.query.payment_intent
-        ) {
-          setdonationStep(4);
-        } else if (
-          donation.data.paymentStatus === "success" ||
-          donation.data.paymentStatus === "paid" ||
-          donation.data.paymentStatus === "failed" ||
-          donation.data.paymentStatus === "pending"
-        ) {
-          setdonationStep(4);
-        } else if (
-          donation.data.paymentStatus === "initiated" ||
-          donation.data.paymentStatus === "draft"
-        ) {
-          // Check if all contact details are present - if not send user to step 2 else step 3
-          // Check if all payment cards are present - if yes then show it on step 3
-          setisDirectDonation(true);
-          setdonationStep(3);
-        }
-      } else {
-        // SET Error that no donation is found
-        setdonationStep(1);
-      }
-    } catch (err) {
-      loadselectedProjects();
-      setdonationStep(0);
-    }
-  }
-  React.useEffect(() => {
-    if (router.query.context) {
-      loadDonation();
-    }
-  }, [router.query.context]);
-
   React.useEffect(() => {
     if (router.query.tenant) {
       // TODO => verify tenant before setting it
@@ -430,9 +290,9 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.trees) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.trees) > 0) {
-        settreeCount(Number(router.query.trees));
+        setquantity(Number(router.query.trees));
       } else {
-        settreeCount(50);
+        setquantity(50);
       }
     }
   }, [router.query.trees]);
@@ -454,7 +314,7 @@ export default function QueryParamProvider({ children }: any) {
     setshouldCreateDonation(true);
   }, [
     paymentSetup,
-    treeCount,
+    quantity,
     isGift,
     giftDetails,
     contactDetails.firstname,
@@ -477,7 +337,6 @@ export default function QueryParamProvider({ children }: any) {
         setisGift,
         giftDetails,
         setgiftDetails,
-        treeSelectionOptions,
         contactDetails,
         setContactDetails,
         country,
@@ -488,8 +347,8 @@ export default function QueryParamProvider({ children }: any) {
         donationStep,
         setdonationStep,
         projectDetails,
-        treeCount,
-        settreeCount,
+        quantity,
+        setquantity,
         language,
         setlanguage,
         donationID,
@@ -516,7 +375,13 @@ export default function QueryParamProvider({ children }: any) {
         loadselectedProjects,
         hideTaxDeduction,
         queryToken,
-        setqueryToken
+        setqueryToken,
+        setpaymentSetup,
+        sethideTaxDeduction,
+        setallowTaxDeductionChange,
+        setisDirectDonation,
+        frequency,
+        setfrequency,
       }}
     >
       {children}
@@ -551,7 +416,9 @@ function ErrorCard({
   }, [showErrorCard]);
 
   return showErrorCard ? (
-    <div className={`${theme} test-donation-bar`} style={{zIndex:15}}>{t("errorOccurred")}</div>
+    <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
+      {t("errorOccurred")}
+    </div>
   ) : (
     <></>
   );

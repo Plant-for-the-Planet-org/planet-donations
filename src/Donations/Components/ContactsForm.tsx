@@ -10,6 +10,8 @@ import BackButton from "../../../public/assets/icons/BackButton";
 import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { useRouter } from "next/router";
+
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
@@ -19,11 +21,16 @@ function ContactsForm({}: Props): ReactElement {
     setaddressSugggestions([]);
   }, []);
 
+  const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
-  const geocoder = new GeocoderArcGIS(process.env.ESRI_CLIENT_SECRET ? {
-    client_id:process.env.ESRI_CLIENT_ID,
-    client_secret:process.env.ESRI_CLIENT_SECRET,
-  } : {});
+  const geocoder = new GeocoderArcGIS(
+    process.env.ESRI_CLIENT_SECRET
+      ? {
+          client_id: process.env.ESRI_CLIENT_ID,
+          client_secret: process.env.ESRI_CLIENT_SECRET,
+        }
+      : {}
+  );
   const {
     contactDetails,
     setContactDetails,
@@ -62,6 +69,9 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
+    router.push({
+      query: { ...router.query, step: "payment" },
+    });
     setContactDetails(data);
     setdonationStep(3);
   };
@@ -86,7 +96,10 @@ function ContactsForm({}: Props): ReactElement {
   const suggestAddress = (value) => {
     if (value.length > 3) {
       geocoder
-        .suggest(value, {category:"Address",countryCode:contactDetails.country})
+        .suggest(value, {
+          category: "Address",
+          countryCode: contactDetails.country,
+        })
         .then((result) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
@@ -116,20 +129,29 @@ function ContactsForm({}: Props): ReactElement {
   };
 
   const { theme } = React.useContext(ThemeContext);
+  let suggestion_counter = 0;
+
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
         <div className="d-flex w-100 align-items-center">
           <button
             className="d-flex"
-            onClick={() => setdonationStep(1)}
+            onClick={() => {
+              setdonationStep(1);
+              router.push({
+                query: { ...router.query, step: "donate" },
+              });
+            }}
             style={{ marginRight: "12px" }}
           >
-            <BackButton color={
-               theme === "theme-light"
-               ? themeProperties.light.primaryFontColor
-               : themeProperties.dark.primaryFontColor
-            } />
+            <BackButton
+              color={
+                theme === "theme-light"
+                  ? themeProperties.light.primaryFontColor
+                  : themeProperties.dark.primaryFontColor
+              }
+            />
           </button>
           <p className="title-text">{t("contactDetails")}</p>
         </div>
@@ -138,29 +160,42 @@ function ContactsForm({}: Props): ReactElement {
           <div className="d-flex row">
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({
+                  required: true,
+                  minLength: 3,
+                })}
                 label={t("firstName")}
                 variant="outlined"
                 name="firstname"
                 defaultValue={contactDetails.firstname}
                 data-test-id="test-firstName"
               />
-              {errors.firstname && (
+              {errors.firstname && errors.firstname.type === "required" && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
+              )}
+              {errors.firstname && errors.firstname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({ required: true, minLength: 3 })}
                 label={t("lastName")}
                 variant="outlined"
                 name="lastname"
                 defaultValue={contactDetails.lastname}
                 data-test-id="test-lastName"
               />
-              {errors.lastname && (
+              {errors.lastname && errors.lastname.type === "required" && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
+              )}
+              {errors.lastname && errors.lastname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
           </div>
@@ -202,6 +237,7 @@ function ContactsForm({}: Props): ReactElement {
                     {addressSugggestions.map((suggestion) => {
                       return (
                         <div
+                          key={"suggestion" + suggestion_counter++}
                           onMouseDown={() => {
                             getAddress(suggestion.text);
                           }}
