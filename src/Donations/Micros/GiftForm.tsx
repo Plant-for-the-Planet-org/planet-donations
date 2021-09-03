@@ -4,7 +4,7 @@ import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 interface Props {}
 
 export default function GiftForm({}: Props): ReactElement {
