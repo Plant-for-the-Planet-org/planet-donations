@@ -6,6 +6,7 @@
   "email": "Email",
   "recipientEmail": "Recipient Email",
   "emailRequired": "Email is required",
+  "useSameEmail": "Use same Email as Login Email",
   "giftMessage": "Gift Message",
   "giftNotification": "Gift Notification",
   "continue": "Continue",

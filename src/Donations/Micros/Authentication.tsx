@@ -22,6 +22,7 @@ function Authentication({}: Props): ReactElement {
     queryToken,
     profile,
     setprofile,
+    setIsSignedUp,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -47,6 +48,7 @@ function Authentication({}: Props): ReactElement {
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
+          setIsSignedUp(true);
           const newContactDetails = {
             firstname: profile.data.firstname ? profile.data.firstname : "",
             lastname: profile.data.lastname ? profile.data.lastname : "",

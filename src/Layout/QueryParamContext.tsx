@@ -63,6 +63,8 @@ export const QueryParamContext = React.createContext({
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
   setisDirectDonation: (value: boolean) => {},
+  isSignedUp: false,
+  setIsSignedUp: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -154,6 +156,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [profile, setprofile] = React.useState<null | Object>(null);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
+  const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (router.query.locale) {
@@ -398,6 +401,8 @@ export default function QueryParamProvider({ children }: any) {
         setisDirectDonation,
         profile,
         setprofile,
+        isSignedUp,
+        setIsSignedUp,
       }}
     >
       {children}

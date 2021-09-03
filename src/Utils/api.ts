@@ -111,7 +111,12 @@ export const apiRequest = async (
           resolve(response);
         })
         .catch((err) => {
-          setshowErrorCard(true);
+          if (
+            JSON.parse(JSON.stringify(err)).message !==
+            "Request failed with status code 303"
+          ) {
+            setshowErrorCard(true);
+          }
           reject(err);
         });
     });

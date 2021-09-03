@@ -10,6 +10,8 @@ import BackButton from "../../../public/assets/icons/BackButton";
 import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { useAuth0 } from "@auth0/auth0-react";
+
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
@@ -20,17 +22,24 @@ function ContactsForm({}: Props): ReactElement {
   }, []);
 
   const [isCompany, setIsCompany] = React.useState(false);
-  const geocoder = new GeocoderArcGIS(process.env.ESRI_CLIENT_SECRET ? {
-    client_id:process.env.ESRI_CLIENT_ID,
-    client_secret:process.env.ESRI_CLIENT_SECRET,
-  } : {});
+  const geocoder = new GeocoderArcGIS(
+    process.env.ESRI_CLIENT_SECRET
+      ? {
+          client_id: process.env.ESRI_CLIENT_ID,
+          client_secret: process.env.ESRI_CLIENT_SECRET,
+        }
+      : {}
+  );
   const {
     contactDetails,
     setContactDetails,
     setdonationStep,
     country,
     isTaxDeductible,
+    isSignedUp,
   } = React.useContext(QueryParamContext);
+
+  const { user } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
@@ -86,7 +95,10 @@ function ContactsForm({}: Props): ReactElement {
   const suggestAddress = (value) => {
     if (value.length > 3) {
       geocoder
-        .suggest(value, {category:"Address",countryCode:contactDetails.country})
+        .suggest(value, {
+          category: "Address",
+          countryCode: contactDetails.country,
+        })
         .then((result) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
@@ -117,7 +129,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
-  
+
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
@@ -127,11 +139,13 @@ function ContactsForm({}: Props): ReactElement {
             onClick={() => setdonationStep(1)}
             style={{ marginRight: "12px" }}
           >
-            <BackButton color={
-               theme === "theme-light"
-               ? themeProperties.light.primaryFontColor
-               : themeProperties.dark.primaryFontColor
-            } />
+            <BackButton
+              color={
+                theme === "theme-light"
+                  ? themeProperties.light.primaryFontColor
+                  : themeProperties.dark.primaryFontColor
+              }
+            />
           </button>
           <p className="title-text">{t("contactDetails")}</p>
         </div>
@@ -171,14 +185,20 @@ function ContactsForm({}: Props): ReactElement {
                 required: true,
                 pattern:
                   /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                validate: (input) => {
+                  return isSignedUp ? true : user.email === input;
+                },
               })}
               label={t("email")}
               variant="outlined"
               name="email"
               defaultValue={contactDetails.email}
             />
-            {errors.email && (
+            {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
+            )}
+            {errors.email && errors.email.type === "validate" && (
+              <span className={"form-errors"}>{t("useSameEmail")}</span>
             )}
           </div>
 
@@ -199,7 +219,8 @@ function ContactsForm({}: Props): ReactElement {
                   <div className="suggestions-container">
                     {addressSugggestions.map((suggestion) => {
                       return (
-                        <div key={'suggestion' + suggestion_counter++}
+                        <div
+                          key={"suggestion" + suggestion_counter++}
                           onMouseDown={() => {
                             getAddress(suggestion.text);
                           }}
