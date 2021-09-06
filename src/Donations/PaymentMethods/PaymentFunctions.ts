@@ -1,5 +1,6 @@
 import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
+import { useRouter } from "next/router";
 
 export function getPaymentProviderRequest(
   gateway,
@@ -80,8 +81,8 @@ export async function createDonationFunction({
   isTaxDeductible,
   country,
   projectDetails,
-  treeCost,
-  treeCount,
+  unitCost,
+  quantity,
   currency,
   contactDetails,
   isGift,
@@ -91,17 +92,19 @@ export async function createDonationFunction({
   setdonationID,
   token,
   setshowErrorCard,
+  frequency
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
     projectDetails,
-    treeCount,
-    treeCost,
+    quantity,
+    unitCost,
     currency,
     contactDetails,
     taxDeductionCountry,
     isGift,
     giftDetails,
+    frequency
   });
   try {
     let donation;
@@ -146,21 +149,23 @@ export async function createDonationFunction({
 
 export function createDonationData({
   projectDetails,
-  treeCount,
-  treeCost,
+  quantity,
+  unitCost,
   currency,
   contactDetails,
   taxDeductionCountry,
   isGift,
   giftDetails,
+  frequency
 }: any) {
   let donationData = {
-    type: "trees",
+    purpose: projectDetails.purpose,
     project: projectDetails.id,
-    treeCount,
-    amount: Math.round((treeCost * treeCount + Number.EPSILON) * 100) / 100,
+    quantity:quantity,
+    amount: Math.round((unitCost * quantity + Number.EPSILON) * 100) / 100,
     currency,
     donor: { ...contactDetails },
+    frequency:frequency === 'once' ? null : frequency
   };
   if (taxDeductionCountry) {
     donationData = {
@@ -213,7 +218,9 @@ export async function payDonationFunction({
   token,
   country,
   setshowErrorCard,
+  router,
 }: any) {
+  // const router = useRouter();
   setIsPaymentProcessing(true);
 
   if (!paymentMethod) {
@@ -221,6 +228,7 @@ export async function payDonationFunction({
     setPaymentError(t("donate:noPaymentMethodError"));
     return;
   }
+
   const payDonationData = getPaymentProviderRequest(
     gateway,
     paymentSetup,
@@ -259,7 +267,10 @@ export async function payDonationFunction({
         paidDonation.data.paymentStatus === "paid"
       ) {
         setIsPaymentProcessing(false);
-        setdonationStep(4);
+        router.replace({
+          query: { ...router.query, step: "thankyou" },
+        });
+        // setdonationStep(4);
 
         return paidDonation.data;
       } else if (paidDonation.data.status === "action_required") {
@@ -276,6 +287,7 @@ export async function payDonationFunction({
           token,
           country,
           setshowErrorCard,
+          router,
         });
       }
     }
@@ -311,6 +323,7 @@ export async function handleSCAPaymentFunction({
   token,
   country,
   setshowErrorCard,
+  router,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -319,6 +332,7 @@ export async function handleSCAPaymentFunction({
   const stripe = window.Stripe(key, {
     stripeAccount: paidDonation.response.account,
   });
+  // const router = useRouter();
   if (stripe) {
     if (gateway === "stripe") {
       const SCAdonation = await stripe.handleCardAction(clientSecret);
@@ -359,9 +373,15 @@ export async function handleSCAPaymentFunction({
               SCAPaidDonation = await apiRequest(requestParams);
             }
 
-            if (SCAPaidDonation.data.paymentStatus || SCAPaidDonation.data.status) {
+            if (
+              SCAPaidDonation.data.paymentStatus ||
+              SCAPaidDonation.data.status
+            ) {
               setIsPaymentProcessing(false);
-              setdonationStep(4);
+              // setdonationStep(4);
+              router.push({
+                query: { ...router.query, step: "thankyou" },
+              });
               return SCAPaidDonation.data;
             }
           } catch (error) {
