@@ -21,6 +21,8 @@ function TaxDeductionOption({}: Props): ReactElement {
     React.useState(false);
 
   React.useEffect(() => {
+    console.log(projectDetails, "projectDetails");
+
     if (
       projectDetails &&
       projectDetails.taxDeductionCountries &&
@@ -59,8 +61,7 @@ function TaxDeductionOption({}: Props): ReactElement {
               : t("taxDeductionNotYetAvailable")}
             <div className={"tax-country-selection text-primary text-bold"}>
               {t(`country:${country.toLowerCase()}`)}
-            </div>
-            {" "}
+            </div>{" "}
             {projectDetails.taxDeductionCountries.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}

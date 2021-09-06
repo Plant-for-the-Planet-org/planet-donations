@@ -135,6 +135,7 @@ function PaymentsForm({}: Props): ReactElement {
   const [askpublishName, setaskpublishName] = React.useState(false);
 
   React.useEffect(() => {
+    console.log(paymentSetup, "paymentSetup");
     if (donationID && publishName !== null) {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
