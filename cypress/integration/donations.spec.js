@@ -108,10 +108,10 @@ describe("Donations", () => {
         cardPayment("4242424242424242", "424", "242")
     });;
 
-    it("Testing with Support Link ", () => {
-        supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-        cardPayment("4242424242424242", "424", "242")
-    });;
+    // it("Testing with Support Link ", () => {
+    //     supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    //     cardPayment("4242424242424242", "424", "242")
+    // });
 
     it("Testing with Gift Donation ", () => {
         giftDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
