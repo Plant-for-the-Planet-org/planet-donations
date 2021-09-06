@@ -2,22 +2,29 @@ import defaultForest from "../../public/tenants/default/default-forest.jpg";
 import klumforest from "../../public/tenants/leniklum/leniklum.jpg";
 import getImageUrl from "./getImageURL";
 
+// Set tenant image -> set tenant image where needed, except for default
+// Default -> Check for tenant image if not found, use project image, if not found, use base
 export function getTenantBackground(tenant: any, projectDetails: any) {
+  let tenantImage = null;
   let imageUrl = defaultForest;
-  if (projectDetails && projectDetails.image) {
-    imageUrl = getImageUrl("project", "large", projectDetails.image);
+
+  switch (tenant) {
+    case "ten_KRHYP8TR":
+      tenantImage = klumforest;
+      break;
+    default:
+      break;
+  }
+
+  if (tenantImage) {
+    imageUrl = tenantImage;
   } else {
-    switch (tenant) {
-      case "ten_I9TW3ncG":
-        imageUrl = defaultForest;
-        break;
-      case "ten_KRHYP8TR":
-        imageUrl = klumforest;
-        break;
-      default:
-        imageUrl = defaultForest;
-        break;
+    if (projectDetails && projectDetails.image) {
+      imageUrl = getImageUrl("project", "large", projectDetails.image);
+    }else{
+      imageUrl = defaultForest;
     }
   }
+
   return imageUrl;
 }
