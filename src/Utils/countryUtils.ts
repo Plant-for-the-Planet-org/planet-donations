@@ -58,7 +58,7 @@ export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
       arr
     ) {
       console.log(priorityCountryCodes, "priorityCountryCodes");
-      if (priorityCountryCodes.includes(value.countryCode)) {
+      if (priorityCountryCodes?.includes(value.countryCode)) {
         priorityCountries.push(value);
         return false;
       } else {

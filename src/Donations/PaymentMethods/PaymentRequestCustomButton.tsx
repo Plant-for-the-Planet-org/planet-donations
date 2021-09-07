@@ -36,7 +36,11 @@ export const PaymentRequestCustomButton = ({
 
   useEffect(() => {
     console.log(stripeAllowedCountries, "stripeAllowedCountries");
-    if (stripe && !paymentRequest && stripeAllowedCountries.includes(country)) {
+    if (
+      stripe &&
+      !paymentRequest &&
+      stripeAllowedCountries?.includes(country)
+    ) {
       const pr = stripe.paymentRequest({
         country: country,
         currency: currency.toLowerCase(),
@@ -112,7 +116,7 @@ export const PaymentRequestCustomButton = ({
         marginTop: isPaymentPage ? "0px" : "20px",
       }}
     >
-      {stripeAllowedCountries.includes(country) &&
+      {stripeAllowedCountries?.includes(country) &&
       canMakePayment &&
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability ? (

@@ -231,30 +231,32 @@ function PaymentsForm({}: Props): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={paymentSetup?.gateways.stripe.methods.includes(
+                showCC={paymentSetup?.gateways?.stripe?.methods?.includes(
                   "stripe_cc"
                 )}
                 showGiroPay={
                   currency === "EUR" &&
                   country === "DE" &&
-                  paymentSetup?.gateways.stripe.methods.includes(
+                  paymentSetup?.gateways?.stripe?.methods?.includes(
                     "stripe_giropay"
                   )
                 }
                 showSepa={
                   currency === "EUR" &&
                   isAuthenticated &&
-                  paymentSetup?.gateways.stripe.methods.includes("stripe_sepa")
+                  paymentSetup?.gateways?.stripe?.methods?.includes(
+                    "stripe_sepa"
+                  )
                 }
                 showSofort={
                   currency === "EUR" &&
-                  sofortCountries.includes(country) &&
-                  paymentSetup?.gateways.stripe.methods.includes(
+                  sofortCountries?.includes(country) &&
+                  paymentSetup?.gateways?.stripe?.methods?.includes(
                     "stripe_sofort"
                   )
                 }
                 showPaypal={
-                  paypalCurrencies.includes(currency) &&
+                  paypalCurrencies?.includes(currency) &&
                   paymentSetup?.gateways.paypal
                 }
                 showNativePay={

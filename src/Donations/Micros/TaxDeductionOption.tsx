@@ -26,7 +26,7 @@ function TaxDeductionOption({}: Props): ReactElement {
     if (
       projectDetails &&
       projectDetails.taxDeductionCountries &&
-      projectDetails.taxDeductionCountries.includes(country)
+      projectDetails?.taxDeductionCountries?.includes(country)
     ) {
       setIsTaxDeductible(true);
     } else {
@@ -40,7 +40,7 @@ function TaxDeductionOption({}: Props): ReactElement {
       projectDetails.taxDeductionCountries.length > 0 ? (
         allowTaxDeductionChange ? (
           <div className={"d-inline"}>
-            {projectDetails.taxDeductionCountries.includes(country)
+            {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <button
@@ -50,19 +50,19 @@ function TaxDeductionOption({}: Props): ReactElement {
               {t(`country:${country.toLowerCase()}`)}
               <DownArrowIcon color={themeProperties.primaryColor} />
             </button>
-            {projectDetails.taxDeductionCountries.includes(country)
+            {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}
           </div>
         ) : isTaxDeductible ? (
           <div className={"d-inline"}>
-            {projectDetails.taxDeductionCountries.includes(country)
+            {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <div className={"tax-country-selection text-primary text-bold"}>
               {t(`country:${country.toLowerCase()}`)}
             </div>{" "}
-            {projectDetails.taxDeductionCountries.includes(country)
+            {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}
           </div>
