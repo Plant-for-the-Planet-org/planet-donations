@@ -13,7 +13,7 @@ import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import themeProperties from "../../../styles/themeProperties";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -25,6 +25,7 @@ function ThankYou() {
     redirectstatus,
     returnTo,
     setshowErrorCard,
+    projectDetails,
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
@@ -118,38 +119,75 @@ function ThankYou() {
           <></>
         )}
 
-        <div className={"title-text thankyouText"}>{t("common:thankYou")}</div>
+        <div className={"title-text thankyouText"} data-test-id="test-thankYou">{t("common:thankYou")}</div>
 
-        <div className={"mt-20 thankyouText"}>
-          {t(
-            paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
-              ? "common:donationSuccessfulWith"
-              : "common:donationSuccessful",
-            {
-              totalAmount: currencyFormat(),
-              paymentTypeUsed,
-            }
-          )}
-          {donation && donation.gift
-            ? " " +
-              t("common:giftSentMessage", {
-                recipientName: donation.gift.recipientName,
-              })
-            : null}
-          {" " +
-            t("common:yourTreesPlantedByOnLocation", {
-              treeCount: getFormattedNumber(
-                i18n.language,
-                Number(donation.treeCount)
-              ),
-              projectName: donation.project.name,
-              location: t("country:" + donation.project.country.toLowerCase()),
-            })}
-        </div>
+        {projectDetails.purpose === "trees" ? (
+          <>
+            <div className={"mt-20 thankyouText"}>
+              {t(
+                paymentTypeUsed === "GOOGLE_PAY" ||
+                  paymentTypeUsed === "APPLE_PAY"
+                  ? "common:donationSuccessfulWith"
+                  : "common:donationSuccessful",
+                {
+                  totalAmount: currencyFormat(),
+                  paymentTypeUsed,
+                }
+              )}
+              {donation && donation.gift
+                ? " " +
+                  t("common:giftSentMessage", {
+                    recipientName: donation.gift.recipientName,
+                  })
+                : null}
+              {" " +
+                t("common:yourTreesPlantedByOnLocation", {
+                  treeCount: getFormattedNumber(
+                    i18n.language,
+                    Number(donation.treeCount)
+                  ),
+                  projectName: donation.project.name,
+                  location: t(
+                    "country:" + donation.project.country.toLowerCase()
+                  ),
+                })}
+            </div>
+            <div className={"mt-20 thankyouText"}>
+              {t("common:contributionMessage")}
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
 
-        <div className={"mt-20 thankyouText"}>
-          {t("common:contributionMessage")}
-        </div>
+        {projectDetails.purpose === "funds" ? (
+          <>
+            <div className={"mt-20 thankyouText"}>
+              {t(
+                paymentTypeUsed === "GOOGLE_PAY" ||
+                  paymentTypeUsed === "APPLE_PAY"
+                  ? "common:donationSuccessfulWith"
+                  : "common:donationSuccessful",
+                {
+                  totalAmount: currencyFormat(),
+                  paymentTypeUsed,
+                }
+              )}
+              {donation && donation.gift
+                ? " " +
+                  t("common:giftSentMessage", {
+                    recipientName: donation.gift.recipientName,
+                  })
+                : null}
+              {" " + t("common:fundingDonationSuccess")}
+            </div>
+            <div className={"mt-20 thankyouText"}>
+              {t("common:fundingContributionMessage")}
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
 
         {/* <div className={'horizontalLine} /> */}
 
@@ -166,17 +204,33 @@ function ThankYou() {
                 }}
               />
             </div>
-            <p className={"donation-count"}>
-              {t("common:myTreesPlantedByOnLocation", {
-                treeCount: getFormattedNumber(
-                  i18n.language,
-                  Number(donation.treeCount)
-                ),
-                location: t(
-                  "country:" + donation.project.country.toLowerCase()
-                ),
-              })}
-            </p>
+            {projectDetails.purpose === "trees" ? (
+              <p className={"donation-count"}>
+                {t("common:myTreesPlantedByOnLocation", {
+                  treeCount: getFormattedNumber(
+                    i18n.language,
+                    Number(donation.treeCount)
+                  ),
+                  location: t(
+                    "country:" + donation.project.country.toLowerCase()
+                  ),
+                })}
+              </p>
+            ) : (
+              <></>
+            )}
+
+            {projectDetails.purpose === "funds" ? (
+              <p className={"donation-count"}>
+                {t("common:contributedToTpo", {
+                  amount: currencyFormat(),
+                  organization: projectDetails.tpo.name,
+                })}
+              </p>
+            ) : (
+              <></>
+            )}
+
             <p className={"donation-url"}>
               {t("common:plantTreesAtURL", {
                 url: "www.plant-for-the-planet.org",
@@ -193,13 +247,28 @@ function ThankYou() {
             }}
           />
           <div className={"donation-count p-20"}>
-            {t("common:myTreesPlantedByOnLocation", {
-              treeCount: getFormattedNumber(
-                i18n.language,
-                Number(donation.treeCount)
-              ),
-              location: t("country:" + donation.project.country.toLowerCase()),
-            })}
+            {projectDetails.purpose === "trees" ? (
+              t("common:myTreesPlantedByOnLocation", {
+                treeCount: getFormattedNumber(
+                  i18n.language,
+                  Number(donation.treeCount)
+                ),
+                location: t(
+                  "country:" + donation.project.country.toLowerCase()
+                ),
+              })
+            ) : (
+              <></>
+            )}
+
+            {projectDetails.purpose === "funds" ? (
+              t("common:contributedToTpo", {
+                amount: currencyFormat(),
+                organization: projectDetails.tpo.name,
+              })
+            ) : (
+              <></>
+            )}
             <p className={"donation-url"}>
               {t("common:plantTreesAtURL", {
                 url: "www.plant-for-the-planet.org",

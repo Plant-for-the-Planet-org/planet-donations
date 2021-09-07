@@ -7,7 +7,7 @@ import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 
 interface Props {
@@ -23,7 +23,6 @@ interface Props {
   shouldCreateDonation: boolean;
   country: any;
   contactDetails: any;
-  treecount: any;
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
@@ -42,7 +41,6 @@ function index({
   shouldCreateDonation,
   country,
   contactDetails,
-  treecount,
   allowTaxDeductionChange,
   currency,
   paymentSetup,
@@ -55,7 +53,6 @@ function index({
     setisGift,
     setpaymentSetup,
     setcurrency,
-    settreeCount,
     setContactDetails,
     setcountry,
     setIsTaxDeductible,
@@ -73,13 +70,17 @@ function index({
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
       setContactDetails(contactDetails);
-      settreeCount(treecount);
       setallowTaxDeductionChange(allowTaxDeductionChange);
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
     }
-    setcountry(country);
+    // XX is hidden country and T1 is Tor browser
+    if (country === "XX" || country === "T1") {
+      setcountry("DE");
+    } else {
+      setcountry(country);
+    }
   }, []);
 
   // If gift details are present set gift
@@ -108,7 +109,11 @@ function index({
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    description = `Plant trees with ${projectDetails.tpo.name} in ${
+    description = `Plant trees with ${
+      projectDetails.tpo
+        ? projectDetails.tpo?.name
+        : projectDetails.tpoData?.name
+    } in ${
       getCountryDataBy("countryCode", projectDetails.country)?.countryName
     }. Your journey to a trillion trees starts here.`;
   }
@@ -199,11 +204,15 @@ export async function getServerSideProps(context: any) {
   }
 
   // Set project details if there is to (project slug) in the query params
-  if (context.query.to && !context.query.context) {
+  if (
+    (context.query.to && !context.query.context) ||
+    context.query.step === "donate"
+  ) {
+    const to = context.query.to.replace(/\//g, "");
     donationStep = 1;
     try {
       const requestParams = {
-        url: `/app/projects/${context.query.to}`,
+        url: `/app/projects/${to}`,
         setshowErrorCard,
       };
       const project = await apiRequest(requestParams);
@@ -224,7 +233,9 @@ export async function getServerSideProps(context: any) {
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
     const found = countriesData.some(
-      (country) => country.countryCode?.toUpperCase() === context.query.country?.toUpperCase()
+      (country) =>
+        country.countryCode?.toUpperCase() ===
+        context.query.country?.toUpperCase()
     );
     if (found) {
       country = context.query.country.toUpperCase();

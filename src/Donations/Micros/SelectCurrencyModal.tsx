@@ -148,7 +148,7 @@ function MapCurrency(props: any) {
       {sortedCountriesData && (
         <div className={"form-field mt-20"}>
           <Autocomplete
-            id="country-select"
+            data-test-id="country-select"
             style={{ width: "100%" }}
             options={sortedCountriesData as CountryType[]}
             classes={{

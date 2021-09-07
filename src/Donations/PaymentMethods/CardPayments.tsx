@@ -194,7 +194,7 @@ function CardPayments({
       {paymentError && <div className={"paymentError"}>{paymentError}</div>}
 
       {
-        <div>
+        <div id="card-element">
           <FormControlNew variant="outlined">
             <CardNumberElement
               id="cardNumber"
@@ -227,6 +227,7 @@ function CardPayments({
           onClick={handleSubmit}
           className="primary-button w-100 mt-30"
           id="donateContinueButton"
+          data-test-id="test-donateButton"
         >
           {t("donate")}{" "}
           {totalCost}

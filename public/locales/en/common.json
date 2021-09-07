@@ -15,6 +15,7 @@
   "firstNameRequired": "First Name is required",
   "lastName": "Last Name",
   "lastNameRequired": "Last Name is required",
+  "atLeast3LettersRequired": "At least 3 letters required",
   "address": "Address",
   "addressRequired": "Address is required",
   "city": "City",
@@ -56,6 +57,8 @@
   "donationSuccessful": "Your {{currency}} {{totalAmount}} donation was successful.",
   "giftSentMessage": "We've sent an email to {{recipientName}} about the gift.",
   "contributionMessage": "Maybe you'll visit them some day? In the mean time, maybe hook up your friends with some trees of their own by telling them about yours?",
+  "fundingDonationSuccess": "Thank you for your contribution",
+  "fundingContributionMessage": "We will keep you posted about our actions, in the mean time maybe share with your friends about your contribution.",
   "yourTreesPlantedByOnLocation": "Your {{treeCount}} trees will be planted by {{projectName}} in {{location}}.",
   "myTreesPlantedByOnLocation": "My {{treeCount}} trees are being planted in {{location}}.",
   "plantTreesAtURL": "Plant trees at {{url}}",
@@ -101,5 +104,6 @@
   "treesInCountry": "{{treeCount}} trees in {{country}}, Plant-for-the-Planet",
   "errorOccurred": "Something went wrong",
   "dedicatedTo": "Dedicated to",
-  "message": "Message"
+  "message": "Message",
+  "contributedToTpo": "I contributed {{amount}} to {{organization}}"
 }

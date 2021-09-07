@@ -1,0 +1,45 @@
+name: 'Cypress tests'
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+jobs:
+  ubuntu-job:
+    name: 'Cypress on Ubuntu'
+    runs-on: ubuntu-latest  # Can be self-hosted runner also
+    steps:
+
+      - name: 'Checkout the repository'
+        uses: actions/checkout@v2
+
+      - name: 'Install Node Modules'
+        run: npm install
+
+      - name: Setting Environment Variables
+        env:
+          AUTH0_CLIENT_ID : ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_CUSTOM_DOMAIN: ${{ secrets.AUTH0_CUSTOM_DOMAIN }}
+          ESRI_CLIENT_ID: ${{ secrets.ESRI_CLIENT_ID }}
+          ESRI_CLIENT_SECRET: ${{ secrets.ESRI_CLIENT_SECRET }}
+        run: |
+          echo "APP_URL=http://localhost:3000" >> .env
+          echo "AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID" >> .env
+          echo "AUTH0_CUSTOM_DOMAIN=$AUTH0_CUSTOM_DOMAIN" >> .env
+          echo "API_ENDPOINT=app-staging.plant-for-the-planet.org" >> .env
+          echo "CDN_URL=cdn.plant-for-the-planet.org/staging" >> .env
+          echo "ESRI_CLIENT_ID=$ESRI_CLIENT_ID" >> .env
+          echo "ESRI_CLIENT_SECRET=$ESRI_CLIENT_SECRET" >> .env
+          echo "SCHEME=https" >> .env
+
+      - name: 'Running Cypress tests'
+        run: |
+          cat .env
+          npm run dev &
+          npm run cypress:run --config baseUrl=http://localhost:3000
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: Cypress
+          path: /home/runner/work/planet-donations/planet-donations/cypress/videos/
