@@ -137,7 +137,7 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
   i18n,
   images: {
-    domains: ["cdn.plant-for-the-planet.org", "cdn.planetapp.workers.dev"],
+    domains: ["cdn.plant-for-the-planet.org"],
 
   },
 });
