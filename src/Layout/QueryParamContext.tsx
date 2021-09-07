@@ -242,7 +242,10 @@ export default function QueryParamProvider({ children }: any) {
               config.data.country?.toUpperCase()
           );
           if (found) {
-            setcountry(config.data.country.toUpperCase());
+            // This is to make sure donations which are already created with some country do not get affected by country from user config
+            if(!router.query.context){
+              setcountry(config.data.country.toUpperCase());
+            }
           } else {
             setcountry("DE");
           }
