@@ -16,7 +16,7 @@ interface PaymentButtonProps {
   onPaymentFunction: Function;
   continueNext: Function;
   isPaymentPage: boolean;
-  paymentLabel:string;
+  paymentLabel: string;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -25,7 +25,7 @@ export const PaymentRequestCustomButton = ({
   onPaymentFunction,
   continueNext,
   isPaymentPage,
-  paymentLabel
+  paymentLabel,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -35,6 +35,7 @@ export const PaymentRequestCustomButton = ({
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
+    console.log(stripeAllowedCountries, "stripeAllowedCountries");
     if (stripe && !paymentRequest && stripeAllowedCountries.includes(country)) {
       const pr = stripe.paymentRequest({
         country: country,
@@ -123,7 +124,13 @@ export const PaymentRequestCustomButton = ({
               }`}
             >
               {isPaymentPage ? "" : t("donateWith")}{" "}
-              <AppleIcon textColor={isPaymentPage ? themeProperties.light.primaryFontColor : '#fff'} />
+              <AppleIcon
+                textColor={
+                  isPaymentPage
+                    ? themeProperties.light.primaryFontColor
+                    : "#fff"
+                }
+              />
             </button>
             {!isPaymentPage && (
               <div className="separator-text mb-10">{t("or")}</div>
@@ -141,7 +148,11 @@ export const PaymentRequestCustomButton = ({
             >
               {isPaymentPage ? "" : t("donateWith")}{" "}
               <GooglePayIcon
-                textColor={isPaymentPage ? themeProperties.light.primaryFontColor : '#fff'}
+                textColor={
+                  isPaymentPage
+                    ? themeProperties.light.primaryFontColor
+                    : "#fff"
+                }
               />
             </button>
             {!isPaymentPage && (
@@ -193,7 +204,7 @@ export const NativePay = ({
   paymentSetup,
   continueNext,
   isPaymentPage,
-  paymentLabel
+  paymentLabel,
 }: NativePayProps) => {
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)

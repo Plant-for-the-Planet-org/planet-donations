@@ -1,4 +1,4 @@
-import countriesData from './countriesData.json';
+import countriesData from "./countriesData.json";
 
 const sortedCountries = [];
 
@@ -33,7 +33,8 @@ export function sortCountriesData(sortBy) {
   return countriesData.sort((a, b) => {
     if (a[sortBy] > b[sortBy]) {
       return 1;
-    } if (a[sortBy] < b[sortBy]) {
+    }
+    if (a[sortBy] < b[sortBy]) {
       return -1;
     }
     return 0;
@@ -51,7 +52,12 @@ export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
   if (!sortedCountries[key]) {
     const priorityCountries = [];
     // filter priority countries from list
-    const filteredCountries = countriesData.filter(function(value, index, arr) {
+    const filteredCountries = countriesData.filter(function (
+      value,
+      index,
+      arr
+    ) {
+      console.log(priorityCountryCodes, "priorityCountryCodes");
       if (priorityCountryCodes.includes(value.countryCode)) {
         priorityCountries.push(value);
         return false;
@@ -60,20 +66,22 @@ export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
       }
     });
     // sort array of countries
-    sortedCountries[key] = priorityCountries.concat(filteredCountries.sort((a, b) => {
-      const nameA = t(`country:${a.countryCode.toLowerCase()}`);
-      const nameB = t(`country:${b.countryCode.toLowerCase()}`);
-      if (nameA > nameB) {
-        return 1;
-      } if (nameA < nameB) {
-        return -1;
-      }
-      return 0;
-    }));
+    sortedCountries[key] = priorityCountries.concat(
+      filteredCountries.sort((a, b) => {
+        const nameA = t(`country:${a.countryCode.toLowerCase()}`);
+        const nameB = t(`country:${b.countryCode.toLowerCase()}`);
+        if (nameA > nameB) {
+          return 1;
+        }
+        if (nameA < nameB) {
+          return -1;
+        }
+        return 0;
+      })
+    );
   }
   return sortedCountries[key];
 }
-
 
 export const stripeAllowedCountries = [
   "AE",
