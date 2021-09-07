@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Cypress
-          path: /home/runner/work/pay-with-planet/pay-with-planet/cypress/videos/
+          path: /home/runner/work/planet-donations/planet-donations/cypress/videos/
