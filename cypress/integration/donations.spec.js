@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
-function createDonation(project = "yucatan", customTrees, firstName, lastName, email, address, city, country, zipCode) {
-    cy.visit(`/?to=${project}`)
+function createDonation(customTrees, firstName, lastName, email, address, city, country, zipCode) {
     cy.wait(5000)
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
@@ -103,15 +102,16 @@ function supportGift(project = "yucatan", customTrees, firstName, lastName, emai
     })
 }
 describe("Donations", () => {
+
     it("Testing with Germany address ", () => {
         createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cardPayment("4242424242424242", "424", "242")
     });;
 
-    // it("Testing with Support Link ", () => {
-    //     supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    //     cardPayment("4242424242424242", "424", "242")
-    // });
+    it("Testing with Support Link ", () => {
+        supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cardPayment("4242424242424242", "424", "242")
+    });
 
     it("Testing with Gift Donation ", () => {
         giftDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
@@ -129,5 +129,22 @@ describe("Donations", () => {
         cardPayment("4000007240000007", "424", "242")
     });
 
+    //error testing
+    it("Testing with Charge declined error", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cardPayment("4000000000000002", "424", "242")
+    });4000000000009995
+    it("Testing with Insufficient funds error", () => {
+        createDonation("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cardPayment("4000000000009995", "424", "242")
+    });
+    // To search project
+    it('should search', () => {   
+        cy.visit(`localhost:3000`) 
+        cy.wait(5000)
+        cy.SearchProject('yucatan')
+        cy.get('#yucatan').click()
+    });
+    
 
 })
