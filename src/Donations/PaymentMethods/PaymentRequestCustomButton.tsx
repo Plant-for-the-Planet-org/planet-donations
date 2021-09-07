@@ -62,11 +62,14 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     let subscribed = true;
     if (paymentRequest) {
-      paymentRequest.canMakePayment().then((res: any) => {
-        if (res && subscribed) {
-          setCanMakePayment(true);
-        }
-      });
+      paymentRequest
+        .canMakePayment()
+        .then((res: any) => {
+          if (res && subscribed) {
+            setCanMakePayment(true);
+          }
+        })
+        .catch((err) => console.log(err, "Err"));
     }
 
     return () => {
