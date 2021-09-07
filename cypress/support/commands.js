@@ -119,46 +119,171 @@
 //  });
  
  // Function to search project
-// Cypress.Commands.add('SearchProject', (project) => {
-//     cy.get('#searchProject').type(project)
+Cypress.Commands.add('SearchProject', (project) => {
+    cy.get('#searchProject').type(project)
     
-// })
-
-Cypress.Commands.add("processStripeSCA", (action) => {
-
-
-  //Find the first frame - Named differently each load ( __privateStripeFrameXXXX )
-  cy.get("iframe[name*='__privateStripeFrame62665']")
-      .within(($element) => {
-
-          //Get the body from the first frame
-          const $body = $element.contents().find("body");
-          let topLevel = cy.wrap($body)
-
-          //Find the second frame
-          topLevel.find("iframe[name*='__stripeJSChallengeFrame']")
-              .within(($secondElement) => {
-
-                  //Get the body from the second frame
-                  const $secondBody = $secondElement.contents().find("body");
-                  let secondLevel = cy.wrap($secondBody)
-
-                  //Find the third frame -  acsFrame
-                  secondLevel.find("iframe[name*='acsFrame']")
-
-
-                      //Scope into the actual modal
-                      .within(($thirdElement) => {
-
-                          //Grab the URL of the stripe popup, then have puppeteer browse to it!
-                          cy.task('processSCA', {url: $thirdElement[0]["baseURI"], action: action});
-
-
-                      })
-
-
-              })
-
-      })
-
 })
+
+Cypress.Commands.add('createDonation', (customTrees, firstName, lastName, email, address, city, country, zipCode) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+    })
+    cy.get('[data-test-id="continue-next"]').click().then(() => {
+        cy.get('[data-test-id="test-firstName"]').type(firstName)
+        cy.get('[data-test-id="test-lastName"]').type(lastName)
+        cy.get('[data-test-id="test-email"]').type(email)
+        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+        cy.get('[data-test-id="test-address"]').type(address);
+        cy.get('[data-test-id="test-city"]').clear().type(city)
+        cy.get('[data-test-id="test-country"]').clear().type(country);
+        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('[data-test-id="test-continueToPayment"]').click()
+
+    })
+    
+})
+
+Cypress.Commands.add('giftDonation', ( customTrees, firstName, lastName, email, address, city, country, zipCode) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.giftDonationForm()
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+    })
+    cy.get('[data-test-id="continue-next"]').click().then(() => {
+        cy.get('[data-test-id="test-firstName"]').type(firstName)
+        cy.get('[data-test-id="test-lastName"]').type(lastName)
+        cy.get('[data-test-id="test-email"]').type(email)
+        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+        cy.get('[data-test-id="test-address"]').type(address);
+        cy.get('[data-test-id="test-city"]').clear().type(city)
+        cy.get('[data-test-id="test-country"]').clear().type(country);
+        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('[data-test-id="test-continueToPayment"]').click()
+
+    })
+})
+Cypress.Commands.add('giftDonationForm',() => {
+    cy.get('.donations-gift-toggle').click().then(() => {
+        cy.get('[data-test-id="recipientName"]').type('Rishabh')
+        cy.get('[data-test-id="addEmailButton"]').click()
+        cy.get('[data-test-id="giftRecipient"]').type('peter.payer@gmail.com')
+        cy.get('[data-test-id="giftMessage"]').type('This gift is for Peter')
+        cy.get('[data-test-id="giftSubmit"]').click()
+    })
+})
+
+Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
+    cy.get('#card-element').within(() => {
+        cy.fillElementsInput('cardNumber', cardNumber);
+        cy.fillElementsInput('cardExpiry', cardExpiry); // MMYY
+        cy.fillElementsInput('cardCvc', cardCvc);
+    });
+    cy.get('[data-test-id="test-donateButton"]').click()
+        .then(() => {
+            cy.wait(8000).then(() => {
+                // cy.get('#test-source-authorize-3ds').click()
+                cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
+            })
+
+        })
+})  
+
+Cypress.Commands.add('paymentError', (cardNumber, cardExpiry, cardCvc) => {
+    cy.get('#card-element').within(() => {
+        cy.fillElementsInput('cardNumber', cardNumber);
+        cy.fillElementsInput('cardExpiry', cardExpiry); // MMYY
+        cy.fillElementsInput('cardCvc', cardCvc);
+    });
+    cy.get('[data-test-id="test-donateButton"]').click()
+        .then(() => {
+            cy.wait(8000).then(() => {
+                // cy.get('#test-source-authorize-3ds').click()
+                cy.get('[data-test-id="payment-error"]')
+            })
+
+        })
+})  
+Cypress.Commands.add('supportGift', (project = "yucatan", customTrees, firstName, lastName, email, address, city, country, zipCode) => {
+    cy.visit({
+        url: `/?to=${project}`,
+        qs: { 's': 'sagar-aryal' }
+    })
+    cy.wait(5000)
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+    })
+    cy.get('[data-test-id="continue-next"]').click().then(() => {
+        cy.get('[data-test-id="test-firstName"]').type(firstName)
+        cy.get('[data-test-id="test-lastName"]').type(lastName)
+        cy.get('[data-test-id="test-email"]').type(email)
+        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+        cy.get('[data-test-id="test-address"]').type(address);
+        cy.get('[data-test-id="test-city"]').clear().type(city)
+        cy.get('[data-test-id="test-country"]').clear().type(country);
+        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('[data-test-id="test-continueToPayment"]').click()
+
+    })
+})
+// Cypress.Commands.add("processStripeSCA", (action) => {
+
+
+//   //Find the first frame - Named differently each load ( __privateStripeFrameXXXX )
+//   cy.get("iframe[name*='__privateStripeFrame62665']")
+//       .within(($element) => {
+
+//           //Get the body from the first frame
+//           const $body = $element.contents().find("body");
+//           let topLevel = cy.wrap($body)
+
+//           //Find the second frame
+//           topLevel.find("iframe[name*='__stripeJSChallengeFrame']")
+//               .within(($secondElement) => {
+
+//                   //Get the body from the second frame
+//                   const $secondBody = $secondElement.contents().find("body");
+//                   let secondLevel = cy.wrap($secondBody)
+
+//                   //Find the third frame -  acsFrame
+//                   secondLevel.find("iframe[name*='acsFrame']")
+
+
+//                       //Scope into the actual modal
+//                       .within(($thirdElement) => {
+
+//                           //Grab the URL of the stripe popup, then have puppeteer browse to it!
+//                           cy.task('processSCA', {url: $thirdElement[0]["baseURI"], action: action});
+
+
+//                       })
+
+
+//               })
+
+//       })
+
+// })
+// function sofortPayment() {
+//     cy.get('[data-test-id="sofortPayment"]').click()
+//     cy.get('[data-test-id="sofortDonateContinue"]').click().then(() => {
+//         cy.get('.actions').within(() => {
+//             cy.get('button').should("have.text", "AUTHORIZE TEST PAYMENT").click().then(() => {
+//                 cy.should("have.text", "COMPLETING YOUR DONATION")
+//             })
+//         })
+//     })
+// }
