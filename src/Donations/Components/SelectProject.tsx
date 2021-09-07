@@ -17,12 +17,16 @@ import themeProperties from "../../../styles/themeProperties";
 interface Props {}
 
 function SelectProject({}: Props): ReactElement {
-  const { selectedProjects, allProjects, setSelectedProjects } =
+  const { selectedProjects, allProjects, setSelectedProjects, setprojectDetails } =
     React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
+
+  React.useEffect(() => {
+    setprojectDetails({});
+  },[])
 
   useDebouncedEffect(
     () => {

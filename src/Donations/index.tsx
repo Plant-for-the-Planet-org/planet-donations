@@ -117,15 +117,9 @@ function DonationInfo() {
       <Image
         layout="fill"
         objectFit="cover"
-        src={
-          projectDetails &&
-          projectDetails.purpose !== "trees" &&
-          projectDetails.image
-            ? projectDetails.image
-            : getTenantBackground(tenant)
-        }
+        objectPosition="right center"
+        src={getTenantBackground(tenant,projectDetails)}
         className="background-image"
-        placeholder={"blur"}
         alt="Background image with trees"
       />
       <div className="background-image-overlay"></div>

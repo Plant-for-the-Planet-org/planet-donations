@@ -23,7 +23,6 @@ interface Props {
   shouldCreateDonation: boolean;
   country: any;
   contactDetails: any;
-  treecount: any;
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
@@ -42,7 +41,6 @@ function index({
   shouldCreateDonation,
   country,
   contactDetails,
-  treecount,
   allowTaxDeductionChange,
   currency,
   paymentSetup,
@@ -55,7 +53,6 @@ function index({
     setisGift,
     setpaymentSetup,
     setcurrency,
-    settreeCount,
     setContactDetails,
     setcountry,
     setIsTaxDeductible,
@@ -73,7 +70,6 @@ function index({
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
       setContactDetails(contactDetails);
-      settreeCount(treecount);
       setallowTaxDeductionChange(allowTaxDeductionChange);
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
@@ -113,7 +109,11 @@ function index({
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    description = `Plant trees with ${projectDetails.tpo ? projectDetails.tpo?.name : projectDetails.tpoData?.name} in ${
+    description = `Plant trees with ${
+      projectDetails.tpo
+        ? projectDetails.tpo?.name
+        : projectDetails.tpoData?.name
+    } in ${
       getCountryDataBy("countryCode", projectDetails.country)?.countryName
     }. Your journey to a trillion trees starts here.`;
   }
