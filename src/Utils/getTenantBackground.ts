@@ -1,5 +1,7 @@
 import defaultForest from "../../public/tenants/default/default-forest.jpg";
 import klumforest from "../../public/tenants/leniklum/leniklum.jpg";
+import bahlsen from "../../public/tenants/bahlsen/bahlsen.png";
+
 import getImageUrl from "./getImageURL";
 
 // Set tenant image -> set tenant image where needed, except for default
@@ -11,6 +13,9 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
   switch (tenant) {
     case "ten_KRHYP8TR":
       tenantImage = klumforest;
+      break;
+    case "ten_eiRX3E3x":
+      tenantImage = bahlsen;
       break;
     default:
       break;
