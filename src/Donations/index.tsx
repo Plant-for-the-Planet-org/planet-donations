@@ -111,7 +111,7 @@ function DonationInfo() {
       </div>
     );
   };
-
+  console.log(`projectDetails`, projectDetails)
   return (
     <div className="donations-info-container">
       <Image
@@ -127,6 +127,7 @@ function DonationInfo() {
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep > 0 &&
+            projectDetails.tpo &&
             (projectDetails.purpose === "trees" ? (
               <a
                 rel="noreferrer"

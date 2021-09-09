@@ -198,6 +198,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {!hideTaxDeduction && <TaxDeductionOption />}
 
+          {/* TODO - When donations are coming from context, check for haspublicprofile */}
           {projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
               {!contactDetails.companyname ||
