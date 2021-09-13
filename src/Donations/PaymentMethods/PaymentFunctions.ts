@@ -92,7 +92,7 @@ export async function createDonationFunction({
   setdonationID,
   token,
   setshowErrorCard,
-  frequency
+  frequency,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -104,7 +104,7 @@ export async function createDonationFunction({
     taxDeductionCountry,
     isGift,
     giftDetails,
-    frequency
+    frequency,
   });
   try {
     let donation;
@@ -156,17 +156,22 @@ export function createDonationData({
   taxDeductionCountry,
   isGift,
   giftDetails,
-  frequency
+  frequency,
 }: any) {
   let donationData = {
     purpose: projectDetails.purpose,
     project: projectDetails.id,
-    quantity:quantity,
     amount: Math.round((unitCost * quantity + Number.EPSILON) * 100) / 100,
     currency,
     donor: { ...contactDetails },
-    frequency:frequency === 'once' ? null : frequency
+    frequency: frequency === "once" ? null : frequency,
   };
+  if (projectDetails.purpose !== "bouquet") {
+    donationData = {
+      ...donationData,
+      quantity,
+    };
+  }
   if (taxDeductionCountry) {
     donationData = {
       ...donationData,

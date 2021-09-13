@@ -21,6 +21,7 @@ import TreeDonation from "../Micros/DonationTypes/TreeDonation";
 import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
+import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 
 function DonationsForm() {
   const {
@@ -119,6 +120,16 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
+  const donationSelection =()=>{
+    switch(projectDetails.purpose){
+      case "trees": return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+      case "funds": return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "bouquet": return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal}  />;
+      default : return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+    }
+  } 
+  
+
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : (
@@ -144,12 +155,8 @@ function DonationsForm() {
           ) : (
             <></>
           )}
-
-          {projectDetails.purpose === "funds" ? (
-            <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
-          ) : (
-            <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />
-          )}
+         
+          {donationSelection()}
 
           <div
             className={`${
@@ -160,7 +167,7 @@ function DonationsForm() {
 
             <div className={"horizontal-line"} />
 
-            {projectDetails.purpose !== "funds" && <DonationAmount />}
+            {projectDetails.purpose === "trees" && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
               minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (

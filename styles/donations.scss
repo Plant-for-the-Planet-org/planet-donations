@@ -258,6 +258,15 @@
   }
 }
 
+.bouquet-project-space-divider{
+  width: 10px;
+  @include smTabletView{
+    width: 30px;
+  }
+  @media screen and (max-width: 341px) {
+    width: 0px;
+  }
+}
 .funding-selection-options-container {
   display: flex;
   flex-direction: row;
