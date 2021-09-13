@@ -69,7 +69,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 }`}
                 style={{ maxWidth: "100px" }}
               >
-                {AllIcons[index]}
+                <div className={'funding-icon'} style={{height:'auto',width:'auto'}}>
+                  {AllIcons[index]}
+                </div>
                 <div className="funding-selection-option-text mt-10">
                   <span>
                     {getFormatedCurrency(
@@ -97,7 +99,10 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           }}
           style={{ flexGrow: 1 }}
         >
+          <div className={'funding-icon'} style={{height:'auto',width:'auto'}}>
           <CustomIcon />
+          </div>
+         
           <div className="funding-selection-option-text">
             <div
               className="d-flex row"
