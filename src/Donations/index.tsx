@@ -180,7 +180,7 @@ function DonationInfo() {
               {projectDetails.purpose === "bouquet" 
               // && projectDetails.description 
               ? (
-                <p className="text-white">{projectDetails.description}This bouquet currently supports restoration projects in Latin America and Sub Saharan Africa.
+                <p className="text-white mt-10">{projectDetails.description}This bouquet currently supports restoration projects in Latin America and Sub Saharan Africa.
                 </p>
               ) : (
                 <></>
