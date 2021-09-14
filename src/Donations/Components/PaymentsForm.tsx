@@ -65,6 +65,7 @@ function PaymentsForm({}: Props): ReactElement {
     hideTaxDeduction,
     queryToken,
     frequency,
+    tenant
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -92,6 +93,7 @@ function PaymentsForm({}: Props): ReactElement {
       country,
       setshowErrorCard,
       router,
+      tenant
     });
   };
 

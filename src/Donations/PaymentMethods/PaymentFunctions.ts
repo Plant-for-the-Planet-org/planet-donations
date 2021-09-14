@@ -224,6 +224,7 @@ export async function payDonationFunction({
   country,
   setshowErrorCard,
   router,
+  tenant
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -293,6 +294,7 @@ export async function payDonationFunction({
           country,
           setshowErrorCard,
           router,
+          tenant
         });
       }
     }
@@ -329,6 +331,7 @@ export async function handleSCAPaymentFunction({
   country,
   setshowErrorCard,
   router,
+  tenant
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -424,7 +427,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
         }
       );
 
@@ -457,7 +460,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
         }
       );
 

@@ -41,6 +41,7 @@ function DonationsForm() {
     setshowErrorCard,
     queryToken,
     frequency,
+    tenant
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -114,6 +115,7 @@ function DonationsForm() {
         country,
         setshowErrorCard,
         router,
+        tenant
       });
     });
   };
