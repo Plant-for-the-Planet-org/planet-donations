@@ -162,7 +162,7 @@ function ContactsForm({}: Props): ReactElement {
               <MaterialTextField
                 inputRef={register({
                   required: true,
-                  minLength: 3,
+                  minLength: 1,
                 })}
                 label={t("firstName")}
                 variant="outlined"
@@ -182,7 +182,7 @@ function ContactsForm({}: Props): ReactElement {
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true, minLength: 3 })}
+                inputRef={register({ required: true, minLength: 1 })}
                 label={t("lastName")}
                 variant="outlined"
                 name="lastname"
