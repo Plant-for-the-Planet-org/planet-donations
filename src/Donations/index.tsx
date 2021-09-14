@@ -177,11 +177,9 @@ function DonationInfo() {
                 <p className="title-text text-white">{projectDetails.name}</p>
               )}
 
-              {projectDetails.purpose === "bouquet" 
-              // && projectDetails.description 
-              ? (
-                <p className="text-white mt-10">{projectDetails.description}This bouquet currently supports restoration projects in Latin America and Sub Saharan Africa.
-                </p>
+              {projectDetails.purpose === "bouquet" &&
+              projectDetails.description ? (
+                <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 <></>
               )}

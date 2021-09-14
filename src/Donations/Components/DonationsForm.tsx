@@ -120,15 +120,55 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
-  const donationSelection =()=>{
-    switch(projectDetails.purpose){
-      case "trees": return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
-      case "funds": return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
-      case "bouquet": return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal}  />;
-      default : return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+  const donationSelection = () => {
+    switch (projectDetails.purpose) {
+      case "trees":
+        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+      case "funds":
+        return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "bouquet":
+        return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      default:
+        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
     }
-  } 
-  
+  };
+
+  let paymentLabel = "";
+
+  if (paymentSetup && currency) {
+    switch (projectDetails.purpose) {
+      case "trees":
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+      case "funds":
+        paymentLabel = t("fundingPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
+      case "bouquet":
+        paymentLabel = t("bouquetPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
+      default:
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+    }
+  }
 
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -155,7 +195,7 @@ function DonationsForm() {
           ) : (
             <></>
           )}
-         
+
           {donationSelection()}
 
           <div
@@ -190,12 +230,7 @@ function DonationsForm() {
                       });
                     }}
                     isPaymentPage={false}
-                    paymentLabel={t("treesInCountry", {
-                      treeCount: quantity,
-                      country: t(
-                        `country:${projectDetails.country.toLowerCase()}`
-                      ),
-                    })}
+                    paymentLabel={paymentLabel}
                     frequency={frequency}
                   />
                 ) : (
