@@ -150,6 +150,32 @@ Cypress.Commands.add('createDonation', (customTrees, firstName, lastName, email,
     
 })
 
+Cypress.Commands.add('multipleDonation', (firstName, lastName, email, address, city, country, zipCode) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.tree-selection-option-text').eq(1).should("have.text", "20trees").click()
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+    })
+    cy.get('[data-test-id="continue-next"]').click().then(() => {
+        cy.get('[data-test-id="test-firstName"]').type(firstName)
+        cy.get('[data-test-id="test-lastName"]').type(lastName)
+        cy.get('[data-test-id="test-email"]').type(email)
+        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+        cy.get('[data-test-id="test-address"]').type(address);
+        cy.get('[data-test-id="test-city"]').clear().type(city)
+        cy.get('[data-test-id="test-country"]').clear().type(country);
+        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('[data-test-id="test-continueToPayment"]').click()
+
+    })
+    
+})
+
 Cypress.Commands.add('giftDonation', ( customTrees, firstName, lastName, email, address, city, country, zipCode) => {
     cy.visit(`localhost:3000`)
     cy.wait(5000)
