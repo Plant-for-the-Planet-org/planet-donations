@@ -61,7 +61,7 @@
   "fundingContributionMessage": "We will keep you posted about our actions, in the mean time maybe share with your friends about your contribution.",
   "yourTreesPlantedByOnLocation": "Your {{treeCount}} trees will be planted by {{projectName}} in {{location}}.",
   "myTreesPlantedByOnLocation": "My {{treeCount}} trees are being planted in {{location}}.",
-  "plantTreesAtURL": "Plant trees at {{url}}",
+  "plantTreesAtURL": "Restore & protect trees at {{url}}",
   "thankYou": "Thank you",
   "thankyouHeaderText": "We're on the road to a \n <h1>Trillion Trees</h1>",
   "donationFailed": "Donation Failed",

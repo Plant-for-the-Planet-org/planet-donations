@@ -4,7 +4,7 @@ import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
 import { useTranslation } from "next-i18next";
-import ThankYou from "./Components/ThankYouComponent";
+import PaymentStatus from "./Components/PaymentStatus";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
@@ -64,7 +64,7 @@ function Donations({}: Props): ReactElement {
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
-        {donationStep === 4 && <ThankYou />}
+        {donationStep === 4 && <PaymentStatus />}
       </div>
     </div>
   );
@@ -111,14 +111,13 @@ function DonationInfo() {
       </div>
     );
   };
-  console.log(`projectDetails`, projectDetails)
   return (
     <div className="donations-info-container">
       <Image
         layout="fill"
         objectFit="cover"
         objectPosition="right center"
-        src={getTenantBackground(tenant,projectDetails)}
+        src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
         alt="Background image with trees"
       />
@@ -140,27 +139,29 @@ function DonationInfo() {
             ) : (
               <TPOImage />
             ))}
-          {(donationStep === 2 || donationStep === 3) && (
-            <div className="contact-details-info">
-              <div className={"w-100 mt-10 text-white"}>
-                {t("donating")}
-                <span className="text-bold" style={{ marginRight: "4px" }}>
-                  {getFormatedCurrency(
-                    i18n.language,
-                    currency,
-                    paymentSetup.unitCost * quantity
-                  )}
-                </span>
-                {t("fortreeCountTrees", {
-                  count: Number(quantity),
-                  treeCount: getFormattedNumber(
-                    i18n.language,
-                    Number(quantity)
-                  ),
-                })}
+          {(donationStep === 2 || donationStep === 3) &&
+            projectDetails.purpose === "trees" && (
+              <div className="contact-details-info">
+                <div className={"w-100 mt-10 text-white"}>
+                  {t("donating")}
+                  <span className="text-bold" style={{ marginRight: "4px" }}>
+                    {getFormatedCurrency(
+                      i18n.language,
+                      currency,
+                      paymentSetup.unitCost * quantity
+                    )}
+                  </span>
+                  {t("fortreeCountTrees", {
+                    count: Number(quantity),
+                    treeCount: getFormattedNumber(
+                      i18n.language,
+                      Number(quantity)
+                    ),
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
           {donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
@@ -176,6 +177,14 @@ function DonationInfo() {
                 <p className="title-text text-white">{projectDetails.name}</p>
               )}
 
+              {projectDetails.purpose === "bouquet" 
+              // && projectDetails.description 
+              ? (
+                <p className="text-white">{projectDetails.description}This bouquet currently supports restoration projects in Latin America and Sub Saharan Africa.
+                </p>
+              ) : (
+                <></>
+              )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a
                   rel="noreferrer"
