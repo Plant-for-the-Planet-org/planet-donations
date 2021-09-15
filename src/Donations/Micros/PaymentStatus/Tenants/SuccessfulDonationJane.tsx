@@ -42,6 +42,9 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
         projectDetails={projectDetails}
         donation={donation}
       />
+      <div className={"mt-20 thankyouText"}>
+        {t("common:janeSuccessMessage")}
+      </div>
       <div
         style={{
           position: "relative",

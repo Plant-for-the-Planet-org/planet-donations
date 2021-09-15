@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
+import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 interface Props {
   projectDetails: any;
@@ -14,6 +15,9 @@ function ThankyouMessage({
   donation,
   paymentTypeUsed,
 }: Props): ReactElement {
+
+  const { tenant } =
+    React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
   let currencyFormat = () => {};
   if (donation) {
@@ -90,9 +94,11 @@ function ThankyouMessage({
               {donationSuccessfulMessage}
               {" " + t("common:fundingDonationSuccess")}
             </div>
-            <div className={"mt-20 thankyouText"}>
+            {tenant !== 'ten_1e5WejOp' && (
+              <div className={"mt-20 thankyouText"}>
               {t("common:fundingContributionMessage")}
             </div>
+            )}
           </>
         )}
       </div>

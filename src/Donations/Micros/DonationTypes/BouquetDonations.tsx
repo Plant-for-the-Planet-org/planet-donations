@@ -45,19 +45,22 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const customInputRef = React.useRef(null);
 
-  React.useEffect(()=>{
-    if(paymentSetup.options.length > 2){
-      setquantity(paymentSetup.options[2].quantity)
-    }else{
-      setquantity(paymentSetup.options[1].quantity)
+  React.useEffect(() => {
+    if (paymentSetup && paymentSetup.options) {
+      if (paymentSetup.options.length > 2) {
+        setquantity(paymentSetup.options[2].quantity);
+      } else {
+        setquantity(paymentSetup.options[1].quantity);
+      }
     }
-  },[paymentSetup])
+  }, [paymentSetup]);
 
   return (
     <>
       <div
-        className={`funding-selection-options-container ${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-          }`}
+        className={`funding-selection-options-container ${
+          isGift && giftDetails.recipientName === "" ? "display-none" : ""
+        }`}
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 4).map((option, index) => {
@@ -69,13 +72,17 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
-                className={`funding-selection-option ${option.quantity === quantity && !isCustomDonation
+                className={`funding-selection-option ${
+                  option.quantity === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
-                  }`}
+                }`}
                 style={{ maxWidth: "100px" }}
               >
-                <div className={'funding-icon'} style={{ height: 'auto', width: 'auto' }}>
+                <div
+                  className={"funding-icon"}
+                  style={{ height: "auto", width: "auto" }}
+                >
                   {AllIcons[index]}
                 </div>
                 <div className="funding-selection-option-text mt-10">
@@ -95,17 +102,21 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           <div className={"bouquet-project-space-divider"} />
         )}
 
-        {paymentSetup && paymentSetup.options &&
+        {paymentSetup && paymentSetup.options && (
           <div
-            className={`funding-selection-option ${isCustomDonation ? "funding-selection-option-selected" : ""
-              }`}
+            className={`funding-selection-option ${
+              isCustomDonation ? "funding-selection-option-selected" : ""
+            }`}
             onClick={() => {
               setisCustomDonation(true);
               customInputRef.current.focus();
             }}
             style={{ flexGrow: 1 }}
           >
-            <div className={'funding-icon'} style={{ height: 'auto', width: 'auto' }}>
+            <div
+              className={"funding-icon"}
+              style={{ height: "auto", width: "auto" }}
+            >
               <CustomIcon />
             </div>
 
@@ -140,7 +151,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               </div>
             </div>
           </div>
-        }
+        )}
       </div>
       {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
