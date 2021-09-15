@@ -48,9 +48,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   return (
     <>
       <div
-        className={`funding-selection-options-container ${
-          isGift && giftDetails.recipientName === "" ? "display-none" : ""
-        }`}
+        className={`funding-selection-options-container ${isGift && giftDetails.recipientName === "" ? "display-none" : ""
+          }`}
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 4).map((option, index) => {
@@ -62,14 +61,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
-                className={`funding-selection-option ${
-                  option.quantity === quantity && !isCustomDonation
+                className={`funding-selection-option ${option.quantity === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
-                }`}
+                  }`}
                 style={{ maxWidth: "100px" }}
               >
-                <div className={'funding-icon'} style={{height:'auto',width:'auto'}}>
+                <div className={'funding-icon'} style={{ height: 'auto', width: 'auto' }}>
                   {AllIcons[index]}
                 </div>
                 <div className="funding-selection-option-text mt-10">
@@ -85,55 +83,56 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             );
           })}
 
-          {paymentSetup?.options?.length > 3 && (
-            <div className={"bouquet-project-space-divider"} />
-          )}
-        
-        <div
-          className={`funding-selection-option ${
-            isCustomDonation ? "funding-selection-option-selected" : ""
-          }`}
-          onClick={() => {
-            setisCustomDonation(true);
-            customInputRef.current.focus();
-          }}
-          style={{ flexGrow: 1 }}
-        >
-          <div className={'funding-icon'} style={{height:'auto',width:'auto'}}>
-          <CustomIcon />
-          </div>
-         
-          <div className="funding-selection-option-text">
-            <div
-              className="d-flex row"
-              style={{ alignItems: "flex-end", justifyContent: "center" }}
-            >
-              <p style={{ marginBottom: "0px", marginRight: "6px" }}>
-                {/* {getFormatedCurrencySymbol(currency)} */}
-              </p>
-              <input
-                className={"funding-custom-tree-input"}
-                onInput={(e) => {
-                  // replaces any character other than number to blank
-                  e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                  //  if length of input more than 12, display only 12 digits
-                  if (e.target.value.toString().length >= 12) {
-                    e.target.value = e.target.value.toString().slice(0, 12);
-                  }
-                }}
-                value={customInputValue}
-                type="text"
-                inputMode="numeric"
-                pattern="\d*"
-                onChange={(e) => {
-                  setCustomValue(e);
-                  setCustomInputValue(e.target.value);
-                }}
-                ref={customInputRef}
-              />
+        {paymentSetup?.options?.length > 3 && (
+          <div className={"bouquet-project-space-divider"} />
+        )}
+
+        {paymentSetup && paymentSetup.options &&
+          <div
+            className={`funding-selection-option ${isCustomDonation ? "funding-selection-option-selected" : ""
+              }`}
+            onClick={() => {
+              setisCustomDonation(true);
+              customInputRef.current.focus();
+            }}
+            style={{ flexGrow: 1 }}
+          >
+            <div className={'funding-icon'} style={{ height: 'auto', width: 'auto' }}>
+              <CustomIcon />
+            </div>
+
+            <div className="funding-selection-option-text">
+              <div
+                className="d-flex row"
+                style={{ alignItems: "flex-end", justifyContent: "center" }}
+              >
+                <p style={{ marginBottom: "0px", marginRight: "6px" }}>
+                  {/* {getFormatedCurrencySymbol(currency)} */}
+                </p>
+                <input
+                  className={"funding-custom-tree-input"}
+                  onInput={(e) => {
+                    // replaces any character other than number to blank
+                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                    //  if length of input more than 12, display only 12 digits
+                    if (e.target.value.toString().length >= 12) {
+                      e.target.value = e.target.value.toString().slice(0, 12);
+                    }
+                  }}
+                  value={customInputValue}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d*"
+                  onChange={(e) => {
+                    setCustomValue(e);
+                    setCustomInputValue(e.target.value);
+                  }}
+                  ref={customInputRef}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        }
       </div>
       {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
