@@ -120,6 +120,7 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     VERCEL_URL: process.env.VERCEL_URL,
     ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,
     ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
+    RECURRENCY: process.env.RECURRENCY,
   },
   trailingSlash: false,
   reactStrictMode: true,
@@ -137,5 +138,6 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
   i18n,
   images: {
     domains: ["cdn.plant-for-the-planet.org"],
+
   },
 });

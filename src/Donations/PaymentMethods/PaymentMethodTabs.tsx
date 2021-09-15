@@ -61,7 +61,7 @@ export default function PaymentMethodTabs({
     );
   }
 
-  const { country, currency, projectDetails, paymentSetup, treeCount } =
+  const { country, currency, projectDetails, paymentSetup, quantity,frequency } =
     React.useContext(QueryParamContext);
 
   return (
@@ -86,6 +86,7 @@ export default function PaymentMethodTabs({
           }`}
           onClick={(e) => handleChange(e, "Sofort")}
           {...a11yProps("Sofort")}
+          data-test-id='sofortPayment'
         >
           <SofortIcon />
           <CheckMark />
@@ -136,7 +137,7 @@ export default function PaymentMethodTabs({
           country={country}
           currency={currency}
           amount={formatAmountForStripe(
-            projectDetails.treeCost * treeCount,
+            paymentSetup.unitCost * quantity,
             currency.toLowerCase()
           )}
           onPaymentFunction={onNativePaymentFunction}
@@ -145,10 +146,11 @@ export default function PaymentMethodTabs({
           isPaymentPage
           paymentLabel={
             t("treesInCountry", {
-              treeCount: treeCount,
+              treeCount: quantity,
               country: t(`country:${projectDetails.country.toLowerCase()}`),
             })
           }
+          frequency={frequency}
         />
       )}
     </div>

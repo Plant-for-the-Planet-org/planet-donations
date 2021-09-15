@@ -46,6 +46,7 @@ function TaxDeductionOption({}: Props): ReactElement {
             <button
               onClick={() => setopenTaxDeductionModal(true)}
               className={"tax-country-selection text-primary text-bold"}
+              data-test-id='taxCountrySelection'
             >
               {t(`country:${country.toLowerCase()}`)}
               <DownArrowIcon color={themeProperties.primaryColor} />

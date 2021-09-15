@@ -17,6 +17,7 @@ interface PaymentButtonProps {
   continueNext: Function;
   isPaymentPage: boolean;
   paymentLabel: string;
+  frequency: string | null;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -26,6 +27,7 @@ export const PaymentRequestCustomButton = ({
   continueNext,
   isPaymentPage,
   paymentLabel,
+  frequency,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -119,7 +121,10 @@ export const PaymentRequestCustomButton = ({
       {stripeAllowedCountries?.includes(country) &&
       canMakePayment &&
       paymentRequest &&
-      paymentRequest._canMakePaymentAvailability ? (
+      paymentRequest._canMakePaymentAvailability &&
+      (frequency !== "once"
+        ? paymentSetup?.gateways.stripe.recurrency.enabled.includes("stripe_cc")
+        : true) ? (
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
           <div className="w-100">
             <button
@@ -185,7 +190,11 @@ export const PaymentRequestCustomButton = ({
       ) : null}
 
       {!isPaymentPage && (
-        <button onClick={() => continueNext()} className="primary-button">
+        <button
+          data-test-id="continue-next"
+          onClick={() => continueNext()}
+          className="primary-button"
+        >
           {canMakePayment ? t("payPalCard") : t("continue")}
         </button>
       )}
@@ -202,6 +211,7 @@ interface NativePayProps {
   continueNext: Function;
   isPaymentPage: boolean;
   paymentLabel: string;
+  frequency: string | null;
 }
 export const NativePay = ({
   country,
@@ -212,6 +222,7 @@ export const NativePay = ({
   continueNext,
   isPaymentPage,
   paymentLabel,
+  frequency,
 }: NativePayProps) => {
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)
@@ -246,6 +257,7 @@ export const NativePay = ({
         continueNext={continueNext}
         isPaymentPage={isPaymentPage}
         paymentLabel={paymentLabel}
+        frequency={frequency}
       />
     </Elements>
   );

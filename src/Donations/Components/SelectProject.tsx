@@ -10,19 +10,23 @@ import {
 } from "../../Utils/projects/filterProjects";
 import { useDebouncedEffect } from "../../Utils/useDebouncedEffect";
 import NotFound from "./../../../public/assets/icons/NotFound";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
 
 interface Props {}
 
 function SelectProject({}: Props): ReactElement {
-  const { selectedProjects, allProjects, setSelectedProjects } =
+  const { selectedProjects, allProjects, setSelectedProjects, setprojectDetails } =
     React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
+
+  React.useEffect(() => {
+    setprojectDetails({});
+  },[])
 
   useDebouncedEffect(
     () => {
@@ -43,7 +47,7 @@ function SelectProject({}: Props): ReactElement {
     } else if (!trottledSearchValue) {
       if (allProjects?.length < 6) {
         setSelectedProjects(allProjects);
-      } else { 
+      } else {
         const randomProjects = getRandomProjects(allProjects, 6);
         setSelectedProjects(randomProjects);
       }
@@ -53,7 +57,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push({query: {...router.query, to: slug },})
+    router.push({ query: { ...router.query, to: slug, step: "donate" } });
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
@@ -69,6 +73,7 @@ function SelectProject({}: Props): ReactElement {
             placeholder={t("search")}
             autoFocus
             onChange={(e) => setSearchValue(e.target.value)}
+            id="searchProject"
           />
         </div>
       </div>
@@ -81,6 +86,7 @@ function SelectProject({}: Props): ReactElement {
                 onClick={() => donateToProject(project.properties.slug)}
                 key={index}
                 className="project"
+                id={project.properties.slug}
               >
                 {project.properties.tpo.image ? (
                   <img
@@ -98,9 +104,7 @@ function SelectProject({}: Props): ReactElement {
                 )}
                 {project.properties.country && (
                   <p className="project-country">
-                    {
-                      t(`country:${project.properties.country.toLowerCase()}`)
-                    }
+                    {t(`country:${project.properties.country.toLowerCase()}`)}
                   </p>
                 )}
                 <p className="project-name">{project.properties.name}</p>

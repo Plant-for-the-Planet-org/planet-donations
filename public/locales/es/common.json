@@ -1,4 +1,6 @@
 {
+  "fortreeCountTrees": "para {{treeCount}} Árbol",
+  "fortreeCountTrees_plural": "para {{treeCount}} Árboles",
   "recipientName": "Nombre del beneficiario",
   "recipientNameRequired": "El nombre del destinatario es obligatorio",
   "email": "Envíe un correo electrónico a",
@@ -13,6 +15,7 @@
   "firstNameRequired": "Se requiere el nombre de pila",
   "lastName": "Apellido",
   "lastNameRequired": "El apellido es obligatorio",
+  "atLeast3LettersRequired": "Se requieren al menos 3 letras",
   "address": "Dirección",
   "addressRequired": "Se requiere la dirección",
   "city": "Ciudad",
@@ -54,6 +57,8 @@
   "donationSuccessful": "Su donación a {{currency}} {{totalAmount}} ha sido exitosa.",
   "giftSentMessage": "Hemos enviado un correo electrónico a {{recipientName}} sobre el regalo.",
   "contributionMessage": "¿Quizás los visites algún día? Mientras tanto, ¿podrías convencer a tus amigos de que tengan sus propios árboles hablándoles de los tuyos?",
+  "fundingDonationSuccess": "Gracias por su contribución",
+  "fundingContributionMessage": "Les mantendremos informados de nuestras acciones, mientras tanto, quizás compartan con sus amigos su contribución.",
   "yourTreesPlantedByOnLocation": "Tus árboles de {{treeCount}} serán plantados por {{projectName}} en {{location}} .",
   "myTreesPlantedByOnLocation": "Mis árboles de {{treeCount}} se están plantando en {{location}} .",
   "plantTreesAtURL": "Plantar árboles en {{url}}",
@@ -99,5 +104,6 @@
   "treesInCountry": "{{treeCount}} árboles en{{country}} , Plant-for-the-Planet",
   "errorOccurred": "Algo salió mal",
   "dedicatedTo": "Dedicado a",
-  "message": "Mensaje"
+  "message": "Mensaje",
+  "contributedToTpo": "He aportado {{amount}} a {{organization}}"
 }

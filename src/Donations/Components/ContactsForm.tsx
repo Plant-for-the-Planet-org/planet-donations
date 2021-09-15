@@ -11,6 +11,7 @@ import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter } from "next/router";
 
 interface Props {}
 
@@ -21,6 +22,7 @@ function ContactsForm({}: Props): ReactElement {
     setaddressSugggestions([]);
   }, []);
 
+  const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
@@ -71,6 +73,9 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
+    router.push({
+      query: { ...router.query, step: "payment" },
+    });
     setContactDetails(data);
     setdonationStep(3);
   };
@@ -136,7 +141,12 @@ function ContactsForm({}: Props): ReactElement {
         <div className="d-flex w-100 align-items-center">
           <button
             className="d-flex"
-            onClick={() => setdonationStep(1)}
+            onClick={() => {
+              setdonationStep(1);
+              router.push({
+                query: { ...router.query, step: "donate" },
+              });
+            }}
             style={{ marginRight: "12px" }}
           >
             <BackButton
@@ -154,27 +164,42 @@ function ContactsForm({}: Props): ReactElement {
           <div className="d-flex row">
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({
+                  required: true,
+                  minLength: 3,
+                })}
                 label={t("firstName")}
                 variant="outlined"
                 name="firstname"
                 defaultValue={contactDetails.firstname}
+                data-test-id="test-firstName"
               />
-              {errors.firstname && (
+              {errors.firstname && errors.firstname.type === "required" && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
+              )}
+              {errors.firstname && errors.firstname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true })}
+                inputRef={register({ required: true, minLength: 3 })}
                 label={t("lastName")}
                 variant="outlined"
                 name="lastname"
                 defaultValue={contactDetails.lastname}
+                data-test-id="test-lastName"
               />
-              {errors.lastname && (
+              {errors.lastname && errors.lastname.type === "required" && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
+              )}
+              {errors.lastname && errors.lastname.type === "minLength" && (
+                <span className={"form-errors"}>
+                  {t("atLeast3LettersRequired")}
+                </span>
               )}
             </div>
           </div>
@@ -193,6 +218,7 @@ function ContactsForm({}: Props): ReactElement {
               variant="outlined"
               name="email"
               defaultValue={contactDetails.email}
+              data-test-id="test-email"
             />
             {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
@@ -209,6 +235,7 @@ function ContactsForm({}: Props): ReactElement {
               variant="outlined"
               name="address"
               defaultValue={contactDetails.address}
+              data-test-id="test-address"
               onChange={(event) => {
                 suggestAddress(event.target.value);
               }}
@@ -246,6 +273,7 @@ function ContactsForm({}: Props): ReactElement {
                 variant="outlined"
                 name="city"
                 defaultValue={contactDetails.city}
+                data-test-id="test-city"
               />
               {errors.city && (
                 <span className={"form-errors"}>{t("cityRequired")}</span>
@@ -263,6 +291,7 @@ function ContactsForm({}: Props): ReactElement {
                   variant="outlined"
                   name="zipCode"
                   defaultValue={contactDetails.zipCode}
+                  data-test-id="test-zipCode"
                 />
               )}
               {errors.zipCode && (
@@ -357,6 +386,7 @@ function ContactsForm({}: Props): ReactElement {
             <button
               onClick={handleSubmit(onSubmit)}
               className={"primary-button mt-30"}
+              data-test-id="test-continueToPayment"
             >
               {t("continue")}
             </button>
