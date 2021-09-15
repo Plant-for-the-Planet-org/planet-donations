@@ -45,6 +45,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const customInputRef = React.useRef(null);
 
+  React.useEffect(()=>{
+    if(paymentSetup.options.length > 2){
+      setquantity(paymentSetup.options[2].quantity)
+    }else{
+      setquantity(paymentSetup.options[1].quantity)
+    }
+  },[paymentSetup])
+
   return (
     <>
       <div

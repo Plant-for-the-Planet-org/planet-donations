@@ -162,6 +162,22 @@ function DonationInfo() {
               </div>
             )}
 
+          {(donationStep === 2 || donationStep === 3) &&
+            projectDetails.purpose === "bouquet" && (
+              <div className="contact-details-info">
+                <div className={"w-100 mt-10 text-white"}>
+                  {t("donating")}
+                  <span className="text-bold" style={{ marginRight: "4px" }}>
+                    {getFormatedCurrency(
+                      i18n.language,
+                      currency,
+                      paymentSetup.unitCost * quantity
+                    )}
+                  </span>
+                </div>
+              </div>
+            )}
+
           {donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
