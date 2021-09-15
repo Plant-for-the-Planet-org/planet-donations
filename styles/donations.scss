@@ -294,8 +294,8 @@
       }
       .funding-selection-option-text {
         color: $primaryFontColor;
-        p {
-          color: $primaryFontColor;
+        p,span {
+          color: $primaryColor;
         }
       }
     }

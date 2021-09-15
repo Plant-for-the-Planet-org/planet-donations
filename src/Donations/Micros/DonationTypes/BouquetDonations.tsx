@@ -109,20 +109,20 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             }}
             style={{ flexGrow: 1 }}
           >
-            <div
+            {/* <div
               className={"funding-icon"}
               style={{ height: "auto", width: "auto" }}
             >
               <CustomIcon />
-            </div>
+            </div> */}
 
             <div className="funding-selection-option-text">
               <div
                 className="d-flex row"
                 style={{ alignItems: "flex-end", justifyContent: "center" }}
               >
-                <p style={{ marginBottom: "0px", marginRight: "6px" }}>
-                  {/* {getFormatedCurrencySymbol(currency)} */}
+                <p style={{ marginBottom: "0px", marginRight: "6px",fontSize:'20px' }}>
+                  {getFormatedCurrencySymbol(currency)}
                 </p>
                 <input
                   className={"funding-custom-tree-input"}
@@ -143,6 +143,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setCustomInputValue(e.target.value);
                   }}
                   ref={customInputRef}
+                  style={{fontSize:'20px'}}
                 />
               </div>
             </div>
