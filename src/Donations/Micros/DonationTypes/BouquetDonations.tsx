@@ -63,7 +63,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         }`}
       >
         {paymentSetup.options &&
-          paymentSetup.options.slice(0, 4).map((option, index) => {
+          paymentSetup.options.slice(0, 6).map((option, index) => {
             return (
               <div
                 key={index}
@@ -79,14 +79,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 }`}
                 style={{ maxWidth: "100px" }}
               >
-                <div
+                {/* <div
                   className={"funding-icon"}
                   style={{ height: "auto", width: "auto" }}
                 >
                   {AllIcons[index]}
-                </div>
-                <div className="funding-selection-option-text mt-10">
-                  <span>
+                </div> */}
+                <div className="funding-selection-option-text">
+                  <span style={{fontSize:'20px'}}>
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
@@ -97,10 +97,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               </div>
             );
           })}
-
-        {paymentSetup?.options?.length > 3 && (
-          <div className={"bouquet-project-space-divider"} />
-        )}
 
         {paymentSetup && paymentSetup.options && (
           <div
