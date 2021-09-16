@@ -6,6 +6,10 @@ describe("Donations", () => {
         cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cy.cardPayment("4242424242424242", "424", "242")
     });
+    it("Testing Multiple Donations ", () => {
+        cy.multipleDonation("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 
     // it("Testing with Support Link ", () => {
     //     supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
@@ -15,7 +19,7 @@ describe("Donations", () => {
     it("Testing with Gift Donation ", () => {
         cy.giftDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cy.cardPayment("4242424242424242", "424", "242")
-    });;
+    });
 
     // International Cards
     it("Testing with Germany Visa", () => {
@@ -28,7 +32,7 @@ describe("Donations", () => {
         cy.cardPayment("4000007240000007", "424", "242")
     });
 
-    //error testing
+    // error testing
     it("Testing with Charge declined error", () => {
         cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
         cy.paymentError("4000000000000002", "424", "242")
@@ -37,6 +41,23 @@ describe("Donations", () => {
         cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
         cy.paymentError("4000000000009995", "424", "242")
     });
-    
+    it("Testing with CVC fails", () => {
+        cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cy.paymentError("4000000000000101", "424", "242")
+    });
+    // it("Testing with incorrect card number", () => {
+    //     cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+    //     cy.paymentError("4242424242424241", "424", "242")
+    // });
 
+    // Recurrency Testing
+    it("Testing Recurrency (yearly)", () => {
+        cy.yearlyDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
+
+    it("Testing Recurrency (monthly)", () => {
+        cy.monthlyDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 })
