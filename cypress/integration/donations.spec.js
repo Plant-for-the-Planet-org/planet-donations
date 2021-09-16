@@ -60,4 +60,8 @@ describe("Donations", () => {
         cy.monthlyDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
         cy.cardPayment("4242424242424242", "424", "242")
     });
+    it("Testing bouquetDonation", () => {
+        cy.bouquetDonation("proj_sq6lIHmsghYl9B74K2GXwa1N", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 })

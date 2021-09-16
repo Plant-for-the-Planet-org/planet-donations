@@ -223,7 +223,7 @@ Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
     });
     cy.get('[data-test-id="test-donateButton"]').click()
         .then(() => {
-            cy.wait(10000).then(() => {
+            cy.wait(15000).then(() => {
                 // cy.get('#test-source-authorize-3ds').click()
                 cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
             })
@@ -327,6 +327,32 @@ Cypress.Commands.add('monthlyDonation', (customTrees, firstName, lastName, email
 
     })
     
+})
+
+Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1N", firstName, lastName, email, address, city, country, zipCode) => {
+    cy.visit({
+        url: `/?to=${projectID}`
+    })
+    cy.wait(5000)
+    cy.get('.funding-selection-option-text').eq(1).should("have.text", "€2.00").click()
+    cy.get('[data-test-id="currency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0);
+    }).then(() => {
+        cy.get('[data-test-id="continue-next"]').click().then(() => {
+            cy.get('[data-test-id="test-firstName"]').type(firstName)
+            cy.get('[data-test-id="test-lastName"]').type(lastName)
+            cy.get('[data-test-id="test-email"]').type(email)
+            // any known address will trigger a dropdown of suggestions which only get away with a tab key,
+            // but Cypress does not support {tab} yet, so we use an unknown address to test here:
+            cy.get('[data-test-id="test-address"]').type(address);
+            cy.get('[data-test-id="test-city"]').clear().type(city)
+            cy.get('[data-test-id="test-country"]').clear().type(country);
+            cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+            cy.get('[data-test-id="test-continueToPayment"]').click()
+    
+        })
+    })
 })
 // Cypress.Commands.add("processStripeSCA", (action) => {
 

@@ -158,6 +158,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             }}
             className="text-bold text-primary"
             style={{ marginRight: "4px" }}
+            data-test-id="currency"
           >
             <span style={{ marginRight: "4px" }} className={"text-normal"}>
               {t("selectCurrency")}
