@@ -6,9 +6,9 @@ import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
 import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { getCountryDataBy } from "../../Utils/countryUtils";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
+import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 function a11yProps(index: any) {
   return {
@@ -28,7 +28,7 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
 }: any) {
-  const { t } = useTranslation(["common", "country"]);
+  const { t, i18n } = useTranslation(["common", "country"]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
     setPaymentType(newValue);
@@ -61,8 +61,51 @@ export default function PaymentMethodTabs({
     );
   }
 
-  const { country, currency, projectDetails, paymentSetup, quantity,frequency } =
-    React.useContext(QueryParamContext);
+  const {
+    country,
+    currency,
+    projectDetails,
+    paymentSetup,
+    quantity,
+    frequency,
+  } = React.useContext(QueryParamContext);
+
+  let paymentLabel;
+
+  if (paymentSetup && currency) {
+    switch (projectDetails.purpose) {
+      case "trees":
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+      case "funds":
+        paymentLabel = t("fundingPaymentLabel", {
+          amount: getFormatedCurrency(
+              i18n.language,
+              currency,
+              paymentSetup.unitCost * quantity
+            ),
+        });
+        break;
+      case "bouquet":
+        paymentLabel = t("bouquetPaymentLabel", {
+          amount: getFormatedCurrency(
+              i18n.language,
+              currency,
+              paymentSetup.unitCost * quantity
+            ),
+        });
+        break;
+      default:
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+    }
+  }
 
   return (
     <div className={"payment-methods-tabs-container"}>
@@ -86,7 +129,7 @@ export default function PaymentMethodTabs({
           }`}
           onClick={(e) => handleChange(e, "Sofort")}
           {...a11yProps("Sofort")}
-          data-test-id='sofortPayment'
+          data-test-id="sofortPayment"
         >
           <SofortIcon />
           <CheckMark />
@@ -144,12 +187,7 @@ export default function PaymentMethodTabs({
           paymentSetup={paymentSetup}
           continueNext={() => {}}
           isPaymentPage
-          paymentLabel={
-            t("treesInCountry", {
-              treeCount: quantity,
-              country: t(`country:${projectDetails.country.toLowerCase()}`),
-            })
-          }
+          paymentLabel={paymentLabel}
           frequency={frequency}
         />
       )}

@@ -109,13 +109,20 @@ function index({
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    description = `Plant trees with ${
-      projectDetails.tpo
-        ? projectDetails.tpo?.name
-        : projectDetails.tpoData?.name
-    } in ${
-      getCountryDataBy("countryCode", projectDetails.country)?.countryName
-    }. Your journey to a trillion trees starts here.`;
+    if(projectDetails.purpose === 'trees'){
+      description = `Plant trees with ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
+    }else if(projectDetails.purpose === 'bouquet'){
+      description = `Plant trees with ${
+        projectDetails.name
+      }. Your journey to a trillion trees starts here.`;
+    }
+
   }
   if (giftDetails && giftDetails.recipientName) {
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;

@@ -92,7 +92,7 @@ export async function createDonationFunction({
   setdonationID,
   token,
   setshowErrorCard,
-  frequency
+  frequency,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -104,7 +104,7 @@ export async function createDonationFunction({
     taxDeductionCountry,
     isGift,
     giftDetails,
-    frequency
+    frequency,
   });
   try {
     let donation;
@@ -156,17 +156,22 @@ export function createDonationData({
   taxDeductionCountry,
   isGift,
   giftDetails,
-  frequency
+  frequency,
 }: any) {
   let donationData = {
     purpose: projectDetails.purpose,
     project: projectDetails.id,
-    quantity:quantity,
     amount: Math.round((unitCost * quantity + Number.EPSILON) * 100) / 100,
     currency,
     donor: { ...contactDetails },
-    frequency:frequency === 'once' ? null : frequency
+    frequency: frequency === "once" ? null : frequency,
   };
+  if (projectDetails.purpose !== "bouquet") {
+    donationData = {
+      ...donationData,
+      quantity,
+    };
+  }
   if (taxDeductionCountry) {
     donationData = {
       ...donationData,
@@ -219,10 +224,10 @@ export async function payDonationFunction({
   country,
   setshowErrorCard,
   router,
+  tenant
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
-
   if (!paymentMethod) {
     setIsPaymentProcessing(false);
     setPaymentError(t("donate:noPaymentMethodError"));
@@ -266,7 +271,7 @@ export async function payDonationFunction({
         paidDonation.data.status === "paid" ||
         paidDonation.data.paymentStatus === "paid"
       ) {
-        setIsPaymentProcessing(false);
+        // setIsPaymentProcessing(false);
         router.replace({
           query: { ...router.query, step: "thankyou" },
         });
@@ -288,6 +293,7 @@ export async function payDonationFunction({
           country,
           setshowErrorCard,
           router,
+          tenant
         });
       }
     }
@@ -324,6 +330,7 @@ export async function handleSCAPaymentFunction({
   country,
   setshowErrorCard,
   router,
+  tenant
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -394,7 +401,7 @@ export async function handleSCAPaymentFunction({
                 "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
               );
             } else {
-              setIsPaymentProcessing(false);
+              // setIsPaymentProcessing(false);
               setPaymentError(
                 error.data.error ? error.data.error.message : error.data.message
               );
@@ -419,7 +426,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
         }
       );
 
@@ -452,7 +459,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort`,
+          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
         }
       );
 

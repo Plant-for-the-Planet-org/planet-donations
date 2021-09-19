@@ -124,7 +124,7 @@ Cypress.Commands.add('SearchProject', (project) => {
     
 })
 
-Cypress.Commands.add('createDonation', (customTrees, firstName, lastName, email, address, city, country, zipCode) => {
+Cypress.Commands.add('createDonation', (customTrees, country) => {
     cy.visit(`localhost:3000`)
     cy.wait(5000)
     cy.SearchProject('yucatan')
@@ -133,7 +133,14 @@ Cypress.Commands.add('createDonation', (customTrees, firstName, lastName, email,
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
+    
+})
+
+Cypress.Commands.add('contactForm', (firstName, lastName, email, address, city, country, zipCode) => {
     cy.get('[data-test-id="continue-next"]').click().then(() => {
         cy.get('[data-test-id="test-firstName"]').type(firstName)
         cy.get('[data-test-id="test-lastName"]').type(lastName)
@@ -147,10 +154,25 @@ Cypress.Commands.add('createDonation', (customTrees, firstName, lastName, email,
         cy.get('[data-test-id="test-continueToPayment"]').click()
 
     })
+})
+Cypress.Commands.add('multipleDonation',(country) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.tree-selection-option-text').eq(1).should("have.text", "20trees").click()
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    })
+    
     
 })
 
-Cypress.Commands.add('giftDonation', ( customTrees, firstName, lastName, email, address, city, country, zipCode) => {
+Cypress.Commands.add('giftDonation', ( customTrees, country) => {
     cy.visit(`localhost:3000`)
     cy.wait(5000)
     cy.SearchProject('yucatan')
@@ -159,20 +181,11 @@ Cypress.Commands.add('giftDonation', ( customTrees, firstName, lastName, email, 
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    cy.get('[data-test-id="continue-next"]').click().then(() => {
-        cy.get('[data-test-id="test-firstName"]').type(firstName)
-        cy.get('[data-test-id="test-lastName"]').type(lastName)
-        cy.get('[data-test-id="test-email"]').type(email)
-        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
-        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
-        cy.get('[data-test-id="test-address"]').type(address);
-        cy.get('[data-test-id="test-city"]').clear().type(city)
-        cy.get('[data-test-id="test-country"]').clear().type(country);
-        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
-        cy.get('[data-test-id="test-continueToPayment"]').click()
-
-    })
+    
 })
 Cypress.Commands.add('giftDonationForm',() => {
     cy.get('.donations-gift-toggle').click().then(() => {
@@ -192,7 +205,7 @@ Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
     });
     cy.get('[data-test-id="test-donateButton"]').click()
         .then(() => {
-            cy.wait(8000).then(() => {
+            cy.wait(15000).then(() => {
                 // cy.get('#test-source-authorize-3ds').click()
                 cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
             })
@@ -224,19 +237,57 @@ Cypress.Commands.add('supportGift', (project = "yucatan", customTrees, firstName
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    cy.get('[data-test-id="continue-next"]').click().then(() => {
-        cy.get('[data-test-id="test-firstName"]').type(firstName)
-        cy.get('[data-test-id="test-lastName"]').type(lastName)
-        cy.get('[data-test-id="test-email"]').type(email)
-        // any known address will trigger a dropdown of suggestions which only get away with a tab key,
-        // but Cypress does not support {tab} yet, so we use an unknown address to test here:
-        cy.get('[data-test-id="test-address"]').type(address);
-        cy.get('[data-test-id="test-city"]').clear().type(city)
-        cy.get('[data-test-id="test-country"]').clear().type(country);
-        cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
-        cy.get('[data-test-id="test-continueToPayment"]').click()
+    
+})
 
+Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.frequency-selection-option').eq(2).should("have.text", "yearly").click()
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    })
+    
+    
+})
+
+Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.frequency-selection-option').eq(1).should("have.text", "monthly").click()
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    })
+    cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    
+})
+
+Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1N", country, tenant="ten_I9TW3ncG") => {
+    cy.visit({
+        url: `/?to=${projectID}&tenant=${tenant}`
+    })
+    cy.wait(5000)
+    cy.get('.funding-selection-option-text').eq(1).click()
+    cy.get('[data-test-id="currency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0);
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
 })
 // Cypress.Commands.add("processStripeSCA", (action) => {

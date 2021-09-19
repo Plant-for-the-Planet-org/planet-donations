@@ -51,9 +51,16 @@ function Footer({}: Props): ReactElement {
           <a
             rel="noreferrer"
             target="_blank"
-            href="https://a.plant-for-the-planet.org/privacy-terms"
+            href="https://a.plant-for-the-planet.org/privacy"
           >
-            {t("privacyTerms")}
+            {t("privacy")}
+          </a>
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href="https://a.plant-for-the-planet.org/terms"
+          >
+            {t("terms")}
           </a>
           <a
             target="_blank"

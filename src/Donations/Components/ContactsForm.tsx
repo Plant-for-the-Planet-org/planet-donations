@@ -11,11 +11,12 @@ import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { useRouter } from "next/router";
+import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
-  const { t } = useTranslation("common");
+  const { t,i18n } = useTranslation("common");
 
   React.useEffect(() => {
     setaddressSugggestions([]);
@@ -37,6 +38,9 @@ function ContactsForm({}: Props): ReactElement {
     setdonationStep,
     country,
     isTaxDeductible,
+    currency,
+    quantity,
+    paymentSetup,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -162,7 +166,7 @@ function ContactsForm({}: Props): ReactElement {
               <MaterialTextField
                 inputRef={register({
                   required: true,
-                  minLength: 3,
+                  minLength: 1,
                 })}
                 label={t("firstName")}
                 variant="outlined"
@@ -182,7 +186,7 @@ function ContactsForm({}: Props): ReactElement {
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
               <MaterialTextField
-                inputRef={register({ required: true, minLength: 3 })}
+                inputRef={register({ required: true, minLength: 1 })}
                 label={t("lastName")}
                 variant="outlined"
                 name="lastname"
@@ -378,7 +382,12 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("continue")}
+              {t("donate")}{" "}
+              {getFormatedCurrency(
+                i18n.language,
+                currency,
+                quantity * paymentSetup.unitCost
+              )}
             </button>
           )}
         </form>

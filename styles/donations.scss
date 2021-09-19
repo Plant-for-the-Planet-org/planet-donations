@@ -258,6 +258,15 @@
   }
 }
 
+.bouquet-project-space-divider{
+  width: 10px;
+  @include smTabletView{
+    width: 30px;
+  }
+  @media screen and (max-width: 341px) {
+    width: 0px;
+  }
+}
 .funding-selection-options-container {
   display: flex;
   flex-direction: row;
@@ -285,8 +294,8 @@
       }
       .funding-selection-option-text {
         color: $primaryFontColor;
-        p {
-          color: $primaryFontColor;
+        p,span {
+          color: $primaryColor;
         }
       }
     }
@@ -407,7 +416,7 @@
   text-align: center;
   margin: 0px;
   margin-left: -16px;
-  width: 50%;
+  width: 80%;
   font-size: 14px;
 }
 
@@ -514,15 +523,14 @@
   align-self: center;
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
 .donation-count {
   font-size: 16px;
   font-weight: 600;
   text-align: center;
-  position: absolute;
-  bottom: 20px;
   color: $light;
   font-variant-ligatures: none;
 }
@@ -535,6 +543,7 @@
   margin-top: 16px;
   color: $light;
   font-variant-ligatures: none;
+  margin-bottom: 40px;
 }
 
 .thankyou-image-header {
@@ -545,6 +554,7 @@
   font-variant-ligatures: none;
   padding-top: 15%;
   white-space: pre-line;
+  flex-grow: 1;
 }
 
 .thankyou-image-header p h1 {
@@ -564,14 +574,13 @@
   }
   .donation-count {
     font-size: 130px;
-    bottom: 300px;
     padding: 0px 80px;
+    margin-bottom: 200px;
   }
   .donation-url {
     font-size: 75px;
     margin: 0px;
-    position: absolute;
-    bottom: 60px;
+    margin-bottom: 100px;
   }
   .thankyou-image-header {
     font-size: 100px;
@@ -667,6 +676,14 @@
 }
 .thankyouText {
   text-align: center;
+  color: $primaryFontColor;
+}
+.linkText {
+  text-align: center;
+  color: $primaryFontColor;
+  &:hover{
+    text-decoration: underline;
+  }
 }
 @include lgLaptopView {
   .thankyouText {

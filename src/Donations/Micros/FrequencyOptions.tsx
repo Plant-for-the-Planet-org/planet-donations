@@ -22,6 +22,7 @@ function FrequencyOptions({}: Props): ReactElement {
               }`}
               key={index}
               onClick={() => setfrequency(frequencyOption)}
+              data-test-id="frequency"
             >
               {frequencyOption}
             </div>
