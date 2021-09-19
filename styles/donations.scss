@@ -416,7 +416,7 @@
   text-align: center;
   margin: 0px;
   margin-left: -16px;
-  width: 50%;
+  width: 80%;
   font-size: 14px;
 }
 
@@ -676,6 +676,14 @@
 }
 .thankyouText {
   text-align: center;
+  color: $primaryFontColor;
+}
+.linkText {
+  text-align: center;
+  color: $primaryFontColor;
+  &:hover{
+    text-decoration: underline;
+  }
 }
 @include lgLaptopView {
   .thankyouText {

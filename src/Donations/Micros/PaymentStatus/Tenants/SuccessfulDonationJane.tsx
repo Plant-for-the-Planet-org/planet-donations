@@ -68,7 +68,7 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
           allowFullScreen
         />
       </div>
-      <a href="https://www.treesforjane.org/" className={"mt-20 thankyouText mb-20"}>
+      <a href="https://www.treesforjane.org/" className={"mt-20 linkText mb-20 text-center"}>
         {t("common:backToTreesForJane")}
       </a>
     </div>

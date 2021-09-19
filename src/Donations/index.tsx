@@ -266,7 +266,7 @@ function DonationInfo() {
 
           {donationID && (
             <a
-              href={`${process.env.APP_URL}/?context=${donationID}`}
+              href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"
             >
               {`Ref - ${donationID}`}

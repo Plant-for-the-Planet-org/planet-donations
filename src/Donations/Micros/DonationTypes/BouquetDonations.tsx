@@ -47,13 +47,24 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
-      if (paymentSetup.options.length > 2) {
-        setquantity(paymentSetup.options[2].quantity);
-      } else {
-        setquantity(paymentSetup.options[1].quantity);
+      // Set all quantities in the allOptionsArray
+      let newallOptionsArray = [];
+      for (let option of paymentSetup.options) {
+        newallOptionsArray.push(option.quantity);
+      }
+      if (!newallOptionsArray.includes(quantity)) {
+        setCustomInputValue(quantity * paymentSetup.unitCost);
       }
     }
   }, [paymentSetup]);
+
+  // IMP TO DO -> Due to new requirements of showing Rounded costs for Bouquet and in future for all we will now have to start passing the amount instead of quantity and unitCost, this demands a structural change in multiple files and hence should be done carefully
+
+  // const roundedCostCalculator=(unitCost,quantity)=>{
+  //   console.log(`unitCost,quantity`, unitCost,quantity)
+  //   const cost = unitCost  * quantity;
+  //   return Math.trunc(Math.ceil(cost/5)*5);
+  // }
 
   return (
     <>
@@ -86,7 +97,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   {AllIcons[index]}
                 </div> */}
                 <div className="funding-selection-option-text">
-                  <span style={{fontSize:'20px'}}>
+                  <span style={{ fontSize: "20px" }}>
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
@@ -121,7 +132,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 className="d-flex row"
                 style={{ alignItems: "flex-end", justifyContent: "center" }}
               >
-                <p style={{ marginBottom: "0px", marginRight: "6px",fontSize:'20px' }}>
+                <p
+                  style={{
+                    marginBottom: "0px",
+                    marginRight: "6px",
+                    fontSize: "20px",
+                  }}
+                >
                   {getFormatedCurrencySymbol(currency)}
                 </p>
                 <input
@@ -143,7 +160,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setCustomInputValue(e.target.value);
                   }}
                   ref={customInputRef}
-                  style={{fontSize:'20px'}}
+                  style={{ fontSize: "20px" }}
                 />
               </div>
             </div>
