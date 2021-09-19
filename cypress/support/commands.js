@@ -277,12 +277,12 @@ Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
     
 })
 
-Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1N", country) => {
+Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1N", country, tenant="ten_I9TW3ncG") => {
     cy.visit({
-        url: `/?to=${projectID}`
+        url: `/?to=${projectID}&tenant=${tenant}`
     })
     cy.wait(5000)
-    cy.get('.funding-selection-option-text').eq(1).should("have.text", "€2.00").click()
+    cy.get('.funding-selection-option-text').eq(1).click()
     cy.get('[data-test-id="currency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
         cy.get('body').click(0,0);

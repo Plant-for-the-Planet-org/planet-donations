@@ -61,9 +61,4 @@ describe("Donations", () => {
     //     cy.cardPayment("4242424242424242", "424", "242")
     // });
 
-    //Bouquet Donation
-    it("Testing bouquetDonation", () => {
-        cy.bouquetDonation("proj_sq6lIHmsghYl9B74K2GXwa1N", "Germany{enter}")
-        cy.cardPayment("4242424242424242", "424", "242")
-    });
 })
