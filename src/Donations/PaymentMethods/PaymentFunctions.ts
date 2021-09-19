@@ -228,7 +228,6 @@ export async function payDonationFunction({
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
-
   if (!paymentMethod) {
     setIsPaymentProcessing(false);
     setPaymentError(t("donate:noPaymentMethodError"));
@@ -272,7 +271,7 @@ export async function payDonationFunction({
         paidDonation.data.status === "paid" ||
         paidDonation.data.paymentStatus === "paid"
       ) {
-        setIsPaymentProcessing(false);
+        // setIsPaymentProcessing(false);
         router.replace({
           query: { ...router.query, step: "thankyou" },
         });
@@ -402,7 +401,7 @@ export async function handleSCAPaymentFunction({
                 "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
               );
             } else {
-              setIsPaymentProcessing(false);
+              // setIsPaymentProcessing(false);
               setPaymentError(
                 error.data.error ? error.data.error.message : error.data.message
               );

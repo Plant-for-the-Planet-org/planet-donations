@@ -81,7 +81,8 @@
   "cancelReturn": "Cancel and return",
   "aboutUs": "About Us",
   "imprint": "Imprint",
-  "privacyTerms": "Privacy & Terms",
+  "privacy": "Privacy Policy",
+  "terms": "Terms & Conditions",
   "contact": "Contact",
   "faqs": "FAQs",
   "selectLanguage": "Select Language",
@@ -108,5 +109,6 @@
   "dedicatedTo": "Dedicated to",
   "message": "Message",
   "contributedToTpo": "I contributed {{amount}} to {{organization}}",
-  "janeSuccessMessage": "In the mean time please share the word on social Media with #TreesForJane, and tune to a message from Jane below."
+  "janeSuccessMessage": "In the mean time please share the word on social Media with #TreesForJane, and tune to a message from Jane below.",
+  "backToTreesForJane":"Go back to Trees for Jane"
 }

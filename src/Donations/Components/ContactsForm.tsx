@@ -11,11 +11,12 @@ import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { useRouter } from "next/router";
+import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
-  const { t } = useTranslation("common");
+  const { t,i18n } = useTranslation("common");
 
   React.useEffect(() => {
     setaddressSugggestions([]);
@@ -37,6 +38,9 @@ function ContactsForm({}: Props): ReactElement {
     setdonationStep,
     country,
     isTaxDeductible,
+    currency,
+    quantity,
+    paymentSetup,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -378,7 +382,12 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("continue")}
+              {t("donate")}{" "}
+              {getFormatedCurrency(
+                i18n.language,
+                currency,
+                quantity * paymentSetup.unitCost
+              )}
             </button>
           )}
         </form>

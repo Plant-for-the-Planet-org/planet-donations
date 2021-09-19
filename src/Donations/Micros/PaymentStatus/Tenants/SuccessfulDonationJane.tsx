@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
 import ThankyouMessage from "./../ThankyouMessage";
+import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
 
 function SuccessfulDonationJane({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
@@ -67,9 +68,12 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
           allowFullScreen
         />
       </div>
+      <a href="https://www.treesforjane.org/" className={"mt-20 thankyouText mb-20"}>
+        {t("common:backToTreesForJane")}
+      </a>
     </div>
   ) : (
-    <></>
+    <PaymentProgress isPaymentProcessing={true} />
   );
 }
 
