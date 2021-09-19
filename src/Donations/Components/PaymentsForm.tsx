@@ -65,6 +65,7 @@ function PaymentsForm({}: Props): ReactElement {
     hideTaxDeduction,
     queryToken,
     frequency,
+    tenant
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -92,6 +93,7 @@ function PaymentsForm({}: Props): ReactElement {
       country,
       setshowErrorCard,
       router,
+      tenant
     });
   };
 
@@ -198,6 +200,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {!hideTaxDeduction && <TaxDeductionOption />}
 
+          {/* TODO - When donations are coming from context, check for haspublicprofile */}
           {projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
               {!contactDetails.companyname ||

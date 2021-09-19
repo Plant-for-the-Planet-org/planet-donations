@@ -4,7 +4,7 @@ import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
 import DonationsForm from "./Components/DonationsForm";
 import { useTranslation } from "next-i18next";
-import ThankYou from "./Components/ThankYouComponent";
+import PaymentStatus from "./Components/PaymentStatus";
 import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
@@ -64,7 +64,7 @@ function Donations({}: Props): ReactElement {
         {donationStep === 1 && <DonationsForm />}
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
-        {donationStep === 4 && <ThankYou />}
+        {donationStep === 4 && <PaymentStatus />}
       </div>
     </div>
   );
@@ -111,14 +111,13 @@ function DonationInfo() {
       </div>
     );
   };
-
   return (
     <div className="donations-info-container">
       <Image
         layout="fill"
         objectFit="cover"
         objectPosition="right center"
-        src={getTenantBackground(tenant,projectDetails)}
+        src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
         alt="Background image with trees"
       />
@@ -127,6 +126,7 @@ function DonationInfo() {
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep > 0 &&
+            projectDetails.tpo &&
             (projectDetails.purpose === "trees" ? (
               <a
                 rel="noreferrer"
@@ -139,27 +139,45 @@ function DonationInfo() {
             ) : (
               <TPOImage />
             ))}
-          {(donationStep === 2 || donationStep === 3) && (
-            <div className="contact-details-info">
-              <div className={"w-100 mt-10 text-white"}>
-                {t("donating")}
-                <span className="text-bold" style={{ marginRight: "4px" }}>
-                  {getFormatedCurrency(
-                    i18n.language,
-                    currency,
-                    paymentSetup.unitCost * quantity
-                  )}
-                </span>
-                {t("fortreeCountTrees", {
-                  count: Number(quantity),
-                  treeCount: getFormattedNumber(
-                    i18n.language,
-                    Number(quantity)
-                  ),
-                })}
+          {(donationStep === 2 || donationStep === 3) &&
+            projectDetails.purpose === "trees" && (
+              <div className="contact-details-info">
+                <div className={"w-100 mt-10 text-white"}>
+                  {t("donating")}
+                  <span className="text-bold" style={{ marginRight: "4px" }}>
+                    {getFormatedCurrency(
+                      i18n.language,
+                      currency,
+                      paymentSetup.unitCost * quantity
+                    )}
+                  </span>
+                  {t("fortreeCountTrees", {
+                    count: Number(quantity),
+                    treeCount: getFormattedNumber(
+                      i18n.language,
+                      Number(quantity)
+                    ),
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+          {(donationStep === 2 || donationStep === 3) &&
+            projectDetails.purpose === "bouquet" && (
+              <div className="contact-details-info">
+                <div className={"w-100 mt-10 text-white"}>
+                  {t("donating")}
+                  <span className="text-bold" style={{ marginRight: "4px" }}>
+                    {getFormatedCurrency(
+                      i18n.language,
+                      currency,
+                      paymentSetup.unitCost * quantity
+                    )}
+                  </span>
+                </div>
+              </div>
+            )}
+
           {donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
@@ -175,6 +193,12 @@ function DonationInfo() {
                 <p className="title-text text-white">{projectDetails.name}</p>
               )}
 
+              {projectDetails.purpose === "bouquet" &&
+              projectDetails.description ? (
+                <p className="text-white mt-10">{projectDetails.description}</p>
+              ) : (
+                <></>
+              )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a
                   rel="noreferrer"
@@ -242,7 +266,7 @@ function DonationInfo() {
 
           {donationID && (
             <a
-              href={`${process.env.APP_URL}/?context=${donationID}`}
+              href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"
             >
               {`Ref - ${donationID}`}
