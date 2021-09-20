@@ -1,4 +1,4 @@
-@import './theme';
+@import "./theme";
 // Reseting User agent styles to maintain cross browser interferences
 html,
 body,
@@ -195,7 +195,7 @@ button {
   background-color: $backgroundColor;
   border: 0px;
   border-radius: 8px;
-  max-height: 80vh;
+  max-height: 85vh;
   max-width: 440px;
   overflow: hidden;
   outline: none;
@@ -247,6 +247,6 @@ label:hover {
   padding: 0px !important;
 }
 
-.MuiCheckbox-colorSecondary{
+.MuiCheckbox-colorSecondary {
   padding: 0px !important;
 }

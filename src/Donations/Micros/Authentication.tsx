@@ -11,6 +11,8 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
+import themeProperties from "styles/themeProperties";
+import CloseIcon from "public/assets/icons/CloseIcon";
 
 interface Props {}
 
@@ -218,6 +220,18 @@ function VerifyEmailModal({
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
+          <button
+            id={"thank-you-close"}
+            onClick={handleModalClose}
+            className="close-icon"
+          >
+            <CloseIcon
+              color={theme === "theme-light" ? "#2f3336" : "#ffffff"}
+              style={{
+                alignSelf: "flex-end",
+              }}
+            />
+          </button>
           <p className={"select-language-title mb-20"}>
             {t("verifyEmailHeader")}
           </p>
