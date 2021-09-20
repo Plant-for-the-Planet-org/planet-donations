@@ -216,7 +216,6 @@ function VerifyEmailModal({
       BackdropProps={{
         timeout: 500,
       }}
-      // disableBackdropClick
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
@@ -270,7 +269,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() => logout({ returnTo: `${process.env.APP_URL}/` })}
+              onClick={() => logout({ returnTo: `${window?.location.href}` })}
             >
               <p>{t("skipLogout")}</p>
             </button>
