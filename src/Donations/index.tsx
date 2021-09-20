@@ -268,6 +268,7 @@ function DonationInfo() {
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"
+              data-test-id="referenceDonation"
             >
               {`Ref - ${donationID}`}
             </a>
