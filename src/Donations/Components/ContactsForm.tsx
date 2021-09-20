@@ -214,23 +214,25 @@ function ContactsForm({}: Props): ReactElement {
                 required: true,
                 pattern:
                   /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                validate: (input) => {
-                  return isSignedUp ? true : user.email === input;
-                },
+                // validate: (input) => {
+                //   return isAuthenticated || isSignedUp
+                //     ? true
+                //     : user.email === input;
+                // },
               })}
               label={t("email")}
               variant="outlined"
               name="email"
               defaultValue={contactDetails.email}
               data-test-id="test-email"
-              disabled={isAuthenticated || isSignedUp}
+              disabled={isAuthenticated}
             />
             {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
             )}
-            {errors.email && errors.email.type === "validate" && (
+            {/* {errors.email && errors.email.type === "validate" && (
               <span className={"form-errors"}>{t("useSameEmail")}</span>
-            )}
+            )} */}
           </div>
 
           <div className={"form-field mt-30"} style={{ position: "relative" }}>
