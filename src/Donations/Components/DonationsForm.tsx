@@ -21,6 +21,7 @@ import TreeDonation from "../Micros/DonationTypes/TreeDonation";
 import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
+import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 
 function DonationsForm() {
   const {
@@ -41,6 +42,7 @@ function DonationsForm() {
     queryToken,
     profile,
     frequency,
+    tenant
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -114,11 +116,62 @@ function DonationsForm() {
         country,
         setshowErrorCard,
         router,
+        tenant
       });
     });
   };
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
+
+  const donationSelection = () => {
+    switch (projectDetails.purpose) {
+      case "trees":
+        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+      case "funds":
+        return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "bouquet":
+        return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      default:
+        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+    }
+  };
+
+  let paymentLabel = "";
+
+  if (paymentSetup && currency) {
+    switch (projectDetails.purpose) {
+      case "trees":
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+      case "funds":
+        paymentLabel = t("fundingPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
+      case "bouquet":
+        paymentLabel = t("bouquetPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
+      default:
+        paymentLabel = t("treesInCountry", {
+          treeCount: quantity,
+          country: t(`country:${projectDetails.country.toLowerCase()}`),
+        });
+        break;
+    }
+  }
 
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -146,11 +199,7 @@ function DonationsForm() {
             <></>
           )}
 
-          {projectDetails.purpose === "funds" ? (
-            <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />
-          ) : (
-            <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />
-          )}
+          {donationSelection()}
 
           <div
             className={`${
@@ -161,7 +210,7 @@ function DonationsForm() {
 
             <div className={"horizontal-line"} />
 
-            {projectDetails.purpose !== "funds" && <DonationAmount />}
+            {projectDetails.purpose === "trees" && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
               minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
@@ -184,12 +233,7 @@ function DonationsForm() {
                       });
                     }}
                     isPaymentPage={false}
-                    paymentLabel={t("treesInCountry", {
-                      treeCount: quantity,
-                      country: t(
-                        `country:${projectDetails.country.toLowerCase()}`
-                      ),
-                    })}
+                    paymentLabel={paymentLabel}
                     frequency={frequency}
                   />
                 ) : (

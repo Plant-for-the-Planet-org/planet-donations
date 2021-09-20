@@ -237,7 +237,7 @@ export default function QueryParamProvider({ children }: any) {
     }
     try {
       const requestParams = {
-        url: `/public/v1.2/${userLang}/config`,
+        url: `/app/config`,
         setshowErrorCard,
       };
       const config: any = await apiRequest(requestParams);
