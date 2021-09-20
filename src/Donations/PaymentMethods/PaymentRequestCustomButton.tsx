@@ -37,7 +37,11 @@ export const PaymentRequestCustomButton = ({
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
-    if (stripe && !paymentRequest && stripeAllowedCountries.includes(country)) {
+    if (
+      stripe &&
+      !paymentRequest &&
+      stripeAllowedCountries?.includes(country)
+    ) {
       const pr = stripe.paymentRequest({
         country: country,
         currency: currency.toLowerCase(),
@@ -63,11 +67,14 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     let subscribed = true;
     if (paymentRequest) {
-      paymentRequest.canMakePayment().then((res: any) => {
-        if (res && subscribed) {
-          setCanMakePayment(true);
-        }
-      });
+      paymentRequest
+        .canMakePayment()
+        .then((res: any) => {
+          if (res && subscribed) {
+            setCanMakePayment(true);
+          }
+        })
+        .catch((err) => console.log(err, "Err"));
     }
 
     return () => {
@@ -110,7 +117,7 @@ export const PaymentRequestCustomButton = ({
         marginTop: isPaymentPage ? "0px" : "20px",
       }}
     >
-      {stripeAllowedCountries.includes(country) &&
+      {stripeAllowedCountries?.includes(country) &&
       canMakePayment &&
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability &&
@@ -182,7 +189,11 @@ export const PaymentRequestCustomButton = ({
       ) : null}
 
       {!isPaymentPage && (
-        <button data-test-id="continue-next" onClick={() => continueNext()} className="primary-button">
+        <button
+          data-test-id="continue-next"
+          onClick={() => continueNext()}
+          className="primary-button"
+        >
           {canMakePayment ? t("payPalCard") : t("continue")}
         </button>
       )}

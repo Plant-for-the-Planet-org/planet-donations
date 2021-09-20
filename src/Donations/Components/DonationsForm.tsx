@@ -40,6 +40,7 @@ function DonationsForm() {
     isTaxDeductible,
     setshowErrorCard,
     queryToken,
+    profile,
     frequency,
     tenant
   } = React.useContext(QueryParamContext);
@@ -77,7 +78,7 @@ function DonationsForm() {
     };
 
     let token = null;
-    if ((!isLoading && isAuthenticated) || queryToken) {
+    if ((!isLoading && isAuthenticated) || (queryToken && profile.address)) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
