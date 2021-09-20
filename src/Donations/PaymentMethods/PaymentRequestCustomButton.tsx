@@ -37,7 +37,6 @@ export const PaymentRequestCustomButton = ({
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   useEffect(() => {
-    console.log(stripeAllowedCountries, "stripeAllowedCountries");
     if (
       stripe &&
       !paymentRequest &&

@@ -23,6 +23,8 @@ function Authentication({}: Props): ReactElement {
     profile,
     setprofile,
     setIsSignedUp,
+    hideLogin,
+    setHideLogin,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -75,7 +77,7 @@ function Authentication({}: Props): ReactElement {
         };
         setprofile(newContactDetails);
         setContactDetails(newContactDetails);
-        // console.log(err);
+        console.log(err);
       }
     } else {
       const newContactDetails = {
@@ -85,7 +87,7 @@ function Authentication({}: Props): ReactElement {
       };
       setprofile(newContactDetails);
       setContactDetails(newContactDetails);
-      setopenVerifyEmailModal(true);
+      // setopenVerifyEmailModal(true);
     }
   };
   const router = useRouter();
@@ -129,13 +131,25 @@ function Authentication({}: Props): ReactElement {
 
   return (
     <div>
-      {!queryToken && !isLoading && !isAuthenticated && (
-        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <button onClick={() => loginUser()} className="login-continue">
-            {t("loginContinue")}
-          </button>
-        </div>
-      )}
+      {!queryToken &&
+        !isLoading &&
+        !isAuthenticated &&
+        (!hideLogin ? (
+          <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+            <button onClick={() => loginUser()} className="login-continue">
+              {t("loginContinue")}
+            </button>
+          </div>
+        ) : (
+          <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+            <button
+              onClick={() => setopenVerifyEmailModal(true)}
+              className="login-continue"
+            >
+              {t("verifyYourEmail")}
+            </button>
+          </div>
+        ))}
 
       {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
         <div className="d-flex row justify-content-between w-100 mb-20">

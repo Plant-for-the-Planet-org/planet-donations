@@ -21,8 +21,6 @@ function TaxDeductionOption({}: Props): ReactElement {
     React.useState(false);
 
   React.useEffect(() => {
-    console.log(projectDetails, "projectDetails");
-
     if (
       projectDetails &&
       projectDetails.taxDeductionCountries &&
@@ -46,7 +44,7 @@ function TaxDeductionOption({}: Props): ReactElement {
             <button
               onClick={() => setopenTaxDeductionModal(true)}
               className={"tax-country-selection text-primary text-bold"}
-              data-test-id='taxCountrySelection'
+              data-test-id="taxCountrySelection"
             >
               {t(`country:${country.toLowerCase()}`)}
               <DownArrowIcon color={themeProperties.primaryColor} />
