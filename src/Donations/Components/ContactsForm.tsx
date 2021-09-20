@@ -80,7 +80,10 @@ function ContactsForm({}: Props): ReactElement {
     router.push({
       query: { ...router.query, step: "payment" },
     });
-    setContactDetails(data);
+    setContactDetails({
+      ...data,
+      email: isAuthenticated ? contactDetails.email : data.email,
+    });
     setdonationStep(3);
   };
 
