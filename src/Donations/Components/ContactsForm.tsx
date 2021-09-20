@@ -45,7 +45,7 @@ function ContactsForm({}: Props): ReactElement {
     paymentSetup,
   } = React.useContext(QueryParamContext);
 
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
@@ -223,6 +223,7 @@ function ContactsForm({}: Props): ReactElement {
               name="email"
               defaultValue={contactDetails.email}
               data-test-id="test-email"
+              disabled={isAuthenticated || isSignedUp}
             />
             {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
