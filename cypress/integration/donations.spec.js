@@ -61,4 +61,9 @@ describe("Donations", () => {
     //     cy.cardPayment("4242424242424242", "424", "242")
     // });
 
+    //Reference Donation Testing
+     it("Testing Reference donation ", () => {
+        cy.referenceDonation("25", "Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 })
