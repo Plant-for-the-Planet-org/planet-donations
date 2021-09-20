@@ -1,5 +1,5 @@
 import { useRouter } from "next/dist/client/router";
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, useEffect } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
@@ -54,8 +54,12 @@ export const QueryParamContext = React.createContext({
   setqueryToken: (value: string) => "",
   sethideTaxDeduction: (value: boolean) => {},
   setisDirectDonation: (value: boolean) => {},
+  isSignedUp: false,
+  setIsSignedUp: (value: boolean) => {},
   frequency: "",
   setfrequency: (value: string) => {},
+  hideLogin: false,
+  setHideLogin: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -128,8 +132,11 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
+  const [profile, setprofile] = React.useState<null | Object>(null);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
+  const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
+  const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
@@ -243,7 +250,7 @@ export default function QueryParamProvider({ children }: any) {
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
-            if(!router.query.context){
+            if (!router.query.context) {
               setcountry(config.data.country.toUpperCase());
             }
           } else {
@@ -332,7 +339,20 @@ export default function QueryParamProvider({ children }: any) {
   ]);
 
   const [showErrorCard, setshowErrorCard] = React.useState(false);
-
+  React.useEffect(() => {
+    // console.log(router.query, "router.query");
+    if (router.query.error) {
+      if (
+        router.query.error_description === "401" &&
+        router.query.error === "unauthorized"
+      ) {
+        router.replace({
+          query: { to: router.query.to, step: router.query.step },
+        });
+        setHideLogin(true);
+      }
+    }
+  }, []);
   return (
     <QueryParamContext.Provider
       value={{
@@ -383,8 +403,14 @@ export default function QueryParamProvider({ children }: any) {
         sethideTaxDeduction,
         setallowTaxDeductionChange,
         setisDirectDonation,
+        profile,
+        setprofile,
+        isSignedUp,
+        setIsSignedUp,
         frequency,
         setfrequency,
+        hideLogin,
+        setHideLogin,
       }}
     >
       {children}

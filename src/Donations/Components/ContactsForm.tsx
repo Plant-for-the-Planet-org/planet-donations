@@ -10,13 +10,14 @@ import BackButton from "../../../public/assets/icons/BackButton";
 import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 interface Props {}
 
 function ContactsForm({}: Props): ReactElement {
-  const { t,i18n } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   React.useEffect(() => {
     setaddressSugggestions([]);
@@ -38,10 +39,13 @@ function ContactsForm({}: Props): ReactElement {
     setdonationStep,
     country,
     isTaxDeductible,
+    isSignedUp,
     currency,
     quantity,
     paymentSetup,
   } = React.useContext(QueryParamContext);
+
+  const { user, isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
@@ -76,7 +80,10 @@ function ContactsForm({}: Props): ReactElement {
     router.push({
       query: { ...router.query, step: "payment" },
     });
-    setContactDetails(data);
+    setContactDetails({
+      ...data,
+      email: isAuthenticated ? contactDetails.email : data.email,
+    });
     setdonationStep(3);
   };
 
@@ -210,16 +217,25 @@ function ContactsForm({}: Props): ReactElement {
                 required: true,
                 pattern:
                   /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                // validate: (input) => {
+                //   return isAuthenticated || isSignedUp
+                //     ? true
+                //     : user.email === input;
+                // },
               })}
               label={t("email")}
               variant="outlined"
               name="email"
               defaultValue={contactDetails.email}
               data-test-id="test-email"
+              disabled={isAuthenticated}
             />
-            {errors.email && (
+            {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
             )}
+            {/* {errors.email && errors.email.type === "validate" && (
+              <span className={"form-errors"}>{t("useSameEmail")}</span>
+            )} */}
           </div>
 
           <div className={"form-field mt-30"} style={{ position: "relative" }}>

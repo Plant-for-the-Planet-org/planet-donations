@@ -11,12 +11,23 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
+import themeProperties from "styles/themeProperties";
+import CloseIcon from "public/assets/icons/CloseIcon";
 
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
-  const { setContactDetails, setshowErrorCard, setqueryToken, queryToken } =
-    React.useContext(QueryParamContext);
+  const {
+    setContactDetails,
+    setshowErrorCard,
+    setqueryToken,
+    queryToken,
+    profile,
+    setprofile,
+    setIsSignedUp,
+    hideLogin,
+    setHideLogin,
+  } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
@@ -26,7 +37,6 @@ function Authentication({}: Props): ReactElement {
     user,
   } = useAuth0();
 
-  const [profile, setprofile] = React.useState<null | Object>(null);
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
@@ -42,6 +52,7 @@ function Authentication({}: Props): ReactElement {
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
           setprofile(profile.data);
+          setIsSignedUp(true);
           const newContactDetails = {
             firstname: profile.data.firstname ? profile.data.firstname : "",
             lastname: profile.data.lastname ? profile.data.lastname : "",
@@ -61,10 +72,24 @@ function Authentication({}: Props): ReactElement {
           setContactDetails(newContactDetails);
         }
       } catch (err) {
-        // console.log(err);
+        const newContactDetails = {
+          firstname: user.nickname ? user.nickname : "",
+          email: user.email ? user.email : "",
+          displayName: user.nickname,
+        };
+        setprofile(newContactDetails);
+        setContactDetails(newContactDetails);
+        console.log(err);
       }
     } else {
-      setopenVerifyEmailModal(true);
+      const newContactDetails = {
+        firstname: user.nickname ? user.nickname : "",
+        email: user.email ? user.email : "",
+        displayName: user.nickname,
+      };
+      setprofile(newContactDetails);
+      setContactDetails(newContactDetails);
+      // setopenVerifyEmailModal(true);
     }
   };
   const router = useRouter();
@@ -108,13 +133,25 @@ function Authentication({}: Props): ReactElement {
 
   return (
     <div>
-      {!queryToken && !isLoading && !isAuthenticated && (
-        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <button onClick={() => loginUser()} className="login-continue">
-            {t("loginContinue")}
-          </button>
-        </div>
-      )}
+      {!queryToken &&
+        !isLoading &&
+        !isAuthenticated &&
+        (!hideLogin ? (
+          <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+            <button onClick={() => loginUser()} className="login-continue">
+              {t("loginContinue")}
+            </button>
+          </div>
+        ) : (
+          <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+            <button
+              onClick={() => setopenVerifyEmailModal(true)}
+              className="login-continue"
+            >
+              {t("verifyYourEmail")}
+            </button>
+          </div>
+        ))}
 
       {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
@@ -179,10 +216,21 @@ function VerifyEmailModal({
       BackdropProps={{
         timeout: 500,
       }}
-      disableBackdropClick
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
+          <button
+            id={"thank-you-close"}
+            onClick={handleModalClose}
+            className="close-icon"
+          >
+            <CloseIcon
+              color={theme === "theme-light" ? "#2f3336" : "#ffffff"}
+              style={{
+                alignSelf: "flex-end",
+              }}
+            />
+          </button>
           <p className={"select-language-title mb-20"}>
             {t("verifyEmailHeader")}
           </p>
@@ -221,7 +269,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() => logout({ returnTo: `${process.env.APP_URL}/` })}
+              onClick={() => logout({ returnTo: `${window?.location.href}` })}
             >
               <p>{t("skipLogout")}</p>
             </button>
