@@ -325,7 +325,7 @@ function PaymentsForm({}: Props): ReactElement {
               >
                 <Elements stripe={getStripe(paymentSetup)}>
                   <CardPayments
-                    contactDetails={contactDetails}
+                    donorDetails={contactDetails}
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
