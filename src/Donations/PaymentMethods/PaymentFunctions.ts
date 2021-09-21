@@ -224,7 +224,7 @@ export async function payDonationFunction({
   country,
   setshowErrorCard,
   router,
-  tenant
+  tenant,
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -293,7 +293,7 @@ export async function payDonationFunction({
           country,
           setshowErrorCard,
           router,
-          tenant
+          tenant,
         });
       }
     }
@@ -330,7 +330,7 @@ export async function handleSCAPaymentFunction({
   country,
   setshowErrorCard,
   router,
-  tenant
+  tenant,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey

@@ -6,10 +6,12 @@
   "email": "Email",
   "recipientEmail": "Recipient Email",
   "emailRequired": "Email is required",
+  "useSameEmail": "Use same Email as Login Email",
   "giftMessage": "Gift Message",
   "giftNotification": "Gift Notification",
   "continue": "Continue",
   "loginContinue": "Login & Continue",
+  "verifyYourEmail": "Verify Your Email",
   "contactDetails": "Contact Details",
   "firstName": "First Name",
   "firstNameRequired": "First Name is required",
@@ -110,5 +112,5 @@
   "message": "Message",
   "contributedToTpo": "I contributed {{amount}} to {{organization}}",
   "janeSuccessMessage": "In the mean time please share the word on social Media with #TreesForJane, and tune to a message from Jane below.",
-  "backToTreesForJane":"Go back to Trees for Jane"
+  "backToTreesForJane": "Go back to Trees for Jane"
 }

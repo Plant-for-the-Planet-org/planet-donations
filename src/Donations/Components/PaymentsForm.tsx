@@ -64,6 +64,7 @@ function PaymentsForm({}: Props): ReactElement {
     setshowErrorCard,
     hideTaxDeduction,
     queryToken,
+    profile,
     frequency,
     tenant
   } = React.useContext(QueryParamContext);
@@ -105,7 +106,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   async function getDonation() {
     let token = null;
-    if ((!isLoading && isAuthenticated) || queryToken) {
+    if (((!isLoading && isAuthenticated) || queryToken) && profile?.address) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     setisDonationLoading(true);
@@ -263,7 +264,7 @@ function PaymentsForm({}: Props): ReactElement {
                 showGiroPay={
                   currency === "EUR" &&
                   country === "DE" &&
-                  paymentSetup?.gateways.stripe.methods.includes(
+                  paymentSetup?.gateways?.stripe?.methods?.includes(
                     "stripe_giropay"
                   ) &&
                   (frequency !== "once"
@@ -286,8 +287,8 @@ function PaymentsForm({}: Props): ReactElement {
                 }
                 showSofort={
                   currency === "EUR" &&
-                  sofortCountries.includes(country) &&
-                  paymentSetup?.gateways.stripe.methods.includes(
+                  sofortCountries?.includes(country) &&
+                  paymentSetup?.gateways?.stripe?.methods?.includes(
                     "stripe_sofort"
                   ) &&
                   (frequency !== "once"
@@ -324,7 +325,7 @@ function PaymentsForm({}: Props): ReactElement {
               >
                 <Elements stripe={getStripe(paymentSetup)}>
                   <CardPayments
-                    contactDetails={contactDetails}
+                    donorDetails={contactDetails}
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,

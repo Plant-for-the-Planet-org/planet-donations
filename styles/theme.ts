@@ -1,7 +1,16 @@
-import css from 'styled-jsx/css';
-import theme from './themeProperties';
+import css from "styled-jsx/css";
+import theme from "./themeProperties";
 
-const { light, dark, fontSizes, primaryColor,primaryDarkColor,fontFamily,darkGrey , grey} = theme;
+const {
+  light,
+  dark,
+  fontSizes,
+  primaryColor,
+  primaryDarkColor,
+  fontFamily,
+  darkGrey,
+  grey,
+} = theme;
 
 const globalStyles = css.global`
   :root {
@@ -23,6 +32,7 @@ const globalStyles = css.global`
     --dark: ${light.dark};
     --danger-color: ${light.dangerColor};
     --background-color-dark: ${light.backgroundColorDark};
+    --disabled-font-color: ${light.disabledFontColor};
   }
   .theme-dark {
     --primary-font-color: ${dark.primaryFontColor};
@@ -34,6 +44,7 @@ const globalStyles = css.global`
     --dark: ${dark.dark};
     --danger-color: ${dark.dangerColor};
     --background-color-dark: ${dark.backgroundColorDark};
+    --disabled-font-color: ${dark.disabledFontColor};
   }
 `;
 
