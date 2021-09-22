@@ -53,10 +53,12 @@ function FailedDonation({ sendToReturn,donation }: any) {
     setcurrency(donation.currency);
     if(donation.gift && donation.gift.recipientName ){
       setisGift(donation.gift.recipientName);
+      // TODO - Gift type invitation and direct will have different properties
       setgiftDetails({
         recipientName:donation.gift.recipientName
       });
     }
+    // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     loadPaymentSetup(donation.project.id,country);
   }
