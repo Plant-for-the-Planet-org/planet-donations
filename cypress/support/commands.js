@@ -229,6 +229,23 @@ Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1
     })
 })
 
+Cypress.Commands.add('referenceDonation', (customTrees, country) => {
+    cy.visit(`localhost:3000`)
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    cy.get('.custom-tree-input').type(customTrees)
+    cy.get('[data-test-id="selectCurrency"]').click().then(() => {
+        cy.get('[data-test-id="country-select"]').clear().type(country)
+        cy.get('body').click(0,0)
+    }).then(() => {
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    })
+    cy.get('[data-test-id="referenceDonation"]').click().wait(5000);
+    
+})
+
 Cypress.Commands.add("donationScreen", (project) => {
     cy.visit(`localhost:3000/?to=${project}`)
     cy.wait(5000)
