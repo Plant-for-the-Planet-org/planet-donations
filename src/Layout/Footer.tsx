@@ -38,7 +38,7 @@ function Footer({}: Props): ReactElement {
         <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
         <div className="footer-links">
-          <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
+          <button onClick={() => setlanguageModalOpen(!languageModalOpen)} data-test-id="languageButton">
             {`${getLanguageName(language)}`}
             <DownArrowIcon
               color={
