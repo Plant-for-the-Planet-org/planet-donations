@@ -7,6 +7,11 @@ import getFormatedCurrency, {
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
+import LeafIcon from "../../../../public/assets/icons/LeafIcon";
+import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
+import TreeIcon from "../../../../public/assets/icons/TreeIcon";
+import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
+import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -18,7 +23,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   const [customInputValue, setCustomInputValue] = React.useState("");
 
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
-  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails, amount,setamount } =
+  // const AllIcons = [
+  //   <LeafIcon />,
+  //   <TwoLeafIcon />,
+  //   <PlantPotIcon />,
+  //   <TreeIcon />,
+  // ];
+  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
 
   const setCustomValue = (e: any) => {
@@ -26,10 +37,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(1 / paymentSetup.unitCost);
-        setamount(1)
       } else if (e.target.value.toString().length <= 12) {
         setquantity(e.target.value / paymentSetup.unitCost);
-        setamount(e.target.value)
       }
     }
   };
@@ -45,28 +54,17 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
       if (!newallOptionsArray.includes(quantity)) {
         setCustomInputValue(quantity * paymentSetup.unitCost);
-        setCustomValue(quantity * paymentSetup.unitCost);
       }
     }
   }, [paymentSetup]);
 
-  // IMP TO DO -> 
-  // Due to new requirements of showing Rounded costs for Bouquet and in 
-  // future for all we will now have to start passing the amount instead 
-  // of quantity and unitCost, this demands a structural change in multiple 
-  // files and hence should be done carefully
+  // IMP TO DO -> Due to new requirements of showing Rounded costs for Bouquet and in future for all we will now have to start passing the amount instead of quantity and unitCost, this demands a structural change in multiple files and hence should be done carefully
 
-  const roundedCostCalculator=(unitCost,quantity)=>{
-    const cost = unitCost  * quantity;
-    return Math.trunc(Math.ceil(cost/5)*5);
-  }
-
-  React.useEffect(()=>{
-    console.log(`running`, amount)
-    setamount(roundedCostCalculator(paymentSetup.unitCost, quantity))
-    console.log(`after`, amount)
-    // TODO - ERROR After going to next screen and coming back the amount is being rounded off
-  },[paymentSetup])
+  // const roundedCostCalculator=(unitCost,quantity)=>{
+  //   console.log(`unitCost,quantity`, unitCost,quantity)
+  //   const cost = unitCost  * quantity;
+  //   return Math.trunc(Math.ceil(cost/5)*5);
+  // }
 
   return (
     <>
@@ -82,7 +80,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 key={index}
                 onClick={() => {
                   setquantity(option.quantity);
-                  setamount(roundedCostCalculator(paymentSetup.unitCost, option.quantity))
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
@@ -104,7 +101,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      roundedCostCalculator(paymentSetup.unitCost, option.quantity)
+                      paymentSetup.unitCost * option.quantity
                     )}
                   </span>
                 </div>

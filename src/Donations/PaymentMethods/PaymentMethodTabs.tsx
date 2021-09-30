@@ -68,7 +68,6 @@ export default function PaymentMethodTabs({
     paymentSetup,
     quantity,
     frequency,
-    amount
   } = React.useContext(QueryParamContext);
 
   let paymentLabel;
@@ -86,7 +85,7 @@ export default function PaymentMethodTabs({
           amount: getFormatedCurrency(
               i18n.language,
               currency,
-              amount
+              paymentSetup.unitCost * quantity
             ),
         });
         break;
@@ -95,7 +94,7 @@ export default function PaymentMethodTabs({
           amount: getFormatedCurrency(
               i18n.language,
               currency,
-              amount
+              paymentSetup.unitCost * quantity
             ),
         });
         break;
@@ -181,7 +180,7 @@ export default function PaymentMethodTabs({
           country={country}
           currency={currency}
           amount={formatAmountForStripe(
-            amount,
+            paymentSetup.unitCost * quantity,
             currency.toLowerCase()
           )}
           onPaymentFunction={onNativePaymentFunction}

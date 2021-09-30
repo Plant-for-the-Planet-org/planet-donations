@@ -83,7 +83,6 @@ function DonationInfo() {
     giftDetails,
     isGift,
     tenant,
-    amount
   } = React.useContext(QueryParamContext);
 
   const TPOImage = () => {
@@ -149,7 +148,7 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      amount
+                      paymentSetup.unitCost * quantity
                     )}
                   </span>
                   {t("fortreeCountTrees", {
@@ -172,7 +171,7 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      amount
+                      paymentSetup.unitCost * quantity
                     )}
                   </span>
                 </div>

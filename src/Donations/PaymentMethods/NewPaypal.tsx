@@ -8,6 +8,8 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 interface Props {
   paymentSetup: any;
+  quantity: number;
+  unitCost: number;
   currency: string;
   donationID: any;
   payDonationFunction: Function;
@@ -16,6 +18,8 @@ interface Props {
 
 function NewPaypal({
   paymentSetup,
+  quantity,
+  unitCost,
   currency,
   donationID,
   payDonationFunction,
@@ -28,14 +32,14 @@ function NewPaypal({
     currency: currency,
   };
 
-  const { donationUid, amount } = React.useContext(QueryParamContext);
+  const { donationUid } = React.useContext(QueryParamContext);
 
   function createOrder(data, actions) {
     return actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: (amount).toFixed(2),
+            value: (quantity * unitCost).toFixed(2),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,

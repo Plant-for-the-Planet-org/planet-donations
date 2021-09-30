@@ -25,7 +25,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     "/assets/images/funding/sprout.png",
   ];
 
-  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails,setamount } =
+  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
 
   const setCustomValue = (e: any) => {
@@ -33,10 +33,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(1 / paymentSetup.unitCost);
-        setamount(1)
       } else if (e.target.value.toString().length <= 12) {
         setquantity(e.target.value / paymentSetup.unitCost);
-        setamount(e.target.value)
       }
     }
   };
@@ -48,15 +46,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   //     }
   //   }, [quantity]);
   const customInputRef = React.useRef(null);
-
-  const roundedCostCalculator=(unitCost,quantity)=>{
-    const cost = unitCost  * quantity;
-    return Math.trunc(Math.ceil(cost/5)*5);
-  }
-
-  React.useEffect(()=>{
-    setamount(roundedCostCalculator(paymentSetup.unitCost, quantity))
-  },[paymentSetup])
 
   return (
     <div
@@ -71,7 +60,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               key={index}
               onClick={() => {
                 setquantity(option.quantity);
-                setamount(roundedCostCalculator(paymentSetup.unitCost, option.quantity))
                 setisCustomDonation(false);
                 setCustomInputValue("");
               }}
@@ -90,8 +78,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   {getFormatedCurrency(
                     i18n.language,
                     currency,
-                    roundedCostCalculator(paymentSetup.unitCost, option.quantity)
-                    )}
+                    paymentSetup.unitCost * option.quantity
+                  )}
                 </span>
               </div>
             </div>
