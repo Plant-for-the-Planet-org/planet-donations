@@ -66,7 +66,8 @@ function PaymentsForm({}: Props): ReactElement {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
+    amount
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -114,7 +115,7 @@ function PaymentsForm({}: Props): ReactElement {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      amount,
       quantity,
       currency,
       contactDetails,
@@ -329,7 +330,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      quantity * paymentSetup.unitCost
+                      amount
                     )}
                     onPaymentFunction={(data) =>
                       onSubmitPayment("stripe", data)
@@ -366,8 +367,6 @@ function PaymentsForm({}: Props): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    quantity={quantity}
-                    unitCost={paymentSetup.unitCost}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

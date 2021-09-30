@@ -43,6 +43,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
     currency,
     paymentSetup,
     giftDetails,
+    setamount
   } = React.useContext(QueryParamContext);
 
   const [customTreeInputValue, setCustomTreeInputValue] = React.useState("");
@@ -54,7 +55,9 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(1);
+        setamount(paymentSetup.unitCost * 1)
       } else if (e.target.value.toString().length <= 12) {
+        setamount(paymentSetup.unitCost * e.target.value)
         setquantity(e.target.value);
       }
     }
@@ -64,10 +67,17 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
       setisCustomDonation(true);
       setCustomTreeValue(quantity);
       setCustomTreeInputValue(quantity);
+      setamount(paymentSetup.unitCost * quantity);
+
     }
   }, [quantity]);
 
+  React.useEffect(()=>{
+    setamount(quantity * paymentSetup.unitCost)
+  },[paymentSetup])
+
   const customInputRef = React.useRef(null);
+
   return (
     <div
       className={`donations-tree-selection ${
@@ -80,6 +90,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
             <div
               onClick={() => {
                 setquantity(option.quantity);
+                setamount(paymentSetup.unitCost * option.quantity)
                 setisCustomDonation(false);
                 setCustomTreeInputValue("");
               }}

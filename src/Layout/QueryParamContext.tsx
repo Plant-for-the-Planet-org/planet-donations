@@ -60,6 +60,8 @@ export const QueryParamContext = React.createContext({
   setfrequency: (value: string) => {},
   hideLogin: false,
   setHideLogin: (value: boolean) => {},
+  amount: 0, 
+  setamount: (value: number) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -99,6 +101,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [quantity, setquantity] = useState(50);
   const [frequency, setfrequency] = useState<null | string>("once");
+
+  const [amount, setamount] = useState(0)
 
   const [isGift, setisGift] = useState<boolean>(false);
   const [giftDetails, setgiftDetails] = useState<object>({
@@ -353,6 +357,8 @@ export default function QueryParamProvider({ children }: any) {
       }
     }
   }, []);
+
+  console.log(`amount`, amount)
   return (
     <QueryParamContext.Provider
       value={{
@@ -411,6 +417,8 @@ export default function QueryParamProvider({ children }: any) {
         setfrequency,
         hideLogin,
         setHideLogin,
+        amount, 
+        setamount
       }}
     >
       {children}

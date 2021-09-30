@@ -43,6 +43,7 @@ function ContactsForm({}: Props): ReactElement {
     currency,
     quantity,
     paymentSetup,
+    amount
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -402,7 +403,7 @@ function ContactsForm({}: Props): ReactElement {
               {getFormatedCurrency(
                 i18n.language,
                 currency,
-                quantity * paymentSetup.unitCost
+                amount
               )}
             </button>
           )}
