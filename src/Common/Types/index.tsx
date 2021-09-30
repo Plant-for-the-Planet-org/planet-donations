@@ -88,7 +88,7 @@ export interface CreateDonationFunctionProps {
   country: any;
   projectDetails: Object;
   quantity: number;
-  unitCost: number;
+  amount: number;
   currency: String;
   contactDetails: Object;
   giftDetails: giftDetailsProps;

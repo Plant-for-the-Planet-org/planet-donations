@@ -42,7 +42,8 @@ function DonationsForm() {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
+    amount
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -86,7 +87,7 @@ function DonationsForm() {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      amount,
       quantity,
       currency,
       contactDetails,
@@ -151,7 +152,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            amount
           ),
         });
         break;
@@ -160,7 +161,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            amount
           ),
         });
         break;
