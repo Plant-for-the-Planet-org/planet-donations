@@ -39,6 +39,7 @@ jobs:
           npm run cypress:run --config baseUrl=http://localhost:3000
 
       - name: 'Upload Artifact'
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: Cypress
