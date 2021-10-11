@@ -118,9 +118,9 @@ function index({
         getCountryDataBy("countryCode", projectDetails.country)?.countryName
       }. Your journey to a trillion trees starts here.`;
     }else if(projectDetails.purpose === 'bouquet'){
-      description = `Plant trees with ${
+      description = `Make a contribution to ${
         projectDetails.name
-      }. Your journey to a trillion trees starts here.`;
+      }. ${projectDetails.description ? projectDetails.description : ""} Your journey to a trillion trees starts here.`;
     }
 
   }

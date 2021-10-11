@@ -34,11 +34,11 @@ jobs:
 
       - name: 'Running Cypress tests'
         run: |
-          cat .env
-          npm run dev &
-          npm run cypress:run --config baseUrl=http://localhost:3000
+          cat .env > .env.production
+          npm run build && (npm run start & npm run cypress:run --config baseUrl=http://localhost:3000)
 
       - name: 'Upload Artifact'
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: Cypress

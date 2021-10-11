@@ -207,7 +207,7 @@ Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
         .then(() => {
             cy.wait(15000).then(() => {
                 // cy.get('#test-source-authorize-3ds').click()
-                cy.get('[data-test-id="test-thankYou"]').should("have.text", "Thank you")
+                cy.get('[data-test-id="test-thankYou"]').should('exist')
             })
 
         })
