@@ -203,7 +203,7 @@ function DonationsForm() {
             <></>
           )}
 
-          {showFrequencyOptions ? (
+          {process.env.RECURRENCY && showFrequencyOptions ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
