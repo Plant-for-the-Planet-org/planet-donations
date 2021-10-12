@@ -11,7 +11,8 @@ function FrequencyOptions({}: Props): ReactElement {
 
   return (
     <div className="d-flex justify-content-between flex-wrap frequency-selection-container mt-20">
-      {paymentSetup.frequencies && paymentSetup.frequencies.length > 0 ? (
+      {
+        // paymentSetup.frequencies && paymentSetup.frequencies.length > 0 ? (
         customfrequencies.map((frequencyOption: any, index: any) => {
           return (
             <div
@@ -28,9 +29,10 @@ function FrequencyOptions({}: Props): ReactElement {
             </div>
           );
         })
-      ) : (
-        <></>
-      )}
+        // ) : (
+        //   <></>
+        // )
+      }
     </div>
   );
 }

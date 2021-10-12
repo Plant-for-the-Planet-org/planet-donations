@@ -47,16 +47,28 @@ function DonationsForm() {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
+  const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
+
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
 
+  React.useEffect(() => {
+    if (Object.keys(paymentSetup).length !== 0) {
+      for (let gateway in paymentSetup?.gateways) {
+        let frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+        if (frequencies && frequencies.length > 0) {
+          setShowFrequencyOptions(true);
+        }
+      }
+    }
+  }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-  console.log(paymentSetup, "paymentSetup");
+  console.log(paymentSetup.gateways, "paymentSetup", showFrequencyOptions);
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -189,9 +201,7 @@ function DonationsForm() {
             <></>
           )}
 
-          {process.env.RECURRENCY &&
-          // purposes.includes(projectDetails.purpose) &&
-          paymentSetup.frequencies ? (
+          {process.env.RECURRENCY && showFrequencyOptions ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
