@@ -42,7 +42,7 @@ function DonationsForm() {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -54,9 +54,9 @@ function DonationsForm() {
   }, [currency]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-
+  const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-
+  console.log(paymentSetup, "paymentSetup");
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -116,7 +116,7 @@ function DonationsForm() {
         country,
         setshowErrorCard,
         router,
-        tenant
+        tenant,
       });
     });
   };
@@ -190,8 +190,8 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-          projectDetails.purpose === "trees" &&
-          projectDetails.frequencies ? (
+          // purposes.includes(projectDetails.purpose) &&
+          paymentSetup.frequencies ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
