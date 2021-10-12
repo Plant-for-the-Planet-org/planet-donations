@@ -59,7 +59,9 @@ function DonationsForm() {
     if (Object.keys(paymentSetup).length !== 0) {
       for (let gateway in paymentSetup?.gateways) {
         let frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+        console.log(frequencies, "frequencies");
         if (frequencies && frequencies.length > 0) {
+          console.log("Show Frequency Options");
           setShowFrequencyOptions(true);
         }
       }
@@ -201,7 +203,7 @@ function DonationsForm() {
             <></>
           )}
 
-          {process.env.RECURRENCY && showFrequencyOptions ? (
+          {showFrequencyOptions ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
