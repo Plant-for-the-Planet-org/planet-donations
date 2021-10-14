@@ -57,8 +57,8 @@ function DonationsForm() {
 
   React.useEffect(() => {
     if (Object.keys(paymentSetup).length !== 0) {
-      for (let gateway in paymentSetup?.gateways) {
-        let frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+      for (const gateway in paymentSetup?.gateways) {
+        const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
         console.log(frequencies, "frequencies");
         if (frequencies && frequencies.length > 0) {
           console.log("Show Frequency Options");
