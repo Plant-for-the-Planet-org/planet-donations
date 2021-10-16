@@ -38,16 +38,16 @@
  */
 //  const isIframeLoaded = $iframe => {
 //     const contentWindow = $iframe.contentWindow;
-  
+
 //     const src = $iframe.attributes.src;
 //     const href = contentWindow.location.href;
 //     if (contentWindow.document.readyState === 'complete') {
 //       return href !== 'about:blank' || src === 'about:blank' || src === '';
 //     }
-  
+
 //     return false;
 //   };
-  
+
   /**
    * Wait for iframe to load, and call callback
    *
@@ -56,7 +56,7 @@
    */
   // Cypress.Commands.add('iframe', { prevSubject: 'element' }, $iframes => new Cypress.Promise(resolve => {
   //   const loaded = [];
-  
+
   //   $iframes.each((_, $iframe) => {
   //     loaded.push(
   //       new Promise(subResolve => {
@@ -73,7 +73,7 @@
   //       })
   //     );
   //   });
-  
+
   //   return Promise.all(loaded).then(resolve);
   // }));
 
@@ -103,25 +103,25 @@
 //   Cypress.Commands.add('waitForStripe3dIframe', callback => {
 //     cy.get('#test-source-authorize-3ds')
 //       .should('be.visible');
-  
+
 //     cy.get('iframe[src^="https://js.stripe.com/v3/three-ds-2-challenge"]')
 //       .iframe()
 //       .then(iframes => {
 //         cy.wrap(iframes[0])
 //           .find('iframe')
 //           .should('be.visible');
-  
+
 //         cy.wrap(iframes[0])
 //           .find('iframe')
 //           .iframe()
 //           .then(callback);
 //       });
 //  });
- 
+
  // Function to search project
 Cypress.Commands.add('SearchProject', (project) => {
     cy.get('#searchProject').type(project)
-    
+
 })
 
 Cypress.Commands.add('createDonation', (customTrees, country) => {
@@ -137,7 +137,7 @@ Cypress.Commands.add('createDonation', (customTrees, country) => {
     }).then(() => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    
+
 })
 
 Cypress.Commands.add('contactForm', (firstName, lastName, email, address, city, country, zipCode) => {
@@ -168,8 +168,8 @@ Cypress.Commands.add('multipleDonation',(country) => {
     }).then(() => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    
-    
+
+
 })
 
 Cypress.Commands.add('giftDonation', ( customTrees, country) => {
@@ -185,7 +185,7 @@ Cypress.Commands.add('giftDonation', ( customTrees, country) => {
     }).then(() => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    
+
 })
 Cypress.Commands.add('giftDonationForm',() => {
     cy.get('.donations-gift-toggle').click().then(() => {
@@ -211,7 +211,7 @@ Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
             })
 
         })
-})  
+})
 
 Cypress.Commands.add('paymentError', (cardNumber, cardExpiry, cardCvc) => {
     cy.get('#card-element').within(() => {
@@ -227,7 +227,7 @@ Cypress.Commands.add('paymentError', (cardNumber, cardExpiry, cardCvc) => {
             })
 
         })
-})  
+})
 Cypress.Commands.add('supportGift', (project = "yucatan", customTrees, firstName, lastName, email, address, city, country, zipCode) => {
     cy.visit({
         url: `/?to=${project}`,
@@ -240,7 +240,7 @@ Cypress.Commands.add('supportGift', (project = "yucatan", customTrees, firstName
     }).then(() => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    
+
 })
 
 Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
@@ -257,8 +257,8 @@ Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
     }).then(() => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
-    
-    
+
+
 })
 
 Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
@@ -274,12 +274,12 @@ Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
         cy.get('body').click(0,0)
     })
     cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    
+
 })
 
-Cypress.Commands.add('bouquetDonation', (projectID="proj_sq6lIHmsghYl9B74K2GXwa1N", country, tenant="ten_I9TW3ncG") => {
+Cypress.Commands.add('bouquetDonation', (projectID="proj_6x3GTD5cMRv0OeQAiIlJZ0Au", country, code="us", tenant="ten_I9TW3ncG") => {
     cy.visit({
-        url: `/?to=${projectID}&tenant=${tenant}`
+        url: `/?to=${projectID}&country=${code}&tenant=${tenant}`
     })
     cy.wait(5000)
     cy.get('.funding-selection-option-text').eq(1).click()
@@ -305,9 +305,9 @@ Cypress.Commands.add('referenceDonation', (customTrees, country) => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
     cy.get('[data-test-id="referenceDonation"]').click().wait(5000);
-    
+
 })
-// Cypress.Commands.add("processStripeSCA", (action) => { 
+// Cypress.Commands.add("processStripeSCA", (action) => {
 
 
 //   //Find the first frame - Named differently each load ( __privateStripeFrameXXXX )
