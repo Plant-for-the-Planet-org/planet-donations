@@ -287,7 +287,7 @@ Cypress.Commands.add('bouquetDonation', (projectID="proj_6x3GTD5cMRv0OeQAiIlJZ0A
         cy.get('[data-test-id="country-select"]').clear().type(country)
         cy.get('body').click(0,0);
     }).then(() => {
-        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Not defined 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
 })
 
