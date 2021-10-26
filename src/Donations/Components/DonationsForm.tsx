@@ -56,7 +56,7 @@ function DonationsForm() {
   }, [currency]);
 
   React.useEffect(() => {
-    if (Object.keys(paymentSetup).length !== 0) {
+    if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
       for (const gateway in paymentSetup?.gateways) {
         const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
         console.log(frequencies, "frequencies");
@@ -70,7 +70,7 @@ function DonationsForm() {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-  console.log(paymentSetup.gateways, "paymentSetup", showFrequencyOptions);
+  console.log(paymentSetup, "paymentSetup", showFrequencyOptions);
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);

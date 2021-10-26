@@ -18,6 +18,7 @@ interface PaymentButtonProps {
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
+  paymentSetup: Object;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -28,6 +29,7 @@ export const PaymentRequestCustomButton = ({
   isPaymentPage,
   paymentLabel,
   frequency,
+  paymentSetup,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -257,6 +259,7 @@ export const NativePay = ({
         isPaymentPage={isPaymentPage}
         paymentLabel={paymentLabel}
         frequency={frequency}
+        paymentSetup={paymentSetup}
       />
     </Elements>
   );
