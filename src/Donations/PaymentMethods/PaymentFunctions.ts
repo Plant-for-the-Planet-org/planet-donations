@@ -261,15 +261,17 @@ export async function payDonationFunction({
       paidDonation = await apiRequest(requestParams);
     }
     if (paidDonation && paidDonation.data) {
-      if (paidDonation.data.status === "failed") {
-        setIsPaymentProcessing(false);
-        setPaymentError(paidDonation.data.message);
-      } else if (
+      // if (paidDonation.data.status === "failed") {
+      //   setIsPaymentProcessing(false);
+      //   setPaymentError(paidDonation.data.message);
+      // } else
+      if (
         paidDonation.data.paymentStatus === "success" ||
         paidDonation.data.paymentStatus === "pending" ||
         paidDonation.data.status === "success" ||
         paidDonation.data.status === "paid" ||
-        paidDonation.data.paymentStatus === "paid"
+        paidDonation.data.paymentStatus === "paid" ||
+        paidDonation.data.status === "failed"
       ) {
         // setIsPaymentProcessing(false);
         router.replace({

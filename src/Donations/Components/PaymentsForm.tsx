@@ -66,13 +66,20 @@ function PaymentsForm({}: Props): ReactElement {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
 
+  React.useEffect(() => {
+    if (paymentError) {
+      router.replace({
+        query: { ...router.query, step: "thankyou" },
+      });
+    }
+  }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
@@ -94,7 +101,7 @@ function PaymentsForm({}: Props): ReactElement {
       country,
       setshowErrorCard,
       router,
-      tenant
+      tenant,
     });
   };
 
