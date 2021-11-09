@@ -5,14 +5,32 @@ import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
+import { useRouter } from "next/router";
 
-function FailedDonation({ sendToReturn,donation }: any) {
+function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
 
-  const { returnTo, donationID, setcountry,setIsTaxDeductible,setprojectDetails, setquantity,setContactDetails, setisGift, setgiftDetails,setfrequency,setdonationStep,setcurrency,setshowErrorCard,setpaymentSetup,country } = React.useContext(QueryParamContext);
+  const {
+    returnTo,
+    donationID,
+    setcountry,
+    setIsTaxDeductible,
+    setprojectDetails,
+    setquantity,
+    setContactDetails,
+    setisGift,
+    setgiftDetails,
+    setfrequency,
+    setdonationStep,
+    setcurrency,
+    setshowErrorCard,
+    setpaymentSetup,
+    country,
+  } = React.useContext(QueryParamContext);
+  const router = useRouter();
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
-  React.useState<boolean>(false);
+    React.useState<boolean>(false);
 
   async function loadPaymentSetup(
     projectGUID: string | string[],
@@ -39,6 +57,10 @@ function FailedDonation({ sendToReturn,donation }: any) {
     }
   }
   async function getDonation() {
+    setdonationStep(3);
+    router.push({
+      query: { ...router.query, step: "payment" },
+    });
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setquantity(donation.amount);
@@ -51,16 +73,16 @@ function FailedDonation({ sendToReturn,donation }: any) {
     }
     setcountry(country);
     setcurrency(donation.currency);
-    if(donation.gift && donation.gift.recipientName ){
+    if (donation.gift && donation.gift.recipientName) {
       setisGift(donation.gift.recipientName);
       // TODO - Gift type invitation and direct will have different properties
       setgiftDetails({
-        recipientName:donation.gift.recipientName
+        recipientName: donation.gift.recipientName,
       });
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    loadPaymentSetup(donation.project.id,country);
+    loadPaymentSetup(donation.project.id, country);
   }
 
   return (
@@ -85,7 +107,7 @@ function FailedDonation({ sendToReturn,donation }: any) {
       <PaymentFailedIllustration />
       {donationID && (
         <button
-          onClick={()=>getDonation()}
+          onClick={() => getDonation()}
           className="primary-button mt-20 mb-20"
           data-test-id="retryDonation"
         >
