@@ -20,6 +20,8 @@ jobs:
         env:
           AUTH0_CLIENT_ID : ${{ secrets.AUTH0_CLIENT_ID }}
           AUTH0_CUSTOM_DOMAIN: ${{ secrets.AUTH0_CUSTOM_DOMAIN }}
+          TEST_MFA_URL: ${{ secrets.TEST_MFA_URL }}
+          TEST_ACCOUNT_PASSWORD: ${{ secrets.TEST_ACCOUNT_PASSWORD }}
           ESRI_CLIENT_ID: ${{ secrets.ESRI_CLIENT_ID }}
           ESRI_CLIENT_SECRET: ${{ secrets.ESRI_CLIENT_SECRET }}
         run: |
@@ -32,13 +34,19 @@ jobs:
           echo "ESRI_CLIENT_SECRET=$ESRI_CLIENT_SECRET" >> .env
           echo "SCHEME=https" >> .env
 
+          echo "{
+            \"TEST_SERVER\": \"http://localhost:3000\",
+            \"TEST_MFA_URL\": \"$TEST_MFA_URL\",
+            \"TEST_ACCOUNT_PASSWORD\": \"$TEST_ACCOUNT_PASSWORD\"
+          }" >> cypress.env.json
+
       - name: 'Running Cypress tests'
         run: |
-          cat .env
-          npm run dev &
-          npm run cypress:run --config baseUrl=http://localhost:3000
+          cat .env > .env.production
+          npm run build && (npm run start & npm run cypress:run)
 
       - name: 'Upload Artifact'
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
           name: Cypress

@@ -28,7 +28,7 @@ function Footer({}: Props): ReactElement {
   const { language, setlanguage } = React.useContext(QueryParamContext);
 
   const { returnTo } = React.useContext(QueryParamContext);
-  const { t, ready } = useTranslation(["common"]);
+  const { t, i18n, ready } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -38,7 +38,7 @@ function Footer({}: Props): ReactElement {
         <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
         <div className="footer-links">
-          <button onClick={() => setlanguageModalOpen(!languageModalOpen)}>
+          <button onClick={() => setlanguageModalOpen(!languageModalOpen)} data-test-id="languageButton">
             {`${getLanguageName(language)}`}
             <DownArrowIcon
               color={
@@ -51,21 +51,21 @@ function Footer({}: Props): ReactElement {
           <a
             rel="noreferrer"
             target="_blank"
-            href="https://a.plant-for-the-planet.org/privacy"
+            href={`https://pp.eco/legal/${i18n.language}/privacy`}
           >
             {t("privacy")}
           </a>
           <a
             rel="noreferrer"
             target="_blank"
-            href="https://a.plant-for-the-planet.org/terms"
+            href={`https://pp.eco/legal/${i18n.language}/terms`}
           >
             {t("terms")}
           </a>
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://a.plant-for-the-planet.org/imprint"
+            href={`https://pp.eco/legal/${i18n.language}/imprint`}
           >
             {t("imprint")}
           </a>
@@ -79,7 +79,7 @@ function Footer({}: Props): ReactElement {
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://a.plant-for-the-planet.org/faq"
+            href={`https://a.plant-for-the-planet.org/${i18n.language}/faq`}
           >
             {t("faqs")}
           </a>
