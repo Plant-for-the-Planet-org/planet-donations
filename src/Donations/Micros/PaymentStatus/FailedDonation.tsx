@@ -51,19 +51,17 @@ function FailedDonation({ sendToReturn, donation }: any) {
         setpaymentSetup(paymentSetupData.data);
       }
       setIsPaymentOptionsLoading(false);
-      setdonationStep(3);
+      // setdonationStep(3);
     } catch (err) {
       // console.log(err);
     }
   }
   async function getDonation() {
-    setdonationStep(3);
-    router.push({
-      query: { ...router.query, step: "payment" },
-    });
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
-    setquantity(donation.amount);
+    // if (donation?.project?.purpose === "trees") {
+    //   setquantity(donation?.treeCount);
+    // }
     setContactDetails(donation.donor);
     let country;
     if (donation.taxDeductionCountry) {
@@ -83,6 +81,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     loadPaymentSetup(donation.project.id, country);
+    setdonationStep(3);
+    router.push({
+      query: { ...router.query, step: "payment" },
+    });
   }
 
   return (
