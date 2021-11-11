@@ -43,6 +43,7 @@ function ContactsForm({}: Props): ReactElement {
     currency,
     quantity,
     paymentSetup,
+    frequency,
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -403,7 +404,8 @@ function ContactsForm({}: Props): ReactElement {
                 i18n.language,
                 currency,
                 quantity * paymentSetup.unitCost
-              )}
+              )}{" "}
+              {frequency}
             </button>
           )}
         </form>
