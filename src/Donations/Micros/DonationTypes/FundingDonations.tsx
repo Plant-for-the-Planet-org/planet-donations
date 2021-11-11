@@ -2,7 +2,9 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency, { getFormatedCurrencySymbol } from "../../../Utils/getFormattedCurrency";
+import getFormatedCurrency, {
+  getFormatedCurrencySymbol,
+} from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
@@ -99,8 +101,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               </div>
               <img className="funding-icon" src={AllIcons[index]} />
               <div className="funding-selection-option-text">
-                <div className="d-flex row" style={{alignItems:'flex-end',justifyContent:'center'}}>
-                  <p style={{marginBottom:'0px',marginRight:'6px'}}>
+                <div
+                  className="d-flex row"
+                  style={{ alignItems: "flex-end", justifyContent: "center" }}
+                >
+                  <p style={{ marginBottom: "0px", marginRight: "6px" }}>
                     {getFormatedCurrencySymbol(currency)}
                   </p>
                   <input
@@ -138,9 +143,10 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             className="text-bold text-primary"
             style={{ marginRight: "4px" }}
           >
-            <span style={{marginRight:'4px'}} className={"text-normal"}>{t("selectCurrency")}</span> 
+            <span style={{ marginRight: "4px" }} className={"text-normal"}>
+              {t("selectCurrency")}
+            </span>
             {currency} <DownArrowIcon color={themeProperties.primaryColor} />
-            
           </button>
         </p>
       ) : (
