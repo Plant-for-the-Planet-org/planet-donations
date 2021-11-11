@@ -66,7 +66,7 @@ function PaymentsForm({}: Props): ReactElement {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -94,7 +94,7 @@ function PaymentsForm({}: Props): ReactElement {
       country,
       setshowErrorCard,
       router,
-      tenant
+      tenant,
     });
   };
 

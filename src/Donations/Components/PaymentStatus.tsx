@@ -89,7 +89,10 @@ function ThankYou() {
     switch (tenant) {
       case "ten_1e5WejOp":
         return (
-          <SuccessfulDonationJane donation={donation} sendToReturn={sendToReturn} />
+          <SuccessfulDonationJane
+            donation={donation}
+            sendToReturn={sendToReturn}
+          />
         );
       default:
         return (
@@ -109,11 +112,12 @@ function ThankYou() {
               status === "success" ||
               status === "paid" ||
               status === "succeeded" ? (
-                <SuccessComponent/>
+                <SuccessComponent />
               ) : status === "failed" ? (
                 <FailedDonation
                   donationID={donationID}
                   sendToReturn={sendToReturn}
+                  donation={donation}
                 />
               ) : (
                 <PendingDonation
