@@ -117,6 +117,7 @@ function ThankYou() {
                 <FailedDonation
                   donationID={donationID}
                   sendToReturn={sendToReturn}
+                  donation={donation}
                 />
               ) : (
                 <PendingDonation
