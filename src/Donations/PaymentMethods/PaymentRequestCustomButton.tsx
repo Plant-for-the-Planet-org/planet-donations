@@ -124,7 +124,7 @@ export const PaymentRequestCustomButton = ({
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability &&
       (frequency !== "once"
-        ? paymentSetup?.gateways.stripe.recurrency.enabled.includes("stripe_cc")
+        ? paymentSetup?.recurrency.methods.includes("stripe_cc")
         : true) ? (
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
           <div className="w-100">

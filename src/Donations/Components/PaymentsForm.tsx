@@ -263,9 +263,7 @@ function PaymentsForm({}: Props): ReactElement {
                 showCC={
                   paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
                     : true)
                 }
                 showGiroPay={
@@ -275,7 +273,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_giropay"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                    ? paymentSetup?.recurrency.methods.includes(
                         "stripe_giropay"
                       )
                     : true)
@@ -287,9 +285,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_sepa"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sepa"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_sepa")
                     : true)
                 }
                 showSofort={
@@ -299,9 +295,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_sofort"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sofort"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_sofort")
                     : true)
                 }
                 showPaypal={
@@ -313,9 +307,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}

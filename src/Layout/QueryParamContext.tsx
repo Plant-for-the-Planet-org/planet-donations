@@ -207,13 +207,102 @@ export default function QueryParamProvider({ children }: any) {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
         setshowErrorCard,
       };
+      // let mockPaymentSetup = {
+      //   treeCost: 1,
+      //   currency: "EUR",
+      //   effectiveCountry: "DE",
+      //   requestedCountry: null,
+      //   recurrency: {
+      //     supported: true,
+      //     methods: ["stripe_cc", "stripe_sepa", "paypal"],
+      //     frequencies: ["monthly", "yearly"],
+      //   },
+      //   gateways: {
+      //     paypal: {
+      //       isLive: false,
+      //       methods: ["paypal"],
+      //       paymentMethods: [],
+      //       account: "paypal_DE",
+      //       authorization: {
+      //         client_id:
+      //           "AVM8OuLVHPJJFABHQdXdrmV0QZU5jS0w_AYtMzijVqm1etflKYpKXdQoqMUX5b5mQqHrRhKBG_oKPb5i",
+      //       },
+      //     },
+      //     stripe: {
+      //       isLive: false,
+      //       methods: [
+      //         "stripe_cc",
+      //         "stripe_sepa",
+      //         "stripe_giropay",
+      //         "stripe_sofort",
+      //       ],
+      //       paymentMethods: [],
+      //       account: "acct_1DYCMDD2OpW2f42N",
+      //       authorization: {
+      //         stripePublishableKey:
+      //           "pk_test_zOadi2MBKX0gATOBvc3fzdRY00SLVj1YvJ",
+      //         accountId: "acct_1DYCMDD2OpW2f42N",
+      //       },
+      //     },
+      //   },
+      //   unitCost: 1,
+      //   options: [
+      //     {
+      //       id: "pplan_EDpAo2w7GfJLoX2ZxM",
+      //       caption: "10",
+      //       description: null,
+      //       icon: null,
+      //       quantity: 10,
+      //       unit: "tree",
+      //       isDefault: false,
+      //     },
+      //     {
+      //       id: "pplan_cEMYAyLGfuTDbCG4Wn",
+      //       caption: "20",
+      //       description: null,
+      //       icon: null,
+      //       quantity: 20,
+      //       unit: "tree",
+      //       isDefault: true,
+      //     },
+      //     {
+      //       id: "pplan_ZF1NG3Obb9bCD6x5jF",
+      //       caption: "50",
+      //       description: null,
+      //       icon: null,
+      //       quantity: 50,
+      //       unit: "tree",
+      //       isDefault: false,
+      //     },
+      //     {
+      //       id: "pplan_lc4lQkYueTpK53Nz5n",
+      //       caption: "150",
+      //       description: null,
+      //       icon: null,
+      //       quantity: 150,
+      //       unit: "tree",
+      //       isDefault: false,
+      //     },
+      //     {
+      //       id: "pplan_DR9CIec82U2gA1ekRv",
+      //       caption: "custom",
+      //       description: null,
+      //       icon: null,
+      //       quantity: null,
+      //       unit: "tree",
+      //       isDefault: false,
+      //     },
+      //   ],
+      // };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
         setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
+
         setpaymentSetup(paymentSetupData.data);
+        console.log(paymentSetupData.data, "paymentSetupData.data");
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {

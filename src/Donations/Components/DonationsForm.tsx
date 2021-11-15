@@ -56,15 +56,19 @@ function DonationsForm() {
   }, [currency]);
 
   React.useEffect(() => {
-    if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
-      for (const gateway in paymentSetup?.gateways) {
-        const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
-        console.log(frequencies, "frequencies");
-        if (frequencies && frequencies.length > 0) {
-          console.log("Show Frequency Options");
-          setShowFrequencyOptions(true);
-        }
-      }
+    // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
+    //   for (const gateway in paymentSetup?.gateways) {
+    //     const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+    //     console.log(frequencies, "frequencies");
+    //     if (frequencies && frequencies.length > 0) {
+    //       console.log("Show Frequency Options");
+    //       setShowFrequencyOptions(true);
+    //     }
+    //   }
+    // }
+    console.log(paymentSetup, "paymentSetup");
+    if (paymentSetup && paymentSetup?.recurrency) {
+      setShowFrequencyOptions(paymentSetup?.recurrency.supported);
     }
   }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
