@@ -112,5 +112,6 @@
   "message": "Nachricht",
   "contributedToTpo": "Ich habe {{amount}} zu {{organization}} beigetragen",
   "janeSuccessMessage": "Teile solange die Nachricht in den sozialen Medien mit #TreesForJane und höre dir unten eine Nachricht von Jane an.",
-  "backToTreesForJane": "Zurück zu Trees for Jane"
+  "backToTreesForJane": "Zurück zu Trees for Jane",
+  "retryPayment": "Bezahlung wiederholen"
 }

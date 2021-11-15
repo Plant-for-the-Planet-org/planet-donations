@@ -26,6 +26,8 @@ interface Props {
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
+  treecount: any;
+  amount: any;
 }
 
 function index({
@@ -44,6 +46,8 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
+  treecount,
+  amount,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -61,6 +65,7 @@ function index({
     sethideTaxDeduction,
     setallowTaxDeductionChange,
     setisDirectDonation,
+    setquantity,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -76,6 +81,11 @@ function index({
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
+      if (projectDetails && projectDetails.purpose === "trees") {
+        setquantity(treecount);
+      } else {
+        setquantity(amount / paymentSetup.unitCost);
+      }
     }
     // XX is hidden country and T1 is Tor browser
     if (country === "XX" || country === "T1") {
@@ -206,7 +216,7 @@ export async function getServerSideProps(context: any) {
   let allowTaxDeductionChange = true;
   let currency = "EUR";
   let paymentSetup = {};
-
+  let amount = 0;
   function setshowErrorCard() {
     showErrorCard = true;
   }
@@ -306,7 +316,7 @@ export async function getServerSideProps(context: any) {
         allowTaxDeductionChange = false;
 
         treecount = donation.data.treeCount;
-
+        amount = donation.data.amount;
         // Setting contact details from donor details
         if (donation.data.donor) {
           contactDetails = {
@@ -417,6 +427,7 @@ export async function getServerSideProps(context: any) {
       allowTaxDeductionChange,
       currency,
       paymentSetup,
+      amount,
     }, // will be passed to the page component as props
   };
 }
