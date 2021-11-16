@@ -256,6 +256,20 @@ export async function getServerSideProps(context: any) {
     if (found) {
       country = context.query.country.toUpperCase();
     }
+  } else {
+    try {
+      const requestParams = {
+        url: `/app/config`,
+        setshowErrorCard,
+      };
+      const config: any = await apiRequest(requestParams);
+      console.log(config, "Config");
+      if (config) {
+        country = config.data.country.toUpperCase();
+      }
+    } catch (err) {
+      console.log(err, "Error");
+    }
   }
 
   // Set donation details if context (created donation ID) present in the URL
