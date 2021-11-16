@@ -98,7 +98,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div> */}
                 <div className="funding-selection-option-text">
                   <span style={{ fontSize: "20px" }}>
-                    {Math.round(paymentSetup.unitCost * option.quantity)}
+                    {paymentSetup.unitCost * option.quantity}
                   </span>
                 </div>
               </div>
