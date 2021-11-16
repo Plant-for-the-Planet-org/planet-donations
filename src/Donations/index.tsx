@@ -12,11 +12,21 @@ import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import { useRouter } from "next/router";
-interface Props {}
+interface Props { }
 
-function Donations({}: Props): ReactElement {
+function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    }
+  });
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -51,12 +61,30 @@ function Donations({}: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => {};
+    return () => { };
   }, [router.query.step]);
   return (
     <div className="donations-container">
-      <div className="donations-card-container">
-        {/* Left panel */}
+      {/* <div className="donations-card-container"> */}
+        {isMobile && router.query.step === 'thankyou' ?
+          (
+            <div className="donations-card-container">
+              
+              {/* Right panel  */}
+              {donationStep === 0 && <SelectProject />}
+              {donationStep === 1 && <DonationsForm />}
+              {donationStep === 2 && <ContactsForm />}
+              {donationStep === 3 && <PaymentsForm />}
+              {donationStep === 4 && <PaymentStatus />}
+
+              {/* Left panel  */}
+              <DonationInfo />
+
+            </div>
+          )
+          : 
+          <div className="donations-card-container">
+          {/* Left panel */}
         <DonationInfo />
 
         {/* Right panel */}
@@ -65,8 +93,11 @@ function Donations({}: Props): ReactElement {
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
         {donationStep === 4 && <PaymentStatus />}
+        </div>
+        }
+        
       </div>
-    </div>
+    // </div>
   );
 }
 
@@ -194,7 +225,7 @@ function DonationInfo() {
               )}
 
               {projectDetails.purpose === "bouquet" &&
-              projectDetails.description ? (
+                projectDetails.description ? (
                 <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 <></>
