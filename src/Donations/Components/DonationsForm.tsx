@@ -207,7 +207,9 @@ function DonationsForm() {
             <></>
           )}
 
-          {process.env.RECURRENCY && showFrequencyOptions ? (
+          {process.env.RECURRENCY &&
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
