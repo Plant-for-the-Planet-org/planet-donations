@@ -11,22 +11,13 @@ import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 interface Props { }
 
 function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
-  const [isMobile, setIsMobile] = React.useState(false);
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (window.innerWidth > 767) {
-        setIsMobile(false);
-      } else {
-        setIsMobile(true);
-      }
-    }
-  });
+  
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -65,25 +56,6 @@ function Donations({ }: Props): ReactElement {
   }, [router.query.step]);
   return (
     <div className="donations-container">
-      {/* <div className="donations-card-container"> */}
-        {isMobile && router.query.step === 'thankyou' ?
-          (
-            <div className="donations-card-container">
-              
-              {/* Right panel  */}
-              {donationStep === 0 && <SelectProject />}
-              {donationStep === 1 && <DonationsForm />}
-              {donationStep === 2 && <ContactsForm />}
-              {donationStep === 3 && <PaymentsForm />}
-              {donationStep === 4 && <PaymentStatus />}
-
-              {/* Left panel  */}
-              <DonationInfo />
-
-            </div>
-          )
-          : 
-          <div className="donations-card-container">
           {/* Left panel */}
         <DonationInfo />
 
@@ -93,11 +65,8 @@ function Donations({ }: Props): ReactElement {
         {donationStep === 2 && <ContactsForm />}
         {donationStep === 3 && <PaymentsForm />}
         {donationStep === 4 && <PaymentStatus />}
-        </div>
-        }
         
-      </div>
-    // </div>
+     </div>
   );
 }
 
@@ -115,6 +84,17 @@ function DonationInfo() {
     isGift,
     tenant,
   } = React.useContext(QueryParamContext);
+
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    }
+  });
 
   const TPOImage = () => {
     return projectDetails.tpo.image ? (
@@ -295,7 +275,7 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && (
+          {donationID && !isMobile && (
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"
