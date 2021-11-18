@@ -12,12 +12,12 @@ import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import router, { useRouter } from "next/router";
-interface Props { }
+interface Props {}
 
-function Donations({ }: Props): ReactElement {
+function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
-  
+
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -52,21 +52,20 @@ function Donations({ }: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => { };
+    return () => {};
   }, [router.query.step]);
   return (
     <div className="donations-container">
-          {/* Left panel */}
-        <DonationInfo />
+      {/* Left panel */}
+      <DonationInfo />
 
-        {/* Right panel */}
-        {donationStep === 0 && <SelectProject />}
-        {donationStep === 1 && <DonationsForm />}
-        {donationStep === 2 && <ContactsForm />}
-        {donationStep === 3 && <PaymentsForm />}
-        {donationStep === 4 && <PaymentStatus />}
-        
-     </div>
+      {/* Right panel */}
+      {donationStep === 0 && <SelectProject />}
+      {donationStep === 1 && <DonationsForm />}
+      {donationStep === 2 && <ContactsForm />}
+      {donationStep === 3 && <PaymentsForm />}
+      {donationStep === 4 && <PaymentStatus />}
+    </div>
   );
 }
 
@@ -87,7 +86,7 @@ function DonationInfo() {
 
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
         setIsMobile(false);
       } else {
@@ -205,7 +204,7 @@ function DonationInfo() {
               )}
 
               {projectDetails.purpose === "bouquet" &&
-                projectDetails.description ? (
+              projectDetails.description ? (
                 <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 <></>
@@ -275,7 +274,7 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && !isMobile && (
+          {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"
