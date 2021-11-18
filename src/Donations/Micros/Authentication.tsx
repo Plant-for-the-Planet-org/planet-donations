@@ -27,6 +27,7 @@ function Authentication({}: Props): ReactElement {
     setIsSignedUp,
     hideLogin,
     setHideLogin,
+    setcurrency,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -51,6 +52,9 @@ function Authentication({}: Props): ReactElement {
         };
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
+          if (profile.data.currency) {
+            setcurrency(profile.data.currency);
+          }
           setprofile(profile.data);
           setIsSignedUp(true);
           const newContactDetails = {
