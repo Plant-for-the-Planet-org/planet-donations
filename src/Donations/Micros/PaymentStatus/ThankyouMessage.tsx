@@ -32,7 +32,7 @@ function ThankyouMessage({
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      frequency: donation.isRecurrent ? frequency : "",
+      frequency: donation.isRecurrent ? t(`${frequency}Success`) : "",
     }
   );
 

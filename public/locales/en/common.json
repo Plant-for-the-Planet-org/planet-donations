@@ -55,7 +55,7 @@
   "selectCountry": "Select Country",
   "cancel": "Cancel",
   "selectCurrency": "Select Currency",
-  "donationSuccessfulWith": "Your {{currency}} {{totalAmount}} donation was successfully paid with {{paymentTypeUsed}}.",
+  "donationSuccessfulWith": "Your {{frequency}} donation of {{currency}} {{totalAmount}} was successfully paid with {{paymentTypeUsed}}.",
   "donationSuccessful": "Your {{frequency}} donation of {{currency}} {{totalAmount}} was successful.",
   "giftSentMessage": "We've sent an email to {{recipientName}} about the gift.",
   "contributionMessage": "Maybe you'll visit them some day? In the mean time, maybe hook up your friends with some trees of their own by telling them about yours?",
@@ -113,5 +113,11 @@
   "contributedToTpo": "I contributed {{amount}} to {{organization}}",
   "janeSuccessMessage": "In the mean time please share the word on social Media with #TreesForJane, and tune to a message from Jane below.",
   "backToTreesForJane": "Go back to Trees for Jane",
-  "retryPayment": "Retry Payment"
+  "retryPayment": "Retry Payment",
+  "once": "Once",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "onceSuccess": "Once",
+  "monthlySuccess": "Monthly",
+  "yearlySuccess": "Yearly"
 }
