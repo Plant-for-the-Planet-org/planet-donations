@@ -97,7 +97,7 @@
   "donateNow": "Donate Now",
   "or": "OR",
   "donateWith": "Donate with",
-  "donating": "Donating ",
+  "donating": "Donating {{frequency}}",
   "addEmail": "Notify Recipient via Email",
   "removeRecipient": "Remove",
   "findProjects": "Find Projects",
