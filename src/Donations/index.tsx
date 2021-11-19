@@ -190,12 +190,14 @@ function DonationInfo() {
                   {projectDetails.name}
                 </a>
               ) : (
-                <p className="title-text text-white">{projectDetails.name}</p>
+                <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
               {projectDetails.purpose === "bouquet" &&
               projectDetails.description ? (
-                <p className="text-white mt-10">{projectDetails.description}</p>
+                <h3 className="text-white mt-10">
+                  {projectDetails.description}
+                </h3>
               ) : (
                 <></>
               )}
