@@ -6,10 +6,12 @@
   "email": "E-Mail",
   "recipientEmail": "E-Mail des Empfängers",
   "emailRequired": "E-Mail ist erforderlich",
+  "useSameEmail": "Dieselbe E-Mail wie für den Login verwenden",
   "giftMessage": "Nachricht zum Geschenk",
   "giftNotification": "Geschenkbenachrichtigung",
   "continue": "Weiter",
   "loginContinue": "Einloggen & Weiter",
+  "verifyYourEmail": "Überprüfe deine E-Mail",
   "contactDetails": "Kontaktdetails",
   "firstName": "Vorname",
   "firstNameRequired": "Vorname ist erforderlich",
@@ -110,5 +112,6 @@
   "message": "Nachricht",
   "contributedToTpo": "Ich habe {{amount}} zu {{organization}} beigetragen",
   "janeSuccessMessage": "Teile solange die Nachricht in den sozialen Medien mit #TreesForJane und höre dir unten eine Nachricht von Jane an.",
-  "backToTreesForJane": "Zurück zu Trees for Jane"
+  "backToTreesForJane": "Zurück zu Trees for Jane",
+  "retryPayment": "Bezahlung wiederholen"
 }

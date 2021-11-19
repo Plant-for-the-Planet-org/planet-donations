@@ -26,6 +26,8 @@ interface Props {
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
+  treecount: any;
+  amount: any;
 }
 
 function index({
@@ -44,6 +46,8 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
+  treecount,
+  amount,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -61,6 +65,7 @@ function index({
     sethideTaxDeduction,
     setallowTaxDeductionChange,
     setisDirectDonation,
+    setquantity,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -74,6 +79,11 @@ function index({
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
+      if (projectDetails && projectDetails.purpose === "trees") {
+        setquantity(treecount);
+      } else {
+        setquantity(amount / paymentSetup.unitCost);
+      }
     }
     // XX is hidden country and T1 is Tor browser
     if (country === "XX" || country === "T1") {
@@ -109,7 +119,7 @@ function index({
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    if(projectDetails.purpose === 'trees'){
+    if (projectDetails.purpose === "trees") {
       description = `Plant trees with ${
         projectDetails.tpo
           ? projectDetails.tpo?.name
@@ -117,12 +127,11 @@ function index({
       } in ${
         getCountryDataBy("countryCode", projectDetails.country)?.countryName
       }. Your journey to a trillion trees starts here.`;
-    }else if(projectDetails.purpose === 'bouquet'){
-      description = `Plant trees with ${
-        projectDetails.name
-      }. Your journey to a trillion trees starts here.`;
+    } else if (projectDetails.purpose === "bouquet") {
+      description = `Make a contribution to ${projectDetails.name}. ${
+        projectDetails.description ? projectDetails.description : ""
+      } Your journey to a trillion trees starts here.`;
     }
-
   }
   if (giftDetails && giftDetails.recipientName) {
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
@@ -205,7 +214,7 @@ export async function getServerSideProps(context: any) {
   let allowTaxDeductionChange = true;
   let currency = "EUR";
   let paymentSetup = {};
-
+  let amount = 0;
   function setshowErrorCard() {
     showErrorCard = true;
   }
@@ -305,7 +314,7 @@ export async function getServerSideProps(context: any) {
         allowTaxDeductionChange = false;
 
         treecount = donation.data.treeCount;
-
+        amount = donation.data.amount;
         // Setting contact details from donor details
         if (donation.data.donor) {
           contactDetails = {
@@ -416,6 +425,7 @@ export async function getServerSideProps(context: any) {
       allowTaxDeductionChange,
       currency,
       paymentSetup,
+      amount,
     }, // will be passed to the page component as props
   };
 }
