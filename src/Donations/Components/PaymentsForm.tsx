@@ -247,7 +247,6 @@ function PaymentsForm({}: Props): ReactElement {
               className={
                 "mt-20 d-flex align-items-center callout-danger text-danger"
               }
-              data-test-id="payment-error"
             >
               <InfoIcon />
               {paymentError}
