@@ -12,9 +12,9 @@ import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import router, { useRouter } from "next/router";
-interface Props {}
+interface Props { }
 
-function Donations({}: Props): ReactElement {
+function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
@@ -52,19 +52,21 @@ function Donations({}: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => {};
+    return () => { };
   }, [router.query.step]);
   return (
     <div className="donations-container">
-      {/* Left panel */}
-      <DonationInfo />
+      <div className="donations-card-container">
+        {/* Left panel */}
+        <DonationInfo />
 
-      {/* Right panel */}
-      {donationStep === 0 && <SelectProject />}
-      {donationStep === 1 && <DonationsForm />}
-      {donationStep === 2 && <ContactsForm />}
-      {donationStep === 3 && <PaymentsForm />}
-      {donationStep === 4 && <PaymentStatus />}
+        {/* Right panel */}
+        {donationStep === 0 && <SelectProject />}
+        {donationStep === 1 && <DonationsForm />}
+        {donationStep === 2 && <ContactsForm />}
+        {donationStep === 3 && <PaymentsForm />}
+        {donationStep === 4 && <PaymentStatus />}
+      </div>
     </div>
   );
 }

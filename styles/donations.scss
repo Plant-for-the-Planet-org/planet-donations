@@ -646,9 +646,6 @@
   }
 }
 
-  .donations-container{
-    flex-direction: column;
-  }
 
 @include smTabletView {
   .donations-info-container {
@@ -675,8 +672,6 @@
   }
   .donations-container {
     padding-top: 80px;
-    display: flex;
-    flex-direction: column;
   }
   .thankyou-image {
     width: 360px;
@@ -698,10 +693,6 @@
   }
 }
 @include lgLaptopView {
-  .donations-container{
-    display: flex;
-    flex-direction: row;
-  }
   .thankyouText {
     text-align: left;
   }
