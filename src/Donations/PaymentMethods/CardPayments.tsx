@@ -232,14 +232,14 @@ function CardPayments({
           id="donateContinueButton"
           data-test-id="test-donateButton"
         >
-          {t("donate")} {totalCost} {frequency}
+          {t("donate")} {totalCost} {t(frequency)}
         </button>
       ) : (
         <button
           className="secondary-button w-100 mt-30"
           id="donateContinueButton"
         >
-          {t("donate")} {totalCost} {frequency}
+          {t("donate")} {totalCost} {t(frequency)}
         </button>
       )}
     </div>
