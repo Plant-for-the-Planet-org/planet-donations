@@ -143,8 +143,8 @@ function index({
 
   return (
     <div
-      style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
-      className="d-flex justify-content-center align-items-center"
+      style={{ flexGrow: 1 }}
+      className="d-flex justify-content-center align-items-center backdrop"
     >
       <Head>
         <title>{title}</title>

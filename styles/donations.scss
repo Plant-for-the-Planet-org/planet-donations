@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  & > .backdrop {
+    background-color: transparent;
+  }
 }
 .donations-container {
   display: flex;
@@ -258,9 +261,9 @@
   }
 }
 
-.bouquet-project-space-divider{
+.bouquet-project-space-divider {
   width: 10px;
-  @include smTabletView{
+  @include smTabletView {
     width: 30px;
   }
   @media screen and (max-width: 341px) {
@@ -294,7 +297,8 @@
       }
       .funding-selection-option-text {
         color: $primaryFontColor;
-        p,span {
+        p,
+        span {
           color: $primaryColor;
         }
       }
@@ -329,7 +333,7 @@
   }
 }
 
-.frequency-selection-container{
+.frequency-selection-container {
   display: flex;
   flex-direction: row;
   background-color: $backgroundColorDark;
@@ -337,7 +341,7 @@
   border-radius: 25px;
   padding: 8px;
 }
-.frequency-selection-option{
+.frequency-selection-option {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -347,11 +351,11 @@
   color: $primaryFontColor;
   font-weight: 600;
   text-transform: capitalize;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-.frequency-selection-option-selected{
+.frequency-selection-option-selected {
   background-color: $primaryColor;
   color: $light;
 }
@@ -681,7 +685,7 @@
 .linkText {
   text-align: center;
   color: $primaryFontColor;
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 }
