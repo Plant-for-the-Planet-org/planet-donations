@@ -405,7 +405,7 @@ function ContactsForm({}: Props): ReactElement {
                 currency,
                 quantity * paymentSetup.unitCost
               )}{" "}
-              {frequency}
+              {frequency === "once" ? "" : t(frequency)}
             </button>
           )}
         </form>

@@ -144,9 +144,7 @@ function DonationInfo() {
             projectDetails.purpose === "trees" && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating", {
-                    frequency: t(`${frequency}`),
-                  })}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -160,7 +158,12 @@ function DonationInfo() {
                       i18n.language,
                       Number(quantity)
                     ),
-                  })}
+                  })}{" "}
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
