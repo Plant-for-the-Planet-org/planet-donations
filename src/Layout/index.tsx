@@ -16,7 +16,7 @@ function Layout(props: any): ReactElement {
       ) : null}
       <Header />
       {props.children}
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

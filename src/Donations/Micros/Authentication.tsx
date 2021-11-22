@@ -32,6 +32,7 @@ function Authentication({}: Props): ReactElement {
     isLoading,
     isAuthenticated,
     loginWithRedirect,
+    loginWithPopup,
     logout,
     getAccessTokenSilently,
     user,
@@ -114,7 +115,11 @@ function Authentication({}: Props): ReactElement {
 
   const loginUser = () => {
     localStorage.setItem("queryparams", router.asPath);
-    loginWithRedirect({
+    // loginWithRedirect({
+    //   redirectUri: window?.location.href,
+    //   ui_locales: localStorage.getItem("language") || "en",
+    // });
+    loginWithPopup({
       redirectUri: window?.location.href,
       ui_locales: localStorage.getItem("language") || "en",
     });
