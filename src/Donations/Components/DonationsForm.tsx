@@ -43,16 +43,24 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
+    autoLogin,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
-
   const [minAmt, setMinAmt] = React.useState(0);
-  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isLoading, isAuthenticated, getAccessTokenSilently, loginWithPopup } =
+    useAuth0();
   const router = useRouter();
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
-
+  React.useEffect(() => {
+    if (autoLogin) {
+      loginWithPopup({
+        redirectUri: window?.location.href,
+        ui_locales: localStorage.getItem("language") || "en",
+      });
+    }
+  }, []);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");

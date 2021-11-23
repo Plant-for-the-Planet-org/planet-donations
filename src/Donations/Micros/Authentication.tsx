@@ -27,6 +27,7 @@ function Authentication({}: Props): ReactElement {
     setIsSignedUp,
     hideLogin,
     setHideLogin,
+    embed,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -115,14 +116,17 @@ function Authentication({}: Props): ReactElement {
 
   const loginUser = () => {
     localStorage.setItem("queryparams", router.asPath);
-    // loginWithRedirect({
-    //   redirectUri: window?.location.href,
-    //   ui_locales: localStorage.getItem("language") || "en",
-    // });
-    loginWithPopup({
-      redirectUri: window?.location.href,
-      ui_locales: localStorage.getItem("language") || "en",
-    });
+    if (embed) {
+      loginWithPopup({
+        redirectUri: window?.location.href,
+        ui_locales: localStorage.getItem("language") || "en",
+      });
+    } else {
+      loginWithRedirect({
+        redirectUri: window?.location.href,
+        ui_locales: localStorage.getItem("language") || "en",
+      });
+    }
   };
 
   React.useEffect(() => {

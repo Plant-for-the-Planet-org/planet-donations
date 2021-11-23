@@ -1,10 +1,12 @@
 import { ServerStyleSheets } from "@material-ui/core/styles";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
+import { useRouter } from "next/router";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: any) {
     const initialProps = await Document.getInitialProps(ctx);
+    console.log({ ...initialProps }, "CTX");
     return { ...initialProps };
   }
 
@@ -38,7 +40,8 @@ MyDocument.getInitialProps = async (ctx) => {
     });
 
   const initialProps = await Document.getInitialProps(ctx);
-
+  // console.log(initialProps, "IProps");
+  // console.log(ctx, "Context");
   return {
     ...initialProps,
     // Styles fragment is rendered after the app and page rendering finish.

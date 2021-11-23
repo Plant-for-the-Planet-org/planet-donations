@@ -28,6 +28,8 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
+  embed: any;
+  autoLogin: any;
 }
 
 function index({
@@ -48,6 +50,8 @@ function index({
   paymentSetup,
   treecount,
   amount,
+  embed,
+  autoLogin,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -66,10 +70,14 @@ function index({
     setallowTaxDeductionChange,
     setisDirectDonation,
     setquantity,
+    setEmbed,
+    setAutoLogin,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setdonationID(donationID);
+    setEmbed(embed);
+    setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
@@ -93,6 +101,7 @@ function index({
     }
   }, []);
 
+  const router = useRouter();
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
@@ -136,8 +145,6 @@ function index({
   if (giftDetails && giftDetails.recipientName) {
     title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
   }
-
-  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
 
@@ -215,6 +222,8 @@ export async function getServerSideProps(context: any) {
   let currency = "EUR";
   let paymentSetup = {};
   let amount = 0;
+  let autoLogin = false;
+  let embed = false;
   function setshowErrorCard() {
     showErrorCard = true;
   }
@@ -257,7 +266,15 @@ export async function getServerSideProps(context: any) {
       country = context.query.country.toUpperCase();
     }
   }
-
+  if (context.query.currency) {
+    currency = context.query.currency.toUpperCase();
+  }
+  if (context.query.embed) {
+    embed = context.query.embed;
+  }
+  if (context.query.autoLogin) {
+    autoLogin = context.query.autoLogin;
+  }
   // Set donation details if context (created donation ID) present in the URL
   if (context.query.context) {
     try {
@@ -426,6 +443,8 @@ export async function getServerSideProps(context: any) {
       currency,
       paymentSetup,
       amount,
+      embed,
+      autoLogin,
     }, // will be passed to the page component as props
   };
 }

@@ -56,6 +56,10 @@ export const QueryParamContext = React.createContext({
   setisDirectDonation: (value: boolean) => {},
   isSignedUp: false,
   setIsSignedUp: (value: boolean) => {},
+  embed: false,
+  setEmbed: (value: boolean) => {},
+  autoLogin: false,
+  setAutoLogin: (value: boolean) => {},
   frequency: "",
   setfrequency: (value: string) => {},
   hideLogin: false,
@@ -137,6 +141,8 @@ export default function QueryParamProvider({ children }: any) {
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
+  const [embed, setEmbed] = React.useState<boolean>(false);
+  const [autoLogin, setAutoLogin] = React.useState<boolean>(false);
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
@@ -407,6 +413,10 @@ export default function QueryParamProvider({ children }: any) {
         setprofile,
         isSignedUp,
         setIsSignedUp,
+        embed,
+        setEmbed,
+        autoLogin,
+        setAutoLogin,
         frequency,
         setfrequency,
         hideLogin,
