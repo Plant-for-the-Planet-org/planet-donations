@@ -1,28 +1,28 @@
 /// <reference types="cypress" />
 
 describe("Language Test", () => {
-    it("Deutsch", () => {
-        cy.visit('localhost:3000')
-        cy.get('[data-test-id="languageButton"]').click()
-        cy.wait(2000).then(() => {
-            cy.contains("Deutsch").click()
-            cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Deutschland{enter}", "82449")
-            cy.get('#card-element').within(() => {
-                cy.fillElementsInput('cardNumber', "4242424242424242");
-                cy.fillElementsInput('cardExpiry', "222"); // MMYY
-                cy.fillElementsInput('cardCvc', "222");
-            });
-            cy.get('[data-test-id="test-donateButton"]').click()
-                .then(() => {
-                    cy.wait(15000).then(() => {
-                        cy.get('[data-test-id="test-thankYou"]').should("have.text", "Vielen Dank")
-                    })
-                })
-        })
-    })
+    // it("Deutsch", () => {
+    //     cy.visit('localhost:3000/?to=yucatan')
+    //     cy.get('[data-test-id="languageButton"]').click()
+    //     cy.wait(2000).then(() => {
+    //         cy.contains("Deutsch").click()
+    //         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Deutschland{enter}", "82449")
+    //         cy.get('#card-element').within(() => {
+    //             cy.fillElementsInput('cardNumber', "4242424242424242");
+    //             cy.fillElementsInput('cardExpiry', "222"); // MMYY
+    //             cy.fillElementsInput('cardCvc', "222");
+    //         });
+    //         cy.get('[data-test-id="test-donateButton"]').click()
+    //             .then(() => {
+    //                 cy.wait(15000).then(() => {
+    //                     cy.get('[data-test-id="test-thankYou"]').should("have.text", "Vielen Dank")
+    //                 })
+    //             })
+    //     })
+    // })
 
     it("Español", () => {
-        cy.visit('localhost:3000')
+        cy.visit('localhost:3000/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Español").click()
@@ -42,7 +42,7 @@ describe("Language Test", () => {
      })
 
     it("Français", () => {
-        cy.visit('localhost:3000')
+        cy.visit('localhost:3000/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Français").click()
@@ -62,7 +62,7 @@ describe("Language Test", () => {
     })
 
     it("Italiano", () => {
-        cy.visit('localhost:3000')
+        cy.visit('localhost:3000/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Italiano").click()
@@ -82,7 +82,7 @@ describe("Language Test", () => {
     })
 
     it("Português brasileiro", () => {
-        cy.visit('localhost:3000')
+        cy.visit('localhost:3000/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Português brasileiro").click()
