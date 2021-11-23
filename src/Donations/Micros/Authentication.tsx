@@ -28,6 +28,7 @@ function Authentication({}: Props): ReactElement {
     hideLogin,
     setHideLogin,
     embed,
+    autoLogin,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -112,6 +113,20 @@ function Authentication({}: Props): ReactElement {
     }
   }, [isAuthenticated, isLoading, queryToken]);
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (
+      autoLogin === "true" &&
+      !hideLogin &&
+      !queryToken &&
+      !isLoading &&
+      !isAuthenticated
+    ) {
+      inputRef.current.click();
+    }
+  }, [isLoading]);
+
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
@@ -147,7 +162,11 @@ function Authentication({}: Props): ReactElement {
         !isAuthenticated &&
         (!hideLogin ? (
           <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-            <button onClick={() => loginUser()} className="login-continue">
+            <button
+              onClick={() => loginUser()}
+              className="login-continue"
+              ref={inputRef}
+            >
               {t("loginContinue")}
             </button>
           </div>

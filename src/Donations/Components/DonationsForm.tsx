@@ -53,14 +53,7 @@ function DonationsForm() {
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
-  React.useEffect(() => {
-    if (autoLogin) {
-      loginWithPopup({
-        redirectUri: window?.location.href,
-        ui_locales: localStorage.getItem("language") || "en",
-      });
-    }
-  }, []);
+
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
 
   const [paymentError, setPaymentError] = React.useState("");
