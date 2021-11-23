@@ -207,7 +207,7 @@ Cypress.Commands.add('cardPayment', (cardNumber, cardExpiry, cardCvc) => {
         .then(() => {
             cy.wait(15000).then(() => {
                 // cy.get('#test-source-authorize-3ds').click()
-                cy.get('[data-test-id="test-thankYou"]').should('have.text', "Thank you")
+                cy.get('[data-test-id="test-thankYou"]').should('exist')
             })
 
         })
@@ -222,7 +222,7 @@ Cypress.Commands.add('paymentError', (cardNumber, cardExpiry, cardCvc) => {
     cy.get('[data-test-id="test-donateButton"]').click()
         .then(() => {
             cy.wait(8000).then(() => {
-                cy.get('[data-test-id="donation-failed"]').should("have.text", "Donation Failed")
+                cy.get('[data-test-id="donation-failed"]').should("exist")
             })
 
         })
