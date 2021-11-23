@@ -5,8 +5,8 @@ import Header from "./Header";
 import { QueryParamContext } from "./QueryParamContext";
 
 function Layout(props: any): ReactElement {
-  const { paymentSetup } = React.useContext(QueryParamContext);
-  const {theme} = React.useContext(ThemeContext);
+  const { paymentSetup, embed } = React.useContext(QueryParamContext);
+  const { theme } = React.useContext(ThemeContext);
   return (
     <div className={`page-container ${theme}`}>
       {paymentSetup?.gateways?.stripe?.isLive === false ? (
@@ -16,7 +16,7 @@ function Layout(props: any): ReactElement {
       ) : null}
       <Header />
       {props.children}
-      {/* <Footer /> */}
+      {!embed ? <Footer /> : []}
     </div>
   );
 }
