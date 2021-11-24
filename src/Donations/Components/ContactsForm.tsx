@@ -399,13 +399,14 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("donate")}{" "}
-              {getFormatedCurrency(
-                i18n.language,
-                currency,
-                quantity * paymentSetup.unitCost
-              )}{" "}
-              {frequency === "once" ? "" : t(frequency)}
+              {t("donate_button", {
+                totalCost: getFormatedCurrency(
+                  i18n.language,
+                  currency,
+                  quantity * paymentSetup.unitCost
+                ),
+                frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+              })}
             </button>
           )}
         </form>

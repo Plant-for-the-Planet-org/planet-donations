@@ -232,14 +232,20 @@ function CardPayments({
           id="donateContinueButton"
           data-test-id="test-donateButton"
         >
-          {t("donate")} {totalCost} {t(frequency)}
+          {t("donate_button", {
+            totalCost: totalCost,
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+          })}
         </button>
       ) : (
         <button
           className="secondary-button w-100 mt-30"
           id="donateContinueButton"
         >
-          {t("donate")} {totalCost} {t(frequency)}
+          {t("donate_button", {
+            totalCost: totalCost,
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+          })}
         </button>
       )}
     </div>

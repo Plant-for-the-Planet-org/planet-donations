@@ -55,8 +55,8 @@
   "selectCountry": "Land auswählen",
   "cancel": "Abbrechen",
   "selectCurrency": "Währung auswählen",
-  "donationSuccessfulWith": "Deine {{currency}} {{totalAmount}} Spende wurde erfolgreich bezahlt mit {{paymentTypeUsed}} .",
-  "donationSuccessful": "Deine {{frequency}} Spende of {{currency}} {{totalAmount}} war erfolgreich.",
+  "donationSuccessfulWith": "Deine {{frequency}} Spende über {{totalAmount}} {{currency}} wurde erfolgreich bezahlt mit {{paymentTypeUsed}} .",
+  "donationSuccessful": "Deine {{frequency}} Spende über {{totalAmount}} {{currency}} war erfolgreich.",
   "giftSentMessage": "Wir haben eine E-Mail zum Geschenk an {{recipientName}} geschickt.",
   "contributionMessage": "Vielleicht wirst du sie eines Tages besuchen? Bis dahin könntest du deinen Freunden von deinen Bäumen erzählen, falls sie auch ein paar eigene Bäume spenden möchten?",
   "fundingDonationSuccess": "Vielen Dank für deinen Beitrag! Du erhältst eine Bescheinigung für deinen Beitrag per E-Mail.",
@@ -98,6 +98,8 @@
   "or": "ODER",
   "donateWith": "Spende mit",
   "donating": "Spenden ",
+  "everyMonth": "jeden Monat",
+  "everyYear": "jedes Jahr",
   "addEmail": "Informiere Empfänger per E-Mail",
   "removeRecipient": "Entfernen",
   "findProjects": "Projekte finden",
@@ -113,5 +115,12 @@
   "contributedToTpo": "Ich habe {{amount}} zu {{organization}} beigetragen",
   "janeSuccessMessage": "Teile solange die Nachricht in den sozialen Medien mit #TreesForJane und höre dir unten eine Nachricht von Jane an.",
   "backToTreesForJane": "Zurück zu Trees for Jane",
-  "retryPayment": "Bezahlung wiederholen"
+  "retryPayment": "Bezahlung wiederholen",
+  "once": "Einmalig",
+  "monthly": "Monatlich",
+  "yearly": "Jährlich",
+  "onceSuccess": "einmalige",
+  "monthlySuccess": "monatliche",
+  "yearlySuccess": "jährliche",
+  "donate_button": "Spende {{totalCost}} {{frequency}}"
 }

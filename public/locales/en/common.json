@@ -119,7 +119,8 @@
   "once": "Once",
   "monthly": "Monthly",
   "yearly": "Yearly",
-  "onceSuccess": "Once",
-  "monthlySuccess": "Monthly",
-  "yearlySuccess": "Yearly"
+  "onceSuccess": "single",
+  "monthlySuccess": "monthly",
+  "yearlySuccess": "yearly",
+  "donate_button": "Donate {{totalCost}} {{frequency}}"
 }
