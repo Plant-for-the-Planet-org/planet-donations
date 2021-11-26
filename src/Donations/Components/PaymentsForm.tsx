@@ -85,7 +85,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = queryToken ? queryToken : await getAccessTokenSilently();
+      token = await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -102,6 +102,7 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      frequency,
     });
   };
 
