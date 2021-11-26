@@ -38,7 +38,10 @@ function Footer({}: Props): ReactElement {
         <DarkModeSwitch />
         {returnTo ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
         <div className="footer-links">
-          <button onClick={() => setlanguageModalOpen(!languageModalOpen)} data-test-id="languageButton">
+          <button
+            onClick={() => setlanguageModalOpen(!languageModalOpen)}
+            data-test-id="languageButton"
+          >
             {`${getLanguageName(language)}`}
             <DownArrowIcon
               color={
@@ -142,7 +145,11 @@ function CookiePolicy() {
   }, [isAuthenticated, isLoading]);
 
   React.useEffect(() => {
-    const prev = localStorage.getItem("cookieNotice");
+    let prev;
+    if (localStorage) {
+      prev = localStorage.getItem("cookieNotice");
+    }
+
     if (!prev) {
       setShowCookieNotice(true);
     } else {
@@ -151,7 +158,9 @@ function CookiePolicy() {
   }, []);
 
   React.useEffect(() => {
-    localStorage.setItem("cookieNotice", showCookieNotice);
+    if (localStorage) {
+      localStorage.setItem("cookieNotice", showCookieNotice);
+    }
   }, [showCookieNotice]);
 
   return showCookieNotice ? (

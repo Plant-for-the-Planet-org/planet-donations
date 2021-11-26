@@ -101,7 +101,8 @@ function Authentication({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      if (localStorage.getItem("queryparams")) {
+      // console.log(localStorage, "localStorage");
+      if (localStorage && localStorage.getItem("queryparams")) {
         const queryparams = localStorage.getItem("queryparams");
         router.push(queryparams);
         localStorage.removeItem("queryparams");
@@ -130,16 +131,22 @@ function Authentication({}: Props): ReactElement {
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
-    localStorage.setItem("queryparams", router.asPath);
+    if (localStorage) {
+      localStorage.setItem("queryparams", router.asPath);
+    }
     if (embed) {
       loginWithPopup({
         redirectUri: window?.location.href,
-        ui_locales: localStorage.getItem("language") || "en",
+        ui_locales: localStorage
+          ? localStorage.getItem("language") || "en"
+          : "en",
       });
     } else {
       loginWithRedirect({
         redirectUri: window?.location.href,
-        ui_locales: localStorage.getItem("language") || "en",
+        ui_locales: localStorage
+          ? localStorage.getItem("language") || "en"
+          : "en",
       });
     }
   };

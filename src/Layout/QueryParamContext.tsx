@@ -80,7 +80,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
-    typeof window !== "undefined" && localStorage.getItem("language")
+    typeof window !== "undefined" &&
+      localStorage &&
+      localStorage.getItem("language")
       ? localStorage.getItem("language")
       : "en"
   );
@@ -152,7 +154,9 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
-      localStorage.setItem("language", language);
+      if (localStorage) {
+        localStorage.setItem("language", language);
+      }
     }
   }, [language, router]);
 
@@ -292,12 +296,18 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.tenant) {
       // TODO => verify tenant before setting it
       settenant(router.query.tenant);
-      localStorage.setItem("tenant", router.query.tenant);
+      if (localStorage) {
+        localStorage.setItem("tenant", router.query.tenant);
+      }
     } else {
-      localStorage.removeItem("tenant");
+      if (localStorage) {
+        localStorage.removeItem("tenant");
+      }
     }
     return () => {
-      localStorage.removeItem("tenant");
+      if (localStorage) {
+        localStorage.removeItem("tenant");
+      }
     };
   }, [router.query.tenant]);
 
