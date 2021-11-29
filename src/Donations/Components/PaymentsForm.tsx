@@ -73,12 +73,19 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
+  React.useEffect(() => {
+    if (paymentError) {
+      router.replace({
+        query: { ...router.query, step: "thankyou" },
+      });
+    }
+  }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = queryToken ? queryToken : await getAccessTokenSilently();
+      token = await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -95,6 +102,7 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      frequency,
     });
   };
 
@@ -240,7 +248,6 @@ function PaymentsForm({}: Props): ReactElement {
               className={
                 "mt-20 d-flex align-items-center callout-danger text-danger"
               }
-              data-test-id="payment-error"
             >
               <InfoIcon />
               {paymentError}
@@ -256,9 +263,7 @@ function PaymentsForm({}: Props): ReactElement {
                 showCC={
                   paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
                     : true)
                 }
                 showGiroPay={
@@ -268,7 +273,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_giropay"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
+                    ? paymentSetup?.recurrency.methods.includes(
                         "stripe_giropay"
                       )
                     : true)
@@ -280,9 +285,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_sepa"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sepa"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_sepa")
                     : true)
                 }
                 showSofort={
@@ -292,9 +295,7 @@ function PaymentsForm({}: Props): ReactElement {
                     "stripe_sofort"
                   ) &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sofort"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_sofort")
                     : true)
                 }
                 showPaypal={
@@ -306,9 +307,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
