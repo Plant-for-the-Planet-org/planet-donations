@@ -70,7 +70,9 @@ function index({
 
   React.useEffect(() => {
     setdonationID(donationID);
+    console.log(isDirectDonation, "isDirectDonation");
     if (isDirectDonation) {
+      console.log(paymentSetup, "isDirectDonation paymentSetup");
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);

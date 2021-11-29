@@ -83,6 +83,7 @@ function DonationInfo() {
     giftDetails,
     isGift,
     tenant,
+    frequency,
   } = React.useContext(QueryParamContext);
 
   const TPOImage = () => {
@@ -143,7 +144,7 @@ function DonationInfo() {
             projectDetails.purpose === "trees" && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating")}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -157,7 +158,12 @@ function DonationInfo() {
                       i18n.language,
                       Number(quantity)
                     ),
-                  })}
+                  })}{" "}
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
@@ -166,7 +172,9 @@ function DonationInfo() {
             projectDetails.purpose === "bouquet" && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating")}
+                  {t("donating", {
+                    frequency: t(`${frequency}`),
+                  })}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
