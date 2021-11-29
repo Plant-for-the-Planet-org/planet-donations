@@ -23,7 +23,7 @@ function PendingDonation({donationID,sendToReturn}:any) {
           </button>
         )}
 
-        <div className={"title-text text-center"}>
+        <div className={"title-text text-center"} data-test-id="test-thankYou">
           {t("common:donationPending")}
         </div>
         <div className={"mt-20 text-center"}>

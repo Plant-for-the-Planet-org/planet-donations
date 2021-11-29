@@ -125,7 +125,7 @@ Cypress.Commands.add('SearchProject', (project) => {
 })
 
 Cypress.Commands.add('createDonation', (customTrees, country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
@@ -156,7 +156,7 @@ Cypress.Commands.add('contactForm', (firstName, lastName, email, address, city, 
     })
 })
 Cypress.Commands.add('multipleDonation',(country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
@@ -173,7 +173,7 @@ Cypress.Commands.add('multipleDonation',(country) => {
 })
 
 Cypress.Commands.add('giftDonation', ( customTrees, country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
@@ -244,7 +244,7 @@ Cypress.Commands.add('supportGift', (project = "yucatan", customTrees, firstName
 })
 
 Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
@@ -262,7 +262,7 @@ Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
 })
 
 Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
@@ -292,7 +292,7 @@ Cypress.Commands.add('bouquetDonation', (projectID="proj_6x3GTD5cMRv0OeQAiIlJZ0A
 })
 
 Cypress.Commands.add('referenceDonation', (customTrees, country) => {
-    cy.visit(Cypress.env('TEST_SERVER') + "/")
+    cy.visit(Cypress.env('TEST_SERVER'))
     cy.wait(5000)
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
