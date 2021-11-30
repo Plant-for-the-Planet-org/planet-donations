@@ -2,24 +2,24 @@
 
 describe("Donations", () => {
 
-    // it("Testing Germany address ", () => {
-    //     cy.createDonation("25", "Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
-    // it("Testing Multiple Donations ", () => {
-    //     cy.multipleDonation("Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
+    it("Testing Germany address ", () => {
+        cy.createDonation("25", "Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
+    it("Testing Multiple Donations ", () => {
+        cy.multipleDonation("Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 
     // it("Testing with Support Link ", () => {
     //     supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     //     cardPayment("4242424242424242", "424", "242")
     // });
 
-    // it("Testing with Gift Donation ", () => {
-    //     cy.giftDonation("25",  "Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
+    it("Testing with Gift Donation ", () => {
+        cy.giftDonation("25",  "Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 
     // International Cards
     it("Testing with Germany Visa", () => {
@@ -45,10 +45,10 @@ describe("Donations", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000000101", "424", "242")
     });
-    // it("Testing with incorrect card number", () => {
-    //     cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
-    //     cy.paymentError("4242424242424241", "424", "242")
-    // });
+    it("Testing with incorrect card number", () => {
+        cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+        cy.paymentError("4242424242424241", "424", "242")
+    });
 
     // Recurrency Testing
     // it("Testing Recurrency (yearly)", () => {
