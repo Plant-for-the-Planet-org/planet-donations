@@ -82,14 +82,19 @@ function PaymentsForm({}: Props): ReactElement {
   }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
-  const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
+  const onSubmitPayment = async (
+    gateway: string,
+    method: string,
+    providerObject: any
+  ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
-      paymentMethod,
+      method,
+      providerObject,
       setIsPaymentProcessing,
       setPaymentError,
       t,
@@ -109,7 +114,11 @@ function PaymentsForm({}: Props): ReactElement {
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
     const gateway = "stripe";
-    onSubmitPayment(gateway, paymentMethod);
+    onSubmitPayment(
+      gateway,
+      paymentRequest._activeBackingLibraryName,
+      paymentMethod
+    );
   };
 
   async function getDonation() {
@@ -174,6 +183,29 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, [currency]);
   const { theme } = React.useContext(ThemeContext);
+
+  const showPaymentMethod = ({
+    paymentMethod,
+    countries,
+    currencies,
+    authenticatedMethod,
+  }: any) => {
+    const isAvailableInCountry = countries ? countries.includes(country) : true;
+    const isAvailableForCurrency = currencies
+      ? currencies.includes(currency)
+      : true;
+    const isAuthenticatedMethod = authenticatedMethod ? isAuthenticated : true;
+
+    return (
+      isAvailableInCountry &&
+      isAvailableForCurrency &&
+      isAuthenticatedMethod &&
+      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      (frequency !== "once"
+        ? paymentSetup?.recurrency.methods.includes(paymentMethod)
+        : true)
+    );
+  };
 
   return ready ? (
     isPaymentProcessing ? (
@@ -260,44 +292,22 @@ function PaymentsForm({}: Props): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={
-                  paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
-                  (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
-                    : true)
-                }
-                showGiroPay={
-                  currency === "EUR" &&
-                  country === "DE" &&
-                  paymentSetup?.gateways?.stripe?.methods?.includes(
-                    "stripe_giropay"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes(
-                        "stripe_giropay"
-                      )
-                    : true)
-                }
-                showSepa={
-                  currency === "EUR" &&
-                  isAuthenticated &&
-                  paymentSetup?.gateways.stripe.methods.includes(
-                    "stripe_sepa"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("stripe_sepa")
-                    : true)
-                }
-                showSofort={
-                  currency === "EUR" &&
-                  sofortCountries?.includes(country) &&
-                  paymentSetup?.gateways?.stripe?.methods?.includes(
-                    "stripe_sofort"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("stripe_sofort")
-                    : true)
-                }
+                showCC={showPaymentMethod({ paymentMethod: "card" })}
+                showGiroPay={showPaymentMethod({
+                  paymentMethod: "giropay",
+                  countries: ["DE"],
+                  currencies: ["EUR"],
+                })}
+                showSepa={showPaymentMethod({
+                  paymentMethod: "sepa_debit",
+                  currencies: ["EUR"],
+                  authenticatedMethod: true,
+                })}
+                showSofort={showPaymentMethod({
+                  paymentMethod: "sofort",
+                  currencies: ["EUR"],
+                  countries: sofortCountries,
+                })}
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&
@@ -307,7 +317,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("stripe_cc")
+                    ? paymentSetup?.recurrency.methods.includes("card")
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
@@ -330,8 +340,8 @@ function PaymentsForm({}: Props): ReactElement {
                       currency,
                       quantity * paymentSetup.unitCost
                     )}
-                    onPaymentFunction={(data) =>
-                      onSubmitPayment("stripe", data)
+                    onPaymentFunction={(providerObject: any) =>
+                      onSubmitPayment("stripe", "card", providerObject)
                     }
                     paymentType={paymentType}
                     setPaymentType={setPaymentType}

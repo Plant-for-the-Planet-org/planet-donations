@@ -18,9 +18,9 @@ function SofortPayments({ onSubmitPayment }: Props): ReactElement {
 
       <button
         className="primary-button w-100 mt-30"
-        onClick={() => onSubmitPayment("stripe_sofort", "sofort")}
+        onClick={() => onSubmitPayment("stripe", "sofort", "sofort")}
         id="donateContinueButton"
-        data-test-id='sofortDonateContinue'
+        data-test-id="sofortDonateContinue"
       >
         {t("payWithSofort")}
       </button>

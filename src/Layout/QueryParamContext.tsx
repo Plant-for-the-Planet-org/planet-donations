@@ -172,6 +172,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.return_to]);
 
+  React.useEffect(() => {
+    if (router.query.to && country) {
+      loadPaymentSetup(router.query.to, country);
+    }
+  }, [country]);
+
   async function loadselectedProjects() {
     try {
       const requestParams = {

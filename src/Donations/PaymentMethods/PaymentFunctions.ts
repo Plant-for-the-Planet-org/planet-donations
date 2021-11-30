@@ -2,55 +2,50 @@ import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
 import { useRouter } from "next/router";
 
-export function getPaymentProviderRequest(
+//rename to buildPaymentProviderRequest
+export function buildPaymentProviderRequest(
   gateway,
+  method,
   paymentSetup,
-  paymentMethod
+  providerObject
 ) {
-  let payDonationData;
-  if (gateway === "stripe") {
-    payDonationData = {
-      paymentProviderRequest: {
-        account: paymentSetup.gateways.stripe.account,
-        gateway: "stripe_pi",
-        source: {
-          id: paymentMethod.id,
-          object: "payment_method",
-        },
-      },
-    };
-  } else if (gateway === "paypal") {
-    payDonationData = {
-      paymentProviderRequest: {
-        account: paymentSetup.gateways.paypal.account,
-        gateway: "paypal",
-        source: {
-          ...paymentMethod,
-        },
-      },
-    };
-  } else if (gateway === "stripe_giropay") {
-    payDonationData = {
-      paymentProviderRequest: {
-        account: paymentSetup.gateways.stripe.account,
-        gateway: "stripe_pi",
-        source: {
-          object: "giropay",
-        },
-      },
-    };
-  } else if (gateway === "stripe_sofort") {
-    payDonationData = {
-      paymentProviderRequest: {
-        account: paymentSetup.gateways.stripe.account,
-        gateway: "stripe_pi",
-        source: {
-          object: "sofort",
-        },
-      },
-    };
+  let account;
+  let source;
+  switch (gateway) {
+    case "stripe":
+      account = paymentSetup.gateways.stripe.account;
+      switch (method) {
+        case "stripe_cc":
+        case "card":
+        case "stripe_sepa":
+        case "sepa_debit":
+          source = {
+            id: providerObject.id,
+            object: "payment_method",
+          };
+          break;
+        case "stripe_sofort":
+        case "sofort":
+        case "stripe_giropay":
+        case "giropay":
+          source = { object: providerObject };
+          break;
+      }
+      break;
+    case "paypal":
+      account = paymentSetup.gateways.paypal.account;
+      source = providerObject;
+      break;
+    default:
+    // throw some exception here 'unsupported gateway'
   }
-  return payDonationData;
+  return {
+    paymentProviderRequest: {
+      account: account,
+      gateway: gateway,
+      source: source,
+    },
+  };
 }
 
 export function getPaymentType(paymentType: String) {
@@ -212,7 +207,8 @@ export function createDonationData({
 
 export async function payDonationFunction({
   gateway,
-  paymentMethod,
+  method,
+  providerObject,
   setIsPaymentProcessing,
   setPaymentError,
   t,
@@ -229,16 +225,17 @@ export async function payDonationFunction({
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
-  if (!paymentMethod) {
+  if (!providerObject) {
     setIsPaymentProcessing(false);
     setPaymentError(t("donate:noPaymentMethodError"));
     return;
   }
 
-  const payDonationData = getPaymentProviderRequest(
+  const payDonationData = buildPaymentProviderRequest(
     gateway,
+    method,
     paymentSetup,
-    paymentMethod
+    providerObject
   );
 
   try {
@@ -282,9 +279,10 @@ export async function payDonationFunction({
 
         return paidDonation.data;
       } else if (paidDonation.data.status === "action_required") {
-        handleSCAPaymentFunction({
+        handleStripeSCAPayment({
           gateway,
-          paidDonation: paidDonation.data,
+          method,
+          paymentResponse: paidDonation.data,
           paymentSetup,
           window,
           setIsPaymentProcessing,
@@ -320,9 +318,59 @@ export async function payDonationFunction({
   }
 }
 
-export async function handleSCAPaymentFunction({
+export async function confirmPaymentIntent(
+  donationId: string,
+  paymentIntentId: string,
+  account: string,
+  token: string,
+  setshowErrorCard: any
+) {
+  const payDonationData = {
+    paymentProviderRequest: {
+      account: account,
+      gateway: "stripe",
+      source: {
+        id: paymentIntentId,
+        object: "payment_intent",
+      },
+    },
+  };
+
+  let confirmationResponse;
+  const requestParams = {
+    url: `/app/donations/${donationId}`,
+    data: payDonationData,
+    method: "PUT",
+    setshowErrorCard,
+    token: token ? token : null,
+  };
+  confirmationResponse = await apiRequest(requestParams);
+
+  if (
+    confirmationResponse.data.paymentStatus ||
+    confirmationResponse.data.status
+  ) {
+    return confirmationResponse.data;
+  }
+}
+
+const buildBillingDetails = (contactDetails: any) => {
+  return {
+    name: `${contactDetails.firstname} ${contactDetails.lastname}`,
+    email: contactDetails.email,
+    address: {
+      city: contactDetails.city,
+      country: contactDetails.country,
+      line1: contactDetails.address,
+      postal_code: contactDetails.zipCode,
+    },
+  };
+};
+
+export async function handleStripeSCAPayment({
   gateway,
-  paidDonation,
+  method,
+  paymentResponse,
   paymentSetup,
   window,
   setIsPaymentProcessing,
@@ -337,159 +385,95 @@ export async function handleSCAPaymentFunction({
   tenant,
   frequency,
 }: any) {
-  const clientSecret = paidDonation.response.payment_intent_client_secret;
+  const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     : paymentSetup?.gateways?.stripe?.stripePublishableKey;
   const stripe = window.Stripe(key, {
-    stripeAccount: paidDonation.response.account,
+    stripeAccount: paymentResponse.response.account,
   });
+
   // const router = useRouter();
-  if (stripe) {
-    if (gateway === "stripe") {
-      let SCAdonation;
-      if (frequency == "once") {
-        SCAdonation = await stripe.handleCardAction(clientSecret);
-      } else {
-        SCAdonation = await stripe.confirmCardPayment(clientSecret);
-      }
-      if (SCAdonation) {
-        if (SCAdonation.error) {
-          setIsPaymentProcessing(false);
-          setPaymentError(SCAdonation.error.message);
-        } else {
-          // For subscriptions, we don't have to confirm server side again
-          if (frequency !== "once") {
+  switch (method) {
+    case "card":
+      let stripeResponse;
+      let successData;
+      switch (paymentResponse.type) {
+        // cardAction requires confirmation of the payment intent to execute the payment server side
+        case "cardAction":
+          stripeResponse = await stripe.handleCardAction(clientSecret);
+          if (stripeResponse.error) {
             setIsPaymentProcessing(false);
-            router.push({
-              query: { ...router.query, step: "thankyou" },
-            });
+            setPaymentError(stripeResponse.error.message);
             return;
           }
-          const payDonationData = {
-            paymentProviderRequest: {
-              account: paymentSetup.gateways.stripe.account,
-              gateway: "stripe_pi",
-              source: {
-                id: SCAdonation.paymentIntent.id,
-                object: "payment_intent",
-              },
-            },
-          };
 
           try {
-            let SCAPaidDonation;
-            if (token) {
-              const requestParams = {
-                url: `/app/donations/${donationID}`,
-                data: payDonationData,
-                method: "PUT",
-                setshowErrorCard,
-                token: token,
-              };
-              SCAPaidDonation = await apiRequest(requestParams);
-            } else {
-              const requestParams = {
-                url: `/app/donations/${donationID}`,
-                data: payDonationData,
-                method: "PUT",
-                setshowErrorCard,
-              };
-              SCAPaidDonation = await apiRequest(requestParams);
-            }
-            if (
-              SCAPaidDonation.data.paymentStatus ||
-              SCAPaidDonation.data.status
-            ) {
-              setIsPaymentProcessing(false);
-              // setdonationStep(4);
-              router.push({
-                query: { ...router.query, step: "thankyou" },
-              });
-              return SCAPaidDonation.data;
-            }
-          } catch (error) {
-            if (error.status === 400) {
-              setPaymentError(error.data.message);
-            } else if (error.status === 500) {
-              setPaymentError("Something went wrong please try again soon!");
-            } else if (error.status === 503) {
-              setPaymentError(
-                "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
-              );
-            } else {
-              // setIsPaymentProcessing(false);
-              setPaymentError(
-                error.data.error ? error.data.error.message : error.data.message
-              );
-            }
-            setIsPaymentProcessing(false);
+            let successResponse = confirmPaymentIntent(
+              donationID,
+              stripeResponse.paymentIntent.id,
+              paymentSetup.gateways.stripe.account,
+              token,
+              setshowErrorCard
+            );
+            successData = successResponse.data;
+          } catch (e) {
+            // implement and call an exception handling function
+            return;
           }
-        }
-      }
-    } else if (gateway === "stripe_giropay") {
-      const { error, paymentIntent } = await stripe.confirmGiropayPayment(
-        paidDonation.response.payment_intent_client_secret,
-        {
-          payment_method: {
-            billing_details: {
-              name: `${contactDetails.firstname} ${contactDetails.lastname}`,
-              email: contactDetails.email,
-              address: {
-                city: contactDetails.city,
-                country: contactDetails.country,
-                line1: contactDetails.address,
-                postal_code: contactDetails.zipCode,
-              },
-            },
-          },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
-        }
-      );
+          break;
 
-      if (error) {
-        setIsPaymentProcessing(false);
-        if (error.message) {
-          setPaymentError(error.message);
-        } else {
-          setPaymentError(error);
-        }
-      } else {
-        return;
-      }
-    } else if (gateway === "stripe_sofort") {
-      const { error, paymentIntent } = await stripe.confirmSofortPayment(
-        paidDonation.response.payment_intent_client_secret,
-        {
-          payment_method: {
-            sofort: {
-              country: country,
-            },
-            billing_details: {
-              name: `${contactDetails.firstname} ${contactDetails.lastname}`,
-              email: contactDetails.email,
-              address: {
-                city: contactDetails.city,
-                country: contactDetails.country,
-                line1: contactDetails.address,
-                postal_code: contactDetails.zipCode,
-              },
-            },
-          },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
-        }
-      );
+        // cardPayment will execute the payment client side so no confirmation of the payment intent is required
+        case "cardPayment":
+          stripeResponse = await stripe.confirmCardPayment(clientSecret);
+          if (stripeResponse.error) {
+            setIsPaymentProcessing(false);
+            setPaymentError(stripeResponse.error.message);
+            return;
+          }
+          break;
 
-      if (error) {
-        setIsPaymentProcessing(false);
-        if (error.message) {
-          setPaymentError(error.message);
-        } else {
-          setPaymentError(error);
-        }
-      } else {
-        console.log("paymentIntent", paymentIntent);
+        default:
+        // unexpected type
       }
-    }
+
+      router.push({
+        query: { ...router.query, step: "thankyou" },
+      });
+
+      setIsPaymentProcessing(false);
+
+      return successData;
+
+    case "giropay":
+      const { errorGiropay, paymentIntentGiropay } =
+        await stripe.confirmGiropayPayment(
+          paymentResponse.response.payment_intent_client_secret,
+          {
+            payment_method: {
+              billing_details: buildBillingDetails(contactDetails),
+            },
+            return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+          }
+        );
+      // handleError(errorGiropay);
+      break;
+
+    case "sofort":
+      const { errorSofort, paymentIntentSofort } =
+        await stripe.confirmSofortPayment(
+          paymentResponse.response.payment_intent_client_secret,
+          {
+            payment_method: {
+              sofort: {
+                country: country,
+              },
+              billing_details: buildBillingDetails(contactDetails),
+            },
+            return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+          }
+        );
+      // handleError(errorSofort);
+      break;
   }
 }
