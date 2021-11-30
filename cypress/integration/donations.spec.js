@@ -2,24 +2,24 @@
 
 describe("Donations", () => {
 
-    // it("Testing Germany address ", () => {
-    //     cy.createDonation("25", "Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
-    // it("Testing Multiple Donations ", () => {
-    //     cy.multipleDonation("Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
+    it("Testing Germany address ", () => {
+        cy.createDonation("25", "Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
+    it("Testing Multiple Donations ", () => {
+        cy.multipleDonation("Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 
     // it("Testing with Support Link ", () => {
     //     supportGift("yucatan", "25", "Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     //     cardPayment("4242424242424242", "424", "242")
     // });
 
-    // it("Testing with Gift Donation ", () => {
-    //     cy.giftDonation("25",  "Germany{enter}")
-    //     cy.cardPayment("4242424242424242", "424", "242")
-    // });
+    it("Testing with Gift Donation ", () => {
+        cy.giftDonation("25",  "Germany{enter}")
+        cy.cardPayment("4242424242424242", "424", "242")
+    });
 
     // International Cards
     it("Testing with Germany Visa", () => {

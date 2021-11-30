@@ -11,12 +11,13 @@ import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
-import { useRouter } from "next/router";
-interface Props {}
+import router, { useRouter } from "next/router";
+interface Props { }
 
-function Donations({}: Props): ReactElement {
+function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
+
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -51,7 +52,7 @@ function Donations({}: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => {};
+    return () => { };
   }, [router.query.step]);
   return (
     <div className="donations-container">
@@ -85,6 +86,17 @@ function DonationInfo() {
     tenant,
     frequency,
   } = React.useContext(QueryParamContext);
+
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    }
+  });
 
   const TPOImage = () => {
     return projectDetails.tpo.image ? (
@@ -274,7 +286,7 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && (
+          {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"

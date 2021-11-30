@@ -6,10 +6,23 @@ import ShareOptions from "../../Micros/ShareOptions";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
+import { useRouter } from 'next/router';
+
 
 function SuccessfulDonation({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
-
+  const router = useRouter();
+  const [isMobile, setIsMobile] = React.useState(false);
+  const { donationID, tenant } = React.useContext(QueryParamContext);
+  React.useEffect(() => {
+    if(typeof window !== 'undefined') {
+      if(window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+    }
+  }
+  });
   const { paymentType, returnTo, projectDetails } =
     React.useContext(QueryParamContext);
 
@@ -57,6 +70,15 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         sendRef={sendRef}
         donor={donation.donor}
       />
+      {donationID && isMobile && (router.query.step === "thankyou") && (
+        <a
+          href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
+          className="donations-transaction-details donation-transaction-phone-view"
+          data-test-id="referenceDonation"
+        >
+          {`Ref - ${donationID}`}
+        </a>
+      )}
     </div>
   ) : (
     <></>
