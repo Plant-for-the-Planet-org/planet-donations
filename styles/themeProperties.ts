@@ -3,7 +3,7 @@ const themeProperties = {
     subTitleSize: "14px",
     titleSize: "18px",
   },
-  fontFamily: '"Open Sans",Helvetica,Arial,sans-serif',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   primaryColor: "#68B030",
   primaryDarkColor: "#007a49",
   grey: "#e6e6e6",
