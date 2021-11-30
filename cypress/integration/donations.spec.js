@@ -45,10 +45,10 @@ describe("Donations", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000000101", "424", "242")
     });
-    it("Testing with incorrect card number", () => {
-        cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
-        cy.paymentError("4242424242424241", "424", "242")
-    });
+    // it("Testing with incorrect card number", () => {
+    //     cy.createDonation("25", "Peter", "Payer", "peter.payer@gmail.com", "aunchd", "Montcada i Reixac", "Spain{enter}", "08110")
+    //     cy.paymentError("4242424242424241", "424", "242")
+    // });
 
     // Recurrency Testing
     // it("Testing Recurrency (yearly)", () => {
