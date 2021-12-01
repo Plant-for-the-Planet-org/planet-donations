@@ -26,6 +26,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
+import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
@@ -36,8 +37,6 @@ function PaymentsForm({}: Props): ReactElement {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
-
-  const [paymentError, setPaymentError] = React.useState("");
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -67,6 +66,8 @@ function PaymentsForm({}: Props): ReactElement {
     profile,
     frequency,
     tenant,
+    paymentError,
+    setPaymentError,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -76,7 +77,7 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (paymentError) {
       router.replace({
-        query: { ...router.query, step: "thankyou" },
+        query: { ...router.query, step: THANK_YOU },
       });
     }
   }, [paymentError]);
@@ -219,7 +220,7 @@ function PaymentsForm({}: Props): ReactElement {
                 onClick={() => {
                   setdonationStep(2);
                   router.push({
-                    query: { ...router.query, step: "contact" },
+                    query: { ...router.query, step: CONTACT },
                   });
                 }}
                 className="d-flex"
@@ -244,8 +245,7 @@ function PaymentsForm({}: Props): ReactElement {
           {/* TODO - When donations are coming from context, check for haspublicprofile */}
           {projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
-              {!contactDetails.companyname ||
-              contactDetails.companyname === "" ? (
+              {!Object.keys(contactDetails).includes("companyName") ? (
                 askpublishName ? (
                   <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <CheckBox

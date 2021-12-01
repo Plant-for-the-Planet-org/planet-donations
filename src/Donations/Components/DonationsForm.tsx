@@ -22,6 +22,7 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
+import { CONTACT } from "src/Utils/donationStepConstants";
 
 function DonationsForm() {
   const {
@@ -43,6 +44,7 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
+    setPaymentError,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -73,8 +75,9 @@ function DonationsForm() {
   }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
-  const [paymentError, setPaymentError] = React.useState("");
+  // const [paymentError, setPaymentError] = React.useState("");
   console.log(paymentSetup, "paymentSetup", showFrequencyOptions);
+
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -247,7 +250,7 @@ function DonationsForm() {
                     continueNext={() => {
                       setdonationStep(2);
                       router.push({
-                        query: { ...router.query, step: "contact" },
+                        query: { ...router.query, step: CONTACT },
                       });
                     }}
                     isPaymentPage={false}

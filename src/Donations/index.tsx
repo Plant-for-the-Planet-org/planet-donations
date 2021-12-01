@@ -12,6 +12,13 @@ import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import { useRouter } from "next/router";
+import {
+  CONTACT,
+  DONATE,
+  PAYMENT,
+  SELECT_PROJECT,
+  THANK_YOU,
+} from "src/Utils/donationStepConstants";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
@@ -24,7 +31,7 @@ function Donations({}: Props): ReactElement {
       let step;
       if (donationStep === 4) {
         //if the last step is 'Thankyou' then this will replace the entire route with the initial one on browser back press
-        step = "selectProject";
+        step = SELECT_PROJECT;
         router.replace({
           query: {},
         });
@@ -32,19 +39,19 @@ function Donations({}: Props): ReactElement {
         step = router.query?.step;
       }
       switch (step) {
-        case "selectProject":
+        case SELECT_PROJECT:
           setdonationStep(0);
           break;
-        case "donate":
+        case DONATE:
           setdonationStep(1);
           break;
-        case "contact":
+        case CONTACT:
           setdonationStep(2);
           break;
-        case "payment":
+        case PAYMENT:
           setdonationStep(3);
           break;
-        case "thankyou":
+        case THANK_YOU:
           setdonationStep(4);
           break;
         default:

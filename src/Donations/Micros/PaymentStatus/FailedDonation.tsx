@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentFailedIllustration from "../../../../public/assets/icons/donation/PaymentFailed";
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
@@ -6,10 +6,12 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
+import { PAYMENT } from "src/Utils/donationStepConstants";
+import InfoIcon from "public/assets/icons/InfoIcon";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
-
+  // const [paymentError, setPaymentError] = useState("");
   const {
     returnTo,
     donationID,
@@ -26,9 +28,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setshowErrorCard,
     setpaymentSetup,
     country,
+    paymentError,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
-
+  console.log(paymentError, "paymentError");
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
 
@@ -83,7 +86,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     loadPaymentSetup(donation.project.id, country);
     setdonationStep(3);
     router.push({
-      query: { ...router.query, step: "payment" },
+      query: { ...router.query, step: PAYMENT },
     });
   }
 
@@ -106,6 +109,16 @@ function FailedDonation({ sendToReturn, donation }: any) {
       <div className={"mt-20 text-center"}>
         {t("common:donationFailedMessage")}
       </div>
+      {paymentError && (
+        <div
+          className={
+            "mt-20 d-flex align-items-center callout-danger text-danger"
+          }
+        >
+          <InfoIcon />
+          {paymentError}
+        </div>
+      )}
       <PaymentFailedIllustration />
       {donationID && (
         <button

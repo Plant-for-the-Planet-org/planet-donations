@@ -1,6 +1,7 @@
 import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
 import { useRouter } from "next/router";
+import { THANK_YOU } from "src/Utils/donationStepConstants";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
@@ -103,25 +104,14 @@ export async function createDonationFunction({
   });
   try {
     let donation;
-
-    if (token) {
-      const requestParams = {
-        url: `/app/donations`,
-        data: donationData,
-        method: "POST",
-        setshowErrorCard,
-        token: token,
-      };
-      donation = await apiRequest(requestParams);
-    } else {
-      const requestParams = {
-        url: `/app/donations`,
-        data: donationData,
-        method: "POST",
-        setshowErrorCard,
-      };
-      donation = await apiRequest(requestParams);
-    }
+    const requestParams = {
+      url: `/app/donations`,
+      data: donationData,
+      method: "POST",
+      setshowErrorCard,
+      token: token ? token : false,
+    };
+    donation = await apiRequest(requestParams);
     if (donation && donation.data) {
       setdonationID(donation.data.id);
       return donation.data;
@@ -239,50 +229,34 @@ export async function payDonationFunction({
   );
 
   try {
-    let paidDonation;
-    if (token) {
-      const requestParams = {
-        url: `/app/donations/${donationID}`,
-        data: payDonationData,
-        method: "PUT",
-        setshowErrorCard,
-        token: token,
-      };
-      paidDonation = await apiRequest(requestParams);
-    } else {
-      const requestParams = {
-        url: `/app/donations/${donationID}`,
-        data: payDonationData,
-        method: "PUT",
-        setshowErrorCard,
-      };
-      paidDonation = await apiRequest(requestParams);
-    }
-    if (paidDonation && paidDonation.data) {
-      // if (paidDonation.data.status === "failed") {
-      //   setIsPaymentProcessing(false);
-      //   setPaymentError(paidDonation.data.message);
-      // } else
+    let paymentResponse = await confirmPaymentIntent(
+      donationID,
+      payDonationData,
+      token,
+      setshowErrorCard,
+      setPaymentError
+    );
+    if (paymentResponse && paymentResponse.data) {
       if (
-        paidDonation.data.paymentStatus === "success" ||
-        paidDonation.data.paymentStatus === "pending" ||
-        paidDonation.data.status === "success" ||
-        paidDonation.data.status === "paid" ||
-        paidDonation.data.paymentStatus === "paid" ||
-        paidDonation.data.status === "failed"
+        ["success", "pending", "paid"].includes(
+          paymentResponse.data.paymentStatus
+        ) ||
+        ["success", "paid", "failed"].includes(paymentResponse.data.status)
       ) {
-        // setIsPaymentProcessing(false);
+        if (paymentResponse.data.status === "failed") {
+          setIsPaymentProcessing(false);
+          setPaymentError(paymentResponse.data.message);
+        }
         router.replace({
-          query: { ...router.query, step: "thankyou" },
+          query: { ...router.query, step: THANK_YOU },
         });
-        // setdonationStep(4);
 
-        return paidDonation.data;
-      } else if (paidDonation.data.status === "action_required") {
+        return paymentResponse.data;
+      } else if (paymentResponse.data.status === "action_required") {
         handleStripeSCAPayment({
           gateway,
           method,
-          paymentResponse: paidDonation.data,
+          paymentResponse: paymentResponse.data,
           paymentSetup,
           window,
           setIsPaymentProcessing,
@@ -320,21 +294,23 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  paymentIntentId: string,
-  account: string,
+  // paymentIntentId: string,
+  // account: string,
+  payDonationData: any,
   token: string,
-  setshowErrorCard: any
+  setshowErrorCard: any,
+  setPaymentError: any
 ) {
-  const payDonationData = {
-    paymentProviderRequest: {
-      account: account,
-      gateway: "stripe",
-      source: {
-        id: paymentIntentId,
-        object: "payment_intent",
-      },
-    },
-  };
+  // const payDonationData = {
+  //   paymentProviderRequest: {
+  //     account: account,
+  //     gateway: "stripe",
+  //     source: {
+  //       id: paymentIntentId,
+  //       object: "payment_intent",
+  //     },
+  //   },
+  // };
 
   let confirmationResponse;
   const requestParams = {
@@ -342,14 +318,16 @@ export async function confirmPaymentIntent(
     data: payDonationData,
     method: "PUT",
     setshowErrorCard,
-    token: token ? token : null,
+    token: token ? token : false,
   };
   confirmationResponse = await apiRequest(requestParams);
-
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
   ) {
+    if (confirmationResponse.data.status === "failed") {
+      setPaymentError(confirmationResponse.data.message);
+    }
     return confirmationResponse.data;
   }
 }
@@ -365,6 +343,19 @@ const buildBillingDetails = (contactDetails: any) => {
       postal_code: contactDetails.zipCode,
     },
   };
+};
+
+const handlePaymentError = (
+  paymentError: any,
+  setIsPaymentProcessing: any,
+  setPaymentError: any
+) => {
+  setIsPaymentProcessing(false);
+  if (paymentError.message || paymentError.data.message) {
+    setPaymentError(paymentError.message ?? paymentError.data.message);
+  } else {
+    setPaymentError(paymentError);
+  }
 };
 
 export async function handleStripeSCAPayment({
@@ -392,13 +383,12 @@ export async function handleStripeSCAPayment({
   const stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
   });
-
-  // const router = useRouter();
   switch (method) {
     case "card":
       let stripeResponse;
       let successData;
-      switch (paymentResponse.type) {
+      console.log(paymentResponse, "paymentResponse.type");
+      switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
           stripeResponse = await stripe.handleCardAction(clientSecret);
@@ -407,22 +397,31 @@ export async function handleStripeSCAPayment({
             setPaymentError(stripeResponse.error.message);
             return;
           }
-
           try {
+            const payDonationData = {
+              paymentProviderRequest: {
+                account: paymentSetup.gateways.stripe.account,
+                gateway: "stripe",
+                source: {
+                  id: stripeResponse.paymentIntent.id,
+                  object: "payment_intent",
+                },
+              },
+            };
             let successResponse = confirmPaymentIntent(
               donationID,
-              stripeResponse.paymentIntent.id,
-              paymentSetup.gateways.stripe.account,
+              payDonationData,
               token,
-              setshowErrorCard
+              setshowErrorCard,
+              setPaymentError
             );
             successData = successResponse.data;
-          } catch (e) {
+          } catch (error: any) {
             // implement and call an exception handling function
+            handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
             return;
           }
           break;
-
         // cardPayment will execute the payment client side so no confirmation of the payment intent is required
         case "cardPayment":
           stripeResponse = await stripe.confirmCardPayment(clientSecret);
@@ -434,15 +433,13 @@ export async function handleStripeSCAPayment({
           break;
 
         default:
-        // unexpected type
+          setIsPaymentProcessing(false);
+          setPaymentError("Unexpected Payment Type");
       }
-
       router.push({
-        query: { ...router.query, step: "thankyou" },
+        query: { ...router.query, step: THANK_YOU },
       });
-
       setIsPaymentProcessing(false);
-
       return successData;
 
     case "giropay":
@@ -456,7 +453,7 @@ export async function handleStripeSCAPayment({
             return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
           }
         );
-      // handleError(errorGiropay);
+      handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
       break;
 
     case "sofort":
@@ -473,7 +470,7 @@ export async function handleStripeSCAPayment({
             return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
           }
         );
-      // handleError(errorSofort);
+      handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
       break;
   }
 }

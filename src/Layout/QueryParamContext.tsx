@@ -60,6 +60,8 @@ export const QueryParamContext = React.createContext({
   setfrequency: (value: string) => {},
   hideLogin: false,
   setHideLogin: (value: boolean) => {},
+  paymentError: "",
+  setPaymentError: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -137,6 +139,8 @@ export default function QueryParamProvider({ children }: any) {
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
+  const [paymentError, setPaymentError] = React.useState("");
+
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
@@ -171,12 +175,6 @@ export default function QueryParamProvider({ children }: any) {
       }
     }
   }, [router.query.return_to]);
-
-  React.useEffect(() => {
-    if (router.query.to && country) {
-      loadPaymentSetup(router.query.to, country);
-    }
-  }, [country]);
 
   async function loadselectedProjects() {
     try {
@@ -348,7 +346,6 @@ export default function QueryParamProvider({ children }: any) {
 
   const [showErrorCard, setshowErrorCard] = React.useState(false);
   React.useEffect(() => {
-    // console.log(router.query, "router.query");
     if (router.query.error) {
       if (
         router.query.error_description === "401" &&
@@ -419,6 +416,8 @@ export default function QueryParamProvider({ children }: any) {
         setfrequency,
         hideLogin,
         setHideLogin,
+        paymentError,
+        setPaymentError,
       }}
     >
       {children}

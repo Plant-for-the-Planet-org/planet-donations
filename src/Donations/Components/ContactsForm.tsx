@@ -13,6 +13,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { PAYMENT } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
@@ -79,7 +80,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const onSubmit = (data: any) => {
     router.push({
-      query: { ...router.query, step: "payment" },
+      query: { ...router.query, step: PAYMENT },
     });
     setContactDetails({
       ...data,
@@ -405,7 +406,8 @@ function ContactsForm({}: Props): ReactElement {
                   currency,
                   quantity * paymentSetup.unitCost
                 ),
-                frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+                frequency:
+                  frequency === "once" ? "" : t(frequency).toLowerCase(),
               })}
             </button>
           )}
