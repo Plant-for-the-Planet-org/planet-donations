@@ -75,7 +75,7 @@ function ThankYou() {
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
 
-  const { returnTo } = React.useContext(QueryParamContext);
+  const { returnTo, paymentError } = React.useContext(QueryParamContext);
 
   const router = useRouter();
 
@@ -113,7 +113,7 @@ function ThankYou() {
               status === "paid" ||
               status === "succeeded" ? (
                 <SuccessComponent />
-              ) : status === "failed" ? (
+              ) : status === "failed" || paymentError ? (
                 <FailedDonation
                   donationID={donationID}
                   sendToReturn={sendToReturn}

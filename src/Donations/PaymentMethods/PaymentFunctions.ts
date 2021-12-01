@@ -236,27 +236,28 @@ export async function payDonationFunction({
       setshowErrorCard,
       setPaymentError
     );
-    if (paymentResponse && paymentResponse.data) {
+    console.log(paymentResponse, "paymentResponse");
+    if (paymentResponse) {
       if (
         ["success", "pending", "paid"].includes(
-          paymentResponse.data.paymentStatus
+          paymentResponse.paymentStatus
         ) ||
-        ["success", "paid", "failed"].includes(paymentResponse.data.status)
+        ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
-        if (paymentResponse.data.status === "failed") {
+        if (paymentResponse.status === "failed") {
           setIsPaymentProcessing(false);
-          setPaymentError(paymentResponse.data.message);
+          setPaymentError(paymentResponse.message);
         }
         router.replace({
           query: { ...router.query, step: THANK_YOU },
         });
 
-        return paymentResponse.data;
-      } else if (paymentResponse.data.status === "action_required") {
+        return paymentResponse;
+      } else if (paymentResponse.status === "action_required") {
         handleStripeSCAPayment({
           gateway,
           method,
-          paymentResponse: paymentResponse.data,
+          paymentResponse,
           paymentSetup,
           window,
           setIsPaymentProcessing,

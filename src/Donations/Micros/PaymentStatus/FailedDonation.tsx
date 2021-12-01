@@ -29,6 +29,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setpaymentSetup,
     country,
     paymentError,
+    setPaymentError,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
   console.log(paymentError, "paymentError");
@@ -62,6 +63,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
+    setPaymentError("");
     // if (donation?.project?.purpose === "trees") {
     //   setquantity(donation?.treeCount);
     // }
@@ -114,6 +116,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
           className={
             "mt-20 d-flex align-items-center callout-danger text-danger"
           }
+          style={{ marginBottom: "10px" }}
         >
           <InfoIcon />
           {paymentError}
