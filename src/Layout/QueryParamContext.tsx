@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
+import { setCountryCode } from "src/Utils/setCountryCode";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -144,6 +145,12 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.locale]);
 
   React.useEffect(() => {
+    if (router.query.to && country !== undefined && country !== "") {
+      loadPaymentSetup(router.query.to, country);
+    }
+  }, [country]);
+
+  React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
@@ -212,6 +219,10 @@ export default function QueryParamProvider({ children }: any) {
         setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
+          localStorage.setItem(
+            "countryCode",
+            paymentSetupData.data.effectiveCountry
+          );
         }
         setpaymentSetup(paymentSetupData.data);
       }
@@ -251,11 +262,22 @@ export default function QueryParamProvider({ children }: any) {
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
             if (!router.query.context) {
-              setcountry(config.data.country.toUpperCase());
+              setCountryCode({
+                setcountry,
+                setcurrency,
+                configCountry: config.data.country.toUpperCase(),
+              });
+              // setcountry(config.data.country.toUpperCase());
+              // localStorage.setItem(
+              //   "countryCode",
+              //   config.data.country.toUpperCase()
+              // );
             }
-          } else {
-            setcountry("DE");
           }
+          // else {
+          //   setcountry("DE");
+          //   localStorage.setItem("countryCode", "DE");
+          // }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -340,7 +362,6 @@ export default function QueryParamProvider({ children }: any) {
 
   const [showErrorCard, setshowErrorCard] = React.useState(false);
   React.useEffect(() => {
-    // console.log(router.query, "router.query");
     if (router.query.error) {
       if (
         router.query.error_description === "401" &&

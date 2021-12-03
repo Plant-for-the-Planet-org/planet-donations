@@ -9,6 +9,7 @@ import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
+import { setCountryCode } from "src/Utils/setCountryCode";
 
 interface Props {
   projectDetails: Object;
@@ -86,11 +87,16 @@ function index({
       }
     }
     // XX is hidden country and T1 is Tor browser
-    if (country === "XX" || country === "T1") {
-      setcountry("DE");
-    } else {
-      setcountry(country);
-    }
+    // if (country === "XX" || country === "T1" || country === "") {
+    //   setcountry("DE");
+    // } else {
+    //   if (country) {
+    //     setcountry(country);
+    //   } else if (localStorage.getItem("countryCode")) {
+    //     setcountry(localStorage.getItem("countryCode"));
+    //   }
+    // }
+    setCountryCode({ setcountry, setcurrency, country });
   }, []);
 
   // If gift details are present set gift
@@ -207,7 +213,7 @@ export async function getServerSideProps(context: any) {
   let isTaxDeductible = false;
   let donationID = null;
   let shouldCreateDonation = false;
-  let country = "DE";
+  let country = "";
   let isDirectDonation = false;
   let contactDetails = {};
   let treecount = 50;
@@ -256,20 +262,19 @@ export async function getServerSideProps(context: any) {
     if (found) {
       country = context.query.country.toUpperCase();
     }
-  } else {
-    try {
-      const requestParams = {
-        url: `/app/config`,
-        setshowErrorCard,
-      };
-      const config: any = await apiRequest(requestParams);
-      console.log(config, "Config");
-      if (config) {
-        country = config.data.country.toUpperCase();
-      }
-    } catch (err) {
-      console.log(err, "Error");
-    }
+    // } else {
+    //   try {
+    //     const requestParams = {
+    //       url: `/app/config`,
+    //       setshowErrorCard,
+    //     };
+    //     const config: any = await apiRequest(requestParams);
+    //     if (config) {
+    //       country = config.data.country.toUpperCase();
+    //     }
+    //   } catch (err) {
+    //     console.log(err, "Error");
+    //   }
   }
 
   // Set donation details if context (created donation ID) present in the URL
