@@ -47,10 +47,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
         setcurrency(paymentSetupData.data.currency);
         if (!country) {
           setcountry(paymentSetupData.data.effectiveCountry);
-          localStorage.setItem(
-            "countryCode",
-            paymentSetupData.data.effectiveCountry
-          );
         }
         setpaymentSetup(paymentSetupData.data);
       }

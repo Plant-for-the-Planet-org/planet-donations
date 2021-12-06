@@ -43,7 +43,5 @@ export const setCountryInLocalAndContext = (
   )[0];
   if (countryData) {
     setcurrency(countryData.currencyCode);
-    localStorage.setItem("currencyCode", countryData.currencyCode);
   }
-  localStorage.setItem("countryCode", country);
 };
