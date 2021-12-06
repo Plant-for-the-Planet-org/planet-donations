@@ -101,7 +101,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
         </button>
       )}
 
-      <div className={"title-text text-center"}>
+      <div className={"title-text text-center"} data-test-id="donation-failed">
         {t("common:donationFailed")}
       </div>
       <div className={"mt-20 text-center"}>

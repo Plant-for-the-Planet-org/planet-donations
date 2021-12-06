@@ -225,6 +225,7 @@ export async function payDonationFunction({
   setshowErrorCard,
   router,
   tenant,
+  frequency,
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -261,15 +262,17 @@ export async function payDonationFunction({
       paidDonation = await apiRequest(requestParams);
     }
     if (paidDonation && paidDonation.data) {
-      if (paidDonation.data.status === "failed") {
-        setIsPaymentProcessing(false);
-        setPaymentError(paidDonation.data.message);
-      } else if (
+      // if (paidDonation.data.status === "failed") {
+      //   setIsPaymentProcessing(false);
+      //   setPaymentError(paidDonation.data.message);
+      // } else
+      if (
         paidDonation.data.paymentStatus === "success" ||
         paidDonation.data.paymentStatus === "pending" ||
         paidDonation.data.status === "success" ||
         paidDonation.data.status === "paid" ||
-        paidDonation.data.paymentStatus === "paid"
+        paidDonation.data.paymentStatus === "paid" ||
+        paidDonation.data.status === "failed"
       ) {
         // setIsPaymentProcessing(false);
         router.replace({
@@ -294,6 +297,7 @@ export async function payDonationFunction({
           setshowErrorCard,
           router,
           tenant,
+          frequency,
         });
       }
     }
@@ -331,6 +335,7 @@ export async function handleSCAPaymentFunction({
   setshowErrorCard,
   router,
   tenant,
+  frequency,
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -342,12 +347,25 @@ export async function handleSCAPaymentFunction({
   // const router = useRouter();
   if (stripe) {
     if (gateway === "stripe") {
-      const SCAdonation = await stripe.handleCardAction(clientSecret);
+      let SCAdonation;
+      if (frequency == "once") {
+        SCAdonation = await stripe.handleCardAction(clientSecret);
+      } else {
+        SCAdonation = await stripe.confirmCardPayment(clientSecret);
+      }
       if (SCAdonation) {
         if (SCAdonation.error) {
           setIsPaymentProcessing(false);
           setPaymentError(SCAdonation.error.message);
         } else {
+          // For subscriptions, we don't have to confirm server side again
+          if (frequency !== "once") {
+            setIsPaymentProcessing(false);
+            router.push({
+              query: { ...router.query, step: "thankyou" },
+            });
+            return;
+          }
           const payDonationData = {
             paymentProviderRequest: {
               account: paymentSetup.gateways.stripe.account,
@@ -379,7 +397,6 @@ export async function handleSCAPaymentFunction({
               };
               SCAPaidDonation = await apiRequest(requestParams);
             }
-
             if (
               SCAPaidDonation.data.paymentStatus ||
               SCAPaidDonation.data.status

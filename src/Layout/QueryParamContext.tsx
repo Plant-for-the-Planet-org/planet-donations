@@ -224,7 +224,9 @@ export default function QueryParamProvider({ children }: any) {
             paymentSetupData.data.effectiveCountry
           );
         }
+
         setpaymentSetup(paymentSetupData.data);
+        console.log(paymentSetupData.data, "paymentSetupData.data");
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
