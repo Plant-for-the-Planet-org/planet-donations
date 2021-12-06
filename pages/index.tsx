@@ -28,7 +28,7 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
-  meta: {};
+  meta: { title: string, description: string, image: string, url: string };
 }
 
 function index({
