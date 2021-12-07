@@ -1,6 +1,5 @@
-import { apiRequest } from "../../Utils/api";
 import { CreateDonationFunctionProps } from "../../Common/Types";
-import { useRouter } from "next/router";
+import { apiRequest } from "../../Utils/api";
 
 export function getPaymentProviderRequest(
   gateway,
@@ -278,7 +277,9 @@ export async function payDonationFunction({
         // setdonationStep(4);
 
         return paidDonation.data;
-      } else if (paidDonation.data.status === "action_required") {
+      }
+      // calls third party (integrated) payment method which was selected earlier 
+      else if (paidDonation.data.status === "action_required") {
         handleSCAPaymentFunction({
           gateway,
           paidDonation: paidDonation.data,
@@ -460,8 +461,19 @@ export async function handleSCAPaymentFunction({
             },
           },
           return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
+        },
+        {
+          handleActions: false
         }
       );
+
+      if (paymentIntent.status === "requires_source_action" && paymentIntent.next_action.type === 'redirect_to_url') {
+        const url = paymentIntent.next_action.redirect_to_url.url;
+        router.replace(url)
+      } else {
+        setIsPaymentProcessing(false);
+        setPaymentError('Something went wrong');
+      }
 
       if (error) {
         setIsPaymentProcessing(false);
