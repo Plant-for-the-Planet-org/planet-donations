@@ -48,6 +48,8 @@ export const QueryParamContext = React.createContext({
   setDonationUid: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
+  transferDetails: {},
+  setTransferDetails: (value: {}) => {},
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
   queryToken: "",
@@ -137,6 +139,8 @@ export default function QueryParamProvider({ children }: any) {
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
+  const [transferDetails, setTransferDetails] = React.useState<Object>({});
+
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
@@ -413,6 +417,8 @@ export default function QueryParamProvider({ children }: any) {
         setfrequency,
         hideLogin,
         setHideLogin,
+        transferDetails,
+        setTransferDetails,
       }}
     >
       {children}
