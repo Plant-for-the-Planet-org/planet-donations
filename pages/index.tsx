@@ -1,13 +1,13 @@
-import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Donations from "./../src/Donations";
-import nextI18NextConfig from "../next-i18next.config.js";
-import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
-import { QueryParamContext } from "../src/Layout/QueryParamContext";
-import { getCountryDataBy } from "../src/Utils/countryUtils";
-import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
+import React, { ReactElement } from "react";
+import nextI18NextConfig from "../next-i18next.config.js";
+import locales from "../public/static/localeList.json";
+import { QueryParamContext } from "../src/Layout/QueryParamContext";
+import { apiRequest } from "../src/Utils/api";
+import { getCountryDataBy } from "../src/Utils/countryUtils";
+import Donations from "./../src/Donations";
 import countriesData from "./../src/Utils/countriesData.json";
 
 interface Props {
@@ -122,8 +122,6 @@ function index({
       loadselectedProjects();
     }
   }, [donationStep]);
-
-  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
 
