@@ -11,12 +11,13 @@ import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
-import { useRouter } from "next/router";
-interface Props {}
+import router, { useRouter } from "next/router";
+interface Props { }
 
-function Donations({}: Props): ReactElement {
+function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
+
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -51,7 +52,7 @@ function Donations({}: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => {};
+    return () => { };
   }, [router.query.step]);
   return (
     <div className="donations-container">
@@ -83,7 +84,19 @@ function DonationInfo() {
     giftDetails,
     isGift,
     tenant,
+    frequency,
   } = React.useContext(QueryParamContext);
+
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    }
+  });
 
   const TPOImage = () => {
     return projectDetails.tpo.image ? (
@@ -143,7 +156,7 @@ function DonationInfo() {
             projectDetails.purpose === "trees" && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating")}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -157,7 +170,12 @@ function DonationInfo() {
                       i18n.language,
                       Number(quantity)
                     ),
-                  })}
+                  })}{" "}
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
@@ -166,7 +184,9 @@ function DonationInfo() {
             projectDetails.purpose === "bouquet" && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating")}
+                  {t("donating", {
+                    frequency: t(`${frequency}`),
+                  })}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -190,12 +210,14 @@ function DonationInfo() {
                   {projectDetails.name}
                 </a>
               ) : (
-                <p className="title-text text-white">{projectDetails.name}</p>
+                <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
               {projectDetails.purpose === "bouquet" &&
               projectDetails.description ? (
-                <p className="text-white mt-10">{projectDetails.description}</p>
+                <h3 className="text-white mt-10">
+                  {projectDetails.description}
+                </h3>
               ) : (
                 <></>
               )}
@@ -264,7 +286,7 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && (
+          {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"

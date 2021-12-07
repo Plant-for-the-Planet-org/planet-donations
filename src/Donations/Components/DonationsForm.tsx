@@ -47,17 +47,35 @@ function DonationsForm() {
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const [minAmt, setMinAmt] = React.useState(0);
-  const { isLoading, isAuthenticated, getAccessTokenSilently, loginWithPopup } =
-    useAuth0();
+
+  const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
+  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
+
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
 
+  React.useEffect(() => {
+    // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
+    //   for (const gateway in paymentSetup?.gateways) {
+    //     const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+    //     console.log(frequencies, "frequencies");
+    //     if (frequencies && frequencies.length > 0) {
+    //       console.log("Show Frequency Options");
+    //       setShowFrequencyOptions(true);
+    //     }
+    //   }
+    // }
+    console.log(paymentSetup, "paymentSetup");
+    if (paymentSetup && paymentSetup?.recurrency) {
+      setShowFrequencyOptions(paymentSetup?.recurrency.supported);
+    }
+  }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-
+  const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-
+  console.log(paymentSetup, "paymentSetup", showFrequencyOptions);
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -126,12 +144,11 @@ function DonationsForm() {
 
   const donationSelection = () => {
     switch (projectDetails.purpose) {
-      case "trees":
-        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "trees":
       default:
         return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
     }
@@ -191,8 +208,8 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-          projectDetails.purpose === "trees" &&
-          projectDetails.frequencies ? (
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
             <div className="donations-gift-container mt-10">
               <FrequencyOptions />
             </div>
