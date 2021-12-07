@@ -77,12 +77,14 @@ function index({
     setEmbed,
     setAutoLogin,
     setReturnToUrl,
+    testURL,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setdonationID(donationID);
     setEmbed(embed);
-    setReturnToUrl(returnToUrl);
+    const isReturnToUrlValid = testURL(returnToUrl);
+    setReturnToUrl(isReturnToUrlValid ? returnToUrl : "");
     setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);

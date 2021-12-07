@@ -66,6 +66,9 @@ export const QueryParamContext = React.createContext({
   setHideLogin: (value: boolean) => {},
   returnToUrl: "",
   setReturnToUrl: (value: string) => {},
+  testURL: (url: string): boolean => {
+    return false;
+  },
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -438,6 +441,7 @@ export default function QueryParamProvider({ children }: any) {
         setHideLogin,
         returnToUrl,
         setReturnToUrl,
+        testURL,
       }}
     >
       {children}
