@@ -225,6 +225,8 @@ export async function payDonationFunction({
   router,
   tenant,
   frequency,
+  embed,
+  returnToUrl
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -299,6 +301,8 @@ export async function payDonationFunction({
           router,
           tenant,
           frequency,
+          embed,
+          returnToUrl
         });
       }
     }
@@ -337,6 +341,8 @@ export async function handleSCAPaymentFunction({
   router,
   tenant,
   frequency,
+  embed,
+  returnToUrl
 }: any) {
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -459,6 +465,7 @@ export async function handleSCAPaymentFunction({
         return;
       }
     } else if (gateway === "stripe_sofort") {
+      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationId=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`
       const { error, paymentIntent } = await stripe.confirmSofortPayment(
         paidDonation.response.payment_intent_client_secret,
         {
@@ -477,20 +484,9 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
-        },
-        {
-          handleActions: false
+          return_url: returnUrl,
         }
       );
-
-      if (paymentIntent.status === "requires_source_action" && paymentIntent.next_action.type === 'redirect_to_url') {
-        const url = paymentIntent.next_action.redirect_to_url.url;
-        router.replace(url)
-      } else {
-        setIsPaymentProcessing(false);
-        setPaymentError('Something went wrong');
-      }
 
       if (error) {
         setIsPaymentProcessing(false);

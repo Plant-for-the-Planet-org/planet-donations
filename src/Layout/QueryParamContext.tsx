@@ -64,6 +64,8 @@ export const QueryParamContext = React.createContext({
   setfrequency: (value: string) => {},
   hideLogin: false,
   setHideLogin: (value: boolean) => {},
+  returnToUrl: "",
+  setReturnToUrl: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -145,6 +147,7 @@ export default function QueryParamProvider({ children }: any) {
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [embed, setEmbed] = React.useState<boolean>(false);
   const [autoLogin, setAutoLogin] = React.useState<boolean>(false);
+  const [returnToUrl, setReturnToUrl] = React.useState<string>("");
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
@@ -433,6 +436,8 @@ export default function QueryParamProvider({ children }: any) {
         setfrequency,
         hideLogin,
         setHideLogin,
+        returnToUrl,
+        setReturnToUrl,
       }}
     >
       {children}

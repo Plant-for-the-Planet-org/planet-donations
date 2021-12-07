@@ -67,6 +67,8 @@ function PaymentsForm({}: Props): ReactElement {
     profile,
     frequency,
     tenant,
+    embed,
+    returnToUrl,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -103,6 +105,8 @@ function PaymentsForm({}: Props): ReactElement {
       router,
       tenant,
       frequency,
+      embed,
+      returnToUrl,
     });
   };
 

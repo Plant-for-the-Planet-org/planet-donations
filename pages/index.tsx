@@ -31,6 +31,7 @@ interface Props {
   embed: any;
   autoLogin: any;
   meta: { title: string; description: string; image: string; url: string };
+  returnToUrl: string;
 }
 
 function index({
@@ -54,6 +55,7 @@ function index({
   embed,
   autoLogin,
   meta,
+  returnToUrl,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -74,14 +76,15 @@ function index({
     setquantity,
     setEmbed,
     setAutoLogin,
+    setReturnToUrl,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setdonationID(donationID);
     setEmbed(embed);
+    setReturnToUrl(returnToUrl);
     setAutoLogin(autoLogin);
     if (isDirectDonation) {
-      console.log(paymentSetup, "isDirectDonation paymentSetup");
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
@@ -201,8 +204,9 @@ export async function getServerSideProps(context: any) {
   let currency = "EUR";
   let paymentSetup = {};
   let amount = 0;
-  let autoLogin = false;
-  let embed = false;
+  const autoLogin = !!context.query.autoLogin;
+  const embed = !!context.query.embed;
+  const returnToUrl = context.query.returnToUrl || "";
   function setshowErrorCard() {
     showErrorCard = true;
   }
@@ -249,12 +253,7 @@ export async function getServerSideProps(context: any) {
   if (context.query.currency) {
     currency = context.query.currency.toUpperCase();
   }
-  if (context.query.embed) {
-    embed = context.query.embed;
-  }
-  if (context.query.autoLogin) {
-    autoLogin = context.query.autoLogin;
-  }
+
   // Set donation details if context (created donation ID) present in the URL
   if (context.query.context) {
     try {
@@ -448,6 +447,7 @@ export async function getServerSideProps(context: any) {
       embed,
       autoLogin,
       meta: { title, description, image, url },
+      returnToUrl,
     }, // will be passed to the page component as props
   };
 }
