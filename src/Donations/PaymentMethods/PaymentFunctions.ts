@@ -242,6 +242,9 @@ export async function payDonationFunction({
     paymentMethod
   );
 
+  const paymentStatuses = ['success', 'paid', 'pending']
+  const statuses = ['success', 'paid', 'failed']
+
   try {
     let paidDonation;
     if (token) {
@@ -268,12 +271,8 @@ export async function payDonationFunction({
       //   setPaymentError(paidDonation.data.message);
       // } else
       if (
-        paidDonation.data.paymentStatus === "success" ||
-        paidDonation.data.paymentStatus === "pending" ||
-        paidDonation.data.status === "success" ||
-        paidDonation.data.status === "paid" ||
-        paidDonation.data.paymentStatus === "paid" ||
-        paidDonation.data.status === "failed"
+        paymentStatuses.includes(paidDonation.data.paymentStatus) ||
+        statuses.includes(paidDonation.data.status)
       ) {
         // setIsPaymentProcessing(false);
         router.replace({
@@ -435,6 +434,7 @@ export async function handleSCAPaymentFunction({
         }
       }
     } else if (gateway === "stripe_giropay") {
+      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationId=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`
       const { error, paymentIntent } = await stripe.confirmGiropayPayment(
         paidDonation.response.payment_intent_client_secret,
         {
@@ -450,7 +450,7 @@ export async function handleSCAPaymentFunction({
               },
             },
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+          return_url: returnUrl,
         }
       );
 
