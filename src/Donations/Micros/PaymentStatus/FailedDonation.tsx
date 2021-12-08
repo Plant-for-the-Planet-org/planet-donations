@@ -61,6 +61,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
   }
   async function getDonation() {
+    console.log(donation, "Donation");
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");

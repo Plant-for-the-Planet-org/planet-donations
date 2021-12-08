@@ -103,7 +103,6 @@ export async function createDonationFunction({
     frequency,
   });
   try {
-    let donation;
     const requestParams = {
       url: `/app/donations`,
       data: donationData,
@@ -111,7 +110,7 @@ export async function createDonationFunction({
       setshowErrorCard,
       token: token ? token : false,
     };
-    donation = await apiRequest(requestParams);
+    const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
       setdonationID(donation.data.id);
       return donation.data;
@@ -229,7 +228,7 @@ export async function payDonationFunction({
   );
 
   try {
-    let paymentResponse = await confirmPaymentIntent(
+    const paymentResponse = await confirmPaymentIntent(
       donationID,
       payDonationData,
       token,
@@ -313,7 +312,6 @@ export async function confirmPaymentIntent(
   //   },
   // };
 
-  let confirmationResponse;
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
@@ -321,7 +319,7 @@ export async function confirmPaymentIntent(
     setshowErrorCard,
     token: token ? token : false,
   };
-  confirmationResponse = await apiRequest(requestParams);
+  const confirmationResponse = await apiRequest(requestParams);
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
@@ -386,8 +384,8 @@ export async function handleStripeSCAPayment({
   });
   switch (method) {
     case "card":
-      let stripeResponse;
-      let successData;
+      let stripeResponse: {};
+      let successData: {};
       console.log(paymentResponse, "paymentResponse.type");
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
@@ -409,7 +407,7 @@ export async function handleStripeSCAPayment({
                 },
               },
             };
-            let successResponse = confirmPaymentIntent(
+            const successResponse = confirmPaymentIntent(
               donationID,
               payDonationData,
               token,
@@ -444,7 +442,7 @@ export async function handleStripeSCAPayment({
       return successData;
 
     case "giropay":
-      const { errorGiropay, paymentIntentGiropay } =
+      const { errorGiropay: any, paymentIntentGiropay: any } =
         await stripe.confirmGiropayPayment(
           paymentResponse.response.payment_intent_client_secret,
           {
@@ -458,7 +456,7 @@ export async function handleStripeSCAPayment({
       break;
 
     case "sofort":
-      const { errorSofort, paymentIntentSofort } =
+      const { errorSofort: any, paymentIntentSofort: any } =
         await stripe.confirmSofortPayment(
           paymentResponse.response.payment_intent_client_secret,
           {
@@ -468,7 +466,7 @@ export async function handleStripeSCAPayment({
               },
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+            return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
           }
         );
       handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);

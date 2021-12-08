@@ -176,6 +176,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.return_to]);
 
+  React.useEffect(() => {
+    if (paymentSetup?.purpose === "funds") {
+      setfrequency("monthly");
+    }
+  }, [paymentSetup]);
+
   async function loadselectedProjects() {
     try {
       const requestParams = {
