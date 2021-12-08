@@ -153,7 +153,7 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    const pattern = new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&\/\/=]*)/g);
+    const pattern = new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g);
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
   }
