@@ -37,14 +37,18 @@ export function buildPaymentProviderRequest(
       account = paymentSetup.gateways.paypal.account;
       source = providerObject;
       break;
+    case "offline":
+      account = paymentSetup.gateways.offline.account;
+      source = {};
     default:
     // throw some exception here 'unsupported gateway'
   }
   return {
     paymentProviderRequest: {
-      account: account,
-      gateway: gateway,
-      source: source,
+      account,
+      gateway,
+      method,
+      source,
     },
   };
 }
@@ -223,6 +227,7 @@ export async function payDonationFunction({
   router,
   tenant,
   frequency,
+  setTransferDetails,
 }: any) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -258,6 +263,12 @@ export async function payDonationFunction({
         if (paymentResponse.status === "failed") {
           setIsPaymentProcessing(false);
           setPaymentError(paymentResponse.message);
+        }
+        // setIsPaymentProcessing(false);
+        if (paymentResponse?.response?.type === "transfer_required") {
+          setTransferDetails(paymentResponse?.response?.account);
+        } else {
+          setTransferDetails(null);
         }
         router.replace({
           query: { ...router.query, step: THANK_YOU },

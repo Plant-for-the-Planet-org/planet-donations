@@ -5,6 +5,7 @@ import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
 import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
+import BankIcon from "../../../public/assets/icons/donation/BankIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
@@ -27,6 +28,7 @@ export default function PaymentMethodTabs({
   showCC,
   showNativePay,
   onNativePaymentFunction,
+  showBankTransfer,
 }: any) {
   const { t, i18n } = useTranslation(["common", "country"]);
 
@@ -174,7 +176,21 @@ export default function PaymentMethodTabs({
           <CheckMark />
         </button>
       )}
-
+      {showBankTransfer && (
+        <button
+          className={`${"payment-method"} ${"bank"} ${
+            paymentType === "Bank" ? "payment-method-selected" : ""
+          }`}
+          onClick={(e) => handleChange(e, "Bank")}
+          {...a11yProps("Bank")}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <BankIcon />
+            <text>{t("bankTransfer")}</text>
+          </div>
+          <CheckMark />
+        </button>
+      )}
       {showNativePay && (
         <NativePay
           country={country}

@@ -40,7 +40,6 @@ function SepaPayments({
           theme === "theme-light"
             ? themeProperties.light.primaryFontColor
             : themeProperties.dark.primaryFontColor,
-        letterSpacing: "0.025em",
         fontFamily: themeProperties.fontFamily,
         "::placeholder": {
           color:

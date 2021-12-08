@@ -27,6 +27,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
+import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
 
@@ -69,6 +70,7 @@ function PaymentsForm({}: Props): ReactElement {
     paymentError,
     setPaymentError,
     amount,
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -110,6 +112,7 @@ function PaymentsForm({}: Props): ReactElement {
       router,
       tenant,
       frequency,
+      setTransferDetails,
     });
   };
 
@@ -311,6 +314,10 @@ function PaymentsForm({}: Props): ReactElement {
                   currencies: ["EUR"],
                   countries: sofortCountries,
                 })}
+                showBankTransfer={
+                  Object.keys(paymentSetup?.gateways).includes("offline") &&
+                  frequency === "once"
+                }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&
@@ -409,6 +416,17 @@ function PaymentsForm({}: Props): ReactElement {
                 <Elements stripe={getStripe(paymentSetup)}>
                   <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
+              </div>
+
+              <div
+                role="tabpanel"
+                hidden={paymentType !== "Bank"}
+                id={`payment-methods-tabpanel-${"Bank"}`}
+                aria-labelledby={`scrollable-force-tab-${"Bank"}`}
+              >
+                {/* <Elements stripe={getStripe(paymentSetup)}> */}
+                <BankTransfer onSubmitPayment={onSubmitPayment} />
+                {/* </Elements> */}
               </div>
             </div>
           ) : (

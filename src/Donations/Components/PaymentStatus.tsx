@@ -11,12 +11,18 @@ import SuccessfulDonation from "../Micros/PaymentStatus/SuccessfulDonation";
 import PendingDonation from "../Micros/PaymentStatus/PendingDonation";
 import { useRouter } from "next/router";
 import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDonationJane";
+import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
 
-  const { donationID, redirectstatus, setshowErrorCard, tenant } =
-    React.useContext(QueryParamContext);
+  const {
+    donationID,
+    redirectstatus,
+    setshowErrorCard,
+    tenant,
+    transferDetails,
+  } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
 
@@ -118,6 +124,12 @@ function ThankYou() {
                   donationID={donationID}
                   sendToReturn={sendToReturn}
                   donation={donation}
+                />
+              ) : transferDetails ? (
+                <TransferDetails
+                  donationID={donationID}
+                  donation={donation}
+                  sendToReturn={sendToReturn}
                 />
               ) : (
                 <PendingDonation

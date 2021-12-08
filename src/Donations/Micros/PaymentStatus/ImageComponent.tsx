@@ -63,7 +63,7 @@ const ImageComponent = ({ projectDetails, donation }: Props) => {
     );
   };
   return (
-    <div>
+    <div style={{display: 'flex', justifyContent: 'center'}}>
       {/* hidden div for image download */}
       <div
         className="temp-image"

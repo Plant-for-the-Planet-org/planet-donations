@@ -48,6 +48,8 @@ export const QueryParamContext = React.createContext({
   setDonationUid: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
   setprojectDetails: (value: {}) => {},
+  transferDetails: null,
+  setTransferDetails: (value: {}) => {},
   loadselectedProjects: () => {},
   hideTaxDeduction: false,
   queryToken: "",
@@ -144,6 +146,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [paymentError, setPaymentError] = React.useState("");
+  const [transferDetails, setTransferDetails] = React.useState<Object | null>(
+    null
+  );
 
   React.useEffect(() => {
     if (router.query.locale) {
@@ -430,6 +435,8 @@ export default function QueryParamProvider({ children }: any) {
         setPaymentError,
         amount,
         setAmount,
+        transferDetails,
+        setTransferDetails,
       }}
     >
       {children}
