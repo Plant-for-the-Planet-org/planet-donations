@@ -27,8 +27,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     "/assets/images/funding/sprout.png",
   ];
 
-  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    paymentSetup,
+    currency,
+    quantity,
+    setquantity,
+    isGift,
+    giftDetails,
+    frequency,
+  } = React.useContext(QueryParamContext);
 
   const setCustomValue = (e: any) => {
     if (e.target) {
@@ -81,7 +88,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * option.quantity
+                      paymentSetup.costIsMonthly && frequency == "yearly"
+                        ? option.quantity * 12
+                        : option.quantity
                     )}
                   </span>
                 </div>
