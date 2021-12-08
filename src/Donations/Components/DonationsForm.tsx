@@ -22,7 +22,6 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
-import { CONTACT } from "src/Utils/donationStepConstants";
 
 function DonationsForm() {
   const {
@@ -44,7 +43,6 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
-    setPaymentError,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -75,9 +73,8 @@ function DonationsForm() {
   }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
-  // const [paymentError, setPaymentError] = React.useState("");
+  const [paymentError, setPaymentError] = React.useState("");
   console.log(paymentSetup, "paymentSetup", showFrequencyOptions);
-
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -146,12 +143,11 @@ function DonationsForm() {
 
   const donationSelection = () => {
     switch (projectDetails.purpose) {
-      case "trees":
-        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "trees":
       default:
         return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
     }
@@ -201,7 +197,9 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">{t("donate")}</p>
+          {projectDetails.purpose !== "funds" && (
+            <p className="title-text">{t("donate")}</p>
+          )}
           {projectDetails.purpose === "trees" ? (
             <div className="donations-gift-container mt-10">
               <GiftForm />
@@ -213,7 +211,13 @@ function DonationsForm() {
           {process.env.RECURRENCY &&
           showFrequencyOptions &&
           !(isGift && giftDetails.recipientName === "") ? (
-            <div className="donations-gift-container mt-10">
+            <div
+              className={`donations-gift-container mt-10 ${
+                projectDetails.purpose === "funds"
+                  ? "funds-frequency-container"
+                  : ""
+              }`}
+            >
               <FrequencyOptions />
             </div>
           ) : (
@@ -250,7 +254,7 @@ function DonationsForm() {
                     continueNext={() => {
                       setdonationStep(2);
                       router.push({
-                        query: { ...router.query, step: CONTACT },
+                        query: { ...router.query, step: "contact" },
                       });
                     }}
                     isPaymentPage={false}

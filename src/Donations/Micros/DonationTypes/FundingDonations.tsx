@@ -8,6 +8,7 @@ import getFormatedCurrency, {
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
+import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -47,13 +48,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
     }
   };
-  // React.useEffect(() => {
-  //     if (![10, 20, 50, 150].includes(quantity)) {
-  //       setisCustomDonation(true);
-  //       setCustomValue(quantity);
-  //       setCustomInputValue(quantity);
-  //     }
-  //   }, [quantity]);
+  React.useEffect(() => {
+    if (paymentSetup?.options?.length > 2) {
+      setquantity(paymentSetup?.options[1].quantity);
+    }
+  }, [paymentSetup]);
   const customInputRef = React.useRef(null);
 
   return (
@@ -77,12 +76,21 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   option.quantity === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
-                }`}
+                }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
               >
                 <div className="funding-selection-option-text">
                   <p>{option.caption}</p>
                 </div>
-                <img className="funding-icon" src={AllIcons[index]} />
+                {paymentSetup.options[index].icon ? (
+                  <img
+                    className="funding-icon"
+                    src={getPaymentOptionIcons(
+                      paymentSetup.options[index].icon
+                    )}
+                  />
+                ) : (
+                  []
+                )}
                 <div className="funding-selection-option-text mt-10">
                   <span>
                     {getFormatedCurrency(
@@ -100,7 +108,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 key={index}
                 className={`funding-selection-option ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
                 onClick={() => {
                   setisCustomDonation(true);
                   customInputRef.current.focus();
@@ -109,7 +117,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 <div className="funding-selection-option-text">
                   <p>{option.caption}</p>
                 </div>
-                <img className="funding-icon" src={AllIcons[index]} />
+                {/* {paymentSetup.costIsMonthly ? (
+                  <img className="funding-icon" src={AllIcons[index]} />
+                ) : (
+                  []
+                )} */}
                 <div className="funding-selection-option-text">
                   <div
                     className="d-flex row"
