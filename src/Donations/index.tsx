@@ -156,7 +156,9 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
                   {t("fortreeCountTrees", {
@@ -186,7 +188,9 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
                 </div>

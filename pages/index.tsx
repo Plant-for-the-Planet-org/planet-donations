@@ -227,7 +227,7 @@ export async function getServerSideProps(context: any) {
     (context.query.to && !context.query.context) ||
     context.query.step === DONATE
   ) {
-    const to = context.query.to.replace(/\//g, "");
+    const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
     try {
       const requestParams = {

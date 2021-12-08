@@ -77,7 +77,7 @@ export async function createDonationFunction({
   isTaxDeductible,
   country,
   projectDetails,
-  unitCost,
+  paymentSetup,
   quantity,
   currency,
   contactDetails,
@@ -89,18 +89,20 @@ export async function createDonationFunction({
   token,
   setshowErrorCard,
   frequency,
+  amount,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
     projectDetails,
     quantity,
-    unitCost,
+    paymentSetup,
     currency,
     contactDetails,
     taxDeductionCountry,
     isGift,
     giftDetails,
     frequency,
+    amount,
   });
   try {
     const requestParams = {
@@ -134,18 +136,28 @@ export async function createDonationFunction({
 export function createDonationData({
   projectDetails,
   quantity,
-  unitCost,
+  paymentSetup,
   currency,
   contactDetails,
   taxDeductionCountry,
   isGift,
   giftDetails,
   frequency,
+  amount,
 }: any) {
   let donationData = {
     purpose: projectDetails.purpose,
     project: projectDetails.id,
-    amount: Math.round((unitCost * quantity + Number.EPSILON) * 100) / 100,
+    amount:
+      paymentSetup.unitCost && quantity
+        ? Math.round(
+            ((paymentSetup.unitBased
+              ? paymentSetup.unitCost * quantity
+              : quantity) +
+              Number.EPSILON) *
+              100
+          ) / 100
+        : amount,
     currency,
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,

@@ -404,7 +404,9 @@ function ContactsForm({}: Props): ReactElement {
                 totalCost: getFormatedCurrency(
                   i18n.language,
                   currency,
-                  quantity * paymentSetup.unitCost
+                  paymentSetup.unitBased
+                    ? quantity * paymentSetup.unitCost
+                    : quantity
                 ),
                 frequency:
                   frequency === "once" ? "" : t(frequency).toLowerCase(),

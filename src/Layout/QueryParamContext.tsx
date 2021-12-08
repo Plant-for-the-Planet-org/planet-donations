@@ -62,6 +62,8 @@ export const QueryParamContext = React.createContext({
   setHideLogin: (value: boolean) => {},
   paymentError: "",
   setPaymentError: (value: string) => {},
+  amount: null,
+  setAmount: (value: number) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -135,6 +137,8 @@ export default function QueryParamProvider({ children }: any) {
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
   const [profile, setprofile] = React.useState<null | Object>(null);
+  const [amount, setAmount] = React.useState<null | number>(null);
+
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
@@ -424,6 +428,8 @@ export default function QueryParamProvider({ children }: any) {
         setHideLogin,
         paymentError,
         setPaymentError,
+        amount,
+        setAmount,
       }}
     >
       {children}

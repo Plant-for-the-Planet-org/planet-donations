@@ -172,7 +172,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;
@@ -181,7 +181,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;

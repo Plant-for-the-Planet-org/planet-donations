@@ -83,19 +83,19 @@ export default function PaymentMethodTabs({
       case "funds":
         paymentLabel = t("fundingPaymentLabel", {
           amount: getFormatedCurrency(
-              i18n.language,
-              currency,
-              paymentSetup.unitCost * quantity
-            ),
+            i18n.language,
+            currency,
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+          ),
         });
         break;
       case "bouquet":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
-              i18n.language,
-              currency,
-              paymentSetup.unitCost * quantity
-            ),
+            i18n.language,
+            currency,
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+          ),
         });
         break;
       default:
@@ -180,7 +180,9 @@ export default function PaymentMethodTabs({
           country={country}
           currency={currency}
           amount={formatAmountForStripe(
-            paymentSetup.unitCost * quantity,
+            paymentSetup.unitBased
+              ? paymentSetup.unitCost * quantity
+              : quantity,
             currency.toLowerCase()
           )}
           onPaymentFunction={onNativePaymentFunction}

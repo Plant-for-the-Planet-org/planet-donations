@@ -30,6 +30,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     country,
     paymentError,
     setPaymentError,
+    setAmount,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
   console.log(paymentError, "paymentError");
@@ -69,6 +70,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     //   setquantity(donation?.treeCount);
     // }
     setContactDetails(donation.donor);
+    setAmount(donation.amount);
+    if (donation.treeCount) {
+      setquantity(donation.treeCount);
+    }
     let country;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;

@@ -68,6 +68,7 @@ function PaymentsForm({}: Props): ReactElement {
     tenant,
     paymentError,
     setPaymentError,
+    amount,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -132,7 +133,7 @@ function PaymentsForm({}: Props): ReactElement {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      // unitCost: paymentSetup.unitCost,
       quantity,
       currency,
       contactDetails,
@@ -144,6 +145,8 @@ function PaymentsForm({}: Props): ReactElement {
       token,
       setshowErrorCard,
       frequency,
+      amount,
+      paymentSetup,
     });
 
     if (donation) {
@@ -338,7 +341,9 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      quantity * paymentSetup.unitCost
+                      paymentSetup.unitBased
+                        ? quantity * paymentSetup.unitCost
+                        : quantity
                     )}
                     onPaymentFunction={(providerObject: any) =>
                       onSubmitPayment("stripe", "card", providerObject)
