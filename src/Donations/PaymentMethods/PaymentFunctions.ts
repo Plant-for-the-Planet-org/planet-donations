@@ -434,7 +434,7 @@ export async function handleSCAPaymentFunction({
         }
       }
     } else if (gateway === "stripe_giropay") {
-      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationId=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`
+      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`
       const { error, paymentIntent } = await stripe.confirmGiropayPayment(
         paidDonation.response.payment_intent_client_secret,
         {
@@ -465,7 +465,7 @@ export async function handleSCAPaymentFunction({
         return;
       }
     } else if (gateway === "stripe_sofort") {
-      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationId=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`
+      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`
       const { error, paymentIntent } = await stripe.confirmSofortPayment(
         paidDonation.response.payment_intent_client_secret,
         {

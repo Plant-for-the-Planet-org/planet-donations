@@ -84,7 +84,8 @@ function index({
     setdonationID(donationID);
     setEmbed(embed);
     const isReturnToUrlValid = testURL(returnToUrl);
-    setReturnToUrl(isReturnToUrlValid ? returnToUrl : "");
+
+    setReturnToUrl(!isReturnToUrlValid ? returnToUrl : "");
     setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
@@ -215,8 +216,8 @@ export async function getServerSideProps(context: any) {
 
   // Set project details if there is to (project slug) in the query params
   if (
-    (context.query.to && !context.query.context) ||
-    context.query.step === "donate"
+    context.query.to &&
+    (!context.query.context || context.query.step === "donate")
   ) {
     const to = context.query.to.replace(/\//g, "");
     donationStep = 1;
