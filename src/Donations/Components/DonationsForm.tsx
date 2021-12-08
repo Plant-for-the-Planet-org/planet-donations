@@ -209,9 +209,15 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-            showFrequencyOptions &&
-            !(isGift && giftDetails.recipientName === "") ? (
-            <div className="donations-gift-container mt-10">
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
+            <div
+              className={`donations-gift-container mt-10 ${
+                projectDetails.purpose === "funds"
+                  ? "funds-frequency-container"
+                  : ""
+              }`}
+            >
               <FrequencyOptions />
             </div>
           ) : (
@@ -221,8 +227,9 @@ function DonationsForm() {
           {donationSelection()}
 
           <div
-            className={`${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-              }`}
+            className={`${
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+            }`}
           >
             <TaxDeductionOption />
 
@@ -233,8 +240,8 @@ function DonationsForm() {
             {paymentSetup && projectDetails ? (
               minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                 !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency ? (
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
                   <NativePay
                     country={country}
                     currency={currency}

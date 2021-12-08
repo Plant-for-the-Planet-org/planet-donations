@@ -49,8 +49,10 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   };
   React.useEffect(() => {
-    setquantity(paymentSetup.options[1].quantity);
-  }, []);
+    if (paymentSetup?.options?.length > 2) {
+      setquantity(paymentSetup?.options[1].quantity);
+    }
+  }, [paymentSetup]);
   const customInputRef = React.useRef(null);
 
   return (
@@ -74,8 +76,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   option.quantity === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
-                } 
-                monthly-option`}
+                }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
               >
                 <div className="funding-selection-option-text">
                   <p>{option.caption}</p>
@@ -107,7 +108,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 key={index}
                 className={`funding-selection-option ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
                 onClick={() => {
                   setisCustomDonation(true);
                   customInputRef.current.focus();
@@ -116,11 +117,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 <div className="funding-selection-option-text">
                   <p>{option.caption}</p>
                 </div>
-                {paymentSetup.costIsMonthly ? (
+                {/* {paymentSetup.costIsMonthly ? (
                   <img className="funding-icon" src={AllIcons[index]} />
                 ) : (
                   []
-                )}
+                )} */}
                 <div className="funding-selection-option-text">
                   <div
                     className="d-flex row"
