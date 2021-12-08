@@ -442,7 +442,7 @@ export async function handleStripeSCAPayment({
       return successData;
 
     case "giropay":
-      const { errorGiropay: any, paymentIntentGiropay: any } =
+      const { errorGiropay, paymentIntentGiropay } =
         await stripe.confirmGiropayPayment(
           paymentResponse.response.payment_intent_client_secret,
           {
@@ -456,7 +456,7 @@ export async function handleStripeSCAPayment({
       break;
 
     case "sofort":
-      const { errorSofort: any, paymentIntentSofort: any } =
+      const { errorSofort, paymentIntentSofort } =
         await stripe.confirmSofortPayment(
           paymentResponse.response.payment_intent_client_secret,
           {
