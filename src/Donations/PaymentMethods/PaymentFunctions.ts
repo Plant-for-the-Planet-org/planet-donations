@@ -287,6 +287,8 @@ export async function payDonationFunction({
         console.log(paidDonation, "paidDonation");
         if (paidDonation.data?.response?.type === "transfer_required") {
           setTransferDetails(paidDonation.data?.response?.account);
+        } else {
+          setTransferDetails(null)
         }
         router.replace({
           query: { ...router.query, step: "thankyou" },
