@@ -115,7 +115,7 @@
   z-index: 3;
   padding-bottom: 10px;
   text-align: left;
-  &.donation-transaction-phone-view{
+  &.donation-transaction-phone-view {
     text-align: center;
     color: black;
   }
@@ -264,9 +264,9 @@
   }
 }
 
-.bouquet-project-space-divider{
+.bouquet-project-space-divider {
   width: 10px;
-  @include smTabletView{
+  @include smTabletView {
     width: 30px;
   }
   @media screen and (max-width: 341px) {
@@ -300,7 +300,8 @@
       }
       .funding-selection-option-text {
         color: $primaryFontColor;
-        p,span {
+        p,
+        span {
           color: $primaryColor;
         }
       }
@@ -335,7 +336,7 @@
   }
 }
 
-.frequency-selection-container{
+.frequency-selection-container {
   display: flex;
   flex-direction: row;
   background-color: $backgroundColorDark;
@@ -343,7 +344,7 @@
   border-radius: 25px;
   padding: 8px;
 }
-.frequency-selection-option{
+.frequency-selection-option {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -353,11 +354,11 @@
   color: $primaryFontColor;
   font-weight: 600;
   text-transform: capitalize;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
-.frequency-selection-option-selected{
+.frequency-selection-option-selected {
   background-color: $primaryColor;
   color: $light;
 }
@@ -455,6 +456,20 @@
     justify-content: center;
     position: relative;
     background-color: $light;
+    &.bank {
+      width: auto;
+      display: flex;
+      align-items: flex-start;
+      align-self: center;
+      justify-content: center;
+      padding: 4px 8px;
+      text {
+        font-weight: bold;
+        font-style: italic;
+        color: #4d5153;
+        margin-left: 8px;
+      }
+    }
     > label {
       margin-top: 6px;
       font-size: 10px;
@@ -501,6 +516,44 @@
   }
   > p {
     margin-left: 8px;
+  }
+}
+.transfer-details {
+  display: flex;
+  flex-direction: column;
+  background-color: $backgroundColorDark;
+  border-radius: 10px;
+  width: 100%;
+  padding: 4px 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 20px 0px;
+  > .single-detail {
+    border: 1px solid #e2e2e2;
+    border-width: 0 0 1px 0;
+    padding: 12px 0px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    &:last-of-type {
+      border: 0;
+    }
+    > p {
+      font-weight: bold;
+    }
+    > .value-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      > .detail-value {
+        color: #48aadd;
+      }
+    }
+  }
+  svg {
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 .mandate-acceptance {
@@ -646,7 +699,6 @@
   }
 }
 
-
 @include smTabletView {
   .donations-info-container {
     padding: 30px;
@@ -688,7 +740,7 @@
 .linkText {
   text-align: center;
   color: $primaryFontColor;
-  &:hover{
+  &:hover {
     text-decoration: underline;
   }
 }
@@ -825,4 +877,26 @@
 
 .ElementsApp .Icon-fill {
   fill: $primaryFontColor;
+}
+
+.copy-container {
+  position: relative;
+  & .copy-tooltip {
+    position: absolute;
+    bottom: 36px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    padding: 6px;
+    width: 100px;
+    left: -40px;
+    background-color: $darkGreyColor;
+    color: $dark;
+    transition: all 0.3s;
+  }
+  &:hover .copy-tooltip,
+  & .copy-tooltip.show-tooltip {
+    display: flex;
+  }
 }
