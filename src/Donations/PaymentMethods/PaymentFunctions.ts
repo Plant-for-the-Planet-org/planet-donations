@@ -40,7 +40,7 @@ export function buildPaymentProviderRequest(
     case "offline":
       account = paymentSetup.gateways.offline.account;
       source = {};
-    default:
+
     // throw some exception here 'unsupported gateway'
   }
   return {
@@ -406,10 +406,10 @@ export async function handleStripeSCAPayment({
     stripeAccount: paymentResponse.response.account,
   });
   switch (method) {
-    case "card":
-      let stripeResponse: {};
+    case "card": {
       let successData: {};
       console.log(paymentResponse, "paymentResponse.type");
+      let stripeResponse: {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
@@ -463,8 +463,8 @@ export async function handleStripeSCAPayment({
       });
       setIsPaymentProcessing(false);
       return successData;
-
-    case "giropay":
+    }
+    case "giropay": {
       const { errorGiropay, paymentIntentGiropay } =
         await stripe.confirmGiropayPayment(
           paymentResponse.response.payment_intent_client_secret,
@@ -477,8 +477,9 @@ export async function handleStripeSCAPayment({
         );
       handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
       break;
+    }
 
-    case "sofort":
+    case "sofort": {
       const { errorSofort, paymentIntentSofort } =
         await stripe.confirmSofortPayment(
           paymentResponse.response.payment_intent_client_secret,
@@ -494,5 +495,6 @@ export async function handleStripeSCAPayment({
         );
       handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
       break;
+    }
   }
 }
