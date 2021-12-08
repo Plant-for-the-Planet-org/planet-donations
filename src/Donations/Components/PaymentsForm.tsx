@@ -301,9 +301,10 @@ function PaymentsForm({}: Props): ReactElement {
                     ? paymentSetup?.recurrency.methods.includes("stripe_sofort")
                     : true)
                 }
-                showBankTransfer={Object.keys(paymentSetup?.gateways).includes(
-                  "offline"
-                )}
+                showBankTransfer={
+                  Object.keys(paymentSetup?.gateways).includes("offline") &&
+                  frequency === "once"
+                }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&

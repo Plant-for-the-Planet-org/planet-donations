@@ -186,7 +186,7 @@ export default function PaymentMethodTabs({
         >
           <div style={{ display: "flex", alignItems: "center" }}>
             <BankIcon />
-            <text>BankTransfer</text>
+            <text>{t("bankTransfer")}</text>
           </div>
           <CheckMark />
         </button>

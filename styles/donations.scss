@@ -457,17 +457,17 @@
     position: relative;
     background-color: $light;
     &.bank {
-      width: 128px;
+      width: auto;
       display: flex;
       align-items: flex-start;
       align-self: center;
       justify-content: center;
-      padding: 0px 5px;
+      padding: 4px 8px;
       text {
         font-weight: bold;
         font-style: italic;
         color: #4d5153;
-        padding-left: 5px;
+        margin-left: 8px;
       }
     }
     > label {
@@ -877,4 +877,26 @@
 
 .ElementsApp .Icon-fill {
   fill: $primaryFontColor;
+}
+
+.copy-container {
+  position: relative;
+  & .copy-tooltip {
+    position: absolute;
+    bottom: 36px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    padding: 6px;
+    width: 100px;
+    left: -40px;
+    background-color: $darkGreyColor;
+    color: $dark;
+    transition: all 0.3s;
+  }
+  &:hover .copy-tooltip,
+  & .copy-tooltip.show-tooltip {
+    display: flex;
+  }
 }
