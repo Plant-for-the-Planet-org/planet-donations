@@ -85,11 +85,11 @@ function index({
     setEmbed(embed);
     const isReturnToUrlValid = testURL(returnToUrl);
 
-    setReturnToUrl(!isReturnToUrlValid ? returnToUrl : "");
+    setReturnToUrl(isReturnToUrlValid ? returnToUrl : "");
 
     console.log("\n\nconponent index");
     console.log(`embed`, embed);
-    console.log(`returnToUrl`, returnToUrl);
+    console.log(`returnToUrl`, returnToUrl, isReturnToUrlValid);
     setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
