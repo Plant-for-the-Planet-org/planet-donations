@@ -89,6 +89,10 @@ function PaymentsForm({}: Props): ReactElement {
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = await getAccessTokenSilently();
     }
+
+    console.log("\n\nonSubmitPayment context");
+    console.log(`embed`, embed);
+    console.log(`returnToUrl`, returnToUrl);
     payDonationFunction({
       gateway,
       paymentMethod,

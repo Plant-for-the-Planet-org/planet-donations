@@ -86,6 +86,10 @@ function index({
     const isReturnToUrlValid = testURL(returnToUrl);
 
     setReturnToUrl(!isReturnToUrlValid ? returnToUrl : "");
+
+    console.log("\n\nconponent index");
+    console.log(`embed`, embed);
+    console.log(`returnToUrl`, returnToUrl);
     setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
@@ -213,6 +217,10 @@ export async function getServerSideProps(context: any) {
   function setshowErrorCard() {
     showErrorCard = true;
   }
+
+  console.log("getServerSideProps");
+  console.log(`embed`, embed);
+  console.log(`returnToUrl`, returnToUrl);
 
   // Set project details if there is to (project slug) in the query params
   if (

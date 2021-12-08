@@ -228,9 +228,13 @@ export async function payDonationFunction({
   embed,
   returnToUrl
 }: any) {
+  console.log("\n\npayDonationFunction");
+  console.log(`embed`, embed);
+  console.log(`returnToUrl`, returnToUrl);
   // const router = useRouter();
   setIsPaymentProcessing(true);
   if (!paymentMethod) {
+
     setIsPaymentProcessing(false);
     setPaymentError(t("donate:noPaymentMethodError"));
     return;
@@ -343,6 +347,9 @@ export async function handleSCAPaymentFunction({
   embed,
   returnToUrl
 }: any) {
+  console.log("\n\nhandleSCAPaymentFunction");
+  console.log(`embed`, embed);
+  console.log(`returnToUrl`, returnToUrl);
   const clientSecret = paidDonation.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -435,6 +442,10 @@ export async function handleSCAPaymentFunction({
       }
     } else if (gateway === "stripe_giropay") {
       const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`
+      console.log(`\n\nreturnUrl stripe_giropay`, returnUrl)
+      console.log(`embed`, embed);
+      console.log(`returnToUrl`, returnToUrl);
+      console.log(`donationID`, donationID);
       const { error, paymentIntent } = await stripe.confirmGiropayPayment(
         paidDonation.response.payment_intent_client_secret,
         {
@@ -466,6 +477,10 @@ export async function handleSCAPaymentFunction({
       }
     } else if (gateway === "stripe_sofort") {
       const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`
+      console.log(`\n\nreturnUrl stripe_sofort`, returnUrl)
+      console.log(`embed`, embed);
+      console.log(`returnToUrl`, returnToUrl);
+      console.log(`donationID`, donationID);
       const { error, paymentIntent } = await stripe.confirmSofortPayment(
         paidDonation.response.payment_intent_client_secret,
         {
