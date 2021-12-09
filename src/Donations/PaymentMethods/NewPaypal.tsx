@@ -39,7 +39,10 @@ function NewPaypal({
       purchase_units: [
         {
           amount: {
-            value: (quantity * unitCost).toFixed(2),
+            value: (paymentSetup.unitBased
+              ? quantity * unitCost
+              : quantity
+            ).toFixed(2),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,

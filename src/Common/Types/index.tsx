@@ -99,5 +99,5 @@ export interface CreateDonationFunctionProps {
   token: any;
   setshowErrorCard: Function;
   frequency: string | null;
-  amount: number | null;
+  amount?: number | null;
 }

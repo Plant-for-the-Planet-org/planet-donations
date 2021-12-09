@@ -31,14 +31,24 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   // ];
   const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
-
+  // React.useEffect(() => {
+  //   if (paymentSetup?.options) {
+  //     setquantity(paymentSetup.options[1].quantity);
+  //   }
+  // for (let i = 0; i < paymentSetup?.options?.length; i++) {
+  //   if (paymentSetup.options[i].isDefault) {
+  //     setquantity(paymentSetup.options[i].quantity);
+  //   }
+  // }
+  // }, [paymentSetup]);
   const setCustomValue = (e: any) => {
     if (e.target) {
+      // setquantity(e.target.value);
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1 / paymentSetup.unitCost);
+        setquantity(1);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value / paymentSetup.unitCost);
+        setquantity(e.target.value);
       }
     }
   };
@@ -48,12 +58,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
       // Set all quantities in the allOptionsArray
+      setquantity(paymentSetup.options[1].quantity);
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      if (!newallOptionsArray.includes(quantity)) {
-        setCustomInputValue(quantity * paymentSetup.unitCost);
+      if (!newallOptionsArray.includes(paymentSetup.options[1].quantity)) {
+        setCustomInputValue(quantity);
       }
     }
   }, [paymentSetup]);

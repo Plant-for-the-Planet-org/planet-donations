@@ -104,7 +104,7 @@ function DonationsForm() {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      paymentSetup,
       quantity,
       currency,
       contactDetails,
@@ -238,7 +238,10 @@ function DonationsForm() {
             {projectDetails.purpose === "trees" && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
-              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+              minAmt &&
+              (paymentSetup.unitBased
+                ? paymentSetup?.unitCost * quantity
+                : quantity) >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
                 currency ? (
@@ -246,7 +249,9 @@ function DonationsForm() {
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      paymentSetup?.unitCost * quantity,
+                      paymentSetup.unitBased
+                        ? paymentSetup?.unitCost * quantity
+                        : quantity,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}
