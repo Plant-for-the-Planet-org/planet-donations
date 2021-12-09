@@ -26,6 +26,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
+import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
 
@@ -69,6 +70,7 @@ function PaymentsForm({}: Props): ReactElement {
     tenant,
     embed,
     returnToUrl,
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -111,6 +113,7 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       embed,
       returnToUrl,
+      setTransferDetails,
     });
   };
 
@@ -306,6 +309,10 @@ function PaymentsForm({}: Props): ReactElement {
                     ? paymentSetup?.recurrency.methods.includes("stripe_sofort")
                     : true)
                 }
+                showBankTransfer={
+                  Object.keys(paymentSetup?.gateways).includes("offline") &&
+                  frequency === "once"
+                }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&
@@ -402,6 +409,17 @@ function PaymentsForm({}: Props): ReactElement {
                 <Elements stripe={getStripe(paymentSetup)}>
                   <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
+              </div>
+
+              <div
+                role="tabpanel"
+                hidden={paymentType !== "Bank"}
+                id={`payment-methods-tabpanel-${"Bank"}`}
+                aria-labelledby={`scrollable-force-tab-${"Bank"}`}
+              >
+                {/* <Elements stripe={getStripe(paymentSetup)}> */}
+                <BankTransfer onSubmitPayment={onSubmitPayment} />
+                {/* </Elements> */}
               </div>
             </div>
           ) : (

@@ -48,6 +48,14 @@ export function getPaymentProviderRequest(
         },
       },
     };
+  } else if (gateway == "offline") {
+    payDonationData = {
+      paymentProviderRequest: {
+        account: paymentSetup.gateways.offline.account,
+        gateway: "offline",
+        source: {},
+      },
+    };
   }
   return payDonationData;
 }
@@ -227,6 +235,7 @@ export async function payDonationFunction({
   frequency,
   embed,
   returnToUrl
+  setTransferDetails,
 }: any) {
   console.log("\n\npayDonationFunction");
   console.log(`embed`, embed);
@@ -279,6 +288,12 @@ export async function payDonationFunction({
         statuses.includes(paidDonation.data.status)
       ) {
         // setIsPaymentProcessing(false);
+        console.log(paidDonation, "paidDonation");
+        if (paidDonation.data?.response?.type === "transfer_required") {
+          setTransferDetails(paidDonation.data?.response?.account);
+        } else {
+          setTransferDetails(null)
+        }
         router.replace({
           query: { ...router.query, step: "thankyou" },
         });
