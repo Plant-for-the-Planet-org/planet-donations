@@ -67,15 +67,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      //if (!newallOptionsArray.includes(quantity)) {
-      //setCustomInputValue(
-      //paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
-      //);
-      //setisCustomDonation(true);
-      //} else {
-      //setisCustomDonation(false);}
       if (!newallOptionsArray.includes(paymentSetup.options[1].quantity)) {
-        setCustomInputValue(quantity);
+        setCustomInputValue(
+          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+        );
+        setisCustomDonation(true);
+      } else {
+        setisCustomDonation(false);
       }
     }
   }, [paymentSetup]);
@@ -91,8 +89,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   return (
     <>
       <div
-        className={`funding-selection-options-container ${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-          }`}
+        className={`funding-selection-options-container ${
+          isGift && giftDetails.recipientName === "" ? "display-none" : ""
+        }`}
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 6).map((option, index) => {
@@ -104,10 +103,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
-                className={`funding-selection-option ${option.quantity === quantity && !isCustomDonation
+                className={`funding-selection-option ${
+                  option.quantity === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
-                  }`}
+                }`}
                 style={{ maxWidth: "100px" }}
               >
                 {/* <div
@@ -127,8 +127,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
         {paymentSetup && paymentSetup.options && (
           <div
-            className={`funding-selection-option ${isCustomDonation ? "funding-selection-option-selected" : ""
-              }`}
+            className={`funding-selection-option ${
+              isCustomDonation ? "funding-selection-option-selected" : ""
+            }`}
             onClick={() => {
               setisCustomDonation(true);
               customInputRef.current.focus();
