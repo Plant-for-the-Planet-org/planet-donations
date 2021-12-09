@@ -52,8 +52,9 @@ function DonationsForm() {
   const router = useRouter();
 
   React.useEffect(() => {
-    setMinAmt(getMinimumAmountForCurrency(currency));
-  }, [currency]);
+    // setMinAmt(getMinimumAmountForCurrency(currency));
+    setMinAmt(paymentSetup.minQuantity * paymentSetup.unitCost);
+  }, [currency, paymentSetup]);
 
   React.useEffect(() => {
     // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
