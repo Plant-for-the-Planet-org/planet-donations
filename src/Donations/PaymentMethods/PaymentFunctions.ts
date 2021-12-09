@@ -227,7 +227,7 @@ export async function payDonationFunction({
   tenant,
   frequency,
   embed,
-  returnToUrl
+  returnToUrl,
   setTransferDetails,
 }: any) {
   console.log("\n\npayDonationFunction");
@@ -248,8 +248,8 @@ export async function payDonationFunction({
     providerObject
   );
 
-  const paymentStatuses = ['success', 'paid', 'pending']
-  const statuses = ['success', 'paid', 'failed']
+  const paymentStatuses = ["success", "paid", "pending"];
+  const statuses = ["success", "paid", "failed"];
 
   try {
     const paymentResponse = await confirmPaymentIntent(
@@ -299,7 +299,7 @@ export async function payDonationFunction({
           tenant,
           frequency,
           embed,
-          returnToUrl
+          returnToUrl,
         });
       }
     }
@@ -405,7 +405,7 @@ export async function handleStripeSCAPayment({
   tenant,
   frequency,
   embed,
-  returnToUrl
+  returnToUrl,
 }: any) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -474,7 +474,10 @@ export async function handleStripeSCAPayment({
       return successData;
     }
     case "giropay": {
-      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`
+      const returnUrl =
+        embed && returnToUrl
+          ? `${returnToUrl}/?donationID=${donationID}`
+          : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`;
 
       const { errorGiropay, paymentIntentGiropay } =
         await stripe.confirmGiropayPayment(
@@ -483,7 +486,7 @@ export async function handleStripeSCAPayment({
             payment_method: {
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: returnUrl
+            return_url: returnUrl,
           }
         );
       handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
@@ -491,7 +494,10 @@ export async function handleStripeSCAPayment({
     }
 
     case "sofort": {
-      const returnUrl = embed && returnToUrl ? `${returnToUrl}/?donationID=${donationID}` : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`
+      const returnUrl =
+        embed && returnToUrl
+          ? `${returnToUrl}/?donationID=${donationID}`
+          : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`;
 
       const { errorSofort, paymentIntentSofort } =
         await stripe.confirmSofortPayment(
