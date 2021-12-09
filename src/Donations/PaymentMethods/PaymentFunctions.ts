@@ -165,7 +165,7 @@ export function createDonationData({
     frequency: frequency === "once" ? null : frequency,
   };
   console.log(donationData, "donationData");
-  if (projectDetails.purpose !== "bouquet") {
+  if (paymentSetup.unitBased) {
     donationData = {
       ...donationData,
       quantity,
