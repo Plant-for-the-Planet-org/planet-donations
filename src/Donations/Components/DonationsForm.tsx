@@ -52,8 +52,12 @@ function DonationsForm() {
   const router = useRouter();
 
   React.useEffect(() => {
-    setMinAmt(getMinimumAmountForCurrency(currency));
-  }, [currency]);
+    if (paymentSetup.minQuantity) {
+      setMinAmt(paymentSetup.minQuantity * paymentSetup.unitCost);
+    } else {
+      setMinAmt(getMinimumAmountForCurrency(currency));
+    }
+  }, [currency, paymentSetup]);
 
   React.useEffect(() => {
     // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
@@ -104,7 +108,7 @@ function DonationsForm() {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      paymentSetup,
       quantity,
       currency,
       contactDetails,
@@ -168,7 +172,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;
@@ -177,7 +181,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;
@@ -197,7 +201,9 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">{t("donate")}</p>
+          {projectDetails.purpose !== "funds" && (
+            <p className="title-text">{t("donate")}</p>
+          )}
           {projectDetails.purpose === "trees" ? (
             <div className="donations-gift-container mt-10">
               <GiftForm />
@@ -209,7 +215,13 @@ function DonationsForm() {
           {process.env.RECURRENCY &&
           showFrequencyOptions &&
           !(isGift && giftDetails.recipientName === "") ? (
-            <div className="donations-gift-container mt-10">
+            <div
+              className={`donations-gift-container mt-10 ${
+                projectDetails.purpose === "funds"
+                  ? "funds-frequency-container"
+                  : ""
+              }`}
+            >
               <FrequencyOptions />
             </div>
           ) : (
@@ -230,7 +242,10 @@ function DonationsForm() {
             {projectDetails.purpose === "trees" && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
-              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+              minAmt &&
+              (paymentSetup.unitBased
+                ? paymentSetup?.unitCost * quantity
+                : quantity) >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
                 currency ? (
@@ -238,7 +253,9 @@ function DonationsForm() {
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      paymentSetup?.unitCost * quantity,
+                      paymentSetup.unitBased
+                        ? paymentSetup?.unitCost * quantity
+                        : quantity,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}

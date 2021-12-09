@@ -23,7 +23,7 @@ function NewPaypal({
   currency,
   donationID,
   payDonationFunction,
-  setPaymentError
+  setPaymentError,
 }: Props): ReactElement {
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
@@ -39,7 +39,10 @@ function NewPaypal({
       purchase_units: [
         {
           amount: {
-            value: (quantity * unitCost).toFixed(2),
+            value: (paymentSetup.unitBased
+              ? quantity * unitCost
+              : quantity
+            ).toFixed(2),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,
@@ -59,16 +62,16 @@ function NewPaypal({
         ...data,
         type: "sdk",
       };
-      payDonationFunction("paypal", data);
+      payDonationFunction("paypal", "paypal", data);
     });
   }
 
   const onError = (data) => {
-    setPaymentError(`Your order ${data.orderID} failed due to some error.`)
+    setPaymentError(`Your order ${data.orderID} failed due to some error.`);
   };
 
   const onCancel = (data) => {
-    setPaymentError('Order was cancelled, please try again')
+    setPaymentError("Order was cancelled, please try again");
   };
 
   return (

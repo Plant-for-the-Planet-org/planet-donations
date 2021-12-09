@@ -7,8 +7,6 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 
-
-
 const FormControlNew = withStyles({
   root: {
     width: "100%",
@@ -38,14 +36,16 @@ function SepaPayments({
     style: {
       base: {
         fontSize: "14px",
-        color: theme === "theme-light"
-          ? themeProperties.light.primaryFontColor
-          : themeProperties.dark.primaryFontColor,
-        fontFamily: themeProperties.fontFamily,
-        "::placeholder": {
-          color: theme === "theme-light"
+        color:
+          theme === "theme-light"
             ? themeProperties.light.primaryFontColor
             : themeProperties.dark.primaryFontColor,
+        fontFamily: themeProperties.fontFamily,
+        "::placeholder": {
+          color:
+            theme === "theme-light"
+              ? themeProperties.light.primaryFontColor
+              : themeProperties.dark.primaryFontColor,
           fontFamily: themeProperties.fontFamily,
         },
       },
@@ -94,7 +94,7 @@ function SepaPayments({
       // Add payload error if failed
     }
     if (paymentMethod) {
-      onPaymentFunction("stripe", paymentMethod);
+      onPaymentFunction("stripe", "sepa_debit", paymentMethod);
     } else {
       setPaymentError(t("noPaymentMethodError"));
       return;

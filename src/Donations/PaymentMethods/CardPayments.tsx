@@ -70,8 +70,9 @@ function CardPayments({
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
-  const { frequency } = React.useContext(QueryParamContext);
-  const [paymentError, setPaymentError] = React.useState("");
+  const { frequency, paymentError, setPaymentError } =
+    React.useContext(QueryParamContext);
+  // const [paymentError, setPaymentError] = React.useState("");
   const [showContinue, setShowContinue] = React.useState(false);
   const [showBrand, setShowBrand] = React.useState("");
   React.useEffect(() => {
@@ -234,7 +235,7 @@ function CardPayments({
         >
           {t("donate_button", {
             totalCost: totalCost,
-            frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase(),
           })}
         </button>
       ) : (
@@ -244,7 +245,7 @@ function CardPayments({
         >
           {t("donate_button", {
             totalCost: totalCost,
-            frequency: frequency === "once" ? "" : t(frequency).toLowerCase()
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase(),
           })}
         </button>
       )}

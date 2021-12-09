@@ -13,12 +13,17 @@ import NotFound from "./../../../public/assets/icons/NotFound";
 import { useRouter } from "next/router";
 import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
+import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
 function SelectProject({}: Props): ReactElement {
-  const { selectedProjects, allProjects, setSelectedProjects, setprojectDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    selectedProjects,
+    allProjects,
+    setSelectedProjects,
+    setprojectDetails,
+  } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
@@ -26,7 +31,7 @@ function SelectProject({}: Props): ReactElement {
 
   React.useEffect(() => {
     setprojectDetails({});
-  },[])
+  }, []);
 
   useDebouncedEffect(
     () => {
@@ -57,7 +62,7 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push({ query: { ...router.query, to: slug, step: "donate" } });
+    router.push({ query: { ...router.query, to: slug, step: DONATE } });
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (

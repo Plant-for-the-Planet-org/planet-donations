@@ -9,6 +9,7 @@ import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
+import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
   projectDetails: Object;
@@ -28,7 +29,7 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
-  meta: { title: string, description: string, image: string, url: string };
+  meta: { title: string; description: string; image: string; url: string };
 }
 
 function index({
@@ -86,7 +87,7 @@ function index({
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
-        setquantity(amount / paymentSetup.unitCost);
+        setquantity(amount);
       }
     }
     // XX is hidden country and T1 is Tor browser
@@ -202,9 +203,9 @@ export async function getServerSideProps(context: any) {
   // Set project details if there is to (project slug) in the query params
   if (
     (context.query.to && !context.query.context) ||
-    context.query.step === "donate"
+    context.query.step === DONATE
   ) {
-    const to = context.query.to.replace(/\//g, "");
+    const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
     try {
       const requestParams = {
