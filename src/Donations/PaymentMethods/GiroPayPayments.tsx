@@ -10,7 +10,7 @@ function GiroPayPayments({ onSubmitPayment }: Props): ReactElement {
 
   return (
     <button
-      onClick={() => onSubmitPayment("stripe_giropay", "giropay")}
+      onClick={() => onSubmitPayment("stripe", "giropay", "giropay")}
       className="primary-button w-100 mt-30"
       id="donateContinueButton"
     >

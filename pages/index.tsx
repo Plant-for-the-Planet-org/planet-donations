@@ -9,6 +9,7 @@ import { apiRequest } from "../src/Utils/api";
 import { getCountryDataBy } from "../src/Utils/countryUtils";
 import Donations from "./../src/Donations";
 import countriesData from "./../src/Utils/countriesData.json";
+import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
   projectDetails: Object;
@@ -103,7 +104,7 @@ function index({
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
-        setquantity(amount / paymentSetup.unitCost);
+        setquantity(amount);
       }
     }
     // XX is hidden country and T1 is Tor browser
@@ -178,7 +179,11 @@ function index({
         {isDirectDonation ? <meta name="robots" content="noindex" /> : <></>}
       </Head>
       <div
-        style={embed ? { flexGrow: 1, backgroundColor: 'transparent' } : { flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
+        style={
+          embed
+            ? { flexGrow: 1, backgroundColor: "transparent" }
+            : { flexGrow: 1, backgroundColor: "var(--background-color-dark)" }
+        }
         className="d-flex justify-content-center align-items-center"
       >
         <Donations />
@@ -224,10 +229,10 @@ export async function getServerSideProps(context: any) {
 
   // Set project details if there is to (project slug) in the query params
   if (
-    context.query.to &&
-    (!context.query.context || context.query.step === "donate")
+    (context.query.to && !context.query.context) ||
+    context.query.step === DONATE
   ) {
-    const to = context.query.to.replace(/\//g, "");
+    const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
     try {
       const requestParams = {
@@ -413,14 +418,17 @@ export async function getServerSideProps(context: any) {
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${projectDetails.tpo
-        ? projectDetails.tpo?.name
-        : projectDetails.tpoData?.name
-        } in ${getCountryDataBy("countryCode", projectDetails.country)?.countryName
-        }. Your journey to a trillion trees starts here.`;
+      description = `Plant trees with ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
     } else if (projectDetails.purpose === "bouquet") {
-      description = `Make a contribution to ${projectDetails.name}. ${projectDetails.description ? projectDetails.description : ""
-        } Your journey to a trillion trees starts here.`;
+      description = `Make a contribution to ${projectDetails.name}. ${
+        projectDetails.description ? projectDetails.description : ""
+      } Your journey to a trillion trees starts here.`;
     }
   }
   if (giftDetails && giftDetails.recipientName) {

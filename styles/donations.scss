@@ -190,6 +190,11 @@
   }
 }
 
+.funds-frequency-container {
+  width: 70%;
+  display: block;
+  margin: auto;
+}
 .currency-selection {
   display: flex;
   align-items: center;
@@ -280,9 +285,10 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   .funding-selection-option {
     width: 140px;
+    margin: 5px;
     // height: 80px;
     border: 1px solid $greyColor;
     border-radius: 4px;
@@ -719,6 +725,12 @@
   .funding-selection-options-container {
     .funding-selection-option {
       width: 170px;
+      &.monthly-option {
+        width: 110px;
+      }
+      &.full-width {
+        width: 100%;
+      }
     }
   }
   .custom-selection {
