@@ -42,9 +42,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1 / paymentSetup.unitCost);
+        setquantity(1);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value / paymentSetup.unitCost);
+        setquantity(e.target.value);
       }
     }
   };

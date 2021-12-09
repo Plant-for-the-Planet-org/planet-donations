@@ -29,7 +29,7 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
-  meta: { title: string, description: string, image: string, url: string };
+  meta: { title: string; description: string; image: string; url: string };
 }
 
 function index({
@@ -87,7 +87,7 @@ function index({
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
-        setquantity(amount / paymentSetup.unitCost);
+        setquantity(amount);
       }
     }
     // XX is hidden country and T1 is Tor browser
