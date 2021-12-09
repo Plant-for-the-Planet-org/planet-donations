@@ -12,5 +12,5 @@ export function getPDFFile(category: string, fileName: any) {
 }
 
 export function getPaymentOptionIcons(logoName: string) {
-  return `${process.env.IMAGE_CDN_URL}/media/images/app/payment_options/${logoName} `;
+  return `${process.env.CDN_URL}/media/images/app/payment_options/${logoName} `;
 }

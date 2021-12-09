@@ -155,17 +155,16 @@ export function createDonationData({
     amount:
       paymentSetup.unitCost && quantity
         ? Math.round(
-            ((paymentSetup.unitBased
+            (paymentSetup.unitBased
               ? paymentSetup.unitCost * quantity
-              : quantity) +
-              Number.EPSILON) *
-              100
+              : quantity) * 100
           ) / 100
         : amount,
     currency,
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
   };
+  console.log(donationData, "donationData");
   if (projectDetails.purpose !== "bouquet") {
     donationData = {
       ...donationData,
