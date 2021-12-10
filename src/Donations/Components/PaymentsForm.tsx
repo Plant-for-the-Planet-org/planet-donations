@@ -111,7 +111,6 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
-      frequency,
       setTransferDetails,
     });
   };
