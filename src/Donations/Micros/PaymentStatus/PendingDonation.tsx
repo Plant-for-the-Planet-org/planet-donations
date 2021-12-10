@@ -5,36 +5,36 @@ import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 
-function PendingDonation({donationID,sendToReturn}:any) {
+function PendingDonation({ donationID, sendToReturn }: any) {
   const { t } = useTranslation(["common"]);
   const {
     returnTo,
   } = React.useContext(QueryParamContext);
-    return (
-      <div>
-        {returnTo && (
-          <button
-            id={"thank-you-close"}
-            onClick={() => sendToReturn()}
-            className="mb-10"
-            style={{ alignSelf: "flex-start" }}
-          >
-            <CloseIcon color={themeProperties.light.primaryFontColor} />
-          </button>
-        )}
+  return (
+    <div>
+      {returnTo && (
+        <button
+          id={"thank-you-close"}
+          onClick={() => sendToReturn()}
+          className="mb-10"
+          style={{ alignSelf: "flex-start" }}
+        >
+          <CloseIcon color={themeProperties.light.primaryFontColor} />
+        </button>
+      )}
 
-        <div className={"title-text text-center"} data-test-id="test-thankYou">
-          {t("common:donationPending")}
-        </div>
-        <div className={"mt-20 text-center"}>
-          {t("common:donationPendingMessage")}
-        </div>
-        <div className={"mt-20 text-center"} style={{ fontStyle: "italic" }}>
-          {t("common:donationRef")} {donationID}
-        </div>
-        <PaymentPendingIllustration />
+      <div className={"title-text text-center"} data-test-id="test-thankYou">
+        {t("common:donationPending")}
       </div>
-    );
+      <div className={"mt-20 text-center"}>
+        {t("common:donationPendingMessage")}
+      </div>
+      <div className={"mt-20 text-center"} style={{ fontStyle: "italic" }}>
+        {t("common:transactionId")} {donationID}
+      </div>
+      <PaymentPendingIllustration />
+    </div>
+  );
 }
 
 export default PendingDonation;

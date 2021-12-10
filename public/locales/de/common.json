@@ -75,7 +75,7 @@
   "donationFailedMessage": "Beim Abschluss deiner Zahlung ist etwas schief gelaufen. Wenn du weiterhin Probleme hast, kontaktiere uns bitte unter support@plant-for-the-planet.org.",
   "donationPending": "Abschließen deiner Spende",
   "donationPendingMessage": "Wir warten derzeit auf die Bestätigung von deiner Bank. Dies kann einige Zeit dauern, daher kannst du diese Seite auch schließen. Wir werden dir den Beleg in Kürze per E-Mail zusenden.",
-  "donationRef": "Spendenreferenznummer",
+  "transactionId": "Spendenreferenznummer",
   "privacyPolicyNotice": "Durch die Nutzung dieser Website akzeptierst Du unsere",
   "privacyPolicy": "Cookie-Richtlinie",
   "acceptClose": "Bestätigen und schließen",
