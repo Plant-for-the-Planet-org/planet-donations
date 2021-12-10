@@ -77,13 +77,13 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
-  React.useEffect(() => {
-    if (paymentError) {
-      router.replace({
-        query: { ...router.query, step: THANK_YOU },
-      });
-    }
-  }, [paymentError]);
+  // React.useEffect(() => {
+  //   if (paymentError) {
+  //     router.replace({
+  //       query: { ...router.query, step: THANK_YOU },
+  //     });
+  //   }
+  // }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
