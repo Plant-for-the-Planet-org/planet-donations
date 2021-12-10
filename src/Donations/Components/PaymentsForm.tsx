@@ -89,7 +89,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject: any
+    providerObject?: any
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {

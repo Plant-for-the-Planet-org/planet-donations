@@ -132,5 +132,6 @@
   "amount": "Amount",
   "beneficiary": "Beneficiary",
   "copied": "Copied",
-  "clickToCopy": "Click to copy"
+  "clickToCopy": "Click to copy",
+  "bank": "Bank"
 }
