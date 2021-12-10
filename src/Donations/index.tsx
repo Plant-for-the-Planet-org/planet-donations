@@ -193,7 +193,7 @@ function DonationInfo() {
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating", {
                     frequency: t(`${frequency}`),
-                  })}
+                  })} {" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
