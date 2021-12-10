@@ -11,6 +11,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 const FormControlNew = withStyles({
   root: {
@@ -23,19 +24,21 @@ const FormControlNew = withStyles({
   },
 })(FormControl);
 
-const getInputOptions = (placeholder: string,theme:string) => {
+const getInputOptions = (placeholder: string, theme: string) => {
   const ObjectM = {
     style: {
       base: {
-        color: theme === "theme-light"
-        ? themeProperties.light.primaryFontColor
-        : themeProperties.dark.primaryFontColor,
+        color:
+          theme === "theme-light"
+            ? themeProperties.light.primaryFontColor
+            : themeProperties.dark.primaryFontColor,
         fontFamily: themeProperties.fontFamily,
         fontSize: "16px",
         "::placeholder": {
-          color: theme === "theme-light"
-        ? themeProperties.light.primaryFontColor
-        : themeProperties.dark.primaryFontColor,
+          color:
+            theme === "theme-light"
+              ? themeProperties.light.primaryFontColor
+              : themeProperties.dark.primaryFontColor,
           fontFamily: themeProperties.fontFamily,
           fontSize: "16px",
         },
@@ -67,8 +70,9 @@ function CardPayments({
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
-
-  const [paymentError, setPaymentError] = React.useState("");
+  const { frequency, paymentError, setPaymentError } =
+    React.useContext(QueryParamContext);
+  // const [paymentError, setPaymentError] = React.useState("");
   const [showContinue, setShowContinue] = React.useState(false);
   const [showBrand, setShowBrand] = React.useState("");
   React.useEffect(() => {
@@ -187,7 +191,7 @@ function CardPayments({
     validateCard();
   }, [cardDate, cardNumber, cardCvv]);
 
-  const {theme} = React.useContext(ThemeContext)
+  const { theme } = React.useContext(ThemeContext);
 
   return ready ? (
     <div>
@@ -198,7 +202,7 @@ function CardPayments({
           <FormControlNew variant="outlined">
             <CardNumberElement
               id="cardNumber"
-              options={getInputOptions(t("cardNumber"),theme)}
+              options={getInputOptions(t("cardNumber"), theme)}
               onChange={handleChange}
             />
           </FormControlNew>
@@ -206,7 +210,7 @@ function CardPayments({
             <FormControlNew variant="outlined">
               <CardExpiryElement
                 id="expiry"
-                options={getInputOptions(t("expDate"),theme)}
+                options={getInputOptions(t("expDate"), theme)}
                 onChange={handleChangeCardDate}
               />
             </FormControlNew>
@@ -214,7 +218,7 @@ function CardPayments({
             <FormControlNew variant="outlined">
               <CardCvcElement
                 id="cvc"
-                options={getInputOptions("CVV",theme)}
+                options={getInputOptions("CVV", theme)}
                 onChange={handleChangeCvv}
               />
             </FormControlNew>
@@ -229,16 +233,20 @@ function CardPayments({
           id="donateContinueButton"
           data-test-id="test-donateButton"
         >
-          {t("donate")}{" "}
-          {totalCost}
+          {t("donate_button", {
+            totalCost: totalCost,
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase(),
+          })}
         </button>
       ) : (
         <button
           className="secondary-button w-100 mt-30"
           id="donateContinueButton"
         >
-          {t("donate")}{" "}
-          {totalCost}
+          {t("donate_button", {
+            totalCost: totalCost,
+            frequency: frequency === "once" ? "" : t(frequency).toLowerCase(),
+          })}
         </button>
       )}
     </div>

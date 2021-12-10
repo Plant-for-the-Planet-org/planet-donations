@@ -2,7 +2,7 @@
 
 describe("Language Test", () => {
     it("Deutsch", () => {
-        cy.visit(`localhost:3000/?to=yucatan`)
+        cy.visit(Cypress.env('TEST_SERVER') + '/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Deutsch").click()
@@ -17,12 +17,12 @@ describe("Language Test", () => {
                     cy.wait(15000).then(() => {
                         cy.get('[data-test-id="test-thankYou"]').should("have.text", "Vielen Dank")
                     })
-                })    
+                })
         })
     })
 
     it("Español", () => {
-        cy.visit(`localhost:3000/?to=yucatan`)
+        cy.visit(Cypress.env('TEST_SERVER') + '/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Español").click()
@@ -42,7 +42,7 @@ describe("Language Test", () => {
      })
 
     it("Français", () => {
-        cy.visit(`localhost:3000/?to=yucatan`)
+        cy.visit(Cypress.env('TEST_SERVER') + '/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Français").click()
@@ -62,7 +62,7 @@ describe("Language Test", () => {
     })
 
     it("Italiano", () => {
-        cy.visit(`localhost:3000/?to=yucatan`)
+        cy.visit(Cypress.env('TEST_SERVER') + '/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Italiano").click()
@@ -82,7 +82,7 @@ describe("Language Test", () => {
     })
 
     it("Português brasileiro", () => {
-        cy.visit(`localhost:3000/?to=yucatan`)
+        cy.visit(Cypress.env('TEST_SERVER') + '/?to=yucatan')
         cy.get('[data-test-id="languageButton"]').click()
         cy.wait(2000).then(() => {
             cy.contains("Português brasileiro").click()

@@ -6,26 +6,26 @@ interface Props {
   onSubmitPayment: Function;
 }
 
-function SofortPayments({ onSubmitPayment }: Props): ReactElement {
+function BankTransfer({ onSubmitPayment }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
 
   return (
     <div>
       <div className={"disclaimer-container"}>
         <InfoIcon />
-        <p>{t("sofortDisclaimer")}</p>
+        <p>{t("bankTransferDisclaimer")}</p>
       </div>
 
       <button
         className="primary-button w-100 mt-30"
-        onClick={() => onSubmitPayment("stripe", "sofort", "sofort")}
+        onClick={() => onSubmitPayment("offline", "offline")}
         id="donateContinueButton"
-        data-test-id="sofortDonateContinue"
+        data-test-id="bankDonateContinue"
       >
-        {t("payWithSofort")}
+        {t("continueWithBank")}
       </button>
     </div>
   );
 }
 
-export default SofortPayments;
+export default BankTransfer;

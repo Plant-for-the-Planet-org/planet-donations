@@ -42,21 +42,41 @@ function DonationsForm() {
     queryToken,
     profile,
     frequency,
-    tenant
+    tenant,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
+  const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
+
   React.useEffect(() => {
-    setMinAmt(getMinimumAmountForCurrency(currency));
-  }, [currency]);
+    if (paymentSetup.minQuantity) {
+      setMinAmt((paymentSetup.minQuantity * paymentSetup.unitCost).toFixed(2));
+    } else {
+      setMinAmt(getMinimumAmountForCurrency(currency));
+    }
+  }, [currency, paymentSetup]);
 
+  React.useEffect(() => {
+    // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
+    //   for (const gateway in paymentSetup?.gateways) {
+    //     const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
+    //     console.log(frequencies, "frequencies");
+    //     if (frequencies && frequencies.length > 0) {
+    //       console.log("Show Frequency Options");
+    //       setShowFrequencyOptions(true);
+    //     }
+    //   }
+    // }
+    if (paymentSetup && paymentSetup?.recurrency) {
+      setShowFrequencyOptions(paymentSetup?.recurrency.supported);
+    }
+  }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-
+  const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -86,7 +106,7 @@ function DonationsForm() {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      paymentSetup,
       quantity,
       currency,
       contactDetails,
@@ -116,7 +136,7 @@ function DonationsForm() {
         country,
         setshowErrorCard,
         router,
-        tenant
+        tenant,
       });
     });
   };
@@ -125,12 +145,11 @@ function DonationsForm() {
 
   const donationSelection = () => {
     switch (projectDetails.purpose) {
-      case "trees":
-        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "trees":
       default:
         return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
     }
@@ -151,7 +170,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;
@@ -160,7 +179,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
           ),
         });
         break;
@@ -180,7 +199,9 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          <p className="title-text">{t("donate")}</p>
+          {projectDetails.purpose !== "funds" && (
+            <p className="title-text">{t("donate")}</p>
+          )}
           {projectDetails.purpose === "trees" ? (
             <div className="donations-gift-container mt-10">
               <GiftForm />
@@ -190,9 +211,14 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-          projectDetails.purpose === "trees" &&
-          projectDetails.frequencies ? (
-            <div className="donations-gift-container mt-10">
+            showFrequencyOptions &&
+            !(isGift && giftDetails.recipientName === "") ? (
+            <div
+              className={`donations-gift-container mt-10 ${paymentSetup.frequencies.length == 2
+                  ? "funds-frequency-container"
+                  : ""
+                }`}
+            >
               <FrequencyOptions />
             </div>
           ) : (
@@ -202,9 +228,8 @@ function DonationsForm() {
           {donationSelection()}
 
           <div
-            className={`${
-              isGift && giftDetails.recipientName === "" ? "display-none" : ""
-            }`}
+            className={`${isGift && giftDetails.recipientName === "" ? "display-none" : ""
+              }`}
           >
             <TaxDeductionOption />
 
@@ -213,15 +238,20 @@ function DonationsForm() {
             {projectDetails.purpose === "trees" && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
-              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+              minAmt &&
+                (paymentSetup.unitBased
+                  ? paymentSetup?.unitCost * quantity
+                  : quantity) >= minAmt ? (
                 !isPaymentOptionsLoading &&
-                paymentSetup?.gateways?.stripe?.account &&
-                currency ? (
+                  paymentSetup?.gateways?.stripe?.account &&
+                  currency ? (
                   <NativePay
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      paymentSetup?.unitCost * quantity,
+                      paymentSetup.unitBased
+                        ? paymentSetup?.unitCost * quantity
+                        : quantity,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}

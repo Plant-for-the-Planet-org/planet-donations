@@ -18,6 +18,7 @@ interface PaymentButtonProps {
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
+  paymentSetup: Object;
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -28,6 +29,7 @@ export const PaymentRequestCustomButton = ({
   isPaymentPage,
   paymentLabel,
   frequency,
+  paymentSetup,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
 
@@ -122,7 +124,7 @@ export const PaymentRequestCustomButton = ({
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability &&
       (frequency !== "once"
-        ? paymentSetup?.gateways.stripe.recurrency.enabled.includes("stripe_cc")
+        ? paymentSetup?.recurrency.methods.includes("stripe_cc")
         : true) ? (
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
           <div className="w-100">
@@ -257,6 +259,7 @@ export const NativePay = ({
         isPaymentPage={isPaymentPage}
         paymentLabel={paymentLabel}
         frequency={frequency}
+        paymentSetup={paymentSetup}
       />
     </Elements>
   );
