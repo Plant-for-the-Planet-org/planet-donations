@@ -20,9 +20,9 @@ import {
 } from "src/Utils/donationStepConstants";
 import router, { useRouter } from "next/router";
 
-interface Props {}
+interface Props { }
 
-function Donations({}: Props): ReactElement {
+function Donations({ }: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
@@ -60,7 +60,7 @@ function Donations({}: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => {};
+    return () => { };
   }, [router.query.step]);
   return (
     <div className="donations-container">
@@ -133,15 +133,12 @@ function DonationInfo() {
     );
   };
   return (
-    <div className="donations-info-container">
-      <Image
-        layout="fill"
-        objectFit="cover"
-        objectPosition="right center"
+    <div style={{ backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`, backgroundSize: "cover", backgroundPosition: "center center" }} className="donations-info-container">
+      {/* <img
         src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
         alt="Background image with trees"
-      />
+      /> */}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -184,8 +181,8 @@ function DonationInfo() {
                   {frequency === "monthly"
                     ? t("everyMonth")
                     : frequency === "yearly"
-                    ? t("everyYear")
-                    : ""}
+                      ? t("everyYear")
+                      : ""}
                 </div>
               </div>
             )}
@@ -226,8 +223,8 @@ function DonationInfo() {
               )}
 
               {projectDetails.purpose === "bouquet" ||
-              (projectDetails.purpose === "funds" &&
-                projectDetails.description) ? (
+                (projectDetails.purpose === "funds" &&
+                  projectDetails.description) ? (
                 <h3 className="text-white mt-10">
                   {projectDetails.description}
                 </h3>
