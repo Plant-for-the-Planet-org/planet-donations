@@ -235,10 +235,12 @@ export async function payDonationFunction({
   console.log(`returnToUrl`, returnToUrl);
   // const router = useRouter();
   setIsPaymentProcessing(true);
-  if (!providerObject) {
-    setIsPaymentProcessing(false);
-    setPaymentError(t("donate:noPaymentMethodError"));
-    return;
+  if (method !== "offline") {
+    if (!providerObject) {
+      setIsPaymentProcessing(false);
+      setPaymentError(t("donate:noPaymentMethodError"));
+      return;
+    }
   }
 
   const payDonationData = buildPaymentProviderRequest(

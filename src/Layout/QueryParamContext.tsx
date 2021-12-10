@@ -8,31 +8,31 @@ import countriesData from "../Utils/countriesData.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
-  setisGift: (value: boolean) => {},
+  setisGift: (value: boolean) => { },
   giftDetails: {},
-  setgiftDetails: (value: {}) => {},
+  setgiftDetails: (value: {}) => { },
   contactDetails: {},
-  setContactDetails: (value: {}) => {},
+  setContactDetails: (value: {}) => { },
   country: "",
-  setcountry: (value: "") => {},
+  setcountry: (value: "") => { },
   paymentSetup: {},
-  setpaymentSetup: ({}) => {},
+  setpaymentSetup: ({ }) => { },
   currency: "",
-  setcurrency: (value: "") => {},
+  setcurrency: (value: "") => { },
   donationStep: null,
-  setdonationStep: (value: number) => {},
+  setdonationStep: (value: number) => { },
   projectDetails: null,
   quantity: 50,
-  setquantity: (value: number) => {},
+  setquantity: (value: number) => { },
   language: "en",
-  setlanguage: (value: string) => {},
+  setlanguage: (value: string) => { },
   donationID: null,
-  setdonationID: (value: string) => {},
+  setdonationID: (value: string) => { },
   paymentType: "",
   setPaymentType: (value: string) => "",
   shouldCreateDonation: false,
-  setshouldCreateDonation: (value: boolean) => {},
-  setIsTaxDeductible: (value: boolean) => {},
+  setshouldCreateDonation: (value: boolean) => { },
+  setIsTaxDeductible: (value: boolean) => { },
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
   redirectstatus: "",
@@ -40,10 +40,10 @@ export const QueryParamContext = React.createContext({
   isDirectDonation: false,
   tenant: "",
   selectedProjects: [],
-  setSelectedProjects: (value: Array<any>) => {},
+  setSelectedProjects: (value: Array<any>) => { },
   allProjects: [],
   allowTaxDeductionChange: true,
-  setallowTaxDeductionChange: (value: boolean) => {},
+  setallowTaxDeductionChange: (value: boolean) => { },
   donationUid: null,
   setDonationUid: (value: string) => "",
   setshowErrorCard: (value: boolean) => {},
@@ -54,8 +54,8 @@ export const QueryParamContext = React.createContext({
   hideTaxDeduction: false,
   queryToken: "",
   setqueryToken: (value: string) => "",
-  sethideTaxDeduction: (value: boolean) => {},
-  setisDirectDonation: (value: boolean) => {},
+  sethideTaxDeduction: (value: boolean) => { },
+  setisDirectDonation: (value: boolean) => { },
   isSignedUp: false,
   setIsSignedUp: (value: boolean) => {},
   embed: false,
@@ -63,7 +63,7 @@ export const QueryParamContext = React.createContext({
   autoLogin: false,
   setAutoLogin: (value: boolean) => {},
   frequency: "",
-  setfrequency: (value: string) => {},
+  setfrequency: (value: string) => { },
   hideLogin: false,
   setHideLogin: (value: boolean) => {},
   returnToUrl: "",
@@ -182,15 +182,8 @@ export default function QueryParamProvider({ children }: any) {
   // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
-    const pattern = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "i"
-    ); // fragment locator
+    const pattern = new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g);
+    // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
   }
   React.useEffect(() => {
