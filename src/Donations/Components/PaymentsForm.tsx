@@ -26,6 +26,8 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
+import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
+import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
 
@@ -36,8 +38,6 @@ function PaymentsForm({}: Props): ReactElement {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
-
-  const [paymentError, setPaymentError] = React.useState("");
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -67,22 +67,38 @@ function PaymentsForm({}: Props): ReactElement {
     profile,
     frequency,
     tenant,
+    paymentError,
+    setPaymentError,
+    amount,
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
 
+  React.useEffect(() => {
+    if (paymentError) {
+      router.replace({
+        query: { ...router.query, step: THANK_YOU },
+      });
+    }
+  }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
-  const onSubmitPayment = async (gateway: any, paymentMethod: any) => {
+  const onSubmitPayment = async (
+    gateway: string,
+    method: string,
+    providerObject?: any
+  ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = queryToken ? queryToken : await getAccessTokenSilently();
+      token = await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
-      paymentMethod,
+      method,
+      providerObject,
       setIsPaymentProcessing,
       setPaymentError,
       t,
@@ -95,13 +111,19 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      frequency,
+      setTransferDetails,
     });
   };
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
     const gateway = "stripe";
-    onSubmitPayment(gateway, paymentMethod);
+    onSubmitPayment(
+      gateway,
+      paymentRequest._activeBackingLibraryName,
+      paymentMethod
+    );
   };
 
   async function getDonation() {
@@ -114,7 +136,7 @@ function PaymentsForm({}: Props): ReactElement {
       isTaxDeductible,
       country,
       projectDetails,
-      unitCost: paymentSetup.unitCost,
+      // unitCost: paymentSetup.unitCost,
       quantity,
       currency,
       contactDetails,
@@ -126,6 +148,8 @@ function PaymentsForm({}: Props): ReactElement {
       token,
       setshowErrorCard,
       frequency,
+      amount,
+      paymentSetup,
     });
 
     if (donation) {
@@ -167,6 +191,29 @@ function PaymentsForm({}: Props): ReactElement {
   }, [currency]);
   const { theme } = React.useContext(ThemeContext);
 
+  const showPaymentMethod = ({
+    paymentMethod,
+    countries,
+    currencies,
+    authenticatedMethod,
+  }: any) => {
+    const isAvailableInCountry = countries ? countries.includes(country) : true;
+    const isAvailableForCurrency = currencies
+      ? currencies.includes(currency)
+      : true;
+    const isAuthenticatedMethod = authenticatedMethod ? isAuthenticated : true;
+
+    return (
+      isAvailableInCountry &&
+      isAvailableForCurrency &&
+      isAuthenticatedMethod &&
+      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      (frequency !== "once"
+        ? paymentSetup?.recurrency.methods.includes(paymentMethod)
+        : true)
+    );
+  };
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -179,7 +226,7 @@ function PaymentsForm({}: Props): ReactElement {
                 onClick={() => {
                   setdonationStep(2);
                   router.push({
-                    query: { ...router.query, step: "contact" },
+                    query: { ...router.query, step: CONTACT },
                   });
                 }}
                 className="d-flex"
@@ -204,8 +251,7 @@ function PaymentsForm({}: Props): ReactElement {
           {/* TODO - When donations are coming from context, check for haspublicprofile */}
           {projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
-              {!contactDetails.companyname ||
-              contactDetails.companyname === "" ? (
+              {!Object.keys(contactDetails).includes("companyName") ? (
                 askpublishName ? (
                   <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <CheckBox
@@ -240,7 +286,6 @@ function PaymentsForm({}: Props): ReactElement {
               className={
                 "mt-20 d-flex align-items-center callout-danger text-danger"
               }
-              data-test-id="payment-error"
             >
               <InfoIcon />
               {paymentError}
@@ -253,49 +298,25 @@ function PaymentsForm({}: Props): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={
-                  paymentSetup?.gateways.stripe.methods.includes("stripe_cc") &&
-                  (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
-                    : true)
-                }
-                showGiroPay={
-                  currency === "EUR" &&
-                  country === "DE" &&
-                  paymentSetup?.gateways?.stripe?.methods?.includes(
-                    "stripe_giropay"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_giropay"
-                      )
-                    : true)
-                }
-                showSepa={
-                  currency === "EUR" &&
-                  isAuthenticated &&
-                  paymentSetup?.gateways.stripe.methods.includes(
-                    "stripe_sepa"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sepa"
-                      )
-                    : true)
-                }
-                showSofort={
-                  currency === "EUR" &&
-                  sofortCountries?.includes(country) &&
-                  paymentSetup?.gateways?.stripe?.methods?.includes(
-                    "stripe_sofort"
-                  ) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_sofort"
-                      )
-                    : true)
+                showCC={showPaymentMethod({ paymentMethod: "card" })}
+                showGiroPay={showPaymentMethod({
+                  paymentMethod: "giropay",
+                  countries: ["DE"],
+                  currencies: ["EUR"],
+                })}
+                showSepa={showPaymentMethod({
+                  paymentMethod: "sepa_debit",
+                  currencies: ["EUR"],
+                  authenticatedMethod: true,
+                })}
+                showSofort={showPaymentMethod({
+                  paymentMethod: "sofort",
+                  currencies: ["EUR"],
+                  countries: sofortCountries,
+                })}
+                showBankTransfer={
+                  Object.keys(paymentSetup?.gateways).includes("offline") &&
+                  frequency === "once"
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
@@ -306,9 +327,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"
-                    ? paymentSetup?.gateways.stripe.recurrency.enabled.includes(
-                        "stripe_cc"
-                      )
+                    ? paymentSetup?.recurrency.methods.includes("card")
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
@@ -329,10 +348,12 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      quantity * paymentSetup.unitCost
+                      paymentSetup.unitBased
+                        ? quantity * paymentSetup.unitCost
+                        : quantity
                     )}
-                    onPaymentFunction={(data) =>
-                      onSubmitPayment("stripe", data)
+                    onPaymentFunction={(providerObject: any) =>
+                      onSubmitPayment("stripe", "card", providerObject)
                     }
                     paymentType={paymentType}
                     setPaymentType={setPaymentType}
@@ -395,6 +416,17 @@ function PaymentsForm({}: Props): ReactElement {
                 <Elements stripe={getStripe(paymentSetup)}>
                   <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
+              </div>
+
+              <div
+                role="tabpanel"
+                hidden={paymentType !== "Bank"}
+                id={`payment-methods-tabpanel-${"Bank"}`}
+                aria-labelledby={`scrollable-force-tab-${"Bank"}`}
+              >
+                {/* <Elements stripe={getStripe(paymentSetup)}> */}
+                <BankTransfer onSubmitPayment={onSubmitPayment} />
+                {/* </Elements> */}
               </div>
             </div>
           ) : (

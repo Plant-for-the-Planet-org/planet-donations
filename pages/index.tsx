@@ -9,6 +9,7 @@ import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
+import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
   projectDetails: Object;
@@ -28,6 +29,7 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
+  meta: { title: string; description: string; image: string; url: string };
 }
 
 function index({
@@ -48,6 +50,7 @@ function index({
   paymentSetup,
   treecount,
   amount,
+  meta,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -70,7 +73,9 @@ function index({
 
   React.useEffect(() => {
     setdonationID(donationID);
+    console.log(isDirectDonation, "isDirectDonation");
     if (isDirectDonation) {
+      console.log(paymentSetup, "isDirectDonation paymentSetup");
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
@@ -82,7 +87,7 @@ function index({
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
-        setquantity(amount / paymentSetup.unitCost);
+        setquantity(amount);
       }
     }
     // XX is hidden country and T1 is Tor browser
@@ -111,44 +116,15 @@ function index({
     }
   }, [donationStep]);
 
-  let title = `Donate with Plant-for-the-Planet`;
-
-  let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = encodeURIComponent(process.env.APP_URL + resolvedUrl);
-  const image = `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
-
-  if (projectDetails) {
-    title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${
-        projectDetails.tpo
-          ? projectDetails.tpo?.name
-          : projectDetails.tpoData?.name
-      } in ${
-        getCountryDataBy("countryCode", projectDetails.country)?.countryName
-      }. Your journey to a trillion trees starts here.`;
-    } else if (projectDetails.purpose === "bouquet") {
-      description = `Make a contribution to ${projectDetails.name}. ${
-        projectDetails.description ? projectDetails.description : ""
-      } Your journey to a trillion trees starts here.`;
-    }
-  }
-  if (giftDetails && giftDetails.recipientName) {
-    title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
-  }
-
   const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
 
   return (
-    <div
-      style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
-      className="d-flex justify-content-center align-items-center"
-    >
+    <>
       <Head>
-        <title>{title}</title>
-        <meta name="title" content={title} />
+        <title>{meta.title}</title>
+        <meta name="title" content={meta.title} />
         <meta name="description" content="" />
 
         <meta
@@ -169,25 +145,30 @@ function index({
           }
         })}
 
-        <meta property="og:site_name" content={title} />
+        <meta property="og:site_name" content={meta.title} />
 
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta name="description" content={description} />
+        <meta property="og:title" content={meta.title} />
+        <meta property="og:description" content={meta.description} />
+        <meta name="description" content={meta.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content={image} />
-        <meta property="og:url" content={url} />
+        <meta property="og:image" content={meta.image} />
+        <meta property="og:url" content={meta.url} />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={title} />
+        <meta name="twitter:title" content={meta.title} />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content={image}></meta>
-        <meta property="twitter:url" content={url} />
-        <meta name="twitter:description" content={description} />
+        <meta property="twitter:image" content={meta.image}></meta>
+        <meta property="twitter:url" content={meta.url} />
+        <meta name="twitter:description" content={meta.description} />
 
         {isDirectDonation ? <meta name="robots" content="noindex" /> : <></>}
       </Head>
-      <Donations />
-    </div>
+      <div
+        style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
+        className="d-flex justify-content-center align-items-center"
+      >
+        <Donations />
+      </div>
+    </>
   );
 }
 
@@ -222,9 +203,9 @@ export async function getServerSideProps(context: any) {
   // Set project details if there is to (project slug) in the query params
   if (
     (context.query.to && !context.query.context) ||
-    context.query.step === "donate"
+    context.query.step === DONATE
   ) {
-    const to = context.query.to.replace(/\//g, "");
+    const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
     try {
       const requestParams = {
@@ -245,6 +226,7 @@ export async function getServerSideProps(context: any) {
       donationStep = 0;
     }
   }
+  const resolvedUrl = context.resolvedUrl;
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
@@ -398,8 +380,30 @@ export async function getServerSideProps(context: any) {
       console.log("Error", err);
     }
   }
-  const resolvedUrl = context.resolvedUrl;
+  let title = `Donate with Plant-for-the-Planet`;
+  let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
+  const url = encodeURIComponent(process.env.APP_URL + resolvedUrl);
+  const image = `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
 
+  if (projectDetails) {
+    title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
+    if (projectDetails.purpose === "trees") {
+      description = `Plant trees with ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
+    } else if (projectDetails.purpose === "bouquet") {
+      description = `Make a contribution to ${projectDetails.name}. ${
+        projectDetails.description ? projectDetails.description : ""
+      } Your journey to a trillion trees starts here.`;
+    }
+  }
+  if (giftDetails && giftDetails.recipientName) {
+    title = `Join ${giftDetails.recipientName} - Donate with Plant-for-the-Planet`;
+  }
   return {
     props: {
       ...(await serverSideTranslations(
@@ -426,6 +430,7 @@ export async function getServerSideProps(context: any) {
       currency,
       paymentSetup,
       amount,
+      meta: { title, description, image, url },
     }, // will be passed to the page component as props
   };
 }

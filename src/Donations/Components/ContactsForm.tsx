@@ -13,6 +13,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { PAYMENT } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
@@ -43,6 +44,7 @@ function ContactsForm({}: Props): ReactElement {
     currency,
     quantity,
     paymentSetup,
+    frequency,
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -78,7 +80,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const onSubmit = (data: any) => {
     router.push({
-      query: { ...router.query, step: "payment" },
+      query: { ...router.query, step: PAYMENT },
     });
     setContactDetails({
       ...data,
@@ -398,12 +400,17 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("donate")}{" "}
-              {getFormatedCurrency(
-                i18n.language,
-                currency,
-                quantity * paymentSetup.unitCost
-              )}
+              {t("donate_button", {
+                totalCost: getFormatedCurrency(
+                  i18n.language,
+                  currency,
+                  paymentSetup.unitBased
+                    ? quantity * paymentSetup.unitCost
+                    : quantity
+                ),
+                frequency:
+                  frequency === "once" ? "" : t(frequency).toLowerCase(),
+              })}
             </button>
           )}
         </form>

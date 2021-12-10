@@ -31,14 +31,28 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   // ];
   const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
-
+  // React.useEffect(() => {
+  //   if (paymentSetup?.options) {
+  //     setquantity(paymentSetup.options[1].quantity);
+  //   }
+  // for (let i = 0; i < paymentSetup?.options?.length; i++) {
+  //   if (paymentSetup.options[i].isDefault) {
+  //     setquantity(paymentSetup.options[i].quantity);
+  //   }
+  // }
+  // }, [paymentSetup]);
   const setCustomValue = (e: any) => {
     if (e.target) {
+      // setquantity(e.target.value);
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1 / paymentSetup.unitCost);
+        setquantity(paymentSetup.unitBased ? 1 / paymentSetup.unitCost : 1);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value / paymentSetup.unitCost);
+        setquantity(
+          paymentSetup.unitBased
+            ? e.target.value / paymentSetup.unitCost
+            : e.target.value
+        );
       }
     }
   };
@@ -48,12 +62,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
       // Set all quantities in the allOptionsArray
+      setquantity(paymentSetup.options[1].quantity);
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      if (!newallOptionsArray.includes(quantity)) {
-        setCustomInputValue(quantity * paymentSetup.unitCost);
+      if (!newallOptionsArray.includes(paymentSetup.options[1].quantity)) {
+        setCustomInputValue(
+          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+        );
+        setisCustomDonation(true);
+      } else {
+        setisCustomDonation(false);
       }
     }
   }, [paymentSetup]);
@@ -98,11 +118,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div> */}
                 <div className="funding-selection-option-text">
                   <span style={{ fontSize: "20px" }}>
-                    {getFormatedCurrency(
-                      i18n.language,
-                      currency,
-                      paymentSetup.unitCost * option.quantity
-                    )}
+                    {getFormatedCurrency(i18n.language, "", option.quantity)}
                   </span>
                 </div>
               </div>
@@ -145,6 +161,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   className={"funding-custom-tree-input"}
                   onInput={(e) => {
                     // replaces any character other than number to blank
+                    // e.target.value = e.target.value.replace(/[,]/g, '.');
                     e.target.value = e.target.value.replace(/[^0-9]/g, "");
                     //  if length of input more than 12, display only 12 digits
                     if (e.target.value.toString().length >= 12) {
