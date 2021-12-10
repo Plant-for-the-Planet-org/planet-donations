@@ -260,7 +260,7 @@ export async function payDonationFunction({
         ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
         if (paymentResponse.status === "failed") {
-          setIsPaymentProcessing(false);
+          // setIsPaymentProcessing(false);
           setPaymentError(paymentResponse.message);
         }
         // setIsPaymentProcessing(false);

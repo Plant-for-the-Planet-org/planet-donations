@@ -89,7 +89,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    loadPaymentSetup(donation.project.id, country);
+    await loadPaymentSetup(donation.project.id, country);
     setdonationStep(3);
     router.push({
       query: { ...router.query, step: PAYMENT },

@@ -53,7 +53,7 @@ function DonationsForm() {
 
   React.useEffect(() => {
     if (paymentSetup.minQuantity) {
-      setMinAmt(paymentSetup.minQuantity * paymentSetup.unitCost);
+      setMinAmt((paymentSetup.minQuantity * paymentSetup.unitCost).toFixed(2));
     } else {
       setMinAmt(getMinimumAmountForCurrency(currency));
     }

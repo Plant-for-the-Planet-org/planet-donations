@@ -30,6 +30,7 @@ interface Props {
   treecount: any;
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
+  frequency: string;
 }
 
 function index({
@@ -51,6 +52,7 @@ function index({
   treecount,
   amount,
   meta,
+  frequency,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -69,6 +71,7 @@ function index({
     setallowTaxDeductionChange,
     setisDirectDonation,
     setquantity,
+    setfrequency,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -82,6 +85,7 @@ function index({
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
+      setfrequency(frequency);
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
@@ -180,7 +184,7 @@ export async function getServerSideProps(context: any) {
   // Variables that will be affected with Gift details
   let isGift = false;
   let giftDetails = {};
-
+  let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
   let isTaxDeductible = false;
@@ -267,7 +271,9 @@ export async function getServerSideProps(context: any) {
           donationStep = 0;
           console.log("err", err);
         }
-
+        if (donation.data.frequency) {
+          frequency = donation.data.frequency;
+        }
         if (donation.data.taxDeductionCountry) {
           country = donation.data.taxDeductionCountry;
           isTaxDeductible = true;
@@ -426,6 +432,7 @@ export async function getServerSideProps(context: any) {
       paymentSetup,
       amount,
       meta: { title, description, image, url },
+      frequency,
     }, // will be passed to the page component as props
   };
 }

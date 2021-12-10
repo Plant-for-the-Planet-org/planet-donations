@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
+import { THANK_YOU } from "src/Utils/donationStepConstants";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -150,6 +151,13 @@ export default function QueryParamProvider({ children }: any) {
     null
   );
 
+  React.useEffect(() => {
+    if (paymentError) {
+      router.replace({
+        query: { ...router.query, step: THANK_YOU },
+      });
+    }
+  }, [paymentError]);
   React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
