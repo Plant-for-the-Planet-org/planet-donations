@@ -64,15 +64,15 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  if (
-    process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" &&
-    process.env.VERCEL_URL &&
-    typeof window !== "undefined"
-  ) {
-    if (process.env.VERCEL_URL !== window.location.hostname) {
-      router.replace(`https://${process.env.VERCEL_URL}`);
-    }
-  }
+  // if (
+  //   process.env.NEXT_PUBLIC_VERCEL_ENV !== "production" &&
+  //   process.env.VERCEL_URL &&
+  //   typeof window !== "undefined"
+  // ) {
+  //   if (process.env.VERCEL_URL !== window.location.hostname) {
+  //     router.replace(`https://${process.env.VERCEL_URL}`);
+  //   }
+  // }
 
   const [browserIncompatible, setBrowserIncompatible] = React.useState(false);
   React.useEffect(() => {
