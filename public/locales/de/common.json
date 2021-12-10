@@ -132,5 +132,6 @@
   "amount": "Betrag",
   "beneficiary": "Kontoinhaber",
   "copied": "Kopiert",
-  "clickToCopy": "Zum Kopieren anklicken"
+  "clickToCopy": "Zum Kopieren anklicken",
+  "bank": "Bank"
 }
