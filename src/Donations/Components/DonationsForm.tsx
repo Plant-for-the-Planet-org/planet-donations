@@ -217,7 +217,7 @@ function DonationsForm() {
           !(isGift && giftDetails.recipientName === "") ? (
             <div
               className={`donations-gift-container mt-10 ${
-                projectDetails.purpose === "funds"
+                paymentSetup.frequencies.length == 2
                   ? "funds-frequency-container"
                   : ""
               }`}
