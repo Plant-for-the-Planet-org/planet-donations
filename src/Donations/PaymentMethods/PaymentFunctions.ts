@@ -164,7 +164,6 @@ export function createDonationData({
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
   };
-  console.log(donationData, "donationData");
   if (paymentSetup.unitBased) {
     donationData = {
       ...donationData,
@@ -253,7 +252,6 @@ export async function payDonationFunction({
       setshowErrorCard,
       setPaymentError
     );
-    console.log(paymentResponse, "paymentResponse");
     if (paymentResponse) {
       if (
         ["success", "pending", "paid"].includes(
@@ -409,7 +407,6 @@ export async function handleStripeSCAPayment({
   switch (method) {
     case "card": {
       let successData: {};
-      console.log(paymentResponse, "paymentResponse.type");
       let stripeResponse: {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
