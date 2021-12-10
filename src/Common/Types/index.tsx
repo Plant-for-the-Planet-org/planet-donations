@@ -88,7 +88,7 @@ export interface CreateDonationFunctionProps {
   country: any;
   projectDetails: Object;
   quantity: number;
-  unitCost: number;
+  paymentSetup: {};
   currency: String;
   contactDetails: Object;
   giftDetails: giftDetailsProps;
@@ -99,4 +99,5 @@ export interface CreateDonationFunctionProps {
   token: any;
   setshowErrorCard: Function;
   frequency: string | null;
+  amount?: number | null;
 }

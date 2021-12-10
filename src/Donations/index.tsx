@@ -11,10 +11,18 @@ import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
+import {
+  CONTACT,
+  DONATE,
+  PAYMENT,
+  SELECT_PROJECT,
+  THANK_YOU,
+} from "src/Utils/donationStepConstants";
 import router, { useRouter } from "next/router";
-interface Props { }
 
-function Donations({ }: Props): ReactElement {
+interface Props {}
+
+function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
@@ -25,7 +33,7 @@ function Donations({ }: Props): ReactElement {
       let step;
       if (donationStep === 4) {
         //if the last step is 'Thankyou' then this will replace the entire route with the initial one on browser back press
-        step = "selectProject";
+        step = SELECT_PROJECT;
         router.replace({
           query: {},
         });
@@ -33,26 +41,26 @@ function Donations({ }: Props): ReactElement {
         step = router.query?.step;
       }
       switch (step) {
-        case "selectProject":
+        case SELECT_PROJECT:
           setdonationStep(0);
           break;
-        case "donate":
+        case DONATE:
           setdonationStep(1);
           break;
-        case "contact":
+        case CONTACT:
           setdonationStep(2);
           break;
-        case "payment":
+        case PAYMENT:
           setdonationStep(3);
           break;
-        case "thankyou":
+        case THANK_YOU:
           setdonationStep(4);
           break;
         default:
           setdonationStep(0);
       }
     }
-    return () => { };
+    return () => {};
   }, [router.query.step]);
   return (
     <div className="donations-container">
@@ -161,7 +169,9 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
                   {t("fortreeCountTrees", {
@@ -191,7 +201,9 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
                 </div>
@@ -213,8 +225,9 @@ function DonationInfo() {
                 <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
-              {projectDetails.purpose === "bouquet" &&
-              projectDetails.description ? (
+              {projectDetails.purpose === "bouquet" ||
+              (projectDetails.purpose === "funds" &&
+                projectDetails.description) ? (
                 <h3 className="text-white mt-10">
                   {projectDetails.description}
                 </h3>

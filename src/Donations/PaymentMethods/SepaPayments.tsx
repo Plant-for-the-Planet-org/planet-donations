@@ -7,8 +7,6 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 
-
-
 const FormControlNew = withStyles({
   root: {
     width: "100%",
@@ -32,21 +30,22 @@ function SepaPayments({
   const [paymentError, setPaymentError] = React.useState("");
   const [showContinue, setShowContinue] = React.useState(false);
 
-  const {theme} = React.useContext(ThemeContext);
+  const { theme } = React.useContext(ThemeContext);
   const SEPA_OPTIONS = {
     supportedCountries: ["SEPA"],
     style: {
       base: {
         fontSize: "14px",
-        color: theme === "theme-light"
-        ? themeProperties.light.primaryFontColor
-        : themeProperties.dark.primaryFontColor,
-        letterSpacing: "0.025em",
+        color:
+          theme === "theme-light"
+            ? themeProperties.light.primaryFontColor
+            : themeProperties.dark.primaryFontColor,
         fontFamily: themeProperties.fontFamily,
         "::placeholder": {
-          color: theme === "theme-light"
-        ? themeProperties.light.primaryFontColor
-        : themeProperties.dark.primaryFontColor,
+          color:
+            theme === "theme-light"
+              ? themeProperties.light.primaryFontColor
+              : themeProperties.dark.primaryFontColor,
           fontFamily: themeProperties.fontFamily,
         },
       },
@@ -95,7 +94,7 @@ function SepaPayments({
       // Add payload error if failed
     }
     if (paymentMethod) {
-      onPaymentFunction("stripe", paymentMethod);
+      onPaymentFunction("stripe", "sepa_debit", paymentMethod);
     } else {
       setPaymentError(t("noPaymentMethodError"));
       return;
@@ -121,20 +120,20 @@ function SepaPayments({
       </div>
 
       {showContinue ? (
-          <button
+        <button
           onClick={handleSubmit}
-            className="primary-button w-100 mt-30"
-            id="donateContinueButton"
-          >
-            {t("donate")}
-          </button>
+          className="primary-button w-100 mt-30"
+          id="donateContinueButton"
+        >
+          {t("donate")}
+        </button>
       ) : (
-          <button
-            className="secondary-button w-100 mt-30"
-            id="donateContinueButton"
-          >
-            {t("donate")}
-          </button>
+        <button
+          className="secondary-button w-100 mt-30"
+          id="donateContinueButton"
+        >
+          {t("donate")}
+        </button>
       )}
 
       <div className={"mandate-acceptance"}>{t("sepaMessage")}</div>

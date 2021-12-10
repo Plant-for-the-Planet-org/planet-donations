@@ -36,14 +36,8 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
     },
   ];
 
-  const {
-    isGift,
-    quantity,
-    setquantity,
-    currency,
-    paymentSetup,
-    giftDetails,
-  } = React.useContext(QueryParamContext);
+  const { isGift, quantity, setquantity, currency, paymentSetup, giftDetails } =
+    React.useContext(QueryParamContext);
 
   const [customTreeInputValue, setCustomTreeInputValue] = React.useState("");
 
@@ -143,7 +137,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
             }}
             className="text-bold text-primary"
             style={{ marginRight: "4px" }}
-            data-test-id='selectCurrency'
+            data-test-id="selectCurrency"
           >
             {currency} <DownArrowIcon color={themeProperties.primaryColor} />
             {getFormatedCurrency(

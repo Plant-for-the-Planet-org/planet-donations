@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
     }
     // sets the content type to json
     config.headers["Content-Type"] = "application/json";
-    config.headers["X-ACCEPT-VERSION"] = "1.1";
+    config.headers["X-ACCEPT-VERSION"] = "1.2";
 
     if (typeof Storage !== "undefined") {
       config.headers["x-locale"] = `${
