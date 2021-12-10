@@ -33,7 +33,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setAmount,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
-  console.log(paymentError, "paymentError");
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
 
@@ -62,7 +61,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
   }
   async function getDonation() {
-    console.log(donation, "Donation");
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");

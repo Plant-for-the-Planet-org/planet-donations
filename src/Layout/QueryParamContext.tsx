@@ -46,11 +46,11 @@ export const QueryParamContext = React.createContext({
   setallowTaxDeductionChange: (value: boolean) => { },
   donationUid: null,
   setDonationUid: (value: string) => "",
-  setshowErrorCard: (value: boolean) => {},
-  setprojectDetails: (value: {}) => {},
+  setshowErrorCard: (value: boolean) => { },
+  setprojectDetails: (value: {}) => { },
   transferDetails: null,
-  setTransferDetails: (value: {}) => {},
-  loadselectedProjects: () => {},
+  setTransferDetails: (value: {}) => { },
+  loadselectedProjects: () => { },
   hideTaxDeduction: false,
   queryToken: "",
   setqueryToken: (value: string) => "",
@@ -61,11 +61,11 @@ export const QueryParamContext = React.createContext({
   frequency: "",
   setfrequency: (value: string) => { },
   hideLogin: false,
-  setHideLogin: (value: boolean) => {},
+  setHideLogin: (value: boolean) => { },
   paymentError: "",
-  setPaymentError: (value: string) => {},
+  setPaymentError: (value: string) => { },
   amount: null,
-  setAmount: (value: number) => {},
+  setAmount: (value: number) => { },
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -227,7 +227,6 @@ export default function QueryParamProvider({ children }: any) {
         }
 
         setpaymentSetup(paymentSetupData.data);
-        console.log(paymentSetupData.data, "paymentSetupData.data");
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {

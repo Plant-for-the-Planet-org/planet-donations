@@ -73,9 +73,7 @@ function index({
 
   React.useEffect(() => {
     setdonationID(donationID);
-    console.log(isDirectDonation, "isDirectDonation");
     if (isDirectDonation) {
-      console.log(paymentSetup, "isDirectDonation paymentSetup");
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
@@ -388,17 +386,14 @@ export async function getServerSideProps(context: any) {
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${
-        projectDetails.tpo
+      description = `Plant trees with ${projectDetails.tpo
           ? projectDetails.tpo?.name
           : projectDetails.tpoData?.name
-      } in ${
-        getCountryDataBy("countryCode", projectDetails.country)?.countryName
-      }. Your journey to a trillion trees starts here.`;
+        } in ${getCountryDataBy("countryCode", projectDetails.country)?.countryName
+        }. Your journey to a trillion trees starts here.`;
     } else if (projectDetails.purpose === "bouquet") {
-      description = `Make a contribution to ${projectDetails.name}. ${
-        projectDetails.description ? projectDetails.description : ""
-      } Your journey to a trillion trees starts here.`;
+      description = `Make a contribution to ${projectDetails.name}. ${projectDetails.description ? projectDetails.description : ""
+        } Your journey to a trillion trees starts here.`;
     }
   }
   if (giftDetails && giftDetails.recipientName) {
