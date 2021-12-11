@@ -194,7 +194,7 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.return_to]);
 
   React.useEffect(() => {
-    if (paymentSetup?.purpose === "funds") {
+    if (paymentSetup?.costIsMonthly) {
       setfrequency("monthly");
     }
   }, [paymentSetup]);

@@ -225,14 +225,15 @@ function DonationInfo() {
                 <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
-              {projectDetails.purpose === "bouquet" ||
-              (projectDetails.purpose === "funds" &&
+              {(projectDetails.purpose === "bouquet" &&  
                 projectDetails.description) ? (
                 <h3 className="text-white mt-10">
                   {projectDetails.description}
                 </h3>
               ) : (
-                <></>
+                projectDetails.purpose === "funds" ? (
+                   <h3 className="text-white mt-10">{t("fundingProjectDescription")}</h3>
+                ):[]
               )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a

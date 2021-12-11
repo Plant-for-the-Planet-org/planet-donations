@@ -9,10 +9,11 @@ function FrequencyOptions({}: Props): ReactElement {
     React.useContext(QueryParamContext);
   const { t } = useTranslation(["common"]);
   console.log(paymentSetup.purpose, "paymentSetup");
-  let customfrequencies = ["once", "monthly", "yearly"];
-  if (paymentSetup.purpose === "funds") {
-    customfrequencies = ["monthly", "yearly"];
-  }
+  let customfrequencies = paymentSetup.frequencies;
+  // let customfrequencies = ["once", "monthly", "yearly"];
+  // if (paymentSetup.purpose === "funds") {
+  //   customfrequencies = ["monthly", "yearly"];
+  // }
 
   return (
     <div className="d-flex justify-content-between flex-wrap frequency-selection-container mt-20">
