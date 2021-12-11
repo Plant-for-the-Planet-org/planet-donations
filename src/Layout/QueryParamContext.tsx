@@ -6,6 +6,7 @@ import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { PaymentSetupProps } from "src/Common/Types";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -74,7 +75,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const { i18n } = useTranslation();
 
-  const [paymentSetup, setpaymentSetup] = useState<Object>({});
+  const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps|{}>({});
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 

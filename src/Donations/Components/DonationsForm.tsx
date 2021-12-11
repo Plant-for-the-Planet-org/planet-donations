@@ -43,6 +43,7 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
+    setTransferDetails
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -125,18 +126,21 @@ function DonationsForm() {
       }
       payDonationFunction({
         gateway: "stripe",
-        paymentMethod,
+        method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+        providerObject: paymentMethod,// payment method
         setIsPaymentProcessing,
         setPaymentError,
         t,
         paymentSetup,
         donationID: res.id,
         setdonationStep,
+        contactDetails,
         token,
         country,
         setshowErrorCard,
         router,
         tenant,
+        setTransferDetails
       });
     });
   };
