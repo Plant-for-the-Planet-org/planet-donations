@@ -126,7 +126,7 @@ function DonationsForm() {
       }
       payDonationFunction({
         gateway: "stripe",
-        method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+        method: paymentRequest, // Hard coding card here since we only have card enabled in gpay and apple pay
         providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
