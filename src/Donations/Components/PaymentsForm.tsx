@@ -93,7 +93,7 @@ function PaymentsForm({}: Props): ReactElement {
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = await getAccessTokenSilently();
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
