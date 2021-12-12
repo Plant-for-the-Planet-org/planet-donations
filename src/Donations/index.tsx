@@ -238,7 +238,7 @@ function DonationInfo() {
                 <h3 className="text-white mt-10">
                   {projectDetails.description
                     ? projectDetails.description
-                    : t("fundingAndBouquetProjectDescription")}
+                    : t("fallbackdescription")}
                 </h3>
               ) : (
                 []

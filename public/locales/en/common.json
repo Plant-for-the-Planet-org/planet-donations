@@ -134,5 +134,5 @@
   "copied": "Copied",
   "clickToCopy": "Click to copy",
   "bank": "Bank",
-  "fundingAndBouquetProjectDescription": "Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here."
+  "fallbackdescription": "Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here."
 }
