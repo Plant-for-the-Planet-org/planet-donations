@@ -1,5 +1,5 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps } from "../../Common/Types";
+import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -164,7 +164,6 @@ export function createDonationData({
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
   };
-  console.log(donationData, "donationData");
   if (paymentSetup.unitBased) {
     donationData = {
       ...donationData,
@@ -218,16 +217,14 @@ export async function payDonationFunction({
   t,
   paymentSetup,
   donationID,
-  setdonationStep,
   contactDetails,
   token,
   country,
   setshowErrorCard,
   router,
   tenant,
-  frequency,
   setTransferDetails,
-}: any) {
+}: PayDonationProps) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
   if (method !== "offline") {
@@ -253,7 +250,6 @@ export async function payDonationFunction({
       setshowErrorCard,
       setPaymentError
     );
-    console.log(paymentResponse, "paymentResponse");
     if (paymentResponse) {
       if (
         ["success", "pending", "paid"].includes(
@@ -286,14 +282,12 @@ export async function payDonationFunction({
           setIsPaymentProcessing,
           setPaymentError,
           donationID,
-          setdonationStep,
           contactDetails,
           token,
           country,
           setshowErrorCard,
           router,
           tenant,
-          frequency,
         });
       }
     }
@@ -382,7 +376,6 @@ const handlePaymentError = (
 };
 
 export async function handleStripeSCAPayment({
-  gateway,
   method,
   paymentResponse,
   paymentSetup,
@@ -390,15 +383,13 @@ export async function handleStripeSCAPayment({
   setIsPaymentProcessing,
   setPaymentError,
   donationID,
-  setdonationStep,
   contactDetails,
   token,
   country,
   setshowErrorCard,
   router,
   tenant,
-  frequency,
-}: any) {
+}: HandleStripeSCAPaymentProps) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -409,7 +400,6 @@ export async function handleStripeSCAPayment({
   switch (method) {
     case "card": {
       let successData: {};
-      console.log(paymentResponse, "paymentResponse.type");
       let stripeResponse: {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side

@@ -54,7 +54,12 @@ export const PaymentRequestCustomButton = ({
         requestPayerName: true,
         requestPayerEmail: true,
       });
-      setPaymentRequest(pr);
+      // Check the availability of the Payment Request API.
+      pr.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
     }
   }, [stripe, paymentRequest]);
 
@@ -111,6 +116,7 @@ export const PaymentRequestCustomButton = ({
     };
   }, [paymentRequest, onPaymentFunction]);
 
+
   return ready ? (
     <div
       className="d-flex column"
@@ -124,7 +130,7 @@ export const PaymentRequestCustomButton = ({
       paymentRequest &&
       paymentRequest._canMakePaymentAvailability &&
       (frequency !== "once"
-        ? paymentSetup?.recurrency.methods.includes("stripe_cc")
+        ? paymentSetup?.recurrency.methods.includes("card")
         : true) ? (
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
           <div className="w-100">
@@ -152,7 +158,10 @@ export const PaymentRequestCustomButton = ({
         ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
           <div className="w-100">
             <button
-              onClick={() => paymentRequest.show()}
+              onClick={() =>{
+                paymentRequest.show()
+              }
+              }
               className={`${
                 isPaymentPage
                   ? "donate-small"

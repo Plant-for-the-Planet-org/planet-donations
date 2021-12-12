@@ -2,13 +2,13 @@ import { useTranslation } from "next-i18next";
 import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 
-interface Props {}
+interface Props { }
 
-function FrequencyOptions({}: Props): ReactElement {
+function FrequencyOptions({ }: Props): ReactElement {
   const { paymentSetup, setfrequency, frequency } =
     React.useContext(QueryParamContext);
   const { t } = useTranslation(["common"]);
-  console.log(paymentSetup.purpose, "paymentSetup");
+  
   let customfrequencies = paymentSetup.frequencies;
   // let customfrequencies = ["once", "monthly", "yearly"];
   // if (paymentSetup.purpose === "funds") {
@@ -22,11 +22,10 @@ function FrequencyOptions({}: Props): ReactElement {
         customfrequencies?.map((frequencyOption: any, index: any) => {
           return (
             <div
-              className={`frequency-selection-option ${
-                frequencyOption === frequency
+              className={`frequency-selection-option ${frequencyOption === frequency
                   ? "frequency-selection-option-selected"
                   : ""
-              }`}
+                }`}
               key={index}
               onClick={() => setfrequency(frequencyOption)}
               data-test-id="frequency"

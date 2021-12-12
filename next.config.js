@@ -116,7 +116,6 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
     SCHEME: scheme,
     API_ENDPOINT: `${scheme}://${process.env.API_ENDPOINT}`,
     CDN_URL: `${scheme}://${process.env.CDN_URL}`,
-    IMAGE_CDN_URL: `${scheme}://${process.env.IMAGE_CDN_URL}`,
     APP_URL: APPUrl,
     VERCEL_URL: process.env.VERCEL_URL,
     ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,

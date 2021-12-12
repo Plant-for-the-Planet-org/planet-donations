@@ -107,7 +107,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         className={"mt-20 mb-20 text-center"}
         style={{ fontStyle: "italic" }}
       >
-        {t("common:donationRef")} {donationID}
+        {t("common:transactionId")} {donationID}
       </div>
     </div>
   );
@@ -119,9 +119,8 @@ const CopyButton = ({ copiedText, buttonFor, t }: any) => {
   return (
     <div className="copy-container">
       <p
-        className={`copy-tooltip ${
-          copiedText === buttonFor ? "show-tooltip" : ""
-        }`}
+        className={`copy-tooltip ${copiedText === buttonFor ? "show-tooltip" : ""
+          }`}
       >
         {copiedText === buttonFor
           ? t("common:copied")
