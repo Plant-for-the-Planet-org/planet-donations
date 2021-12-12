@@ -75,7 +75,7 @@
   "donationFailedMessage": "Something went wrong while completing your payment. If you continue having issues please reach out to us at support@plant-for-the-planet.org",
   "donationPending": "Completing your donation",
   "donationPendingMessage": "We are currently waiting for the confirmation from your bank. This might take some time so, please feel free to close this page. We’ll send your receipt via email shortly.",
-  "donationRef": "Donation Ref",
+  "transactionId": "Transaction ID",
   "privacyPolicyNotice": "By using this website, you agree to our",
   "privacyPolicy": "cookie policy",
   "acceptClose": "Accept and close",
@@ -136,3 +136,4 @@
   "bank": "Bank",
   "fundingAndBouquetProjectDescription": "Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillian trees starts here."
 }
+
