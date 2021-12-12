@@ -55,7 +55,7 @@ export const PaymentRequestCustomButton = ({
         requestPayerEmail: true,
       });
       // Check the availability of the Payment Request API.
-      pr.canMakePayment().then(result => {
+      pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
         }
@@ -96,6 +96,7 @@ export const PaymentRequestCustomButton = ({
       paymentRequest.on(
         "paymentmethod",
         ({ complete, paymentMethod, ...data }: any) => {
+          console.log(paymentMethod, paymentRequest, "paymentRequest.on");
           onPaymentFunction(paymentMethod, paymentRequest);
           complete("success");
           setPaymentLoading(false);
@@ -107,6 +108,7 @@ export const PaymentRequestCustomButton = ({
         paymentRequest.off(
           "paymentmethod",
           ({ complete, paymentMethod, ...data }: any) => {
+            console.log(paymentMethod, paymentRequest, "paymentRequest.off");
             onPaymentFunction(paymentMethod, paymentRequest);
             complete("success");
             setPaymentLoading(false);
@@ -115,7 +117,6 @@ export const PaymentRequestCustomButton = ({
       }
     };
   }, [paymentRequest, onPaymentFunction]);
-
 
   return ready ? (
     <div
@@ -158,10 +159,9 @@ export const PaymentRequestCustomButton = ({
         ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
           <div className="w-100">
             <button
-              onClick={() =>{
-                paymentRequest.show()
-              }
-              }
+              onClick={() => {
+                paymentRequest.show();
+              }}
               className={`${
                 isPaymentPage
                   ? "donate-small"
