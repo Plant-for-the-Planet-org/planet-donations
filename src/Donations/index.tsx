@@ -228,7 +228,9 @@ function DonationInfo() {
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
                 <h3 className="text-white mt-10">
-                  {t("fundingAndBouquetProjectDescription")}
+                  {projectDetails.description
+                    ? projectDetails.description
+                    : t("fundingAndBouquetProjectDescription")}
                 </h3>
               ) : (
                 []
