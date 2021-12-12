@@ -120,7 +120,7 @@ function PaymentsForm({}: Props): ReactElement {
     const gateway = "stripe";
     onSubmitPayment(
       gateway,
-      "card",
+      paymentRequest._activeBackingLibraryName,
       paymentMethod
     );
   };
