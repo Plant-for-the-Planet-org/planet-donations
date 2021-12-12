@@ -78,10 +78,11 @@ function DonationsForm() {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
+
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
-
+    console.log(paymentMethod, paymentRequest, "paymentRequest");
     let fullName = paymentMethod.billing_details.name;
     fullName = String(fullName).split(" ");
     const firstName = fullName[0];

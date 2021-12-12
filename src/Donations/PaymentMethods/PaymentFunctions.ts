@@ -1,5 +1,9 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
+import {
+  CreateDonationFunctionProps,
+  PayDonationProps,
+  HandleStripeSCAPaymentProps,
+} from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -25,6 +29,13 @@ export function buildPaymentProviderRequest(
             object: "payment_method",
           };
           break;
+        case "browser":
+        case "google_pay":
+        case "apple_pay":
+          source = {
+            id: providerObject.id,
+            object: "payment_method",
+          };
         case "stripe_sofort":
         case "sofort":
         case "stripe_giropay":
