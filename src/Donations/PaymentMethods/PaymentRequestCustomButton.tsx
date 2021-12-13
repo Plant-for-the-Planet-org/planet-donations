@@ -98,7 +98,12 @@ export const PaymentRequestCustomButton = ({
         async ({ complete, paymentMethod, ...data }: any) => {
           console.log(`data`, data);
 
-          console.log(paymentMethod, paymentRequest, "paymentRequest.on");
+          console.log(
+            paymentMethod,
+            paymentRequest,
+            nativePayMethod,
+            "paymentRequest.on"
+          );
           onPaymentFunction(paymentMethod, nativePayMethod);
           complete("success");
           setPaymentLoading(false);
@@ -110,7 +115,12 @@ export const PaymentRequestCustomButton = ({
         paymentRequest.off(
           "paymentmethod",
           ({ complete, paymentMethod, ...data }: any) => {
-            console.log(paymentMethod, paymentRequest, "paymentRequest.off");
+            console.log(
+              paymentMethod,
+              paymentRequest,
+              nativePayMethod,
+              "paymentRequest.off"
+            );
             onPaymentFunction(paymentMethod, nativePayMethod);
             complete("success");
             setPaymentLoading(false);

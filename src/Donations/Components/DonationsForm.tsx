@@ -81,7 +81,14 @@ function DonationsForm() {
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest);
+    const method = paymentMethod?.card?.wallet?.type;
+    setPaymentType(method);
+    console.log(
+      `paymentRequest, paymentMethod, method`,
+      paymentRequest,
+      paymentMethod,
+      method
+    );
     let fullName = paymentMethod.billing_details.name;
     fullName = String(fullName).split(" ");
     const firstName = fullName[0];
@@ -126,7 +133,7 @@ function DonationsForm() {
       }
       payDonationFunction({
         gateway: "stripe",
-        method: paymentRequest, // Hard coding card here since we only have card enabled in gpay and apple pay
+        method: method, // Hard coding card here since we only have card enabled in gpay and apple pay
         providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
