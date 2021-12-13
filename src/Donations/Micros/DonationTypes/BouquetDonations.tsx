@@ -12,6 +12,7 @@ import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
+import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -41,6 +42,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   //   }
   // }
   // }, [paymentSetup]);
+  const router = useRouter();
+
   const setCustomValue = (e: any) => {
     if (e.target) {
       // setquantity(e.target.value);
@@ -62,17 +65,22 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
       // Set all quantities in the allOptionsArray
-      setquantity(paymentSetup.options[1].quantity);
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      if (!newallOptionsArray.includes(paymentSetup.options[1].quantity)) {
+      const newQuantity = router.query.units
+        ? Number(router.query.units)
+        : paymentSetup.options[1].quantity;
+      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(
           paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
         );
+        setquantity(Number(router.query.units));
         setisCustomDonation(true);
       } else {
+        setCustomInputValue("");
+        setquantity(newQuantity);
         setisCustomDonation(false);
       }
     }
@@ -95,6 +103,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 6).map((option, index) => {
+            console.log(
+              `option.quantity, quantity`,
+              option.quantity,
+              quantity,
+              option.quantity === quantity
+            );
             return (
               <div
                 key={index}

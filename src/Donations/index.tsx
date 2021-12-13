@@ -20,9 +20,9 @@ import {
 } from "src/Utils/donationStepConstants";
 import router, { useRouter } from "next/router";
 
-interface Props { }
+interface Props {}
 
-function Donations({ }: Props): ReactElement {
+function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
@@ -60,7 +60,7 @@ function Donations({ }: Props): ReactElement {
           setdonationStep(0);
       }
     }
-    return () => { };
+    return () => {};
   }, [router.query.step]);
   return (
     <div className="donations-container">
@@ -133,7 +133,14 @@ function DonationInfo() {
     );
   };
   return (
-    <div style={{ backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`, backgroundSize: "cover", backgroundPosition: "center center" }} className="donations-info-container">
+    <div
+      style={{
+        backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+      }}
+      className="donations-info-container"
+    >
       {/* <img
         src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
@@ -181,19 +188,18 @@ function DonationInfo() {
                   {frequency === "monthly"
                     ? t("everyMonth")
                     : frequency === "yearly"
-                      ? t("everyYear")
-                      : ""}
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
 
           {(donationStep === 2 || donationStep === 3) &&
-            projectDetails.purpose === "bouquet" && (
+            (projectDetails.purpose === "bouquet" ||
+              projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating", {
-                    frequency: t(`${frequency}`),
-                  })} {" "}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -203,6 +209,11 @@ function DonationInfo() {
                         : quantity
                     )}
                   </span>
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
@@ -222,14 +233,13 @@ function DonationInfo() {
                 <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
-              {projectDetails.purpose === "bouquet" ||
-                (projectDetails.purpose === "funds" &&
-                  projectDetails.description) ? (
-                <h3 className="text-white mt-10">
+              {projectDetails.purpose === "funds" ||
+              projectDetails.purpose === "bouquet" ? (
+                <p className="text-white mt-10">
                   {projectDetails.description}
-                </h3>
+                </p>
               ) : (
-                <></>
+                []
               )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a

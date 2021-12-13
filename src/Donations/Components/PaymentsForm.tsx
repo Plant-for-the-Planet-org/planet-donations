@@ -93,7 +93,7 @@ function PaymentsForm({}: Props): ReactElement {
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = await getAccessTokenSilently();
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
     payDonationFunction({
       gateway,
@@ -111,7 +111,6 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
-      frequency,
       setTransferDetails,
     });
   };
@@ -121,7 +120,7 @@ function PaymentsForm({}: Props): ReactElement {
     const gateway = "stripe";
     onSubmitPayment(
       gateway,
-      paymentRequest._activeBackingLibraryName,
+      "card",
       paymentMethod
     );
   };
