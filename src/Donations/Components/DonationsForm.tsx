@@ -79,9 +79,8 @@ function DonationsForm() {
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
 
-  const onPaymentFunction = async (paymentMethod: any) => {
+  const onPaymentFunction = async (paymentMethod: any, method: string) => {
     // eslint-disable-next-line no-underscore-dangle
-    const method = paymentMethod?.card?.wallet?.type;
     setPaymentType(method);
 
     let fullName = paymentMethod.billing_details.name;

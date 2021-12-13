@@ -115,9 +115,7 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
-  const onPaymentFunction = async (paymentMethod: any) => {
-    const method = paymentMethod?.card?.wallet?.type;
-
+  const onPaymentFunction = async (paymentMethod: any, method: string) => {
     setPaymentType(method);
     const gateway = "stripe";
     onSubmitPayment(gateway, method, paymentMethod);
