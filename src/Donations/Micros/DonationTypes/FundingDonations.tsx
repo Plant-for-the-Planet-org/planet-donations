@@ -9,6 +9,7 @@ import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
 import { getPaymentOptionIcons } from "src/Utils/getImageURL";
+import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -38,6 +39,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     frequency,
   } = React.useContext(QueryParamContext);
 
+  const router = useRouter();
+
   const setCustomValue = (e: any) => {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
@@ -49,12 +52,31 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   };
   React.useEffect(() => {
-    if (paymentSetup?.options?.length > 2) {
-      setquantity(paymentSetup?.options[1].quantity);
+    if (paymentSetup && paymentSetup.options) {
+      // Set all quantities in the allOptionsArray
+      const newallOptionsArray = [];
+      for (const option of paymentSetup.options) {
+        newallOptionsArray.push(option.quantity);
+      }
+      const newQuantity = router.query.units
+        ? Number(router.query.units)
+        : paymentSetup.options[1].quantity;
+      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
+        setCustomInputValue(
+          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+        );
+        setquantity(Number(router.query.units));
+        setisCustomDonation(true);
+      } else {
+        setCustomInputValue("");
+        setquantity(newQuantity);
+        setisCustomDonation(false);
+      }
     }
   }, [paymentSetup]);
-  const customInputRef = React.useRef(null);
 
+  const customInputRef = React.useRef(null);
+  console.log(`option.quantity , quantity `, paymentSetup.options, quantity);
   return (
     <>
       <div
@@ -78,9 +100,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     : ""
                 }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
               >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
+                {option.caption ? (
+                  <div className="funding-selection-option-text">
+                    <p>{option.caption}</p>
+                  </div>
+                ) : (
+                  []
+                )}
                 {paymentSetup.options[index].icon ? (
                   <img
                     className="funding-icon"
