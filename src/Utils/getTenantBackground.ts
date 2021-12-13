@@ -1,4 +1,4 @@
-const defaultForest = "/tenants/default/default-forest.jpg";
+const defaultForest = `${process.env.CDN_URL}/default-forest.jpg`;
 const klumforest = "/tenants/leniklum/leniklum.jpg";
 const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
