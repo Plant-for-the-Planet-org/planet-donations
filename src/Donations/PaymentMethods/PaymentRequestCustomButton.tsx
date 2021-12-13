@@ -55,13 +55,13 @@ export const PaymentRequestCustomButton = ({
         requestPayerEmail: true,
       });
       // Check the availability of the Payment Request API.
-      pr.canMakePayment().then(result => {
+      pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
         }
       });
     }
-  }, [stripe, paymentRequest]);
+  }, [stripe, paymentRequest, country, currency, amount]);
 
   useEffect(() => {
     if (stripe && paymentRequest) {
@@ -116,7 +116,6 @@ export const PaymentRequestCustomButton = ({
     };
   }, [paymentRequest, onPaymentFunction]);
 
-
   return ready ? (
     <div
       className="d-flex column"
@@ -158,10 +157,9 @@ export const PaymentRequestCustomButton = ({
         ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
           <div className="w-100">
             <button
-              onClick={() =>{
-                paymentRequest.show()
-              }
-              }
+              onClick={() => {
+                paymentRequest.show();
+              }}
               className={`${
                 isPaymentPage
                   ? "donate-small"
