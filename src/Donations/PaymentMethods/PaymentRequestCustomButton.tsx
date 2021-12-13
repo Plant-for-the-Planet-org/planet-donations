@@ -96,15 +96,8 @@ export const PaymentRequestCustomButton = ({
       paymentRequest.on(
         "paymentmethod",
         async ({ complete, paymentMethod, ...data }: any) => {
-          console.log(`data`, data);
-
-          console.log(
-            paymentMethod,
-            paymentRequest,
-            nativePayMethod,
-            "paymentRequest.on"
-          );
-          onPaymentFunction(paymentMethod, nativePayMethod);
+          const method = paymentMethod?.card?.wallet?.type || nativePayMethod;
+          onPaymentFunction(paymentMethod, method);
           complete("success");
           setPaymentLoading(false);
         }
@@ -115,13 +108,9 @@ export const PaymentRequestCustomButton = ({
         paymentRequest.off(
           "paymentmethod",
           ({ complete, paymentMethod, ...data }: any) => {
-            console.log(
-              paymentMethod,
-              paymentRequest,
-              nativePayMethod,
-              "paymentRequest.off"
-            );
-            onPaymentFunction(paymentMethod, nativePayMethod);
+            const method = paymentMethod?.card?.wallet?.type || nativePayMethod;
+
+            onPaymentFunction(paymentMethod, method);
             complete("success");
             setPaymentLoading(false);
           }
@@ -149,8 +138,8 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                paymentRequest.show();
                 setNativePayMethod("apple_pay");
+                paymentRequest.show();
               }}
               className={`${
                 isPaymentPage
@@ -175,8 +164,8 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                paymentRequest.show();
                 setNativePayMethod("google_pay");
+                paymentRequest.show();
               }}
               className={`${
                 isPaymentPage
@@ -201,8 +190,8 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                paymentRequest.show();
                 setNativePayMethod("browser");
+                paymentRequest.show();
               }}
               className={`donate-now ${
                 isPaymentPage ? "donate-small" : "primary-button mb-10 w-100"

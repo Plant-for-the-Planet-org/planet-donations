@@ -115,10 +115,12 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
-  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
-    setPaymentType(paymentRequest);
+  const onPaymentFunction = async (paymentMethod: any) => {
+    const method = paymentMethod?.card?.wallet?.type;
+
+    setPaymentType(method);
     const gateway = "stripe";
-    onSubmitPayment(gateway, paymentRequest, paymentMethod);
+    onSubmitPayment(gateway, method, paymentMethod);
   };
 
   async function getDonation() {
