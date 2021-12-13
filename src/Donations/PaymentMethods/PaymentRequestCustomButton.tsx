@@ -62,7 +62,7 @@ export const PaymentRequestCustomButton = ({
         }
       });
     }
-  }, [stripe, paymentRequest]);
+  }, [stripe, paymentRequest, country, currency, amount]);
 
   useEffect(() => {
     if (stripe && paymentRequest) {
