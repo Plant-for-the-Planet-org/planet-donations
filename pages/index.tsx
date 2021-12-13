@@ -386,19 +386,17 @@ export async function getServerSideProps(context: any) {
   }
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = encodeURIComponent(process.env.APP_URL + resolvedUrl);
-  const image = `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
+  const url = process.env.APP_URL + resolvedUrl;
+  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1200&h=770.jpg`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${
-        projectDetails.tpo
+      description = `Plant trees with ${projectDetails.tpo
           ? projectDetails.tpo?.name
           : projectDetails.tpoData?.name
-      } in ${
-        getCountryDataBy("countryCode", projectDetails.country)?.countryName
-      }. Your journey to a trillion trees starts here.`;
+        } in ${getCountryDataBy("countryCode", projectDetails.country)?.countryName
+        }. Your journey to a trillion trees starts here.`;
     } else if (
       (projectDetails.purpose === "bouquet" ||
         projectDetails.purpose === "funds") &&
