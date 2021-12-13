@@ -38,6 +38,7 @@ export const PaymentRequestCustomButton = ({
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [nativePayMethod, setNativePayMethod] = useState("");
+
   useEffect(() => {
     if (
       stripe &&
@@ -96,7 +97,8 @@ export const PaymentRequestCustomButton = ({
       paymentRequest.on(
         "paymentmethod",
         async ({ complete, paymentMethod, ...data }: any) => {
-          const method = paymentMethod?.card?.wallet?.type || nativePayMethod;
+          const method = paymentMethod?.card?.wallet?.type || "browser";
+
           onPaymentFunction(paymentMethod, method);
           complete("success");
           setPaymentLoading(false);
@@ -108,7 +110,7 @@ export const PaymentRequestCustomButton = ({
         paymentRequest.off(
           "paymentmethod",
           ({ complete, paymentMethod, ...data }: any) => {
-            const method = paymentMethod?.card?.wallet?.type || nativePayMethod;
+            const method = paymentMethod?.card?.wallet?.type || "browser";
 
             onPaymentFunction(paymentMethod, method);
             complete("success");

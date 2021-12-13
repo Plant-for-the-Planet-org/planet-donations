@@ -141,6 +141,7 @@ export async function createDonationFunction({
       setPaymentError(error.message);
     }
     setIsPaymentProcessing(false);
+    return false
   }
 }
 

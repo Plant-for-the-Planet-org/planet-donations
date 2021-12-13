@@ -121,28 +121,30 @@ function DonationsForm() {
       setshowErrorCard,
       frequency,
     }).then(async (res) => {
-      let token = null;
-      if ((!isLoading && isAuthenticated) || queryToken) {
-        token = queryToken ? queryToken : await getAccessTokenSilently();
+      if (res) {
+        let token = null;
+        if ((!isLoading && isAuthenticated) || queryToken) {
+          token = queryToken ? queryToken : await getAccessTokenSilently();
+        }
+        payDonationFunction({
+          gateway: "stripe",
+          method: method, // Hard coding card here since we only have card enabled in gpay and apple pay
+          providerObject: paymentMethod, // payment method
+          setIsPaymentProcessing,
+          setPaymentError,
+          t,
+          paymentSetup,
+          donationID: res.id,
+          setdonationStep,
+          contactDetails,
+          token,
+          country,
+          setshowErrorCard,
+          router,
+          tenant,
+          setTransferDetails,
+        });
       }
-      payDonationFunction({
-        gateway: "stripe",
-        method: method, // Hard coding card here since we only have card enabled in gpay and apple pay
-        providerObject: paymentMethod, // payment method
-        setIsPaymentProcessing,
-        setPaymentError,
-        t,
-        paymentSetup,
-        donationID: res.id,
-        setdonationStep,
-        contactDetails,
-        token,
-        country,
-        setshowErrorCard,
-        router,
-        tenant,
-        setTransferDetails,
-      });
     });
   };
 
