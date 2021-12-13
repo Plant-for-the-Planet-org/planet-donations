@@ -81,8 +81,7 @@ function DonationsForm() {
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName);
-    console.log(paymentMethod, paymentRequest, "paymentRequest");
+    setPaymentType(paymentRequest);
     let fullName = paymentMethod.billing_details.name;
     fullName = String(fullName).split(" ");
     const firstName = fullName[0];

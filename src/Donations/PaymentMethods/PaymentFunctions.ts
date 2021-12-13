@@ -1,11 +1,8 @@
-import { apiRequest } from "../../Utils/api";
-import {
-  CreateDonationFunctionProps,
-  PayDonationProps,
-  HandleStripeSCAPaymentProps,
-} from "../../Common/Types";
-import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import {
+  CreateDonationFunctionProps, HandleStripeSCAPaymentProps, PayDonationProps
+} from "../../Common/Types";
+import { apiRequest } from "../../Utils/api";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
@@ -24,11 +21,6 @@ export function buildPaymentProviderRequest(
         case "card":
         case "stripe_sepa":
         case "sepa_debit":
-          source = {
-            id: providerObject.id,
-            object: "payment_method",
-          };
-          break;
         case "browser":
         case "google_pay":
         case "apple_pay":
@@ -36,6 +28,7 @@ export function buildPaymentProviderRequest(
             id: providerObject.id,
             object: "payment_method",
           };
+          break;
         case "stripe_sofort":
         case "sofort":
         case "stripe_giropay":
@@ -73,14 +66,17 @@ export function getPaymentType(paymentType: String) {
     case "SEPA":
       paymentTypeUsed = "SEPA Direct Debit";
       break;
-    case "GOOGLE_PAY":
+    case "google_pay":
       paymentTypeUsed = "Google Pay";
       break;
-    case "APPLE_PAY":
+    case "apple_pay":
       paymentTypeUsed = "Apple Pay";
       break;
-    case "BROWSER":
+    case "browser":
       paymentTypeUsed = "Browser";
+      break;
+    case "Bank":
+      paymentTypeUsed = "Bank Transfer";
       break;
     default:
       paymentTypeUsed = "Credit Card";
@@ -166,10 +162,10 @@ export function createDonationData({
     amount:
       paymentSetup.unitCost && quantity
         ? Math.round(
-            (paymentSetup.unitBased
-              ? paymentSetup.unitCost * quantity
-              : quantity) * 100
-          ) / 100
+          (paymentSetup.unitBased
+            ? paymentSetup.unitCost * quantity
+            : quantity) * 100
+        ) / 100
         : amount,
     currency,
     donor: { ...contactDetails },

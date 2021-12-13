@@ -116,13 +116,9 @@ function PaymentsForm({}: Props): ReactElement {
   };
 
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
-    setPaymentType(paymentRequest._activeBackingLibraryName);
+    setPaymentType(paymentRequest);
     const gateway = "stripe";
-    onSubmitPayment(
-      gateway,
-      "card",
-      paymentMethod
-    );
+    onSubmitPayment(gateway, paymentRequest, paymentMethod);
   };
 
   async function getDonation() {

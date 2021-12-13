@@ -17,7 +17,7 @@ function ThankyouMessage({
 }: Props): ReactElement {
   const { tenant, frequency } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
-  let currencyFormat = () => { };
+  let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
@@ -25,7 +25,7 @@ function ThankyouMessage({
 
   // EXAMPLE: Your ₹21,713.64 donation was successful {with Google Pay}
   const donationSuccessfulMessage = t(
-    paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
+    paymentTypeUsed === "Google Pay" || paymentTypeUsed === "Apple Pay"
       ? "common:donationSuccessfulWith"
       : "common:donationSuccessful",
     {
@@ -40,22 +40,22 @@ function ThankyouMessage({
   const donationGiftMessage =
     donation && donation.gift && donation.gift.recipientEmail
       ? " " +
-      t("common:giftSentMessage", {
-        recipientName: donation.gift.recipientName,
-      })
+        t("common:giftSentMessage", {
+          recipientName: donation.gift.recipientName,
+        })
       : null;
 
   // EXAMPLE: Your 50 trees will be planted by AMU EcoVillage Project, Ethiopia in Ethiopia.
   const donationProjectMessage = donation.project
     ? " " +
-    t("common:yourTreesPlantedByOnLocation", {
-      treeCount: getFormattedNumber(
-        i18n.language,
-        Number(donation.treeCount)
-      ),
-      projectName: donation.project.name,
-      location: t("country:" + donation.project.country.toLowerCase()),
-    })
+      t("common:yourTreesPlantedByOnLocation", {
+        treeCount: getFormattedNumber(
+          i18n.language,
+          Number(donation.treeCount)
+        ),
+        projectName: donation.project.name,
+        location: t("country:" + donation.project.country.toLowerCase()),
+      })
     : null;
 
   const Message = () => {

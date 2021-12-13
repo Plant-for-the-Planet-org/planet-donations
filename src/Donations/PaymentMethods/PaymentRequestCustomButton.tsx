@@ -95,7 +95,9 @@ export const PaymentRequestCustomButton = ({
       setPaymentLoading(true);
       paymentRequest.on(
         "paymentmethod",
-        ({ complete, paymentMethod, ...data }: any) => {
+        async ({ complete, paymentMethod, ...data }: any) => {
+          console.log(`data`, data);
+
           console.log(paymentMethod, paymentRequest, "paymentRequest.on");
           onPaymentFunction(paymentMethod, nativePayMethod);
           complete("success");
