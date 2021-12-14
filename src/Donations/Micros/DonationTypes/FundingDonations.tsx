@@ -60,7 +60,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
       const newQuantity = router.query.units
         ? Number(router.query.units)
-        : paymentSetup.options[1].quantity;
+        : paymentSetup.options.filter((option) => option.isDefault === true)[0]
+            .quantity;
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(
           paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
