@@ -89,16 +89,13 @@ function NewPaypal({
 
     setPaymentError("Order was cancelled, please try again");
 
-    return actions.order.capture().then(function (details) {
-      console.log(`actions.order details onCancel`, details);
-      // This function shows a transaction success message to your buyer.
-      data = {
-        ...data,
-        type: "sdk",
-        status: "cancel",
-      };
-      payDonationFunction("paypal", "paypal", data);
-    });
+    // This function shows a transaction success message to your buyer.
+    data = {
+      ...data,
+      type: "sdk",
+      status: "cancel",
+    };
+    payDonationFunction("paypal", "paypal", data);
   };
 
   return (
