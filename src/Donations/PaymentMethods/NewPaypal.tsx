@@ -71,14 +71,18 @@ function NewPaypal({
   }
 
   const onError = (data) => {
-    console.log(`data onError`, data);
-    setPaymentError(`Your order ${data.orderID} failed due to some error.`);
+    console.log(`\n\n data onError`, data);
+    console.log(`\n\n Object.keys(data) onError`, Object.keys(data));
+    console.log(`\n\n data?.message onError`, data?.message);
+    console.log(`\n\n data?.code onError`, data?.code);
+    setPaymentError(`Your order failed due to some error.`);
 
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
       type: "sdk",
       status: "error",
+      errorMessage: data?.message,
     };
     payDonationFunction("paypal", "paypal", data);
   };
