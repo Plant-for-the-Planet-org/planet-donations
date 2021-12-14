@@ -1,4 +1,4 @@
-const defaultForest = "/tenants/default/default-forest.jpg";
+const defaultForest = `${process.env.CDN_URL}/default-forest.jpg`;
 const klumforest = "/tenants/leniklum/leniklum.jpg";
 const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
@@ -29,7 +29,7 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
     imageUrl = tenantImage;
   } else {
     if (projectDetails && projectDetails.image) {
-      imageUrl = getImageUrl("project", "large", projectDetails.image);
+      imageUrl = getImageUrl("project", "medium", projectDetails.image);
     } else {
       imageUrl = defaultForest;
     }
