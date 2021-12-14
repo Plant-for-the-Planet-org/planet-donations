@@ -160,7 +160,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       className={"funding-custom-tree-input"}
                       onInput={(e) => {
                         // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                        // e.target.value = e.target.value.replace(/[^0-9]/g, "");
                         //  if length of input more than 12, display only 12 digits
                         if (e.target.value.toString().length >= 12) {
                           e.target.value = e.target.value
