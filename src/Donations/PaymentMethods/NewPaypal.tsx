@@ -56,11 +56,7 @@ function NewPaypal({
   }
 
   function onApprove(data, actions) {
-    console.log(`data onApprove`, data);
-    console.log(`actions onApprove`, actions);
-
     return actions.order.capture().then(function (details) {
-      console.log(`actions.order details onApprove`, details);
       // This function shows a transaction success message to your buyer.
       data = {
         ...data,
@@ -71,10 +67,6 @@ function NewPaypal({
   }
 
   const onError = (data) => {
-    console.log(`\n\n data onError`, data);
-    console.log(`\n\n Object.keys(data) onError`, Object.keys(data));
-    console.log(`\n\n data?.message onError`, data?.message);
-    console.log(`\n\n data?.code onError`, data?.code);
     setPaymentError(`Your order failed due to some error.`);
 
     // This function shows a transaction success message to your buyer.
@@ -88,9 +80,6 @@ function NewPaypal({
   };
 
   const onCancel = (data, actions) => {
-    console.log(`data onCancel`, data);
-    console.log(`actions onCancel`, actions);
-
     setPaymentError("Order was cancelled, please try again");
 
     // This function shows a transaction success message to your buyer.
