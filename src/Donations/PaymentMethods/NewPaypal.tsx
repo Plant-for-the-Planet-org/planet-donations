@@ -35,14 +35,14 @@ function NewPaypal({
   const { donationUid } = React.useContext(QueryParamContext);
 
   function createOrder(data, actions) {
+    const value = paymentSetup.unitBased
+        ? quantity * unitCost
+        : quantity;
     return actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: (paymentSetup.unitBased
-              ? quantity * unitCost
-              : quantity
-            ).toFixed(2),
+            value: value.toFixed(2),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,
