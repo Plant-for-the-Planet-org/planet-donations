@@ -118,11 +118,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
     const gateway = "stripe";
-    onSubmitPayment(
-      gateway,
-      "card",
-      paymentMethod
-    );
+    onSubmitPayment(gateway, "card", paymentMethod);
   };
 
   async function getDonation() {
@@ -306,7 +302,8 @@ function PaymentsForm({}: Props): ReactElement {
                 showSepa={showPaymentMethod({
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
-                  authenticatedMethod: true,
+                  authenticatedMethod:
+                    projectDetails.purpose === "funds" ? false : true,
                 })}
                 showSofort={showPaymentMethod({
                   paymentMethod: "sofort",
