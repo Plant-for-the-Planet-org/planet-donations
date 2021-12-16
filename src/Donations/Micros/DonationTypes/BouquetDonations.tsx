@@ -69,10 +69,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      const newQuantity = router.query.units
+      const defaultPaymentOption = paymentSetup.options.filter(
+        (option) => option.isDefault === true
+      );
+      let newQuantity = router.query.units
         ? Number(router.query.units)
-        : paymentSetup.options.filter((option) => option.isDefault === true)[0]
-            .quantity;
+        : defaultPaymentOption.length > 0
+        ? defaultPaymentOption[0].quantity
+        : paymentSetup.options[1].quantity;
+
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(
           paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
