@@ -117,7 +117,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 ) : (
                   []
                 )}
-                <div className="funding-selection-option-text mt-10">
+                <div
+                  className={`funding-selection-option-text ${
+                    option.caption ? "mt-10" : "m-10"
+                  }`}
+                >
                   <span>
                     {getFormatedCurrency(
                       i18n.language,
@@ -134,7 +138,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 key={index}
                 className={`funding-selection-option ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : "flex-50"}`}
                 onClick={() => {
                   setisCustomDonation(true);
                   customInputRef.current.focus();
