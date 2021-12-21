@@ -42,3 +42,5 @@ cypress.env.json
 /cypress/integration/examples
 
 .sentryclirc
+# Sentry
+.sentryclirc
