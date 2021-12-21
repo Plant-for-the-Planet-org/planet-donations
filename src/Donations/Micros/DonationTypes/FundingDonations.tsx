@@ -61,7 +61,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       const defaultPaymentOption = paymentSetup.options.filter(
         (option) => option.isDefault === true
       );
-      let newQuantity = router.query.units
+      const newQuantity = router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity
