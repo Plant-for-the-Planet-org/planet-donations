@@ -12,6 +12,7 @@ interface Props {
   unitCost: number;
   currency: string;
   donationID: any;
+  paypalPlan: string;
   payDonationFunction: Function;
   setPaymentError: Function;
 }
@@ -22,17 +23,20 @@ function NewPaypal({
   unitCost,
   currency,
   donationID,
+  paypalPlan,
   payDonationFunction,
   setPaymentError,
 }: Props): ReactElement {
+  const { donationUid, frequency } = React.useContext(QueryParamContext);
+
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
     "enable-funding": "venmo,giropay,sofort",
     "disable-funding": "card",
     currency: currency,
+    intent: frequency !== "once" ? "subscription" : "capture",
+    vault: frequency !== "once" ? true : false,
   };
-
-  const { donationUid } = React.useContext(QueryParamContext);
 
   function createOrder(data, actions) {
     const amount = paymentSetup.unitBased
@@ -54,6 +58,12 @@ function NewPaypal({
       },
     });
   }
+  function createSubscription(data, actions) {
+    console.log(paypalPlan, "paypalPlan");
+    return actions.subscription.create({
+      plan_id: paypalPlan,
+    });
+  }
 
   function onApprove(data, actions) {
     return actions.order.capture().then(function (details) {
@@ -65,10 +75,18 @@ function NewPaypal({
       payDonationFunction("paypal", "paypal", data);
     });
   }
-
+  function onApproveSubscription(data, actions) {
+    alert("You have successfully created subscription " + data.subscriptionID);
+    // This function shows a transaction success message to your buyer.
+    data = {
+      ...data,
+      type: "sdk",
+    };
+    payDonationFunction("paypal", "paypal", data);
+  }
   const onError = (data) => {
     setPaymentError(`Your order failed due to some error.`);
-
+    console.log(`data`, data);
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
@@ -94,13 +112,22 @@ function NewPaypal({
   return (
     <>
       <PayPalScriptProvider options={initialOptions}>
-        <ReloadButton currency={currency} />
-        <PayPalButtons
-          createOrder={createOrder}
-          onError={onError}
-          onApprove={onApprove}
-          onCancel={onCancel}
-        />
+        <ReloadButton currency={currency} paypalPlan={paypalPlan} />
+        {frequency === "once" ? (
+          <PayPalButtons
+            createOrder={createOrder}
+            onError={onError}
+            onApprove={onApprove}
+            onCancel={onCancel}
+          />
+        ) : (
+          <PayPalButtons
+            createSubscription={createSubscription}
+            onError={onError}
+            onApprove={onApproveSubscription}
+            onCancel={onCancel}
+          />
+        )}
       </PayPalScriptProvider>
     </>
   );
