@@ -26,6 +26,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
+  const [taxIdentificationAvail, setTaxIdentificationAvail] = React.useState(false)
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
@@ -45,6 +46,7 @@ function ContactsForm({}: Props): ReactElement {
     quantity,
     paymentSetup,
     frequency,
+    projectDetails
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -140,6 +142,17 @@ function ContactsForm({}: Props): ReactElement {
       })
       .catch(console.log);
   };
+  React.useEffect(() => {
+    if (
+      projectDetails &&
+      projectDetails.taxDeductionCountries[1] &&
+      projectDetails?.taxDeductionCountries[1]?.includes(country)
+    ) {
+      setTaxIdentificationAvail(true);
+    } else {
+      setTaxIdentificationAvail(false);
+    }
+  }, [projectDetails, country]);
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
@@ -213,6 +226,27 @@ function ContactsForm({}: Props): ReactElement {
             </div>
           </div>
 
+         {taxIdentificationAvail ?
+         (
+         <div className={"form-field mt-30"}>
+            <MaterialTextField
+              inputRef={register({
+                required: true,
+              })}
+              label={t("taxIdentificationNumber")}
+              variant="outlined"
+              name="tin"
+              defaultValue={contactDetails.tin}
+              data-test-id="test-tin"
+              disabled={isAuthenticated}
+            />
+            {errors.tin && errors.tin.type !== "validate" && (
+              <span className={"form-errors"}>{t("tinRequired")}</span>
+            )}
+          </div>
+          ) : <></>
+          }
+          
           <div className={"form-field mt-30"}>
             <MaterialTextField
               inputRef={register({
