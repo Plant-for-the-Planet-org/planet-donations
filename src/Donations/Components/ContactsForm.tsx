@@ -145,8 +145,9 @@ function ContactsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.taxDeductionCountries[1] &&
-      projectDetails?.taxDeductionCountries[1]?.includes(country)
+      projectDetails.taxDeductionCountries &&
+      projectDetails?.taxDeductionCountries?.includes("ES") &&
+      country == "ES"
     ) {
       setTaxIdentificationAvail(true);
     } else {
@@ -156,7 +157,6 @@ function ContactsForm({}: Props): ReactElement {
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
-
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
