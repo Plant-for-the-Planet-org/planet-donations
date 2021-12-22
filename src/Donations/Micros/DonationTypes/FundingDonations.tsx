@@ -13,9 +13,13 @@ import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
+  setInvalidAmount: any;
 }
 
-function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
+function FundingDonations({
+  setopenCurrencyModal,
+  setInvalidAmount,
+}: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [customInputValue, setCustomInputValue] = React.useState("");
@@ -67,6 +71,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         );
         setquantity(Number(router.query.units));
         setisCustomDonation(true);
+      } else if (newQuantity == 0) {
+        setisCustomDonation(true);
+        customInputRef.current.focus();
       } else {
         setCustomInputValue("");
         setquantity(newQuantity);
@@ -76,7 +83,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   }, [paymentSetup]);
 
   const customInputRef = React.useRef(null);
-  console.log(`option.quantity , quantity `, paymentSetup.options, quantity);
+
+  const amountRegex = /^(\d+)(\,\d{1,2}|\.\d{1,2})?$/;
   return (
     <>
       <div
@@ -159,8 +167,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     <input
                       className={"funding-custom-tree-input"}
                       onInput={(e) => {
+                        // ^\d{0,5}(\.,\d{1,3})?$
                         // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                        e.target.value = e.target.value.replace(
+                          /[^0-9,.]/g,
+                          ""
+                        );
                         //  if length of input more than 12, display only 12 digits
                         if (e.target.value.toString().length >= 12) {
                           e.target.value = e.target.value
@@ -175,6 +187,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       onChange={(e) => {
                         setCustomValue(e);
                         setCustomInputValue(e.target.value);
+                        if (!amountRegex.test(e.target.value)) {
+                          setInvalidAmount(true);
+                        } else {
+                          setInvalidAmount(false);
+                        }
                       }}
                       ref={customInputRef}
                     />

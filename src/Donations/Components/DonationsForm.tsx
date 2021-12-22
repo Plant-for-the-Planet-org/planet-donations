@@ -43,13 +43,15 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
-    setTransferDetails
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
+  const [invalidAmount, setInvalidAmount] = React.useState(false);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+
   const router = useRouter();
 
   React.useEffect(() => {
@@ -127,7 +129,7 @@ function DonationsForm() {
       payDonationFunction({
         gateway: "stripe",
         method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-        providerObject: paymentMethod,// payment method
+        providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
         t,
@@ -140,7 +142,7 @@ function DonationsForm() {
         setshowErrorCard,
         router,
         tenant,
-        setTransferDetails
+        setTransferDetails,
       });
     });
   };
@@ -150,9 +152,19 @@ function DonationsForm() {
   const donationSelection = () => {
     switch (projectDetails.purpose) {
       case "funds":
-        return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+        return (
+          <FundingDonations
+            setopenCurrencyModal={setopenCurrencyModal}
+            setInvalidAmount={setInvalidAmount}
+          />
+        );
       case "bouquet":
-        return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+        return (
+          <BouquetDonations
+            setopenCurrencyModal={setopenCurrencyModal}
+            setInvalidAmount={setInvalidAmount}
+          />
+        );
       case "trees":
       default:
         return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
@@ -215,13 +227,14 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-            showFrequencyOptions &&
-            !(isGift && giftDetails.recipientName === "") ? (
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
             <div
-              className={`donations-gift-container mt-10 ${paymentSetup.frequencies.length == 2
+              className={`donations-gift-container mt-10 ${
+                paymentSetup.frequencies.length == 2
                   ? "funds-frequency-container"
                   : ""
-                }`}
+              }`}
             >
               <FrequencyOptions />
             </div>
@@ -232,8 +245,9 @@ function DonationsForm() {
           {donationSelection()}
 
           <div
-            className={`${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-              }`}
+            className={`${
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+            }`}
           >
             <TaxDeductionOption />
 
@@ -243,12 +257,12 @@ function DonationsForm() {
 
             {paymentSetup && projectDetails ? (
               minAmt &&
-                (paymentSetup.unitBased
-                  ? paymentSetup?.unitCost * quantity
-                  : quantity) >= minAmt ? (
+              (paymentSetup.unitBased
+                ? paymentSetup?.unitCost * quantity
+                : quantity) >= minAmt ? (
                 !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency ? (
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
                   <NativePay
                     country={country}
                     currency={currency}
@@ -275,6 +289,10 @@ function DonationsForm() {
                     <ButtonLoader />
                   </div>
                 )
+              ) : invalidAmount ? (
+                <p className={"text-danger mt-20 text-center"}>
+                  Invalid amount entered
+                </p>
               ) : minAmt > 0 ? (
                 <p className={"text-danger mt-20 text-center"}>
                   {t("minDonate")}{" "}
