@@ -225,27 +225,6 @@ function ContactsForm({}: Props): ReactElement {
               )}
             </div>
           </div>
-
-         {taxIdentificationAvail ?
-         (
-         <div className={"form-field mt-30"}>
-            <MaterialTextField
-              inputRef={register({
-                required: true,
-              })}
-              label={t("taxIdentificationNumber")}
-              variant="outlined"
-              name="tin"
-              defaultValue={contactDetails.tin}
-              data-test-id="test-tin"
-              disabled={isAuthenticated}
-            />
-            {errors.tin && errors.tin.type !== "validate" && (
-              <span className={"form-errors"}>{t("tinRequired")}</span>
-            )}
-          </div>
-          ) : <></>
-          }
           
           <div className={"form-field mt-30"}>
             <MaterialTextField
@@ -377,6 +356,27 @@ function ContactsForm({}: Props): ReactElement {
             )}
           </div>
 
+          {taxIdentificationAvail ?
+         (
+         <div className={"form-field mt-30"}>
+            <MaterialTextField
+              inputRef={register({
+                required: true,
+              })}
+              label={t("taxIdentificationNumber")}
+              variant="outlined"
+              name="tin"
+              defaultValue={contactDetails.tin}
+              data-test-id="test-tin"
+              disabled={isAuthenticated}
+            />
+            {errors.tin && errors.tin.type !== "validate" && (
+              <span className={"form-errors"}>{t("tinRequired")}</span>
+            )}
+          </div>
+          ) : <></>
+          }
+          
           <div className="contacts-isCompany-toggle mt-20">
             <label htmlFor="isCompany-toggle">
               {t("isACompanyDonation")}
