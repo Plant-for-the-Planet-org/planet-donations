@@ -59,9 +59,9 @@ function NewPaypal({
     });
   }
   function createSubscription(data, actions) {
-    console.log(paypalPlan, "paypalPlan");
     return actions.subscription.create({
       plan_id: paypalPlan,
+      custom_id: donationUid,
     });
   }
 
