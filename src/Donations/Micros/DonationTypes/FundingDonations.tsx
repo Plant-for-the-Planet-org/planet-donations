@@ -144,7 +144,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 key={index}
                 className={`funding-selection-option ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }${paymentSetup.costIsMonthly ? "   full-width" : "flex-50"}`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : " flex-50"}`}
                 onClick={() => {
                   setisCustomDonation(true);
                   customInputRef.current.focus();
