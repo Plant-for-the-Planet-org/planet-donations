@@ -12,6 +12,7 @@ import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
+import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -31,14 +32,30 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   // ];
   const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
     React.useContext(QueryParamContext);
+  // React.useEffect(() => {
+  //   if (paymentSetup?.options) {
+  //     setquantity(paymentSetup.options[1].quantity);
+  //   }
+  // for (let i = 0; i < paymentSetup?.options?.length; i++) {
+  //   if (paymentSetup.options[i].isDefault) {
+  //     setquantity(paymentSetup.options[i].quantity);
+  //   }
+  // }
+  // }, [paymentSetup]);
+  const router = useRouter();
 
   const setCustomValue = (e: any) => {
     if (e.target) {
+      // setquantity(e.target.value);
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1 / paymentSetup.unitCost);
+        setquantity(paymentSetup.unitBased ? 1 / paymentSetup.unitCost : 1);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value / paymentSetup.unitCost);
+        setquantity(
+          paymentSetup.unitBased
+            ? e.target.value / paymentSetup.unitCost
+            : e.target.value
+        );
       }
     }
   };
@@ -52,8 +69,19 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
-      if (!newallOptionsArray.includes(quantity)) {
-        setCustomInputValue(quantity * paymentSetup.unitCost);
+      const newQuantity = router.query.units
+        ? Number(router.query.units)
+        : paymentSetup.options[1].quantity;
+      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
+        setCustomInputValue(
+          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+        );
+        setquantity(Number(router.query.units));
+        setisCustomDonation(true);
+      } else {
+        setCustomInputValue("");
+        setquantity(newQuantity);
+        setisCustomDonation(false);
       }
     }
   }, [paymentSetup]);
@@ -75,6 +103,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 6).map((option, index) => {
+            console.log(
+              `option.quantity, quantity`,
+              option.quantity,
+              quantity,
+              option.quantity === quantity
+            );
             return (
               <div
                 key={index}
@@ -98,10 +132,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div> */}
                 <div className="funding-selection-option-text">
                   <span style={{ fontSize: "20px" }}>
-                    {getFormatedCurrency(
-                      i18n.language, 
-                      '',
-                      paymentSetup.unitCost * option.quantity)}
+                    {getFormatedCurrency(i18n.language, "", option.quantity)}
                   </span>
                 </div>
               </div>
@@ -144,6 +175,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   className={"funding-custom-tree-input"}
                   onInput={(e) => {
                     // replaces any character other than number to blank
+                    // e.target.value = e.target.value.replace(/[,]/g, '.');
                     e.target.value = e.target.value.replace(/[^0-9]/g, "");
                     //  if length of input more than 12, display only 12 digits
                     if (e.target.value.toString().length >= 12) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentFailedIllustration from "../../../../public/assets/icons/donation/PaymentFailed";
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
@@ -6,10 +6,12 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
+import { PAYMENT } from "src/Utils/donationStepConstants";
+import InfoIcon from "public/assets/icons/InfoIcon";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
-
+  // const [paymentError, setPaymentError] = useState("");
   const {
     returnTo,
     donationID,
@@ -26,9 +28,11 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setshowErrorCard,
     setpaymentSetup,
     country,
+    paymentError,
+    setPaymentError,
+    setAmount,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
-
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
 
@@ -59,10 +63,15 @@ function FailedDonation({ sendToReturn, donation }: any) {
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
+    setPaymentError("");
     // if (donation?.project?.purpose === "trees") {
     //   setquantity(donation?.treeCount);
     // }
     setContactDetails(donation.donor);
+    setAmount(donation.amount);
+    if (donation.treeCount) {
+      setquantity(donation.treeCount);
+    }
     let country;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;
@@ -81,10 +90,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    loadPaymentSetup(donation.project.id, country);
+    await loadPaymentSetup(donation.project.id, country);
     setdonationStep(3);
     router.push({
-      query: { ...router.query, step: "payment" },
+      query: { ...router.query, step: PAYMENT },
     });
   }
 
@@ -107,6 +116,17 @@ function FailedDonation({ sendToReturn, donation }: any) {
       <div className={"mt-20 text-center"}>
         {t("common:donationFailedMessage")}
       </div>
+      {paymentError && (
+        <div
+          className={
+            "mt-20 d-flex align-items-center callout-danger text-danger"
+          }
+          style={{ marginBottom: "10px" }}
+        >
+          <InfoIcon />
+          {paymentError}
+        </div>
+      )}
       <PaymentFailedIllustration />
       {donationID && (
         <button

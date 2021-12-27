@@ -11,12 +11,21 @@ import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
 import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
-import { useRouter } from "next/router";
+import {
+  CONTACT,
+  DONATE,
+  PAYMENT,
+  SELECT_PROJECT,
+  THANK_YOU,
+} from "src/Utils/donationStepConstants";
+import router, { useRouter } from "next/router";
+
 interface Props {}
 
 function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
+
   const { paymentSetup, donationStep, projectDetails, setdonationStep } =
     React.useContext(QueryParamContext);
   useEffect(() => {
@@ -24,7 +33,7 @@ function Donations({}: Props): ReactElement {
       let step;
       if (donationStep === 4) {
         //if the last step is 'Thankyou' then this will replace the entire route with the initial one on browser back press
-        step = "selectProject";
+        step = SELECT_PROJECT;
         router.replace({
           query: {},
         });
@@ -32,19 +41,19 @@ function Donations({}: Props): ReactElement {
         step = router.query?.step;
       }
       switch (step) {
-        case "selectProject":
+        case SELECT_PROJECT:
           setdonationStep(0);
           break;
-        case "donate":
+        case DONATE:
           setdonationStep(1);
           break;
-        case "contact":
+        case CONTACT:
           setdonationStep(2);
           break;
-        case "payment":
+        case PAYMENT:
           setdonationStep(3);
           break;
-        case "thankyou":
+        case THANK_YOU:
           setdonationStep(4);
           break;
         default:
@@ -86,6 +95,17 @@ function DonationInfo() {
     frequency,
   } = React.useContext(QueryParamContext);
 
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth > 767) {
+        setIsMobile(false);
+      } else {
+        setIsMobile(true);
+      }
+    }
+  });
+
   const TPOImage = () => {
     return projectDetails.tpo.image ? (
       <img
@@ -113,15 +133,19 @@ function DonationInfo() {
     );
   };
   return (
-    <div className="donations-info-container">
-      <Image
-        layout="fill"
-        objectFit="cover"
-        objectPosition="right center"
+    <div
+      style={{
+        backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+      }}
+      className="donations-info-container"
+    >
+      {/* <img
         src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
         alt="Background image with trees"
-      />
+      /> */}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -149,7 +173,9 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
                   {t("fortreeCountTrees", {
@@ -169,19 +195,25 @@ function DonationInfo() {
             )}
 
           {(donationStep === 2 || donationStep === 3) &&
-            projectDetails.purpose === "bouquet" && (
+            (projectDetails.purpose === "bouquet" ||
+              projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating", {
-                    frequency: t(`${frequency}`),
-                  })}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup.unitBased
+                        ? paymentSetup.unitCost * quantity
+                        : quantity
                     )}
                   </span>
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
@@ -201,13 +233,13 @@ function DonationInfo() {
                 <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
-              {projectDetails.purpose === "bouquet" &&
-              projectDetails.description ? (
-                <h3 className="text-white mt-10">
+              {projectDetails.purpose === "funds" ||
+              projectDetails.purpose === "bouquet" ? (
+                <p className="text-white mt-10">
                   {projectDetails.description}
-                </h3>
+                </p>
               ) : (
-                <></>
+                []
               )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a
@@ -274,7 +306,7 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && (
+          {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
               href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
               className="donations-transaction-details mt-20"

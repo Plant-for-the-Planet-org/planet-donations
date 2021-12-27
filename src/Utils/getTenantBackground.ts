@@ -1,7 +1,7 @@
-import defaultForest from "../../public/tenants/default/default-forest.jpg";
-import klumforest from "../../public/tenants/leniklum/leniklum.jpg";
-import treesforjane from "../../public/tenants/treesforjane/treesforjane.jpg";
-import bahlsen from "../../public/tenants/bahlsen/bahlsen.png";
+const defaultForest = `${process.env.CDN_URL}/default-forest.jpg`;
+const klumforest = "/tenants/leniklum/leniklum.jpg";
+const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
+const bahlsen = "/tenants/bahlsen/bahlsen.png";
 
 import getImageUrl from "./getImageURL";
 
@@ -17,7 +17,7 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
       break;
     case "ten_1e5WejOp":
       tenantImage = treesforjane;
-        break;
+      break;
     case "ten_eiRX3E3x":
       tenantImage = bahlsen;
       break;
@@ -30,7 +30,7 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
   } else {
     if (projectDetails && projectDetails.image) {
       imageUrl = getImageUrl("project", "large", projectDetails.image);
-    }else{
+    } else {
       imageUrl = defaultForest;
     }
   }

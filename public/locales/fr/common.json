@@ -70,7 +70,7 @@
   "donationFailedMessage": "Un problème est survenu lors de votre paiement. Si vous continuez à avoir des problèmes, veuillez nous contacter à l'adresse suivante : support@plant-for-the-planet.org",
   "donationPending": "Compléter votre don",
   "donationPendingMessage": "Nous attendons actuellement la confirmation de votre banque. Cela pourrait prendre un certain temps, alors n'hésitez pas à fermer cette page. Nous vous enverrons sous peu votre reçu par courrier électronique.",
-  "donationRef": "Donation Ref",
+  "transactionId": "Donation Ref",
   "privacyPolicyNotice": "En utilisant ce site Web, vous acceptez les conditions suivantes de Plant-for-the-Planet",
   "privacyPolicy": "politique de confidentialité et de cookies",
   "acceptClose": "Accepter et fermer",

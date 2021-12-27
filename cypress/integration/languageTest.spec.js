@@ -15,7 +15,7 @@ describe("Language Test", () => {
             cy.get('[data-test-id="test-donateButton"]').click()
                 .then(() => {
                     cy.wait(15000).then(() => {
-                        cy.get('[data-test-id="test-thankYou"]').should("have.text", "Vielen Dank")
+                        cy.get('[data-test-id="test-thankYou"]').should("have.text", "Vielen Dank!")
                     })
                 })
         })

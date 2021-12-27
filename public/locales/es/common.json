@@ -68,7 +68,7 @@
   "donationFailedMessage": "Algo ha ido mal al completar el pago. Si sigue teniendo problemas, póngase en contacto con nosotros en support@plant-for-the-planet.org",
   "donationPending": "Completar su donación",
   "donationPendingMessage": "Actualmente estamos esperando la confirmación de su banco. Esto puede llevar algún tiempo, así que no dude en cerrar esta página. En breve le enviaremos su recibo por correo electrónico.",
-  "donationRef": "Ref. de la donación",
+  "transactionId": "Ref. de la donación",
   "privacyPolicyNotice": "Al utilizar este sitio web, usted acepta que Plant-for-the-Planet",
   "privacyPolicy": "política de privacidad y cookies",
   "acceptClose": "Aceptar y cerrar",
