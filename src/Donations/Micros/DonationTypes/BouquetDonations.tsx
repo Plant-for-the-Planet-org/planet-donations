@@ -92,6 +92,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             : newQuantity
         );
         setisCustomDonation(true);
+      } else if (newQuantity == 0) {
+        setisCustomDonation(true);
       } else {
         setCustomInputValue("");
         setisCustomDonation(false);
