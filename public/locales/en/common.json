@@ -132,7 +132,9 @@
   "amount": "Amount",
   "beneficiary": "Beneficiary",
   "copied": "Copied",
-  "clickToCopy": "Click to copy",
+  "clickToCopy": "Click to Copy",
   "bank": "Bank",
-  "fallbackdescription": "Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here."
+  "fallbackdescription": "Make tax deductible donations to over 200+ restoration and conservation projects. Your journey to a trillion trees starts here.",
+  "taxIdentificationNumber": "Tax Identification Number",
+  "tinRequired": "Tax Identification Number is Required"
 }
