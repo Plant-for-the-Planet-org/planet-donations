@@ -66,16 +66,17 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity
         : paymentSetup.options[1].quantity;
+      setquantity(newQuantity);
 
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(
-          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+          paymentSetup.unitBased
+            ? newQuantity * paymentSetup.unitCost
+            : newQuantity
         );
-        setquantity(Number(router.query.units));
         setisCustomDonation(true);
       } else {
         setCustomInputValue("");
-        setquantity(newQuantity);
         setisCustomDonation(false);
       }
     }
