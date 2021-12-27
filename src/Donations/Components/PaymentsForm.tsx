@@ -214,7 +214,10 @@ function PaymentsForm({}: Props): ReactElement {
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
     ) : (
       <div className={"donations-forms-container"}>
-        <div className="donations-form">
+        <div
+          className="donations-form"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
               <button
@@ -436,7 +439,11 @@ function PaymentsForm({}: Props): ReactElement {
             target="_blank"
             rel="noreferrer"
             className="text-center nolink"
-            style={{ fontStyle: "italic" }}
+            style={{
+              marginTop: "auto",
+              alignSelf: "center",
+              fontStyle: "italic",
+            }}
           >
             {t("donationProcessedBy")}
             {/* Needs break */}
