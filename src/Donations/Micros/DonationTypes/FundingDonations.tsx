@@ -80,6 +80,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
     }
   }, [paymentSetup]);
+  React.useEffect(() => {
+    if (isCustomDonation) {
+      customInputRef?.current?.focus();
+    }
+  }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
 
@@ -147,49 +152,61 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 }${paymentSetup.costIsMonthly ? "   full-width" : " flex-50"}`}
                 onClick={() => {
                   setisCustomDonation(true);
-                  customInputRef.current.focus();
+                  customInputRef?.current?.focus();
                 }}
               >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
-                {/* {paymentSetup.costIsMonthly ? (
-                  <img className="funding-icon" src={AllIcons[index]} />
+                {isCustomDonation ? (
+                  <>
+                    {" "}
+                    <div className="funding-selection-option-text">
+                      <p>{option.caption}</p>
+                    </div>
+                    <div className="funding-selection-option-text">
+                      <div
+                        className="d-flex row"
+                        style={{
+                          alignItems: "flex-end",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <p style={{ marginBottom: "0px", marginRight: "6px" }}>
+                          {getFormatedCurrencySymbol(currency)}
+                        </p>
+                        <input
+                          className={"funding-custom-tree-input"}
+                          onInput={(e) => {
+                            // replaces any character other than number to blank
+                            e.target.value = e.target.value.replace(
+                              /[^0-9]/g,
+                              ""
+                            );
+                            //  if length of input more than 12, display only 12 digits
+                            if (e.target.value.toString().length >= 12) {
+                              e.target.value = e.target.value
+                                .toString()
+                                .slice(0, 12);
+                            }
+                          }}
+                          value={customInputValue}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="\d*"
+                          onChange={(e) => {
+                            setCustomValue(e);
+                            setCustomInputValue(e.target.value);
+                          }}
+                          ref={customInputRef}
+                        />
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  []
-                )} */}
-                <div className="funding-selection-option-text">
-                  <div
-                    className="d-flex row"
-                    style={{ alignItems: "flex-end", justifyContent: "center" }}
-                  >
-                    <p style={{ marginBottom: "0px", marginRight: "6px" }}>
-                      {getFormatedCurrencySymbol(currency)}
-                    </p>
-                    <input
-                      className={"funding-custom-tree-input"}
-                      onInput={(e) => {
-                        // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                        //  if length of input more than 12, display only 12 digits
-                        if (e.target.value.toString().length >= 12) {
-                          e.target.value = e.target.value
-                            .toString()
-                            .slice(0, 12);
-                        }
-                      }}
-                      value={customInputValue}
-                      type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
-                      onChange={(e) => {
-                        setCustomValue(e);
-                        setCustomInputValue(e.target.value);
-                      }}
-                      ref={customInputRef}
-                    />
-                  </div>
-                </div>
+                  <>
+                    <div className={`funding-selection-option-text m-10`}>
+                      <span>{option.caption}</span>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}

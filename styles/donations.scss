@@ -284,8 +284,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   .funding-selection-option {
-    width: 140px;
-    margin: 5px;
+    width: 130px;
+    margin: 10px;
     // height: 80px;
     border: 1px solid $greyColor;
     border-radius: 4px;
@@ -297,7 +297,7 @@
     justify-content: center;
     text-align: center;
     &.flex-50 {
-      flex: calc(50% - 10px);
+      flex: calc(50% - 20px);
     }
     &.funding-selection-option-selected,
     &:hover,
@@ -725,7 +725,7 @@
   }
   .funding-selection-options-container {
     .funding-selection-option {
-      width: 170px;
+      width: 160px;
       &.monthly-option {
         width: 110px;
       }
@@ -733,7 +733,7 @@
         width: 100%;
       }
       &.flex-50 {
-        flex: calc(50% - 10px);
+        flex: calc(50% - 20px);
       }
     }
   }

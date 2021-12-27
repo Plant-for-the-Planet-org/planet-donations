@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
@@ -59,6 +59,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
     }
   };
+
+  useEffect(() => {
+    if (isCustomDonation) {
+      customInputRef?.current?.focus();
+    }
+  }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
 
@@ -152,7 +158,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             }`}
             onClick={() => {
               setisCustomDonation(true);
-              customInputRef.current.focus();
+              customInputRef?.current?.focus();
             }}
             style={{ flexGrow: 1 }}
           >
@@ -163,44 +169,53 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               <CustomIcon />
             </div> */}
 
-            <div className="funding-selection-option-text">
-              <div
-                className="d-flex row"
-                style={{ alignItems: "flex-end", justifyContent: "center" }}
-              >
-                <p
-                  style={{
-                    marginBottom: "0px",
-                    marginRight: "6px",
-                    fontSize: "20px",
-                  }}
+            {isCustomDonation ? (
+              <div className="funding-selection-option-text">
+                <div
+                  className="d-flex row"
+                  style={{ alignItems: "flex-end", justifyContent: "center" }}
                 >
-                  {getFormatedCurrencySymbol(currency)}
-                </p>
-                <input
-                  className={"funding-custom-tree-input"}
-                  onInput={(e) => {
-                    // replaces any character other than number to blank
-                    // e.target.value = e.target.value.replace(/[,]/g, '.');
-                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                    //  if length of input more than 12, display only 12 digits
-                    if (e.target.value.toString().length >= 12) {
-                      e.target.value = e.target.value.toString().slice(0, 12);
-                    }
-                  }}
-                  value={customInputValue}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d*"
-                  onChange={(e) => {
-                    setCustomValue(e);
-                    setCustomInputValue(e.target.value);
-                  }}
-                  ref={customInputRef}
-                  style={{ fontSize: "20px" }}
-                />
+                  <p
+                    style={{
+                      marginBottom: "0px",
+                      marginRight: "6px",
+                      fontSize: "20px",
+                    }}
+                  >
+                    {getFormatedCurrencySymbol(currency)}
+                  </p>
+                  <input
+                    className={"funding-custom-tree-input"}
+                    onInput={(e) => {
+                      // replaces any character other than number to blank
+                      // e.target.value = e.target.value.replace(/[,]/g, '.');
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                      //  if length of input more than 12, display only 12 digits
+                      if (e.target.value.toString().length >= 12) {
+                        e.target.value = e.target.value.toString().slice(0, 12);
+                      }
+                    }}
+                    value={customInputValue}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="\d*"
+                    onChange={(e) => {
+                      setCustomValue(e);
+                      setCustomInputValue(e.target.value);
+                    }}
+                    ref={customInputRef}
+                    style={{ fontSize: "20px" }}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div
+                className="funding-selection-option-text"
+                style={{ fontSize: "20px" }}
+              >
+                <p style={{ margin: "5px" }}> {t("custom")}</p>
+              </div>
+            )}
           </div>
         )}
       </div>
