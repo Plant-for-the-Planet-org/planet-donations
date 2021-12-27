@@ -368,7 +368,6 @@ function ContactsForm({}: Props): ReactElement {
               name="tin"
               defaultValue={contactDetails.tin}
               data-test-id="test-tin"
-              disabled={isAuthenticated}
             />
             {errors.tin && errors.tin.type !== "validate" && (
               <span className={"form-errors"}>{t("tinRequired")}</span>
