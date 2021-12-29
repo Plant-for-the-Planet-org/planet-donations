@@ -118,6 +118,8 @@ function PaymentsForm({}: Props): ReactElement {
     const paypalAccount = paymentSetup.gateways.paypal.account;
     const requestParams = {
       url: `/app/paypalPlan/${donationID}/${paypalAccount}`,
+      data: {},
+      method: "POST",
       setshowErrorCard,
     };
     const paypalPlan = await apiRequest(requestParams);
@@ -182,7 +184,7 @@ function PaymentsForm({}: Props): ReactElement {
     if (!isDirectDonation && shouldCreateDonation) {
       setisCreatingDonation(true);
       getDonation().then((donationID) => {
-        if (frequency !== "once") {
+        if (frequency !== "once" && paymentSetup?.gateways.paypal?.methods) {
           createPaypalPlan(donationID);
         }
       });
@@ -210,7 +212,7 @@ function PaymentsForm({}: Props): ReactElement {
       isAvailableInCountry &&
       isAvailableForCurrency &&
       isAuthenticatedMethod &&
-      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      paymentSetup?.gateways.stripe?.methods.includes(paymentMethod) &&
       (frequency !== "once"
         ? paymentSetup?.recurrency.methods.includes(paymentMethod)
         : true)
