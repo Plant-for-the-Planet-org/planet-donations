@@ -18,6 +18,8 @@ $dark: var(--dark);
 $dangerColor: var(--danger-color);
 $greyColor: var(--grey-color);
 $darkGreyColor: var(--dark-grey-color);
+$secondaryFontColor: var(--secondary-font-color);
+$secondaryBackgroundColor: var(--secondary-background-color);
 
 @mixin xsPhoneView {
   @media screen and (max-width: 481px) {

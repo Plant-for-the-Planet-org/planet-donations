@@ -294,6 +294,7 @@
     padding: 12px;
     margin-top: 20px;
     align-items: center;
+    background-color: $secondaryBackgroundColor;
     justify-content: center;
     text-align: center;
     &.flex-50 {
@@ -303,6 +304,7 @@
     &:hover,
     &:focus {
       cursor: pointer;
+      background-color: $primaryColor;
       border: 1px solid $primaryColor;
       > .funding-icon {
         filter: grayscale(0%) opacity(1);
@@ -311,7 +313,7 @@
         color: $primaryFontColor;
         p,
         span {
-          color: $primaryColor;
+          color: $backgroundColor;
         }
       }
     }
@@ -331,12 +333,14 @@
       text-align: left;
       line-height: 1;
       // margin-left: 12px;
-      color: $darkGreyColor;
+      color: $secondaryFontColor;
+      // color: $darkGreyColor;
       font-size: 14px;
       font-weight: 700;
       text-align: center;
       p {
-        color: $darkGreyColor;
+        color: $secondaryFontColor;
+        // color: $darkGreyColor;
         margin-bottom: 10px;
       }
       > span {
@@ -416,24 +420,24 @@
 .custom-tree-input,
 .funding-custom-tree-input {
   border: 0px;
-  border-bottom: 1px solid $primaryFontColor;
-  margin: 0px 10px;
-  width: 70%;
+  border-bottom: 2px solid $backgroundColor;
+  // margin: 0px 10px;
+  width: 100%;
   font-family: $primaryFontFamily;
   font-weight: 800;
   font-size: $fontSubTitleSize;
-  color: $primaryColor;
+  color: $backgroundColor;
   text-align: center;
   background-color: transparent;
   outline: 0px;
   font-size: 16px;
-}
-.funding-custom-tree-input {
-  text-align: center;
-  margin: 0px;
-  margin-left: -16px;
-  width: 80%;
-  font-size: 14px;
+  // }
+  // .funding-custom-tree-input {
+  // text-align: center;
+  // margin: 0px;
+  // margin-left: -16px;
+  // width: 100%;
+  // font-size: 14px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
@@ -724,6 +728,7 @@
     padding: 12px;
   }
   .funding-selection-options-container {
+    margin-top: 10px;
     .funding-selection-option {
       width: 160px;
       &.monthly-option {
