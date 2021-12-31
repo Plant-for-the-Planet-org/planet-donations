@@ -156,7 +156,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
         {paymentSetup && paymentSetup.options && (
           <div
-            className={`funding-selection-option ${
+            className={`funding-selection-option custom ${
               isCustomDonation ? "funding-selection-option-selected" : ""
             }`}
             onClick={() => {
@@ -173,9 +173,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             </div> */}
 
             {isCustomDonation ? (
-              <>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <p
+                  style={{
+                    fontSize: "18px",
+                    marginTop: "3px",
+                  }}
+                >
+                  {getFormatedCurrencySymbol(currency)}
+                </p>
                 <input
                   className={"funding-custom-tree-input"}
+                  style={{ fontSize: "18px" }}
                   onInput={(e) => {
                     // replaces any character other than number to blank
                     // e.target.value = e.target.value.replace(/[,]/g, '.');
@@ -194,9 +203,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setCustomInputValue(e.target.value);
                   }}
                   ref={customInputRef}
-                  style={{ fontSize: "18px" }}
                 />
-              </>
+              </div>
             ) : (
               <div
                 className="funding-selection-option-text"

@@ -297,6 +297,12 @@
     background-color: $secondaryBackgroundColor;
     justify-content: center;
     text-align: center;
+    &.custom {
+      align-items: stretch;
+      p {
+        color: $activeGreenBgTextColor;
+      }
+    }
     &.flex-50 {
       flex: calc(50% - 20px);
     }
@@ -313,7 +319,7 @@
         color: $primaryFontColor;
         p,
         span {
-          color: $backgroundColor;
+          color: $activeGreenBgTextColor;
         }
       }
     }
@@ -420,13 +426,13 @@
 .custom-tree-input,
 .funding-custom-tree-input {
   border: 0px;
-  border-bottom: 2px solid $backgroundColor;
+  border-bottom: 2px solid $activeGreenBgTextColor;
   // margin: 0px 10px;
   width: 100%;
   font-family: $primaryFontFamily;
   font-weight: 800;
   font-size: $fontSubTitleSize;
-  color: $backgroundColor;
+  color: $activeGreenBgTextColor;
   text-align: center;
   background-color: transparent;
   outline: 0px;
@@ -732,7 +738,7 @@
     .funding-selection-option {
       width: 160px;
       &.monthly-option {
-        width: 110px;
+        width: 100px;
       }
       &.full-width {
         width: 100%;

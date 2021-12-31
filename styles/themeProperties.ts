@@ -22,6 +22,7 @@ const themeProperties = {
     disabledFontColor: "#909090",
     secondaryFontColor: "#4d5153",
     secondaryBackgroundColor: "#f8fbf8",
+    activeGreenBgTextColor: "#fff",
   },
   dark: {
     primaryFontColor: "#ffffff",
@@ -36,6 +37,7 @@ const themeProperties = {
     disabledFontColor: "#686868",
     secondaryFontColor: "#f0ffed",
     secondaryBackgroundColor: "#575957",
+    activeGreenBgTextColor: "#f0ffed",
   },
 };
 

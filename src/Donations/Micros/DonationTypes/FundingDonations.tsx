@@ -136,7 +136,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     option.caption ? "mt-10" : "m-10"
                   }`}
                 >
-                  <span style={{ fontSize: option.caption ? "14px" : "18px" }}>
+                  <span
+                    style={{
+                      fontSize: option.caption ? "14px" : "18px",
+                    }}
+                  >
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
@@ -150,7 +154,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             ) : (
               <div
                 key={index}
-                className={`funding-selection-option ${
+                className={`funding-selection-option custom ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
                 }${paymentSetup.costIsMonthly ? "   full-width" : " flex-50"}`}
                 onClick={() => {
@@ -159,11 +163,20 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 }}
               >
                 {isCustomDonation ? (
-                  <>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <p
+                      style={{
+                        fontSize: "18px",
+                        marginTop: "3px",
+                      }}
+                    >
+                      {getFormatedCurrencySymbol(currency)}
+                    </p>
                     <input
                       className={"funding-custom-tree-input"}
                       style={{
                         fontSize: "18px",
+                        paddingBottom: "12px",
                       }}
                       onInput={(e) => {
                         // replaces any character other than number to blank
@@ -185,7 +198,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       }}
                       ref={customInputRef}
                     />
-                  </>
+                  </div>
                 ) : (
                   <>
                     <div className={`funding-selection-option-text m-10`}>
