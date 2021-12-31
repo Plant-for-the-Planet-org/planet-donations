@@ -3,7 +3,8 @@ const themeProperties = {
     subTitleSize: "14px",
     titleSize: "18px",
   },
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  fontFamily:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   primaryColor: "#68B030",
   primaryDarkColor: "#007a49",
   grey: "#e6e6e6",
@@ -19,6 +20,9 @@ const themeProperties = {
     dangerColor: "#e74c3c",
     backgroundColorDark: "#F2F2F7",
     disabledFontColor: "#909090",
+    secondaryFontColor: "#4d5153",
+    secondaryBackgroundColor: "#f8fbf8",
+    activeGreenBgTextColor: "#fff",
   },
   dark: {
     primaryFontColor: "#ffffff",
@@ -31,6 +35,9 @@ const themeProperties = {
     dangerColor: "#00ef00",
     backgroundColorDark: "#101113",
     disabledFontColor: "#686868",
+    secondaryFontColor: "#f0ffed",
+    secondaryBackgroundColor: "#575957",
+    activeGreenBgTextColor: "#f0ffed",
   },
 };
 
