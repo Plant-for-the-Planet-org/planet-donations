@@ -85,7 +85,6 @@ function NewPaypal({
   }
   const onError = (data) => {
     setPaymentError(`Your order failed due to some error.`);
-    console.log(`data`, data);
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
