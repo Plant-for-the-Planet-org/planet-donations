@@ -73,9 +73,9 @@ function Authentication({}: Props): ReactElement {
         }
       } catch (err) {
         const newContactDetails = {
-          firstname: user.nickname ? user.nickname : "",
-          email: user.email ? user.email : "",
-          displayName: user.nickname,
+          firstname: user?.nickname ? user.nickname : "",
+          email: user?.email ? user.email : "",
+          displayName: user?.nickname ? user.nickname : "",
         };
         setprofile(newContactDetails);
         setContactDetails(newContactDetails);
