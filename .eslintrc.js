@@ -27,7 +27,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-use-before-define': 'off',
-    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.tsx'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.jsx', '.tsx'] }],
     'react/jsx-indent': 'off',
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
@@ -35,10 +35,12 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    "@typescript-eslint/ban-ts-ignore": 'off',
+    "@typescript-eslint/ban-ts-comment": 'off',
     'no-empty-pattern': 'off',
     'react/display-name': 'off',
     'react/no-find-dom-node': 'off',
-    'i18next/no-literal-string': 'off'
+    'i18next/no-literal-string': 'off',
   },
   globals: {
     React: 'writable',

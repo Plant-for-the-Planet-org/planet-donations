@@ -40,3 +40,7 @@ cypress.env.json
 /cypress/videos
 /cypress/screenshots
 /cypress/integration/examples
+
+.sentryclirc
+# Sentry
+.sentryclirc
