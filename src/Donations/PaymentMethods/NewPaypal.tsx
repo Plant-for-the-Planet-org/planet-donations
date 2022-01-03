@@ -76,7 +76,6 @@ function NewPaypal({
     });
   }
   function onApproveSubscription(data, actions) {
-    alert("You have successfully created subscription " + data.subscriptionID);
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
