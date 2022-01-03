@@ -1,5 +1,9 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
+import {
+  CreateDonationFunctionProps,
+  PayDonationProps,
+  HandleStripeSCAPaymentProps,
+} from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -223,8 +227,14 @@ export async function payDonationFunction({
   setshowErrorCard,
   router,
   tenant,
+  frequency,
+  embed,
+  returnToUrl,
   setTransferDetails,
 }: PayDonationProps) {
+  console.log("\n\npayDonationFunction");
+  console.log(`embed`, embed);
+  console.log(`returnToUrl`, returnToUrl);
   // const router = useRouter();
   setIsPaymentProcessing(true);
   if (method !== "offline") {
@@ -242,6 +252,9 @@ export async function payDonationFunction({
     providerObject
   );
 
+  const paymentStatuses = ["success", "paid", "pending"];
+  const statuses = ["success", "paid", "failed"];
+
   try {
     const paymentResponse = await confirmPaymentIntent(
       donationID,
@@ -252,10 +265,8 @@ export async function payDonationFunction({
     );
     if (paymentResponse) {
       if (
-        ["success", "pending", "paid"].includes(
-          paymentResponse.paymentStatus
-        ) ||
-        ["success", "paid", "failed"].includes(paymentResponse.status)
+        paymentStatuses.includes(paymentResponse.paymentStatus) ||
+        statuses.includes(paymentResponse.status)
       ) {
         if (paymentResponse.status === "failed") {
           // setIsPaymentProcessing(false);
@@ -288,6 +299,9 @@ export async function payDonationFunction({
           setshowErrorCard,
           router,
           tenant,
+          frequency,
+          embed,
+          returnToUrl,
         });
       }
     }
@@ -389,6 +403,9 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
+  frequency,
+  embed,
+  returnToUrl,
 }: HandleStripeSCAPaymentProps) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -456,6 +473,11 @@ export async function handleStripeSCAPayment({
       return successData;
     }
     case "giropay": {
+      const returnUrl =
+        embed && returnToUrl
+          ? `${returnToUrl}/?donationID=${donationID}`
+          : `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`;
+
       const { errorGiropay, paymentIntentGiropay } =
         await stripe.confirmGiropayPayment(
           paymentResponse.response.payment_intent_client_secret,
@@ -463,7 +485,7 @@ export async function handleStripeSCAPayment({
             payment_method: {
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+            return_url: returnUrl,
           }
         );
       handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
@@ -471,6 +493,11 @@ export async function handleStripeSCAPayment({
     }
 
     case "sofort": {
+      const returnUrl =
+        embed && returnToUrl
+          ? `${returnToUrl}/?donationID=${donationID}`
+          : `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`;
+
       const { errorSofort, paymentIntentSofort } =
         await stripe.confirmSofortPayment(
           paymentResponse.response.payment_intent_client_secret,
@@ -481,7 +508,7 @@ export async function handleStripeSCAPayment({
               },
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
+            return_url: returnUrl,
           }
         );
       handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);

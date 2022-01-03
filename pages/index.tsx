@@ -1,13 +1,13 @@
-import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Donations from "./../src/Donations";
-import nextI18NextConfig from "../next-i18next.config.js";
-import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
-import { QueryParamContext } from "../src/Layout/QueryParamContext";
-import { getCountryDataBy } from "../src/Utils/countryUtils";
-import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
+import React, { ReactElement } from "react";
+import nextI18NextConfig from "../next-i18next.config.js";
+import locales from "../public/static/localeList.json";
+import { QueryParamContext } from "../src/Layout/QueryParamContext";
+import { apiRequest } from "../src/Utils/api";
+import { getCountryDataBy } from "../src/Utils/countryUtils";
+import Donations from "./../src/Donations";
 import countriesData from "./../src/Utils/countriesData.json";
 import { DONATE } from "src/Utils/donationStepConstants";
 
@@ -29,7 +29,10 @@ interface Props {
   paymentSetup: any;
   treecount: any;
   amount: any;
+  embed: any;
+  autoLogin: any;
   meta: { title: string; description: string; image: string; url: string };
+  returnToUrl: string;
   frequency: string;
 }
 
@@ -51,7 +54,10 @@ function index({
   paymentSetup,
   treecount,
   amount,
+  embed,
+  autoLogin,
   meta,
+  returnToUrl,
   frequency,
 }: Props): ReactElement {
   const {
@@ -71,11 +77,24 @@ function index({
     setallowTaxDeductionChange,
     setisDirectDonation,
     setquantity,
+    setEmbed,
+    setAutoLogin,
+    setReturnToUrl,
+    testURL,
     setfrequency,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setdonationID(donationID);
+    setEmbed(embed);
+    const isReturnToUrlValid = testURL(returnToUrl);
+
+    setReturnToUrl(isReturnToUrlValid ? returnToUrl : "");
+
+    console.log("\n\nconponent index");
+    console.log(`embed`, embed);
+    console.log(`returnToUrl`, returnToUrl, isReturnToUrlValid);
+    setAutoLogin(autoLogin);
     if (isDirectDonation) {
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
@@ -100,6 +119,7 @@ function index({
     }
   }, []);
 
+  const router = useRouter();
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
@@ -116,8 +136,6 @@ function index({
       loadselectedProjects();
     }
   }, [donationStep]);
-
-  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
   if (router.query.context) {
@@ -167,7 +185,11 @@ function index({
         {isDirectDonation ? <meta name="robots" content="noindex" /> : <></>}
       </Head>
       <div
-        style={{ flexGrow: 1, backgroundColor: "var(--background-color-dark)" }}
+        style={
+          embed
+            ? { flexGrow: 1, backgroundColor: "transparent" }
+            : { flexGrow: 1, backgroundColor: "var(--background-color-dark)" }
+        }
         className="d-flex justify-content-center align-items-center"
       >
         <Donations />
@@ -200,9 +222,16 @@ export async function getServerSideProps(context: any) {
   let currency = "EUR";
   let paymentSetup = {};
   let amount = 0;
+  const autoLogin = !!context.query.autoLogin;
+  const embed = !!context.query.embed;
+  const returnToUrl = context.query.returnToUrl || "";
   function setshowErrorCard() {
     showErrorCard = true;
   }
+
+  console.log("getServerSideProps");
+  console.log(`embed`, embed);
+  console.log(`returnToUrl`, returnToUrl);
 
   // Set project details if there is to (project slug) in the query params
   if (
@@ -242,6 +271,9 @@ export async function getServerSideProps(context: any) {
     if (found) {
       country = context.query.country.toUpperCase();
     }
+  }
+  if (context.query.currency) {
+    currency = context.query.currency.toUpperCase();
   }
 
   // Set donation details if context (created donation ID) present in the URL
@@ -440,7 +472,10 @@ export async function getServerSideProps(context: any) {
       currency,
       paymentSetup,
       amount,
+      embed,
+      autoLogin,
       meta: { title, description, image, url },
+      returnToUrl,
       frequency,
     }, // will be passed to the page component as props
   };

@@ -60,10 +60,19 @@ export const QueryParamContext = React.createContext({
   setisDirectDonation: (value: boolean) => {},
   isSignedUp: false,
   setIsSignedUp: (value: boolean) => {},
+  embed: false,
+  setEmbed: (value: boolean) => {},
+  autoLogin: false,
+  setAutoLogin: (value: boolean) => {},
   frequency: "",
   setfrequency: (value: string) => {},
   hideLogin: false,
   setHideLogin: (value: boolean) => {},
+  returnToUrl: "",
+  setReturnToUrl: (value: string) => {},
+  testURL: (url: string): boolean => {
+    return false;
+  },
   paymentError: "",
   setPaymentError: (value: string) => {},
   amount: null,
@@ -84,7 +93,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
-    typeof window !== "undefined" && localStorage.getItem("language")
+    typeof window !== "undefined" &&
+      localStorage &&
+      localStorage.getItem("language")
       ? localStorage.getItem("language")
       : "en"
   );
@@ -148,6 +159,9 @@ export default function QueryParamProvider({ children }: any) {
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
+  const [embed, setEmbed] = React.useState<boolean>(false);
+  const [autoLogin, setAutoLogin] = React.useState<boolean>(false);
+  const [returnToUrl, setReturnToUrl] = React.useState<string>("");
   const [paymentError, setPaymentError] = React.useState("");
   const [transferDetails, setTransferDetails] = React.useState<Object | null>(
     null
@@ -169,7 +183,9 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
-      localStorage.setItem("language", language);
+      if (localStorage) {
+        localStorage.setItem("language", language);
+      }
     }
   }, [language, router]);
 
@@ -311,12 +327,18 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.tenant) {
       // TODO => verify tenant before setting it
       settenant(router.query.tenant);
-      localStorage.setItem("tenant", router.query.tenant);
+      if (localStorage) {
+        localStorage.setItem("tenant", router.query.tenant);
+      }
     } else {
-      localStorage.removeItem("tenant");
+      if (localStorage) {
+        localStorage.removeItem("tenant");
+      }
     }
     return () => {
-      localStorage.removeItem("tenant");
+      if (localStorage) {
+        localStorage.removeItem("tenant");
+      }
     };
   }, [router.query.tenant]);
 
@@ -432,10 +454,17 @@ export default function QueryParamProvider({ children }: any) {
         setprofile,
         isSignedUp,
         setIsSignedUp,
+        embed,
+        setEmbed,
+        autoLogin,
+        setAutoLogin,
         frequency,
         setfrequency,
         hideLogin,
         setHideLogin,
+        returnToUrl,
+        setReturnToUrl,
+        testURL,
         paymentError,
         setPaymentError,
         amount,

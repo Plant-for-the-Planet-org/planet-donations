@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(
 
     if (typeof Storage !== "undefined") {
       config.headers["x-locale"] = `${
-        localStorage.getItem("language")
+        localStorage && localStorage.getItem("language")
           ? localStorage.getItem("language")
           : "en"
       }`;
@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use(
 
     if (typeof Storage !== "undefined") {
       config.headers["tenant-key"] = `${
-        localStorage.getItem("tenant")
+        localStorage && localStorage.getItem("tenant")
           ? localStorage.getItem("tenant")
           : "ten_I9TW3ncG"
       }`;

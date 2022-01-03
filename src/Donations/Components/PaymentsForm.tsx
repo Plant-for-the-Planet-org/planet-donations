@@ -67,6 +67,8 @@ function PaymentsForm({}: Props): ReactElement {
     profile,
     frequency,
     tenant,
+    embed,
+    returnToUrl,
     paymentError,
     setPaymentError,
     amount,
@@ -95,6 +97,10 @@ function PaymentsForm({}: Props): ReactElement {
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
+
+    console.log("\n\nonSubmitPayment context");
+    console.log(`embed`, embed);
+    console.log(`returnToUrl`, returnToUrl);
     payDonationFunction({
       gateway,
       method,
@@ -111,6 +117,9 @@ function PaymentsForm({}: Props): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      frequency,
+      embed,
+      returnToUrl,
       setTransferDetails,
     });
   };

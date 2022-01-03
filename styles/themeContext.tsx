@@ -1,44 +1,48 @@
-import React from 'react';
+import React from "react";
 
 export const ThemeContext = React.createContext({
-  theme: 'theme-light',
-  setTheme: (theme:any) => theme,
+  theme: "theme-light",
+  setTheme: (theme: any) => theme,
 });
 
-export default function ThemeProvider({ children }:any) {
-  const [theme, setTheme] = React.useState('theme-light');  
+export default function ThemeProvider({ children }: any) {
+  const [theme, setTheme] = React.useState("theme-light");
 
-  React.useEffect(()=>{
-    if(typeof window !== 'undefined'){
-      if(localStorage.getItem('theme')){
-        if(localStorage.getItem('theme')==='theme-light'){
-          setTheme('theme-light');
-        }else{
-          setTheme('theme-dark')
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("theme") && localStorage) {
+        if (localStorage.getItem("theme") === "theme-light") {
+          setTheme("theme-light");
+        } else {
+          setTheme("theme-dark");
+        }
+      } else {
+        if (
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+          setTheme("theme-dark");
+          if (localStorage) {
+            localStorage.setItem("theme", "theme-dark");
+          }
+        } else {
+          setTheme("theme-light");
+          if (localStorage) {
+            localStorage.setItem("theme", "theme-light");
+          }
         }
       }
-      else{
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          setTheme('theme-dark');
-          localStorage.setItem('theme','theme-dark')
-        }
-        else{
-          setTheme('theme-light');
-          localStorage.setItem('theme','theme-light')
-        }
-      }
-      
     }
-  },[]);
+  }, []);
 
-  React.useEffect(()=>{
-    if(typeof window !== 'undefined'){
-      localStorage.setItem('theme',theme)
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && localStorage) {
+      localStorage.setItem("theme", theme);
     }
-  },[theme])
+  }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme,setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

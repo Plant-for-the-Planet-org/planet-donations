@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  & > .backdrop {
+    background-color: transparent;
+  }
 }
 .donations-container {
   display: flex;

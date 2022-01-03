@@ -27,11 +27,14 @@ function Authentication({}: Props): ReactElement {
     setIsSignedUp,
     hideLogin,
     setHideLogin,
+    embed,
+    autoLogin,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
     isAuthenticated,
     loginWithRedirect,
+    loginWithPopup,
     logout,
     getAccessTokenSilently,
     user,
@@ -98,7 +101,8 @@ function Authentication({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      if (localStorage.getItem("queryparams")) {
+      // console.log(localStorage, "localStorage");
+      if (localStorage && localStorage.getItem("queryparams")) {
         const queryparams = localStorage.getItem("queryparams");
         router.push(queryparams);
         localStorage.removeItem("queryparams");
@@ -110,14 +114,41 @@ function Authentication({}: Props): ReactElement {
     }
   }, [isAuthenticated, isLoading, queryToken]);
 
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (
+      autoLogin === "true" &&
+      !hideLogin &&
+      !queryToken &&
+      !isLoading &&
+      !isAuthenticated
+    ) {
+      inputRef.current.click();
+    }
+  }, [isLoading]);
+
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
-    localStorage.setItem("queryparams", router.asPath);
-    loginWithRedirect({
-      redirectUri: window?.location.href,
-      ui_locales: localStorage.getItem("language") || "en",
-    });
+    if (localStorage) {
+      localStorage.setItem("queryparams", router.asPath);
+    }
+    if (embed) {
+      loginWithPopup({
+        redirectUri: window?.location.href,
+        ui_locales: localStorage
+          ? localStorage.getItem("language") || "en"
+          : "en",
+      });
+    } else {
+      loginWithRedirect({
+        redirectUri: window?.location.href,
+        ui_locales: localStorage
+          ? localStorage.getItem("language") || "en"
+          : "en",
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -138,7 +169,11 @@ function Authentication({}: Props): ReactElement {
         !isAuthenticated &&
         (!hideLogin ? (
           <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-            <button onClick={() => loginUser()} className="login-continue">
+            <button
+              onClick={() => loginUser()}
+              className="login-continue"
+              ref={inputRef}
+            >
               {t("loginContinue")}
             </button>
           </div>
