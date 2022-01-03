@@ -33,6 +33,7 @@ interface Props {
   autoLogin: any;
   meta: { title: string; description: string; image: string; url: string };
   returnToUrl: string;
+  frequency: string;
 }
 
 function index({
@@ -57,6 +58,7 @@ function index({
   autoLogin,
   meta,
   returnToUrl,
+  frequency,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -79,6 +81,7 @@ function index({
     setAutoLogin,
     setReturnToUrl,
     testURL,
+    setfrequency,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -101,6 +104,7 @@ function index({
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
+      setfrequency(frequency);
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
@@ -121,7 +125,6 @@ function index({
     setgiftDetails(giftDetails);
     setisGift(true);
   }
-
   // If project details are present set project details
   if (projectDetails) {
     setprojectDetails(projectDetails);
@@ -135,6 +138,9 @@ function index({
   }, [donationStep]);
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
+  if (router.query.context) {
+    setfrequency(frequency);
+  }
 
   return (
     <>
@@ -202,7 +208,7 @@ export async function getServerSideProps(context: any) {
   // Variables that will be affected with Gift details
   let isGift = false;
   let giftDetails = {};
-
+  let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
   let isTaxDeductible = false;
@@ -299,7 +305,9 @@ export async function getServerSideProps(context: any) {
           donationStep = 0;
           console.log("err", err);
         }
-
+        if (donation.data.frequency) {
+          frequency = donation.data.frequency;
+        }
         if (donation.data.taxDeductionCountry) {
           country = donation.data.taxDeductionCountry;
           isTaxDeductible = true;
@@ -412,8 +420,10 @@ export async function getServerSideProps(context: any) {
   }
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = encodeURIComponent(process.env.APP_URL + resolvedUrl);
-  const image = `https://s.wordpress.com/mshots/v1/${url}?w=1200&h=770.jpg`;
+  const url = process.env.APP_URL + resolvedUrl;
+  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
+    url
+  )}?w=1200&h=770.jpg`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
@@ -425,10 +435,12 @@ export async function getServerSideProps(context: any) {
       } in ${
         getCountryDataBy("countryCode", projectDetails.country)?.countryName
       }. Your journey to a trillion trees starts here.`;
-    } else if (projectDetails.purpose === "bouquet") {
-      description = `Make a contribution to ${projectDetails.name}. ${
-        projectDetails.description ? projectDetails.description : ""
-      } Your journey to a trillion trees starts here.`;
+    } else if (
+      (projectDetails.purpose === "bouquet" ||
+        projectDetails.purpose === "funds") &&
+      projectDetails.description
+    ) {
+      description = projectDetails.description;
     }
   }
   if (giftDetails && giftDetails.recipientName) {
@@ -464,6 +476,7 @@ export async function getServerSideProps(context: any) {
       autoLogin,
       meta: { title, description, image, url },
       returnToUrl,
+      frequency,
     }, // will be passed to the page component as props
   };
 }

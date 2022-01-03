@@ -33,7 +33,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setAmount,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
-  console.log(paymentError, "paymentError");
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
 
@@ -62,7 +61,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
   }
   async function getDonation() {
-    console.log(donation, "Donation");
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");
@@ -91,7 +89,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    loadPaymentSetup(donation.project.id, country);
+    await loadPaymentSetup(donation.project.id, country);
     setdonationStep(3);
     router.push({
       query: { ...router.query, step: PAYMENT },

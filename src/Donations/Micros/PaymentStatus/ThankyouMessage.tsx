@@ -18,7 +18,6 @@ function ThankyouMessage({
   const { tenant, frequency } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
   let currencyFormat = () => {};
-  console.log(donation, "Donation", frequency);
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);

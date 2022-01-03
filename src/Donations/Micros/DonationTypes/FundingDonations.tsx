@@ -9,6 +9,7 @@ import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
 import { getPaymentOptionIcons } from "src/Utils/getImageURL";
+import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -38,6 +39,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     frequency,
   } = React.useContext(QueryParamContext);
 
+  const router = useRouter();
+
   const setCustomValue = (e: any) => {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
@@ -49,10 +52,43 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   };
   React.useEffect(() => {
-    if (paymentSetup?.options?.length > 2) {
-      setquantity(paymentSetup?.options[1].quantity);
+    if (paymentSetup && paymentSetup.options) {
+      // Set all quantities in the allOptionsArray
+      const newallOptionsArray = [];
+      for (const option of paymentSetup.options) {
+        newallOptionsArray.push(option.quantity);
+      }
+      const defaultPaymentOption = paymentSetup.options.filter(
+        (option) => option.isDefault === true
+      );
+      const newQuantity = router.query.units
+        ? Number(router.query.units)
+        : defaultPaymentOption.length > 0
+        ? defaultPaymentOption[0].quantity
+        : paymentSetup.options[1].quantity;
+      setquantity(newQuantity);
+
+      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
+        setCustomInputValue(
+          paymentSetup.unitBased
+            ? newQuantity * paymentSetup.unitCost
+            : newQuantity
+        );
+        setisCustomDonation(true);
+      } else if (newQuantity == 0) {
+        setisCustomDonation(true);
+      } else {
+        setCustomInputValue("");
+        setisCustomDonation(false);
+      }
     }
   }, [paymentSetup]);
+  React.useEffect(() => {
+    if (isCustomDonation) {
+      customInputRef?.current?.focus();
+    }
+  }, [isCustomDonation]);
+
   const customInputRef = React.useRef(null);
 
   return (
@@ -78,9 +114,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     : ""
                 }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
               >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
+                {option.caption ? (
+                  <div className="funding-selection-option-text">
+                    <p>{option.caption}</p>
+                  </div>
+                ) : (
+                  []
+                )}
                 {paymentSetup.options[index].icon ? (
                   <img
                     className="funding-icon"
@@ -91,8 +131,16 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 ) : (
                   []
                 )}
-                <div className="funding-selection-option-text mt-10">
-                  <span>
+                <div
+                  className={`funding-selection-option-text ${
+                    option.caption ? "mt-10" : "m-10"
+                  }`}
+                >
+                  <span
+                    style={{
+                      fontSize: option.caption ? "14px" : "18px",
+                    }}
+                  >
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
@@ -106,32 +154,30 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             ) : (
               <div
                 key={index}
-                className={`funding-selection-option ${
+                className={`funding-selection-option custom ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : " flex-50"}`}
                 onClick={() => {
                   setisCustomDonation(true);
-                  customInputRef.current.focus();
+                  customInputRef?.current?.focus();
                 }}
               >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
-                {/* {paymentSetup.costIsMonthly ? (
-                  <img className="funding-icon" src={AllIcons[index]} />
-                ) : (
-                  []
-                )} */}
-                <div className="funding-selection-option-text">
-                  <div
-                    className="d-flex row"
-                    style={{ alignItems: "flex-end", justifyContent: "center" }}
-                  >
-                    <p style={{ marginBottom: "0px", marginRight: "6px" }}>
+                {isCustomDonation ? (
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <p
+                      style={{
+                        fontSize: "18px",
+                        marginTop: "3px",
+                      }}
+                    >
                       {getFormatedCurrencySymbol(currency)}
                     </p>
                     <input
                       className={"funding-custom-tree-input"}
+                      style={{
+                        fontSize: "18px",
+                        paddingBottom: "12px",
+                      }}
                       onInput={(e) => {
                         // replaces any character other than number to blank
                         e.target.value = e.target.value.replace(/[^0-9]/g, "");
@@ -153,7 +199,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       ref={customInputRef}
                     />
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className={`funding-selection-option-text m-10`}>
+                      <span>{option.caption}</span>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}

@@ -8,16 +8,12 @@ function FrequencyOptions({}: Props): ReactElement {
   const { paymentSetup, setfrequency, frequency } =
     React.useContext(QueryParamContext);
   const { t } = useTranslation(["common"]);
-  console.log(paymentSetup.purpose, "paymentSetup");
-  let customfrequencies = ["once", "monthly", "yearly"];
-  if (paymentSetup.purpose === "funds") {
-    customfrequencies = ["monthly", "yearly"];
-  }
+
+  const customfrequencies = paymentSetup.frequencies;
 
   return (
     <div className="d-flex justify-content-between flex-wrap frequency-selection-container mt-20">
       {
-        // paymentSetup.frequencies && paymentSetup.frequencies.length > 0 ? (
         customfrequencies?.map((frequencyOption: any, index: any) => {
           return (
             <div
@@ -27,7 +23,9 @@ function FrequencyOptions({}: Props): ReactElement {
                   : ""
               }`}
               key={index}
-              onClick={() => setfrequency(frequencyOption)}
+              onClick={() => {
+                setfrequency(frequencyOption);
+              }}
               data-test-id="frequency"
             >
               {t(frequencyOption)}

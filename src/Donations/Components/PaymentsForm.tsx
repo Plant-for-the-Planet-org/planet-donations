@@ -79,23 +79,23 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
-  React.useEffect(() => {
-    if (paymentError) {
-      router.replace({
-        query: { ...router.query, step: THANK_YOU },
-      });
-    }
-  }, [paymentError]);
+  // React.useEffect(() => {
+  //   if (paymentError) {
+  //     router.replace({
+  //       query: { ...router.query, step: THANK_YOU },
+  //     });
+  //   }
+  // }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject: any
+    providerObject?: any
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
-      token = await getAccessTokenSilently();
+      token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
     console.log("\n\nonSubmitPayment context");
@@ -127,11 +127,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
     const gateway = "stripe";
-    onSubmitPayment(
-      gateway,
-      paymentRequest._activeBackingLibraryName,
-      paymentMethod
-    );
+    onSubmitPayment(gateway, "card", paymentMethod);
   };
 
   async function getDonation() {
@@ -315,7 +311,8 @@ function PaymentsForm({}: Props): ReactElement {
                 showSepa={showPaymentMethod({
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
-                  authenticatedMethod: true,
+                  authenticatedMethod:
+                    projectDetails.purpose === "funds" ? false : true,
                 })}
                 showSofort={showPaymentMethod({
                   paymentMethod: "sofort",

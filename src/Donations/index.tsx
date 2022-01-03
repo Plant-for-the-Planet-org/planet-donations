@@ -133,15 +133,19 @@ function DonationInfo() {
     );
   };
   return (
-    <div className="donations-info-container">
-      <Image
-        layout="fill"
-        objectFit="cover"
-        objectPosition="right center"
+    <div
+      style={{
+        backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+      }}
+      className="donations-info-container"
+    >
+      {/* <img
         src={getTenantBackground(tenant, projectDetails)}
         className="background-image"
         alt="Background image with trees"
-      />
+      /> */}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -191,12 +195,11 @@ function DonationInfo() {
             )}
 
           {(donationStep === 2 || donationStep === 3) &&
-            projectDetails.purpose === "bouquet" && (
+            (projectDetails.purpose === "bouquet" ||
+              projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
-                  {t("donating", {
-                    frequency: t(`${frequency}`),
-                  })}
+                  {t("donating")}{" "}
                   <span className="text-bold" style={{ marginRight: "4px" }}>
                     {getFormatedCurrency(
                       i18n.language,
@@ -206,6 +209,11 @@ function DonationInfo() {
                         : quantity
                     )}
                   </span>
+                  {frequency === "monthly"
+                    ? t("everyMonth")
+                    : frequency === "yearly"
+                    ? t("everyYear")
+                    : ""}
                 </div>
               </div>
             )}
@@ -225,14 +233,13 @@ function DonationInfo() {
                 <h1 className="title-text text-white">{projectDetails.name}</h1>
               )}
 
-              {projectDetails.purpose === "bouquet" ||
-              (projectDetails.purpose === "funds" &&
-                projectDetails.description) ? (
-                <h3 className="text-white mt-10">
+              {projectDetails.purpose === "funds" ||
+              projectDetails.purpose === "bouquet" ? (
+                <p className="text-white mt-10">
                   {projectDetails.description}
-                </h3>
+                </p>
               ) : (
-                <></>
+                []
               )}
               {projectDetails.purpose === "trees" && projectDetails.tpo && (
                 <a

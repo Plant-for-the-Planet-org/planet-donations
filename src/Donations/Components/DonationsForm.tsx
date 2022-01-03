@@ -44,6 +44,7 @@ function DonationsForm() {
     frequency,
     tenant,
     autoLogin,
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const [minAmt, setMinAmt] = React.useState(0);
@@ -54,7 +55,7 @@ function DonationsForm() {
 
   React.useEffect(() => {
     if (paymentSetup.minQuantity) {
-      setMinAmt(paymentSetup.minQuantity * paymentSetup.unitCost);
+      setMinAmt((paymentSetup.minQuantity * paymentSetup.unitCost).toFixed(2));
     } else {
       setMinAmt(getMinimumAmountForCurrency(currency));
     }
@@ -71,7 +72,6 @@ function DonationsForm() {
     //     }
     //   }
     // }
-    console.log(paymentSetup, "paymentSetup");
     if (paymentSetup && paymentSetup?.recurrency) {
       setShowFrequencyOptions(paymentSetup?.recurrency.supported);
     }
@@ -79,7 +79,6 @@ function DonationsForm() {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-  console.log(paymentSetup, "paymentSetup", showFrequencyOptions);
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -128,18 +127,21 @@ function DonationsForm() {
       }
       payDonationFunction({
         gateway: "stripe",
-        paymentMethod,
+        method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+        providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
         t,
         paymentSetup,
         donationID: res.id,
         setdonationStep,
+        contactDetails,
         token,
         country,
         setshowErrorCard,
         router,
         tenant,
+        setTransferDetails,
       });
     });
   };
@@ -218,7 +220,7 @@ function DonationsForm() {
           !(isGift && giftDetails.recipientName === "") ? (
             <div
               className={`donations-gift-container mt-10 ${
-                projectDetails.purpose === "funds"
+                paymentSetup.frequencies.length == 2
                   ? "funds-frequency-container"
                   : ""
               }`}

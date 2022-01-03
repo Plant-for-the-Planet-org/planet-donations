@@ -5,6 +5,8 @@ import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
 import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
+import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { PaymentSetupProps } from "src/Common/Types";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -82,7 +84,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const { i18n } = useTranslation();
 
-  const [paymentSetup, setpaymentSetup] = useState<Object>({});
+  const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
@@ -128,6 +130,7 @@ export default function QueryParamProvider({ children }: any) {
   const [contactDetails, setContactDetails] = React.useState({
     firstname: "",
     lastname: "",
+    tin: "",
     email: "",
     address: "",
     city: "",
@@ -165,6 +168,13 @@ export default function QueryParamProvider({ children }: any) {
   );
 
   React.useEffect(() => {
+    if (paymentError) {
+      router.replace({
+        query: { ...router.query, step: THANK_YOU },
+      });
+    }
+  }, [paymentError]);
+  React.useEffect(() => {
     if (router.query.locale) {
       setlanguage(router.query.locale);
     }
@@ -183,14 +193,9 @@ export default function QueryParamProvider({ children }: any) {
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "i"
-    ); // fragment locator
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
+    );
+    // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
   }
   React.useEffect(() => {
@@ -202,7 +207,7 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.return_to]);
 
   React.useEffect(() => {
-    if (paymentSetup?.purpose === "funds") {
+    if (paymentSetup?.costIsMonthly) {
       setfrequency("monthly");
     }
   }, [paymentSetup]);
@@ -250,7 +255,6 @@ export default function QueryParamProvider({ children }: any) {
         }
 
         setpaymentSetup(paymentSetupData.data);
-        console.log(paymentSetupData.data, "paymentSetupData.data");
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -340,15 +344,15 @@ export default function QueryParamProvider({ children }: any) {
 
   // Tree Count = treecount => Received from the URL
   React.useEffect(() => {
-    if (router.query.trees) {
+    if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.trees) > 0) {
-        setquantity(Number(router.query.trees));
+      if (Number(router.query.units) > 0) {
+        setquantity(Number(router.query.units));
       } else {
         setquantity(50);
       }
     }
-  }, [router.query.trees]);
+  }, [router.query.units]);
 
   React.useEffect(() => {
     if (router.query.method) {
@@ -372,6 +376,7 @@ export default function QueryParamProvider({ children }: any) {
     giftDetails,
     contactDetails.firstname,
     contactDetails.lastname,
+    contactDetails.tin,
     contactDetails.email,
     contactDetails.address,
     contactDetails.city,
