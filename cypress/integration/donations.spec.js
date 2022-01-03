@@ -51,15 +51,15 @@ describe("Donations", () => {
     // });
 
     // Recurrency Testing
-    it("Testing Recurrency (yearly)", () => {
-        cy.yearlyDonation("25", "Germany{enter}")
-        cy.cardPayment("4242424242424242", "424", "242")
-    });
+    // it("Testing Recurrency (yearly)", () => {
+    //     cy.yearlyDonation("25", "Germany{enter}")
+    //     cy.cardPayment("4242424242424242", "424", "242")
+    // });
 
-    it("Testing Recurrency (monthly)", () => {
-        cy.monthlyDonation("25", "Germany{enter}")
-        cy.cardPayment("4242424242424242", "424", "242")
-    });
+    // it("Testing Recurrency (monthly)", () => {
+    //     cy.monthlyDonation("25", "Germany{enter}")
+    //     cy.cardPayment("4242424242424242", "424", "242")
+    // });
 
     //Reference Donation Testing
      it("Testing Reference donation ", () => {
