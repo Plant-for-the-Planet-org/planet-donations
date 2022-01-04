@@ -8,7 +8,7 @@ import getFormatedCurrency, {
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
-import { getPaymentOptionIcons } from "src/Utils/getImageURL";
+// import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -107,16 +107,17 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 ) : (
                   []
                 )}
-                {paymentSetup.options[index].icon ? (
-                  <img
-                    className="funding-icon"
-                    src={getPaymentOptionIcons(
-                      paymentSetup.options[index].icon
-                    )}
-                  />
-                ) : (
-                  []
-                )}
+                {paymentSetup.options[index].icon
+                  ? // <img
+                    //   className="funding-icon"
+                    //   src={
+                    //     getPaymentOptionIcons(
+                    //     paymentSetup.options[index].icon
+                    //   )
+                    // }
+                    // />
+                    getPaymentOptionIcons(paymentSetup.options[index].icon)
+                  : []}
                 <div
                   className={`funding-selection-option-text ${
                     option.caption ? "mt-10" : "m-10"
@@ -211,5 +212,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     </>
   );
 }
-
+function getPaymentOptionIcons(logoName: string) {
+  return (
+    <div
+      className="donation-option-icon"
+      dangerouslySetInnerHTML={createMarkup(logoName)}
+    />
+  );
+}
+function createMarkup(logoName: string) {
+  return { __html: logoName };
+}
 export default FundingDonations;
