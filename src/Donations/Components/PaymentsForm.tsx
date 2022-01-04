@@ -150,6 +150,7 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
+      t,
     });
 
     if (donation) {

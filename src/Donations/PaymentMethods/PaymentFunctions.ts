@@ -1,5 +1,9 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
+import {
+  CreateDonationFunctionProps,
+  PayDonationProps,
+  HandleStripeSCAPaymentProps,
+} from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -94,6 +98,7 @@ export async function createDonationFunction({
   setshowErrorCard,
   frequency,
   amount,
+  t,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -125,11 +130,9 @@ export async function createDonationFunction({
     if (error.status === 400) {
       setPaymentError(error.data.message);
     } else if (error.status === 500) {
-      setPaymentError("Something went wrong please try again soon!");
+      setPaymentError(t("somethingWentWrong"));
     } else if (error.status === 503) {
-      setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
-      );
+      setPaymentError("appUnderMaintenance");
     } else {
       setPaymentError(error.message);
     }
@@ -288,6 +291,7 @@ export async function payDonationFunction({
           setshowErrorCard,
           router,
           tenant,
+          t,
         });
       }
     }
@@ -296,12 +300,10 @@ export async function payDonationFunction({
       setPaymentError(error.data.message);
       return;
     } else if (error.status === 500) {
-      setPaymentError("Something went wrong please try again soon!");
+      setPaymentError("somethingWentWrong");
       return;
     } else if (error.status === 503) {
-      setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
-      );
+      setPaymentError("appUnderMaintenance");
       return;
     } else {
       setPaymentError(error.message);
@@ -389,6 +391,7 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
+  t,
 }: HandleStripeSCAPaymentProps) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -444,10 +447,9 @@ export async function handleStripeSCAPayment({
             return;
           }
           break;
-
         default:
           setIsPaymentProcessing(false);
-          setPaymentError("Unexpected Payment Type");
+          setPaymentError(t("unexpectedPaymentType"));
       }
       router.push({
         query: { ...router.query, step: THANK_YOU },

@@ -40,10 +40,11 @@ function NewPaypal({
     vault: frequency !== "once" ? true : false,
   };
 
+
   function createOrder(data, actions) {
     const amount = paymentSetup.unitBased
       ? (quantity * unitCost).toFixed(2)
-      : (quantity * 1).toFixed(2);  // quick & dirty fix to be sure toFixed() is called on a number value
+      : (quantity * 1).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
       purchase_units: [
         {
@@ -87,6 +88,10 @@ function NewPaypal({
   }
   const onError = (data) => {
     setPaymentError(t("orderFailedError"));
+<<<<<<< HEAD
+=======
+
+>>>>>>> c2259ca (Added missing translation resources)
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
@@ -98,7 +103,7 @@ function NewPaypal({
   };
 
   const onCancel = (data, actions) => {
-    setPaymentError("Order was cancelled, please try again");
+    setPaymentError(t("orderCancelled"));
 
     // This function shows a transaction success message to your buyer.
     data = {
