@@ -36,7 +36,6 @@
  *
   // @param $iframe - The iframe element
  */
-
  // Function to search project
 Cypress.Commands.add('SearchProject', (project) => {
     cy.get('#searchProject').type(project)
@@ -234,4 +233,11 @@ Cypress.Commands.add('bankTransfer', () => {
     cy.wait(10000)
     cy.get('[data-test-id="test-thankYou"]').should("exist")
 
+})
+
+
+Cypress.Commands.add("donationScreen", (project) => {
+    cy.visit(`localhost:3000/?to=${project}`)
+    cy.wait(5000)
+    cy.get('[data-test-id="continue-next"]').click()
 })

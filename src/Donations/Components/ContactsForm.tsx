@@ -26,6 +26,7 @@ function ContactsForm({}: Props): ReactElement {
 
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
+  const [taxIdentificationAvail, setTaxIdentificationAvail] = React.useState(false)
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
@@ -45,6 +46,7 @@ function ContactsForm({}: Props): ReactElement {
     quantity,
     paymentSetup,
     frequency,
+    projectDetails
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -140,10 +142,21 @@ function ContactsForm({}: Props): ReactElement {
       })
       .catch(console.log);
   };
+  React.useEffect(() => {
+    if (
+      projectDetails &&
+      projectDetails.taxDeductionCountries &&
+      projectDetails?.taxDeductionCountries?.includes("ES") &&
+      country == "ES"
+    ) {
+      setTaxIdentificationAvail(true);
+    } else {
+      setTaxIdentificationAvail(false);
+    }
+  }, [projectDetails, country]);
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
-
   return (
     <div className={"donations-forms-container"}>
       <div className="donations-form">
@@ -212,7 +225,7 @@ function ContactsForm({}: Props): ReactElement {
               )}
             </div>
           </div>
-
+          
           <div className={"form-field mt-30"}>
             <MaterialTextField
               inputRef={register({
@@ -343,6 +356,26 @@ function ContactsForm({}: Props): ReactElement {
             )}
           </div>
 
+          {taxIdentificationAvail ?
+         (
+         <div className={"form-field mt-30"}>
+            <MaterialTextField
+              inputRef={register({
+                required: true,
+              })}
+              label={t("taxIdentificationNumber")}
+              variant="outlined"
+              name="tin"
+              defaultValue={contactDetails.tin}
+              data-test-id="test-tin"
+            />
+            {errors.tin && errors.tin.type !== "validate" && (
+              <span className={"form-errors"}>{t("tinRequired")}</span>
+            )}
+          </div>
+          ) : <></>
+          }
+          
           <div className="contacts-isCompany-toggle mt-20">
             <label htmlFor="isCompany-toggle">
               {t("isACompanyDonation")}
