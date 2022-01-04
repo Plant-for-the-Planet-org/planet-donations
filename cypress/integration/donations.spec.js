@@ -37,6 +37,7 @@ describe("Donations", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000000002", "424", "242")
     });
+    
     it("Testing with Insufficient funds error", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000009995", "424", "242")
