@@ -36,27 +36,6 @@
  *
   // @param $iframe - The iframe element
  */
-//  const isIframeLoaded = $iframe => {
-//     const contentWindow = $iframe.contentWindow;
-
-//     const src = $iframe.attributes.src;
-//     const href = contentWindow.location.href;
-//     if (contentWindow.document.readyState === 'complete') {
-//       return href !== 'about:blank' || src === 'about:blank' || src === '';
-//     }
-
-//     return false;
-//   };
-
-  /**
-   * Wait for iframe to load, and call callback
-   *
-   * Some hints taken and adapted from:
-   * https://gitlab.com/kgroat/cypress-iframe/-/blob/master/src/index.ts
-   */
-  
- 
-  
  // Function to search project
 Cypress.Commands.add('SearchProject', (project) => {
     cy.get('#searchProject').type(project)
@@ -184,7 +163,7 @@ Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
     cy.wait(5000)
-    cy.get('.frequency-selection-option').eq(2).should("have.text", "yearly").click()
+    cy.get('.frequency-selection-option').eq(2).should("have.text", "Yearly").click()
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
@@ -202,7 +181,7 @@ Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
     cy.wait(5000)
-    cy.get('.frequency-selection-option').eq(1).should("have.text", "monthly").click()
+    cy.get('.frequency-selection-option').eq(1).should("have.text", "Monthly").click()
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
@@ -238,6 +217,21 @@ Cypress.Commands.add('referenceDonation', (customTrees, country) => {
         cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
     cy.get('[data-test-id="referenceDonation"]').click().wait(5000);
+
+})
+
+Cypress.Commands.add('bankTransfer', () => {
+    cy.visit(Cypress.env('TEST_SERVER'))
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    // cy.get('.frequency-selection-option').eq(0).should("have.text", "Once").click()
+    cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    cy.get('[data-test-id="bankTransfer"]').click()
+    cy.get('[data-test-id="bankDonateContinue"]').click()
+    cy.wait(10000)
+    cy.get('[data-test-id="test-thankYou"]').should("exist")
 
 })
 
