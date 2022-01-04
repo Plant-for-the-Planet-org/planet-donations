@@ -135,5 +135,5 @@
   "clickToCopy": "Click to copy",
   "bank": "Bank",
   "fallbackdescription": "Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.",
-  "orderFailedError": "Your order failed due to some error."
+  "orderFailedError": "Your donation failed due to an unknown error. Please check if you have been charged, and if this continues, please contact us at support@plant-for-the-planet.org"
 }
