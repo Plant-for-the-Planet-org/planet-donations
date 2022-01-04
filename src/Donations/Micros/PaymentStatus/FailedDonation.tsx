@@ -8,6 +8,7 @@ import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
 import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
+import RetryIcon from "public/assets/icons/RetryIcon";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
@@ -133,6 +134,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
           className="primary-button mt-20 mb-20"
           data-test-id="retryDonation"
         >
+          <RetryIcon color="#fff" />
           {t("common:retryPayment")}
         </button>
       )}
