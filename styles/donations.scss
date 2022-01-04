@@ -296,6 +296,9 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    &.flex-50 {
+      flex: calc(50% - 10px);
+    }
     &.funding-selection-option-selected,
     &:hover,
     &:focus {
@@ -312,6 +315,7 @@
         }
       }
     }
+
     &:hover {
       transform: scale(1.05);
     }
@@ -727,6 +731,9 @@
       }
       &.full-width {
         width: 100%;
+      }
+      &.flex-50 {
+        flex: calc(50% - 10px);
       }
     }
   }
