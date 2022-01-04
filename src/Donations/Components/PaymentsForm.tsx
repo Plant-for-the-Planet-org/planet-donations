@@ -216,7 +216,7 @@ function PaymentsForm({}: Props): ReactElement {
       <div className={"donations-forms-container"}>
         <div
           className="donations-form"
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{ display: "flex", flexDirection: "column", width: "100%" }}
         >
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (

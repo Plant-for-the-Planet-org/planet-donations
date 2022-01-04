@@ -237,7 +237,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 function getPaymentOptionIcons(logoName: string) {
   return (
     <div
-      className="donation-option-icon"
+      className="funding-icon"
       dangerouslySetInnerHTML={createMarkup(logoName)}
     />
   );
