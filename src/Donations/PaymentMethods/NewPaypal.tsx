@@ -5,6 +5,7 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { useTranslation } from "next-i18next";
 
 interface Props {
   paymentSetup: any;
@@ -28,6 +29,7 @@ function NewPaypal({
   setPaymentError,
 }: Props): ReactElement {
   const { donationUid, frequency } = React.useContext(QueryParamContext);
+  const { t } = useTranslation(["common"]);
 
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
@@ -84,7 +86,7 @@ function NewPaypal({
     payDonationFunction("paypal", "paypal", data);
   }
   const onError = (data) => {
-    setPaymentError(`Your order failed due to some error.`);
+    setPaymentError(t("orderFailedError"));
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
