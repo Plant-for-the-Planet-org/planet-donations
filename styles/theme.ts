@@ -33,6 +33,9 @@ const globalStyles = css.global`
     --danger-color: ${light.dangerColor};
     --background-color-dark: ${light.backgroundColorDark};
     --disabled-font-color: ${light.disabledFontColor};
+    --secondary-font-color: ${light.secondaryFontColor};
+    --secondary-background-color: ${light.secondaryBackgroundColor};
+    --active-green-bg-text-color: ${light.activeGreenBgTextColor};
   }
   .theme-dark {
     --primary-font-color: ${dark.primaryFontColor};
@@ -45,6 +48,9 @@ const globalStyles = css.global`
     --danger-color: ${dark.dangerColor};
     --background-color-dark: ${dark.backgroundColorDark};
     --disabled-font-color: ${dark.disabledFontColor};
+    --secondary-font-color: ${dark.secondaryFontColor};
+    --secondary-background-color: ${dark.secondaryBackgroundColor};
+    --active-green-bg-text-color: ${dark.activeGreenBgTextColor};
   }
 `;
 
