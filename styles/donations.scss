@@ -433,7 +433,7 @@
 
 .custom-tree-input {
   border: 0px;
-  border-bottom: 2px solid $primaryFontColor;
+  border-bottom: 2px solid $greyColor;
   width: 100%;
   font-family: $primaryFontFamily;
   font-weight: 800;
@@ -463,7 +463,7 @@
   outline: none;
 }
 
-.tree-selection-option-selected > .custom-tree-input {
+.tree-selection-option-selected .custom-tree-input {
   border-bottom: 1px solid $primaryColor;
 }
 
