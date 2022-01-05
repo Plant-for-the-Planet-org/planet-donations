@@ -222,6 +222,8 @@ export const PaymentRequestCustomButton = ({
   ) : null;
 };
 
+const promise = getStripe(null);
+
 interface NativePayProps {
   country: string;
   currency: String;
@@ -244,6 +246,7 @@ export const NativePay = ({
   paymentLabel,
   frequency,
 }: NativePayProps) => {
+  // console.log(`paymentSetup`, paymentSetup);
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)
   );
@@ -266,8 +269,9 @@ export const NativePay = ({
 
   return (
     <Elements
-      stripe={stripePromise}
-      key={paymentSetup?.gateways?.stripe?.authorization.accountId}
+      stripe={promise}
+      // key={paymentSetup?.gateways?.stripe?.authorization.accountId}
+      key={"acct_1DYCMDD2OpW2f42N"}
     >
       <PaymentRequestCustomButton
         country={country}
