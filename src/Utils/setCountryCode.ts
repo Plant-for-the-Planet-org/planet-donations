@@ -13,25 +13,22 @@ export const setCountryCode = ({
   configCountry: string;
   country: string;
 }) => {
+  let newCountry: string = "DE";
   if (
     localStorage.getItem("countryCode") &&
     localStorage.getItem("countryCode") !== "undefined"
   ) {
-    setCountryInLocalAndContext(
-      setcountry,
-      setcurrency,
-      localStorage.getItem("countryCode")
-    );
+    newCountry = localStorage.getItem("countryCode");
   } else if (profileCountry) {
-    setCountryInLocalAndContext(setcountry, setcurrency, profileCountry);
+    newCountry = profileCountry;
   } else if (configCountry) {
-    setCountryInLocalAndContext(setcountry, setcurrency, configCountry);
+    newCountry = configCountry;
   } else if (country && country !== undefined) {
-    setCountryInLocalAndContext(setcountry, setcurrency, country);
-  } else {
-    setCountryInLocalAndContext(setcountry, setcurrency, "DE");
+    newCountry = country;
   }
+  setCountryInLocalAndContext(setcountry, setcurrency, newCountry);
 };
+
 export const setCountryInLocalAndContext = (
   setcountry: (value: string) => {},
   setcurrency: (value: string) => {},
@@ -41,7 +38,7 @@ export const setCountryInLocalAndContext = (
   const countryData = countriesData.filter(
     (singleCountryData) => singleCountryData.countryCode == country
   )[0];
-  if (countryData) {
+  if (countryData?.currencyCode) {
     setcurrency(countryData.currencyCode);
   }
 };
