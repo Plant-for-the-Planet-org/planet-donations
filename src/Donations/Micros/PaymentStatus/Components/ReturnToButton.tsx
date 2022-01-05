@@ -11,7 +11,7 @@ interface Props {
 export default function ReturnToButton({ returnTo, donationContext, donationStatus }: Props): ReactElement {
 
     const router = useRouter();
-    const { t } = useTranslation(['common']);
+    const { t } = useTranslation('common');
 
     let returnDisplay;
     const x = returnTo.slice(8);
@@ -26,7 +26,7 @@ export default function ReturnToButton({ returnTo, donationContext, donationStat
             className="primary-button"
             style={{ marginBottom: 20 }}
         >
-            {t('returnTo')} {returnDisplay[0]}
+            {t('common:returnTo')} {returnDisplay[0]}
         </button>
     )
 }
