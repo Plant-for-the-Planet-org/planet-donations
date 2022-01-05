@@ -88,9 +88,9 @@ function Authentication({}: Props): ReactElement {
         }
       } catch (err) {
         const newContactDetails = {
-          firstname: user.nickname ? user.nickname : "",
-          email: user.email ? user.email : "",
-          displayName: user.nickname,
+          firstname: user?.nickname ? user.nickname : "",
+          email: user?.email ? user.email : "",
+          displayName: user?.nickname ? user.nickname : "",
         };
         setprofile(newContactDetails);
         setContactDetails(newContactDetails);
@@ -98,9 +98,9 @@ function Authentication({}: Props): ReactElement {
       }
     } else {
       const newContactDetails = {
-        firstname: user.nickname ? user.nickname : "",
-        email: user.email ? user.email : "",
-        displayName: user.nickname,
+        firstname: user?.nickname ? user.nickname : "",
+        email: user?.email ? user.email : "",
+        displayName: user?.nickname ? user.nickname : "",
       };
       setprofile(newContactDetails);
       setContactDetails(newContactDetails);
@@ -309,7 +309,7 @@ function UserProfile({ profile, user }: UserProfileProps) {
           alt={profile ? profile.displayName : user?.name}
         />
       ) : user?.picture ? (
-        <img className="profile-pic" src={user.picture} alt={user.name} />
+        <img className="profile-pic" src={user.picture} alt={user?.name} />
       ) : (
         <div className="profile-pic no-pic">
           {profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}

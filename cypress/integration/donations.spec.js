@@ -37,6 +37,7 @@ describe("Donations", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000000002", "424", "242")
     });
+    
     it("Testing with Insufficient funds error", () => {
         cy.createDonation("25", "Spain{enter}")
         cy.paymentError("4000000000009995", "424", "242")
@@ -66,4 +67,9 @@ describe("Donations", () => {
         cy.referenceDonation("25", "Germany{enter}")
         cy.cardPayment("4242424242424242", "424", "242")
     });
+
+    //Offline Donation
+    it("Offline Donation", () => {
+        cy.bankTransfer()
+    })
 })
