@@ -69,6 +69,10 @@ Cypress.Commands.add('contactForm', (firstName, lastName, email, address, city, 
         cy.get('[data-test-id="test-city"]').clear().type(city)
         cy.get('[data-test-id="test-country"]').clear().type(country);
         cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('body').then((body) => {
+            if(body.find('#taxIdentificationAvail').length > 0)
+            cy.get('[data-test-id="taxIdentiication"]').type('123456')
+        })
         cy.get('[data-test-id="test-continueToPayment"]').click()
 
     })
@@ -228,6 +232,7 @@ Cypress.Commands.add('bankTransfer', () => {
     cy.wait(5000)
     // cy.get('.frequency-selection-option').eq(0).should("have.text", "Once").click()
     cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    cy.wait(10000)
     cy.get('[data-test-id="bankTransfer"]').click()
     cy.get('[data-test-id="bankDonateContinue"]').click()
     cy.wait(10000)

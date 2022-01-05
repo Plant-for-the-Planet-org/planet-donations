@@ -9,6 +9,7 @@ import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
+import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
@@ -92,12 +93,8 @@ function index({
         setquantity(amount);
       }
     }
-    // XX is hidden country and T1 is Tor browser
-    if (country === "XX" || country === "T1") {
-      setcountry("DE");
-    } else {
-      setcountry(country);
-    }
+
+    setCountryCode({ setcountry, setcurrency, country });
   }, []);
 
   // If gift details are present set gift
@@ -192,7 +189,7 @@ export async function getServerSideProps(context: any) {
   let isTaxDeductible = false;
   let donationID = null;
   let shouldCreateDonation = false;
-  let country = "DE";
+  let country = "";
   let isDirectDonation = false;
   let contactDetails = {};
   let treecount = 50;
@@ -253,7 +250,13 @@ export async function getServerSideProps(context: any) {
       };
       const donation: any = await apiRequest(requestParams);
 
+      const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
+      const paymentStatusForStep3 = ["initiated", "draft"];
+      const queryMethodForStep4 = ["Sofort", "Giropay"];
+      const queryRedirectStatus = ["succeeded", "failed"];
+
       if (donation.status === 200) {
+        const donorData = donation.data.donor;
         donationID = context.query.context;
         // if the donation is present means the donation is already created
         // Set shouldCreateDonation as false
@@ -281,7 +284,7 @@ export async function getServerSideProps(context: any) {
           isTaxDeductible = true;
         } else {
           hideTaxDeduction = true;
-          country = donation.data.donor.country;
+          country = donorData.country;
         }
 
         // This will fetch the payment options
@@ -304,51 +307,33 @@ export async function getServerSideProps(context: any) {
         treecount = donation.data.treeCount;
         amount = donation.data.amount;
         // Setting contact details from donor details
-        if (donation.data.donor) {
+        if (donorData) {
           contactDetails = {
-            firstname: donation.data.donor.firstname
-              ? donation.data.donor.firstname
-              : "",
-            lastname: donation.data.donor.lastname
-              ? donation.data.donor.lastname
-              : "",
-            email: donation.data.donor.email ? donation.data.donor.email : "",
-            address: donation.data.donor.address
-              ? donation.data.donor.address
-              : "",
-            city: donation.data.donor.city ? donation.data.donor.city : "",
-            zipCode: donation.data.donor.zipCode
-              ? donation.data.donor.zipCode
-              : "",
-            country: donation.data.donor.country
-              ? donation.data.donor.country
-              : "",
-            companyname: donation.data.donor.companyname
-              ? donation.data.donor.companyname
-              : "",
+            firstname: donorData.firstname || "",
+            lastname: donorData.lastname || "",
+            email: donorData.email || "",
+            address: donorData.address || "",
+            city: donorData.city || "",
+            zipCode: donorData.zipCode || "",
+            country: donorData.country || "",
+            companyname: donorData.companyname || "",
           };
         }
 
         // Check if the donation status is paid or successful - if yes directly show thank you page
         // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
         if (
-          (context.query.method === "Sofort" ||
-            context.query.method === "Giropay") &&
-          (context.query.redirect_status === "succeeded" ||
-            context.query.redirect_status === "failed") &&
+          queryMethodForStep4.includes(context.query.method) &&
+          queryRedirectStatus.includes(context.query.redirect_status) &&
           context.query.payment_intent
         ) {
           donationStep = 4;
         } else if (
-          donation.data.paymentStatus === "success" ||
-          donation.data.paymentStatus === "paid" ||
-          donation.data.paymentStatus === "failed" ||
-          donation.data.paymentStatus === "pending"
+          paymentStatusForStep4.includes(donation.data.paymentStatus)
         ) {
           donationStep = 4;
         } else if (
-          donation.data.paymentStatus === "initiated" ||
-          donation.data.paymentStatus === "draft"
+          paymentStatusForStep3.includes(donation.data.paymentStatus)
         ) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
