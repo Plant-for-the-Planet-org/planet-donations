@@ -62,25 +62,39 @@ function FundingDonations({
       for (const option of paymentSetup.options) {
         newallOptionsArray.push(option.quantity);
       }
+      const defaultPaymentOption = paymentSetup.options.filter(
+        (option) => option.isDefault === true
+      );
       const newQuantity = router.query.units
         ? Number(router.query.units)
+        : defaultPaymentOption.length > 0
+        ? defaultPaymentOption[0].quantity
         : paymentSetup.options[1].quantity;
+      setquantity(newQuantity);
+
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(
-          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
+          paymentSetup.unitBased
+            ? newQuantity * paymentSetup.unitCost
+            : newQuantity
         );
-        setquantity(Number(router.query.units));
+        setisCustomDonation(true);
+      } else if (newQuantity == 0) {
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
         customInputRef.current.focus();
       } else {
         setCustomInputValue("");
-        setquantity(newQuantity);
         setisCustomDonation(false);
       }
     }
   }, [paymentSetup]);
+  React.useEffect(() => {
+    if (isCustomDonation) {
+      customInputRef?.current?.focus();
+    }
+  }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
 
@@ -125,8 +139,16 @@ function FundingDonations({
                 ) : (
                   []
                 )}
-                <div className="funding-selection-option-text mt-10">
-                  <span>
+                <div
+                  className={`funding-selection-option-text ${
+                    option.caption ? "mt-10" : "m-10"
+                  }`}
+                >
+                  <span
+                    style={{
+                      fontSize: option.caption ? "14px" : "18px",
+                    }}
+                  >
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
@@ -140,32 +162,30 @@ function FundingDonations({
             ) : (
               <div
                 key={index}
-                className={`funding-selection-option ${
+                className={`funding-selection-option custom ${
                   isCustomDonation ? "funding-selection-option-selected" : ""
-                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
+                }${paymentSetup.costIsMonthly ? "   full-width" : " flex-50"}`}
                 onClick={() => {
                   setisCustomDonation(true);
-                  customInputRef.current.focus();
+                  customInputRef?.current?.focus();
                 }}
               >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
-                {/* {paymentSetup.costIsMonthly ? (
-                  <img className="funding-icon" src={AllIcons[index]} />
-                ) : (
-                  []
-                )} */}
-                <div className="funding-selection-option-text">
-                  <div
-                    className="d-flex row"
-                    style={{ alignItems: "flex-end", justifyContent: "center" }}
-                  >
-                    <p style={{ marginBottom: "0px", marginRight: "6px" }}>
+                {isCustomDonation ? (
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <p
+                      style={{
+                        fontSize: "18px",
+                        marginTop: "3px",
+                      }}
+                    >
                       {getFormatedCurrencySymbol(currency)}
                     </p>
                     <input
                       className={"funding-custom-tree-input"}
+                      style={{
+                        fontSize: "18px",
+                        paddingBottom: "12px",
+                      }}
                       onInput={(e) => {
                         // ^\d{0,5}(\.,\d{1,3})?$
                         // replaces any character other than number to blank
@@ -196,7 +216,13 @@ function FundingDonations({
                       ref={customInputRef}
                     />
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className={`funding-selection-option-text m-10`}>
+                      <span>{option.caption}</span>
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}

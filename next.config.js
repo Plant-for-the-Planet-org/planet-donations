@@ -1,7 +1,4 @@
 const withPlugins = require("next-compose-plugins");
-// Use the hidden-source-map option when you don't want the source maps to be
-// publicly available on the servers, only to the error reporting
-const withSourceMaps = require("@zeit/next-source-maps")();
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
@@ -16,6 +13,7 @@ const {
   SENTRY_PROJECT,
   SENTRY_AUTH_TOKEN,
   NODE_ENV,
+  VERCEL_GIT_COMMIT_SHA,
   VERCEL_GITHUB_COMMIT_SHA,
   VERCEL_GITLAB_COMMIT_SHA,
   VERCEL_BITBUCKET_COMMIT_SHA,
@@ -23,6 +21,7 @@ const {
 } = process.env;
 
 const COMMIT_SHA =
+  VERCEL_GIT_COMMIT_SHA ||
   VERCEL_GITHUB_COMMIT_SHA ||
   VERCEL_GITLAB_COMMIT_SHA ||
   VERCEL_BITBUCKET_COMMIT_SHA ||
@@ -46,7 +45,8 @@ if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
 const hasAssetPrefix =
   process.env.ASSET_PREFIX !== "" && process.env.ASSET_PREFIX !== undefined;
 
-module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
+module.exports = withPlugins([[withBundleAnalyzer]], {
+  productionBrowserSourceMaps: true,
   serverRuntimeConfig: {
     rootDir: __dirname,
   },
@@ -87,13 +87,6 @@ module.exports = withPlugins([[withBundleAnalyzer], [withSourceMaps]], {
       NODE_ENV === "production"
     ) {
       config.plugins.push(
-        new SentryWebpackPlugin({
-          include: ".next",
-          ignore: ["node_modules"],
-          stripPrefix: ["webpack://_N_E/"],
-          urlPrefix: `~${basePath}/_next`,
-          release: COMMIT_SHA,
-        }),
         new SentryWebpackPlugin({
           include: ".next",
           ignore: ["node_modules"],
