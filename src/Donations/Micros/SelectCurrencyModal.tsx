@@ -60,6 +60,8 @@ export default function TransitionsModal(props: any) {
                 value={country}
                 handleChange={(value) => {
                   setcountry(value.countryCode);
+                  // setcurrency
+                  localStorage.setItem("countryCode", value.countryCode);
                   handleModalClose();
                 }}
               />

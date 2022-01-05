@@ -13,6 +13,7 @@ import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
+import { setCountryCode } from "src/Utils/setCountryCode";
 
 interface Props {}
 
@@ -27,6 +28,8 @@ function Authentication({}: Props): ReactElement {
     setIsSignedUp,
     hideLogin,
     setHideLogin,
+    setcurrency,
+    setcountry,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -51,6 +54,18 @@ function Authentication({}: Props): ReactElement {
         };
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
+          if (profile.data.currency) {
+            setcurrency(profile.data.currency);
+          }
+          if (profile.data.address.country) {
+            // setcountry(profile.data.address.country);
+            setCountryCode({
+              setcountry,
+              setcurrency,
+              profileCountry: profile.data.address.country,
+            });
+            // localStorage.setItem("countryCode", profile.data.address.country);
+          }
           setprofile(profile.data);
           setIsSignedUp(true);
           const newContactDetails = {

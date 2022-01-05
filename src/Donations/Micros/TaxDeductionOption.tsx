@@ -46,7 +46,7 @@ function TaxDeductionOption({}: Props): ReactElement {
               className={"tax-country-selection text-primary text-bold"}
               data-test-id="taxCountrySelection"
             >
-              {t(`country:${country.toLowerCase()}`)}
+              {t(`country:${country?.toLowerCase()}`)}
               <DownArrowIcon color={themeProperties.primaryColor} />
             </button>
             {projectDetails?.taxDeductionCountries?.includes(country)
@@ -59,7 +59,7 @@ function TaxDeductionOption({}: Props): ReactElement {
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <div className={"tax-country-selection text-primary text-bold"}>
-              {t(`country:${country.toLowerCase()}`)}
+              {t(`country:${country?.toLowerCase()}`)}
             </div>{" "}
             {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")

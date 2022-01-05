@@ -79,6 +79,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
       country = donation.donor.country;
     }
     setcountry(country);
+    localStorage.setItem("countryCode", country);
     setcurrency(donation.currency);
     if (donation.gift && donation.gift.recipientName) {
       setisGift(donation.gift.recipientName);
