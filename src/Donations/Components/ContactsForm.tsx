@@ -358,7 +358,7 @@ function ContactsForm({}: Props): ReactElement {
 
           {taxIdentificationAvail ?
          (
-         <div className={"form-field mt-30"}>
+         <div className={"form-field mt-30"} data-test-id="taxIdentiication" id="taxIdentificationAvail">
             <MaterialTextField
               inputRef={register({
                 required: true,
@@ -367,7 +367,6 @@ function ContactsForm({}: Props): ReactElement {
               variant="outlined"
               name="tin"
               defaultValue={contactDetails.tin}
-              data-test-id="test-tin"
             />
             {errors.tin && errors.tin.type !== "validate" && (
               <span className={"form-errors"}>{t("tinRequired")}</span>
