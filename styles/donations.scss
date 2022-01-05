@@ -267,6 +267,14 @@
       font-size: 12px;
     }
   }
+  .custom-tree-option {
+    display: flex;
+    flex-direction: row;
+    > span {
+      align-self: center;
+      padding-left: 5px;
+    }
+  }
 }
 
 .bouquet-project-space-divider {
@@ -423,11 +431,22 @@
   }
 }
 
-.custom-tree-input,
+.custom-tree-input {
+  border: 0px;
+  border-bottom: 2px solid $primaryFontColor;
+  width: 100%;
+  font-family: $primaryFontFamily;
+  font-weight: 800;
+  font-size: $fontSubTitleSize;
+  color: $primaryFontColor;
+  text-align: center;
+  background-color: transparent;
+  outline: 0px;
+  font-size: 16px;
+}
 .funding-custom-tree-input {
   border: 0px;
   border-bottom: 2px solid $activeGreenBgTextColor;
-  // margin: 0px 10px;
   width: 100%;
   font-family: $primaryFontFamily;
   font-weight: 800;
@@ -437,13 +456,6 @@
   background-color: transparent;
   outline: 0px;
   font-size: 16px;
-  // }
-  // .funding-custom-tree-input {
-  // text-align: center;
-  // margin: 0px;
-  // margin-left: -16px;
-  // width: 100%;
-  // font-size: 14px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
