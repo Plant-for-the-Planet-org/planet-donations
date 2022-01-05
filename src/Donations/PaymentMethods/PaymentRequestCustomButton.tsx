@@ -37,7 +37,6 @@ export const PaymentRequestCustomButton = ({
   const [paymentRequest, setPaymentRequest] = useState(null);
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [nativePayMethod, setNativePayMethod] = useState("");
 
   useEffect(() => {
     if (
@@ -140,7 +139,6 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                setNativePayMethod("apple_pay");
                 paymentRequest.show();
               }}
               className={`${
@@ -166,7 +164,6 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                setNativePayMethod("google_pay");
                 paymentRequest.show();
               }}
               className={`${
@@ -192,7 +189,6 @@ export const PaymentRequestCustomButton = ({
           <div className="w-100">
             <button
               onClick={() => {
-                setNativePayMethod("browser");
                 paymentRequest.show();
               }}
               className={`donate-now ${
@@ -221,8 +217,6 @@ export const PaymentRequestCustomButton = ({
     </div>
   ) : null;
 };
-
-const promise = getStripe(null);
 
 interface NativePayProps {
   country: string;
@@ -269,9 +263,8 @@ export const NativePay = ({
 
   return (
     <Elements
-      stripe={promise}
-      // key={paymentSetup?.gateways?.stripe?.authorization.accountId}
-      key={"acct_1DYCMDD2OpW2f42N"}
+      stripe={stripePromise}
+      key={paymentSetup?.gateways?.stripe?.authorization.accountId}
     >
       <PaymentRequestCustomButton
         country={country}
