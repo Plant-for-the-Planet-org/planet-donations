@@ -35,14 +35,14 @@ function NewPaypal({
   const { donationUid } = React.useContext(QueryParamContext);
 
   function createOrder(data, actions) {
+    const amount = paymentSetup.unitBased
+      ? (quantity * unitCost).toFixed(2)
+      : (quantity * 1).toFixed(2);  // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: (paymentSetup.unitBased
-              ? quantity * unitCost
-              : quantity
-            ).toFixed(2),
+            value: Number(amount),
             currency: currency,
           },
           invoice_id: `planet-${donationID}`,
@@ -67,11 +67,28 @@ function NewPaypal({
   }
 
   const onError = (data) => {
-    setPaymentError(`Your order ${data.orderID} failed due to some error.`);
+    setPaymentError(`Your order failed due to some error.`);
+
+    // This function shows a transaction success message to your buyer.
+    data = {
+      ...data,
+      type: "sdk",
+      status: "error",
+      errorMessage: data?.message,
+    };
+    payDonationFunction("paypal", "paypal", data);
   };
 
-  const onCancel = (data) => {
+  const onCancel = (data, actions) => {
     setPaymentError("Order was cancelled, please try again");
+
+    // This function shows a transaction success message to your buyer.
+    data = {
+      ...data,
+      type: "sdk",
+      status: "cancel",
+    };
+    payDonationFunction("paypal", "paypal", data);
   };
 
   return (

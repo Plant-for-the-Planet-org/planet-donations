@@ -302,7 +302,8 @@ function PaymentsForm({}: Props): ReactElement {
                 showSepa={showPaymentMethod({
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
-                  authenticatedMethod: true,
+                  authenticatedMethod:
+                    projectDetails.purpose === "funds" ? false : true,
                 })}
                 showSofort={showPaymentMethod({
                   paymentMethod: "sofort",

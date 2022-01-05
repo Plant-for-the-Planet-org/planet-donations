@@ -119,6 +119,7 @@ export default function QueryParamProvider({ children }: any) {
   const [contactDetails, setContactDetails] = React.useState({
     firstname: "",
     lastname: "",
+    tin: "",
     email: "",
     address: "",
     city: "",
@@ -353,6 +354,7 @@ export default function QueryParamProvider({ children }: any) {
     giftDetails,
     contactDetails.firstname,
     contactDetails.lastname,
+    contactDetails.tin,
     contactDetails.email,
     contactDetails.address,
     contactDetails.city,
