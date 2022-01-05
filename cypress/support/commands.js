@@ -53,7 +53,7 @@ Cypress.Commands.add('createDonation', (customTrees, country) => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
         cy.get('body').click(0,0)
     }).then(() => {
-        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449", "123456")
+        cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
     })
 
 })
