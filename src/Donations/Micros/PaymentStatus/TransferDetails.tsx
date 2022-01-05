@@ -4,6 +4,7 @@ import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import CopyIcon from "public/assets/icons/CopyIcon";
+import ReturnToButton from "./Components/ReturnToButton";
 
 function TransferDetails({ donationID, donation, sendToReturn }: any) {
   const { t } = useTranslation(["common"]);
@@ -109,6 +110,9 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
       >
         {t("common:transactionId")} {donationID}
       </div>
+      {returnTo && (
+        <ReturnToButton returnTo={returnTo} donationContext={donationID} donationStatus="pending" />
+      )}
     </div>
   );
 }
