@@ -94,6 +94,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
+      } else if (newQuantity == 0) {
+        setisCustomDonation(true);
+        customInputRef.current.focus();
       } else {
         setCustomInputValue("");
         setisCustomDonation(false);
@@ -118,12 +121,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 6).map((option, index) => {
-            console.log(
-              `option.quantity, quantity`,
-              option.quantity,
-              quantity,
-              option.quantity === quantity
-            );
             return (
               <div
                 key={index}

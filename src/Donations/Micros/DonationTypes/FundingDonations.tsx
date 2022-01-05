@@ -13,9 +13,13 @@ import { useRouter } from "next/router";
 
 interface Props {
   setopenCurrencyModal: any;
+  setInvalidAmount: any;
 }
 
-function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
+function FundingDonations({
+  setopenCurrencyModal,
+  setInvalidAmount,
+}: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [customInputValue, setCustomInputValue] = React.useState("");
@@ -41,13 +45,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const router = useRouter();
 
-  const setCustomValue = (e: any) => {
-    if (e.target) {
-      if (e.target.value === "" || e.target.value < 1) {
+  const setCustomValue = (value: any) => {
+    if (value) {
+      if (value === "" || value < 1) {
         // if input is '', default 1
         setquantity(1);
-      } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value);
+      } else if (value.toString().length <= 12) {
+        setquantity(value);
       }
     }
   };
@@ -77,6 +81,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
+      } else if (newQuantity == 0) {
+        setisCustomDonation(true);
+        customInputRef.current.focus();
       } else {
         setCustomInputValue("");
         setisCustomDonation(false);
@@ -90,6 +97,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
+
+  const amountRegex1 = /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/;
+  const amountRegex2 = /^(\d+(\,\d{0,2})?|\,?\d{1,2})$/;
 
   return (
     <>
@@ -179,8 +189,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         paddingBottom: "12px",
                       }}
                       onInput={(e) => {
+                        // ^\d{0,5}(\.,\d{1,3})?$
                         // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                        e.target.value = e.target.value.replace(
+                          /[^0-9,.]/g,
+                          ""
+                        );
                         //  if length of input more than 12, display only 12 digits
                         if (e.target.value.toString().length >= 12) {
                           e.target.value = e.target.value
@@ -190,11 +204,21 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       }}
                       value={customInputValue}
                       type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
+                      inputMode="decimal"
+                      // pattern="/^(\d+)(\,\d{1,2}|\.\d{1,2})?$/"
                       onChange={(e) => {
-                        setCustomValue(e);
                         setCustomInputValue(e.target.value);
+                        if (
+                          !amountRegex1.test(e.target.value) &&
+                          !amountRegex2.test(e.target.value)
+                        ) {
+                          setInvalidAmount(true);
+                        } else {
+                          setCustomValue(
+                            Number(e.target.value.replace(/[,]/g, "."))
+                          );
+                          setInvalidAmount(false);
+                        }
                       }}
                       ref={customInputRef}
                     />
