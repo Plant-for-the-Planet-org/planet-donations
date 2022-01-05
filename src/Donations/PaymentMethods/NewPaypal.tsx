@@ -40,7 +40,6 @@ function NewPaypal({
     vault: frequency !== "once" ? true : false,
   };
 
-
   function createOrder(data, actions) {
     const amount = paymentSetup.unitBased
       ? (quantity * unitCost).toFixed(2)
@@ -88,10 +87,7 @@ function NewPaypal({
   }
   const onError = (data) => {
     setPaymentError(t("orderFailedError"));
-<<<<<<< HEAD
-=======
 
->>>>>>> c2259ca (Added missing translation resources)
     // This function shows a transaction success message to your buyer.
     data = {
       ...data,
