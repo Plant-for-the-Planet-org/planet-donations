@@ -257,6 +257,7 @@ function DonationsForm() {
 
             {paymentSetup && projectDetails ? (
               minAmt &&
+              !invalidAmount &&
               (paymentSetup.unitBased
                 ? paymentSetup?.unitCost * quantity
                 : quantity) >= minAmt ? (

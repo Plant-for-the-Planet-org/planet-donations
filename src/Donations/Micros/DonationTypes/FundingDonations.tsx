@@ -45,13 +45,13 @@ function FundingDonations({
 
   const router = useRouter();
 
-  const setCustomValue = (e: any) => {
-    if (e.target) {
-      if (e.target.value === "" || e.target.value < 1) {
+  const setCustomValue = (value: any) => {
+    if (value) {
+      if (value === "" || value < 1) {
         // if input is '', default 1
         setquantity(1);
-      } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value);
+      } else if (value.toString().length <= 12) {
+        setquantity(value);
       }
     }
   };
@@ -98,7 +98,9 @@ function FundingDonations({
 
   const customInputRef = React.useRef(null);
 
-  const amountRegex = /^(\d+)(\,\d{1,2}|\.\d{1,2})?$/;
+  const amountRegex1 = /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/;
+  const amountRegex2 = /^(\d+(\,\d{0,2})?|\,?\d{1,2})$/;
+
   return (
     <>
       <div
@@ -202,14 +204,19 @@ function FundingDonations({
                       }}
                       value={customInputValue}
                       type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
+                      inputMode="decimal"
+                      // pattern="/^(\d+)(\,\d{1,2}|\.\d{1,2})?$/"
                       onChange={(e) => {
-                        setCustomValue(e);
                         setCustomInputValue(e.target.value);
-                        if (!amountRegex.test(e.target.value)) {
+                        if (
+                          !amountRegex1.test(e.target.value) &&
+                          !amountRegex2.test(e.target.value)
+                        ) {
                           setInvalidAmount(true);
                         } else {
+                          setCustomValue(
+                            Number(e.target.value.replace(/[,]/g, "."))
+                          );
                           setInvalidAmount(false);
                         }
                       }}
