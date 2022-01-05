@@ -13,9 +13,8 @@ export default function ReturnToButton({ returnTo, donationContext, donationStat
     const router = useRouter();
     const { t } = useTranslation('common');
 
-    let returnDisplay;
     const x = returnTo.slice(8);
-    returnDisplay = x.split("/", 2);
+    const returnDisplay = x.split("/", 2);
 
     const sendToReturn = () => {
         router.push(`${returnTo}?context=${donationContext}&don_status=${donationStatus}`);
