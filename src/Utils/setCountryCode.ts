@@ -13,7 +13,7 @@ export const setCountryCode = ({
   configCountry: string;
   country: string;
 }) => {
-  let newCountry: string = "DE";
+  let newCountry: string | null = "DE";
   if (
     localStorage.getItem("countryCode") &&
     localStorage.getItem("countryCode") !== "undefined"
