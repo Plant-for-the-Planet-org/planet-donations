@@ -184,9 +184,9 @@ export default function PaymentMethodTabs({
           onClick={(e) => handleChange(e, "Bank")}
           {...a11yProps("Bank")}
         >
-          <div style={{ display: "flex", alignItems: "center" }} >
+          <div style={{ display: "flex", alignItems: "center" }} data-test-id="bankTransfer">
             <BankIcon />
-            <text data-test-id="bankTransfer">{t("bankTransfer")}</text>
+            <text>{t("bankTransfer")}</text>
           </div>
           <CheckMark />
         </button>
