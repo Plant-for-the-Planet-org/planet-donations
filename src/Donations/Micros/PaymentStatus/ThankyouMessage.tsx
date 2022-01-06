@@ -25,7 +25,7 @@ function ThankyouMessage({
 
   // EXAMPLE: Your ₹21,713.64 donation was successful {with Google Pay}
   const donationSuccessfulMessage = t(
-    paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
+    paymentTypeUsed === "Google Pay" || paymentTypeUsed === "Apple Pay"
       ? "common:donationSuccessfulWith"
       : "common:donationSuccessful",
     {

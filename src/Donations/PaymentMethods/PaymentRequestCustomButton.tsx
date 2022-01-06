@@ -95,8 +95,10 @@ export const PaymentRequestCustomButton = ({
       setPaymentLoading(true);
       paymentRequest.on(
         "paymentmethod",
-        ({ complete, paymentMethod, ...data }: any) => {
-          onPaymentFunction(paymentMethod, paymentRequest);
+        async ({ complete, paymentMethod, ...data }: any) => {
+          const method = paymentMethod?.card?.wallet?.type || "browser";
+
+          onPaymentFunction(paymentMethod, method);
           complete("success");
           setPaymentLoading(false);
         }
@@ -107,7 +109,9 @@ export const PaymentRequestCustomButton = ({
         paymentRequest.off(
           "paymentmethod",
           ({ complete, paymentMethod, ...data }: any) => {
-            onPaymentFunction(paymentMethod, paymentRequest);
+            const method = paymentMethod?.card?.wallet?.type || "browser";
+
+            onPaymentFunction(paymentMethod, method);
             complete("success");
             setPaymentLoading(false);
           }
@@ -134,7 +138,9 @@ export const PaymentRequestCustomButton = ({
         paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
           <div className="w-100">
             <button
-              onClick={() => paymentRequest.show()}
+              onClick={() => {
+                paymentRequest.show();
+              }}
               className={`${
                 isPaymentPage
                   ? "donate-small"
@@ -182,7 +188,9 @@ export const PaymentRequestCustomButton = ({
         ) : (
           <div className="w-100">
             <button
-              onClick={() => paymentRequest.show()}
+              onClick={() => {
+                paymentRequest.show();
+              }}
               className={`donate-now ${
                 isPaymentPage ? "donate-small" : "primary-button mb-10 w-100"
               }`}
@@ -232,6 +240,7 @@ export const NativePay = ({
   paymentLabel,
   frequency,
 }: NativePayProps) => {
+  // console.log(`paymentSetup`, paymentSetup);
   const [stripePromise, setStripePromise] = useState(() =>
     getStripe(paymentSetup)
   );
