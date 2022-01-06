@@ -139,8 +139,8 @@
   "taxIdentificationNumber": "Tax Identification Number",
   "tinRequired": "Tax Identification Number is Required",
   "somethingWentWrong": "Something went wrong please try again soon!",
-  "appUnderMaintenance": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
-  "unexpectedPaymentType": "Unexpected Payment Type",
-  "orderFailedError": "Your donation failed due to an unknown error. Please check if you have been charged, and if this continues, please contact us at support@plant-for-the-planet.org",
-  "orderCancelled": "Order was cancelled, please try again"
+  "appUnderMaintenance": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details.",
+  "unexpectedPaymentType": "Unexpected Payment Type. Please retry your donation.",
+  "orderFailedError": "Your donation failed due to an unknown error. Please check if you have been charged, and if this continues, please contact us at support@plant-for-the-planet.org.",
+  "orderCancelled": "Order was Cancelled. Please try again."
 }
