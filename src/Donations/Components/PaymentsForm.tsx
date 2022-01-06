@@ -327,9 +327,10 @@ function PaymentsForm({}: Props): ReactElement {
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
-                  paymentSetup?.gateways.paypal
-                  //  &&
-                  // (frequency !== "once" ? false : true)
+                  paymentSetup?.gateways.paypal &&
+                  (frequency !== "once"
+                    ? paymentSetup?.recurrency.methods.includes("paypal")
+                    : true)
                 }
                 showNativePay={
                   paymentSetup?.gateways?.stripe?.account &&
