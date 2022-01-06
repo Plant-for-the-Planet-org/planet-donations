@@ -103,7 +103,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
           }}
         >
           <CustomIcon />
-          <div className="tree-selection-option-text">
+          <div className="tree-selection-option-text custom-tree-option">
             <input
               className={"custom-tree-input"}
               onInput={(e) => {
