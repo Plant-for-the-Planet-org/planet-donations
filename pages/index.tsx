@@ -214,6 +214,7 @@ export async function getServerSideProps(context: any) {
         setshowErrorCard,
       };
       const project = await apiRequest(requestParams);
+      console.log(project.data, "project.data");
       if (project.data) {
         projectDetails = project.data;
         donationStep = 1;
@@ -390,7 +391,8 @@ export async function getServerSideProps(context: any) {
       }. Your journey to a trillion trees starts here.`;
     } else if (
       (projectDetails.purpose === "bouquet" ||
-        projectDetails.purpose === "funds") &&
+        projectDetails.purpose === "funds" ||
+        projectDetails.purpose === "conservation") &&
       projectDetails.description
     ) {
       description = projectDetails.description;

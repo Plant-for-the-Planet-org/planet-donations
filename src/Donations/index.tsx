@@ -196,7 +196,8 @@ function DonationInfo() {
 
           {(donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "bouquet" ||
-              projectDetails.purpose === "funds") && (
+              projectDetails.purpose === "funds" ||
+              projectDetails.purpose === "conservation") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}
@@ -235,9 +236,7 @@ function DonationInfo() {
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">
-                  {projectDetails.description}
-                </p>
+                <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 []
               )}

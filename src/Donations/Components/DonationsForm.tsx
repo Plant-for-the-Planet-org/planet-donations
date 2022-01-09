@@ -43,7 +43,7 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
-    setTransferDetails
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -127,7 +127,7 @@ function DonationsForm() {
       payDonationFunction({
         gateway: "stripe",
         method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-        providerObject: paymentMethod,// payment method
+        providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
         t,
@@ -140,7 +140,7 @@ function DonationsForm() {
         setshowErrorCard,
         router,
         tenant,
-        setTransferDetails
+        setTransferDetails,
       });
     });
   };
@@ -152,6 +152,7 @@ function DonationsForm() {
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "bouquet":
+      case "conservation":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "trees":
       default:
@@ -179,6 +180,7 @@ function DonationsForm() {
         });
         break;
       case "bouquet":
+      case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
             i18n.language,
@@ -190,7 +192,7 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country.toLowerCase()}`),
+          country: t(`country:${projectDetails?.country?.toLowerCase()}`),
         });
         break;
     }
@@ -215,13 +217,14 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-            showFrequencyOptions &&
-            !(isGift && giftDetails.recipientName === "") ? (
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
             <div
-              className={`donations-gift-container mt-10 ${paymentSetup.frequencies.length == 2
+              className={`donations-gift-container mt-10 ${
+                paymentSetup.frequencies.length == 2
                   ? "funds-frequency-container"
                   : ""
-                }`}
+              }`}
             >
               <FrequencyOptions />
             </div>
@@ -232,8 +235,9 @@ function DonationsForm() {
           {donationSelection()}
 
           <div
-            className={`${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-              }`}
+            className={`${
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+            }`}
           >
             <TaxDeductionOption />
 
@@ -243,12 +247,12 @@ function DonationsForm() {
 
             {paymentSetup && projectDetails ? (
               minAmt &&
-                (paymentSetup.unitBased
-                  ? paymentSetup?.unitCost * quantity
-                  : quantity) >= minAmt ? (
+              (paymentSetup.unitBased
+                ? paymentSetup?.unitCost * quantity
+                : quantity) >= minAmt ? (
                 !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency ? (
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
                   <NativePay
                     country={country}
                     currency={currency}
