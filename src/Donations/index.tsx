@@ -93,6 +93,7 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
+    taxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -289,7 +290,8 @@ function DonationInfo() {
               <p>{t("billingAddress")}</p>
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
-                {contactDetails.lastname && contactDetails.lastname}
+                {contactDetails.lastname && contactDetails.lastname} {" "}
+                <span style={{fontWeight: 'normal'}}>{taxIdentificationAvail ? `TIN: ${contactDetails.tin && contactDetails.tin}` : null}</span>
               </p>
               <p>{contactDetails.email && contactDetails.email}</p>
               <p>

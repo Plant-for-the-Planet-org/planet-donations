@@ -26,7 +26,6 @@ function ContactsForm({}: Props): ReactElement {
 
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
-  const [taxIdentificationAvail, setTaxIdentificationAvail] = React.useState(false)
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
@@ -46,7 +45,9 @@ function ContactsForm({}: Props): ReactElement {
     quantity,
     paymentSetup,
     frequency,
-    projectDetails
+    projectDetails,
+    taxIdentificationAvail,
+    setTaxIdentificationAvail
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();

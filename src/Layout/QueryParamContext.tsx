@@ -69,6 +69,8 @@ export const QueryParamContext = React.createContext({
   setPaymentError: (value: string) => {},
   amount: null,
   setAmount: (value: number) => {},
+  taxIdentificationAvail: {},
+  setTaxIdentificationAvail: (value: boolean) => {}
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -132,7 +134,7 @@ export default function QueryParamProvider({ children }: any) {
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
   const [returnTo, setreturnTo] = useState("");
-
+  const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false)
   const [redirectstatus, setredirectstatus] = useState(null);
 
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
@@ -464,6 +466,8 @@ export default function QueryParamProvider({ children }: any) {
         setAmount,
         transferDetails,
         setTransferDetails,
+        taxIdentificationAvail,
+        setTaxIdentificationAvail
       }}
     >
       {children}
