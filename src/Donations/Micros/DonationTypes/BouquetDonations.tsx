@@ -147,7 +147,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div> */}
                 <div className="funding-selection-option-text m-10">
                   <span style={{ fontSize: "18px" }}>
-                    {getFormatedCurrency(i18n.language, "", option.quantity)}
+                    {getFormatedCurrency(
+                      i18n.language,
+                      currency,
+                      option.quantity
+                    )}
                   </span>
                 </div>
               </div>
