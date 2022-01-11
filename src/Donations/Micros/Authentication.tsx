@@ -47,6 +47,9 @@ function Authentication({}: Props): ReactElement {
       try {
         // if we have access token in the query params we use it instead of using the
         const token = queryToken ? queryToken : await getAccessTokenSilently();
+        let queryParams = { ...router.query };
+        delete queryParams.token;
+        router.replace(queryParams);
         const requestParams = {
           url: "/app/profile",
           token: token,
