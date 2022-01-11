@@ -4,6 +4,7 @@ import PaymentPendingIllustration from "../../../../public/assets/icons/donation
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
+import ReturnToButton from "./Components/ReturnToButton";
 
 function PendingDonation({ donationID, sendToReturn }: any) {
   const { t } = useTranslation(["common"]);
@@ -33,6 +34,9 @@ function PendingDonation({ donationID, sendToReturn }: any) {
         {t("common:transactionId")} {donationID}
       </div>
       <PaymentPendingIllustration />
+      {returnTo && (
+        <ReturnToButton donationContext={donationID} donationStatus="pending" />
+      )}
     </div>
   );
 }
