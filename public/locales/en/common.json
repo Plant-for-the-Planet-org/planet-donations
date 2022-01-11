@@ -137,5 +137,6 @@
 "custom": "Custom",
   "fallbackdescription": "Make tax deductible donations to over 200+ restoration and conservation projects. Your journey to a trillion trees starts here.",
   "taxIdentificationNumber": "Tax Identification Number",
-  "tinRequired": "Tax Identification Number is Required"
+  "tinRequired": "Tax Identification Number is Required",
+  "tinText": "TIN: "
 }

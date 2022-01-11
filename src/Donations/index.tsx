@@ -291,8 +291,8 @@ function DonationInfo() {
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname} {" "}
-                <span style={{fontWeight: 'normal'}}>{taxIdentificationAvail ? `TIN: ${contactDetails.tin && contactDetails.tin}` : null}</span>
               </p>
+              <p>{taxIdentificationAvail ? `${t('common:tinText')} ${contactDetails.tin && contactDetails.tin}` : null}</p>
               <p>{contactDetails.email && contactDetails.email}</p>
               <p>
                 {contactDetails.address && contactDetails.address}
