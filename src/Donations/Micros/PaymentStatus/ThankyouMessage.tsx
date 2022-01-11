@@ -100,6 +100,19 @@ function ThankyouMessage({
             )}
           </>
         )}
+        {projectDetails.purpose === "conservation" && (
+          <>
+            <div className={"mt-20 thankyouText"}>
+              {donationSuccessfulMessage}
+              {" " + t("common:fundingDonationSuccess")}
+            </div>
+            {tenant !== "ten_1e5WejOp" && (
+              <div className={"mt-20 thankyouText"}>
+                {t("common:fundingContributionMessage")}
+              </div>
+            )}
+          </>
+        )}
       </div>
     );
   };

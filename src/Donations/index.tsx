@@ -240,18 +240,20 @@ function DonationInfo() {
               ) : (
                 []
               )}
-              {projectDetails.purpose === "trees" && projectDetails.tpo && (
-                <a
-                  rel="noreferrer"
-                  target="_blank"
-                  href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-                  className="text-white"
-                >
-                  {t("byOrganization", {
-                    organizationName: projectDetails.tpo.name,
-                  })}
-                </a>
-              )}
+              {(projectDetails.purpose === "trees" ||
+                projectDetails.purpose === "conservation") &&
+                projectDetails.tpo && (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                    className="text-white"
+                  >
+                    {t("byOrganization", {
+                      organizationName: projectDetails.tpo.name,
+                    })}
+                  </a>
+                )}
             </>
           ) : (
             <></>

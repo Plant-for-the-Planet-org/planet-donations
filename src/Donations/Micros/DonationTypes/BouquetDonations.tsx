@@ -137,7 +137,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     ? "funding-selection-option-selected"
                     : ""
                 }`}
-                style={{ maxWidth: "100px" }}
+                // style={{ maxWidth: "100px" }}
               >
                 {/* <div
                   className={"funding-icon"}
@@ -145,7 +145,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 >
                   {AllIcons[index]}
                 </div> */}
-                <div className="funding-selection-option-text">
+                <div className="funding-selection-option-text m-10">
                   <span style={{ fontSize: "18px" }}>
                     {getFormatedCurrency(i18n.language, "", option.quantity)}
                   </span>

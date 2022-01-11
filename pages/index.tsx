@@ -390,6 +390,17 @@ export async function getServerSideProps(context: any) {
         getCountryDataBy("countryCode", projectDetails.country)?.countryName
       }. Your journey to a trillion trees starts here.`;
     } else if (
+      projectDetails.purpose === "conservation" &&
+      !projectDetails.description
+    ) {
+      description = `Conserve forests with  ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
+    } else if (
       (projectDetails.purpose === "bouquet" ||
         projectDetails.purpose === "funds" ||
         projectDetails.purpose === "conservation") &&

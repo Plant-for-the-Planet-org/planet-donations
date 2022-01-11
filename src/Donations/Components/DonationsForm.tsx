@@ -150,9 +150,9 @@ function DonationsForm() {
   const donationSelection = () => {
     switch (projectDetails.purpose) {
       case "funds":
+      case "conservation":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "bouquet":
-      case "conservation":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "trees":
       default:
