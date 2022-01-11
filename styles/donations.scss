@@ -59,6 +59,7 @@
   width: 100%;
   padding-bottom: 30px;
   max-width: 360px;
+  min-height: 560px;
   align-self: center;
   background-color: $backgroundColor;
   border-radius: 10px;
@@ -98,6 +99,7 @@
 .donations-info {
   display: flex;
   flex-direction: column;
+  flex: inherit;
   height: 100%;
   z-index: 3;
   justify-content: flex-end;
@@ -320,9 +322,6 @@
       cursor: pointer;
       background-color: $primaryColor;
       border: 1px solid $primaryColor;
-      > .funding-icon {
-        filter: grayscale(0%) opacity(1);
-      }
       .funding-selection-option-text {
         color: $primaryFontColor;
         p,
@@ -330,18 +329,17 @@
           color: $activeGreenBgTextColor;
         }
       }
+      .funding-icon {
+        svg {
+          color: $activeGreenBgTextColor;
+        }
+      }
     }
-
     &:hover {
       transform: scale(1.05);
     }
     &:active {
       transform: scale(0.98);
-    }
-    > .funding-icon {
-      filter: grayscale(100%) opacity(0.5);
-      height: 40px;
-      width: 40px;
     }
     .funding-selection-option-text {
       text-align: left;
@@ -359,6 +357,12 @@
       }
       > span {
         margin-top: 10px;
+      }
+    }
+    .funding-icon {
+      svg {
+        width: 34px;
+        color: $secondaryFontColor;
       }
     }
   }
@@ -798,6 +802,7 @@
     flex-direction: row;
     border-radius: 20px;
     min-height: 560px;
+    align-items: center;
     max-width: 840px;
   }
   .donations-info-container {
@@ -805,6 +810,7 @@
     flex: 1;
     border-radius: 20px;
     align-self: auto;
+    min-height: 560px;
     margin-right: -10px;
   }
   .donations-forms-container {
