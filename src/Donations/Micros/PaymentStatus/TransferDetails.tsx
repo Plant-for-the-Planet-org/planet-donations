@@ -111,7 +111,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         {t("common:transactionId")} {donationID}
       </div>
       {returnTo && (
-        <ReturnToButton returnTo={returnTo} donationContext={donationID} donationStatus="pending" />
+        <ReturnToButton donationContext={donationID} donationStatus="pending" />
       )}
     </div>
   );

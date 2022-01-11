@@ -35,7 +35,7 @@ function PendingDonation({ donationID, sendToReturn }: any) {
       </div>
       <PaymentPendingIllustration />
       {returnTo && (
-        <ReturnToButton returnTo={returnTo} donationContext={donationID} donationStatus="pending" />
+        <ReturnToButton donationContext={donationID} donationStatus="pending" />
       )}
     </div>
   );
