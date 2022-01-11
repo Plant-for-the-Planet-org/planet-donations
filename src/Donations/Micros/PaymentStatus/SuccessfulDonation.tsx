@@ -7,6 +7,7 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from 'next/router';
+import ReturnToButton from "./Components/ReturnToButton";
 
 
 function SuccessfulDonation({ donation, sendToReturn }: any) {
@@ -15,13 +16,13 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
   const [isMobile, setIsMobile] = React.useState(false);
   const { donationID, tenant } = React.useContext(QueryParamContext);
   React.useEffect(() => {
-    if(typeof window !== 'undefined') {
-      if(window.innerWidth > 767) {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth > 767) {
         setIsMobile(false);
       } else {
         setIsMobile(true);
+      }
     }
-  }
   });
   const { paymentType, returnTo, projectDetails } =
     React.useContext(QueryParamContext);
@@ -32,24 +33,8 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
 
   const sendRef = () => imageRef;
 
-  let returnDisplay;
-  if (returnTo) {
-    const x = returnTo.slice(8);
-    returnDisplay = x.split("/", 2);
-  }
-
   return donation ? (
     <div>
-      {returnTo && (
-        <button
-          id={"thank-you-close"}
-          onClick={() => sendToReturn()}
-          className="mb-10 text-primary"
-          style={{ alignSelf: "flex-start" }}
-        >
-          Back to {returnDisplay[0]}
-        </button>
-      )}
 
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}
@@ -78,6 +63,9 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         >
           {`Ref - ${donationID}`}
         </a>
+      )}
+      {returnTo && (
+        <ReturnToButton returnTo={returnTo} donationContext={donationID} donationStatus="success" />
       )}
     </div>
   ) : (

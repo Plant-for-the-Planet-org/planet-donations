@@ -227,18 +227,22 @@ function DonationInfo() {
                   target="_blank"
                   href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
                   className="title-text text-white"
+                  style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
                 </a>
               ) : (
-                <h1 className="title-text text-white">{projectDetails.name}</h1>
+                <h1
+                  className="title-text text-white"
+                  style={{ marginTop: "10px" }}
+                >
+                  {projectDetails.name}
+                </h1>
               )}
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">
-                  {projectDetails.description}
-                </p>
+                <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 []
               )}
