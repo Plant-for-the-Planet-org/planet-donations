@@ -1,5 +1,9 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
+import {
+  CreateDonationFunctionProps,
+  PayDonationProps,
+  HandleStripeSCAPaymentProps,
+} from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -94,6 +98,8 @@ export async function createDonationFunction({
   setshowErrorCard,
   frequency,
   amount,
+  returnTo,
+  callbackMethod,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -107,6 +113,8 @@ export async function createDonationFunction({
     giftDetails,
     frequency,
     amount,
+    returnTo,
+    callbackMethod,
   });
   try {
     const requestParams = {
@@ -148,6 +156,8 @@ export function createDonationData({
   giftDetails,
   frequency,
   amount,
+  returnTo,
+  callbackMethod,
 }: any) {
   let donationData = {
     purpose: projectDetails.purpose,
@@ -163,6 +173,10 @@ export function createDonationData({
     currency,
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
+    metadata: {
+      callback_url: returnTo,
+      callback_method: callbackMethod,
+    },
   };
   if (paymentSetup.unitBased) {
     donationData = {

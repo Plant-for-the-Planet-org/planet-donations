@@ -100,6 +100,8 @@ export interface CreateDonationFunctionProps {
   setshowErrorCard: Function;
   frequency: string | null;
   amount?: number | null;
+  returnTo?: string | undefined;
+  callbackMethod?: string | undefined;
 }
 
 export interface PayDonationProps {
@@ -108,8 +110,8 @@ export interface PayDonationProps {
   providerObject: Object;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
-  t:any;
-  paymentSetup:Object;
+  t: any;
+  paymentSetup: Object;
   donationID: string;
   contactDetails: Object;
   token: string;
@@ -120,11 +122,10 @@ export interface PayDonationProps {
   setTransferDetails: Function;
 }
 
-
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup:Object;
+  paymentSetup: Object;
   window: any;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
@@ -141,10 +142,10 @@ export interface PaymentSetupProps {
   costIsMonthly: boolean;
   currency: string;
   effectiveCountry: string;
-  frequencies?: (string)[] | null;
+  frequencies?: string[] | null;
   gateways: Gateways;
   minQuantity: number;
-  options?: (OptionsEntity)[] | null;
+  options?: OptionsEntity[] | null;
   project: string;
   purpose: string;
   recurrency: Recurrency;
@@ -160,7 +161,7 @@ export interface Gateways {
   offline: Offline;
 }
 export interface Paypal {
-  methods?: (string)[] | null;
+  methods?: string[] | null;
   account: string;
   authorization: AuthorizationPaypal;
 }
@@ -168,7 +169,7 @@ export interface AuthorizationPaypal {
   client_id: string;
 }
 export interface Stripe {
-  methods?: (string)[] | null;
+  methods?: string[] | null;
   account: string;
   authorization: AuthorizationStripe;
 }
@@ -177,19 +178,19 @@ export interface AuthorizationStripe {
   accountId: string;
 }
 export interface Offline {
-  methods?: (string)[] | null;
+  methods?: string[] | null;
   account: string;
 }
 export interface OptionsEntity {
   id: string;
   caption: string;
   description?: string | null;
-  icon?:  string | null;
+  icon?: string | null;
   quantity?: number | null;
   isDefault: boolean;
 }
 export interface Recurrency {
   supported: boolean;
-  methods?: (string)[] | null;
-  frequencies?: (string)[] | null;
+  methods?: string[] | null;
+  frequencies?: string[] | null;
 }
