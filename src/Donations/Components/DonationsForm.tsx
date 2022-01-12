@@ -150,8 +150,8 @@ function DonationsForm() {
   const donationSelection = () => {
     switch (projectDetails.purpose) {
       case "funds":
-      case "conservation":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "conservation":
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "trees":
@@ -243,7 +243,8 @@ function DonationsForm() {
 
             <div className={"horizontal-line"} />
 
-            {projectDetails.purpose === "trees" && <DonationAmount />}
+            {(projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
               minAmt &&

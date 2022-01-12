@@ -165,7 +165,8 @@ function DonationInfo() {
               <TPOImage />
             ))}
           {(donationStep === 2 || donationStep === 3) &&
-            projectDetails.purpose === "trees" && (
+            (projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}
@@ -178,13 +179,22 @@ function DonationInfo() {
                         : quantity
                     )}
                   </span>
-                  {t("fortreeCountTrees", {
-                    count: Number(quantity),
-                    treeCount: getFormattedNumber(
-                      i18n.language,
-                      Number(quantity)
-                    ),
-                  })}{" "}
+                  {paymentSetup.purpose === "trees"
+                    ? t("fortreeCountTrees", {
+                        count: Number(quantity),
+                        treeCount: getFormattedNumber(
+                          i18n.language,
+                          Number(quantity)
+                        ),
+                      })
+                    : paymentSetup.purpose === "conservation"
+                    ? t("forQuantitym2", {
+                        quantity: getFormattedNumber(
+                          i18n.language,
+                          Number(quantity)
+                        ),
+                      })
+                    : []}{" "}
                   {frequency === "monthly"
                     ? t("everyMonth")
                     : frequency === "yearly"
@@ -196,8 +206,7 @@ function DonationInfo() {
 
           {(donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "bouquet" ||
-              projectDetails.purpose === "funds" ||
-              projectDetails.purpose === "conservation") && (
+              projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}

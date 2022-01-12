@@ -52,9 +52,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         setquantity(paymentSetup.unitBased ? 1 / paymentSetup.unitCost : 1);
       } else if (e.target.value.toString().length <= 12) {
         setquantity(
-          paymentSetup.unitBased
-            ? e.target.value / paymentSetup.unitCost
-            : e.target.value
+          // paymentSetup.unitBased
+          //   ? e.target.value * paymentSetup.unitCost
+          e.target.value
         );
       }
     }
@@ -86,11 +86,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       setquantity(newQuantity);
 
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
-        setCustomInputValue(
-          paymentSetup.unitBased
-            ? newQuantity * paymentSetup.unitCost
-            : newQuantity
-        );
+        setCustomInputValue(newQuantity);
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
@@ -118,13 +114,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       >
         {paymentSetup.options &&
           paymentSetup.options.slice(0, 6).map((option, index) => {
-            console.log(
-              `option.quantity, quantity`,
-              option.quantity,
-              quantity,
-              option.quantity === quantity
-            );
-            return (
+            return option.quantity ? (
               <div
                 key={index}
                 onClick={() => {
@@ -149,76 +139,92 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   <span style={{ fontSize: "18px" }}>
                     {getFormatedCurrency(
                       i18n.language,
-                      currency,
+                      paymentSetup.purpose === "conservation" ? "" : currency,
                       option.quantity
-                    )}
+                    )}{" "}
+                    {paymentSetup.purpose === "conservation"
+                      ? paymentSetup.unit
+                      : []}
                   </span>
                 </div>
               </div>
-            );
-          })}
-
-        {paymentSetup && paymentSetup.options && (
-          <div
-            className={`funding-selection-option custom ${
-              isCustomDonation ? "funding-selection-option-selected" : ""
-            }`}
-            onClick={() => {
-              setisCustomDonation(true);
-              customInputRef?.current?.focus();
-            }}
-            style={{ flexGrow: 1 }}
-          >
-            {/* <div
+            ) : (
+              <div
+                className={`funding-selection-option custom ${
+                  isCustomDonation ? "funding-selection-option-selected" : ""
+                }`}
+                onClick={() => {
+                  setisCustomDonation(true);
+                  customInputRef?.current?.focus();
+                }}
+                style={{ flexGrow: 1 }}
+              >
+                {/* <div
               className={"funding-icon"}
               style={{ height: "auto", width: "auto" }}
             >
               <CustomIcon />
             </div> */}
 
-            {isCustomDonation ? (
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <p
-                  style={{
-                    fontSize: "18px",
-                    marginTop: "3px",
-                  }}
-                >
-                  {getFormatedCurrencySymbol(currency)}
-                </p>
-                <input
-                  className={"funding-custom-tree-input"}
-                  style={{ fontSize: "18px" }}
-                  onInput={(e) => {
-                    // replaces any character other than number to blank
-                    // e.target.value = e.target.value.replace(/[,]/g, '.');
-                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                    //  if length of input more than 12, display only 12 digits
-                    if (e.target.value.toString().length >= 12) {
-                      e.target.value = e.target.value.toString().slice(0, 12);
-                    }
-                  }}
-                  value={customInputValue}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d*"
-                  onChange={(e) => {
-                    setCustomValue(e);
-                    setCustomInputValue(e.target.value);
-                  }}
-                  ref={customInputRef}
-                />
+                {isCustomDonation ? (
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <p
+                      style={{
+                        fontSize: "18px",
+                        marginTop: "3px",
+                      }}
+                    >
+                      {paymentSetup.purpose === "bouquet"
+                        ? getFormatedCurrencySymbol(currency)
+                        : []}
+                    </p>
+                    <input
+                      className={"funding-custom-tree-input"}
+                      style={{ fontSize: "18px" }}
+                      onInput={(e) => {
+                        // replaces any character other than number to blank
+                        // e.target.value = e.target.value.replace(/[,]/g, '.');
+                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                        //  if length of input more than 12, display only 12 digits
+                        if (e.target.value.toString().length >= 12) {
+                          e.target.value = e.target.value
+                            .toString()
+                            .slice(0, 12);
+                        }
+                      }}
+                      value={customInputValue}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="\d*"
+                      onChange={(e) => {
+                        setCustomValue(e);
+                        setCustomInputValue(e.target.value);
+                      }}
+                      ref={customInputRef}
+                    />
+                    <p
+                      style={{
+                        fontSize: "18px",
+                        marginTop: "3px",
+                        fontWeight: "800",
+                      }}
+                    >
+                      {paymentSetup.purpose === "conservation"
+                        ? paymentSetup.unit
+                        : []}
+                    </p>
+                  </div>
+                ) : (
+                  <div
+                    className="funding-selection-option-text"
+                    style={{ fontSize: "18px" }}
+                  >
+                    <p style={{ margin: "5px" }}> {t("custom")}</p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div
-                className="funding-selection-option-text"
-                style={{ fontSize: "18px" }}
-              >
-                <p style={{ margin: "5px" }}> {t("custom")}</p>
-              </div>
-            )}
-          </div>
-        )}
+            );
+          })}
       </div>
       {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
