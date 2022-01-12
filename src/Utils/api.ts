@@ -30,15 +30,15 @@ axiosInstance.interceptors.request.use(
       config.headers["x-locale"] = "en";
     }
 
-    if (typeof Storage !== "undefined") {
-      config.headers["tenant-key"] = `${
-        localStorage.getItem("tenant")
-          ? localStorage.getItem("tenant")
-          : "ten_I9TW3ncG"
-      }`;
-    } else {
-      config.headers["tenant-key"] = "ten_I9TW3ncG";
-    }
+    // if (typeof Storage !== "undefined") {
+    //   config.headers["tenant-key"] = `${
+    //     localStorage.getItem("tenant")
+    //       ? localStorage.getItem("tenant")
+    //       : "ten_I9TW3ncG"
+    //   }`;
+    // } else {
+    //   config.headers["tenant-key"] = "ten_I9TW3ncG";
+    // }
 
     return config;
   },
@@ -103,6 +103,17 @@ export const apiRequest = async (
       options.headers = {
         Authorization: `Bearer ${token}`,
       };
+    }
+    if (typeof Storage !== "undefined") {
+      options.params = {
+        tenant: `${
+          localStorage.getItem("tenant")
+            ? localStorage.getItem("tenant")
+            : "ten_I9TW3ncG"
+        }`,
+      };
+    } else {
+      options.params = { tenant: "ten_I9TW3ncG" };
     }
 
     // returns a promise with axios instance
