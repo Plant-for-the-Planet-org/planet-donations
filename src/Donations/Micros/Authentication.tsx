@@ -49,7 +49,7 @@ function Authentication({}: Props): ReactElement {
         const token = queryToken ? queryToken : await getAccessTokenSilently();
         let queryParams = { ...router.query };
         delete queryParams.token;
-        router.replace(queryParams);
+        router.replace({ query: queryParams });
         const requestParams = {
           url: "/app/profile",
           token: token,
