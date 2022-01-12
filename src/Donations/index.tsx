@@ -93,7 +93,6 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
-    taxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -296,7 +295,6 @@ function DonationInfo() {
                 {contactDetails.firstname && contactDetails.firstname}{" "}
                 {contactDetails.lastname && contactDetails.lastname} {" "}
               </p>
-              <p>{taxIdentificationAvail ? `${t('common:tinText')} ${contactDetails.tin && contactDetails.tin}` : null}</p>
               <p>{contactDetails.email && contactDetails.email}</p>
               <p>
                 {contactDetails.address && contactDetails.address}
@@ -309,6 +307,8 @@ function DonationInfo() {
                 {contactDetails.country &&
                   t(`country:${contactDetails.country.toLowerCase()}`)}
               </p>
+              <p>{contactDetails.tin ? `${t('common:tinText')} ${" "}${contactDetails.tin && contactDetails.tin}` : null}</p>
+
             </div>
           )}
 
