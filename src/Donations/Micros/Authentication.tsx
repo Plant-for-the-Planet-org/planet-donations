@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
+import { parseJwt } from "src/Utils/getFormattedNumber";
 
 interface Props {}
 
@@ -43,19 +44,33 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if ((user && user.email_verified) || queryToken) {
+    let token;
+    if (queryToken) {
+      const jwtToken = parseJwt(queryToken);
+      const isTokenValid =
+        new Date(jwtToken.exp * 1000).getTime() > new Date().getTime();
+      console.log(jwtToken, isTokenValid, "isTokenValid");
+      if (isTokenValid) {
+        token = queryToken;
+      }
+      let queryParams = { ...router.query };
+      delete queryParams.token;
+      router.replace({ query: queryParams });
+    } else if (user && user.email_verified) {
+      token = await getAccessTokenSilently();
+    }
+    console.log(token, "tokennnnnnnnnnnnnnnnnnn");
+    if ((user && user.email_verified) || token) {
       try {
         // if we have access token in the query params we use it instead of using the
-        const token = queryToken ? queryToken : await getAccessTokenSilently();
-        let queryParams = { ...router.query };
-        delete queryParams.token;
-        router.replace({ query: queryParams });
+
         const requestParams = {
           url: "/app/profile",
           token: token,
           setshowErrorCard,
         };
         const profile: any = await apiRequest(requestParams);
+        console.log(profile, "*****************************");
         if (profile.data) {
           if (profile.data.currency) {
             setcurrency(profile.data.currency);
@@ -127,7 +142,7 @@ function Authentication({}: Props): ReactElement {
       loadUserProfile();
     }
   }, [isAuthenticated, isLoading, queryToken]);
-
+  console.log(`user`, user, queryToken, profile);
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
@@ -184,7 +199,7 @@ function Authentication({}: Props): ReactElement {
           ) : (
             <UserProfile profile={profile} user={user} />
           )}
-          {user ? (
+          {user || (queryToken && profile) ? (
             <button
               className="login-continue"
               onClick={() => logout({ returnTo: window?.location.href })}
