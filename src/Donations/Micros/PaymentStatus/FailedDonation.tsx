@@ -94,7 +94,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     await loadPaymentSetup(donation.project.id, country);
     setdonationStep(3);
     router.replace({
-      query: { to: router.query.to, step: PAYMENT },
+      query: {
+        to: router.query.context ? router.query.context : router.query.to,
+        step: PAYMENT,
+      },
     });
   }
 
