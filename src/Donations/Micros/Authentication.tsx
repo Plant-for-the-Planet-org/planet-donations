@@ -49,7 +49,7 @@ function Authentication({}: Props): ReactElement {
       const jwtToken = parseJwt(queryToken);
       const isTokenValid =
         new Date(jwtToken.exp * 1000).getTime() > new Date().getTime();
-      console.log(jwtToken, isTokenValid, "isTokenValid");
+
       if (isTokenValid) {
         token = queryToken;
       }
@@ -59,7 +59,7 @@ function Authentication({}: Props): ReactElement {
     } else if (user && user.email_verified) {
       token = await getAccessTokenSilently();
     }
-    console.log(token, "tokennnnnnnnnnnnnnnnnnn");
+
     if ((user && user.email_verified) || token) {
       try {
         // if we have access token in the query params we use it instead of using the
@@ -70,7 +70,7 @@ function Authentication({}: Props): ReactElement {
           setshowErrorCard,
         };
         const profile: any = await apiRequest(requestParams);
-        console.log(profile, "*****************************");
+
         if (profile.data) {
           if (profile.data.currency) {
             setcurrency(profile.data.currency);
@@ -142,7 +142,7 @@ function Authentication({}: Props): ReactElement {
       loadUserProfile();
     }
   }, [isAuthenticated, isLoading, queryToken]);
-  console.log(`user`, user, queryToken, profile);
+
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
@@ -161,6 +161,8 @@ function Authentication({}: Props): ReactElement {
       if (!isLoading && isAuthenticated) {
         logout({ returnTo: window?.location.href });
       }
+    } else {
+      setqueryToken(null);
     }
   }, [router.query, isLoading, isAuthenticated]);
 
