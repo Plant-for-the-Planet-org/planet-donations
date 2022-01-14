@@ -150,9 +150,16 @@ function PaymentsForm({}: Props): ReactElement {
       returnTo,
       callbackMethod,
     });
-    router.replace({
-      query: { to: router.query.to, step: PAYMENT },
-    });
+    if (router.query.to) {
+      router.replace({
+        query: { to: projectDetails.id, step: PAYMENT },
+      });
+    }
+    if (router.query.context) {
+      router.replace({
+        query: { context: donation.id, step: PAYMENT },
+      });
+    }
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
       setpublishName(donation.hasPublicProfile);

@@ -32,6 +32,9 @@ function FailedDonation({ sendToReturn, donation }: any) {
     paymentError,
     setPaymentError,
     setAmount,
+    setreturnTo,
+    setCallbackMethod,
+    setredirectstatus,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
@@ -92,13 +95,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup(donation.project.id, country);
+    setreturnTo(donation.metadata.callback_url);
+    setCallbackMethod(donation.metadata.callback_method);
+    setredirectstatus("");
     setdonationStep(3);
-    router.replace({
-      query: {
-        to: router.query.context ? router.query.context : router.query.to,
-        step: PAYMENT,
-      },
-    });
   }
 
   return (
