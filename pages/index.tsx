@@ -214,7 +214,6 @@ export async function getServerSideProps(context: any) {
         setshowErrorCard,
       };
       const project = await apiRequest(requestParams);
-      console.log(project.data, "project.data");
       if (project.data) {
         projectDetails = project.data;
         donationStep = 1;

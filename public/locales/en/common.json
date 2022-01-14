@@ -1,7 +1,8 @@
 {
   "fortreeCountTrees": "for {{treeCount}} Tree",
   "fortreeCountTrees_plural": "for {{treeCount}} Trees",
-  "forQuantitym2": "for {{quantity}} m2",
+  "forQuantitym2": "for {{quantity}} m²",
+  "m2": "m²",
   "recipientName": "Recipient Name",
   "recipientNameRequired": "Recipient Name is required",
   "email": "Email",
@@ -68,6 +69,7 @@
   "fundingDonationSuccess": "Thank you for your contribution! You’ll receive a confirmation for your contribution on your email.",
   "fundingContributionMessage": "We will keep you posted about our actions, in the mean time maybe share with your friends about your contribution.",
   "yourTreesPlantedByOnLocation": "Your {{treeCount}} trees will be planted by {{projectName}} in {{location}}.",
+  "m2conservedByOnLocation": "{{quantity}} m² forest will be conserved by {{projectName}} in {{location}}",
   "myTreesPlantedByOnLocation": "My {{treeCount}} trees are being planted in {{location}}.",
   "plantTreesAtURL": "Restore & protect trees at {{url}}",
   "thankYou": "Thank You!",

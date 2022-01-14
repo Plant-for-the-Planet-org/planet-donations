@@ -142,9 +142,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       paymentSetup.purpose === "conservation" ? "" : currency,
                       option.quantity
                     )}{" "}
-                    {paymentSetup.purpose === "conservation"
-                      ? paymentSetup.unit
-                      : []}
+                    {paymentSetup.purpose === "conservation" ? t("m2") : []}
                   </span>
                 </div>
               </div>
