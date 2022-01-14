@@ -32,6 +32,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     paymentError,
     setPaymentError,
     setAmount,
+    tenant,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
@@ -46,6 +47,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        tenant,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {

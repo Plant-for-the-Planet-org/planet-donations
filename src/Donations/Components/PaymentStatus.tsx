@@ -30,6 +30,7 @@ function ThankYou() {
     const requestParams = {
       url: `/app/donations/${donationID}`,
       setshowErrorCard,
+      tenant,
     };
     const donation = await apiRequest(requestParams);
     if (donation.status === 200) {

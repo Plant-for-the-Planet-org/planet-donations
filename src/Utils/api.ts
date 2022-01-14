@@ -66,6 +66,7 @@ interface RequestParams {
   data?: any;
   setshowErrorCard: Function;
   tenantQueryParam?: boolean;
+  tenant?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -81,6 +82,7 @@ export const apiRequest = async (
     token = false,
     setshowErrorCard,
     tenantQueryParam = true,
+    tenant,
   } = extendedRequestParams;
 
   try {
@@ -108,11 +110,7 @@ export const apiRequest = async (
     }
     if (typeof Storage !== "undefined" && tenantQueryParam) {
       options.params = {
-        tenant: `${
-          localStorage.getItem("tenant")
-            ? localStorage.getItem("tenant")
-            : "ten_I9TW3ncG"
-        }`,
+        tenant: tenant,
       };
     } else if (tenantQueryParam) {
       options.params = { tenant: "ten_I9TW3ncG" };

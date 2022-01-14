@@ -1,5 +1,9 @@
 import { apiRequest } from "../../Utils/api";
-import { CreateDonationFunctionProps, PayDonationProps, HandleStripeSCAPaymentProps } from "../../Common/Types";
+import {
+  CreateDonationFunctionProps,
+  PayDonationProps,
+  HandleStripeSCAPaymentProps,
+} from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
@@ -94,6 +98,7 @@ export async function createDonationFunction({
   setshowErrorCard,
   frequency,
   amount,
+  tenant,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -114,6 +119,7 @@ export async function createDonationFunction({
       data: donationData,
       method: "POST",
       setshowErrorCard,
+      tenant,
       token: token ? token : false,
     };
     const donation = await apiRequest(requestParams);
@@ -248,7 +254,8 @@ export async function payDonationFunction({
       payDonationData,
       token,
       setshowErrorCard,
-      setPaymentError
+      setPaymentError,
+      tenant
     );
     if (paymentResponse) {
       if (
@@ -317,7 +324,8 @@ export async function confirmPaymentIntent(
   payDonationData: any,
   token: string,
   setshowErrorCard: any,
-  setPaymentError: any
+  setPaymentError: any,
+  tenant: string
 ) {
   // const payDonationData = {
   //   paymentProviderRequest: {
@@ -336,6 +344,7 @@ export async function confirmPaymentIntent(
     method: "PUT",
     setshowErrorCard,
     token: token ? token : false,
+    tenant,
   };
   const confirmationResponse = await apiRequest(requestParams);
   if (
@@ -426,7 +435,8 @@ export async function handleStripeSCAPayment({
               payDonationData,
               token,
               setshowErrorCard,
-              setPaymentError
+              setPaymentError,
+              tenant
             );
             successData = successResponse.data;
           } catch (error: any) {
