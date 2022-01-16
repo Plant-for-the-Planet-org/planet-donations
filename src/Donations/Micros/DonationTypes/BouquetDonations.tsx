@@ -208,7 +208,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       }}
                     >
                       {paymentSetup.purpose === "conservation"
-                        ? paymentSetup.unit
+                        ? t(paymentSetup.unit)
                         : []}
                     </p>
                   </div>
