@@ -46,7 +46,7 @@ function Authentication({}: Props): ReactElement {
   const loadUserProfile = async () => {
     // if we have access token in the query params we use it instead of using the
     const token = queryToken ? queryToken : await getAccessTokenSilently();
-    let queryParams = { ...router.query };
+    const queryParams = { ...router.query };
     delete queryParams.token;
     router.replace({ query: queryParams });
     if ((user && user.email_verified) || validateToken(token)) {
