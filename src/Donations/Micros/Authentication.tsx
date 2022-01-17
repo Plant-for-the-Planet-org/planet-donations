@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
-import { parseJwt } from "src/Utils/getFormattedNumber";
+import { validateToken } from "src/Utils/tokenActions";
 
 interface Props {}
 
@@ -44,26 +44,13 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    let token;
-    if (queryToken) {
-      const jwtToken = parseJwt(queryToken);
-      const isTokenValid =
-        new Date(jwtToken.exp * 1000).getTime() > new Date().getTime();
-
-      if (isTokenValid) {
-        token = queryToken;
-      }
-      let queryParams = { ...router.query };
-      delete queryParams.token;
-      router.replace({ query: queryParams });
-    } else if (user && user.email_verified) {
-      token = await getAccessTokenSilently();
-    }
-
-    if ((user && user.email_verified) || token) {
+    // if we have access token in the query params we use it instead of using the
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
+    let queryParams = { ...router.query };
+    delete queryParams.token;
+    router.replace({ query: queryParams });
+    if ((user && user.email_verified) || validateToken(token)) {
       try {
-        // if we have access token in the query params we use it instead of using the
-
         const requestParams = {
           url: "/app/profile",
           token: token,
@@ -161,8 +148,6 @@ function Authentication({}: Props): ReactElement {
       if (!isLoading && isAuthenticated) {
         logout({ returnTo: window?.location.href });
       }
-    } else {
-      setqueryToken(null);
     }
   }, [router.query, isLoading, isAuthenticated]);
 
@@ -188,11 +173,11 @@ function Authentication({}: Props): ReactElement {
           </div>
         ))}
 
-      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
+      {(!isLoading && isAuthenticated && profile) || profile?.displayName ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
-          {!profile.isPrivate ? (
+          {!profile?.isPrivate ? (
             <a
-              href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
+              href={`https://www1.plant-for-the-planet.org/t/${profile?.slug}`}
               target={"_blank"}
               rel="noreferrer"
             >
@@ -201,7 +186,7 @@ function Authentication({}: Props): ReactElement {
           ) : (
             <UserProfile profile={profile} user={user} />
           )}
-          {user || (queryToken && profile) ? (
+          {user || profile ? (
             <button
               className="login-continue"
               onClick={() => logout({ returnTo: window?.location.href })}
