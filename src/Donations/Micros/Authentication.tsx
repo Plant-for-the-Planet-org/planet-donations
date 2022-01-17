@@ -30,6 +30,7 @@ function Authentication({}: Props): ReactElement {
     setHideLogin,
     setcurrency,
     setcountry,
+    tenant,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -51,6 +52,7 @@ function Authentication({}: Props): ReactElement {
           url: "/app/profile",
           token: token,
           setshowErrorCard,
+          tenant,
         };
         const profile: any = await apiRequest(requestParams);
         if (profile.data) {
