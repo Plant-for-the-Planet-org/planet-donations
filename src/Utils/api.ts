@@ -30,16 +30,6 @@ axiosInstance.interceptors.request.use(
       config.headers["x-locale"] = "en";
     }
 
-    // if (typeof Storage !== "undefined") {
-    //   config.headers["tenant-key"] = `${
-    //     localStorage.getItem("tenant")
-    //       ? localStorage.getItem("tenant")
-    //       : "ten_I9TW3ncG"
-    //   }`;
-    // } else {
-    //   config.headers["tenant-key"] = "ten_I9TW3ncG";
-    // }
-
     return config;
   },
   (error) => {

@@ -341,19 +341,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.isReady]);
 
-  // React.useEffect(() => {
-  //   if (router.query.tenant) {
-  //     // TODO => verify tenant before setting it
-  //     settenant(router.query.tenant);
-  //     localStorage.setItem("tenant", router.query.tenant);
-  //   } else {
-  //     localStorage.removeItem("tenant");
-  //   }
-  //   return () => {
-  //     localStorage.removeItem("tenant");
-  //   };
-  // }, [router.query.tenant]);
-
   // Tree Count = treecount => Received from the URL
   React.useEffect(() => {
     if (router.query.units) {
