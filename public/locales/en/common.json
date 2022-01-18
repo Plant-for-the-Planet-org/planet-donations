@@ -71,6 +71,8 @@
   "yourTreesPlantedByOnLocation": "Your {{treeCount}} trees will be planted by {{projectName}} in {{location}}.",
   "m2conservedByOnLocation": "{{quantity}} m² forest will be conserved by {{projectName}} in {{location}}",
   "myTreesPlantedByOnLocation": "My {{treeCount}} trees are being planted in {{location}}.",
+  "iDonatedForestOnLocation": "I donated {{amount}} for forest conservation in {{location}}",
+  "weDonatedForestOnLocation": "We donated {{amount}} for forest conservation in {{location}}",
   "plantTreesAtURL": "Restore & protect trees at {{url}}",
   "thankYou": "Thank You!",
   "thankyouHeaderText": "We're on the road to a \n <h1>Trillion Trees</h1>",
