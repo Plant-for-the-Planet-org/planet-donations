@@ -8,12 +8,12 @@ import { QueryParamContext } from "src/Layout/QueryParamContext";
 interface Props {
   projectDetails: any;
   donation: any;
+  imageRef: any;
 }
 
-const ImageComponent = ({ projectDetails, donation }: Props) => {
+const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
-  const imageRef = React.createRef();
   const { profile } = React.useContext(QueryParamContext);
   let currencyFormat = () => {};
   if (donation) {
