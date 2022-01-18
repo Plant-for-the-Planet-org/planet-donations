@@ -104,12 +104,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               <div
                 key={index}
                 onClick={() => {
-                  setquantity(option.quantity);
+                  setquantity(
+                    paymentSetup.costIsMonthly && frequency == "yearly"
+                      ? option.quantity * 12
+                      : option.quantity
+                  );
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
                 className={`funding-selection-option ${
-                  option.quantity === quantity && !isCustomDonation
+                  (paymentSetup.costIsMonthly && frequency == "yearly"
+                    ? option.quantity * 12
+                    : option.quantity) === quantity && !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
                 }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
