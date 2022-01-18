@@ -25,10 +25,16 @@ function DonationAmount({}: Props): ReactElement {
                 : quantity
             )}
           </span>
-          {t("fortreeCountTrees", {
-            count: Number(quantity),
-            treeCount: getFormattedNumber(i18n.language, Number(quantity)),
-          })}
+          {paymentSetup.purpose === "trees"
+            ? t("fortreeCountTrees", {
+                count: Number(quantity),
+                treeCount: getFormattedNumber(i18n.language, Number(quantity)),
+              })
+            : paymentSetup.purpose === "conservation"
+            ? t("forQuantitym2", {
+                quantity: getFormattedNumber(i18n.language, Number(quantity)),
+              })
+            : []}
         </div>
       ) : (
         <div className={"text-center mt-20"}>
