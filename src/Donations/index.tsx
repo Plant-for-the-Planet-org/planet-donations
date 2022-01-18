@@ -305,7 +305,7 @@ function DonationInfo() {
               <p>{t("billingAddress")}</p>
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
-                {contactDetails.lastname && contactDetails.lastname}
+                {contactDetails.lastname && contactDetails.lastname} {" "}
               </p>
               <p>{contactDetails.email && contactDetails.email}</p>
               <p>
@@ -319,6 +319,8 @@ function DonationInfo() {
                 {contactDetails.country &&
                   t(`country:${contactDetails.country.toLowerCase()}`)}
               </p>
+              <p>{contactDetails.tin ? `${t('common:tinText')} ${" "}${contactDetails.tin && contactDetails.tin}` : null}</p>
+
             </div>
           )}
 
