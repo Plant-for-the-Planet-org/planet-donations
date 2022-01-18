@@ -81,12 +81,12 @@ function ThankYou() {
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
 
-  const { returnTo, paymentError } = React.useContext(QueryParamContext);
+  const { callbackUrl, paymentError } = React.useContext(QueryParamContext);
 
   const router = useRouter();
 
   const sendToReturn = () => {
-    router.push(returnTo);
+    router.push(callbackUrl);
   };
 
   const status = redirectstatus || donation?.paymentStatus;

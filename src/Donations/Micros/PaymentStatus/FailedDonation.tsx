@@ -14,7 +14,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
   // const [paymentError, setPaymentError] = useState("");
   const {
-    returnTo,
+    callbackUrl,
     donationID,
     setcountry,
     setIsTaxDeductible,
@@ -32,7 +32,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     paymentError,
     setPaymentError,
     setAmount,
-    setreturnTo,
+    setcallbackUrl,
     setCallbackMethod,
     setredirectstatus,
   } = React.useContext(QueryParamContext);
@@ -95,7 +95,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup(donation.project.id, country);
-    setreturnTo(donation.metadata.callback_url);
+    setcallbackUrl(donation.metadata.callback_url);
     setCallbackMethod(donation.metadata.callback_method);
     setredirectstatus("");
     setdonationStep(3);
@@ -103,7 +103,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
 
   return (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}

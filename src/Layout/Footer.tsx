@@ -21,13 +21,13 @@ import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 
-interface Props { }
+interface Props {}
 
-function Footer({ }: Props): ReactElement {
+function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
   const { language, setlanguage } = React.useContext(QueryParamContext);
 
-  const { returnTo, donationStep } = React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
   const { t, i18n, ready } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
@@ -36,9 +36,16 @@ function Footer({ }: Props): ReactElement {
     <div className="footer">
       <div className="footer-container">
         <DarkModeSwitch />
-        {returnTo && donationStep !== 4 ? <a href={returnTo}>{t("cancelReturn")}</a> : <p></p>}
+        {callbackUrl && donationStep !== 4 ? (
+          <a href={callbackUrl}>{t("cancelReturn")}</a>
+        ) : (
+          <p></p>
+        )}
         <div className="footer-links">
-          <button onClick={() => setlanguageModalOpen(!languageModalOpen)} data-test-id="languageButton">
+          <button
+            onClick={() => setlanguageModalOpen(!languageModalOpen)}
+            data-test-id="languageButton"
+          >
             {`${getLanguageName(language)}`}
             <DownArrowIcon
               color={

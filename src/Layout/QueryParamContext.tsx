@@ -40,8 +40,8 @@ export const QueryParamContext = React.createContext({
   isPaymentOptionsLoading: false,
   redirectstatus: "",
   setredirectstatus: (value: string) => {},
-  returnTo: "",
-  setreturnTo: (value: string) => {},
+  callbackUrl: "",
+  setcallbackUrl: (value: string) => {},
   isDirectDonation: false,
   tenant: "",
   selectedProjects: [],
@@ -135,7 +135,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
-  const [returnTo, setreturnTo] = useState("");
+  const [callbackUrl, setcallbackUrl] = useState("");
   const [callbackMethod, setCallbackMethod] = useState("");
 
   const [redirectstatus, setredirectstatus] = useState(null);
@@ -185,7 +185,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [language, router]);
 
-  // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
+  // Return URL = callbackUrl => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
     const pattern = new RegExp(
@@ -197,7 +197,7 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.callback_url) {
       if (testURL(router.query.callback_url)) {
-        setreturnTo(router.query.callback_url);
+        setcallbackUrl(router.query.callback_url);
       }
     }
   }, [router.query.callback_url]);
@@ -443,8 +443,8 @@ export default function QueryParamProvider({ children }: any) {
         isPaymentOptionsLoading,
         redirectstatus,
         setredirectstatus,
-        returnTo,
-        setreturnTo,
+        callbackUrl,
+        setcallbackUrl,
         isDirectDonation,
         tenant,
         selectedProjects,

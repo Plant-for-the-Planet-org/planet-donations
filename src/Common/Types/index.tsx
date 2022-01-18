@@ -100,7 +100,7 @@ export interface CreateDonationFunctionProps {
   setshowErrorCard: Function;
   frequency: string | null;
   amount?: number | null;
-  returnTo?: string | undefined;
+  callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
 }
 

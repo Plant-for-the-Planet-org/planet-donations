@@ -98,7 +98,7 @@ export async function createDonationFunction({
   setshowErrorCard,
   frequency,
   amount,
-  returnTo,
+  callbackUrl,
   callbackMethod,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
@@ -113,7 +113,7 @@ export async function createDonationFunction({
     giftDetails,
     frequency,
     amount,
-    returnTo,
+    callbackUrl,
     callbackMethod,
   });
   try {
@@ -156,7 +156,7 @@ export function createDonationData({
   giftDetails,
   frequency,
   amount,
-  returnTo,
+  callbackUrl,
   callbackMethod,
 }: any) {
   let donationData = {
@@ -174,7 +174,7 @@ export function createDonationData({
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
     metadata: {
-      callback_url: returnTo,
+      callback_url: callbackUrl,
       callback_method: callbackMethod,
     },
   };

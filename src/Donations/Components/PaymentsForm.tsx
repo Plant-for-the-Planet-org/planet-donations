@@ -71,7 +71,7 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentError,
     amount,
     setTransferDetails,
-    returnTo,
+    callbackUrl,
     callbackMethod,
   } = React.useContext(QueryParamContext);
 
@@ -147,7 +147,7 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
-      returnTo,
+      callbackUrl,
       callbackMethod,
     });
     if (router.query.to) {
