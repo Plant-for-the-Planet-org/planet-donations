@@ -102,6 +102,7 @@ export interface CreateDonationFunctionProps {
   amount?: number | null;
   callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
+  tenant: string;
 }
 
 export interface PayDonationProps {

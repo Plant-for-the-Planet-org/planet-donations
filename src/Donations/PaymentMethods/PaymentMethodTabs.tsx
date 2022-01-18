@@ -92,6 +92,7 @@ export default function PaymentMethodTabs({
         });
         break;
       case "bouquet":
+      case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
             i18n.language,
@@ -184,7 +185,10 @@ export default function PaymentMethodTabs({
           onClick={(e) => handleChange(e, "Bank")}
           {...a11yProps("Bank")}
         >
-          <div style={{ display: "flex", alignItems: "center" }} data-test-id="bankTransfer">
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            data-test-id="bankTransfer"
+          >
             <BankIcon />
             <text>{t("bankTransfer")}</text>
           </div>

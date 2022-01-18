@@ -30,16 +30,6 @@ axiosInstance.interceptors.request.use(
       config.headers["x-locale"] = "en";
     }
 
-    if (typeof Storage !== "undefined") {
-      config.headers["tenant-key"] = `${
-        localStorage.getItem("tenant")
-          ? localStorage.getItem("tenant")
-          : "ten_I9TW3ncG"
-      }`;
-    } else {
-      config.headers["tenant-key"] = "ten_I9TW3ncG";
-    }
-
     return config;
   },
   (error) => {
@@ -65,6 +55,8 @@ interface RequestParams {
   token?: any;
   data?: any;
   setshowErrorCard: Function;
+  tenantQueryParam?: boolean;
+  tenant?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -79,6 +71,8 @@ export const apiRequest = async (
     data = undefined,
     token = false,
     setshowErrorCard,
+    tenantQueryParam = true,
+    tenant,
   } = extendedRequestParams;
 
   try {
@@ -103,6 +97,13 @@ export const apiRequest = async (
       options.headers = {
         Authorization: `Bearer ${token}`,
       };
+    }
+    if (typeof Storage !== "undefined" && tenantQueryParam) {
+      options.params = {
+        tenant: tenant,
+      };
+    } else if (tenantQueryParam) {
+      options.params = { tenant: "ten_I9TW3ncG" };
     }
 
     // returns a promise with axios instance

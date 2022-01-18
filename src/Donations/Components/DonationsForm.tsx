@@ -119,6 +119,7 @@ function DonationsForm() {
       token,
       setshowErrorCard,
       frequency,
+      tenant,
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
@@ -151,6 +152,7 @@ function DonationsForm() {
     switch (projectDetails.purpose) {
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "conservation":
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "trees":
@@ -179,6 +181,7 @@ function DonationsForm() {
         });
         break;
       case "bouquet":
+      case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
             i18n.language,
@@ -190,7 +193,7 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country.toLowerCase()}`),
+          country: t(`country:${projectDetails?.country?.toLowerCase()}`),
         });
         break;
     }
@@ -241,7 +244,8 @@ function DonationsForm() {
 
             <div className={"horizontal-line"} />
 
-            {projectDetails.purpose === "trees" && <DonationAmount />}
+            {(projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
               minAmt &&

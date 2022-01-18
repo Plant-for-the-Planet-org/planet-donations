@@ -149,6 +149,7 @@ function PaymentsForm({}: Props): ReactElement {
       paymentSetup,
       callbackUrl,
       callbackMethod,
+      tenant,
     });
     if (router.query.to) {
       router.replace({
@@ -182,6 +183,7 @@ function PaymentsForm({}: Props): ReactElement {
         data: { publish: publishName },
         method: "PUT",
         setshowErrorCard,
+        tenant,
       };
       apiRequest(requestParams);
     }
