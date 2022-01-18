@@ -11,62 +11,63 @@ import { PaymentSetupProps } from "src/Common/Types";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
-  setisGift: (value: boolean) => { },
+  setisGift: (value: boolean) => {},
   giftDetails: {},
-  setgiftDetails: (value: {}) => { },
+  setgiftDetails: (value: {}) => {},
   contactDetails: {},
-  setContactDetails: (value: {}) => { },
+  setContactDetails: (value: {}) => {},
   country: "",
-  setcountry: (value: "") => { },
+  setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: ({ }) => { },
+  setpaymentSetup: ({}) => {},
   currency: "",
-  setcurrency: (value: "") => { },
+  setcurrency: (value: "") => {},
   donationStep: null,
-  setdonationStep: (value: number) => { },
+  setdonationStep: (value: number) => {},
   projectDetails: null,
   quantity: 50,
-  setquantity: (value: number) => { },
+  setquantity: (value: number) => {},
   language: "en",
-  setlanguage: (value: string) => { },
+  setlanguage: (value: string) => {},
   donationID: null,
-  setdonationID: (value: string) => { },
+  setdonationID: (value: string) => {},
   paymentType: "",
   setPaymentType: (value: string) => "",
   shouldCreateDonation: false,
-  setshouldCreateDonation: (value: boolean) => { },
-  setIsTaxDeductible: (value: boolean) => { },
+  setshouldCreateDonation: (value: boolean) => {},
+  setIsTaxDeductible: (value: boolean) => {},
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
   redirectstatus: "",
   returnTo: "",
   isDirectDonation: false,
   tenant: "",
+  settenant: (value: string) => {},
   selectedProjects: [],
-  setSelectedProjects: (value: Array<any>) => { },
+  setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
   allowTaxDeductionChange: true,
-  setallowTaxDeductionChange: (value: boolean) => { },
+  setallowTaxDeductionChange: (value: boolean) => {},
   donationUid: null,
   setDonationUid: (value: string) => "",
-  setshowErrorCard: (value: boolean) => { },
-  setprojectDetails: (value: {}) => { },
+  setshowErrorCard: (value: boolean) => {},
+  setprojectDetails: (value: {}) => {},
   transferDetails: null,
-  setTransferDetails: (value: {}) => { },
-  loadselectedProjects: () => { },
+  setTransferDetails: (value: {}) => {},
+  loadselectedProjects: () => {},
   hideTaxDeduction: false,
   queryToken: "",
   setqueryToken: (value: string) => "",
-  sethideTaxDeduction: (value: boolean) => { },
-  setisDirectDonation: (value: boolean) => { },
+  sethideTaxDeduction: (value: boolean) => {},
+  setisDirectDonation: (value: boolean) => {},
   isSignedUp: false,
-  setIsSignedUp: (value: boolean) => { },
+  setIsSignedUp: (value: boolean) => {},
   frequency: "",
-  setfrequency: (value: string) => { },
+  setfrequency: (value: string) => {},
   hideLogin: false,
-  setHideLogin: (value: boolean) => { },
+  setHideLogin: (value: boolean) => {},
   paymentError: "",
-  setPaymentError: (value: string) => { },
+  setPaymentError: (value: string) => {},
   amount: null,
   setAmount: (value: number) => { },
   taxIdentificationAvail: {},
@@ -219,6 +220,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/projects?_scope=map`,
         setshowErrorCard,
+        tenant,
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
@@ -248,6 +250,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        tenant,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
@@ -286,6 +289,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
+        tenantQueryParam: false,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {
@@ -339,19 +343,6 @@ export default function QueryParamProvider({ children }: any) {
       loadConfig();
     }
   }, [router.isReady]);
-
-  React.useEffect(() => {
-    if (router.query.tenant) {
-      // TODO => verify tenant before setting it
-      settenant(router.query.tenant);
-      localStorage.setItem("tenant", router.query.tenant);
-    } else {
-      localStorage.removeItem("tenant");
-    }
-    return () => {
-      localStorage.removeItem("tenant");
-    };
-  }, [router.query.tenant]);
 
   // Tree Count = treecount => Received from the URL
   React.useEffect(() => {
@@ -445,6 +436,7 @@ export default function QueryParamProvider({ children }: any) {
         returnTo,
         isDirectDonation,
         tenant,
+        settenant,
         selectedProjects,
         setSelectedProjects,
         allProjects,

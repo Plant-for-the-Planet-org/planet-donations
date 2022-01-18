@@ -145,6 +145,7 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
+      tenant,
     });
 
     if (donation) {
@@ -169,6 +170,7 @@ function PaymentsForm({}: Props): ReactElement {
         data: { publish: publishName },
         method: "PUT",
         setshowErrorCard,
+        tenant,
       };
       apiRequest(requestParams);
     }
