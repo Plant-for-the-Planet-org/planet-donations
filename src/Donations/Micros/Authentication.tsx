@@ -46,9 +46,6 @@ function Authentication({}: Props): ReactElement {
   const loadUserProfile = async () => {
     // if we have access token in the query params we use it instead of using the
     const token = queryToken ? queryToken : await getAccessTokenSilently();
-    const queryParams = { ...router.query };
-    delete queryParams.token;
-    router.replace({ query: queryParams });
     if ((user && user.email_verified) || validateToken(token)) {
       try {
         const requestParams = {
@@ -128,6 +125,9 @@ function Authentication({}: Props): ReactElement {
     } else if (queryToken) {
       loadUserProfile();
     }
+    const queryParams = { ...router.query };
+    delete queryParams.token;
+    router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, ready } = useTranslation("common");
@@ -142,15 +142,19 @@ function Authentication({}: Props): ReactElement {
 
   React.useEffect(() => {
     // if there is token in the query params use it
-    if (router.query.token) {
-      setqueryToken(router.query.token);
+    if (
+      (router.query.token && validateToken(router.query.token)) ||
+      validateToken(queryToken)
+    ) {
+      setqueryToken(router.query.token || queryToken);
       // If user is logged in via auth0, log them out
       if (!isLoading && isAuthenticated) {
         logout({ returnTo: window?.location.href });
       }
+    } else {
+      setqueryToken("");
     }
   }, [router.query, isLoading, isAuthenticated]);
-
   return (
     <div>
       {!queryToken &&
