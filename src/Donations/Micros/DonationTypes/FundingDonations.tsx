@@ -37,6 +37,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
+    setfrequency,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -53,6 +54,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   };
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
+      setfrequency(paymentSetup.costIsMonthly ? "monthly" : "once");
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {

@@ -30,8 +30,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   //   <PlantPotIcon />,
   //   <TreeIcon />,
   // ];
-  const { paymentSetup, currency, quantity, setquantity, isGift, giftDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    paymentSetup,
+    currency,
+    quantity,
+    setquantity,
+    isGift,
+    giftDetails,
+    setfrequency,
+  } = React.useContext(QueryParamContext);
   // React.useEffect(() => {
   //   if (paymentSetup?.options) {
   //     setquantity(paymentSetup.options[1].quantity);
@@ -70,6 +77,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
+      setfrequency(paymentSetup.costIsMonthly ? "monthly" : "once");
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {
