@@ -33,6 +33,8 @@ interface Props {
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
   tenant: string;
+  callbackUrl: string;
+  callbackMethod: string;
 }
 
 function index({
@@ -56,6 +58,8 @@ function index({
   meta,
   frequency,
   tenant,
+  callbackUrl,
+  callbackMethod,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -76,6 +80,8 @@ function index({
     setquantity,
     setfrequency,
     settenant,
+    setcallbackUrl,
+    setCallbackMethod,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -90,13 +96,15 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
       setfrequency(frequency);
+
       if (projectDetails && projectDetails.purpose === "trees") {
         setquantity(treecount);
       } else {
         setquantity(amount);
       }
     }
-
+    setcallbackUrl(callbackUrl);
+    setCallbackMethod(callbackMethod);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
   settenant(tenant);
@@ -201,6 +209,9 @@ export async function getServerSideProps(context: any) {
   let paymentSetup = {};
   let amount = 0;
   let tenant = "ten_I9TW3ncG";
+  let callbackUrl = "";
+  let callbackMethod = "";
+
   function setshowErrorCard() {
     showErrorCard = true;
   }
@@ -295,7 +306,10 @@ export async function getServerSideProps(context: any) {
           hideTaxDeduction = true;
           country = donorData.country;
         }
-
+        if (donation.data.metadata) {
+          callbackMethod = donation.data.metadata?.callback_method;
+          callbackUrl = donation.data.metadata?.callback_url;
+        }
         // This will fetch the payment options
         try {
           const requestParams = {
@@ -449,6 +463,8 @@ export async function getServerSideProps(context: any) {
       meta: { title, description, image, url },
       frequency,
       tenant,
+      callbackMethod,
+      callbackUrl,
     }, // will be passed to the page component as props
   };
 }

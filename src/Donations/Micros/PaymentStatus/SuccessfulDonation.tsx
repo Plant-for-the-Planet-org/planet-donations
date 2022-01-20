@@ -23,7 +23,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
       }
     }
   });
-  const { paymentType, returnTo, projectDetails } =
+  const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
   const imageRef = React.createRef();
@@ -66,9 +66,9 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
           {`Ref - ${donationID}`}
         </a>
       )}
-      {returnTo && (
+      {callbackUrl && (
         <ReturnToButton
-          returnTo={returnTo}
+          callbackUrl={callbackUrl}
           donationContext={donationID}
           donationStatus="success"
         />

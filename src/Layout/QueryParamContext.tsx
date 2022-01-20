@@ -39,7 +39,9 @@ export const QueryParamContext = React.createContext({
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
   redirectstatus: "",
-  returnTo: "",
+  setredirectstatus: (value: string) => {},
+  callbackUrl: "",
+  setcallbackUrl: (value: string) => {},
   isDirectDonation: false,
   tenant: "",
   settenant: (value: string) => {},
@@ -69,10 +71,11 @@ export const QueryParamContext = React.createContext({
   paymentError: "",
   setPaymentError: (value: string) => {},
   amount: null,
-  setAmount: (value: number) => { },
+  setAmount: (value: number) => {},
   taxIdentificationAvail: {},
   setTaxIdentificationAvail: (value: boolean) => {},
   callbackMethod: "",
+  setCallbackMethod: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -135,8 +138,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
-  const [returnTo, setreturnTo] = useState("");
-  const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false)
+  const [callbackUrl, setcallbackUrl] = useState("");
+  const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
 
   const [redirectstatus, setredirectstatus] = useState(null);
@@ -186,7 +189,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [language, router]);
 
-  // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
+  // Return URL = callbackUrl => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
     const pattern = new RegExp(
@@ -198,7 +201,7 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.callback_url) {
       if (testURL(router.query.callback_url)) {
-        setreturnTo(router.query.callback_url);
+        setcallbackUrl(router.query.callback_url);
       }
     }
   }, [router.query.callback_url]);
@@ -433,7 +436,9 @@ export default function QueryParamProvider({ children }: any) {
         setIsTaxDeductible,
         isPaymentOptionsLoading,
         redirectstatus,
-        returnTo,
+        setredirectstatus,
+        callbackUrl,
+        setcallbackUrl,
         isDirectDonation,
         tenant,
         settenant,
@@ -470,6 +475,7 @@ export default function QueryParamProvider({ children }: any) {
         taxIdentificationAvail,
         setTaxIdentificationAvail,
         callbackMethod,
+        setCallbackMethod,
       }}
     >
       {children}
