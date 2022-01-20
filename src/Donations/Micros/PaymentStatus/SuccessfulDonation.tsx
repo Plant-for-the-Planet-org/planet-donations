@@ -43,7 +43,11 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         projectDetails={projectDetails}
         donation={donation}
       />
-      <ImageComponent projectDetails={projectDetails} donation={donation} />
+      <ImageComponent
+        projectDetails={projectDetails}
+        donation={donation}
+        imageRef={imageRef}
+      />
 
       <ShareOptions
         treeCount={getFormattedNumber(
