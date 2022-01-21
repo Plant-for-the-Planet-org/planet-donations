@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
+import { validateToken } from "src/Utils/tokenActions";
 
 interface Props {}
 
@@ -44,10 +45,10 @@ function Authentication({}: Props): ReactElement {
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
 
   const loadUserProfile = async () => {
-    if ((user && user.email_verified) || queryToken) {
+    // if we have access token in the query params we use it instead of using the
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
+    if ((user && user.email_verified) || validateToken(token)) {
       try {
-        // if we have access token in the query params we use it instead of using the
-        const token = queryToken ? queryToken : await getAccessTokenSilently();
         const requestParams = {
           url: "/app/profile",
           token: token,
@@ -55,6 +56,7 @@ function Authentication({}: Props): ReactElement {
           tenant,
         };
         const profile: any = await apiRequest(requestParams);
+
         if (profile.data) {
           if (profile.data.currency) {
             setcurrency(profile.data.currency);
@@ -125,6 +127,9 @@ function Authentication({}: Props): ReactElement {
     } else if (queryToken) {
       loadUserProfile();
     }
+    const queryParams = { ...router.query };
+    delete queryParams.token;
+    router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, ready } = useTranslation("common");
@@ -139,15 +144,19 @@ function Authentication({}: Props): ReactElement {
 
   React.useEffect(() => {
     // if there is token in the query params use it
-    if (router.query.token) {
-      setqueryToken(router.query.token);
+    if (
+      (router.query.token && validateToken(router.query.token)) ||
+      validateToken(queryToken)
+    ) {
+      setqueryToken(router.query.token || queryToken);
       // If user is logged in via auth0, log them out
       if (!isLoading && isAuthenticated) {
         logout({ returnTo: window?.location.href });
       }
+    } else {
+      setqueryToken("");
     }
   }, [router.query, isLoading, isAuthenticated]);
-
   return (
     <div>
       {!queryToken &&
@@ -170,11 +179,11 @@ function Authentication({}: Props): ReactElement {
           </div>
         ))}
 
-      {(!isLoading && isAuthenticated && profile) || (queryToken && profile) ? (
+      {(!isLoading && isAuthenticated && profile) || profile?.displayName ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
-          {!profile.isPrivate ? (
+          {!profile?.isPrivate ? (
             <a
-              href={`https://www1.plant-for-the-planet.org/t/${profile.slug}`}
+              href={`https://www1.plant-for-the-planet.org/t/${profile?.slug}`}
               target={"_blank"}
               rel="noreferrer"
             >
@@ -183,7 +192,7 @@ function Authentication({}: Props): ReactElement {
           ) : (
             <UserProfile profile={profile} user={user} />
           )}
-          {user ? (
+          {user || profile ? (
             <button
               className="login-continue"
               onClick={() => logout({ returnTo: window?.location.href })}

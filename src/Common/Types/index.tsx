@@ -100,6 +100,8 @@ export interface CreateDonationFunctionProps {
   setshowErrorCard: Function;
   frequency: string | null;
   amount?: number | null;
+  callbackUrl?: string | undefined;
+  callbackMethod?: string | undefined;
   tenant: string;
 }
 

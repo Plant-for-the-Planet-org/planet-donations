@@ -26,7 +26,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
-import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
+import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
@@ -71,6 +71,8 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentError,
     amount,
     setTransferDetails,
+    callbackUrl,
+    callbackMethod,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -145,9 +147,20 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
+      callbackUrl,
+      callbackMethod,
       tenant,
     });
-
+    if (router.query.to) {
+      router.replace({
+        query: { to: projectDetails.id, step: PAYMENT },
+      });
+    }
+    if (router.query.context) {
+      router.replace({
+        query: { context: donation.id, step: PAYMENT },
+      });
+    }
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
       setpublishName(donation.hasPublicProfile);

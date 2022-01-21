@@ -9,7 +9,7 @@ import ReturnToButton from "./Components/ReturnToButton";
 function TransferDetails({ donationID, donation, sendToReturn }: any) {
   const { t } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
-  const { returnTo, transferDetails } = React.useContext(QueryParamContext);
+  const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);
   const copyDetails = (detail: string, textCopied: string) => {
     navigator.clipboard.writeText(detail);
     setCopiedText(textCopied);
@@ -17,7 +17,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
   };
   return (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}
@@ -110,7 +110,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
       >
         {t("common:transactionId")} {donationID}
       </div>
-      {returnTo && (
+      {callbackUrl && (
         <ReturnToButton donationContext={donationID} donationStatus="pending" />
       )}
     </div>
@@ -123,8 +123,9 @@ const CopyButton = ({ copiedText, buttonFor, t }: any) => {
   return (
     <div className="copy-container">
       <p
-        className={`copy-tooltip ${copiedText === buttonFor ? "show-tooltip" : ""
-          }`}
+        className={`copy-tooltip ${
+          copiedText === buttonFor ? "show-tooltip" : ""
+        }`}
       >
         {copiedText === buttonFor
           ? t("common:copied")

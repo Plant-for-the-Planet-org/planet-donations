@@ -6,9 +6,8 @@ import ShareOptions from "../../Micros/ShareOptions";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
-
 
 function SuccessfulDonation({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
@@ -16,7 +15,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
   const [isMobile, setIsMobile] = React.useState(false);
   const { donationID, tenant } = React.useContext(QueryParamContext);
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
         setIsMobile(false);
       } else {
@@ -24,7 +23,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
       }
     }
   });
-  const { paymentType, returnTo, projectDetails } =
+  const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
   const imageRef = React.createRef();
@@ -35,7 +34,6 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
 
   return donation ? (
     <div>
-
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}
       </div>
@@ -45,7 +43,11 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         projectDetails={projectDetails}
         donation={donation}
       />
-      <ImageComponent projectDetails={projectDetails} donation={donation} />
+      <ImageComponent
+        projectDetails={projectDetails}
+        donation={donation}
+        imageRef={imageRef}
+      />
 
       <ShareOptions
         treeCount={getFormattedNumber(
@@ -55,7 +57,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         sendRef={sendRef}
         donor={donation.donor}
       />
-      {donationID && isMobile && (router.query.step === "thankyou") && (
+      {donationID && isMobile && router.query.step === "thankyou" && (
         <a
           href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
           className="donations-transaction-details donation-transaction-phone-view"
@@ -64,8 +66,12 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
           {`Ref - ${donationID}`}
         </a>
       )}
-      {returnTo && (
-        <ReturnToButton returnTo={returnTo} donationContext={donationID} donationStatus="success" />
+      {callbackUrl && (
+        <ReturnToButton
+          callbackUrl={callbackUrl}
+          donationContext={donationID}
+          donationStatus="success"
+        />
       )}
     </div>
   ) : (

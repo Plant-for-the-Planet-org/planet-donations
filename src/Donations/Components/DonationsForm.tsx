@@ -78,6 +78,9 @@ function DonationsForm() {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
+  // let queryParams = { ...router.query };
+  // delete queryParams.callback_method;
+  // console.log(queryParams, "queryParams");
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);

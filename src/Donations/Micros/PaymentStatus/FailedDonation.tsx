@@ -14,7 +14,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
   // const [paymentError, setPaymentError] = useState("");
   const {
-    returnTo,
+    callbackUrl,
     donationID,
     setcountry,
     setIsTaxDeductible,
@@ -32,6 +32,9 @@ function FailedDonation({ sendToReturn, donation }: any) {
     paymentError,
     setPaymentError,
     setAmount,
+    setcallbackUrl,
+    setCallbackMethod,
+    setredirectstatus,
     tenant,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
@@ -94,15 +97,15 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup(donation.project.id, country);
+    setcallbackUrl(donation.metadata.callback_url);
+    setCallbackMethod(donation.metadata.callback_method);
+    setredirectstatus("");
     setdonationStep(3);
-    router.push({
-      query: { ...router.query, step: PAYMENT },
-    });
   }
 
   return (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}

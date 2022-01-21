@@ -8,7 +8,7 @@ import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress
 function SuccessfulDonationJane({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
-  const { paymentType, returnTo, projectDetails } =
+  const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
   const imageRef = React.createRef();
@@ -18,14 +18,14 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
   const sendRef = () => imageRef;
 
   let returnDisplay;
-  if (returnTo) {
-    const x = returnTo.slice(8);
+  if (callbackUrl) {
+    const x = callbackUrl.slice(8);
     returnDisplay = x.split("/", 2);
   }
 
   return donation ? (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}
@@ -68,7 +68,10 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
           allowFullScreen
         />
       </div>
-      <a href="https://www.treesforjane.org/" className={"mt-20 linkText mb-20 text-center"}>
+      <a
+        href="https://www.treesforjane.org/"
+        className={"mt-20 linkText mb-20 text-center"}
+      >
         {t("common:backToTreesForJane")}
       </a>
     </div>
