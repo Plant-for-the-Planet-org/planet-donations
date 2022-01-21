@@ -37,6 +37,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
+    setfrequency,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -51,12 +52,20 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       }
     }
   };
+
+  const getFrequencyBasedQuantity = (quantity: number) => {
+    const frequencyBasedQuantity =
+      paymentSetup.costIsMonthly && frequency == "yearly"
+        ? quantity * 12
+        : quantity;
+    return frequencyBasedQuantity;
+  };
   React.useEffect(() => {
     if (paymentSetup && paymentSetup.options) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.options) {
-        newallOptionsArray.push(option.quantity);
+        newallOptionsArray.push(getFrequencyBasedQuantity(option.quantity));
       }
       const defaultPaymentOption = paymentSetup.options.filter(
         (option) => option.isDefault === true
@@ -64,8 +73,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       const newQuantity = router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
-        ? defaultPaymentOption[0].quantity
-        : paymentSetup.options[1].quantity;
+        ? getFrequencyBasedQuantity(defaultPaymentOption[0].quantity)
+        : getFrequencyBasedQuantity(paymentSetup.options[1].quantity);
       setquantity(newQuantity);
 
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
@@ -82,7 +91,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         setisCustomDonation(false);
       }
     }
-  }, [paymentSetup]);
+  }, [paymentSetup, frequency]);
   React.useEffect(() => {
     if (isCustomDonation) {
       customInputRef?.current?.focus();
@@ -104,12 +113,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               <div
                 key={index}
                 onClick={() => {
-                  setquantity(option.quantity);
+                  setquantity(getFrequencyBasedQuantity(option.quantity));
                   setisCustomDonation(false);
                   setCustomInputValue("");
                 }}
                 className={`funding-selection-option ${
-                  option.quantity === quantity && !isCustomDonation
+                  getFrequencyBasedQuantity(option.quantity) === quantity &&
+                  !isCustomDonation
                     ? "funding-selection-option-selected"
                     : ""
                 }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
@@ -145,9 +155,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.costIsMonthly && frequency == "yearly"
-                        ? option.quantity * 12
-                        : option.quantity
+                      getFrequencyBasedQuantity(option.quantity)
                     )}
                   </span>
                 </div>
