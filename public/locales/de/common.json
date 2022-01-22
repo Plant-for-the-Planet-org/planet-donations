@@ -1,6 +1,8 @@
 {
   "fortreeCountTrees": "für {{treeCount}} Baum",
   "fortreeCountTrees_plural": "für {{treeCount}} Bäume",
+  "forQuantitym2": "für {{quantity}} m²",
+  "m2": "m²",
   "recipientName": "Name des Empfängers",
   "recipientNameRequired": "Name des Empfängers ist erforderlich",
   "email": "E-Mail",
@@ -67,7 +69,10 @@
   "fundingDonationSuccess": "Vielen Dank für deinen Beitrag! Du erhältst eine Bescheinigung für deinen Beitrag per E-Mail.",
   "fundingContributionMessage": "Wir werden dich über unsere Aktionen auf dem Laufenden halten, und in der Zwischenzeit kannst du deinen Freunden von deinem Beitrag berichten.",
   "yourTreesPlantedByOnLocation": "Deine {{treeCount}} Bäume werden von {{projectName}} in {{location}} gepflanzt.",
+  "m2conservedByOnLocation": "{{quantity}} m² Wald werden durch {{projectName}} in {{location}} erhalten",
   "myTreesPlantedByOnLocation": "Meine {{treeCount}} Bäume werden gepflanzt in {{location}} .",
+  "iDonatedForestOnLocation": "Ich habe {{amount}} für die Erhaltung der Wälder in {{location}} gespendet",
+  "weDonatedForestOnLocation": "Wir haben {{amount}} für die Erhaltung der Wälder in {{location}} gespendet",
   "plantTreesAtURL": "Pflanze & beschütze Bäume mit! {{url}}",
   "thankYou": "Vielen Dank!",
   "thankyouHeaderText": "Wir sind auf dem Weg zu einer \n <h1>Billionen Bäume</h1>",
@@ -138,5 +143,6 @@
   "fallbackdescription": "Mache steuerlich absetzbare Spenden für über 200+ Renaturierungs- und Schutzprojekte. Deine Reise zu einer Billion Bäume beginnt hier.",
   "taxIdentificationNumber": "Steueridentifikationsnummer",
   "tinRequired": "Steueridentifikationsnummer ist erforderlich",
+  "tinText": "TIN:",
   "returnTo": "Zurück zu"
 }
