@@ -89,7 +89,7 @@ function ContactsForm({}: Props): ReactElement {
       ...data,
       email: isAuthenticated ? contactDetails.email : data.email,
     });
-    setdonationStep(3);
+    // setdonationStep(3);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -168,7 +168,7 @@ function ContactsForm({}: Props): ReactElement {
               router.push({
                 query: { ...router.query, step: DONATE },
               });
-              setdonationStep(1);
+              // setdonationStep(1);
             }}
             style={{ marginRight: "12px" }}
           >

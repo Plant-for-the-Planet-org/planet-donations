@@ -269,7 +269,7 @@ function DonationsForm() {
                       router.push({
                         query: { ...router.query, step: CONTACT },
                       });
-                      setdonationStep(2);
+                      // setdonationStep(2);
                       setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
