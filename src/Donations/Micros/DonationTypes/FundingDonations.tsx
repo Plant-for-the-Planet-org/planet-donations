@@ -96,7 +96,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
-  console.log("quantity", quantity);
 
   return (
     <>

@@ -59,6 +59,9 @@ function FailedDonation({ sendToReturn, donation }: any) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
         setpaymentSetup(paymentSetupData.data);
+        setquantity(
+          Math.round(donation.amount / paymentSetupData.data.unitCost)
+        );
       }
       setIsPaymentOptionsLoading(false);
       // setdonationStep(3);
@@ -75,9 +78,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // }
     setContactDetails(donation.donor);
     setAmount(donation.amount);
-    if (donation.treeCount) {
-      setquantity(donation.treeCount);
-    }
+
     let country;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;

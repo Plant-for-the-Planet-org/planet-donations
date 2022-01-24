@@ -110,6 +110,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [paymentSetup]);
 
+  const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
+    Math.abs(v1 - v2) < epsilon;
   // IMP TO DO -> Due to new requirements of showing Rounded costs for Bouquet and in future for all we will now have to start passing the amount instead of quantity and unitCost, this demands a structural change in multiple files and hence should be done carefully
 
   // const roundedCostCalculator=(unitCost,quantity)=>{
@@ -138,7 +140,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setCustomInputValue("");
                   }}
                   className={`funding-selection-option ${
-                    option.quantity === quantity && !isCustomDonation
+                    approximatelyEqual(option.quantity, quantity) &&
+                    !isCustomDonation
                       ? "funding-selection-option-selected"
                       : ""
                   }`}
@@ -152,11 +155,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div> */}
                   <div className="funding-selection-option-text m-10">
                     <span style={{ fontSize: "18px" }}>
-                      {getFormatedCurrency(
-                        i18n.language,
-                        paymentSetup.purpose === "conservation" ? "" : currency,
-                        option.quantity * paymentSetup.unitCost
-                      )}{" "}
+                      {paymentSetup.purpose === "conservation"
+                        ? option.quantity
+                        : getFormatedCurrency(
+                            i18n.language,
+                            currency,
+                            option.quantity * paymentSetup.unitCost
+                          )}{" "}
                       {paymentSetup.purpose === "conservation" ? t("m2") : []}
                     </span>
                   </div>
