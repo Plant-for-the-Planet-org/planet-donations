@@ -38,7 +38,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
-    setfrequency,
+    retainQuantityValue,
   } = React.useContext(QueryParamContext);
   // React.useEffect(() => {
   //   if (paymentSetup?.options) {
@@ -57,12 +57,16 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       // setquantity(e.target.value);
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1 / paymentSetup.unitCost);
+        setquantity(
+          paymentSetup.purpose === "conservation"
+            ? 1
+            : 1 / paymentSetup.unitCost
+        );
       } else if (e.target.value.toString().length <= 12) {
         setquantity(
-          // paymentSetup.unitBased
-          //   ? e.target.value * paymentSetup.unitCost
-          e.target.value / paymentSetup.unitCost
+          paymentSetup.purpose === "conservation"
+            ? e.target.value
+            : e.target.value / paymentSetup.unitCost
         );
       }
     }
@@ -90,7 +94,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         `${frequency}`
       ].options.filter((option) => option.isDefault === true);
 
-      const newQuantity = router.query.units
+      const newQuantity = retainQuantityValue
+        ? quantity * paymentSetup.unitCost
+        : router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost

@@ -38,6 +38,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     giftDetails,
     frequency,
     setfrequency,
+    retainQuantityValue,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -70,14 +71,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
       ].options.filter((option) => option.isDefault === true);
-      const newQuantity = router.query.units
+      const newQuantity = retainQuantityValue
+        ? quantity * paymentSetup.unitCost
+        : router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
           paymentSetup.unitCost;
       setquantity(Math.round(newQuantity / paymentSetup.unitCost));
-
       if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
         setCustomInputValue(newQuantity * paymentSetup.unitCost);
         setisCustomDonation(true);

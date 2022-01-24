@@ -45,6 +45,7 @@ function DonationsForm() {
     frequency,
     tenant,
     setTransferDetails,
+    setRetainQuantityValue,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -269,6 +270,7 @@ function DonationsForm() {
                         query: { ...router.query, step: CONTACT },
                       });
                       setdonationStep(2);
+                      setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
                     paymentLabel={paymentLabel}

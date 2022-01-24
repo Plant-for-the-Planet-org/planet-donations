@@ -76,6 +76,8 @@ export const QueryParamContext = React.createContext({
   setTaxIdentificationAvail: (value: boolean) => {},
   callbackMethod: "",
   setCallbackMethod: (value: string) => {},
+  retainQuantityValue: false,
+  setRetainQuantityValue: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -153,7 +155,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [profile, setprofile] = React.useState<null | Object>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
-
+  const [retainQuantityValue, setRetainQuantityValue] =
+    React.useState<boolean>(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
@@ -219,6 +222,7 @@ export default function QueryParamProvider({ children }: any) {
     ) {
       setfrequency(Object.keys(paymentSetup?.frequencies)[0]);
     }
+    setRetainQuantityValue(false);
   }, [paymentSetup]);
 
   async function loadselectedProjects() {
@@ -357,10 +361,8 @@ export default function QueryParamProvider({ children }: any) {
       if (Number(router.query.units) > 0) {
         setquantity(Number(router.query.units) / paymentSetup.unitCost);
       }
-      //  else {
-      //   setquantity(50);
-      // }
     }
+    setRetainQuantityValue(false);
   }, [router.query.units]);
 
   React.useEffect(() => {
@@ -480,6 +482,8 @@ export default function QueryParamProvider({ children }: any) {
         setTaxIdentificationAvail,
         callbackMethod,
         setCallbackMethod,
+        retainQuantityValue,
+        setRetainQuantityValue,
       }}
     >
       {children}
