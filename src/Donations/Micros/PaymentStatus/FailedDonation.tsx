@@ -59,9 +59,6 @@ function FailedDonation({ sendToReturn, donation }: any) {
           setcountry(paymentSetupData.data.effectiveCountry);
         }
         setpaymentSetup(paymentSetupData.data);
-        setquantity(
-          Math.round(donation.amount / paymentSetupData.data.unitCost)
-        );
       }
       setIsPaymentOptionsLoading(false);
       // setdonationStep(3);
@@ -73,9 +70,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");
-    // if (donation?.project?.purpose === "trees") {
-    //   setquantity(donation?.treeCount);
-    // }
+    setquantity(donation?.quantity);
     setContactDetails(donation.donor);
     setAmount(donation.amount);
 

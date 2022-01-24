@@ -13,7 +13,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
-import { PAYMENT } from "src/Utils/donationStepConstants";
+import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
@@ -165,10 +165,10 @@ function ContactsForm({}: Props): ReactElement {
           <button
             className="d-flex"
             onClick={() => {
-              setdonationStep(1);
               router.push({
-                query: { ...router.query, step: "donate" },
+                query: { ...router.query, step: DONATE },
               });
+              setdonationStep(1);
             }}
             style={{ marginRight: "12px" }}
           >

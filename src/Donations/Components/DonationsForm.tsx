@@ -22,6 +22,7 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
+import { CONTACT } from "src/Utils/donationStepConstants";
 
 function DonationsForm() {
   const {
@@ -137,7 +138,6 @@ function DonationsForm() {
         t,
         paymentSetup,
         donationID: res.id,
-        setdonationStep,
         contactDetails,
         token,
         country,
@@ -265,10 +265,10 @@ function DonationsForm() {
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
                     continueNext={() => {
-                      setdonationStep(2);
                       router.push({
-                        query: { ...router.query, step: "contact" },
+                        query: { ...router.query, step: CONTACT },
                       });
+                      setdonationStep(2);
                     }}
                     isPaymentPage={false}
                     paymentLabel={paymentLabel}

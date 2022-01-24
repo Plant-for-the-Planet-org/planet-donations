@@ -106,7 +106,6 @@ function PaymentsForm({}: Props): ReactElement {
       t,
       paymentSetup,
       donationID,
-      setdonationStep,
       contactDetails,
       token,
       country,
@@ -237,10 +236,10 @@ function PaymentsForm({}: Props): ReactElement {
             {!isDirectDonation ? (
               <button
                 onClick={() => {
-                  setdonationStep(2);
                   router.push({
                     query: { ...router.query, step: CONTACT },
                   });
+                  setdonationStep(2);
                 }}
                 className="d-flex"
                 style={{ marginRight: "12px" }}
