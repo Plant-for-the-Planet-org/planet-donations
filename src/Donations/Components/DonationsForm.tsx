@@ -179,7 +179,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -189,7 +189,7 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -225,7 +225,7 @@ function DonationsForm() {
           !(isGift && giftDetails.recipientName === "") ? (
             <div
               className={`donations-gift-container mt-10 ${
-                paymentSetup.frequencies.length == 2
+                Object.keys(paymentSetup.frequencies).length == 2
                   ? "funds-frequency-container"
                   : ""
               }`}
@@ -251,10 +251,7 @@ function DonationsForm() {
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
-              minAmt &&
-              (paymentSetup.unitBased
-                ? paymentSetup?.unitCost * quantity
-                : quantity) >= minAmt ? (
+              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
                 currency ? (
@@ -262,9 +259,7 @@ function DonationsForm() {
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      paymentSetup.unitBased
-                        ? paymentSetup?.unitCost * quantity
-                        : quantity,
+                      paymentSetup?.unitCost * quantity,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}

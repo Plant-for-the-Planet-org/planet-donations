@@ -213,8 +213,12 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.callback_method]);
 
   React.useEffect(() => {
-    if (paymentSetup?.costIsMonthly) {
-      setfrequency("monthly");
+    if (paymentSetup?.frequencies) {
+      console.log(
+        "Object.keys(paymentSetup?.frequencies)[0]",
+        Object.keys(paymentSetup?.frequencies)[0]
+      );
+      setfrequency(Object.keys(paymentSetup?.frequencies)[0]);
     }
   }, [paymentSetup]);
 
@@ -352,7 +356,7 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.units) > 0) {
-        setquantity(Number(router.query.units));
+        setquantity(Number(router.query.units) / paymentSetup.unitCost);
       } else {
         setquantity(50);
       }

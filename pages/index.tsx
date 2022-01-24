@@ -97,11 +97,11 @@ function index({
       setisDirectDonation(isDirectDonation);
       setfrequency(frequency);
 
-      if (projectDetails && projectDetails.purpose === "trees") {
-        setquantity(treecount);
-      } else {
-        setquantity(amount);
-      }
+      // if (projectDetails && projectDetails.purpose === "trees") {
+      //   setquantity(treecount);
+      // } else {
+      setquantity(Math.round(amount / paymentSetup.unitCost));
+      // }
     }
     setcallbackUrl(callbackUrl);
     setCallbackMethod(callbackMethod);

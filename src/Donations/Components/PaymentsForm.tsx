@@ -362,9 +362,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitBased
-                        ? quantity * paymentSetup.unitCost
-                        : quantity
+                      paymentSetup.unitCost * quantity
                     )}
                     onPaymentFunction={(providerObject: any) =>
                       onSubmitPayment("stripe", "card", providerObject)
