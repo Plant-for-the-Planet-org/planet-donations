@@ -37,6 +37,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
+    setfrequency,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -50,6 +51,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         setquantity(e.target.value / paymentSetup.unitCost);
       }
     }
+  };
+
+  const getFrequencyBasedQuantity = (quantity: number) => {
+    const frequencyBasedQuantity =
+      paymentSetup.costIsMonthly && frequency == "yearly"
+        ? quantity * 12
+        : quantity;
+    return frequencyBasedQuantity;
   };
   React.useEffect(() => {
     if (paymentSetup.frequencies && paymentSetup.frequencies[`${frequency}`]) {
@@ -100,7 +109,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           paymentSetup.frequencies[`${frequency}`] &&
           paymentSetup.frequencies[`${frequency}`].options.map(
             (option, index) => {
-              console.log("option.quantity", option.quantity);
               return option.quantity ? (
                 <div
                   key={index}
@@ -153,7 +161,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       {getFormatedCurrency(
                         i18n.language,
                         currency,
-
                         option.quantity * paymentSetup.unitCost
                       )}
                     </span>

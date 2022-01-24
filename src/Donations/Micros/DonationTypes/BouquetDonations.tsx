@@ -38,6 +38,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
+    setfrequency,
   } = React.useContext(QueryParamContext);
   // React.useEffect(() => {
   //   if (paymentSetup?.options) {
