@@ -143,9 +143,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         }`}
       >
         {paymentSetup.frequencies &&
-          paymentSetup.frequencies[`${frequency}`].options
-            .slice(0, 6)
-            .map((option, index) => {
+          paymentSetup.frequencies[`${frequency}`].options.map(
+            (option, index) => {
               return option.quantity ? (
                 <div
                   key={index}
@@ -260,7 +259,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   )}
                 </div>
               );
-            })}
+            }
+          )}
       </div>
       {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
