@@ -10,6 +10,7 @@ import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
 // import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
+import { approximatelyEqual } from "src/Utils/common";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -47,20 +48,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1);
+        setquantity(1 / paymentSetup.unitCost);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value / paymentSetup.unitCost);
+        setquantity(Number(e.target.value) / paymentSetup.unitCost);
       }
     }
   };
 
-  const getFrequencyBasedQuantity = (quantity: number) => {
-    const frequencyBasedQuantity =
-      paymentSetup.costIsMonthly && frequency == "yearly"
-        ? quantity * 12
-        : quantity;
-    return frequencyBasedQuantity;
-  };
   React.useEffect(() => {
     if (paymentSetup.frequencies && paymentSetup.frequencies[`${frequency}`]) {
       // Set all quantities in the allOptionsArray
@@ -71,7 +65,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
       ].options.filter((option) => option.isDefault === true);
-      const newQuantity = retainQuantityValue
+      let newQuantity = retainQuantityValue
         ? quantity * paymentSetup.unitCost
         : router.query.units
         ? Number(router.query.units)
@@ -79,8 +73,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
           paymentSetup.unitCost;
-      setquantity(Math.round(newQuantity / paymentSetup.unitCost));
-      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
+      newQuantity = newQuantity / paymentSetup.unitCost;
+      setquantity(newQuantity);
+      if (
+        newQuantity &&
+        newallOptionsArray.filter((option) =>
+          approximatelyEqual(option, newQuantity * paymentSetup.unitCost)
+        ).length == 0
+      ) {
         setCustomInputValue(newQuantity * paymentSetup.unitCost);
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
@@ -119,7 +119,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setCustomInputValue("");
                   }}
                   className={`funding-selection-option ${
-                    option.quantity === quantity && !isCustomDonation
+                    approximatelyEqual(option.quantity, quantity) &&
+                    !isCustomDonation
                       ? "funding-selection-option-selected"
                       : ""
                   }${
