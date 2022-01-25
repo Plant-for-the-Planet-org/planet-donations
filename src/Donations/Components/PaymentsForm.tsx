@@ -106,7 +106,6 @@ function PaymentsForm({}: Props): ReactElement {
       t,
       paymentSetup,
       donationID,
-      setdonationStep,
       contactDetails,
       token,
       country,
@@ -237,7 +236,6 @@ function PaymentsForm({}: Props): ReactElement {
             {!isDirectDonation ? (
               <button
                 onClick={() => {
-                  setdonationStep(2);
                   router.push({
                     query: { ...router.query, step: CONTACT },
                   });
@@ -362,9 +360,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitBased
-                        ? quantity * paymentSetup.unitCost
-                        : quantity
+                      paymentSetup.unitCost * quantity
                     )}
                     onPaymentFunction={(providerObject: any) =>
                       onSubmitPayment("stripe", "card", providerObject)

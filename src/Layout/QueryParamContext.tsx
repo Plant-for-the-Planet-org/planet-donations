@@ -76,6 +76,8 @@ export const QueryParamContext = React.createContext({
   setTaxIdentificationAvail: (value: boolean) => {},
   callbackMethod: "",
   setCallbackMethod: (value: string) => {},
+  retainQuantityValue: false,
+  setRetainQuantityValue: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -153,7 +155,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [profile, setprofile] = React.useState<null | Object>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
-
+  const [retainQuantityValue, setRetainQuantityValue] =
+    React.useState<boolean>(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
@@ -213,9 +216,13 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.callback_method]);
 
   React.useEffect(() => {
-    if (paymentSetup?.costIsMonthly) {
-      setfrequency("monthly");
+    if (
+      paymentSetup?.frequencies &&
+      Object.keys(paymentSetup.frequencies).length === 2
+    ) {
+      setfrequency(Object.keys(paymentSetup?.frequencies)[0]);
     }
+    setRetainQuantityValue(false);
   }, [paymentSetup]);
 
   async function loadselectedProjects() {
@@ -352,11 +359,10 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.units) > 0) {
-        setquantity(Number(router.query.units));
-      } else {
-        setquantity(50);
+        setquantity(Number(router.query.units) / paymentSetup.unitCost);
       }
     }
+    setRetainQuantityValue(false);
   }, [router.query.units]);
 
   React.useEffect(() => {
@@ -476,6 +482,8 @@ export default function QueryParamProvider({ children }: any) {
         setTaxIdentificationAvail,
         callbackMethod,
         setCallbackMethod,
+        retainQuantityValue,
+        setRetainQuantityValue,
       }}
     >
       {children}

@@ -20,9 +20,7 @@ function DonationAmount({}: Props): ReactElement {
             {getFormatedCurrency(
               i18n.language,
               currency,
-              paymentSetup.unitBased
-                ? paymentSetup.unitCost * quantity
-                : quantity
+              paymentSetup.unitCost * quantity
             )}
           </span>
           {paymentSetup.purpose === "trees"

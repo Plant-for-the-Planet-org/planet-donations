@@ -96,12 +96,7 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
       setfrequency(frequency);
-
-      if (projectDetails && projectDetails.purpose === "trees") {
-        setquantity(treecount);
-      } else {
-        setquantity(amount);
-      }
+      setquantity(Math.round(amount / paymentSetup.unitCost));
     }
     setcallbackUrl(callbackUrl);
     setCallbackMethod(callbackMethod);
