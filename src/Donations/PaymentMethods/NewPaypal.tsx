@@ -35,9 +35,7 @@ function NewPaypal({
   const { donationUid } = React.useContext(QueryParamContext);
 
   function createOrder(data, actions) {
-    const amount = paymentSetup.unitBased
-      ? (quantity * unitCost).toFixed(2)
-      : (quantity * 1).toFixed(2);  // quick & dirty fix to be sure toFixed() is called on a number value
+    const amount = (quantity * unitCost).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
       purchase_units: [
         {

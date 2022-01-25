@@ -87,7 +87,7 @@ export default function PaymentMethodTabs({
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -97,7 +97,7 @@ export default function PaymentMethodTabs({
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -200,9 +200,7 @@ export default function PaymentMethodTabs({
           country={country}
           currency={currency}
           amount={formatAmountForStripe(
-            paymentSetup.unitBased
-              ? paymentSetup.unitCost * quantity
-              : quantity,
+            paymentSetup.unitCost * quantity,
             currency.toLowerCase()
           )}
           onPaymentFunction={onNativePaymentFunction}

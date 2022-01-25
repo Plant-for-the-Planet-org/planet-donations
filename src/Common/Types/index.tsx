@@ -140,7 +140,6 @@ export interface HandleStripeSCAPaymentProps {
 }
 
 export interface PaymentSetupProps {
-  costIsMonthly: boolean;
   currency: string;
   effectiveCountry: string;
   frequencies?: string[] | null;
@@ -153,7 +152,6 @@ export interface PaymentSetupProps {
   requestedCountry: string;
   treeCost: number;
   unit: string;
-  unitBased: boolean;
   unitCost: number;
 }
 export interface Gateways {

@@ -13,7 +13,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
-import { PAYMENT } from "src/Utils/donationStepConstants";
+import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 
 interface Props {}
 
@@ -47,7 +47,7 @@ function ContactsForm({}: Props): ReactElement {
     frequency,
     projectDetails,
     taxIdentificationAvail,
-    setTaxIdentificationAvail
+    setTaxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
   const { user, isAuthenticated } = useAuth0();
@@ -89,7 +89,6 @@ function ContactsForm({}: Props): ReactElement {
       ...data,
       email: isAuthenticated ? contactDetails.email : data.email,
     });
-    setdonationStep(3);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -165,9 +164,8 @@ function ContactsForm({}: Props): ReactElement {
           <button
             className="d-flex"
             onClick={() => {
-              setdonationStep(1);
               router.push({
-                query: { ...router.query, step: "donate" },
+                query: { ...router.query, step: DONATE },
               });
             }}
             style={{ marginRight: "12px" }}
@@ -226,7 +224,7 @@ function ContactsForm({}: Props): ReactElement {
               )}
             </div>
           </div>
-          
+
           <div className={"form-field mt-30"}>
             <MaterialTextField
               inputRef={register({
@@ -357,25 +355,29 @@ function ContactsForm({}: Props): ReactElement {
             )}
           </div>
 
-          {taxIdentificationAvail ?
-         (
-         <div className={"form-field mt-30"} data-test-id="taxIdentiication" id="taxIdentificationAvail">
-            <MaterialTextField
-              inputRef={register({
-                required: true,
-              })}
-              label={t("taxIdentificationNumber")}
-              variant="outlined"
-              name="tin"
-              defaultValue={contactDetails.tin}
-            />
-            {errors.tin && errors.tin.type !== "validate" && (
-              <span className={"form-errors"}>{t("tinRequired")}</span>
-            )}
-          </div>
-          ) : <></>
-          }
-          
+          {taxIdentificationAvail ? (
+            <div
+              className={"form-field mt-30"}
+              data-test-id="taxIdentiication"
+              id="taxIdentificationAvail"
+            >
+              <MaterialTextField
+                inputRef={register({
+                  required: true,
+                })}
+                label={t("taxIdentificationNumber")}
+                variant="outlined"
+                name="tin"
+                defaultValue={contactDetails.tin}
+              />
+              {errors.tin && errors.tin.type !== "validate" && (
+                <span className={"form-errors"}>{t("tinRequired")}</span>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+
           <div className="contacts-isCompany-toggle mt-20">
             <label htmlFor="isCompany-toggle">
               {t("isACompanyDonation")}
@@ -437,9 +439,7 @@ function ContactsForm({}: Props): ReactElement {
                 totalCost: getFormatedCurrency(
                   i18n.language,
                   currency,
-                  paymentSetup.unitBased
-                    ? quantity * paymentSetup.unitCost
-                    : quantity
+                  paymentSetup.unitCost * quantity
                 ),
                 frequency:
                   frequency === "once" ? "" : t(frequency).toLowerCase(),

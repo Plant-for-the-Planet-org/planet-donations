@@ -165,12 +165,8 @@ export function createDonationData({
     purpose: projectDetails.purpose,
     project: projectDetails.id,
     amount:
-      paymentSetup.unitCost && quantity
-        ? Math.round(
-            (paymentSetup.unitBased
-              ? paymentSetup.unitCost * quantity
-              : quantity) * 100
-          ) / 100
+      paymentSetup.unitCost * quantity
+        ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
         : amount,
     currency,
     donor: { ...contactDetails },
@@ -180,12 +176,12 @@ export function createDonationData({
       callback_method: callbackMethod,
     },
   };
-  if (paymentSetup.unitBased) {
-    donationData = {
-      ...donationData,
-      quantity,
-    };
-  }
+  // if (paymentSetup.unitBased) {
+  donationData = {
+    ...donationData,
+    quantity,
+  };
+  // }
   if (taxDeductionCountry) {
     donationData = {
       ...donationData,

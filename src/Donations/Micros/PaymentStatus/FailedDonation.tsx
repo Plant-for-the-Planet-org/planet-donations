@@ -70,14 +70,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");
-    // if (donation?.project?.purpose === "trees") {
-    //   setquantity(donation?.treeCount);
-    // }
+    setquantity(donation?.quantity);
     setContactDetails(donation.donor);
     setAmount(donation.amount);
-    if (donation.treeCount) {
-      setquantity(donation.treeCount);
-    }
+
     let country;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;
