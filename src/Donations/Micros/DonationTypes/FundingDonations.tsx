@@ -8,8 +8,9 @@ import getFormatedCurrency, {
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
 import { getCountryDataBy } from "../../../Utils/countryUtils";
-import { getPaymentOptionIcons } from "src/Utils/getImageURL";
+// import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
+import { approximatelyEqual } from "src/Utils/common";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -37,6 +38,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
+    setfrequency,
+    retainQuantityValue,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -45,38 +48,58 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     if (e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
-        setquantity(1);
+        setquantity(1 / paymentSetup.unitCost);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value);
+        setquantity(Number(e.target.value) / paymentSetup.unitCost);
       }
     }
   };
+
   React.useEffect(() => {
-    if (paymentSetup && paymentSetup.options) {
+    if (paymentSetup.frequencies && paymentSetup.frequencies[`${frequency}`]) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
-      for (const option of paymentSetup.options) {
-        newallOptionsArray.push(option.quantity);
+      for (const option of paymentSetup.frequencies[`${frequency}`].options) {
+        newallOptionsArray.push(option.quantity * paymentSetup.unitCost);
       }
-      const newQuantity = router.query.units
+      const defaultPaymentOption = paymentSetup.frequencies[
+        `${frequency}`
+      ].options.filter((option) => option.isDefault === true);
+
+      let newQuantity = retainQuantityValue
+        ? quantity * paymentSetup.unitCost
+        : router.query.units
         ? Number(router.query.units)
-        : paymentSetup.options[1].quantity;
-      if (newQuantity && !newallOptionsArray.includes(newQuantity)) {
-        setCustomInputValue(
-          paymentSetup.unitBased ? quantity * paymentSetup.unitCost : quantity
-        );
-        setquantity(Number(router.query.units));
+        : defaultPaymentOption.length > 0
+        ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
+        : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+          paymentSetup.unitCost;
+      newQuantity = newQuantity / paymentSetup.unitCost;
+      setquantity(newQuantity);
+      if (
+        newQuantity &&
+        newallOptionsArray.filter((option) =>
+          approximatelyEqual(option, newQuantity * paymentSetup.unitCost)
+        ).length == 0
+      ) {
+        setCustomInputValue(newQuantity * paymentSetup.unitCost);
+        setisCustomDonation(true);
+      } else if (newQuantity == 0) {
         setisCustomDonation(true);
       } else {
         setCustomInputValue("");
-        setquantity(newQuantity);
         setisCustomDonation(false);
       }
     }
-  }, [paymentSetup]);
+  }, [paymentSetup, frequency]);
+  React.useEffect(() => {
+    if (isCustomDonation) {
+      customInputRef?.current?.focus();
+    }
+  }, [isCustomDonation]);
 
   const customInputRef = React.useRef(null);
-  console.log(`option.quantity , quantity `, paymentSetup.options, quantity);
+
   return (
     <>
       <div
@@ -84,105 +107,134 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           isGift && giftDetails.recipientName === "" ? "display-none" : ""
         }`}
       >
-        {paymentSetup.options &&
-          paymentSetup.options.map((option, index) => {
-            return option.quantity ? (
-              <div
-                key={index}
-                onClick={() => {
-                  setquantity(option.quantity);
-                  setisCustomDonation(false);
-                  setCustomInputValue("");
-                }}
-                className={`funding-selection-option ${
-                  option.quantity === quantity && !isCustomDonation
-                    ? "funding-selection-option-selected"
-                    : ""
-                }${paymentSetup.costIsMonthly ? "   monthly-option" : ""}`}
-              >
-                {option.caption ? (
-                  <div className="funding-selection-option-text">
-                    <p>{option.caption}</p>
-                  </div>
-                ) : (
-                  []
-                )}
-                {paymentSetup.options[index].icon ? (
-                  <img
-                    className="funding-icon"
-                    src={getPaymentOptionIcons(
-                      paymentSetup.options[index].icon
-                    )}
-                  />
-                ) : (
-                  []
-                )}
-                <div className="funding-selection-option-text mt-10">
-                  <span>
-                    {getFormatedCurrency(
-                      i18n.language,
-                      currency,
-                      paymentSetup.costIsMonthly && frequency == "yearly"
-                        ? option.quantity * 12
-                        : option.quantity
-                    )}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div
-                key={index}
-                className={`funding-selection-option ${
-                  isCustomDonation ? "funding-selection-option-selected" : ""
-                }${paymentSetup.costIsMonthly ? "   full-width" : ""}`}
-                onClick={() => {
-                  setisCustomDonation(true);
-                  customInputRef.current.focus();
-                }}
-              >
-                <div className="funding-selection-option-text">
-                  <p>{option.caption}</p>
-                </div>
-                {/* {paymentSetup.costIsMonthly ? (
-                  <img className="funding-icon" src={AllIcons[index]} />
-                ) : (
-                  []
-                )} */}
-                <div className="funding-selection-option-text">
+        {paymentSetup.frequencies &&
+          paymentSetup.frequencies[`${frequency}`] &&
+          paymentSetup.frequencies[`${frequency}`].options.map(
+            (option, index) => {
+              return option.quantity ? (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setquantity(option.quantity);
+                    setisCustomDonation(false);
+                    setCustomInputValue("");
+                  }}
+                  className={`funding-selection-option ${
+                    approximatelyEqual(option.quantity, quantity) &&
+                    !isCustomDonation
+                      ? "funding-selection-option-selected"
+                      : ""
+                  }${
+                    Object.keys(paymentSetup.frequencies).length < 3
+                      ? "   monthly-option"
+                      : ""
+                  }`}
+                >
+                  {option.caption ? (
+                    <div className="funding-selection-option-text">
+                      <p>{option.caption}</p>
+                    </div>
+                  ) : (
+                    []
+                  )}
+                  {paymentSetup.frequencies[`${frequency}`].options[index].icon
+                    ? // <img
+                      //   className="funding-icon"
+                      //   src={
+                      //     getPaymentOptionIcons(
+                      //     paymentSetup.options[index].icon
+                      //   )
+                      // }
+                      // />
+                      getPaymentOptionIcons(
+                        paymentSetup.frequencies[`${frequency}`].options[index]
+                          .icon
+                      )
+                    : []}
                   <div
-                    className="d-flex row"
-                    style={{ alignItems: "flex-end", justifyContent: "center" }}
+                    className={`funding-selection-option-text ${
+                      option.caption ? "mt-10" : "m-10"
+                    }`}
                   >
-                    <p style={{ marginBottom: "0px", marginRight: "6px" }}>
-                      {getFormatedCurrencySymbol(currency)}
-                    </p>
-                    <input
-                      className={"funding-custom-tree-input"}
-                      onInput={(e) => {
-                        // replaces any character other than number to blank
-                        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-                        //  if length of input more than 12, display only 12 digits
-                        if (e.target.value.toString().length >= 12) {
-                          e.target.value = e.target.value
-                            .toString()
-                            .slice(0, 12);
-                        }
+                    <span
+                      style={{
+                        fontSize: option.caption ? "14px" : "18px",
                       }}
-                      value={customInputValue}
-                      type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
-                      onChange={(e) => {
-                        setCustomValue(e);
-                        setCustomInputValue(e.target.value);
-                      }}
-                      ref={customInputRef}
-                    />
+                    >
+                      {getFormatedCurrency(
+                        i18n.language,
+                        currency,
+                        option.quantity * paymentSetup.unitCost
+                      )}
+                    </span>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              ) : (
+                <div
+                  key={index}
+                  className={`funding-selection-option custom ${
+                    isCustomDonation ? "funding-selection-option-selected" : ""
+                  }${
+                    Object.keys(paymentSetup.frequencies).length < 3
+                      ? "   full-width"
+                      : " flex-50"
+                  }`}
+                  onClick={() => {
+                    setisCustomDonation(true);
+                    customInputRef?.current?.focus();
+                  }}
+                >
+                  {isCustomDonation ? (
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                      <p
+                        style={{
+                          fontSize: "18px",
+                          marginTop: "3px",
+                        }}
+                      >
+                        {getFormatedCurrencySymbol(currency)}
+                      </p>
+                      <input
+                        className={"funding-custom-tree-input"}
+                        style={{
+                          fontSize: "18px",
+                          paddingBottom: "12px",
+                        }}
+                        onInput={(e) => {
+                          // replaces any character other than number to blank
+                          e.target.value = e.target.value.replace(
+                            /[^0-9]/g,
+                            ""
+                          );
+                          //  if length of input more than 12, display only 12 digits
+                          if (e.target.value.toString().length >= 12) {
+                            e.target.value = e.target.value
+                              .toString()
+                              .slice(0, 12);
+                          }
+                        }}
+                        value={customInputValue}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="\d*"
+                        onChange={(e) => {
+                          setCustomValue(e);
+                          setCustomInputValue(e.target.value);
+                        }}
+                        ref={customInputRef}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className={`funding-selection-option-text m-10`}>
+                        <span>{option.caption}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            }
+          )}
       </div>
       {paymentSetup && paymentSetup.unitCost ? (
         <p className="currency-selection mt-30">
@@ -207,5 +259,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     </>
   );
 }
-
+function getPaymentOptionIcons(logoName: string) {
+  return (
+    <div
+      className="funding-icon"
+      dangerouslySetInnerHTML={createMarkup(logoName)}
+    />
+  );
+}
+function createMarkup(logoName: string) {
+  return { __html: logoName };
+}
 export default FundingDonations;

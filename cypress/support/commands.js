@@ -36,88 +36,6 @@
  *
   // @param $iframe - The iframe element
  */
-//  const isIframeLoaded = $iframe => {
-//     const contentWindow = $iframe.contentWindow;
-
-//     const src = $iframe.attributes.src;
-//     const href = contentWindow.location.href;
-//     if (contentWindow.document.readyState === 'complete') {
-//       return href !== 'about:blank' || src === 'about:blank' || src === '';
-//     }
-
-//     return false;
-//   };
-
-  /**
-   * Wait for iframe to load, and call callback
-   *
-   * Some hints taken and adapted from:
-   * https://gitlab.com/kgroat/cypress-iframe/-/blob/master/src/index.ts
-   */
-  // Cypress.Commands.add('iframe', { prevSubject: 'element' }, $iframes => new Cypress.Promise(resolve => {
-  //   const loaded = [];
-
-  //   $iframes.each((_, $iframe) => {
-  //     loaded.push(
-  //       new Promise(subResolve => {
-  //         if (isIframeLoaded($iframe)) {
-  //           subResolve($iframe.contentDocument.body);
-  //         } else {
-  //           Cypress.$($iframe).on('load.appearHere', () => {
-  //             if (isIframeLoaded($iframe)) {
-  //               subResolve($iframe.contentDocument.body);
-  //               Cypress.$($iframe).off('load.appearHere');
-  //             }
-  //           });
-  //         }
-  //       })
-  //     );
-  //   });
-
-  //   return Promise.all(loaded).then(resolve);
-  // }));
-
-  // Cypress.Commands.add('fillOutCreditCardForm', details => {
-  //   cy.get('.__PrivateStripeElement > iframe')
-  //     .iframe()
-  //     .then(iframes => {
-  //       cy.wrap(iframes[0])
-  //         .find('.InputElement')
-  //         .first()
-  //         .type(details.number);
-  //       cy.wrap(iframes[1])
-  //         .find('.InputElement')
-  //         .first()
-  //         .fill(
-  //           details.expiration ||
-  //           moment()
-  //             .add(5, 'years')
-  //             .format('MM/YY')
-  //         );
-  //       cy.wrap(iframes[2])
-  //         .find('.InputElement')
-  //         .first()
-  //         .fill(details.code);
-  //     });
-  // });
-//   Cypress.Commands.add('waitForStripe3dIframe', callback => {
-//     cy.get('#test-source-authorize-3ds')
-//       .should('be.visible');
-
-//     cy.get('iframe[src^="https://js.stripe.com/v3/three-ds-2-challenge"]')
-//       .iframe()
-//       .then(iframes => {
-//         cy.wrap(iframes[0])
-//           .find('iframe')
-//           .should('be.visible');
-
-//         cy.wrap(iframes[0])
-//           .find('iframe')
-//           .iframe()
-//           .then(callback);
-//       });
-//  });
-
  // Function to search project
 Cypress.Commands.add('SearchProject', (project) => {
     cy.get('#searchProject').type(project)
@@ -151,6 +69,10 @@ Cypress.Commands.add('contactForm', (firstName, lastName, email, address, city, 
         cy.get('[data-test-id="test-city"]').clear().type(city)
         cy.get('[data-test-id="test-country"]').clear().type(country);
         cy.get('[data-test-id="test-zipCode"]').clear().type(zipCode)
+        cy.get('body').then((body) => {
+            if(body.find('#taxIdentificationAvail').length > 0)
+            cy.get('[data-test-id="taxIdentiication"]').type('123456')
+        })
         cy.get('[data-test-id="test-continueToPayment"]').click()
 
     })
@@ -245,7 +167,7 @@ Cypress.Commands.add('yearlyDonation', (customTrees, country) => {
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
     cy.wait(5000)
-    cy.get('.frequency-selection-option').eq(2).should("have.text", "yearly").click()
+    cy.get('.frequency-selection-option').eq(2).should("have.text", "Yearly").click()
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
@@ -263,7 +185,7 @@ Cypress.Commands.add('monthlyDonation', (customTrees, country) => {
     cy.SearchProject('yucatan')
     cy.get('#yucatan').click()
     cy.wait(5000)
-    cy.get('.frequency-selection-option').eq(1).should("have.text", "monthly").click()
+    cy.get('.frequency-selection-option').eq(1).should("have.text", "Monthly").click()
     cy.get('.custom-tree-input').type(customTrees)
     cy.get('[data-test-id="selectCurrency"]').click().then(() => {
         cy.get('[data-test-id="country-select"]').clear().type(country)
@@ -301,51 +223,26 @@ Cypress.Commands.add('referenceDonation', (customTrees, country) => {
     cy.get('[data-test-id="referenceDonation"]').click().wait(5000);
 
 })
-// Cypress.Commands.add("processStripeSCA", (action) => {
+
+Cypress.Commands.add('bankTransfer', () => {
+    cy.visit(Cypress.env('TEST_SERVER'))
+    cy.wait(5000)
+    cy.SearchProject('yucatan')
+    cy.get('#yucatan').click()
+    cy.wait(5000)
+    // cy.get('.frequency-selection-option').eq(0).should("have.text", "Once").click()
+    cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
+    cy.wait(10000)
+    cy.get('[data-test-id="bankTransfer"]').click()
+    cy.get('[data-test-id="bankDonateContinue"]').click()
+    cy.wait(10000)
+    cy.get('[data-test-id="test-thankYou"]').should("exist")
+
+})
 
 
-//   //Find the first frame - Named differently each load ( __privateStripeFrameXXXX )
-//   cy.get("iframe[name*='__privateStripeFrame62665']")
-//       .within(($element) => {
-
-//           //Get the body from the first frame
-//           const $body = $element.contents().find("body");
-//           let topLevel = cy.wrap($body)
-
-//           //Find the second frame
-//           topLevel.find("iframe[name*='__stripeJSChallengeFrame']")
-//               .within(($secondElement) => {
-
-//                   //Get the body from the second frame
-//                   const $secondBody = $secondElement.contents().find("body");
-//                   let secondLevel = cy.wrap($secondBody)
-
-//                   //Find the third frame -  acsFrame
-//                   secondLevel.find("iframe[name*='acsFrame']")
-
-
-//                       //Scope into the actual modal
-//                       .within(($thirdElement) => {
-
-//                           //Grab the URL of the stripe popup, then have puppeteer browse to it!
-//                           cy.task('processSCA', {url: $thirdElement[0]["baseURI"], action: action});
-
-
-//                       })
-
-
-//               })
-
-//       })
-
-// })
-// function sofortPayment() {
-//     cy.get('[data-test-id="sofortPayment"]').click()
-//     cy.get('[data-test-id="sofortDonateContinue"]').click().then(() => {
-//         cy.get('.actions').within(() => {
-//             cy.get('button').should("have.text", "AUTHORIZE TEST PAYMENT").click().then(() => {
-//                 cy.should("have.text", "COMPLETING YOUR DONATION")
-//             })
-//         })
-//     })
-// }
+Cypress.Commands.add("donationScreen", (project) => {
+    cy.visit(`localhost:3000/?to=${project}`)
+    cy.wait(5000)
+    cy.get('[data-test-id="continue-next"]').click()
+})

@@ -26,7 +26,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
-import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
+import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
@@ -71,6 +71,8 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentError,
     amount,
     setTransferDetails,
+    callbackUrl,
+    callbackMethod,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -104,7 +106,6 @@ function PaymentsForm({}: Props): ReactElement {
       t,
       paymentSetup,
       donationID,
-      setdonationStep,
       contactDetails,
       token,
       country,
@@ -118,11 +119,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
     const gateway = "stripe";
-    onSubmitPayment(
-      gateway,
-      "card",
-      paymentMethod
-    );
+    onSubmitPayment(gateway, "card", paymentMethod);
   };
 
   async function getDonation() {
@@ -149,8 +146,20 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
+      callbackUrl,
+      callbackMethod,
+      tenant,
     });
-
+    if (router.query.to) {
+      router.replace({
+        query: { to: projectDetails.id, step: PAYMENT },
+      });
+    }
+    if (router.query.context) {
+      router.replace({
+        query: { context: donation.id, step: PAYMENT },
+      });
+    }
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
       setpublishName(donation.hasPublicProfile);
@@ -173,6 +182,7 @@ function PaymentsForm({}: Props): ReactElement {
         data: { publish: publishName },
         method: "PUT",
         setshowErrorCard,
+        tenant,
       };
       apiRequest(requestParams);
     }
@@ -218,12 +228,14 @@ function PaymentsForm({}: Props): ReactElement {
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
     ) : (
       <div className={"donations-forms-container"}>
-        <div className="donations-form">
+        <div
+          className="donations-form"
+          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+        >
           <div className="d-flex w-100 align-items-center">
             {!isDirectDonation ? (
               <button
                 onClick={() => {
-                  setdonationStep(2);
                   router.push({
                     query: { ...router.query, step: CONTACT },
                   });
@@ -306,7 +318,8 @@ function PaymentsForm({}: Props): ReactElement {
                 showSepa={showPaymentMethod({
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
-                  authenticatedMethod: true,
+                  authenticatedMethod:
+                    projectDetails.purpose === "funds" ? false : true,
                 })}
                 showSofort={showPaymentMethod({
                   paymentMethod: "sofort",
@@ -347,9 +360,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitBased
-                        ? quantity * paymentSetup.unitCost
-                        : quantity
+                      paymentSetup.unitCost * quantity
                     )}
                     onPaymentFunction={(providerObject: any) =>
                       onSubmitPayment("stripe", "card", providerObject)
@@ -439,7 +450,11 @@ function PaymentsForm({}: Props): ReactElement {
             target="_blank"
             rel="noreferrer"
             className="text-center nolink"
-            style={{ fontStyle: "italic" }}
+            style={{
+              marginTop: "auto",
+              alignSelf: "center",
+              fontStyle: "italic",
+            }}
           >
             {t("donationProcessedBy")}
             {/* Needs break */}

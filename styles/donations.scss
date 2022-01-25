@@ -59,6 +59,7 @@
   width: 100%;
   padding-bottom: 30px;
   max-width: 360px;
+  min-height: 560px;
   align-self: center;
   background-color: $backgroundColor;
   border-radius: 10px;
@@ -98,6 +99,7 @@
 .donations-info {
   display: flex;
   flex-direction: column;
+  flex: inherit;
   height: 100%;
   z-index: 3;
   justify-content: flex-end;
@@ -267,6 +269,14 @@
       font-size: 12px;
     }
   }
+  .custom-tree-option {
+    display: flex;
+    flex-direction: row;
+    > span {
+      align-self: center;
+      padding-left: 5px;
+    }
+  }
 }
 
 .bouquet-project-space-divider {
@@ -283,32 +293,45 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-top: 10px;
   .funding-selection-option {
-    width: 140px;
-    margin: 5px;
+    width: 130px;
+    margin: 10px;
     // height: 80px;
     border: 1px solid $greyColor;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     padding: 12px;
-    margin-top: 20px;
     align-items: center;
+    background-color: $secondaryBackgroundColor;
     justify-content: center;
     text-align: center;
+    &.custom {
+      align-items: stretch;
+      p {
+        color: $activeGreenBgTextColor;
+      }
+    }
+    &.flex-50 {
+      flex: calc(50% - 20px);
+    }
     &.funding-selection-option-selected,
     &:hover,
     &:focus {
       cursor: pointer;
+      background-color: $primaryColor;
       border: 1px solid $primaryColor;
-      > .funding-icon {
-        filter: grayscale(0%) opacity(1);
-      }
       .funding-selection-option-text {
         color: $primaryFontColor;
         p,
         span {
-          color: $primaryColor;
+          color: $activeGreenBgTextColor;
+        }
+      }
+      .funding-icon {
+        svg {
+          color: $activeGreenBgTextColor;
         }
       }
     }
@@ -318,25 +341,28 @@
     &:active {
       transform: scale(0.98);
     }
-    > .funding-icon {
-      filter: grayscale(100%) opacity(0.5);
-      height: 40px;
-      width: 40px;
-    }
     .funding-selection-option-text {
       text-align: left;
       line-height: 1;
       // margin-left: 12px;
-      color: $darkGreyColor;
+      color: $secondaryFontColor;
+      // color: $darkGreyColor;
       font-size: 14px;
       font-weight: 700;
       text-align: center;
       p {
-        color: $darkGreyColor;
+        color: $secondaryFontColor;
+        // color: $darkGreyColor;
         margin-bottom: 10px;
       }
       > span {
         margin-top: 10px;
+      }
+    }
+    .funding-icon {
+      svg {
+        width: 34px;
+        color: $secondaryFontColor;
       }
     }
   }
@@ -409,27 +435,31 @@
   }
 }
 
-.custom-tree-input,
-.funding-custom-tree-input {
+.custom-tree-input {
   border: 0px;
-  border-bottom: 1px solid $primaryFontColor;
-  margin: 0px 10px;
-  width: 70%;
+  border-bottom: 2px solid $greyColor;
+  width: 100%;
   font-family: $primaryFontFamily;
   font-weight: 800;
   font-size: $fontSubTitleSize;
-  color: $primaryColor;
+  color: $primaryFontColor;
   text-align: center;
   background-color: transparent;
   outline: 0px;
   font-size: 16px;
 }
 .funding-custom-tree-input {
+  border: 0px;
+  border-bottom: 2px solid $activeGreenBgTextColor;
+  width: 100%;
+  font-family: $primaryFontFamily;
+  font-weight: 800;
+  font-size: $fontSubTitleSize;
+  color: $activeGreenBgTextColor;
   text-align: center;
-  margin: 0px;
-  margin-left: -16px;
-  width: 80%;
-  font-size: 14px;
+  background-color: transparent;
+  outline: 0px;
+  font-size: 16px;
 }
 
 .tree-selection-option > .custom-tree-input:focus {
@@ -437,8 +467,8 @@
   outline: none;
 }
 
-.tree-selection-option-selected > .custom-tree-input {
-  border-bottom: 1px solid $primaryColor;
+.tree-selection-option-selected .custom-tree-input {
+  border-bottom: 2px solid $primaryColor;
 }
 
 .payment-methods-tabs-container {
@@ -720,13 +750,17 @@
     padding: 12px;
   }
   .funding-selection-options-container {
+    margin-top: 10px;
     .funding-selection-option {
-      width: 170px;
+      width: 160px;
       &.monthly-option {
-        width: 110px;
+        width: 100px;
       }
       &.full-width {
         width: 100%;
+      }
+      &.flex-50 {
+        flex: calc(50% - 20px);
       }
     }
   }
@@ -768,6 +802,7 @@
     flex-direction: row;
     border-radius: 20px;
     min-height: 560px;
+    align-items: center;
     max-width: 840px;
   }
   .donations-info-container {
@@ -775,6 +810,7 @@
     flex: 1;
     border-radius: 20px;
     align-self: auto;
+    min-height: 560px;
     margin-right: -10px;
   }
   .donations-forms-container {

@@ -22,6 +22,7 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
+import { CONTACT } from "src/Utils/donationStepConstants";
 
 function DonationsForm() {
   const {
@@ -43,7 +44,8 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
-    setTransferDetails
+    setTransferDetails,
+    setRetainQuantityValue,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -53,24 +55,10 @@ function DonationsForm() {
   const router = useRouter();
 
   React.useEffect(() => {
-    if (paymentSetup.minQuantity) {
-      setMinAmt((paymentSetup.minQuantity * paymentSetup.unitCost).toFixed(2));
-    } else {
-      setMinAmt(getMinimumAmountForCurrency(currency));
-    }
-  }, [currency, paymentSetup]);
+    setMinAmt(getMinimumAmountForCurrency(currency));
+  }, [currency]);
 
   React.useEffect(() => {
-    // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
-    //   for (const gateway in paymentSetup?.gateways) {
-    //     const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
-    //     console.log(frequencies, "frequencies");
-    //     if (frequencies && frequencies.length > 0) {
-    //       console.log("Show Frequency Options");
-    //       setShowFrequencyOptions(true);
-    //     }
-    //   }
-    // }
     if (paymentSetup && paymentSetup?.recurrency) {
       setShowFrequencyOptions(paymentSetup?.recurrency.supported);
     }
@@ -119,6 +107,7 @@ function DonationsForm() {
       token,
       setshowErrorCard,
       frequency,
+      tenant,
     }).then(async (res) => {
       let token = null;
       if ((!isLoading && isAuthenticated) || queryToken) {
@@ -127,20 +116,19 @@ function DonationsForm() {
       payDonationFunction({
         gateway: "stripe",
         method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-        providerObject: paymentMethod,// payment method
+        providerObject: paymentMethod, // payment method
         setIsPaymentProcessing,
         setPaymentError,
         t,
         paymentSetup,
         donationID: res.id,
-        setdonationStep,
         contactDetails,
         token,
         country,
         setshowErrorCard,
         router,
         tenant,
-        setTransferDetails
+        setTransferDetails,
       });
     });
   };
@@ -151,6 +139,7 @@ function DonationsForm() {
     switch (projectDetails.purpose) {
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
+      case "conservation":
       case "bouquet":
         return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "trees":
@@ -174,23 +163,24 @@ function DonationsForm() {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
       case "bouquet":
+      case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country.toLowerCase()}`),
+          country: t(`country:${projectDetails?.country?.toLowerCase()}`),
         });
         break;
     }
@@ -215,13 +205,14 @@ function DonationsForm() {
           )}
 
           {process.env.RECURRENCY &&
-            showFrequencyOptions &&
-            !(isGift && giftDetails.recipientName === "") ? (
+          showFrequencyOptions &&
+          !(isGift && giftDetails.recipientName === "") ? (
             <div
-              className={`donations-gift-container mt-10 ${paymentSetup.frequencies.length == 2
+              className={`donations-gift-container mt-10 ${
+                Object.keys(paymentSetup.frequencies).length == 2
                   ? "funds-frequency-container"
                   : ""
-                }`}
+              }`}
             >
               <FrequencyOptions />
             </div>
@@ -232,39 +223,36 @@ function DonationsForm() {
           {donationSelection()}
 
           <div
-            className={`${isGift && giftDetails.recipientName === "" ? "display-none" : ""
-              }`}
+            className={`${
+              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+            }`}
           >
             <TaxDeductionOption />
 
             <div className={"horizontal-line"} />
 
-            {projectDetails.purpose === "trees" && <DonationAmount />}
+            {(projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {paymentSetup && projectDetails ? (
-              minAmt &&
-                (paymentSetup.unitBased
-                  ? paymentSetup?.unitCost * quantity
-                  : quantity) >= minAmt ? (
+              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                 !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency ? (
+                paymentSetup?.gateways?.stripe?.account &&
+                currency ? (
                   <NativePay
                     country={country}
                     currency={currency}
                     amount={formatAmountForStripe(
-                      paymentSetup.unitBased
-                        ? paymentSetup?.unitCost * quantity
-                        : quantity,
+                      paymentSetup?.unitCost * quantity,
                       currency.toLowerCase()
                     )}
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
                     continueNext={() => {
-                      setdonationStep(2);
                       router.push({
-                        query: { ...router.query, step: "contact" },
+                        query: { ...router.query, step: CONTACT },
                       });
+                      setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
                     paymentLabel={paymentLabel}

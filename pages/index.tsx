@@ -9,6 +9,7 @@ import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
+import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
@@ -31,6 +32,9 @@ interface Props {
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
+  tenant: string;
+  callbackUrl: string;
+  callbackMethod: string;
 }
 
 function index({
@@ -53,6 +57,9 @@ function index({
   amount,
   meta,
   frequency,
+  tenant,
+  callbackUrl,
+  callbackMethod,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -72,6 +79,9 @@ function index({
     setisDirectDonation,
     setquantity,
     setfrequency,
+    settenant,
+    setcallbackUrl,
+    setCallbackMethod,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -86,26 +96,18 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
       setfrequency(frequency);
-      if (projectDetails && projectDetails.purpose === "trees") {
-        setquantity(treecount);
-      } else {
-        setquantity(amount);
-      }
+      setquantity(Math.round(amount / paymentSetup.unitCost));
     }
-    // XX is hidden country and T1 is Tor browser
-    if (country === "XX" || country === "T1") {
-      setcountry("DE");
-    } else {
-      setcountry(country);
-    }
+    setcallbackUrl(callbackUrl);
+    setCallbackMethod(callbackMethod);
+    setCountryCode({ setcountry, setcurrency, country });
   }, []);
-
+  settenant(tenant);
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
     setisGift(true);
   }
-
   // If project details are present set project details
   if (projectDetails) {
     setprojectDetails(projectDetails);
@@ -121,6 +123,9 @@ function index({
   const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
+  if (router.query.context) {
+    setfrequency(frequency);
+  }
 
   return (
     <>
@@ -190,7 +195,7 @@ export async function getServerSideProps(context: any) {
   let isTaxDeductible = false;
   let donationID = null;
   let shouldCreateDonation = false;
-  let country = "DE";
+  let country = "";
   let isDirectDonation = false;
   let contactDetails = {};
   let treecount = 50;
@@ -198,10 +203,16 @@ export async function getServerSideProps(context: any) {
   let currency = "EUR";
   let paymentSetup = {};
   let amount = 0;
+  let tenant = "ten_I9TW3ncG";
+  let callbackUrl = "";
+  let callbackMethod = "";
+
   function setshowErrorCard() {
     showErrorCard = true;
   }
-
+  if (context.query.tenant) {
+    tenant = context.query.tenant;
+  }
   // Set project details if there is to (project slug) in the query params
   if (
     (context.query.to && !context.query.context) ||
@@ -213,6 +224,7 @@ export async function getServerSideProps(context: any) {
       const requestParams = {
         url: `/app/projects/${to}`,
         setshowErrorCard,
+        tenant,
       };
       const project = await apiRequest(requestParams);
       if (project.data) {
@@ -251,16 +263,24 @@ export async function getServerSideProps(context: any) {
       };
       const donation: any = await apiRequest(requestParams);
 
+      const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
+      const paymentStatusForStep3 = ["initiated", "draft"];
+      const queryMethodForStep4 = ["Sofort", "Giropay"];
+      const queryRedirectStatus = ["succeeded", "failed"];
+
       if (donation.status === 200) {
+        const donorData = donation.data.donor;
         donationID = context.query.context;
         // if the donation is present means the donation is already created
         // Set shouldCreateDonation as false
         shouldCreateDonation = false;
         // fetch project - payment setup
+        tenant = donation.data.tenant;
         try {
           const requestParams = {
             url: `/app/projects/${donation.data.project.id}`,
             setshowErrorCard,
+            tenant,
           };
           const project = await apiRequest(requestParams);
           if (project.data) {
@@ -279,14 +299,18 @@ export async function getServerSideProps(context: any) {
           isTaxDeductible = true;
         } else {
           hideTaxDeduction = true;
-          country = donation.data.donor.country;
+          country = donorData.country;
         }
-
+        if (donation.data.metadata) {
+          callbackMethod = donation.data.metadata?.callback_method;
+          callbackUrl = donation.data.metadata?.callback_url;
+        }
         // This will fetch the payment options
         try {
           const requestParams = {
             url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
             setshowErrorCard,
+            tenant,
           };
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {
@@ -296,57 +320,37 @@ export async function getServerSideProps(context: any) {
         } catch (err) {
           // console.log(err);
         }
-
         allowTaxDeductionChange = false;
-
         treecount = donation.data.treeCount;
         amount = donation.data.amount;
         // Setting contact details from donor details
-        if (donation.data.donor) {
+        if (donorData) {
           contactDetails = {
-            firstname: donation.data.donor.firstname
-              ? donation.data.donor.firstname
-              : "",
-            lastname: donation.data.donor.lastname
-              ? donation.data.donor.lastname
-              : "",
-            email: donation.data.donor.email ? donation.data.donor.email : "",
-            address: donation.data.donor.address
-              ? donation.data.donor.address
-              : "",
-            city: donation.data.donor.city ? donation.data.donor.city : "",
-            zipCode: donation.data.donor.zipCode
-              ? donation.data.donor.zipCode
-              : "",
-            country: donation.data.donor.country
-              ? donation.data.donor.country
-              : "",
-            companyname: donation.data.donor.companyname
-              ? donation.data.donor.companyname
-              : "",
+            firstname: donorData.firstname || "",
+            lastname: donorData.lastname || "",
+            email: donorData.email || "",
+            address: donorData.address || "",
+            city: donorData.city || "",
+            zipCode: donorData.zipCode || "",
+            country: donorData.country || "",
+            companyname: donorData.companyname || "",
           };
         }
 
         // Check if the donation status is paid or successful - if yes directly show thank you page
         // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
         if (
-          (context.query.method === "Sofort" ||
-            context.query.method === "Giropay") &&
-          (context.query.redirect_status === "succeeded" ||
-            context.query.redirect_status === "failed") &&
+          queryMethodForStep4.includes(context.query.method) &&
+          queryRedirectStatus.includes(context.query.redirect_status) &&
           context.query.payment_intent
         ) {
           donationStep = 4;
         } else if (
-          donation.data.paymentStatus === "success" ||
-          donation.data.paymentStatus === "paid" ||
-          donation.data.paymentStatus === "failed" ||
-          donation.data.paymentStatus === "pending"
+          paymentStatusForStep4.includes(donation.data.paymentStatus)
         ) {
           donationStep = 4;
         } else if (
-          donation.data.paymentStatus === "initiated" ||
-          donation.data.paymentStatus === "draft"
+          paymentStatusForStep3.includes(donation.data.paymentStatus)
         ) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
@@ -368,6 +372,7 @@ export async function getServerSideProps(context: any) {
       const requestParams = {
         url: `/app/profiles/${context.query.s}`,
         setshowErrorCard,
+        tenant,
       };
       const newProfile = await apiRequest(requestParams);
       if (newProfile.data.type !== "tpo") {
@@ -387,19 +392,35 @@ export async function getServerSideProps(context: any) {
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = process.env.APP_URL + resolvedUrl;
-  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(url)}?w=1200&h=770.jpg`;
+  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
+    url
+  )}?w=1200&h=770.jpg`;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${projectDetails.tpo
+      description = `Plant trees with ${
+        projectDetails.tpo
           ? projectDetails.tpo?.name
           : projectDetails.tpoData?.name
-        } in ${getCountryDataBy("countryCode", projectDetails.country)?.countryName
-        }. Your journey to a trillion trees starts here.`;
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
+    } else if (
+      projectDetails.purpose === "conservation" &&
+      !projectDetails.description
+    ) {
+      description = `Conserve forests with  ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
     } else if (
       (projectDetails.purpose === "bouquet" ||
-        projectDetails.purpose === "funds") &&
+        projectDetails.purpose === "funds" ||
+        projectDetails.purpose === "conservation") &&
       projectDetails.description
     ) {
       description = projectDetails.description;
@@ -436,6 +457,9 @@ export async function getServerSideProps(context: any) {
       amount,
       meta: { title, description, image, url },
       frequency,
+      tenant,
+      callbackMethod,
+      callbackUrl,
     }, // will be passed to the page component as props
   };
 }

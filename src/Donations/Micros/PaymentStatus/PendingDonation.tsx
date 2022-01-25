@@ -4,15 +4,14 @@ import PaymentPendingIllustration from "../../../../public/assets/icons/donation
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
+import ReturnToButton from "./Components/ReturnToButton";
 
 function PendingDonation({ donationID, sendToReturn }: any) {
   const { t } = useTranslation(["common"]);
-  const {
-    returnTo,
-  } = React.useContext(QueryParamContext);
+  const { callbackUrl } = React.useContext(QueryParamContext);
   return (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}
@@ -33,6 +32,9 @@ function PendingDonation({ donationID, sendToReturn }: any) {
         {t("common:transactionId")} {donationID}
       </div>
       <PaymentPendingIllustration />
+      {callbackUrl && (
+        <ReturnToButton donationContext={donationID} donationStatus="pending" />
+      )}
     </div>
   );
 }

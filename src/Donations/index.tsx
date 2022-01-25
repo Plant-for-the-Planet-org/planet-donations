@@ -40,6 +40,7 @@ function Donations({}: Props): ReactElement {
       } else {
         step = router.query?.step;
       }
+
       switch (step) {
         case SELECT_PROJECT:
           setdonationStep(0);
@@ -165,7 +166,8 @@ function DonationInfo() {
               <TPOImage />
             ))}
           {(donationStep === 2 || donationStep === 3) &&
-            projectDetails.purpose === "trees" && (
+            (projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}
@@ -173,18 +175,25 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitBased
-                        ? paymentSetup.unitCost * quantity
-                        : quantity
+                      paymentSetup.unitCost * quantity
                     )}
                   </span>
-                  {t("fortreeCountTrees", {
-                    count: Number(quantity),
-                    treeCount: getFormattedNumber(
-                      i18n.language,
-                      Number(quantity)
-                    ),
-                  })}{" "}
+                  {paymentSetup.purpose === "trees"
+                    ? t("fortreeCountTrees", {
+                        count: Number(quantity),
+                        treeCount: getFormattedNumber(
+                          i18n.language,
+                          Number(quantity)
+                        ),
+                      })
+                    : paymentSetup.purpose === "conservation"
+                    ? t("forQuantitym2", {
+                        quantity: getFormattedNumber(
+                          i18n.language,
+                          Number(quantity)
+                        ),
+                      })
+                    : []}{" "}
                   {frequency === "monthly"
                     ? t("everyMonth")
                     : frequency === "yearly"
@@ -204,9 +213,7 @@ function DonationInfo() {
                     {getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitBased
-                        ? paymentSetup.unitCost * quantity
-                        : quantity
+                      paymentSetup.unitCost * quantity
                     )}
                   </span>
                   {frequency === "monthly"
@@ -226,33 +233,39 @@ function DonationInfo() {
                   target="_blank"
                   href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
                   className="title-text text-white"
+                  style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
                 </a>
               ) : (
-                <h1 className="title-text text-white">{projectDetails.name}</h1>
+                <h1
+                  className="title-text text-white"
+                  style={{ marginTop: "10px" }}
+                >
+                  {projectDetails.name}
+                </h1>
               )}
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">
-                  {projectDetails.description}
-                </p>
+                <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 []
               )}
-              {projectDetails.purpose === "trees" && projectDetails.tpo && (
-                <a
-                  rel="noreferrer"
-                  target="_blank"
-                  href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
-                  className="text-white"
-                >
-                  {t("byOrganization", {
-                    organizationName: projectDetails.tpo.name,
-                  })}
-                </a>
-              )}
+              {(projectDetails.purpose === "trees" ||
+                projectDetails.purpose === "conservation") &&
+                projectDetails.tpo && (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                    className="text-white"
+                  >
+                    {t("byOrganization", {
+                      organizationName: projectDetails.tpo.name,
+                    })}
+                  </a>
+                )}
             </>
           ) : (
             <></>
@@ -289,7 +302,7 @@ function DonationInfo() {
               <p>{t("billingAddress")}</p>
               <p className={`text-bold`}>
                 {contactDetails.firstname && contactDetails.firstname}{" "}
-                {contactDetails.lastname && contactDetails.lastname}
+                {contactDetails.lastname && contactDetails.lastname}{" "}
               </p>
               <p>{contactDetails.email && contactDetails.email}</p>
               <p>
@@ -302,6 +315,13 @@ function DonationInfo() {
               <p>
                 {contactDetails.country &&
                   t(`country:${contactDetails.country.toLowerCase()}`)}
+              </p>
+              <p>
+                {contactDetails.tin
+                  ? `${t("common:tinText")} ${" "}${
+                      contactDetails.tin && contactDetails.tin
+                    }`
+                  : null}
               </p>
             </div>
           )}
