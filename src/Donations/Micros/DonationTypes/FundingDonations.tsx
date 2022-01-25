@@ -65,6 +65,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
       ].options.filter((option) => option.isDefault === true);
+
       let newQuantity = retainQuantityValue
         ? quantity * paymentSetup.unitCost
         : router.query.units
