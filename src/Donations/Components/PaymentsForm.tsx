@@ -239,7 +239,6 @@ function PaymentsForm({}: Props): ReactElement {
                   router.push({
                     query: { ...router.query, step: CONTACT },
                   });
-                  // setdonationStep(2);
                 }}
                 className="d-flex"
                 style={{ marginRight: "12px" }}

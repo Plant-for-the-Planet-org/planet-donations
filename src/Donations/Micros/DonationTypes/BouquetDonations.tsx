@@ -13,6 +13,7 @@ import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { useRouter } from "next/router";
+import { approximatelyEqual } from "src/Utils/common";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -116,8 +117,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [paymentSetup]);
 
-  const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
-    Math.abs(v1 - v2) < epsilon;
   // IMP TO DO -> Due to new requirements of showing Rounded costs for Bouquet and in future for all we will now have to start passing the amount instead of quantity and unitCost, this demands a structural change in multiple files and hence should be done carefully
 
   // const roundedCostCalculator=(unitCost,quantity)=>{

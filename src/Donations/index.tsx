@@ -40,7 +40,6 @@ function Donations({}: Props): ReactElement {
       } else {
         step = router.query?.step;
       }
-      console.log("step", step, donationStep);
 
       switch (step) {
         case SELECT_PROJECT:

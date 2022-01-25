@@ -63,16 +63,6 @@ function DonationsForm() {
   }, [currency, paymentSetup]);
 
   React.useEffect(() => {
-    // if (Object.keys(paymentSetup).length !== 0 && paymentSetup?.gateways) {
-    //   for (const gateway in paymentSetup?.gateways) {
-    //     const frequencies = paymentSetup.gateways[gateway].recurrency.intervals;
-    //     console.log(frequencies, "frequencies");
-    //     if (frequencies && frequencies.length > 0) {
-    //       console.log("Show Frequency Options");
-    //       setShowFrequencyOptions(true);
-    //     }
-    //   }
-    // }
     if (paymentSetup && paymentSetup?.recurrency) {
       setShowFrequencyOptions(paymentSetup?.recurrency.supported);
     }
@@ -80,9 +70,6 @@ function DonationsForm() {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
-  // let queryParams = { ...router.query };
-  // delete queryParams.callback_method;
-  // console.log(queryParams, "queryParams");
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -269,7 +256,6 @@ function DonationsForm() {
                       router.push({
                         query: { ...router.query, step: CONTACT },
                       });
-                      // setdonationStep(2);
                       setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
