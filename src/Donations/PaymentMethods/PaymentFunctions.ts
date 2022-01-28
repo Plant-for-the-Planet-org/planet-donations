@@ -99,6 +99,9 @@ export async function createDonationFunction({
   frequency,
   amount,
   t,
+  callbackUrl,
+  callbackMethod,
+  tenant,
 }: CreateDonationFunctionProps) {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -112,6 +115,8 @@ export async function createDonationFunction({
     giftDetails,
     frequency,
     amount,
+    callbackUrl,
+    callbackMethod,
   });
   try {
     const requestParams = {
@@ -119,6 +124,7 @@ export async function createDonationFunction({
       data: donationData,
       method: "POST",
       setshowErrorCard,
+      tenant,
       token: token ? token : false,
     };
     const donation = await apiRequest(requestParams);
@@ -151,28 +157,30 @@ export function createDonationData({
   giftDetails,
   frequency,
   amount,
+  callbackUrl,
+  callbackMethod,
 }: any) {
   let donationData = {
     purpose: projectDetails.purpose,
     project: projectDetails.id,
     amount:
-      paymentSetup.unitCost && quantity
-        ? Math.round(
-            (paymentSetup.unitBased
-              ? paymentSetup.unitCost * quantity
-              : quantity) * 100
-          ) / 100
+      paymentSetup.unitCost * quantity
+        ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
         : amount,
     currency,
     donor: { ...contactDetails },
     frequency: frequency === "once" ? null : frequency,
+    metadata: {
+      callback_url: callbackUrl,
+      callback_method: callbackMethod,
+    },
   };
-  if (paymentSetup.unitBased) {
-    donationData = {
-      ...donationData,
-      quantity,
-    };
-  }
+  // if (paymentSetup.unitBased) {
+  donationData = {
+    ...donationData,
+    quantity,
+  };
+  // }
   if (taxDeductionCountry) {
     donationData = {
       ...donationData,
@@ -251,7 +259,8 @@ export async function payDonationFunction({
       payDonationData,
       token,
       setshowErrorCard,
-      setPaymentError
+      setPaymentError,
+      tenant
     );
     if (paymentResponse) {
       if (
@@ -319,7 +328,8 @@ export async function confirmPaymentIntent(
   payDonationData: any,
   token: string,
   setshowErrorCard: any,
-  setPaymentError: any
+  setPaymentError: any,
+  tenant: string
 ) {
   // const payDonationData = {
   //   paymentProviderRequest: {
@@ -338,6 +348,7 @@ export async function confirmPaymentIntent(
     method: "PUT",
     setshowErrorCard,
     token: token ? token : false,
+    tenant,
   };
   const confirmationResponse = await apiRequest(requestParams);
   if (
@@ -429,7 +440,8 @@ export async function handleStripeSCAPayment({
               payDonationData,
               token,
               setshowErrorCard,
-              setPaymentError
+              setPaymentError,
+              tenant
             );
             successData = successResponse.data;
           } catch (error: any) {

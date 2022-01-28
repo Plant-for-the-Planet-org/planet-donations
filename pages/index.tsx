@@ -32,6 +32,9 @@ interface Props {
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
+  tenant: string;
+  callbackUrl: string;
+  callbackMethod: string;
 }
 
 function index({
@@ -54,6 +57,9 @@ function index({
   amount,
   meta,
   frequency,
+  tenant,
+  callbackUrl,
+  callbackMethod,
 }: Props): ReactElement {
   const {
     setprojectDetails,
@@ -73,6 +79,9 @@ function index({
     setisDirectDonation,
     setquantity,
     setfrequency,
+    settenant,
+    setcallbackUrl,
+    setCallbackMethod,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -87,16 +96,13 @@ function index({
       setpaymentSetup(paymentSetup);
       setisDirectDonation(isDirectDonation);
       setfrequency(frequency);
-      if (projectDetails && projectDetails.purpose === "trees") {
-        setquantity(treecount);
-      } else {
-        setquantity(amount);
-      }
+      setquantity(Math.round(amount / paymentSetup.unitCost));
     }
-
+    setcallbackUrl(callbackUrl);
+    setCallbackMethod(callbackMethod);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
-
+  settenant(tenant);
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
@@ -197,10 +203,16 @@ export async function getServerSideProps(context: any) {
   let currency = "EUR";
   let paymentSetup = {};
   let amount = 0;
+  let tenant = "ten_I9TW3ncG";
+  let callbackUrl = "";
+  let callbackMethod = "";
+
   function setshowErrorCard() {
     showErrorCard = true;
   }
-
+  if (context.query.tenant) {
+    tenant = context.query.tenant;
+  }
   // Set project details if there is to (project slug) in the query params
   if (
     (context.query.to && !context.query.context) ||
@@ -212,6 +224,7 @@ export async function getServerSideProps(context: any) {
       const requestParams = {
         url: `/app/projects/${to}`,
         setshowErrorCard,
+        tenant,
       };
       const project = await apiRequest(requestParams);
       if (project.data) {
@@ -262,10 +275,12 @@ export async function getServerSideProps(context: any) {
         // Set shouldCreateDonation as false
         shouldCreateDonation = false;
         // fetch project - payment setup
+        tenant = donation.data.tenant;
         try {
           const requestParams = {
             url: `/app/projects/${donation.data.project.id}`,
             setshowErrorCard,
+            tenant,
           };
           const project = await apiRequest(requestParams);
           if (project.data) {
@@ -286,12 +301,16 @@ export async function getServerSideProps(context: any) {
           hideTaxDeduction = true;
           country = donorData.country;
         }
-
+        if (donation.data.metadata) {
+          callbackMethod = donation.data.metadata?.callback_method;
+          callbackUrl = donation.data.metadata?.callback_url;
+        }
         // This will fetch the payment options
         try {
           const requestParams = {
             url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
             setshowErrorCard,
+            tenant,
           };
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {
@@ -301,9 +320,7 @@ export async function getServerSideProps(context: any) {
         } catch (err) {
           // console.log(err);
         }
-
         allowTaxDeductionChange = false;
-
         treecount = donation.data.treeCount;
         amount = donation.data.amount;
         // Setting contact details from donor details
@@ -355,6 +372,7 @@ export async function getServerSideProps(context: any) {
       const requestParams = {
         url: `/app/profiles/${context.query.s}`,
         setshowErrorCard,
+        tenant,
       };
       const newProfile = await apiRequest(requestParams);
       if (newProfile.data.type !== "tpo") {
@@ -389,8 +407,20 @@ export async function getServerSideProps(context: any) {
         getCountryDataBy("countryCode", projectDetails.country)?.countryName
       }. Your journey to a trillion trees starts here.`;
     } else if (
+      projectDetails.purpose === "conservation" &&
+      !projectDetails.description
+    ) {
+      description = `Conserve forests with  ${
+        projectDetails.tpo
+          ? projectDetails.tpo?.name
+          : projectDetails.tpoData?.name
+      } in ${
+        getCountryDataBy("countryCode", projectDetails.country)?.countryName
+      }. Your journey to a trillion trees starts here.`;
+    } else if (
       (projectDetails.purpose === "bouquet" ||
-        projectDetails.purpose === "funds") &&
+        projectDetails.purpose === "funds" ||
+        projectDetails.purpose === "conservation") &&
       projectDetails.description
     ) {
       description = projectDetails.description;
@@ -427,6 +457,9 @@ export async function getServerSideProps(context: any) {
       amount,
       meta: { title, description, image, url },
       frequency,
+      tenant,
+      callbackMethod,
+      callbackUrl,
     }, // will be passed to the page component as props
   };
 }

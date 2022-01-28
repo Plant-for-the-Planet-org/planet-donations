@@ -39,9 +39,12 @@ export const QueryParamContext = React.createContext({
   isTaxDeductible: false,
   isPaymentOptionsLoading: false,
   redirectstatus: "",
-  returnTo: "",
+  setredirectstatus: (value: string) => {},
+  callbackUrl: "",
+  setcallbackUrl: (value: string) => {},
   isDirectDonation: false,
   tenant: "",
+  settenant: (value: string) => {},
   selectedProjects: [],
   setSelectedProjects: (value: Array<any>) => {},
   allProjects: [],
@@ -69,6 +72,12 @@ export const QueryParamContext = React.createContext({
   setPaymentError: (value: string) => {},
   amount: null,
   setAmount: (value: number) => {},
+  taxIdentificationAvail: {},
+  setTaxIdentificationAvail: (value: boolean) => {},
+  callbackMethod: "",
+  setCallbackMethod: (value: string) => {},
+  retainQuantityValue: false,
+  setRetainQuantityValue: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -131,7 +140,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
-  const [returnTo, setreturnTo] = useState("");
+  const [callbackUrl, setcallbackUrl] = useState("");
+  const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
+  const [callbackMethod, setCallbackMethod] = useState("");
 
   const [redirectstatus, setredirectstatus] = useState(null);
 
@@ -144,7 +155,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [profile, setprofile] = React.useState<null | Object>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
-
+  const [retainQuantityValue, setRetainQuantityValue] =
+    React.useState<boolean>(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
 
@@ -180,7 +192,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [language, router]);
 
-  // Return URL = returnTo => This will be received from the URL params - this is where the user will be redirected after the donation is complete
+  // Return URL = callbackUrl => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
     const pattern = new RegExp(
@@ -190,17 +202,27 @@ export default function QueryParamProvider({ children }: any) {
     return !!pattern.test(url);
   }
   React.useEffect(() => {
-    if (router.query.return_to) {
-      if (testURL(router.query.return_to)) {
-        setreturnTo(router.query.return_to);
+    if (router.query.callback_url) {
+      if (testURL(router.query.callback_url)) {
+        setcallbackUrl(router.query.callback_url);
       }
     }
-  }, [router.query.return_to]);
+  }, [router.query.callback_url]);
 
   React.useEffect(() => {
-    if (paymentSetup?.costIsMonthly) {
-      setfrequency("monthly");
+    if (router.query.callback_method) {
+      setCallbackMethod(router.query.callback_method);
     }
+  }, [router.query.callback_method]);
+
+  React.useEffect(() => {
+    if (
+      paymentSetup?.frequencies &&
+      Object.keys(paymentSetup.frequencies).length === 2
+    ) {
+      setfrequency(Object.keys(paymentSetup?.frequencies)[0]);
+    }
+    setRetainQuantityValue(false);
   }, [paymentSetup]);
 
   async function loadselectedProjects() {
@@ -208,6 +230,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/projects?_scope=map`,
         setshowErrorCard,
+        tenant,
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
@@ -237,6 +260,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        tenant,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
@@ -275,6 +299,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
+        tenantQueryParam: false,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {
@@ -329,29 +354,15 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.isReady]);
 
-  React.useEffect(() => {
-    if (router.query.tenant) {
-      // TODO => verify tenant before setting it
-      settenant(router.query.tenant);
-      localStorage.setItem("tenant", router.query.tenant);
-    } else {
-      localStorage.removeItem("tenant");
-    }
-    return () => {
-      localStorage.removeItem("tenant");
-    };
-  }, [router.query.tenant]);
-
   // Tree Count = treecount => Received from the URL
   React.useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.units) > 0) {
-        setquantity(Number(router.query.units));
-      } else {
-        setquantity(50);
+        setquantity(Number(router.query.units) / paymentSetup.unitCost);
       }
     }
+    setRetainQuantityValue(false);
   }, [router.query.units]);
 
   React.useEffect(() => {
@@ -431,9 +442,12 @@ export default function QueryParamProvider({ children }: any) {
         setIsTaxDeductible,
         isPaymentOptionsLoading,
         redirectstatus,
-        returnTo,
+        setredirectstatus,
+        callbackUrl,
+        setcallbackUrl,
         isDirectDonation,
         tenant,
+        settenant,
         selectedProjects,
         setSelectedProjects,
         allProjects,
@@ -464,6 +478,12 @@ export default function QueryParamProvider({ children }: any) {
         setAmount,
         transferDetails,
         setTransferDetails,
+        taxIdentificationAvail,
+        setTaxIdentificationAvail,
+        callbackMethod,
+        setCallbackMethod,
+        retainQuantityValue,
+        setRetainQuantityValue,
       }}
     >
       {children}

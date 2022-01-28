@@ -2,22 +2,32 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
+import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 interface Props {
   projectDetails: any;
   donation: any;
+  imageRef: any;
 }
 
-const ImageComponent = ({ projectDetails, donation }: Props) => {
+const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
-  const imageRef = React.createRef();
-
+  const { profile } = React.useContext(QueryParamContext);
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
+
+  const pluralProfileTypes = [
+    "tpo",
+    "company",
+    "organization",
+    "government",
+    "education",
+  ];
 
   const ImageHeaderText = () => {
     return (
@@ -51,7 +61,22 @@ const ImageComponent = ({ projectDetails, donation }: Props) => {
             ),
             location: t("country:" + donation.project.country.toLowerCase()),
           })}
-
+        {projectDetails.purpose === "conservation" &&
+          t(
+            `common:${
+              profile?.type && pluralProfileTypes.includes(profile?.type)
+                ? "weDonatedForestOnLocation"
+                : "iDonatedForestOnLocation"
+            }`,
+            {
+              amount: getFormattedCurrency(
+                i18n.language,
+                donation.currency,
+                Number(donation.amount)
+              ),
+              location: t("country:" + donation.project.country.toLowerCase()),
+            }
+          )}
         {projectDetails.purpose === "funds" &&
           t("common:contributedToTpo", {
             amount: currencyFormat(),
@@ -63,7 +88,7 @@ const ImageComponent = ({ projectDetails, donation }: Props) => {
     );
   };
   return (
-    <div style={{display: 'flex', justifyContent: 'center'}}>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       {/* hidden div for image download */}
       <div
         className="temp-image"

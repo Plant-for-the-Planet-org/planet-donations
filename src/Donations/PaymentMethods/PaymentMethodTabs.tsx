@@ -87,16 +87,17 @@ export default function PaymentMethodTabs({
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
       case "bouquet":
+      case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitBased ? paymentSetup.unitCost * quantity : quantity
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -184,7 +185,10 @@ export default function PaymentMethodTabs({
           onClick={(e) => handleChange(e, "Bank")}
           {...a11yProps("Bank")}
         >
-          <div style={{ display: "flex", alignItems: "center" }} data-test-id="bankTransfer">
+          <div
+            style={{ display: "flex", alignItems: "center" }}
+            data-test-id="bankTransfer"
+          >
             <BankIcon />
             <text>{t("bankTransfer")}</text>
           </div>
@@ -196,9 +200,7 @@ export default function PaymentMethodTabs({
           country={country}
           currency={currency}
           amount={formatAmountForStripe(
-            paymentSetup.unitBased
-              ? paymentSetup.unitCost * quantity
-              : quantity,
+            paymentSetup.unitCost * quantity,
             currency.toLowerCase()
           )}
           onPaymentFunction={onNativePaymentFunction}

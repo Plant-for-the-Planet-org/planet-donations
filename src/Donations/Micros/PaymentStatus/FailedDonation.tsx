@@ -8,12 +8,13 @@ import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
 import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
+import RetryIcon from "public/assets/icons/RetryIcon";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
   // const [paymentError, setPaymentError] = useState("");
   const {
-    returnTo,
+    callbackUrl,
     donationID,
     setcountry,
     setIsTaxDeductible,
@@ -31,6 +32,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     paymentError,
     setPaymentError,
     setAmount,
+    setcallbackUrl,
+    setCallbackMethod,
+    setredirectstatus,
+    tenant,
   } = React.useContext(QueryParamContext);
   const router = useRouter();
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
@@ -45,6 +50,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
       const requestParams = {
         url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        tenant,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
@@ -64,14 +70,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
     setPaymentError("");
-    // if (donation?.project?.purpose === "trees") {
-    //   setquantity(donation?.treeCount);
-    // }
+    setquantity(donation?.quantity);
     setContactDetails(donation.donor);
     setAmount(donation.amount);
-    if (donation.treeCount) {
-      setquantity(donation.treeCount);
-    }
+
     let country;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;
@@ -91,15 +93,15 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup(donation.project.id, country);
+    setcallbackUrl(donation.metadata.callback_url);
+    setCallbackMethod(donation.metadata.callback_method);
+    setredirectstatus("");
     setdonationStep(3);
-    router.push({
-      query: { ...router.query, step: PAYMENT },
-    });
   }
 
   return (
     <div>
-      {returnTo && (
+      {callbackUrl && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}
@@ -134,6 +136,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
           className="primary-button mt-20 mb-20"
           data-test-id="retryDonation"
         >
+          <RetryIcon color="#fff" />
           {t("common:retryPayment")}
         </button>
       )}
