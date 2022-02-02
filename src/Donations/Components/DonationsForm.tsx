@@ -23,6 +23,7 @@ import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 import { CONTACT } from "src/Utils/donationStepConstants";
+import { Skeleton } from "@material-ui/lab";
 
 function DonationsForm() {
   const {
@@ -217,7 +218,9 @@ function DonationsForm() {
               <FrequencyOptions />
             </div>
           ) : (
-            <></>
+            <div className={`donations-gift-container mt-10 `}>
+              <Skeleton variant="rect" width={"100%"} height={40} />
+            </div>
           )}
 
           {donationSelection()}
@@ -234,7 +237,7 @@ function DonationsForm() {
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
-            {paymentSetup && projectDetails ? (
+            {paymentSetup && paymentSetup?.unitCost && projectDetails ? (
               minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
@@ -249,9 +252,13 @@ function DonationsForm() {
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
                     continueNext={() => {
-                      router.push({
-                        query: { ...router.query, step: CONTACT },
-                      });
+                      router.push(
+                        {
+                          query: { ...router.query, step: CONTACT },
+                        },
+                        undefined,
+                        { shallow: true }
+                      );
                       setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
@@ -271,7 +278,9 @@ function DonationsForm() {
                   </span>
                 </p>
               ) : (
-                <></>
+                <div className="mt-20 w-100">
+                  <ButtonLoader />
+                </div>
               )
             ) : (
               <div className="mt-20 w-100">
