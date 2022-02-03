@@ -20,16 +20,6 @@ axiosInstance.interceptors.request.use(
     config.headers["Content-Type"] = "application/json";
     config.headers["X-ACCEPT-VERSION"] = "1.2";
 
-    if (typeof Storage !== "undefined") {
-      config.headers["x-locale"] = `${
-        localStorage.getItem("language")
-          ? localStorage.getItem("language")
-          : "en"
-      }`;
-    } else {
-      config.headers["x-locale"] = "en";
-    }
-
     return config;
   },
   (error) => {
@@ -105,6 +95,15 @@ export const apiRequest = async (
     } else if (tenantQueryParam) {
       options.params = { tenant: "ten_I9TW3ncG" };
     }
+    let locale = "en";
+    if (typeof Storage !== "undefined") {
+      locale = `${
+        localStorage.getItem("language")
+          ? localStorage.getItem("language")
+          : "en"
+      }`;
+    }
+    options.params = { ...options.params, locale };
 
     // returns a promise with axios instance
     return new Promise((resolve, reject) => {
