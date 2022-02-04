@@ -383,7 +383,7 @@ const handlePaymentError = (
   setPaymentError: any
 ) => {
   setIsPaymentProcessing(false);
-  if (paymentError.message || paymentError.data.message) {
+  if (paymentError?.message || paymentError?.data?.message) {
     setPaymentError(paymentError.message ?? paymentError.data.message);
   } else {
     setPaymentError(paymentError);
@@ -501,6 +501,21 @@ export async function handleStripeSCAPayment({
           }
         );
       handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
+      break;
+    }
+    case "sepa_debit": {
+      try {
+        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
+        console.log(sepaResponse, "sepaResponse,");
+      } catch {
+        (err) => console.log(err, "Sepaerror");
+      }
+      // console.log(errorSepaDebit, "errorSepaDebit", paymentIntentSepaDebit);
+      // handlePaymentError(
+      //   errorSepaDebit,
+      //   setIsPaymentProcessing,
+      //   setPaymentError
+      // );
       break;
     }
   }
