@@ -45,7 +45,7 @@ interface RequestParams {
   token?: any;
   data?: any;
   setshowErrorCard: Function;
-  tenantQueryParam?: boolean;
+  shouldQueryParamAdd?: boolean;
   tenant?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
@@ -61,7 +61,7 @@ export const apiRequest = async (
     data = undefined,
     token = false,
     setshowErrorCard,
-    tenantQueryParam = true,
+    shouldQueryParamAdd = true,
     tenant,
   } = extendedRequestParams;
 
@@ -88,22 +88,19 @@ export const apiRequest = async (
         Authorization: `Bearer ${token}`,
       };
     }
-    if (typeof Storage !== "undefined" && tenantQueryParam) {
-      options.params = {
-        tenant: tenant,
-      };
-    } else if (tenantQueryParam) {
-      options.params = { tenant: "ten_I9TW3ncG" };
-    }
-    let locale = "en";
-    if (typeof Storage !== "undefined") {
-      locale = `${
+    if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
+      let locale = `${
         localStorage.getItem("language")
           ? localStorage.getItem("language")
           : "en"
       }`;
+      options.params = {
+        tenant: tenant,
+        locale,
+      };
+    } else if (shouldQueryParamAdd) {
+      options.params = { tenant: "ten_I9TW3ncG", locale: "en" };
     }
-    options.params = { ...options.params, locale };
 
     // returns a promise with axios instance
     return new Promise((resolve, reject) => {
