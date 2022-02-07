@@ -510,12 +510,9 @@ export async function handleStripeSCAPayment({
       } catch {
         (err) => console.log(err, "Sepaerror");
       }
-      // console.log(errorSepaDebit, "errorSepaDebit", paymentIntentSepaDebit);
-      // handlePaymentError(
-      //   errorSepaDebit,
-      //   setIsPaymentProcessing,
-      //   setPaymentError
-      // );
+      router.push({
+        query: { ...router.query, step: THANK_YOU },
+      });
       break;
     }
   }
