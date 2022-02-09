@@ -76,6 +76,7 @@ function PaymentsForm({}: Props): ReactElement {
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
+    console.log("router.query", router.query);
     setPaymentType("CARD");
   }, []);
 
@@ -152,7 +153,7 @@ function PaymentsForm({}: Props): ReactElement {
     });
     if (router.query.to) {
       router.replace({
-        query: { to: projectDetails.slug, step: PAYMENT },
+        query: { to: router.query.to, step: PAYMENT },
       });
     }
     if (router.query.context) {
