@@ -100,7 +100,7 @@
   "selectLanguage": "Select Language",
   "trees": "trees",
   "logout": "Logout",
-  "directGiftRecipient": "This donation supports {{name}}",
+  "directGiftRecipient": "This donation supports {{name}}'s Forest",
   "saveGiftDetails": "Save Gift Details",
   "giftSomeone": "My donation is dedicated to someone",
   "payPalCard": "Use PayPal or Card",
