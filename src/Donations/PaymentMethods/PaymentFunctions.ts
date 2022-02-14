@@ -170,7 +170,7 @@ export function createDonationData({
         : amount,
     currency,
     donor: { ...contactDetails },
-    frequency: frequency === "once" ? null : frequency,
+    frequency: frequency,
     metadata: {
       callback_url: callbackUrl,
       callback_method: callbackMethod,
