@@ -465,9 +465,13 @@ export async function handleStripeSCAPayment({
           setIsPaymentProcessing(false);
           setPaymentError("Unexpected Payment Type");
       }
-      router.push({
-        query: { ...router.query, step: THANK_YOU },
-      });
+      router.push(
+        {
+          query: { ...router.query, step: THANK_YOU },
+        },
+        undefined,
+        { shallow: true }
+      );
       setIsPaymentProcessing(false);
       return successData;
     }

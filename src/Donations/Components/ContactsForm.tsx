@@ -82,9 +82,13 @@ function ContactsForm({}: Props): ReactElement {
   }, [contactDetails.country]);
 
   const onSubmit = (data: any) => {
-    router.push({
-      query: { ...router.query, step: PAYMENT },
-    });
+    router.push(
+      {
+        query: { ...router.query, step: PAYMENT },
+      },
+      undefined,
+      { shallow: true }
+    );
     setContactDetails({
       ...data,
       email: isAuthenticated ? contactDetails.email : data.email,
@@ -164,9 +168,13 @@ function ContactsForm({}: Props): ReactElement {
           <button
             className="d-flex"
             onClick={() => {
-              router.push({
-                query: { ...router.query, step: DONATE },
-              });
+              router.push(
+                {
+                  query: { ...router.query, step: DONATE },
+                },
+                undefined,
+                { shallow: true }
+              );
             }}
             style={{ marginRight: "12px" }}
           >

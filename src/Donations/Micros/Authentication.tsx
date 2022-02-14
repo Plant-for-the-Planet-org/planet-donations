@@ -15,6 +15,7 @@ import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
+import { Skeleton } from "@material-ui/lab";
 
 interface Props {}
 
@@ -159,10 +160,12 @@ function Authentication({}: Props): ReactElement {
   }, [router.query, isLoading, isAuthenticated]);
   return (
     <div>
-      {!queryToken &&
-        !isLoading &&
-        !isAuthenticated &&
-        (!hideLogin ? (
+      {isLoading ? (
+        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+          <Skeleton variant="rect" width={100} height={30} />
+        </div>
+      ) : !queryToken && !isLoading && !isAuthenticated ? (
+        !hideLogin ? (
           <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
             <button onClick={() => loginUser()} className="login-continue">
               {t("loginContinue")}
@@ -177,9 +180,8 @@ function Authentication({}: Props): ReactElement {
               {t("verifyYourEmail")}
             </button>
           </div>
-        ))}
-
-      {(!isLoading && isAuthenticated && profile) || profile?.displayName ? (
+        )
+      ) : (!isLoading && isAuthenticated && profile) || profile?.displayName ? (
         <div className="d-flex row justify-content-between w-100 mb-20">
           {!profile?.isPrivate ? (
             <a
@@ -202,7 +204,9 @@ function Authentication({}: Props): ReactElement {
           ) : null}
         </div>
       ) : (
-        <></>
+        <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
+          <Skeleton variant="rect" width={100} height={30} />
+        </div>
       )}
       <VerifyEmailModal
         logout={logout}
