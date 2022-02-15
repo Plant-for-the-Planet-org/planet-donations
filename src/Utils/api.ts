@@ -89,7 +89,7 @@ export const apiRequest = async (
       };
     }
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
-      let locale = `${
+      const locale = `${
         localStorage.getItem("language")
           ? localStorage.getItem("language")
           : "en"
