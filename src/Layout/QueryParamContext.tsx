@@ -282,13 +282,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  // React.useEffect(() => {
-  //   if (router.query.to && country) {
-  //     const to = String(router.query.to).replace(/\//g, "");
-  //     loadPaymentSetup(to, country);
-  //   }
-  // }, [router.query.to, country]);
-
   async function loadConfig() {
     let userLang;
     if (localStorage) {
@@ -318,17 +311,8 @@ export default function QueryParamProvider({ children }: any) {
                 setcurrency,
                 configCountry: config.data.country.toUpperCase(),
               });
-              // setcountry(config.data.country.toUpperCase());
-              // localStorage.setItem(
-              //   "countryCode",
-              //   config.data.country.toUpperCase()
-              // );
             }
           }
-          // else {
-          //   setcountry("DE");
-          //   localStorage.setItem("countryCode", "DE");
-          // }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -359,12 +343,7 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (
-        Number(router.query.units) > 0 &&
-        paymentSetup.unitCost
-        //  &&
-        // paymentSetup.unit !== "currency"
-      ) {
+      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
         setquantity(Number(router.query.units));
       }
     }
