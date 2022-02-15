@@ -48,6 +48,7 @@ function ThankYou() {
     const interval = setInterval(() => {
       if (
         donation &&
+        donation.gateway !== "offline" &&
         (donation.paymentStatus === "pending" ||
           donation.paymentStatus === "initiated")
       ) {

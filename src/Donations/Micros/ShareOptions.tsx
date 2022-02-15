@@ -59,7 +59,8 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
     backgroundColor = null,
     type = "image/jpeg"
   ) => {
-    return exportComponent(node, fileName, backgroundColor, type);
+    const modifiedFileName = fileName.replace(".", "");
+    return exportComponent(node, modifiedFileName, backgroundColor, type);
   };
 
   const openWindowLinks = (shareUrl) => {

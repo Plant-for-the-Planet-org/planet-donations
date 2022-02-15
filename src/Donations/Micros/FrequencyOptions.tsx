@@ -9,7 +9,7 @@ function FrequencyOptions({}: Props): ReactElement {
     React.useContext(QueryParamContext);
   const { t } = useTranslation(["common"]);
 
-  const customfrequencies = Object.keys(paymentSetup.frequencies);
+  const customfrequencies = Object.keys(paymentSetup?.frequencies);
 
   return (
     <div className="d-flex justify-content-between flex-wrap frequency-selection-container mt-20">

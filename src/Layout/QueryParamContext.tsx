@@ -181,9 +181,10 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country !== undefined && country !== "") {
-      loadPaymentSetup(router.query.to, country);
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup(to, country);
     }
-  }, [country]);
+  }, [router.query.to, country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -281,13 +282,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  React.useEffect(() => {
-    if (router.query.to && country) {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup(to, country);
-    }
-  }, [router.query.to, country]);
-
   async function loadConfig() {
     let userLang;
     if (localStorage) {
@@ -299,7 +293,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
-        tenantQueryParam: false,
+        shouldQueryParamAdd: false,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {
@@ -317,17 +311,8 @@ export default function QueryParamProvider({ children }: any) {
                 setcurrency,
                 configCountry: config.data.country.toUpperCase(),
               });
-              // setcountry(config.data.country.toUpperCase());
-              // localStorage.setItem(
-              //   "countryCode",
-              //   config.data.country.toUpperCase()
-              // );
             }
           }
-          // else {
-          //   setcountry("DE");
-          //   localStorage.setItem("countryCode", "DE");
-          // }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -358,12 +343,12 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.units) > 0) {
-        setquantity(Number(router.query.units) / paymentSetup.unitCost);
+      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
+        setquantity(Number(router.query.units));
       }
     }
     setRetainQuantityValue(false);
-  }, [router.query.units]);
+  }, [router.query.units, paymentSetup]);
 
   React.useEffect(() => {
     if (router.query.method) {
