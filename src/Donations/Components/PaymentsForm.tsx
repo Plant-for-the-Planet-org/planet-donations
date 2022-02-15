@@ -76,7 +76,6 @@ function PaymentsForm({}: Props): ReactElement {
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
-    console.log("router.query", router.query);
     setPaymentType("CARD");
   }, []);
 
@@ -163,6 +162,7 @@ function PaymentsForm({}: Props): ReactElement {
     }
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
+      setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
@@ -236,13 +236,9 @@ function PaymentsForm({}: Props): ReactElement {
             {!isDirectDonation ? (
               <button
                 onClick={() => {
-                  router.push(
-                    {
-                      query: { ...router.query, step: CONTACT },
-                    },
-                    undefined,
-                    { shallow: true }
-                  );
+                  router.push({
+                    query: { ...router.query, step: CONTACT },
+                  });
                 }}
                 className="d-flex"
                 style={{ marginRight: "12px" }}
