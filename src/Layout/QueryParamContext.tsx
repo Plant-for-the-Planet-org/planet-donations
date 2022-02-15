@@ -300,7 +300,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
-        tenantQueryParam: false,
+        shouldQueryParamAdd: false,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {

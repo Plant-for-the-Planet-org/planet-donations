@@ -20,16 +20,6 @@ axiosInstance.interceptors.request.use(
     config.headers["Content-Type"] = "application/json";
     config.headers["X-ACCEPT-VERSION"] = "1.2";
 
-    if (typeof Storage !== "undefined") {
-      config.headers["x-locale"] = `${
-        localStorage.getItem("language")
-          ? localStorage.getItem("language")
-          : "en"
-      }`;
-    } else {
-      config.headers["x-locale"] = "en";
-    }
-
     return config;
   },
   (error) => {
@@ -55,7 +45,7 @@ interface RequestParams {
   token?: any;
   data?: any;
   setshowErrorCard: Function;
-  tenantQueryParam?: boolean;
+  shouldQueryParamAdd?: boolean;
   tenant?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
@@ -71,7 +61,7 @@ export const apiRequest = async (
     data = undefined,
     token = false,
     setshowErrorCard,
-    tenantQueryParam = true,
+    shouldQueryParamAdd = true,
     tenant,
   } = extendedRequestParams;
 
@@ -98,12 +88,18 @@ export const apiRequest = async (
         Authorization: `Bearer ${token}`,
       };
     }
-    if (typeof Storage !== "undefined" && tenantQueryParam) {
+    if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
+      const locale = `${
+        localStorage.getItem("language")
+          ? localStorage.getItem("language")
+          : "en"
+      }`;
       options.params = {
         tenant: tenant,
+        locale,
       };
-    } else if (tenantQueryParam) {
-      options.params = { tenant: "ten_I9TW3ncG" };
+    } else if (shouldQueryParamAdd) {
+      options.params = { tenant: "ten_I9TW3ncG", locale: "en" };
     }
 
     // returns a promise with axios instance
