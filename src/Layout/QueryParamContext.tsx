@@ -181,9 +181,10 @@ export default function QueryParamProvider({ children }: any) {
 
   React.useEffect(() => {
     if (router.query.to && country !== undefined && country !== "") {
-      loadPaymentSetup(router.query.to, country);
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup(to, country);
     }
-  }, [country]);
+  }, [router.query.to, country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -281,12 +282,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  React.useEffect(() => {
-    if (router.query.to && country) {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup(to, country);
-    }
-  }, [router.query.to, country]);
+  // React.useEffect(() => {
+  //   if (router.query.to && country) {
+  //     const to = String(router.query.to).replace(/\//g, "");
+  //     loadPaymentSetup(to, country);
+  //   }
+  // }, [router.query.to, country]);
 
   async function loadConfig() {
     let userLang;
@@ -358,12 +359,13 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
-        setquantity(
-          paymentSetup.unit === "currency"
-            ? Number(router.query.units) / paymentSetup.unitCost
-            : Number(router.query.units)
-        );
+      if (
+        Number(router.query.units) > 0 &&
+        paymentSetup.unitCost
+        //  &&
+        // paymentSetup.unit !== "currency"
+      ) {
+        setquantity(Number(router.query.units));
       }
     }
     setRetainQuantityValue(false);
