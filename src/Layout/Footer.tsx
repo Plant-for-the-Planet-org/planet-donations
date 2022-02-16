@@ -20,6 +20,8 @@ import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
+import { loadPaymentSetup } from "../Layout/QueryParamContext";
+import { apiRequest } from "src/Utils/api";
 
 interface Props {}
 
@@ -193,8 +195,33 @@ function LanguageModal({
 }: ModalProps): ReactElement {
   const { theme } = React.useContext(ThemeContext);
 
-  const { language, setlanguage } = React.useContext(QueryParamContext);
+  const {
+    language,
+    setlanguage,
+    projectDetails,
+    setshowErrorCard,
+    tenant,
+    country,
+    setProjectName,
+    setProjectDescription,
+  } = React.useContext(QueryParamContext);
   const { t, ready } = useTranslation(["common"]);
+  async function loadPaymentSetup() {
+    try {
+      const requestParams = {
+        url: `/app/projects/${projectDetails.id}/paymentOptions?country=${country}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const paymentSetupData: any = await apiRequest(requestParams);
+      if (paymentSetupData.data) {
+        setProjectName(paymentSetupData.data.name);
+        setProjectDescription(paymentSetupData.data.description);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -218,6 +245,10 @@ function LanguageModal({
               value={language}
               onChange={(event) => {
                 setlanguage(event.target.value);
+                localStorage.setItem("language", event.target.value);
+                if (projectDetails) {
+                  loadPaymentSetup();
+                }
                 setlanguageModalOpen(false);
               }}
             >

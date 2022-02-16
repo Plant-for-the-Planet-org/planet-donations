@@ -78,6 +78,10 @@ export const QueryParamContext = React.createContext({
   setCallbackMethod: (value: string) => {},
   retainQuantityValue: false,
   setRetainQuantityValue: (value: boolean) => {},
+  projectName: "",
+  setProjectName: (value: string) => {},
+  projectDescription: "",
+  setProjectDescription: (value: string) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -165,6 +169,8 @@ export default function QueryParamProvider({ children }: any) {
   const [transferDetails, setTransferDetails] = React.useState<Object | null>(
     null
   );
+  const [projectName, setProjectName] = React.useState("");
+  const [projectDescription, setProjectDescription] = React.useState("");
 
   React.useEffect(() => {
     if (paymentError) {
@@ -183,7 +189,7 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.to && country !== undefined && country !== "") {
       loadPaymentSetup(router.query.to, country);
     }
-  }, [country]);
+  }, [country, language]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -274,6 +280,8 @@ export default function QueryParamProvider({ children }: any) {
         }
 
         setpaymentSetup(paymentSetupData.data);
+        setProjectName(paymentSetupData.data.name);
+        setProjectDescription(paymentSetupData.data.description);
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -488,6 +496,10 @@ export default function QueryParamProvider({ children }: any) {
         setCallbackMethod,
         retainQuantityValue,
         setRetainQuantityValue,
+        projectDescription,
+        projectName,
+        setProjectName,
+        setProjectDescription,
       }}
     >
       {children}

@@ -94,6 +94,8 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
+    projectName,
+    projectDescription,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -235,20 +237,20 @@ function DonationInfo() {
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {projectName}
                 </a>
               ) : (
                 <h1
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {projectName}
                 </h1>
               )}
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">{projectDetails.description}</p>
+                <p className="text-white mt-10">{projectDescription}</p>
               ) : (
                 []
               )}
