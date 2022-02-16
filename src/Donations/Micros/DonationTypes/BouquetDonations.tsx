@@ -245,7 +245,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       className="funding-selection-option-text"
                       style={{ fontSize: "18px" }}
                     >
-                      <p style={{ margin: "5px" }}> {t("custom")}</p>
+                      <p style={{ margin: "5px" }}>
+                        {" "}
+                        {paymentSetup.unit === "currency"
+                          ? t("customAmount")
+                          : t("custom")}
+                      </p>
                     </div>
                   )}
                 </div>
