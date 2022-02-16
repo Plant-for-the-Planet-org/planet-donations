@@ -152,7 +152,7 @@ function PaymentsForm({}: Props): ReactElement {
     });
     if (router.query.to) {
       router.replace({
-        query: { to: projectDetails.id, step: PAYMENT },
+        query: { to: router.query.to, step: PAYMENT },
       });
     }
     if (router.query.context) {

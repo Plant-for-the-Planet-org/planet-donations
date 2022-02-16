@@ -217,6 +217,8 @@ function DonationsForm() {
             >
               <FrequencyOptions />
             </div>
+          ) : isGift ? (
+            <></>
           ) : (
             <div className={`donations-gift-container mt-10 `}>
               <Skeleton variant="rect" width={"100%"} height={40} />
