@@ -189,7 +189,7 @@ export default function QueryParamProvider({ children }: any) {
     if (router.query.to && country !== undefined && country !== "") {
       loadPaymentSetup(router.query.to, country);
     }
-  }, [country, language]);
+  }, [country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
