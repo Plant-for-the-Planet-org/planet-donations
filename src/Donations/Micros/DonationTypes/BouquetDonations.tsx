@@ -94,7 +94,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
           paymentSetup.unitCost;
-      newQuantity = newQuantity / paymentSetup.unitCost;
+      newQuantity = Number(
+        getFormattedNumber(
+          i18n.language,
+          Number(newQuantity / paymentSetup.unitCost)
+        )
+      );
       setquantity(newQuantity);
 
       if (
@@ -240,7 +245,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       className="funding-selection-option-text"
                       style={{ fontSize: "18px" }}
                     >
-                      <p style={{ margin: "5px" }}> {t("custom")}</p>
+                      <p style={{ margin: "5px" }}>
+                        {" "}
+                        {paymentSetup.unit === "currency"
+                          ? t("customAmount")
+                          : t("custom")}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -266,13 +276,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               []
             )}
             {currency} <DownArrowIcon color={themeProperties.primaryColor} />
-            {getFormatedCurrency(
-              i18n.language,
-              "",
-              Number(paymentSetup.unitCost)
-            )}{" "}
+            {paymentSetup.purpose === "conservation"
+              ? getFormatedCurrency(
+                  i18n.language,
+                  "",
+                  Number(paymentSetup.unitCost)
+                )
+              : []}{" "}
           </button>
-          {t("perm2")}
+          {paymentSetup.purpose === "conservation" ? t("perm2") : []}
         </p>
       ) : (
         <div className={"mt-20"}>
