@@ -80,7 +80,7 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
         {projectDetails.purpose === "funds" &&
           t("common:contributedToTpo", {
             amount: currencyFormat(),
-            organization: projectDetails.tpo.name,
+            organization: projectDetails.ownerName,
           })}
 
         {projectDetails.purpose === "bouquet" && t("Message for Bouquet")}

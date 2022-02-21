@@ -8,6 +8,7 @@ import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
+import loadPaymentSetup from "src/Utils/loadPaymentSetup";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -185,12 +186,12 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
-    if (router.query.to && country !== undefined && country !== "") {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup(to, country);
-    }
-  }, [router.query.to, country]);
+  // React.useEffect(() => {
+  //   if (router.query.to && country !== undefined && country !== "") {
+  //     const to = String(router.query.to).replace(/\//g, "");
+  //     loadPaymentSetup(to, country);
+  //   }
+  // }, [router.query.to, country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -258,37 +259,24 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  async function loadPaymentSetup(
-    projectGUID: string | string[],
-    paymentSetupCountry: string
-  ) {
-    setIsPaymentOptionsLoading(true);
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+  React.useEffect(() => {
+    if (router.query.to && country !== undefined && country !== "") {
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup({
+        projectGUID: to,
+        paymentSetupCountry: country,
+        setIsPaymentOptionsLoading,
         setshowErrorCard,
         tenant,
-      };
-      const paymentSetupData: any = await apiRequest(requestParams);
-      if (paymentSetupData.data) {
-        setcurrency(paymentSetupData.data.currency);
-        if (!country) {
-          setcountry(paymentSetupData.data.effectiveCountry);
-          localStorage.setItem(
-            "countryCode",
-            paymentSetupData.data.effectiveCountry
-          );
-        }
-
-        setpaymentSetup(paymentSetupData.data);
-        setProjectName(paymentSetupData.data.name);
-        setProjectDescription(paymentSetupData.data.description);
-      }
-      setIsPaymentOptionsLoading(false);
-    } catch (err) {
-      // console.log(err);
+        setcurrency,
+        country,
+        setcountry,
+        setpaymentSetup,
+        setprojectDetails,
+        shouldSetPaymentDetails: true,
+      });
     }
-  }
+  }, [router.query.to, country]);
 
   async function loadConfig() {
     let userLang;
@@ -481,6 +469,7 @@ export default function QueryParamProvider({ children }: any) {
         projectName,
         setProjectName,
         setProjectDescription,
+        setIsPaymentOptionsLoading,
       }}
     >
       {children}

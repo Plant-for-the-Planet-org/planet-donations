@@ -26,8 +26,14 @@ function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
-  const { paymentSetup, donationStep, projectDetails, setdonationStep } =
-    React.useContext(QueryParamContext);
+  const {
+    paymentSetup,
+    donationStep,
+    projectDetails,
+    setdonationStep,
+    allProjects,
+  } = React.useContext(QueryParamContext);
+
   useEffect(() => {
     if (router.query?.step) {
       let step;
@@ -110,10 +116,10 @@ function DonationInfo() {
   });
 
   const TPOImage = () => {
-    return projectDetails.tpo.image ? (
+    return projectDetails.ownerAvatar ? (
       <img
         className="project-organisation-image"
-        src={getImageUrl("profile", "thumb", projectDetails.tpo.image)}
+        src={getImageUrl("profile", "thumb", projectDetails.ownerAvatar)}
         style={{
           width: "48px",
           height: "48px",
@@ -131,7 +137,7 @@ function DonationInfo() {
         }}
         className="project-organisation-image no-project-organisation-image mb-10"
       >
-        {projectDetails.tpo.name.charAt(0)}
+        {projectDetails.ownerName.charAt(0)}
       </div>
     );
   };
@@ -154,12 +160,12 @@ function DonationInfo() {
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep > 0 &&
-            projectDetails.tpo &&
+            projectDetails.ownerName &&
             (projectDetails.purpose === "trees" ? (
               <a
                 rel="noreferrer"
                 target="_blank"
-                href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
                 style={{ width: "fit-content" }}
               >
                 <TPOImage />
@@ -233,18 +239,18 @@ function DonationInfo() {
                 <a
                   rel="noreferrer"
                   target="_blank"
-                  href={`https://www.trilliontreecampaign.org/${projectDetails.slug}`}
+                  href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectName}
+                  {projectDetails.name}
                 </a>
               ) : (
                 <h1
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectName}
+                  {projectDetails.name}
                 </h1>
               )}
 
@@ -256,15 +262,15 @@ function DonationInfo() {
               )}
               {(projectDetails.purpose === "trees" ||
                 projectDetails.purpose === "conservation") &&
-                projectDetails.tpo && (
+                projectDetails.ownerName && (
                   <a
                     rel="noreferrer"
                     target="_blank"
-                    href={`https://www.trilliontreecampaign.org/t/${projectDetails.tpo.slug}`}
+                    href={`https://www.trilliontreecampaign.org/t/${projectDetails.id}`}
                     className="text-white"
                   >
                     {t("byOrganization", {
-                      organizationName: projectDetails.tpo.name,
+                      organizationName: projectDetails.ownerName,
                     })}
                   </a>
                 )}

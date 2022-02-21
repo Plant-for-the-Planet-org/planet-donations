@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
+import loadPaymentSetup from "src/Utils/loadPaymentSetup";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
@@ -41,31 +42,31 @@ function FailedDonation({ sendToReturn, donation }: any) {
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
     React.useState<boolean>(false);
 
-  async function loadPaymentSetup(
-    projectGUID: string | string[],
-    paymentSetupCountry: string
-  ) {
-    setIsPaymentOptionsLoading(true);
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentSetupData: any = await apiRequest(requestParams);
-      if (paymentSetupData.data) {
-        setcurrency(paymentSetupData.data.currency);
-        if (!country) {
-          setcountry(paymentSetupData.data.effectiveCountry);
-        }
-        setpaymentSetup(paymentSetupData.data);
-      }
-      setIsPaymentOptionsLoading(false);
-      // setdonationStep(3);
-    } catch (err) {
-      // console.log(err);
-    }
-  }
+  // async function loadPaymentSetup(
+  //   projectGUID: string | string[],
+  //   paymentSetupCountry: string
+  // ) {
+  //   setIsPaymentOptionsLoading(true);
+  //   try {
+  //     const requestParams = {
+  //       url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+  //       setshowErrorCard,
+  //       tenant,
+  //     };
+  //     const paymentSetupData: any = await apiRequest(requestParams);
+  //     if (paymentSetupData.data) {
+  //       setcurrency(paymentSetupData.data.currency);
+  //       if (!country) {
+  //         setcountry(paymentSetupData.data.effectiveCountry);
+  //       }
+  //       setpaymentSetup(paymentSetupData.data);
+  //     }
+  //     setIsPaymentOptionsLoading(false);
+  //     // setdonationStep(3);
+  //   } catch (err) {
+  //     // console.log(err);
+  //   }
+  // }
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
@@ -92,7 +93,19 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    await loadPaymentSetup(donation.project.id, country);
+    await loadPaymentSetup({
+      projectGUID: donation.project.id,
+      paymentSetupCountry: country,
+      setIsPaymentOptionsLoading,
+      setshowErrorCard,
+      tenant,
+      setcurrency,
+      country,
+      setcountry,
+      setpaymentSetup,
+      setprojectDetails,
+      shouldSetPaymentDetails: true,
+    });
     setcallbackUrl(donation.metadata.callback_url);
     setCallbackMethod(donation.metadata.callback_method);
     setredirectstatus("");
