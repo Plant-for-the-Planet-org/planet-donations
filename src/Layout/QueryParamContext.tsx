@@ -83,6 +83,7 @@ export const QueryParamContext = React.createContext({
   setProjectName: (value: string) => {},
   projectDescription: "",
   setProjectDescription: (value: string) => {},
+  setIsPaymentOptionsLoading: (value: boolean) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {

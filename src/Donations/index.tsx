@@ -243,14 +243,14 @@ function DonationInfo() {
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {projectName}
                 </a>
               ) : (
                 <h1
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {projectName}
                 </h1>
               )}
 
