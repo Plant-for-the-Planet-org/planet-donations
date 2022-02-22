@@ -227,7 +227,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   ) : (
                     <>
                       <div className={`funding-selection-option-text m-10`}>
-                        <span>{option.caption}</span>
+                        <span>
+                          {option.caption ? option.caption : t("customAmount")}
+                        </span>
                       </div>
                     </>
                   )}
