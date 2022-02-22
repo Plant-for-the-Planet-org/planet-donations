@@ -8,7 +8,6 @@ import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
-import loadPaymentSetup from "src/Utils/loadPaymentSetup";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -84,6 +83,11 @@ export const QueryParamContext = React.createContext({
   projectDescription: "",
   setProjectDescription: (value: string) => {},
   setIsPaymentOptionsLoading: (value: boolean) => {},
+  loadPaymentSetup: (value: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -187,13 +191,6 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  // React.useEffect(() => {
-  //   if (router.query.to && country !== undefined && country !== "") {
-  //     const to = String(router.query.to).replace(/\//g, "");
-  //     loadPaymentSetup(to, country);
-  //   }
-  // }, [router.query.to, country]);
-
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
@@ -266,14 +263,6 @@ export default function QueryParamProvider({ children }: any) {
       loadPaymentSetup({
         projectGUID: to,
         paymentSetupCountry: country,
-        setIsPaymentOptionsLoading,
-        setshowErrorCard,
-        tenant,
-        setcurrency,
-        country,
-        setcountry,
-        setpaymentSetup,
-        setprojectDetails,
         shouldSetPaymentDetails: true,
       });
     }
@@ -393,6 +382,52 @@ export default function QueryParamProvider({ children }: any) {
       }
     }
   }, []);
+
+  const loadPaymentSetup = async ({
+    projectGUID,
+    paymentSetupCountry,
+    shouldSetPaymentDetails,
+  }: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {
+    setIsPaymentOptionsLoading(true);
+    try {
+      const requestParams = {
+        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const paymentSetupData: any = await apiRequest(requestParams);
+      if (paymentSetupData.data) {
+        const paymentSetup = paymentSetupData.data;
+        if (shouldSetPaymentDetails) {
+          setcurrency(paymentSetup.currency);
+          if (!country) {
+            setcountry(paymentSetup.effectiveCountry);
+            localStorage.setItem("countryCode", paymentSetup.effectiveCountry);
+          }
+
+          setpaymentSetup(paymentSetup);
+        }
+        setprojectDetails({
+          id: paymentSetup.id,
+          name: paymentSetup.name,
+          description: paymentSetup.description,
+          purpose: paymentSetup.purpose,
+          ownerName: paymentSetup.ownerName,
+          taxDeductionCountries: paymentSetup.taxDeductionCountries,
+          ownerImage: paymentSetup.image,
+          ownerAvatar: paymentSetup.ownerAvatar,
+        });
+      }
+      setIsPaymentOptionsLoading(false);
+    } catch (err) {
+      // console.log(err);
+    }
+  };
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -471,6 +506,7 @@ export default function QueryParamProvider({ children }: any) {
         setProjectName,
         setProjectDescription,
         setIsPaymentOptionsLoading,
+        loadPaymentSetup,
       }}
     >
       {children}

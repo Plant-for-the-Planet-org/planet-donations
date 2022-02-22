@@ -20,7 +20,6 @@ import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
-import loadPaymentSetup from "../Utils/loadPaymentSetup";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
 
@@ -28,9 +27,10 @@ interface Props {}
 
 function Footer({}: Props): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
-  const { language, setlanguage } = React.useContext(QueryParamContext);
 
-  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep, language, setlanguage } =
+    React.useContext(QueryParamContext);
+
   const { t, i18n, ready } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
@@ -196,34 +196,12 @@ function LanguageModal({
 }: ModalProps): ReactElement {
   const { theme } = React.useContext(ThemeContext);
 
-  const {
-    language,
-    setlanguage,
-    projectDetails,
-    setshowErrorCard,
-    tenant,
-    country,
-    setIsPaymentOptionsLoading,
-    setprojectDetails,
-  } = React.useContext(QueryParamContext);
+  const { language, setlanguage, projectDetails, country, loadPaymentSetup } =
+    React.useContext(QueryParamContext);
+
   const router = useRouter();
   const { t, ready } = useTranslation(["common"]);
-  // async function loadPaymentSetup() {
-  //   try {
-  //     const requestParams = {
-  //       url: `/app/projects/${projectDetails.id}/paymentOptions?country=${country}`,
-  //       setshowErrorCard,
-  //       tenant,
-  //     };
-  //     const paymentSetupData: any = await apiRequest(requestParams);
-  //     if (paymentSetupData.data) {
-  //       setProjectName(paymentSetupData.data.name);
-  //       setProjectDescription(paymentSetupData.data.description);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -252,10 +230,6 @@ function LanguageModal({
                   loadPaymentSetup({
                     projectGUID: router.query.to,
                     paymentSetupCountry: country,
-                    setIsPaymentOptionsLoading,
-                    setshowErrorCard,
-                    tenant,
-                    setprojectDetails,
                     shouldSetPaymentDetails: false,
                   });
                 }
