@@ -27,8 +27,8 @@ function NewPaypal({
 }: Props): ReactElement {
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
-    "enable-funding": "venmo,giropay,sofort",
-    "disable-funding": "card",
+    "enable-funding": "venmo",
+    "disable-funding": "card,giropay,sofort,sepa",
     currency: currency,
   };
 
