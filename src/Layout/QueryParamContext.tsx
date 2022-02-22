@@ -78,6 +78,16 @@ export const QueryParamContext = React.createContext({
   setCallbackMethod: (value: string) => {},
   retainQuantityValue: false,
   setRetainQuantityValue: (value: boolean) => {},
+  projectName: "",
+  setProjectName: (value: string) => {},
+  projectDescription: "",
+  setProjectDescription: (value: string) => {},
+  setIsPaymentOptionsLoading: (value: boolean) => {},
+  loadPaymentSetup: (value: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -165,6 +175,8 @@ export default function QueryParamProvider({ children }: any) {
   const [transferDetails, setTransferDetails] = React.useState<Object | null>(
     null
   );
+  const [projectName, setProjectName] = React.useState("");
+  const [projectDescription, setProjectDescription] = React.useState("");
 
   React.useEffect(() => {
     if (paymentError) {
@@ -178,12 +190,6 @@ export default function QueryParamProvider({ children }: any) {
       setlanguage(router.query.locale);
     }
   }, [router.query.locale]);
-
-  React.useEffect(() => {
-    if (router.query.to && country !== undefined && country !== "") {
-      loadPaymentSetup(router.query.to, country);
-    }
-  }, [country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -251,40 +257,14 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  async function loadPaymentSetup(
-    projectGUID: string | string[],
-    paymentSetupCountry: string
-  ) {
-    setIsPaymentOptionsLoading(true);
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentSetupData: any = await apiRequest(requestParams);
-      if (paymentSetupData.data) {
-        setcurrency(paymentSetupData.data.currency);
-        if (!country) {
-          setcountry(paymentSetupData.data.effectiveCountry);
-          localStorage.setItem(
-            "countryCode",
-            paymentSetupData.data.effectiveCountry
-          );
-        }
-
-        setpaymentSetup(paymentSetupData.data);
-      }
-      setIsPaymentOptionsLoading(false);
-    } catch (err) {
-      // console.log(err);
-    }
-  }
-
   React.useEffect(() => {
-    if (router.query.to && country) {
+    if (router.query.to && country !== undefined && country !== "") {
       const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup(to, country);
+      loadPaymentSetup({
+        projectGUID: to,
+        paymentSetupCountry: country,
+        shouldSetPaymentDetails: true,
+      });
     }
   }, [router.query.to, country]);
 
@@ -299,7 +279,7 @@ export default function QueryParamProvider({ children }: any) {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
-        tenantQueryParam: false,
+        shouldQueryParamAdd: false,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {
@@ -317,17 +297,8 @@ export default function QueryParamProvider({ children }: any) {
                 setcurrency,
                 configCountry: config.data.country.toUpperCase(),
               });
-              // setcountry(config.data.country.toUpperCase());
-              // localStorage.setItem(
-              //   "countryCode",
-              //   config.data.country.toUpperCase()
-              // );
             }
           }
-          // else {
-          //   setcountry("DE");
-          //   localStorage.setItem("countryCode", "DE");
-          // }
         }
         if (!router.query.context) {
           setContactDetails({
@@ -358,12 +329,12 @@ export default function QueryParamProvider({ children }: any) {
   React.useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.units) > 0) {
-        setquantity(Number(router.query.units) / paymentSetup.unitCost);
+      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
+        setquantity(Number(router.query.units));
       }
     }
     setRetainQuantityValue(false);
-  }, [router.query.units]);
+  }, [router.query.units, paymentSetup]);
 
   React.useEffect(() => {
     if (router.query.method) {
@@ -411,6 +382,52 @@ export default function QueryParamProvider({ children }: any) {
       }
     }
   }, []);
+
+  const loadPaymentSetup = async ({
+    projectGUID,
+    paymentSetupCountry,
+    shouldSetPaymentDetails,
+  }: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {
+    setIsPaymentOptionsLoading(true);
+    try {
+      const requestParams = {
+        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const paymentSetupData: any = await apiRequest(requestParams);
+      if (paymentSetupData.data) {
+        const paymentSetup = paymentSetupData.data;
+        if (shouldSetPaymentDetails) {
+          setcurrency(paymentSetup.currency);
+          if (!country) {
+            setcountry(paymentSetup.effectiveCountry);
+            localStorage.setItem("countryCode", paymentSetup.effectiveCountry);
+          }
+
+          setpaymentSetup(paymentSetup);
+        }
+        setprojectDetails({
+          id: paymentSetup.id,
+          name: paymentSetup.name,
+          description: paymentSetup.description,
+          purpose: paymentSetup.purpose,
+          ownerName: paymentSetup.ownerName,
+          taxDeductionCountries: paymentSetup.taxDeductionCountries,
+          projectImage: paymentSetup.image,
+          ownerAvatar: paymentSetup.ownerAvatar,
+        });
+      }
+      setIsPaymentOptionsLoading(false);
+    } catch (err) {
+      // console.log(err);
+    }
+  };
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -484,6 +501,12 @@ export default function QueryParamProvider({ children }: any) {
         setCallbackMethod,
         retainQuantityValue,
         setRetainQuantityValue,
+        projectDescription,
+        projectName,
+        setProjectName,
+        setProjectDescription,
+        setIsPaymentOptionsLoading,
+        loadPaymentSetup,
       }}
     >
       {children}

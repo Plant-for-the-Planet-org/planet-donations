@@ -23,6 +23,7 @@ import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 import { CONTACT } from "src/Utils/donationStepConstants";
+import { Skeleton } from "@material-ui/lab";
 
 function DonationsForm() {
   const {
@@ -136,7 +137,7 @@ function DonationsForm() {
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
   const donationSelection = () => {
-    switch (projectDetails.purpose) {
+    switch (projectDetails?.purpose) {
       case "funds":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "conservation":
@@ -150,12 +151,12 @@ function DonationsForm() {
 
   let paymentLabel = "";
 
-  if (paymentSetup && currency) {
-    switch (projectDetails.purpose) {
+  if (paymentSetup && currency && projectDetails) {
+    switch (projectDetails?.purpose) {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country.toLowerCase()}`),
+          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -188,15 +189,15 @@ function DonationsForm() {
 
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
-  ) : (
+  ) : projectDetails ? (
     <div className="donations-forms-container">
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          {projectDetails.purpose !== "funds" && (
+          {projectDetails?.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
-          {projectDetails.purpose === "trees" ? (
+          {projectDetails?.purpose === "trees" ? (
             <div className="donations-gift-container mt-10">
               <GiftForm />
             </div>
@@ -216,8 +217,12 @@ function DonationsForm() {
             >
               <FrequencyOptions />
             </div>
-          ) : (
+          ) : isGift ? (
             <></>
+          ) : (
+            <div className={`donations-gift-container mt-10 `}>
+              <Skeleton variant="rect" width={"100%"} height={40} />
+            </div>
           )}
 
           {donationSelection()}
@@ -234,7 +239,7 @@ function DonationsForm() {
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
-            {paymentSetup && projectDetails ? (
+            {paymentSetup && paymentSetup?.unitCost && projectDetails ? (
               minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                 !isPaymentOptionsLoading &&
                 paymentSetup?.gateways?.stripe?.account &&
@@ -249,9 +254,13 @@ function DonationsForm() {
                     onPaymentFunction={onPaymentFunction}
                     paymentSetup={paymentSetup}
                     continueNext={() => {
-                      router.push({
-                        query: { ...router.query, step: CONTACT },
-                      });
+                      router.push(
+                        {
+                          query: { ...router.query, step: CONTACT },
+                        },
+                        undefined,
+                        { shallow: true }
+                      );
                       setRetainQuantityValue(true);
                     }}
                     isPaymentPage={false}
@@ -271,7 +280,9 @@ function DonationsForm() {
                   </span>
                 </p>
               ) : (
-                <></>
+                <div className="mt-20 w-100">
+                  <ButtonLoader />
+                </div>
               )
             ) : (
               <div className="mt-20 w-100">
@@ -287,6 +298,8 @@ function DonationsForm() {
         handleModalClose={() => setopenCurrencyModal(false)}
       />
     </div>
+  ) : (
+    <></>
   );
 }
 

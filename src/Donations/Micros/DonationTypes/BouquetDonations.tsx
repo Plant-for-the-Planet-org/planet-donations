@@ -14,6 +14,7 @@ import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
+import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -41,21 +42,11 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     frequency,
     retainQuantityValue,
   } = React.useContext(QueryParamContext);
-  // React.useEffect(() => {
-  //   if (paymentSetup?.options) {
-  //     setquantity(paymentSetup.options[1].quantity);
-  //   }
-  // for (let i = 0; i < paymentSetup?.options?.length; i++) {
-  //   if (paymentSetup.options[i].isDefault) {
-  //     setquantity(paymentSetup.options[i].quantity);
-  //   }
-  // }
-  // }, [paymentSetup]);
+
   const router = useRouter();
 
   const setCustomValue = (e: any) => {
     if (e.target) {
-      // setquantity(e.target.value);
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(
@@ -98,12 +89,17 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       let newQuantity = retainQuantityValue
         ? quantity * paymentSetup.unitCost
         : router.query.units
-        ? Number(router.query.units)
+        ? Number(router.query.units * paymentSetup.unitCost)
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
           paymentSetup.unitCost;
-      newQuantity = newQuantity / paymentSetup.unitCost;
+      newQuantity = Number(
+        getFormattedNumber(
+          i18n.language,
+          Number(newQuantity / paymentSetup.unitCost)
+        )
+      );
       setquantity(newQuantity);
 
       if (
@@ -113,9 +109,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         ).length == 0
       ) {
         setCustomInputValue(
-          paymentSetup.unit !== "currency"
-            ? newQuantity
-            : newQuantity * paymentSetup.unitCost
+          getFormattedNumber(
+            i18n.language,
+            paymentSetup.unit !== "currency"
+              ? newQuantity
+              : newQuantity * paymentSetup.unitCost
+          )
         );
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
@@ -134,7 +133,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   //   const cost = unitCost  * quantity;
   //   return Math.trunc(Math.ceil(cost/5)*5);
   // }
-
   return (
     <>
       <div
@@ -191,13 +189,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                   }}
                   style={{ flexGrow: 1 }}
                 >
-                  {/* <div
-              className={"funding-icon"}
-              style={{ height: "auto", width: "auto" }}
-            >
-              <CustomIcon />
-            </div> */}
-
                   {isCustomDonation ? (
                     <div style={{ display: "flex", flexDirection: "row" }}>
                       <p
@@ -254,7 +245,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       className="funding-selection-option-text"
                       style={{ fontSize: "18px" }}
                     >
-                      <p style={{ margin: "5px" }}> {t("custom")}</p>
+                      <p style={{ margin: "5px" }}>
+                        {" "}
+                        {paymentSetup.unit === "currency"
+                          ? t("customAmount")
+                          : t("custom")}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -272,11 +268,23 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             style={{ marginRight: "4px" }}
             data-test-id="currency"
           >
-            <span style={{ marginRight: "4px" }} className={"text-normal"}>
-              {t("selectCurrency")}
-            </span>
+            {paymentSetup.purpose !== "conservation" ? (
+              <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                {t("selectCurrency")}
+              </span>
+            ) : (
+              []
+            )}
             {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            {paymentSetup.purpose === "conservation"
+              ? getFormatedCurrency(
+                  i18n.language,
+                  "",
+                  Number(paymentSetup.unitCost)
+                )
+              : []}{" "}
           </button>
+          {paymentSetup.purpose === "conservation" ? t("perm2") : []}
         </p>
       ) : (
         <div className={"mt-20"}>

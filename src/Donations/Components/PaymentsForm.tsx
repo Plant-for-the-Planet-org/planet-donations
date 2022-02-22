@@ -152,7 +152,7 @@ function PaymentsForm({}: Props): ReactElement {
     });
     if (router.query.to) {
       router.replace({
-        query: { to: projectDetails.id, step: PAYMENT },
+        query: { to: router.query.to, step: PAYMENT },
       });
     }
     if (router.query.context) {
@@ -162,7 +162,6 @@ function PaymentsForm({}: Props): ReactElement {
     }
     if (donation) {
       setaskpublishName(!donation.hasPublicProfile);
-      setpublishName(donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
@@ -236,9 +235,13 @@ function PaymentsForm({}: Props): ReactElement {
             {!isDirectDonation ? (
               <button
                 onClick={() => {
-                  router.push({
-                    query: { ...router.query, step: CONTACT },
-                  });
+                  router.push(
+                    {
+                      query: { ...router.query, step: CONTACT },
+                    },
+                    undefined,
+                    { shallow: true }
+                  );
                 }}
                 className="d-flex"
                 style={{ marginRight: "12px" }}

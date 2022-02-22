@@ -62,7 +62,11 @@ function SelectProject({}: Props): ReactElement {
   const router = useRouter();
 
   const donateToProject = (slug) => {
-    router.push({ query: { ...router.query, to: slug, step: DONATE } });
+    router.push(
+      { query: { ...router.query, to: slug, step: DONATE } },
+      undefined,
+      { shallow: true }
+    );
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
