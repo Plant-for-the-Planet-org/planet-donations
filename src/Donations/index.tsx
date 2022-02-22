@@ -100,8 +100,6 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
-    projectName,
-    projectDescription,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -116,7 +114,7 @@ function DonationInfo() {
   });
 
   const TPOImage = () => {
-    return projectDetails.ownerAvatar ? (
+    return projectDetails?.ownerAvatar ? (
       <img
         className="project-organisation-image"
         src={getImageUrl("profile", "thumb", projectDetails.ownerAvatar)}

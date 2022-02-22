@@ -102,15 +102,19 @@ function index({
     setCallbackMethod(callbackMethod);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
+
+  // If project details are present set project details
+  React.useEffect(() => {
+    if (projectDetails) {
+      setprojectDetails(projectDetails);
+    }
+  }, [projectDetails]);
+
   settenant(tenant);
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
     setisGift(true);
-  }
-  // If project details are present set project details
-  if (projectDetails) {
-    setprojectDetails(projectDetails);
   }
 
   React.useEffect(() => {
