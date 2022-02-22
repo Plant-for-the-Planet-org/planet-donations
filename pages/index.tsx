@@ -253,7 +253,7 @@ export async function getServerSideProps(context: any) {
           ownerName: paymentOptionsResponse.data.ownerName,
           taxDeductionCountries:
             paymentOptionsResponse.data.taxDeductionCountries,
-          ownerImage: paymentOptionsResponse.data.image,
+          projectImage: paymentOptionsResponse.data.image,
           ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
         };
         donationStep = 1;
@@ -324,7 +324,7 @@ export async function getServerSideProps(context: any) {
               ownerName: paymentSetupData.data.ownerName,
               taxDeductionCountries:
                 paymentSetupData.data.taxDeductionCountries,
-              ownerImage: paymentSetupData.data.image,
+              projectImage: paymentSetupData.data.image,
               ownerAvatar: paymentSetupData.data.ownerAvatar,
             };
             donationStep = 3;

@@ -418,7 +418,7 @@ export default function QueryParamProvider({ children }: any) {
           purpose: paymentSetup.purpose,
           ownerName: paymentSetup.ownerName,
           taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          ownerImage: paymentSetup.image,
+          projectImage: paymentSetup.image,
           ownerAvatar: paymentSetup.ownerAvatar,
         });
       }

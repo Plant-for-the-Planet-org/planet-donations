@@ -261,16 +261,11 @@ function DonationInfo() {
               {(projectDetails.purpose === "trees" ||
                 projectDetails.purpose === "conservation") &&
                 projectDetails.ownerName && (
-                  <a
-                    rel="noreferrer"
-                    target="_blank"
-                    href={`https://www.trilliontreecampaign.org/t/${projectDetails.id}`}
-                    className="text-white"
-                  >
+                  <div className="text-white">
                     {t("byOrganization", {
                       organizationName: projectDetails.ownerName,
                     })}
-                  </a>
+                  </div>
                 )}
             </>
           ) : (
