@@ -12,7 +12,7 @@ import RetryIcon from "public/assets/icons/RetryIcon";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
-  // const [paymentError, setPaymentError] = useState("");
+
   const {
     callbackUrl,
     donationID,
@@ -26,46 +26,15 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setfrequency,
     setdonationStep,
     setcurrency,
-    setshowErrorCard,
-    setpaymentSetup,
-    country,
     paymentError,
     setPaymentError,
     setAmount,
     setcallbackUrl,
     setCallbackMethod,
     setredirectstatus,
-    tenant,
+    loadPaymentSetup,
   } = React.useContext(QueryParamContext);
-  const router = useRouter();
-  const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
-    React.useState<boolean>(false);
 
-  async function loadPaymentSetup(
-    projectGUID: string | string[],
-    paymentSetupCountry: string
-  ) {
-    setIsPaymentOptionsLoading(true);
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentSetupData: any = await apiRequest(requestParams);
-      if (paymentSetupData.data) {
-        setcurrency(paymentSetupData.data.currency);
-        if (!country) {
-          setcountry(paymentSetupData.data.effectiveCountry);
-        }
-        setpaymentSetup(paymentSetupData.data);
-      }
-      setIsPaymentOptionsLoading(false);
-      // setdonationStep(3);
-    } catch (err) {
-      // console.log(err);
-    }
-  }
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
     setprojectDetails(donation.project);
@@ -92,7 +61,11 @@ function FailedDonation({ sendToReturn, donation }: any) {
     }
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
-    await loadPaymentSetup(donation.project.id, country);
+    await loadPaymentSetup({
+      projectGUID: donation.project.id,
+      paymentSetupCountry: country,
+      shouldSetPaymentDetails: true,
+    });
     setcallbackUrl(donation.metadata.callback_url);
     setCallbackMethod(donation.metadata.callback_method);
     setredirectstatus("");

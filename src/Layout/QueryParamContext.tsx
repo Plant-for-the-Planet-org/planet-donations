@@ -78,6 +78,16 @@ export const QueryParamContext = React.createContext({
   setCallbackMethod: (value: string) => {},
   retainQuantityValue: false,
   setRetainQuantityValue: (value: boolean) => {},
+  projectName: "",
+  setProjectName: (value: string) => {},
+  projectDescription: "",
+  setProjectDescription: (value: string) => {},
+  setIsPaymentOptionsLoading: (value: boolean) => {},
+  loadPaymentSetup: (value: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -165,6 +175,8 @@ export default function QueryParamProvider({ children }: any) {
   const [transferDetails, setTransferDetails] = React.useState<Object | null>(
     null
   );
+  const [projectName, setProjectName] = React.useState("");
+  const [projectDescription, setProjectDescription] = React.useState("");
 
   React.useEffect(() => {
     if (paymentError) {
@@ -178,13 +190,6 @@ export default function QueryParamProvider({ children }: any) {
       setlanguage(router.query.locale);
     }
   }, [router.query.locale]);
-
-  React.useEffect(() => {
-    if (router.query.to && country !== undefined && country !== "") {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup(to, country);
-    }
-  }, [router.query.to, country]);
 
   React.useEffect(() => {
     if (i18n && i18n.isInitialized) {
@@ -252,35 +257,16 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  async function loadPaymentSetup(
-    projectGUID: string | string[],
-    paymentSetupCountry: string
-  ) {
-    setIsPaymentOptionsLoading(true);
-    try {
-      const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentSetupData: any = await apiRequest(requestParams);
-      if (paymentSetupData.data) {
-        setcurrency(paymentSetupData.data.currency);
-        if (!country) {
-          setcountry(paymentSetupData.data.effectiveCountry);
-          localStorage.setItem(
-            "countryCode",
-            paymentSetupData.data.effectiveCountry
-          );
-        }
-
-        setpaymentSetup(paymentSetupData.data);
-      }
-      setIsPaymentOptionsLoading(false);
-    } catch (err) {
-      // console.log(err);
+  React.useEffect(() => {
+    if (router.query.to && country !== undefined && country !== "") {
+      const to = String(router.query.to).replace(/\//g, "");
+      loadPaymentSetup({
+        projectGUID: to,
+        paymentSetupCountry: country,
+        shouldSetPaymentDetails: true,
+      });
     }
-  }
+  }, [router.query.to, country]);
 
   async function loadConfig() {
     let userLang;
@@ -396,6 +382,52 @@ export default function QueryParamProvider({ children }: any) {
       }
     }
   }, []);
+
+  const loadPaymentSetup = async ({
+    projectGUID,
+    paymentSetupCountry,
+    shouldSetPaymentDetails,
+  }: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {
+    setIsPaymentOptionsLoading(true);
+    try {
+      const requestParams = {
+        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const paymentSetupData: any = await apiRequest(requestParams);
+      if (paymentSetupData.data) {
+        const paymentSetup = paymentSetupData.data;
+        if (shouldSetPaymentDetails) {
+          setcurrency(paymentSetup.currency);
+          if (!country) {
+            setcountry(paymentSetup.effectiveCountry);
+            localStorage.setItem("countryCode", paymentSetup.effectiveCountry);
+          }
+
+          setpaymentSetup(paymentSetup);
+        }
+        setprojectDetails({
+          id: paymentSetup.id,
+          name: paymentSetup.name,
+          description: paymentSetup.description,
+          purpose: paymentSetup.purpose,
+          ownerName: paymentSetup.ownerName,
+          taxDeductionCountries: paymentSetup.taxDeductionCountries,
+          projectImage: paymentSetup.image,
+          ownerAvatar: paymentSetup.ownerAvatar,
+        });
+      }
+      setIsPaymentOptionsLoading(false);
+    } catch (err) {
+      // console.log(err);
+    }
+  };
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -469,6 +501,12 @@ export default function QueryParamProvider({ children }: any) {
         setCallbackMethod,
         retainQuantityValue,
         setRetainQuantityValue,
+        projectDescription,
+        projectName,
+        setProjectName,
+        setProjectDescription,
+        setIsPaymentOptionsLoading,
+        loadPaymentSetup,
       }}
     >
       {children}

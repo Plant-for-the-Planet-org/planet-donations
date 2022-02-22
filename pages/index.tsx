@@ -102,15 +102,19 @@ function index({
     setCallbackMethod(callbackMethod);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
+
+  // If project details are present set project details
+  React.useEffect(() => {
+    if (projectDetails) {
+      setprojectDetails(projectDetails);
+    }
+  }, [projectDetails]);
+
   settenant(tenant);
   // If gift details are present set gift
   if (giftDetails && isGift) {
     setgiftDetails(giftDetails);
     setisGift(true);
-  }
-  // If project details are present set project details
-  if (projectDetails) {
-    setprojectDetails(projectDetails);
   }
 
   React.useEffect(() => {
@@ -213,34 +217,6 @@ export async function getServerSideProps(context: any) {
   if (context.query.tenant) {
     tenant = context.query.tenant;
   }
-  // Set project details if there is to (project slug) in the query params
-  if (
-    (context.query.to && !context.query.context) ||
-    context.query.step === DONATE
-  ) {
-    const to = context.query?.to?.replace(/\//g, "") || "";
-    donationStep = 1;
-    try {
-      const requestParams = {
-        url: `/app/projects/${to}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const project = await apiRequest(requestParams);
-      if (project.data) {
-        projectDetails = project.data;
-        donationStep = 1;
-      }
-    } catch (err) {
-      donationStep = 0;
-      console.log("err", err);
-    }
-  } else {
-    if (!context.query.context) {
-      donationStep = 0;
-    }
-  }
-  const resolvedUrl = context.resolvedUrl;
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
   if (context.query.country) {
@@ -253,6 +229,45 @@ export async function getServerSideProps(context: any) {
       country = context.query.country.toUpperCase();
     }
   }
+
+  // Set project details if there is to (project slug) in the query params
+  if (
+    (context.query.to && !context.query.context) ||
+    context.query.step === DONATE
+  ) {
+    const to = context.query?.to?.replace(/\//g, "") || "";
+    donationStep = 1;
+    try {
+      const requestParams = {
+        url: `/app/projects/${to}/paymentOptions?country=${country}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const paymentOptionsResponse = await apiRequest(requestParams);
+      if (paymentOptionsResponse.data) {
+        projectDetails = {
+          id: paymentOptionsResponse.data.id,
+          name: paymentOptionsResponse.data.name,
+          description: paymentOptionsResponse.data.description,
+          purpose: paymentOptionsResponse.data.purpose,
+          ownerName: paymentOptionsResponse.data.ownerName,
+          taxDeductionCountries:
+            paymentOptionsResponse.data.taxDeductionCountries,
+          projectImage: paymentOptionsResponse.data.image,
+          ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+        };
+        donationStep = 1;
+      }
+    } catch (err) {
+      donationStep = 0;
+      console.log("err", err);
+    }
+  } else {
+    if (!context.query.context) {
+      donationStep = 0;
+    }
+  }
+  const resolvedUrl = context.resolvedUrl;
 
   // Set donation details if context (created donation ID) present in the URL
   if (context.query.context) {
@@ -276,21 +291,6 @@ export async function getServerSideProps(context: any) {
         shouldCreateDonation = false;
         // fetch project - payment setup
         tenant = donation.data.tenant;
-        try {
-          const requestParams = {
-            url: `/app/projects/${donation.data.project.id}`,
-            setshowErrorCard,
-            tenant,
-          };
-          const project = await apiRequest(requestParams);
-          if (project.data) {
-            projectDetails = project.data;
-            donationStep = 3;
-          }
-        } catch (err) {
-          donationStep = 0;
-          console.log("err", err);
-        }
         if (donation.data.frequency) {
           frequency = donation.data.frequency;
         }
@@ -316,6 +316,18 @@ export async function getServerSideProps(context: any) {
           if (paymentSetupData.data) {
             currency = paymentSetupData.data.currency;
             paymentSetup = paymentSetupData.data;
+            projectDetails = {
+              id: paymentSetupData.data.id,
+              name: paymentSetupData.data.name,
+              description: paymentSetupData.data.description,
+              purpose: paymentSetupData.data.purpose,
+              ownerName: paymentSetupData.data.ownerName,
+              taxDeductionCountries:
+                paymentSetupData.data.taxDeductionCountries,
+              projectImage: paymentSetupData.data.image,
+              ownerAvatar: paymentSetupData.data.ownerAvatar,
+            };
+            donationStep = 3;
           }
         } catch (err) {
           // console.log(err);
@@ -399,24 +411,12 @@ export async function getServerSideProps(context: any) {
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
-      description = `Plant trees with ${
-        projectDetails.tpo
-          ? projectDetails.tpo?.name
-          : projectDetails.tpoData?.name
-      } in ${
-        getCountryDataBy("countryCode", projectDetails.country)?.countryName
-      }. Your journey to a trillion trees starts here.`;
+      description = `Plant trees with ${projectDetails.ownerName}. Your journey to a trillion trees starts here.`;
     } else if (
       projectDetails.purpose === "conservation" &&
       !projectDetails.description
     ) {
-      description = `Conserve forests with  ${
-        projectDetails.tpo
-          ? projectDetails.tpo?.name
-          : projectDetails.tpoData?.name
-      } in ${
-        getCountryDataBy("countryCode", projectDetails.country)?.countryName
-      }. Your journey to a trillion trees starts here.`;
+      description = `Conserve forests with  ${projectDetails.ownerName}. Your journey to a trillion trees starts here.`;
     } else if (
       (projectDetails.purpose === "bouquet" ||
         projectDetails.purpose === "funds" ||

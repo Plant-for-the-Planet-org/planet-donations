@@ -28,8 +28,8 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
   if (tenantImage) {
     imageUrl = tenantImage;
   } else {
-    if (projectDetails && projectDetails.image) {
-      imageUrl = getImageUrl("project", "large", projectDetails.image);
+    if (projectDetails && projectDetails.projectImage) {
+      imageUrl = getImageUrl("project", "large", projectDetails.projectImage);
     } else {
       imageUrl = defaultForest;
     }
