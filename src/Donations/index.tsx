@@ -142,7 +142,9 @@ function DonationInfo() {
   return (
     <div
       style={{
-        backgroundImage: `url(${getTenantBackground(tenant, projectDetails)})`,
+        backgroundImage: projectDetails?.projectImage
+          ? `url(${getTenantBackground(tenant, projectDetails)})`
+          : "none",
         backgroundSize: "cover",
         backgroundPosition: "center center",
       }}
