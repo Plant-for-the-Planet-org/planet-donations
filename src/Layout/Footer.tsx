@@ -98,7 +98,7 @@ function Footer({}: Props): ReactElement {
             rel="noreferrer"
             href="https://a.plant-for-the-planet.org/"
           >
-            <Image
+            <img
               src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
               alt="Plant-for-the-Planet logo"
               width={33}
@@ -226,7 +226,7 @@ function LanguageModal({
               onChange={(event) => {
                 setlanguage(event.target.value);
                 localStorage.setItem("language", event.target.value);
-                if (projectDetails) {
+                if (projectDetails && router.query.to) {
                   loadPaymentSetup({
                     projectGUID: router.query.to,
                     paymentSetupCountry: country,
