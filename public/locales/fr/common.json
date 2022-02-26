@@ -104,7 +104,7 @@
   "search": "Recherche",
   "noProjectsFound": "Aucun projet trouvé",
   "billingAddress": "Adresse de facturation",
-  "treesInCountry": "{{treeCount}} arbres sur{{country}} , Plante pour la planète",
+  "treesInCountry": "{{treeCount}} arbres , Plante pour la planète",
   "fundingPaymentLabel": "Faire un don de {{amount}}, Plant-for-the-Planet",
   "bouquetPaymentLabel": "Faire un don de {{amount}}, Plant-for-the-Planet",
   "errorOccurred": "Quelque chose a mal tourné",

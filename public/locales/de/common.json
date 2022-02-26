@@ -117,7 +117,7 @@
   "search": "Suche",
   "noProjectsFound": "Keine Projekte gefunden",
   "billingAddress": "Kontaktdetails",
-  "treesInCountry": "{{treeCount}} Bäume in {{country}}, Plant-for-the-Planet",
+  "treesInCountry": "{{treeCount}} Bäume, Plant-for-the-Planet",
   "fundingPaymentLabel": "Spende {{amount}}, Plant-for-the-Planet",
   "bouquetPaymentLabel": "Spende {{amount}}, Plant-for-the-Planet",
   "errorOccurred": "Etwas ist schief gelaufen. Bitte mache einen Screenshot und schicke ihn uns als E-Mail an support@plant-for-the-planet.org.",
