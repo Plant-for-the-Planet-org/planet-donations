@@ -38,7 +38,7 @@ function PaymentsForm({}: Props): ReactElement {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
-
+  const [paypalPlan, setPaypalPlan] = React.useState("");
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const [isDonationLoading, setisDonationLoading] = React.useState(false);
@@ -79,13 +79,6 @@ function PaymentsForm({}: Props): ReactElement {
     setPaymentType("CARD");
   }, []);
 
-  // React.useEffect(() => {
-  //   if (paymentError) {
-  //     router.replace({
-  //       query: { ...router.query, step: THANK_YOU },
-  //     });
-  //   }
-  // }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
@@ -122,6 +115,18 @@ function PaymentsForm({}: Props): ReactElement {
     onSubmitPayment(gateway, "card", paymentMethod);
   };
 
+  const createPaypalPlan = async (donationID: string) => {
+    const paypalAccount = paymentSetup.gateways.paypal.account;
+    const requestParams = {
+      url: `/app/paypalPlan/${donationID}/${paypalAccount}`,
+      data: {},
+      method: "POST",
+      setshowErrorCard,
+    };
+    const paypalPlan = await apiRequest(requestParams);
+    setPaypalPlan(paypalPlan.data.planId);
+  };
+
   async function getDonation() {
     let token = null;
     if (((!isLoading && isAuthenticated) || queryToken) && profile?.address) {
@@ -146,6 +151,7 @@ function PaymentsForm({}: Props): ReactElement {
       frequency,
       amount,
       paymentSetup,
+      t,
       callbackUrl,
       callbackMethod,
       tenant,
@@ -168,6 +174,7 @@ function PaymentsForm({}: Props): ReactElement {
       setDonationUid(donation.uid);
     }
     setisDonationLoading(false);
+    return donation.id;
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
@@ -190,7 +197,11 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
       setisCreatingDonation(true);
-      getDonation();
+      getDonation().then((donationID) => {
+        if (frequency !== "once" && paymentSetup?.gateways.paypal?.methods) {
+          createPaypalPlan(donationID);
+        }
+      });
     }
   }, [shouldCreateDonation]);
 
@@ -215,7 +226,7 @@ function PaymentsForm({}: Props): ReactElement {
       isAvailableInCountry &&
       isAvailableForCurrency &&
       isAuthenticatedMethod &&
-      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      paymentSetup?.gateways.stripe?.methods.includes(paymentMethod) &&
       (frequency !== "once"
         ? paymentSetup?.recurrency.methods.includes(paymentMethod)
         : true)
@@ -335,8 +346,11 @@ function PaymentsForm({}: Props): ReactElement {
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
-                  paymentSetup?.gateways.paypal &&
-                  (frequency !== "once" ? false : true)
+                  paymentSetup?.gateways.paypal
+                  // &&
+                  // (frequency !== "once"
+                  //   ? paymentSetup?.recurrency.methods.includes("paypal")
+                  //   : true)
                 }
                 showNativePay={
                   paymentSetup?.gateways?.stripe?.account &&
@@ -404,6 +418,7 @@ function PaymentsForm({}: Props): ReactElement {
                     unitCost={paymentSetup.unitCost}
                     currency={currency}
                     donationID={donationID}
+                    paypalPlan={paypalPlan}
                     payDonationFunction={onSubmitPayment}
                     setPaymentError={setPaymentError}
                   />

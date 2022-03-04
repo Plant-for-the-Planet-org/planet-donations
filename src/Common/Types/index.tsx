@@ -100,6 +100,7 @@ export interface CreateDonationFunctionProps {
   setshowErrorCard: Function;
   frequency: string | null;
   amount?: number | null;
+  t: (value: string) => string;
   callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
   tenant: string;
@@ -137,6 +138,7 @@ export interface HandleStripeSCAPaymentProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
+  t: (value: string) => string;
 }
 
 export interface PaymentSetupProps {

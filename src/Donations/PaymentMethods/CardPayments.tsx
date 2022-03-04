@@ -72,7 +72,7 @@ function CardPayments({
   }, []);
   const { frequency, paymentError, setPaymentError } =
     React.useContext(QueryParamContext);
-  // const [paymentError, setPaymentError] = React.useState("");
+
   const [showContinue, setShowContinue] = React.useState(false);
   const [showBrand, setShowBrand] = React.useState("");
   React.useEffect(() => {

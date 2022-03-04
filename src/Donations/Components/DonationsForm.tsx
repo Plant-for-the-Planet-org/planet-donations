@@ -108,6 +108,7 @@ function DonationsForm() {
       token,
       setshowErrorCard,
       frequency,
+      t,
       tenant,
     }).then(async (res) => {
       let token = null;
