@@ -100,6 +100,8 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
+    onBehalf,
+    onBehalfDonor,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -301,6 +303,16 @@ function DonationInfo() {
                 )}
               </div>
             )}
+
+          {donationStep === 1 && onBehalf && onBehalfDonor.firstName && (
+            <div className="contact-details-info  mt-10 on-behalf-info">
+              <p>{t("onBehalfOf")}</p>
+              <p className="text-bold">
+                {onBehalfDonor.firstName + " " + onBehalfDonor.lastName}
+              </p>
+            </div>
+          )}
+
           {donationStep === 3 && contactDetails.firstname && (
             <div className={"contact-details-info w-100 mt-20"}>
               <p>{t("billingAddress")}</p>

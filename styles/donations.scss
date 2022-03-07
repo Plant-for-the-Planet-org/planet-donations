@@ -196,6 +196,9 @@
   }
 
   .on-behalf-container-form-container {
+    .form-errors {
+      color: $dangerColor;
+    }
   }
 }
 

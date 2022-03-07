@@ -75,7 +75,6 @@ const OnBehalf: FC = () => {
               <MaterialTextField
                 name="email"
                 inputRef={register({
-                  required: true,
                   pattern:
                     /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
                 })}
@@ -83,7 +82,7 @@ const OnBehalf: FC = () => {
                 variant="outlined"
               />
               {errors.email && (
-                <span className={"form-errors"}>{t("emailRequired")}</span>
+                <span className={"form-errors"}>{t("invalidEmail")}</span>
               )}
             </Grid>
           </Grid>

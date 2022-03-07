@@ -153,5 +153,7 @@
   "usePlanetCash": "Use Planet Cash for this donation",
   "balance": "Balance",
   "credit": "Credit",
-  "addBalance": "Add Balance"
+  "addBalance": "Add Balance",
+  "onBehalfOf": "On behalf of",
+  "invalidEmail": "Please enter a valid email"
 }

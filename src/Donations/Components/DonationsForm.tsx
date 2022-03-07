@@ -57,7 +57,6 @@ function DonationsForm() {
     onBehalf,
     onBehalfDonor,
   } = React.useContext(QueryParamContext);
-  console.log(React.useContext(QueryParamContext));
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
@@ -146,8 +145,6 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
-  console.log(minAmt);
-
   const donationSelection = () => {
     switch (projectDetails?.purpose) {
       case "funds":
@@ -223,6 +220,7 @@ function DonationsForm() {
 
     // @method    POST
     // @endpoint  /app/donation
+
     try {
       await apiRequest({
         url: "/app/donations",
@@ -370,13 +368,6 @@ function DonationsForm() {
                   <ButtonLoader />
                 </div>
               )
-            ) : paymentSetup.unitCost * quantity < minAmt ? (
-              <p className={"text-danger mt-20 text-center"}>
-                {t("minDonate")}{" "}
-                <span>
-                  {getFormatedCurrency(i18n.language, currency, minAmt)}
-                </span>
-              </p>
             ) : (
               <button
                 onClick={handlePlanetCashDonate}
