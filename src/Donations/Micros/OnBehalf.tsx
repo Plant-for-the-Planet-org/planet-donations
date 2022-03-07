@@ -1,4 +1,5 @@
 import { Grid } from "@material-ui/core";
+import { useTranslation } from "next-i18next";
 import { FC, useContext } from "react";
 import { useForm } from "react-hook-form";
 import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
@@ -6,6 +7,7 @@ import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 const OnBehalf: FC = () => {
+  const { t } = useTranslation("common");
   const { onBehalf, setOnBehalf, onBehalfDonor, setOnBehalfDonor } =
     useContext(QueryParamContext);
 
@@ -38,8 +40,7 @@ const OnBehalf: FC = () => {
   return onBehalfDonor.firstName === "" ? (
     <div className="on-behalf-container mt-10">
       <div className="on-behalf-container-toggle">
-        {/* // translation Req */}
-        <p>This donation is on behalf of someone</p>
+        <p>{t("donationOnBehalfText")}</p>
         <ToggleSwitch
           checked={onBehalf}
           onChange={() => setOnBehalf((onBehalf) => !onBehalf)}
@@ -52,26 +53,22 @@ const OnBehalf: FC = () => {
               <MaterialTextField
                 name="firstName"
                 inputRef={register({ required: true })}
-                // translation Req
-                label={"First Name"}
+                label={t("firstName")}
                 variant="outlined"
               />
-              {/* // translation Req */}
               {errors.firstName && (
-                <span className={"form-errors"}>First Name is Required</span>
+                <span className={"form-errors"}>{t("firstNameRequired")}</span>
               )}
             </Grid>
             <Grid item xs={6}>
               <MaterialTextField
                 name="lastName"
                 inputRef={register({ required: true })}
-                // translation Req
-                label={"Last Name"}
+                label={t("lastName")}
                 variant="outlined"
               />
-              {/* // translation Req */}
               {errors.lastName && (
-                <span className={"form-errors"}>Last Name is Required</span>
+                <span className={"form-errors"}>{t("lastNameRequired")}</span>
               )}
             </Grid>
             <Grid item xs={12}>
@@ -82,13 +79,11 @@ const OnBehalf: FC = () => {
                   pattern:
                     /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
                 })}
-                // translation Req
-                label={"Email"}
+                label={t("email")}
                 variant="outlined"
               />
-              {/* // translation Req */}
               {errors.email && (
-                <span className={"form-errors"}>Email is Required</span>
+                <span className={"form-errors"}>{t("emailRequired")}</span>
               )}
             </Grid>
           </Grid>
@@ -96,8 +91,7 @@ const OnBehalf: FC = () => {
             onClick={handleSubmit(onSubmit)}
             className="primary-button w-100 mt-30"
           >
-            {/* translation Req */}
-            Continue
+            {t("continue")}
           </button>
         </div>
       ) : (
@@ -106,14 +100,12 @@ const OnBehalf: FC = () => {
     </div>
   ) : (
     <div className="on-behalf-donor-info mt-10">
-      {/* translation Req  */}
       <p>
-        This donation is on behalf of{" "}
+        {t("donationOnBehalfOf")}&nbsp;
         {onBehalfDonor.firstName + " " + onBehalfDonor.lastName}
       </p>
-      {/* translation Req  */}
       <p onClick={() => resetOnBehalfForm()} className="remove-on-behalf-donor">
-        Remove
+        {t("removeRecipient")}
       </p>
     </div>
   );

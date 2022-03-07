@@ -27,7 +27,8 @@ import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import { v4 as uuidv4 } from "uuid";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
-import OnBehalf from "../Micros/OnBhehalf";
+import OnBehalf from "../Micros/OnBehalf";
+import cleanObject from "src/Utils/cleanObject";
 
 function DonationsForm() {
   const {
@@ -145,6 +146,8 @@ function DonationsForm() {
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
 
+  console.log(minAmt);
+
   const donationSelection = () => {
     switch (projectDetails?.purpose) {
       case "funds":
@@ -203,6 +206,7 @@ function DonationsForm() {
       email: onBehalfDonor.email,
     };
 
+    // create Donation data
     const donationData = {
       purpose: projectDetails!.purpose,
       project: projectDetails!.id,
@@ -213,14 +217,18 @@ function DonationsForm() {
       ...(isGift && { gift: giftDetails }),
     };
 
+    const cleanedDonationData = cleanObject(donationData);
+
     const token = await getAccessTokenSilently();
 
+    // @method    POST
+    // @endpoint  /app/donation
     try {
-      const { data } = await apiRequest({
+      await apiRequest({
         url: "/app/donations",
         method: "POST",
         setshowErrorCard,
-        data: donationData,
+        data: cleanedDonationData,
         token,
         headers: {
           "IDEMPOTENCY-KEY": uuidv4(),
@@ -228,6 +236,17 @@ function DonationsForm() {
       });
     } catch (err) {
       console.error(err);
+      if (err.status === 400) {
+        setPaymentError(err.data.message);
+      } else if (err.status === 500) {
+        setPaymentError("Something went wrong please try again soon!");
+      } else if (err.status === 503) {
+        setPaymentError(
+          "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
+        );
+      } else {
+        setPaymentError(err.message);
+      }
     }
   };
 
@@ -241,6 +260,8 @@ function DonationsForm() {
           {projectDetails?.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
+
+          {/* show PlanetCashSelector only if user is signed up and have a planet Cash account */}
           {!(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
@@ -296,6 +317,8 @@ function DonationsForm() {
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
+            {/* Hide NativePay if Planet Cash is active */}
+
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
                 minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
@@ -347,13 +370,19 @@ function DonationsForm() {
                   <ButtonLoader />
                 </div>
               )
+            ) : paymentSetup.unitCost * quantity < minAmt ? (
+              <p className={"text-danger mt-20 text-center"}>
+                {t("minDonate")}{" "}
+                <span>
+                  {getFormatedCurrency(i18n.language, currency, minAmt)}
+                </span>
+              </p>
             ) : (
               <button
                 onClick={handlePlanetCashDonate}
                 className="primary-button w-100 mt-30"
               >
-                {/* translation Req */}
-                Donate with PlanetCash
+                {t("donateWithPlanetCash")}
               </button>
             )}
           </div>

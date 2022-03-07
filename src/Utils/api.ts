@@ -47,7 +47,7 @@ interface RequestParams {
   setshowErrorCard: Function;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
-  headers?: any;
+  headers?: any; // additional headers
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -91,6 +91,7 @@ export const apiRequest = async (
       };
     }
 
+    // append all the additional headers to the request
     options.headers = {
       ...options.headers,
       ...headers,

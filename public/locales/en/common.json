@@ -146,5 +146,12 @@
   "taxIdentificationNumber": "Tax Identification Number",
   "tinRequired": "Tax Identification Number is Required",
   "tinText": "TIN:",
-  "returnTo": "Return to"
+  "returnTo": "Return to",
+  "donateWithPlanetCash": "Donate with Planet Cash",
+  "donationOnBehalfText": "This donation is on behalf of someone",
+  "donationOnBehalfOf": "This donation is on behalf of",
+  "usePlanetCash": "Use Planet Cash for this donation",
+  "balance": "Balance",
+  "credit": "Credit",
+  "addBalance": "Add Balance"
 }
