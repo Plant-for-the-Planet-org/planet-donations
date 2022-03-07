@@ -155,5 +155,6 @@
   "credit": "Credit",
   "addBalance": "Add Balance",
   "onBehalfOf": "On behalf of",
-  "invalidEmail": "Please enter a valid email"
+  "invalidEmail": "Please enter a valid email",
+  "onBehalfNotification": "On Behalf Notification"
 }

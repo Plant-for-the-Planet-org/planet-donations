@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import { useTranslation } from "next-i18next";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
@@ -10,6 +10,8 @@ const OnBehalf: FC = () => {
   const { t } = useTranslation("common");
   const { onBehalf, setOnBehalf, onBehalfDonor, setOnBehalfDonor } =
     useContext(QueryParamContext);
+
+  const [shouldNotify, setShouldNotify] = useState(false);
 
   const defaultValues = {
     firstName: onBehalfDonor.firstName,
@@ -71,20 +73,42 @@ const OnBehalf: FC = () => {
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
               )}
             </Grid>
-            <Grid item xs={12}>
-              <MaterialTextField
-                name="email"
-                inputRef={register({
-                  pattern:
-                    /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                })}
-                label={t("email")}
-                variant="outlined"
-              />
-              {errors.email && (
-                <span className={"form-errors"}>{t("invalidEmail")}</span>
-              )}
-            </Grid>
+            {shouldNotify ? (
+              <Grid item xs={12}>
+                <div className="d-flex row justify-content-between mb-10">
+                  <p>{t("onBehalfNotification")}</p>
+                  <button
+                    onClick={() => setShouldNotify(false)}
+                    className={"singleGiftRemove"}
+                  >
+                    {t("removeRecipient")}
+                  </button>
+                </div>
+                <MaterialTextField
+                  name="email"
+                  inputRef={register({
+                    pattern:
+                      /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                  })}
+                  label={t("email")}
+                  variant="outlined"
+                />
+                {errors.email && (
+                  <span className={"form-errors"}>{t("invalidEmail")}</span>
+                )}
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <div className={"form-field"}>
+                  <button
+                    onClick={() => setShouldNotify(true)}
+                    className={"addEmailButton"}
+                  >
+                    {t("addEmail")}
+                  </button>
+                </div>
+              </Grid>
+            )}
           </Grid>
           <button
             onClick={handleSubmit(onSubmit)}
