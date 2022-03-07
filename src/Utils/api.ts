@@ -47,6 +47,7 @@ interface RequestParams {
   setshowErrorCard: Function;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
+  headers?: any;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -63,6 +64,7 @@ export const apiRequest = async (
     setshowErrorCard,
     shouldQueryParamAdd = true,
     tenant,
+    headers = {},
   } = extendedRequestParams;
 
   try {
@@ -88,6 +90,12 @@ export const apiRequest = async (
         Authorization: `Bearer ${token}`,
       };
     }
+
+    options.headers = {
+      ...options.headers,
+      ...headers,
+    };
+
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
       const locale = `${
         localStorage.getItem("language")

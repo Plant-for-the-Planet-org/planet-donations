@@ -159,6 +159,57 @@
   font-weight: 600;
   text-align: right;
 }
+
+.planet-cash-selector {
+  margin-top: 10px;
+
+  .planet-cash-selector-toggle {
+    display: flex;
+    justify-content: space-between;
+
+    .planet-cash-balance-positive {
+      color: $primaryColor;
+      font-weight: bold;
+    }
+
+    .planet-cash-balance-negative {
+      color: $dangerColor;
+      font-weight: bold;
+    }
+
+    .planet-cash-credit-limit {
+      font-weight: bold;
+    }
+
+    .add-plant-cash-balance {
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+}
+
+.on-behalf-container {
+  .on-behalf-container-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .on-behalf-container-form-container {
+  }
+}
+
+.on-behalf-donor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .remove-on-behalf-donor {
+    color: $dangerColor;
+    cursor: pointer;
+  }
+}
+
 .donations-gift-container {
   .donations-gift-toggle {
     display: flex;

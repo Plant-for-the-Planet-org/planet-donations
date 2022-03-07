@@ -88,6 +88,13 @@ export const QueryParamContext = React.createContext({
     paymentSetupCountry: string | string[];
     shouldSetPaymentDetails?: Boolean;
   }) => {},
+  profile: null,
+  isPlanetCashActive: false,
+  setIsPlanetCashActive: (value: boolean) => {},
+  onBehalf: false,
+  setOnBehalf: (value: boolean) => {},
+  onBehalfDonor: {},
+  setOnBehalfDonor: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -177,6 +184,16 @@ export default function QueryParamProvider({ children }: any) {
   );
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
+
+  const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
+
+  const [onBehalf, setOnBehalf] = useState(false);
+
+  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   React.useEffect(() => {
     if (paymentError) {
@@ -507,6 +524,12 @@ export default function QueryParamProvider({ children }: any) {
         setProjectDescription,
         setIsPaymentOptionsLoading,
         loadPaymentSetup,
+        isPlanetCashActive,
+        setIsPlanetCashActive,
+        onBehalf,
+        setOnBehalf,
+        onBehalfDonor,
+        setOnBehalfDonor,
       }}
     >
       {children}
