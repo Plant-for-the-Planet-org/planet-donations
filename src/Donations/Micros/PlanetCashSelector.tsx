@@ -40,11 +40,12 @@ const PlanetCashSelector: FC = (props) => {
                   : "-negative")
               }
             >
-              {profile!.planetCash.balance / 100} {currency}
+              {profile!.planetCash.balance / 100} {profile!.planetCash.currency}
             </span>
             &nbsp;&bull;&nbsp;{t("credit")}{" "}
             <span className="planet-cash-credit-limit">
-              {profile!.planetCash.creditLimit / 100} {currency}
+              {profile!.planetCash.creditLimit / 100}{" "}
+              {profile!.planetCash.currency}
             </span>
           </p>
           <p className="add-plant-cash-balance">{t("addBalance")}</p>
