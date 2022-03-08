@@ -22,7 +22,7 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
-import { CONTACT } from "src/Utils/donationStepConstants";
+import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import { v4 as uuidv4 } from "uuid";
@@ -56,6 +56,7 @@ function DonationsForm() {
     isPlanetCashActive,
     onBehalf,
     onBehalfDonor,
+    setdonation,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -243,7 +244,7 @@ function DonationsForm() {
     // @endpoint  /app/donation
 
     try {
-      await apiRequest({
+      const { data, status } = await apiRequest({
         url: "/app/donations",
         method: "POST",
         setshowErrorCard,
@@ -253,6 +254,13 @@ function DonationsForm() {
           "IDEMPOTENCY-KEY": uuidv4(),
         },
       });
+
+      if (status === 200) {
+        setdonation(data);
+        router.replace({
+          query: { ...router.query, step: THANK_YOU },
+        });
+      }
     } catch (err) {
       console.error(err);
       if (err.status === 400) {

@@ -22,9 +22,9 @@ function ThankYou() {
     setshowErrorCard,
     tenant,
     transferDetails,
+    donation,
+    setdonation,
   } = React.useContext(QueryParamContext);
-
-  const [donation, setdonation] = React.useState(null);
 
   async function loadDonation() {
     const requestParams = {

@@ -95,6 +95,8 @@ export const QueryParamContext = React.createContext({
   setOnBehalf: (value: boolean) => {},
   onBehalfDonor: {},
   setOnBehalfDonor: (value: {}) => {},
+  donation: null,
+  setdonation: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -188,13 +190,15 @@ export default function QueryParamProvider({ children }: any) {
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
   // Only used when planetCash is active
-  const [onBehalf, setOnBehalf] = useState(false); 
+  const [onBehalf, setOnBehalf] = useState(false);
 
   const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
     firstName: "",
     lastName: "",
     email: "",
   });
+
+  const [donation, setdonation] = React.useState(null);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -531,6 +535,8 @@ export default function QueryParamProvider({ children }: any) {
         setOnBehalf,
         onBehalfDonor,
         setOnBehalfDonor,
+        donation,
+        setdonation
       }}
     >
       {children}
