@@ -245,11 +245,9 @@ function DonationsForm() {
       if (err.status === 400) {
         setPaymentError(err.data.message);
       } else if (err.status === 500) {
-        setPaymentError("Something went wrong please try again soon!");
+        setPaymentError(t("errorStatus500"));
       } else if (err.status === 503) {
-        setPaymentError(
-          "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
-        );
+        setPaymentError(t("errorStatus503"));
       } else {
         setPaymentError(err.message);
       }
