@@ -14,6 +14,7 @@ const PlanetCashSelector: FC = (props) => {
     setIsPlanetCashActive,
     paymentSetup,
     quantity,
+    country,
     setcountry,
   } = useContext(QueryParamContext);
 
@@ -57,13 +58,23 @@ const PlanetCashSelector: FC = (props) => {
           </p>
           <p className="add-plant-cash-balance">{t("addBalance")}</p>
         </div>
-        <div>
+        <div
+          title={
+            country === profile!.planetCash.countryCode &&
+            (paymentSetup.unitCost * quantity >
+            profile!.planetCash.balance / 100 +
+              profile!.planetCash.creditLimit / 100
+              ? "Balance too low"
+              : "")
+          }
+        >
           <ToggleSwitch
             checked={isPlanetCashActive}
             disabled={
+              country === profile!.planetCash.countryCode &&
               paymentSetup.unitCost * quantity >
-              profile!.planetCash.balance / 100 +
-                profile!.planetCash.creditLimit / 100
+                profile!.planetCash.balance / 100 +
+                  profile!.planetCash.creditLimit / 100
             }
             onChange={() =>
               setIsPlanetCashActive((isPlanetCashActive) => !isPlanetCashActive)
