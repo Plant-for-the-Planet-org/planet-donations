@@ -26,6 +26,8 @@ const PlanetCashSelector: FC = (props) => {
           profile!.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
+    } else {
+      setIsPlanetCashActive(true);
     }
   }, [paymentSetup.unitCost, quantity]);
 
