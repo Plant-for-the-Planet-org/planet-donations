@@ -187,7 +187,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
-  // Only used when planet Cash is active
+  // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false); 
 
   const [onBehalfDonor, setOnBehalfDonor] = useState<object>({

@@ -259,7 +259,7 @@ function DonationsForm() {
             <p className="title-text">{t("donate")}</p>
           )}
 
-          {/* show PlanetCashSelector only if user is signed up and have a planet Cash account */}
+          {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {!(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
@@ -315,7 +315,7 @@ function DonationsForm() {
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
-            {/* Hide NativePay if Planet Cash is active */}
+            {/* Hide NativePay if PlanetCash is active */}
 
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
