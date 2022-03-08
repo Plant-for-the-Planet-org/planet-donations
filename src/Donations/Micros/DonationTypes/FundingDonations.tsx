@@ -40,6 +40,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     frequency,
     setfrequency,
     retainQuantityValue,
+    isPlanetCashActive,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -242,15 +243,22 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         <p className="currency-selection mt-30">
           <button
             onClick={() => {
-              setopenCurrencyModal(true);
+              // Lock the currency/country change if planetCash is active
+              !isPlanetCashActive && setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
-            style={{ marginRight: "4px" }}
+            style={{
+              marginRight: "4px",
+              ...(isPlanetCashActive && { cursor: "text" }),
+            }}
           >
             <span style={{ marginRight: "4px" }} className={"text-normal"}>
               {t("selectCurrency")}
             </span>
-            {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            {currency}
+            {!isPlanetCashActive && (
+              <DownArrowIcon color={themeProperties.primaryColor} />
+            )}
           </button>
         </p>
       ) : (

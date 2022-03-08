@@ -41,6 +41,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     giftDetails,
     frequency,
     retainQuantityValue,
+    isPlanetCashActive,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -262,10 +263,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         <p className="currency-selection mt-30">
           <button
             onClick={() => {
-              setopenCurrencyModal(true);
+              // Lock the currency/country change if planetCash is active
+              !isPlanetCashActive && setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
-            style={{ marginRight: "4px" }}
+            style={{
+              marginRight: "4px",
+              ...(isPlanetCashActive && { cursor: "text" }),
+            }}
             data-test-id="currency"
           >
             {paymentSetup.purpose !== "conservation" ? (
@@ -275,7 +280,10 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             ) : (
               []
             )}
-            {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            {currency}
+            {!isPlanetCashActive && (
+              <DownArrowIcon color={themeProperties.primaryColor} />
+            )}
             {paymentSetup.purpose === "conservation"
               ? getFormatedCurrency(
                   i18n.language,

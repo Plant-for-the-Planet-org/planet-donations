@@ -14,6 +14,7 @@ const PlanetCashSelector: FC = (props) => {
     setIsPlanetCashActive,
     paymentSetup,
     quantity,
+    setcountry,
   } = useContext(QueryParamContext);
 
   useEffect(() => {
@@ -24,6 +25,12 @@ const PlanetCashSelector: FC = (props) => {
       setIsPlanetCashActive(false);
     }
   }, [paymentSetup.unitCost, quantity]);
+
+  useEffect(() => {
+    if (isPlanetCashActive) {
+      setcountry(profile!.planetCash.countryCode);
+    }
+  }, [isPlanetCashActive, setcountry]);
 
   return (
     <div className="planet-cash-selector">

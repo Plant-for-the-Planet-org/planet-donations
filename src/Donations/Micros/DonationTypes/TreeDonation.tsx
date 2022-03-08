@@ -36,8 +36,15 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
     },
   ];
 
-  const { isGift, quantity, setquantity, currency, paymentSetup, giftDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    isGift,
+    quantity,
+    setquantity,
+    currency,
+    paymentSetup,
+    giftDetails,
+    isPlanetCashActive,
+  } = React.useContext(QueryParamContext);
 
   const [customTreeInputValue, setCustomTreeInputValue] = React.useState("");
 
@@ -133,13 +140,20 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
         <p className="currency-selection mt-30">
           <button
             onClick={() => {
-              setopenCurrencyModal(true);
+              // Lock the currency/country change if planetCash is active
+              !isPlanetCashActive && setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
-            style={{ marginRight: "4px" }}
+            style={{
+              marginRight: "4px",
+              ...(isPlanetCashActive && { cursor: "text" }),
+            }}
             data-test-id="selectCurrency"
           >
-            {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            {currency}{" "}
+            {!isPlanetCashActive && (
+              <DownArrowIcon color={themeProperties.primaryColor} />
+            )}
             {getFormatedCurrency(
               i18n.language,
               "",
