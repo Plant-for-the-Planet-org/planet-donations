@@ -20,8 +20,10 @@ const PlanetCashSelector: FC = (props) => {
 
   useEffect(() => {
     if (
+      country === profile!.planetCash.country &&
       paymentSetup.unitCost * quantity >
-      profile!.planetCash.balance / 100 + profile!.planetCash.creditLimit / 100
+        profile!.planetCash.balance / 100 +
+          profile!.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
     }
@@ -29,7 +31,7 @@ const PlanetCashSelector: FC = (props) => {
 
   useEffect(() => {
     if (isPlanetCashActive) {
-      setcountry(profile!.planetCash.countryCode);
+      setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
 
@@ -60,7 +62,7 @@ const PlanetCashSelector: FC = (props) => {
         </div>
         <div
           title={
-            country === profile!.planetCash.countryCode &&
+            country === profile!.planetCash.country &&
             (paymentSetup.unitCost * quantity >
             profile!.planetCash.balance / 100 +
               profile!.planetCash.creditLimit / 100
@@ -71,7 +73,7 @@ const PlanetCashSelector: FC = (props) => {
           <ToggleSwitch
             checked={isPlanetCashActive}
             disabled={
-              country === profile!.planetCash.countryCode &&
+              country === profile!.planetCash.country &&
               paymentSetup.unitCost * quantity >
                 profile!.planetCash.balance / 100 +
                   profile!.planetCash.creditLimit / 100

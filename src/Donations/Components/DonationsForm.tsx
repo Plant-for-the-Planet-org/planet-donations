@@ -197,27 +197,6 @@ function DonationsForm() {
     }
   }
 
-  const fetchPlanetCashAccount = React.useCallback(async () => {
-    if (isSignedUp && profile!.planetCash) {
-      try {
-        const token = await getAccessTokenSilently();
-        const { data } = await apiRequest({
-          url: `/app/planetCash/${profile!.planetCash.account}`,
-          setshowErrorCard,
-          token,
-        });
-        const planetCashAccCountry = data.country;
-        profile!.planetCash.countryCode = planetCashAccCountry;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }, [isSignedUp, profile, getAccessTokenSilently]);
-
-  React.useEffect(() => {
-    fetchPlanetCashAccount();
-  }, [fetchPlanetCashAccount]);
-
   const handlePlanetCashDonate = async () => {
     const _onBehalfDonor = {
       firstname: onBehalfDonor.firstName,
