@@ -155,7 +155,7 @@
   "credit": "Credit",
   "addBalance": "Add Balance",
   "onBehalfOf": "On behalf of",
-  "invalidEmail": "Please enter a valid email",
+  "inValidField": "{{fieldName}} is invalid",
   "onBehalfNotification": "On Behalf Notification",
   "errorStatus500": "Something went wrong please try again soon!",
   "errorStatus503": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"

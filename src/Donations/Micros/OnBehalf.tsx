@@ -94,7 +94,11 @@ const OnBehalf: FC = () => {
                   variant="outlined"
                 />
                 {errors.email && (
-                  <span className={"form-errors"}>{t("invalidEmail")}</span>
+                  <span className={"form-errors"}>
+                    {t("inValidField", {
+                      fieldName: "Email",
+                    })}
+                  </span>
                 )}
               </Grid>
             ) : (
