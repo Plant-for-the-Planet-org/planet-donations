@@ -47,7 +47,7 @@ interface RequestParams {
   setshowErrorCard: Function;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
-  headers?: any; // additional headers
+  headers?: { [k: string]: string }; // additional headers
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
