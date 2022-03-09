@@ -22,6 +22,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
+import  UNEPLogo from "../../public/assets/icons/UNEPLogo"
 
 interface Props {}
 
@@ -105,6 +106,9 @@ function Footer({}: Props): ReactElement {
               height={34}
             />
           </a>
+          <div>
+            <UNEPLogo/>
+          </div>
         </div>
         <LanguageModal
           languageModalOpen={languageModalOpen}

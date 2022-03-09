@@ -34,6 +34,11 @@
       margin-top: 24px;
       font-weight: 600;
     }
+    > div {
+      margin-left: 24px;
+      margin-top: 24px;
+    }
+
     > button {
       display: flex;
       align-items: center;
@@ -84,7 +89,7 @@
 }
 
 .darkmodeLabel {
-  background-color: rgba($color: #B2B2B2, $alpha: 0.4) ;
+  background-color: rgba($color: #b2b2b2, $alpha: 0.4);
   border-radius: 50px;
   cursor: pointer;
   display: flex;
