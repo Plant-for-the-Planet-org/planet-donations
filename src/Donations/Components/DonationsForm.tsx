@@ -204,6 +204,13 @@ function DonationsForm() {
       email: onBehalfDonor.email,
     };
 
+    const _gift = {
+      ...giftDetails,
+      message: giftDetails.giftMessage,
+    };
+
+    delete _gift.giftMessage;
+
     // create Donation data
     const donationData = {
       purpose: projectDetails!.purpose,
@@ -212,7 +219,7 @@ function DonationsForm() {
       prePaid: true,
       onBehalf: onBehalf,
       ...(onBehalf && { donor: _onBehalfDonor }),
-      ...(isGift && { gift: giftDetails }),
+      ...(isGift && { gift: _gift }),
     };
 
     const cleanedDonationData = cleanObject(donationData);
@@ -306,7 +313,7 @@ function DonationsForm() {
           {!(isGift && giftDetails.recipientName === "") &&
             isPlanetCashActive && <OnBehalf />}
 
-          {!isPlanetCashActive && <TaxDeductionOption />}
+          {!isGift && !isPlanetCashActive && <TaxDeductionOption />}
 
           <div
             className={`${
