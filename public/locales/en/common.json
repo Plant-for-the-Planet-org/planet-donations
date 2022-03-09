@@ -152,7 +152,6 @@
   "donationOnBehalfOf": "This donation is on behalf of",
   "usePlanetCash": "Use PlanetCash for this donation",
   "balance": "Balance",
-  "credit": "Credit",
   "addBalance": "Add Balance",
   "onBehalfOf": "On behalf of",
   "inValidField": "{{fieldName}} is invalid",

@@ -41,20 +41,22 @@ const PlanetCashSelector: FC = (props) => {
         <div>
           <p>{t("usePlanetCash")}</p>
           <p>
-            {t("balance")} &nbsp;
+            {t("balance")}&nbsp;
             <span
               className={
                 "planet-cash-balance" +
-                (Math.sign(profile!.planetCash.balance) !== -1
+                (Math.sign(
+                  profile!.planetCash.balance / 100 +
+                    profile!.planetCash.creditLimit / 100
+                ) !== -1
                   ? "-positive"
                   : "-negative")
               }
             >
-              {profile!.planetCash.balance / 100} {profile!.planetCash.currency}
-            </span>
-            &nbsp;&bull;&nbsp;{t("credit")}{" "}
-            <span className="planet-cash-credit-limit">
-              {profile!.planetCash.creditLimit / 100}{" "}
+              {(
+                profile!.planetCash.balance / 100 +
+                profile!.planetCash.creditLimit / 100
+              ).toFixed(2)}{" "}
               {profile!.planetCash.currency}
             </span>
           </p>
