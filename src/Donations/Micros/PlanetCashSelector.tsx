@@ -9,13 +9,13 @@ const PlanetCashSelector: FC = (props) => {
   const { t } = useTranslation("common");
   const {
     profile,
-    currency,
     isPlanetCashActive,
     setIsPlanetCashActive,
     paymentSetup,
     quantity,
     country,
     setcountry,
+    frequency,
   } = useContext(QueryParamContext);
 
   useEffect(() => {
@@ -34,6 +34,59 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
+
+  useEffect(() => {
+    if (frequency !== "once") {
+      setIsPlanetCashActive(false);
+    }
+  }, [frequency]);
+
+  const shouldPlanetCashDisable = () => {
+    let lowBalance = false;
+    let isOnce = false;
+
+    if (
+      country === profile!.planetCash.country &&
+      paymentSetup.unitCost * quantity >
+        profile!.planetCash.balance / 100 +
+          profile!.planetCash.creditLimit / 100
+    ) {
+      lowBalance = true;
+    }
+
+    // Donation with PlanetCash is a one time payment
+    if (frequency === "once") {
+      isOnce = true;
+    }
+
+    return lowBalance || !isOnce;
+  };
+
+  const disabledReason = () => {
+    let lowBalance = false;
+    let isOnce = false;
+
+    if (
+      country === profile!.planetCash.country &&
+      paymentSetup.unitCost * quantity >
+        profile!.planetCash.balance / 100 +
+          profile!.planetCash.creditLimit / 100
+    ) {
+      lowBalance = true;
+    }
+
+    if (frequency === "once") {
+      isOnce = true;
+    }
+
+    if (lowBalance && !isOnce) {
+      return "Balance is low | Donation with PlanetCash is a one time payment";
+    } else if (lowBalance) {
+      return "Balance is low";
+    } else {
+      return "Donation with PlanetCash is a one time payment";
+    }
+  };
 
   return (
     <div className="planet-cash-selector">
@@ -62,24 +115,10 @@ const PlanetCashSelector: FC = (props) => {
           </p>
           <p className="add-plant-cash-balance">{t("addBalance")}</p>
         </div>
-        <div
-          title={
-            country === profile!.planetCash.country &&
-            (paymentSetup.unitCost * quantity >
-            profile!.planetCash.balance / 100 +
-              profile!.planetCash.creditLimit / 100
-              ? "Balance too low"
-              : "")
-          }
-        >
+        <div title={disabledReason() ? disabledReason() : ""}>
           <ToggleSwitch
             checked={isPlanetCashActive}
-            disabled={
-              country === profile!.planetCash.country &&
-              paymentSetup.unitCost * quantity >
-                profile!.planetCash.balance / 100 +
-                  profile!.planetCash.creditLimit / 100
-            }
+            disabled={shouldPlanetCashDisable()}
             onChange={() =>
               setIsPlanetCashActive((isPlanetCashActive) => !isPlanetCashActive)
             }
