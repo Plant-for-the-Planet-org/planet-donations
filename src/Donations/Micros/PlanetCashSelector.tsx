@@ -26,8 +26,15 @@ const PlanetCashSelector: FC = (props) => {
           profile!.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
+    } else if (
+      country === profile!.planetCash.country &&
+      paymentSetup.unitCost * quantity <
+        profile!.planetCash.balance / 100 +
+          profile!.planetCash.creditLimit / 100
+    ) {
+      setIsPlanetCashActive(true);
     }
-  }, [paymentSetup.unitCost, quantity]);
+  }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
     if (isPlanetCashActive) {
