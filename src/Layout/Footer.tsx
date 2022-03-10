@@ -106,9 +106,14 @@ function Footer({}: Props): ReactElement {
               height={34}
             />
           </a>
-          <div>
+          <a 
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.unep.org/"
+          >
             <UNEPLogo/>
-          </div>
+          </a>
+         
         </div>
         <LanguageModal
           languageModalOpen={languageModalOpen}
