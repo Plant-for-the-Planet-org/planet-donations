@@ -19,6 +19,8 @@ const PlanetCashSelector: FC = (props) => {
   } = useContext(QueryParamContext);
 
   useEffect(() => {
+    // Here checking country is important as many countries could have same currency.
+
     if (
       country === profile!.planetCash.country &&
       paymentSetup.unitCost * quantity >
@@ -37,12 +39,17 @@ const PlanetCashSelector: FC = (props) => {
   }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
+    // This is done to lock the transaction with PlanetCash in a single currency.
+    // Here setting country is important as many countries could have same currency.
+
+    // Setting country in global context changes currency of the selected country.
     if (isPlanetCashActive) {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
 
   useEffect(() => {
+    // Donation with PlanetCash is a one time process.
     if (frequency !== "once") {
       setIsPlanetCashActive(false);
     }
