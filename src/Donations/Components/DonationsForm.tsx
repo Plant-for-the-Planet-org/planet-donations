@@ -149,6 +149,7 @@ function DonationsForm() {
   const donationSelection = () => {
     switch (projectDetails?.purpose) {
       case "funds":
+      case "planet-cash":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "conservation":
       case "bouquet":
@@ -273,7 +274,8 @@ function DonationsForm() {
           )}
 
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {!(isGift && giftDetails.recipientName === "") &&
+          {projectDetails.purpose !== "planet-cash" &&
+            !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
             profile!.planetCash && <PlanetCashSelector />}

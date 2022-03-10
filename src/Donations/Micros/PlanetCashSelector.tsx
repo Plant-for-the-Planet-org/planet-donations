@@ -1,4 +1,5 @@
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
@@ -17,6 +18,7 @@ const PlanetCashSelector: FC = (props) => {
     setcountry,
     frequency,
   } = useContext(QueryParamContext);
+  const router = useRouter();
 
   useEffect(() => {
     // Here checking country is important as many countries could have same currency.
@@ -28,13 +30,6 @@ const PlanetCashSelector: FC = (props) => {
           profile!.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
-    } else if (
-      country === profile!.planetCash.country &&
-      paymentSetup.unitCost * quantity <
-        profile!.planetCash.balance / 100 +
-          profile!.planetCash.creditLimit / 100
-    ) {
-      setIsPlanetCashActive(true);
     }
   }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
 
@@ -102,6 +97,12 @@ const PlanetCashSelector: FC = (props) => {
     }
   };
 
+  const handleAddBalance = () => {
+    router.replace({
+      query: { ...router.query, to: profile!.planetCash.account },
+    });
+  };
+
   return (
     <div className="planet-cash-selector">
       <div className="planet-cash-selector-toggle">
@@ -127,7 +128,15 @@ const PlanetCashSelector: FC = (props) => {
               {profile!.planetCash.currency}
             </span>
           </p>
-          <p className="add-plant-cash-balance">{t("addBalance")}</p>
+          <button
+            className="add-plant-cash-balance"
+            onClick={() => {
+              setIsPlanetCashActive(false);
+              handleAddBalance();
+            }}
+          >
+            {t("addBalance")}
+          </button>
         </div>
         <div title={disabledReason() ? disabledReason() : ""}>
           <ToggleSwitch

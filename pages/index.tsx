@@ -239,7 +239,7 @@ export async function getServerSideProps(context: any) {
     donationStep = 1;
     try {
       const requestParams = {
-        url: `/app/projects/${to}/paymentOptions?country=${country}`,
+        url: `/app/paymentOptions/${to}?country=${country}`,
         setshowErrorCard,
         tenant,
       };
@@ -308,7 +308,7 @@ export async function getServerSideProps(context: any) {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
+            url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
             setshowErrorCard,
             tenant,
           };

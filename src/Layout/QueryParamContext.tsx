@@ -417,7 +417,7 @@ export default function QueryParamProvider({ children }: any) {
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
         tenant,
       };
