@@ -57,6 +57,7 @@ function DonationsForm() {
     onBehalf,
     onBehalfDonor,
     setdonation,
+    setcountry,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -68,6 +69,20 @@ function DonationsForm() {
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
+
+  React.useEffect(() => {
+
+    // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
+    // since transaction needs to happen in the same currency.
+
+    if (projectDetails && profile) {
+      if (profile!.planetCash) {
+        if (projectDetails.purpose === "planet-cash") {
+          setcountry(profile!.planetCash.country);
+        }
+      }
+    }
+  }, [projectDetails, profile]);
 
   React.useEffect(() => {
     if (paymentSetup && paymentSetup?.recurrency) {

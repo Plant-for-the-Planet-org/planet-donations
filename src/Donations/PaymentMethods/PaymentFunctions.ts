@@ -217,6 +217,17 @@ export function createDonationData({
       // for multiple receipients
     }
   }
+
+  if (projectDetails.purpose === "planet-cash") {
+    // For PlanetCash Top-up
+
+    // No need to send quantity.
+    delete donationData.quantity;
+
+    // Since a user account can have only one planetCash account no need to send project (i.e planetCash account ID).
+    delete donationData.project;
+  }
+
   return donationData;
 }
 
