@@ -3,11 +3,12 @@ import { useRouter } from "next/router";
 import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
 
 const PlanetCashSelector: FC = (props) => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const {
     profile,
     isPlanetCashActive,
@@ -121,11 +122,12 @@ const PlanetCashSelector: FC = (props) => {
                   : "-negative")
               }
             >
-              {(
+              {getFormatedCurrency(
+                i18n.language,
+                profile!.planetCash.currency,
                 profile!.planetCash.balance / 100 +
-                profile!.planetCash.creditLimit / 100
-              ).toFixed(2)}{" "}
-              {profile!.planetCash.currency}
+                  profile!.planetCash.creditLimit / 100
+              )}
             </span>
           </p>
           <button
