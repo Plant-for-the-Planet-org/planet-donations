@@ -89,7 +89,7 @@ function ThankyouMessage({
 
         {projectDetails.purpose === "planet-cash" && (
           <>
-            <div>
+            <div className="mt-20">
               {t("common:pCashTopUpSuccess", {
                 amount: getFormatedCurrency(
                   i18n.language,
@@ -99,7 +99,7 @@ function ThankyouMessage({
                 frequency: donation.isRecurrent ? t(`${frequency} `) : "",
               })}
             </div>
-            <div>{t("common:fundingDonationSuccess")}</div>
+            <div className="mt-10">{t("common:fundingDonationSuccess")}</div>
           </>
         )}
 

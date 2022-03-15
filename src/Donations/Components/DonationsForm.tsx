@@ -58,6 +58,7 @@ function DonationsForm() {
     onBehalfDonor,
     setdonation,
     setcountry,
+    setcurrency,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -78,6 +79,7 @@ function DonationsForm() {
       if (profile!.planetCash) {
         if (projectDetails.purpose === "planet-cash") {
           setcountry(profile!.planetCash.country);
+          setcurrency(profile!.planetCash.currency);
         }
       }
     }
