@@ -35,10 +35,18 @@
       font-weight: 600;
     }
     > div {
-      margin-left: 24px;
-      margin-top: 24px;
+      display: flex;
+       flex-wrap: wrap ;
+    
+      > div {
+        > a {
+          margin-left: 24px;
+          margin-top: 24px;
+        }
+      }
+      
     }
-
+    
     > button {
       display: flex;
       align-items: center;
@@ -50,6 +58,51 @@
       }
     }
   }
+  .planet-support-text {
+      padding-top: 10px;
+      // paddingBottom: "10px",
+      // marginLeft: "14rem",
+      display: flex;
+      justify-content: flex-end;
+    
+    > p {
+      color: $primaryFontColor;
+      margin-left: 25px;
+      width: auto;
+    }
+  }
+}
+
+@media screen and (min-width:375px) and (max-width:745px) {
+  .footer-links{
+    > div { 
+      flex-basis: 100%;
+      justify-content: center;
+      > div {
+        
+        > a {
+          margin-left: 24px;
+          margin-top: 24px;
+        }
+      }
+     
+    }
+  }
+  .footer-container {
+    .planet-support-text {
+    padding-top: 10px;
+    // paddingBottom: "10px",
+    // marginLeft: "14rem",
+    display: flex;
+    justify-content: center;
+    
+    > p {
+      color: $primaryFontColor;
+      margin-left: 25px;
+      width: 60vw;
+    }
+  }
+}
 }
 
 .select-language-title {
@@ -78,6 +131,10 @@
     display: inline;
   }
 }
+
+
+
+
 @include lgLaptopView {
   .footer-container {
     margin: 60px;
