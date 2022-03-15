@@ -109,36 +109,78 @@ const PlanetCashSelector: FC = (props) => {
       <div className="planet-cash-selector-toggle">
         <div>
           <p>{t("usePlanetCash")}</p>
-          <p>
-            {t("balance")}&nbsp;
-            <span
-              className={
-                "planet-cash-balance" +
-                (Math.sign(
+          {isPlanetCashActive ? (
+            <>
+              <p>
+                {t("balance")}&nbsp;
+                <span
+                  className={
+                    "planet-cash-balance" +
+                    (Math.sign(profile!.planetCash.balance / 100) !== -1
+                      ? "-positive"
+                      : "-negative")
+                  }
+                >
+                  {getFormatedCurrency(
+                    i18n.language,
+                    profile!.planetCash.currency,
+                    profile!.planetCash.balance / 100
+                  )}
+                </span>
+              </p>
+              <p>
+                {t("credit")}&nbsp;
+                <span
+                  className={
+                    "planet-cash-balance" +
+                    (Math.sign(profile!.planetCash.creditLimit / 100) !== -1
+                      ? "-positive"
+                      : "-negative")
+                  }
+                >
+                  {getFormatedCurrency(
+                    i18n.language,
+                    profile!.planetCash.currency,
+                    profile!.planetCash.creditLimit / 100
+                  )}
+                </span>
+              </p>
+            </>
+          ) : (
+            <p>
+              {t("balance")}&nbsp;
+              <span
+                className={
+                  "planet-cash-balance" +
+                  (Math.sign(
+                    profile!.planetCash.balance / 100 +
+                      profile!.planetCash.creditLimit / 100
+                  ) !== -1
+                    ? "-positive"
+                    : "-negative")
+                }
+              >
+                {getFormatedCurrency(
+                  i18n.language,
+                  profile!.planetCash.currency,
                   profile!.planetCash.balance / 100 +
                     profile!.planetCash.creditLimit / 100
-                ) !== -1
-                  ? "-positive"
-                  : "-negative")
-              }
+                )}
+              </span>
+            </p>
+          )}
+
+          {isPlanetCashActive && (
+            <button
+              className="add-plant-cash-balance"
+              onClick={() => {
+                setIsPlanetCashActive(false);
+                handleAddBalance();
+              }}
             >
-              {getFormatedCurrency(
-                i18n.language,
-                profile!.planetCash.currency,
-                profile!.planetCash.balance / 100 +
-                  profile!.planetCash.creditLimit / 100
-              )}
-            </span>
-          </p>
-          <button
-            className="add-plant-cash-balance"
-            onClick={() => {
-              setIsPlanetCashActive(false);
-              handleAddBalance();
-            }}
-          >
-            {t("addBalance")}
-          </button>
+              {t("addBalance")}
+            </button>
+          )}
         </div>
         <div title={disabledReason() ? disabledReason() : ""}>
           <ToggleSwitch
