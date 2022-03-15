@@ -178,7 +178,7 @@ const PlanetCashSelector: FC = (props) => {
                 handleAddBalance();
               }}
             >
-              {t("addBalance")}
+              <p>{t("addBalance")}</p>
             </button>
           )}
         </div>
