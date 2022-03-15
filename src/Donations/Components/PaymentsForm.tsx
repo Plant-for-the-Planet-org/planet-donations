@@ -284,9 +284,11 @@ function PaymentsForm({}: Props): ReactElement {
                   </div>
                 ) : (
                   <div>
-                    <label style={{ textAlign: "center" }}>
-                      {t("nameAlreadyPublished")}
-                    </label>
+                    {projectDetails.purpose !== "planet-cash" && (
+                      <label style={{ textAlign: "center" }}>
+                        {t("nameAlreadyPublished")}
+                      </label>
+                    )}
                   </div>
                 )
               ) : null}
