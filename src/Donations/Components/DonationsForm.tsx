@@ -71,7 +71,6 @@ function DonationsForm() {
   }, [currency]);
 
   React.useEffect(() => {
-
     // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
     // since transaction needs to happen in the same currency.
 
@@ -330,7 +329,10 @@ function DonationsForm() {
           {!(isGift && giftDetails.recipientName === "") &&
             isPlanetCashActive && <OnBehalf />}
 
-          {!isGift && !isPlanetCashActive && <TaxDeductionOption />}
+          {!isPlanetCashActive &&
+            !(isGift && giftDetails.recipientName === "") && (
+              <TaxDeductionOption />
+            )}
 
           <div
             className={`${
