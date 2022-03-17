@@ -159,5 +159,6 @@
   "onBehalfNotification": "On Behalf Notification",
   "errorStatus500": "Something went wrong please try again soon!",
   "errorStatus503": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
-  "pCashTopUpSuccess": "Your {{frequency}}PlanetCash Donation of {{amount}} was successful."
+  "pCashTopUpSuccess": "Your {{frequency}}PlanetCash donation of {{amount}} was successful.",
+  "backToPPEco": "Back"
 }
