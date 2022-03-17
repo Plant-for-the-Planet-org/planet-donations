@@ -128,23 +128,26 @@ const PlanetCashSelector: FC = (props) => {
                   )}
                 </span>
               </p>
-              <p>
-                {t("credit")}&nbsp;
-                <span
-                  className={
-                    "planet-cash-balance" +
-                    (Math.sign(profile!.planetCash.creditLimit / 100) !== -1
-                      ? "-positive"
-                      : "-negative")
-                  }
-                >
-                  {getFormatedCurrency(
-                    i18n.language,
-                    profile!.planetCash.currency,
-                    profile!.planetCash.creditLimit / 100
-                  )}
-                </span>
-              </p>
+              {profile!.planetCash.creditLimit !== null &&
+                profile!.planetCash.creditLimit !== 0 && (
+                  <p>
+                    {t("credit")}&nbsp;
+                    <span
+                      className={
+                        "planet-cash-balance" +
+                        (Math.sign(profile!.planetCash.creditLimit / 100) !== -1
+                          ? "-positive"
+                          : "-negative")
+                      }
+                    >
+                      {getFormatedCurrency(
+                        i18n.language,
+                        profile!.planetCash.currency,
+                        profile!.planetCash.creditLimit / 100
+                      )}
+                    </span>
+                  </p>
+                )}
             </>
           ) : (
             <p>
