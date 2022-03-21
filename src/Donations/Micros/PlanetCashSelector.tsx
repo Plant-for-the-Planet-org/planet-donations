@@ -90,11 +90,11 @@ const PlanetCashSelector: FC = (props) => {
     }
 
     if (lowBalance && !isOnce) {
-      return "Balance is low | Donation with PlanetCash is a one time payment";
+      return t("lowBalanceAndOneTimePay");
     } else if (lowBalance) {
-      return "Balance is low";
+      return t("lowBalance");
     } else {
-      return "Donation with PlanetCash is a one time payment";
+      return t("oneTimePay");
     }
   };
 
