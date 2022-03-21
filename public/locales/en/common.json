@@ -157,7 +157,7 @@
   "onBehalfOf": "On behalf of",
   "inValidField": "{{fieldName}} is invalid",
   "onBehalfNotification": "On Behalf Notification",
-  "errorStatus500": "Something went wrong please try again soon!",
+  "genericErrorMessage": "Something went wrong please try again soon!",
   "errorStatus503": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
   "lowBalanceAndOneTimePay": "Balance is low | Donation with PlanetCash is a one time payment",
   "lowBalance": "Balance is low",

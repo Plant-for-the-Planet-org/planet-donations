@@ -269,7 +269,7 @@ function DonationsForm() {
       if (err.status === 400) {
         setPaymentError(err.data.message);
       } else if (err.status === 500) {
-        setPaymentError(t("errorStatus500"));
+        setPaymentError(t("genericErrorMessage"));
       } else if (err.status === 503) {
         setPaymentError(t("errorStatus503"));
       } else {
