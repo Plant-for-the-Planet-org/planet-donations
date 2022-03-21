@@ -257,9 +257,16 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               ...(isPlanetCashActive && { cursor: "text" }),
             }}
           >
-            <span style={{ marginRight: "4px" }} className={"text-normal"}>
-              {t("selectCurrency")}
-            </span>
+            {projectDetails.purpose !== "planet-cash" ? (
+              <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                {t("selectCurrency")}
+              </span>
+            ) : (
+              <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                {t("currency")}
+              </span>
+            )}
+
             {currency}
             {projectDetails.purpose !== "planet-cash" &&
               !isPlanetCashActive && (

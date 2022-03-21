@@ -162,5 +162,6 @@
   "pCashTopUpSuccess": "Your {{frequency}}PlanetCash donation of {{amount}} was successful.",
   "lowBalanceAndOneTimePay": "Balance is low | Donation with PlanetCash is a one time payment",
   "lowBalance": "Balance is low",
-  "oneTimePay": "Donation with PlanetCash is a one time payment"
+  "oneTimePay": "Donation with PlanetCash is a one time payment",
+  "currency": "Currency"
 }
