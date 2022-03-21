@@ -25,7 +25,6 @@ import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
-import { v4 as uuidv4 } from "uuid";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
@@ -65,6 +64,8 @@ function DonationsForm() {
   const [minAmt, setMinAmt] = React.useState(0);
   const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [showDisablePlanetCashButton, setShowDisablePlanetCashButton] =
+    React.useState(false);
   const router = useRouter();
 
   React.useEffect(() => {
@@ -215,6 +216,7 @@ function DonationsForm() {
   }
 
   const handlePlanetCashDonate = async () => {
+    setShowDisablePlanetCashButton(true);
     const _onBehalfDonor = {
       firstname: onBehalfDonor.firstName,
       lastname: onBehalfDonor.lastName,
@@ -273,6 +275,7 @@ function DonationsForm() {
       } else {
         setPaymentError(err.message);
       }
+      setShowDisablePlanetCashButton(false);
     }
   };
 
@@ -400,11 +403,15 @@ function DonationsForm() {
                   <ButtonLoader />
                 </div>
               )
-            ) : (
+            ) : !showDisablePlanetCashButton ? (
               <button
                 onClick={handlePlanetCashDonate}
                 className="primary-button w-100 mt-30"
               >
+                {t("donateWithPlanetCash")}
+              </button>
+            ) : (
+              <button className="secondary-button w-100 mt-30">
                 {t("donateWithPlanetCash")}
               </button>
             )}
