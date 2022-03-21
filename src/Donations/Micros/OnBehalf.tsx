@@ -128,8 +128,10 @@ const OnBehalf: FC = () => {
   ) : (
     <div className="on-behalf-donor-info mt-10">
       <p>
-        {t("donationOnBehalfOf")}&nbsp;
-        {onBehalfDonor.firstName + " " + onBehalfDonor.lastName}
+        {t("donationOnBehalfOf", {
+          firstName: onBehalfDonor.firstName,
+          lastName: onBehalfDonor.lastName,
+        })}
       </p>
       <p onClick={() => resetOnBehalfForm()} className="remove-on-behalf-donor">
         {t("removeRecipient")}
