@@ -1001,7 +1001,14 @@
 }
 
 .thank-you-purpose {
+  text-align: center;
   .go-back {
     margin-bottom: 300px;
+  }
+}
+
+@include lgLaptopView {
+  .thank-you-purpose {
+    text-align: left;
   }
 }

@@ -90,8 +90,8 @@ function ThankyouMessage({
 
         {projectDetails.purpose === "planet-cash" && (
           <div className="thank-you-purpose">
-            <div className="mt-20 go-back">
-              {donationSuccessfulMessage}&nbsp;
+            <div className="mt-20">{donationSuccessfulMessage}</div>
+            <div className="mt-10 go-back">
               {t("common:fundingDonationSuccess")}
             </div>
           </div>
