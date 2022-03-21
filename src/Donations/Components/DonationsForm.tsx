@@ -253,9 +253,7 @@ function DonationsForm() {
         setshowErrorCard,
         data: cleanedDonationData,
         token,
-        headers: {
-          "IDEMPOTENCY-KEY": uuidv4(),
-        },
+        addIdempotencyKeyHeader: true,
       });
 
       if (status === 200) {

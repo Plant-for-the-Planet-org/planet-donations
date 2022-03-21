@@ -1,5 +1,6 @@
 import getsessionId from "./getSessionId";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 // creates and axios instance with base url
 const axiosInstance = axios.create({
@@ -48,6 +49,7 @@ interface RequestParams {
   shouldQueryParamAdd?: boolean;
   tenant?: string;
   headers?: { [k: string]: string }; // additional headers
+  addIdempotencyKeyHeader?: boolean;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -65,6 +67,7 @@ export const apiRequest = async (
     shouldQueryParamAdd = true,
     tenant,
     headers = {},
+    addIdempotencyKeyHeader = false,
   } = extendedRequestParams;
 
   try {
@@ -94,6 +97,7 @@ export const apiRequest = async (
     // append all the additional headers to the request
     options.headers = {
       ...options.headers,
+      ...(addIdempotencyKeyHeader && { "IDEMPOTENCY-KEY": uuidv4() }),
       ...headers,
     };
 
