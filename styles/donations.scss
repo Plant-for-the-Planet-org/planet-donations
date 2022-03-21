@@ -203,8 +203,10 @@
   align-items: center;
 
   .remove-on-behalf-donor {
-    color: $dangerColor;
     cursor: pointer;
+    color: $dangerColor;
+    font-size: 12px;
+    font-weight: 600;
   }
 }
 
