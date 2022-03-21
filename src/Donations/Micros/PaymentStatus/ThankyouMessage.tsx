@@ -100,12 +100,7 @@ function ThankyouMessage({
               })}
             </div>
             <div className="mt-10">{t("common:fundingDonationSuccess")}</div>
-            <div className="go-back">
-              <a href="https://pp.eco/" className="primary-button w-100 mt-30">
-                {t("backToPPEco")}
-              </a>
-              <p className="mt-20">{t("donationProcessedBy")}</p>
-            </div>
+            <div className="go-back"></div>
           </div>
         )}
 
