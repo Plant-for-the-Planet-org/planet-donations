@@ -99,8 +99,9 @@ function ThankyouMessage({
                 frequency: donation.isRecurrent ? t(`${frequency} `) : "",
               })}
             </div>
-            <div className="mt-10">{t("common:fundingDonationSuccess")}</div>
-            <div className="go-back"></div>
+            <div className="mt-10 go-back">
+              {t("common:fundingDonationSuccess")}
+            </div>
           </div>
         )}
 
