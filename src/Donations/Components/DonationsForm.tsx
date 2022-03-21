@@ -411,9 +411,12 @@ function DonationsForm() {
                 {t("donateWithPlanetCash")}
               </button>
             ) : (
-              <button className="secondary-button w-100 mt-30">
-                {t("donateWithPlanetCash")}
-              </button>
+              <>
+                <button className="secondary-button w-100 mt-30">
+                  {t("donateWithPlanetCash")}
+                </button>
+                <PaymentProgress />
+              </>
             )}
           </div>
         </div>
