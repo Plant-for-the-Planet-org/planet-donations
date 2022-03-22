@@ -12,6 +12,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  column-gap: 30px;
   align-items: center;
   > a {
     margin-top: 24px;
@@ -84,7 +85,7 @@
 }
 
 .darkmodeLabel {
-  background-color: rgba($color: #B2B2B2, $alpha: 0.4) ;
+  background-color: rgba($color: #b2b2b2, $alpha: 0.4);
   border-radius: 50px;
   cursor: pointer;
   display: flex;
