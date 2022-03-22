@@ -58,6 +58,7 @@ function DonationsForm() {
     setdonation,
     setcountry,
     setcurrency,
+    donation,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -415,7 +416,7 @@ function DonationsForm() {
                 <button className="secondary-button w-100 mt-30">
                   {t("donateWithPlanetCash")}
                 </button>
-                <PaymentProgress />
+                {!donation && <PaymentProgress />}
               </>
             )}
           </div>
