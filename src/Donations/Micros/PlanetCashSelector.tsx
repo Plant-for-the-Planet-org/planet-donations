@@ -35,6 +35,19 @@ const PlanetCashSelector: FC = (props) => {
   }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
+    // On Load If selected country is planetCash Country and balance is sufficient activate planetCash.
+
+    if (
+      country === profile!.planetCash.country &&
+      paymentSetup.unitCost * quantity <=
+        profile!.planetCash.balance / 100 +
+          profile!.planetCash.creditLimit / 100
+    ) {
+      setIsPlanetCashActive(true);
+    }
+  }, []);
+
+  useEffect(() => {
     // This is done to lock the transaction with PlanetCash in a single currency.
     // Here setting country is important as many countries could have same currency.
 
