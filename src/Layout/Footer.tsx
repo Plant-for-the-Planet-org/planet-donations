@@ -22,6 +22,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
+import  UNEPLogo from "../../public/assets/icons/UNEPLogo"
 
 interface Props {}
 
@@ -44,73 +45,96 @@ function Footer({}: Props): ReactElement {
         ) : (
           <p></p>
         )}
-        <div className="footer-links">
-          <button
-            onClick={() => setlanguageModalOpen(!languageModalOpen)}
-            data-test-id="languageButton"
-          >
-            {`${getLanguageName(language)}`}
-            <DownArrowIcon
-              color={
-                theme === "theme-light"
-                  ? themeProperties.light.primaryFontColor
-                  : themeProperties.dark.primaryFontColor
-              }
-            />
-          </button>
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://pp.eco/legal/${i18n.language}/privacy`}
-          >
-            {t("privacy")}
-          </a>
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://pp.eco/legal/${i18n.language}/terms`}
-          >
-            {t("terms")}
-          </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href={`https://pp.eco/legal/${i18n.language}/imprint`}
-          >
-            {t("imprint")}
-          </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="mailto:support@plant-for-the-planet.org"
-          >
-            {t("contact")}
-          </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href={`https://a.plant-for-the-planet.org/${i18n.language}/faq`}
-          >
-            {t("faqs")}
-          </a>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://a.plant-for-the-planet.org/"
-          >
-            <img
-              src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
-              alt="Plant-for-the-Planet logo"
-              width={33}
-              height={34}
-            />
-          </a>
+        <div>
+          <div className="footer-links">
+            <button
+              onClick={() => setlanguageModalOpen(!languageModalOpen)}
+              data-test-id="languageButton"
+            >
+              {`${getLanguageName(language)}`}
+              <DownArrowIcon
+                color={
+                  theme === "theme-light"
+                    ? themeProperties.light.primaryFontColor
+                    : themeProperties.dark.primaryFontColor
+                }
+              />
+            </button>
+            <a
+              rel="noreferrer"
+              target="_blank"
+              href={`https://pp.eco/legal/${i18n.language}/privacy`}
+            >
+              {t("privacy")}
+            </a>
+            <a
+              rel="noreferrer"
+              target="_blank"
+              href={`https://pp.eco/legal/${i18n.language}/terms`}
+            >
+              {t("terms")}
+            </a>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://pp.eco/legal/${i18n.language}/imprint`}
+            >
+              {t("imprint")}
+            </a>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="mailto:support@plant-for-the-planet.org"
+            >
+              {t("contact")}
+            </a>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://a.plant-for-the-planet.org/${i18n.language}/faq`}
+            >
+              {t("faqs")}
+            </a>
+            <div className="planet-unep-logo">
+              <div>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://a.plant-for-the-planet.org/"
+                >
+                  <img
+                    src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
+                    alt="Plant-for-the-Planet logo"
+                    width={33}
+                    height={34}
+                  />
+                </a>
+              </div>
+              <div>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://www.unep.org/"
+                >
+                  <UNEPLogo />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="planet-support-text">
+            <p style={{ fontStyle: "italic" }}>
+              Plant-for-the-Planet Supports the United Nations Environment
+              Program{" "}
+            </p>
+          </div>
         </div>
+
         <LanguageModal
           languageModalOpen={languageModalOpen}
           setlanguageModalOpen={setlanguageModalOpen}
         />
       </div>
+      <div style={{ paddingTop: "10px", paddingBottom: "10px" }}></div>
       <CookiePolicy />
     </div>
   );

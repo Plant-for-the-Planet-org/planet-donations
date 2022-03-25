@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/dom-to-image": "^2.6.2",
-    "@types/react": "^17.0.3",
+    "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.3",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
