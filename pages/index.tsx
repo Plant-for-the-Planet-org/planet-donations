@@ -104,11 +104,11 @@ function index({
   }, []);
 
   // If project details are present set project details
-  // React.useEffect(() => {
-  //   if (projectDetails) {
-  //     setprojectDetails(projectDetails);
-  //   }
-  // }, [projectDetails]);
+  React.useEffect(() => {
+     if (projectDetails) {
+       setprojectDetails(projectDetails);
+     }
+  }, [projectDetails]);
 
   settenant(tenant);
   // If gift details are present set gift

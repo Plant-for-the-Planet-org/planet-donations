@@ -22,6 +22,8 @@ function ThankYou() {
     setshowErrorCard,
     tenant,
     transferDetails,
+    projectDetails,
+    setprojectDetails,
   } = React.useContext(QueryParamContext);
 
   const [donation, setdonation] = React.useState(null);
@@ -35,6 +37,10 @@ function ThankYou() {
     const donation = await apiRequest(requestParams);
     if (donation.status === 200) {
       setdonation(donation.data);
+      const details = {name: ''}
+      Object.assign(details, projectDetails);
+      details.name = donation.data.project.name
+      setprojectDetails(details);
     }
   }
 
