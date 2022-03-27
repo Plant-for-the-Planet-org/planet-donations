@@ -104,11 +104,11 @@ function index({
   }, []);
 
   // If project details are present set project details
-  // React.useEffect(() => {
-  //   if (projectDetails) {
-  //     setprojectDetails(projectDetails);
-  //   }
-  // }, [projectDetails]);
+  React.useEffect(() => {
+     if (projectDetails) {
+       setprojectDetails(projectDetails);
+     }
+  }, [projectDetails]);
 
   settenant(tenant);
   // If gift details are present set gift
@@ -242,6 +242,7 @@ export async function getServerSideProps(context: any) {
         url: `/app/projects/${to}/paymentOptions?country=${country}`,
         setshowErrorCard,
         tenant,
+        locale: context.query.locale ? context.query.locale : context.locale,
       };
       const paymentOptionsResponse = await apiRequest(requestParams);
       if (paymentOptionsResponse.data) {
@@ -275,6 +276,7 @@ export async function getServerSideProps(context: any) {
       const requestParams = {
         url: `/app/donations/${context.query.context}`,
         setshowErrorCard,
+        locale: context.query.locale ? context.query.locale : context.locale,
       };
       const donation: any = await apiRequest(requestParams);
 
@@ -311,6 +313,7 @@ export async function getServerSideProps(context: any) {
             url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
             setshowErrorCard,
             tenant,
+            locale: context.query.locale ? context.query.locale : context.locale,
           };
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {
@@ -385,6 +388,7 @@ export async function getServerSideProps(context: any) {
         url: `/app/profiles/${context.query.s}`,
         setshowErrorCard,
         tenant,
+        locale: context.query.locale ? context.query.locale : context.locale,
       };
       const newProfile = await apiRequest(requestParams);
       if (newProfile.data.type !== "tpo") {
