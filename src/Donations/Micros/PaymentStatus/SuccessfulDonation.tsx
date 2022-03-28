@@ -13,7 +13,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);
-  const { donationID, tenant } = React.useContext(QueryParamContext);
+  const { donationID, tenant, country } = React.useContext(QueryParamContext);
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
@@ -59,7 +59,11 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
       />
       {donationID && isMobile && router.query.step === "thankyou" && (
         <a
-          href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
+          href={`${
+            process.env.APP_URL
+          }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${localStorage.getItem(
+            "language"
+          )}`}
           className="donations-transaction-details donation-transaction-phone-view"
           data-test-id="referenceDonation"
         >
