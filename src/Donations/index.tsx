@@ -100,6 +100,7 @@ function DonationInfo() {
     isGift,
     tenant,
     frequency,
+    country,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -332,7 +333,13 @@ function DonationInfo() {
 
           {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
-              href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}`}
+              href={`${
+                process.env.APP_URL
+              }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
+                localStorage.getItem("language")
+                  ? localStorage.getItem("language")
+                  : "en"
+              }`}
               className="donations-transaction-details mt-20"
               data-test-id="referenceDonation"
             >

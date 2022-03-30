@@ -22,7 +22,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
-import  UNEPLogo from "../../public/assets/icons/UNEPLogo"
+import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 
 interface Props {}
 
@@ -197,6 +197,7 @@ function CookiePolicy() {
         </a>
       </div>
       <button
+        data-test-id="cookieCloseButton"
         id={"cookieCloseButton"}
         onClick={() => setShowCookieNotice(false)}
         className="primary-button mt-20"
