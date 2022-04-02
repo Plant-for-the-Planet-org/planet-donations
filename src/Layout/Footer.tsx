@@ -39,12 +39,14 @@ function Footer({}: Props): ReactElement {
   return (
     <div className="footer">
       <div className="footer-container">
-        <DarkModeSwitch />
-        {callbackUrl && donationStep !== 4 ? (
-          <a href={callbackUrl}>{t("cancelReturn")}</a>
-        ) : (
-          <p></p>
-        )}
+        <div className="footer-links">
+          <DarkModeSwitch />
+          {callbackUrl && donationStep !== 4 ? (
+            <a href={callbackUrl}>{t("cancelReturn")}</a>
+          ) : (
+            <p></p>
+          )}
+        </div>
         <div>
           <div className="footer-links">
             <button

@@ -37,16 +37,16 @@
     > div {
       display: flex;
        flex-wrap: wrap ;
-    
+
       > div {
         > a {
           margin-left: 24px;
           margin-top: 24px;
         }
       }
-      
+
     }
-    
+
     > button {
       display: flex;
       align-items: center;
@@ -64,7 +64,7 @@
       // marginLeft: "14rem",
       display: flex;
       justify-content: flex-end;
-    
+
     > p {
       color: $primaryFontColor;
       margin-left: 25px;
@@ -75,17 +75,17 @@
 
 @media screen and (min-width:375px) and (max-width:745px) {
   .footer-links{
-    > div { 
+    > div {
       flex-basis: 100%;
       justify-content: center;
       > div {
-        
+
         > a {
           margin-left: 24px;
           margin-top: 24px;
         }
       }
-     
+
     }
   }
   .footer-container {
@@ -95,7 +95,7 @@
     // marginLeft: "14rem",
     display: flex;
     justify-content: center;
-    
+
     > p {
       color: $primaryFontColor;
       margin-left: 25px;
@@ -156,7 +156,7 @@
   height: 20px;
   width: 42px;
   transform: scale(1.5);
-  margin-top: 24px;
+  margin-top: 4px;
   svg > path {
     fill: #f1c40f;
   }
