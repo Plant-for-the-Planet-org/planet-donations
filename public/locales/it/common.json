@@ -100,7 +100,7 @@
   "search": "Cerca",
   "noProjectsFound": "Nessun progetto trovato",
   "billingAddress": "Indirizzo di fatturazione",
-  "treesInCountry": "{{treeCount}} alberi in{{country}} , Plant-for-the-Planet",
+  "treesInCountry": "{{treeCount}} alberi , Plant-for-the-Planet",
   "errorOccurred": "Qualcosa è andato storto",
   "dedicatedTo": "Dedicato a",
   "message": "Messaggio",

@@ -104,11 +104,11 @@ function index({
   }, []);
 
   // If project details are present set project details
-  // React.useEffect(() => {
-  //   if (projectDetails) {
-  //     setprojectDetails(projectDetails);
-  //   }
-  // }, [projectDetails]);
+  React.useEffect(() => {
+    if (projectDetails) {
+      setprojectDetails(projectDetails);
+    }
+  }, [projectDetails]);
 
   settenant(tenant);
   // If gift details are present set gift
@@ -210,6 +210,7 @@ export async function getServerSideProps(context: any) {
   let tenant = "ten_I9TW3ncG";
   let callbackUrl = "";
   let callbackMethod = "";
+  let locale = "en";
 
   function setshowErrorCard() {
     showErrorCard = true;
@@ -229,7 +230,9 @@ export async function getServerSideProps(context: any) {
       country = context.query.country.toUpperCase();
     }
   }
-
+  if (context.query.locale) {
+    locale = context.query.locale;
+  }
   // Set project details if there is to (project slug) in the query params
   if (
     (context.query.to && !context.query.context) ||
@@ -311,6 +314,7 @@ export async function getServerSideProps(context: any) {
             url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
             setshowErrorCard,
             tenant,
+            locale,
           };
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {

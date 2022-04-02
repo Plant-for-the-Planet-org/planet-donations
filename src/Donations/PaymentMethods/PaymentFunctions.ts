@@ -494,7 +494,13 @@ export async function handleStripeSCAPayment({
             payment_method: {
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}`,
+            return_url: `${
+              window.location.origin
+            }/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}&locale=${
+              localStorage.getItem("language")
+                ? localStorage.getItem("language")
+                : "en"
+            }`,
           }
         );
       handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
@@ -512,7 +518,13 @@ export async function handleStripeSCAPayment({
               },
               billing_details: buildBillingDetails(contactDetails),
             },
-            return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}`,
+            return_url: `${
+              window.location.origin
+            }/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}&locale=${
+              localStorage.getItem("language")
+                ? localStorage.getItem("language")
+                : "en"
+            }`,
           }
         );
       handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
