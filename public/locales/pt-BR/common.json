@@ -111,7 +111,7 @@
   "search": "Procurar",
   "noProjectsFound": "Nenhum projeto encontrado",
   "billingAddress": "Detalhes do contato",
-  "treesInCountry": "{{treeCount}} árvores em{{country}} , Plant-for-the-Planet",
+  "treesInCountry": "{{treeCount}} árvores, Plant-for-the-Planet",
   "fundingPaymentLabel": "Doe {{amount}}, Plant-for-the-Planet",
   "bouquetPaymentLabel": "Doe {{amount}}, Plant-for-the-Planet",
   "errorOccurred": "Alguma coisa correu mal. Por favor, sinta-se à vontade para tirar uma foto de tela e nos enviar um e-mail para support@plant-for-the-planet.org.",

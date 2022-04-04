@@ -77,17 +77,7 @@ function NewPaypal({
     payDonationFunction("paypal", "paypal", data);
   };
 
-  const onCancel = (data, actions) => {
-    setPaymentError("Order was cancelled, please try again");
-
-    // This function shows a transaction success message to your buyer.
-    data = {
-      ...data,
-      type: "sdk",
-      status: "cancel",
-    };
-    payDonationFunction("paypal", "paypal", data);
-  };
+  const onCancel = () => {};
 
   return (
     <>
