@@ -18,6 +18,7 @@ const PlanetCashSelector: FC = (props) => {
     country,
     setcountry,
     frequency,
+    paymentRequest,
   } = useContext(QueryParamContext);
   const router = useRouter();
 
@@ -45,7 +46,7 @@ const PlanetCashSelector: FC = (props) => {
     ) {
       setIsPlanetCashActive(true);
     }
-  }, []);
+  }, [paymentRequest]);
 
   useEffect(() => {
     // This is done to lock the transaction with PlanetCash in a single currency.
