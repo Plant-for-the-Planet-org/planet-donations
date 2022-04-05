@@ -22,8 +22,12 @@ import FundingDonations from "../Micros/DonationTypes/FundingDonations";
 import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
-import { CONTACT } from "src/Utils/donationStepConstants";
+import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
+import { apiRequest } from "../../Utils/api";
+import PlanetCashSelector from "../Micros/PlanetCashSelector";
+import OnBehalf from "../Micros/OnBehalf";
+import cleanObject from "src/Utils/cleanObject";
 
 function DonationsForm() {
   const {
@@ -45,19 +49,43 @@ function DonationsForm() {
     profile,
     frequency,
     tenant,
+    isSignedUp,
     setTransferDetails,
     setRetainQuantityValue,
+    isPlanetCashActive,
+    onBehalf,
+    onBehalfDonor,
+    setdonation,
+    setcountry,
+    setcurrency,
+    donation,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const [minAmt, setMinAmt] = React.useState(0);
   const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const [showDisablePlanetCashButton, setShowDisablePlanetCashButton] =
+    React.useState(false);
   const router = useRouter();
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
+
+  React.useEffect(() => {
+    // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
+    // since transaction needs to happen in the same currency.
+
+    if (projectDetails && profile) {
+      if (profile!.planetCash) {
+        if (projectDetails.purpose === "planet-cash") {
+          setcountry(profile!.planetCash.country);
+          setcurrency(profile!.planetCash.currency);
+        }
+      }
+    }
+  }, [projectDetails, profile]);
 
   React.useEffect(() => {
     if (paymentSetup && paymentSetup?.recurrency) {
@@ -139,6 +167,7 @@ function DonationsForm() {
   const donationSelection = () => {
     switch (projectDetails?.purpose) {
       case "funds":
+      case "planet-cash":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "conservation":
       case "bouquet":
@@ -187,6 +216,70 @@ function DonationsForm() {
     }
   }
 
+  const handlePlanetCashDonate = async () => {
+    setShowDisablePlanetCashButton(true);
+    const _onBehalfDonor = {
+      firstname: onBehalfDonor.firstName,
+      lastname: onBehalfDonor.lastName,
+      email: onBehalfDonor.email,
+    };
+
+    const _gift = {
+      ...giftDetails,
+      message: giftDetails.giftMessage,
+    };
+
+    delete _gift.giftMessage;
+
+    // create Donation data
+    const donationData = {
+      purpose: projectDetails!.purpose,
+      project: projectDetails!.id,
+      units: quantity,
+      prePaid: true,
+      onBehalf: onBehalf,
+      ...(onBehalf && { donor: _onBehalfDonor }),
+      ...(isGift && { gift: _gift }),
+    };
+
+    const cleanedDonationData = cleanObject(donationData);
+
+    const token = await getAccessTokenSilently();
+
+    // @method    POST
+    // @endpoint  /app/donation
+
+    try {
+      const { data, status } = await apiRequest({
+        url: "/app/donations",
+        method: "POST",
+        setshowErrorCard,
+        data: cleanedDonationData,
+        token,
+        addIdempotencyKeyHeader: true,
+      });
+
+      if (status === 200) {
+        setdonation(data);
+        router.replace({
+          query: { ...router.query, step: THANK_YOU },
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.status === 400) {
+        setPaymentError(err.data.message);
+      } else if (err.status === 500) {
+        setPaymentError(t("genericErrorMessage"));
+      } else if (err.status === 503) {
+        setPaymentError(t("errorStatus503"));
+      } else {
+        setPaymentError(err.message);
+      }
+      setShowDisablePlanetCashButton(false);
+    }
+  };
+
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : projectDetails ? (
@@ -197,97 +290,134 @@ function DonationsForm() {
           {projectDetails?.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
-          {projectDetails?.purpose === "trees" ? (
-            <div className="donations-gift-container mt-10">
-              <GiftForm />
-            </div>
-          ) : (
-            <></>
-          )}
+
+          {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
+          {projectDetails.purpose !== "planet-cash" &&
+            !(isGift && giftDetails.recipientName === "") &&
+            !(onBehalf && onBehalfDonor.firstName === "") &&
+            isSignedUp &&
+            profile!.planetCash && <PlanetCashSelector />}
+
+          {!(onBehalf && onBehalfDonor.firstName === "") &&
+            (projectDetails?.purpose === "trees" ? (
+              <div className="donations-gift-container mt-10">
+                <GiftForm />
+              </div>
+            ) : (
+              <></>
+            ))}
 
           {process.env.RECURRENCY &&
-          showFrequencyOptions &&
-          !(isGift && giftDetails.recipientName === "") ? (
-            <div
-              className={`donations-gift-container mt-10 ${
-                Object.keys(paymentSetup.frequencies).length == 2
-                  ? "funds-frequency-container"
-                  : ""
-              }`}
-            >
-              <FrequencyOptions />
-            </div>
-          ) : isGift ? (
-            <></>
-          ) : (
-            <div className={`donations-gift-container mt-10 `}>
-              <Skeleton variant="rect" width={"100%"} height={40} />
-            </div>
-          )}
+            showFrequencyOptions &&
+            (!(onBehalf && onBehalfDonor.firstName === "") &&
+            !(isGift && giftDetails.recipientName === "") ? (
+              <div
+                className={`donations-gift-container mt-10 ${
+                  Object.keys(paymentSetup.frequencies).length == 2
+                    ? "funds-frequency-container"
+                    : ""
+                }`}
+              >
+                <FrequencyOptions />
+              </div>
+            ) : isGift || onBehalf ? (
+              <></>
+            ) : (
+              <div className={`donations-gift-container mt-10 `}>
+                <Skeleton variant="rect" width={"100%"} height={40} />
+              </div>
+            ))}
 
-          {donationSelection()}
+          {!(onBehalf && onBehalfDonor.firstName === "") && donationSelection()}
+
+          {!(isGift && giftDetails.recipientName === "") &&
+            isPlanetCashActive && <OnBehalf />}
+
+          {!isPlanetCashActive &&
+            !(isGift && giftDetails.recipientName === "") && (
+              <TaxDeductionOption />
+            )}
 
           <div
             className={`${
-              isGift && giftDetails.recipientName === "" ? "display-none" : ""
+              (isGift && giftDetails.recipientName === "") ||
+              (onBehalf && onBehalfDonor.firstName === "")
+                ? "display-none"
+                : ""
             }`}
           >
-            <TaxDeductionOption />
-
             <div className={"horizontal-line"} />
 
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
-            {paymentSetup && paymentSetup?.unitCost && projectDetails ? (
-              minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
-                !isPaymentOptionsLoading &&
-                paymentSetup?.gateways?.stripe?.account &&
-                currency ? (
-                  <NativePay
-                    country={country}
-                    currency={currency}
-                    amount={formatAmountForStripe(
-                      paymentSetup?.unitCost * quantity,
-                      currency.toLowerCase()
-                    )}
-                    onPaymentFunction={onPaymentFunction}
-                    paymentSetup={paymentSetup}
-                    continueNext={() => {
-                      router.push(
-                        {
-                          query: { ...router.query, step: CONTACT },
-                        },
-                        undefined,
-                        { shallow: true }
-                      );
-                      setRetainQuantityValue(true);
-                    }}
-                    isPaymentPage={false}
-                    paymentLabel={paymentLabel}
-                    frequency={frequency}
-                  />
+            {/* Hide NativePay if PlanetCash is active */}
+
+            {!isPlanetCashActive ? (
+              paymentSetup && paymentSetup?.unitCost && projectDetails ? (
+                minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+                  !isPaymentOptionsLoading &&
+                  paymentSetup?.gateways?.stripe?.account &&
+                  currency ? (
+                    <NativePay
+                      country={country}
+                      currency={currency}
+                      amount={formatAmountForStripe(
+                        paymentSetup?.unitCost * quantity,
+                        currency.toLowerCase()
+                      )}
+                      onPaymentFunction={onPaymentFunction}
+                      paymentSetup={paymentSetup}
+                      continueNext={() => {
+                        router.push(
+                          {
+                            query: { ...router.query, step: CONTACT },
+                          },
+                          undefined,
+                          { shallow: true }
+                        );
+                        setRetainQuantityValue(true);
+                      }}
+                      isPaymentPage={false}
+                      paymentLabel={paymentLabel}
+                      frequency={frequency}
+                    />
+                  ) : (
+                    <div className="mt-20 w-100">
+                      <ButtonLoader />
+                    </div>
+                  )
+                ) : minAmt > 0 ? (
+                  <p className={"text-danger mt-20 text-center"}>
+                    {t("minDonate")}{" "}
+                    <span>
+                      {getFormatedCurrency(i18n.language, currency, minAmt)}
+                    </span>
+                  </p>
                 ) : (
                   <div className="mt-20 w-100">
                     <ButtonLoader />
                   </div>
                 )
-              ) : minAmt > 0 ? (
-                <p className={"text-danger mt-20 text-center"}>
-                  {t("minDonate")}{" "}
-                  <span>
-                    {getFormatedCurrency(i18n.language, currency, minAmt)}
-                  </span>
-                </p>
               ) : (
                 <div className="mt-20 w-100">
                   <ButtonLoader />
                 </div>
               )
+            ) : !showDisablePlanetCashButton ? (
+              <button
+                onClick={handlePlanetCashDonate}
+                className="primary-button w-100 mt-30"
+              >
+                {t("donateWithPlanetCash")}
+              </button>
             ) : (
-              <div className="mt-20 w-100">
-                <ButtonLoader />
-              </div>
+              <>
+                <button className="secondary-button w-100 mt-30">
+                  {t("donateWithPlanetCash")}
+                </button>
+                {!donation && <PaymentProgress />}
+              </>
             )}
           </div>
         </div>

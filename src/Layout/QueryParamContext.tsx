@@ -1,5 +1,5 @@
 import { useRouter } from "next/dist/client/router";
-import React, { useState, ReactElement, useEffect } from "react";
+import React, { useState, ReactElement } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
@@ -88,6 +88,17 @@ export const QueryParamContext = React.createContext({
     paymentSetupCountry: string | string[];
     shouldSetPaymentDetails?: Boolean;
   }) => {},
+  profile: null,
+  isPlanetCashActive: false,
+  setIsPlanetCashActive: (value: boolean) => {},
+  onBehalf: false,
+  setOnBehalf: (value: boolean) => {},
+  onBehalfDonor: {},
+  setOnBehalfDonor: (value: {}) => {},
+  donation: null,
+  setdonation: (value: {}) => {},
+  paymentRequest: null,
+  setPaymentRequest: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -177,6 +188,20 @@ export default function QueryParamProvider({ children }: any) {
   );
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
+
+  const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
+
+  // Only used when planetCash is active
+  const [onBehalf, setOnBehalf] = useState(false);
+
+  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
+  const [donation, setdonation] = React.useState(null);
+  const [paymentRequest, setPaymentRequest] = React.useState(null);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -395,7 +420,7 @@ export default function QueryParamProvider({ children }: any) {
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
-        url: `/app/projects/${projectGUID}/paymentOptions?country=${paymentSetupCountry}`,
+        url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
         tenant,
       };
@@ -507,6 +532,16 @@ export default function QueryParamProvider({ children }: any) {
         setProjectDescription,
         setIsPaymentOptionsLoading,
         loadPaymentSetup,
+        isPlanetCashActive,
+        setIsPlanetCashActive,
+        onBehalf,
+        setOnBehalf,
+        onBehalfDonor,
+        setOnBehalfDonor,
+        donation,
+        setdonation,
+        paymentRequest,
+        setPaymentRequest,
       }}
     >
       {children}

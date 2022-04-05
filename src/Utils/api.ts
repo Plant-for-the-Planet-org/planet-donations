@@ -1,5 +1,6 @@
 import getsessionId from "./getSessionId";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 // creates and axios instance with base url
 const axiosInstance = axios.create({
@@ -47,6 +48,8 @@ interface RequestParams {
   setshowErrorCard: Function;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
+  headers?: { [k: string]: string }; // additional headers
+  addIdempotencyKeyHeader?: boolean;
   locale?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
@@ -64,6 +67,8 @@ export const apiRequest = async (
     setshowErrorCard,
     shouldQueryParamAdd = true,
     tenant,
+    headers = {},
+    addIdempotencyKeyHeader = false,
     locale,
   } = extendedRequestParams;
 
@@ -90,6 +95,14 @@ export const apiRequest = async (
         Authorization: `Bearer ${token}`,
       };
     }
+
+    // append all the additional headers to the request
+    options.headers = {
+      ...options.headers,
+      ...(addIdempotencyKeyHeader && { "IDEMPOTENCY-KEY": uuidv4() }),
+      ...headers,
+    };
+
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
       const l = locale
         ? locale
