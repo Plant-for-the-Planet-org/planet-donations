@@ -50,6 +50,7 @@ interface RequestParams {
   tenant?: string;
   headers?: { [k: string]: string }; // additional headers
   addIdempotencyKeyHeader?: boolean;
+  locale?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -68,6 +69,7 @@ export const apiRequest = async (
     tenant,
     headers = {},
     addIdempotencyKeyHeader = false,
+    locale,
   } = extendedRequestParams;
 
   try {
@@ -102,17 +104,22 @@ export const apiRequest = async (
     };
 
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
-      const locale = `${
-        localStorage.getItem("language")
-          ? localStorage.getItem("language")
-          : "en"
-      }`;
+      const l = locale
+        ? locale
+        : `${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`;
       options.params = {
         tenant: tenant,
-        locale,
+        locale: l,
       };
     } else if (shouldQueryParamAdd) {
-      options.params = { tenant: "ten_I9TW3ncG", locale: "en" };
+      options.params = {
+        tenant: "ten_I9TW3ncG",
+        locale: locale ? locale : "en",
+      };
     }
 
     // returns a promise with axios instance
