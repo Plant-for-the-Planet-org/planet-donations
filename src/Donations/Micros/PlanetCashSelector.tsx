@@ -187,7 +187,11 @@ const PlanetCashSelector: FC = (props) => {
             </p>
           )}
 
-          {isPlanetCashActive && (
+          {(isPlanetCashActive ||
+            (country === profile!.planetCash.country &&
+              paymentSetup.unitCost * quantity >
+                profile!.planetCash.balance / 100 +
+                  profile!.planetCash.creditLimit / 100)) && (
             <button
               className="add-plant-cash-balance"
               onClick={() => {
