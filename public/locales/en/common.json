@@ -162,5 +162,9 @@
   "lowBalanceAndOneTimePay": "Balance is low | Donation with PlanetCash is a one time payment",
   "lowBalance": "Balance is low",
   "oneTimePay": "Donation with PlanetCash is a one time payment",
-  "currency": "Currency"
+  "currency": "Currency",
+  "treesPurpose": "trees",
+  "fundsPurpose": "funding",
+  "bouquetPurpose": "bouquet",
+  "conservationPurpose": "conservation"
 }
