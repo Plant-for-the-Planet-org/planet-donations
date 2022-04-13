@@ -31,8 +31,8 @@ function ThankyouMessage({
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      purpose: projectDetails.purpose,
-      frequency: donation.isRecurrent ? t(`${frequency}Success`) : "",
+      purpose: t(`common:${projectDetails.purpose}Purpose`),
+      frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
     }
   );
 

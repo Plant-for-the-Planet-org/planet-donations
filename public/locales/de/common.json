@@ -162,5 +162,9 @@
   "lowBalanceAndOneTimePay": "Guthaben ist niedrig | Spende mit PlanetCash ist eine einmalige Zahlung",
   "lowBalance": "Guthaben ist niedrig",
   "oneTimePay": "Eine Spende mit PlanetCash ist eine einmalige Zahlung",
-  "currency": "Währung"
+  "currency": "Währung",
+  "treesPurpose": "Baum",
+  "fundsPurpose": "Funding",
+  "bouquetPurpose": "Bouquet",
+  "conservationPurpose": "Conservation"
 }
