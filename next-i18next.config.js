@@ -4,7 +4,7 @@ module.exports = {
     // debug: true,
     localeDetection: false,
     defaultLocale: "en",
-    locales: ["en", "de", "it", "es", "fr", "pt-BR"],
+    locales: ["en", "cs", "de", "it", "es", "fr", "pt-BR"],
     localePath: path.resolve('./public/locales')
   },
 };
