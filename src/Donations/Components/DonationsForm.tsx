@@ -64,10 +64,44 @@ function DonationsForm() {
 
   const [minAmt, setMinAmt] = React.useState(0);
   const [showFrequencyOptions, setShowFrequencyOptions] = React.useState(false);
-  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const {
+    isLoading,
+    isAuthenticated,
+    getAccessTokenSilently,
+    loginWithRedirect,
+  } = useAuth0();
   const [showDisablePlanetCashButton, setShowDisablePlanetCashButton] =
     React.useState(false);
   const router = useRouter();
+
+  React.useEffect(() => {
+    // Allow User to Top-up PlanetCash only if they are authenticated
+
+    if (projectDetails) {
+      if (projectDetails.purpose === "planet-cash") {
+        if (!isLoading && !isAuthenticated) {
+          loginWithRedirect({
+            redirectUri: window?.location.origin + router.asPath,
+            ui_locales: localStorage.getItem("language") || "en",
+          });
+        }
+      }
+    }
+  }, [projectDetails, isAuthenticated, isLoading]);
+
+  React.useEffect(() => {
+    // Restrict user from adding top-up to other's account
+
+    if (projectDetails && profile) {
+      if (profile!.planetCash) {
+        if (projectDetails.purpose === "planet-cash") {
+          if (projectDetails.id !== profile!.planetCash.account) {
+            router.push("/login");
+          }
+        }
+      }
+    }
+  }, [projectDetails, profile, router]);
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
@@ -292,7 +326,8 @@ function DonationsForm() {
           )}
 
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {(projectDetails.purpose !== "funds" && projectDetails.purpose !== "planet-cash") &&
+          {projectDetails.purpose !== "funds" &&
+            projectDetails.purpose !== "planet-cash" &&
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
