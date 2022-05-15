@@ -166,5 +166,6 @@
   "treesPurpose": "tree donation",
   "fundsPurpose": "donation",
   "bouquetPurpose": "donation",
-  "conservationPurpose": "conservation donation"
+  "conservationPurpose": "conservation donation",
+  "planet-cashPurpose": "PlanetCash donation"
 }
