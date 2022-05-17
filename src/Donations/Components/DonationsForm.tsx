@@ -96,7 +96,7 @@ function DonationsForm() {
       if (profile!.planetCash) {
         if (projectDetails.purpose === "planet-cash") {
           if (projectDetails.id !== profile!.planetCash.account) {
-            router.push("/login");
+            router.push("/");
           }
         }
       }
