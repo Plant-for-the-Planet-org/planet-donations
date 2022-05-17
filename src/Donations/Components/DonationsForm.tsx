@@ -70,6 +70,42 @@ function DonationsForm() {
   const router = useRouter();
 
   React.useEffect(() => {
+<<<<<<< Updated upstream
+=======
+    // Allow User to Top-up PlanetCash only if they are authenticated
+
+    if (projectDetails) {
+      if (projectDetails.purpose === "planet-cash") {
+        if (!isLoading && !isAuthenticated) {
+          loginWithRedirect({
+            redirectUri: window?.location.origin + router.asPath,
+            ui_locales: localStorage.getItem("language") || "en",
+          });
+        }
+      }
+    }
+  }, [projectDetails, isAuthenticated, isLoading]);
+
+  React.useEffect(() => {
+    // Restrict user from adding top-up to other's account
+
+    if (projectDetails && profile) {
+      console.log(profile, "profile");
+      console.log(profile!.planetCash, "profile!.planetCash");
+
+      if (profile!.planetCash) {
+        console.log("===================");
+        if (projectDetails.purpose === "planet-cash") {
+          if (projectDetails.id !== profile!.planetCash.account) {
+            router.push("/login");
+          }
+        }
+      }
+    }
+  }, [projectDetails, profile, router]);
+
+  React.useEffect(() => {
+>>>>>>> Stashed changes
     setMinAmt(getMinimumAmountForCurrency(currency));
   }, [currency]);
 
@@ -332,8 +368,8 @@ function DonationsForm() {
 
           {!(onBehalf && onBehalfDonor.firstName === "") && donationSelection()}
 
-          {!(isGift && giftDetails.recipientName === "") &&
-            isPlanetCashActive && <OnBehalf />}
+          {/* {!(isGift && giftDetails.recipientName === "") &&
+            isPlanetCashActive && <OnBehalf />} */}
 
           {!isPlanetCashActive &&
             !(isGift && giftDetails.recipientName === "") && (
