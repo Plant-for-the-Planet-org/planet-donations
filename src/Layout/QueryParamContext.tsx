@@ -1,5 +1,5 @@
 import { useRouter } from "next/dist/client/router";
-import React, { useState, ReactElement, useEffect } from "react";
+import React, { useState, ReactElement } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
@@ -97,6 +97,8 @@ export const QueryParamContext = React.createContext({
   setOnBehalfDonor: (value: {}) => {},
   donation: null,
   setdonation: (value: {}) => {},
+  paymentRequest: null,
+  setPaymentRequest: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -199,6 +201,7 @@ export default function QueryParamProvider({ children }: any) {
   });
 
   const [donation, setdonation] = React.useState(null);
+  const [paymentRequest, setPaymentRequest] = React.useState(null);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -536,7 +539,9 @@ export default function QueryParamProvider({ children }: any) {
         onBehalfDonor,
         setOnBehalfDonor,
         donation,
-        setdonation
+        setdonation,
+        paymentRequest,
+        setPaymentRequest,
       }}
     >
       {children}

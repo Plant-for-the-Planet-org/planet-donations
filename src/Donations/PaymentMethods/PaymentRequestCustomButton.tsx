@@ -1,5 +1,5 @@
 import { useStripe } from "@stripe/react-stripe-js";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -8,6 +8,7 @@ import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
 import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
+import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 interface PaymentButtonProps {
   country: string;
@@ -32,9 +33,9 @@ export const PaymentRequestCustomButton = ({
   paymentSetup,
 }: PaymentButtonProps) => {
   const { t, ready } = useTranslation(["common"]);
+  const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
   const stripe = useStripe();
-  const [paymentRequest, setPaymentRequest] = useState(null);
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
