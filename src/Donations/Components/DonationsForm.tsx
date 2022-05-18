@@ -294,7 +294,8 @@ function DonationsForm() {
           )}
 
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {(projectDetails.purpose !== "funds" && projectDetails.purpose !== "planet-cash") &&
+          {projectDetails.purpose !== "funds" &&
+            projectDetails.purpose !== "planet-cash" &&
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
@@ -332,8 +333,8 @@ function DonationsForm() {
 
           {!(onBehalf && onBehalfDonor.firstName === "") && donationSelection()}
 
-          {!(isGift && giftDetails.recipientName === "") &&
-            isPlanetCashActive && <OnBehalf />}
+          {/* {!(isGift && giftDetails.recipientName === "") &&
+            isPlanetCashActive && <OnBehalf />} */}
 
           {!isPlanetCashActive &&
             !(isGift && giftDetails.recipientName === "") && (
