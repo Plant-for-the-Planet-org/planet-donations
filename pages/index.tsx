@@ -84,6 +84,18 @@ function index({
     setCallbackMethod,
   } = React.useContext(QueryParamContext);
 
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (
+      window.location.pathname !== "/" &&
+      router.locales?.filter((locale) => locale === router.locale)[0]
+    ) {
+      window.location.href =
+        window.location.origin + "/" + window.location.search;
+    }
+  }, [router.locale]);
+
   React.useEffect(() => {
     setdonationID(donationID);
     if (isDirectDonation) {
@@ -123,8 +135,6 @@ function index({
       loadselectedProjects();
     }
   }, [donationStep]);
-
-  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
   if (router.query.context) {
