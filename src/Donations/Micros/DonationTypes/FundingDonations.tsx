@@ -231,7 +231,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                             parseFloat(customInputValue)
                           );
                           setCustomInputValue(
-                            isNaN(parseFloat(_value)) ? "" : _value
+                            isNaN(parseFloat(_value))
+                              ? ""
+                              : `${parseFloat(_value).toFixed(2)}`
                           );
                         }}
                         ref={customInputRef}
