@@ -102,6 +102,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [isCustomDonation]);
 
+  const setCustomInputOnBlur = () => {
+    setCustomInputValue(
+      isNaN(quantity)
+        ? ""
+        : getFormattedNumber(i18n.language, parseFloat(quantity.toFixed(2)))
+    );
+  };
+
+  React.useEffect(() => {
+    setCustomInputOnBlur();
+  }, [i18n.language]);
+
   const customInputRef = React.useRef(null);
 
   return (
@@ -206,10 +218,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         }}
                         onInput={(e) => {
                           // replaces any character other than number to blank
-                          e.target.value = e.target.value.replace(
-                            /[^0-9.]/g,
-                            ""
-                          );
+                          e.target.value = e.target.value
+                            .replace(/[^0-9^\.]+/g, "")
+                            .replace(".", "$#$")
+                            .replace(/\./g, "")
+                            .replace("$#$", ".")
+                            .replace(/^0+/, "");
+
                           //  if length of input more than 12, display only 12 digits
                           if (e.target.value.toString().length >= 12) {
                             e.target.value = e.target.value
@@ -225,17 +240,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           setCustomValue(e);
                           setCustomInputValue(e.target.value);
                         }}
-                        onBlur={() => {
-                          const _value = getFormattedNumber(
-                            i18n.language,
-                            parseFloat(customInputValue)
-                          );
-                          setCustomInputValue(
-                            isNaN(parseFloat(_value))
-                              ? ""
-                              : `${parseFloat(_value).toFixed(2)}`
-                          );
-                        }}
+                        onBlur={setCustomInputOnBlur}
                         ref={customInputRef}
                       />
                     </div>

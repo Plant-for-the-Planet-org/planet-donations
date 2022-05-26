@@ -127,6 +127,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [paymentSetup]);
 
+  const setCustomInputOnBlur = () => {
+    setCustomInputValue(
+      isNaN(quantity)
+        ? ""
+        : getFormattedNumber(i18n.language, parseFloat(quantity.toFixed(2)))
+    );
+  };
+
+  React.useEffect(() => {
+    setCustomInputOnBlur();
+  }, [i18n.language]);
+
   // IMP TO DO -> Due to new requirements of showing Rounded costs for Bouquet and in future for all we will now have to start passing the amount instead of quantity and unitCost, this demands a structural change in multiple files and hence should be done carefully
 
   // const roundedCostCalculator=(unitCost,quantity)=>{
@@ -208,10 +220,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         onInput={(e) => {
                           // replaces any character other than number to blank
                           // e.target.value = e.target.value.replace(/[,]/g, '.');
-                          e.target.value = e.target.value.replace(
-                            /[^0-9.]/g,
-                            ""
-                          );
+                          e.target.value = e.target.value
+                            .replace(/[^0-9^\.]+/g, "")
+                            .replace(".", "$#$")
+                            .replace(/\./g, "")
+                            .replace("$#$", ".")
+                            .replace(/^0+/, "");
                           //  if length of input more than 12, display only 12 digits
                           if (e.target.value.toString().length >= 12) {
                             e.target.value = e.target.value
@@ -227,17 +241,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           setCustomValue(e);
                           setCustomInputValue(e.target.value);
                         }}
-                        onBlur={() => {
-                          const _value = getFormattedNumber(
-                            i18n.language,
-                            parseFloat(customInputValue)
-                          );
-                          setCustomInputValue(
-                            isNaN(parseFloat(_value))
-                              ? ""
-                              : `${parseFloat(_value).toFixed(2)}`
-                          );
-                        }}
+                        onBlur={setCustomInputOnBlur}
                         ref={customInputRef}
                       />
                       <p
