@@ -11,6 +11,7 @@ import { getCountryDataBy } from "../../../Utils/countryUtils";
 // import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
+import { getFormattedNumber } from "../../../Utils/getFormattedNumber";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -206,7 +207,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         onInput={(e) => {
                           // replaces any character other than number to blank
                           e.target.value = e.target.value.replace(
-                            /[^0-9]/g,
+                            /[^0-9.]/g,
                             ""
                           );
                           //  if length of input more than 12, display only 12 digits
@@ -223,6 +224,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         onChange={(e) => {
                           setCustomValue(e);
                           setCustomInputValue(e.target.value);
+                        }}
+                        onBlur={() => {
+                          const _value = getFormattedNumber(
+                            i18n.language,
+                            parseFloat(customInputValue)
+                          );
+                          setCustomInputValue(
+                            isNaN(parseFloat(_value)) ? "" : _value
+                          );
                         }}
                         ref={customInputRef}
                       />
