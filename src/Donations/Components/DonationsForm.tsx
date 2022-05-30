@@ -87,7 +87,7 @@ function DonationsForm() {
         }
       }
     }
-  }, [projectDetails, isAuthenticated, isLoading]);
+  }, [projectDetails, isLoading]);
 
   React.useEffect(() => {
     // Restrict user from adding top-up to other's account
