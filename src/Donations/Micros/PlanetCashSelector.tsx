@@ -187,7 +187,7 @@ const PlanetCashSelector: FC = (props) => {
             </p>
           )}
 
-          {(isPlanetCashActive ||
+          {/* {(isPlanetCashActive ||
             (country === profile!.planetCash.country &&
               paymentSetup.unitCost * quantity >
                 profile!.planetCash.balance / 100 +
@@ -201,7 +201,7 @@ const PlanetCashSelector: FC = (props) => {
             >
               <p>{t("addBalance")}</p>
             </button>
-          )}
+          )} */}
         </div>
         <div title={disabledReason() ? disabledReason() : ""}>
           <ToggleSwitch
