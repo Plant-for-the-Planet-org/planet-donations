@@ -76,18 +76,19 @@ function DonationsForm() {
 
   React.useEffect(() => {
     // Allow User to Top-up PlanetCash only if they are authenticated
-
-    if (projectDetails) {
-      if (projectDetails.purpose === "planet-cash") {
-        if (!isLoading && !isAuthenticated) {
-          loginWithRedirect({
-            redirectUri: window?.location.origin + router.asPath,
-            ui_locales: localStorage.getItem("language") || "en",
-          });
+    if (router.isReady) {
+      if (projectDetails) {
+        if (projectDetails.purpose === "planet-cash") {
+          if (!isLoading && !isAuthenticated) {
+            loginWithRedirect({
+              redirectUri: window?.location.origin + router.asPath,
+              ui_locales: localStorage.getItem("language") || "en",
+            });
+          }
         }
       }
     }
-  }, [projectDetails, isLoading]);
+  }, [projectDetails, isLoading, router.isReady]);
 
   React.useEffect(() => {
     // Restrict user from adding top-up to other's account
@@ -96,14 +97,14 @@ function DonationsForm() {
       if (profile!.planetCash) {
         if (projectDetails.purpose === "planet-cash") {
           if (projectDetails.id !== profile!.planetCash.account) {
-            router.push("/");
+            router.push("/login");
           }
         }
       } else if (
         !profile.planetCash &&
         projectDetails.purpose === "planet-cash"
       ) {
-        router.push("/");
+        router.push("/login");
       }
     }
   }, [projectDetails, profile, router]);
