@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
@@ -133,6 +133,7 @@ function Authentication({}: Props): ReactElement {
     router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
+  const { projectDetails } = useContext(QueryParamContext);
   const { t, ready } = useTranslation("common");
 
   const loginUser = () => {
@@ -194,7 +195,7 @@ function Authentication({}: Props): ReactElement {
           ) : (
             <UserProfile profile={profile} user={user} />
           )}
-          {user || profile ? (
+          {(user || profile) && projectDetails.purpose !== "planet-cash" ? (
             <button
               className="login-continue"
               onClick={() => logout({ returnTo: window?.location.href })}
