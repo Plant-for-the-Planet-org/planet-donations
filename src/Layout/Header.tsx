@@ -1,13 +1,29 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 
-export default function Header() {  
+export default function Header() {
+  const router = useRouter();
+
+  const getMetaTag = () => {
+    const regex = /^pcash_/;
+
+    if (
+      (router.query.to && regex.test(router.query.to)) ||
+      router.query.context
+    ) {
+      return <meta name="robots" content="noindex" />;
+    } else return null;
+  };
+
   return (
     <Head>
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=0"
       />
-   
+
+      {getMetaTag()}
+
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
 

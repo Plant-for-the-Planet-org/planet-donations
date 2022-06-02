@@ -263,7 +263,8 @@ function PaymentsForm({}: Props): ReactElement {
           {!hideTaxDeduction && <TaxDeductionOption />}
 
           {/* TODO - When donations are coming from context, check for haspublicprofile */}
-          {projectDetails.purpose !== "funds" ? (
+
+          {projectDetails && projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
               {!Object.keys(contactDetails).includes("companyName") ? (
                 askpublishName ? (
@@ -284,9 +285,11 @@ function PaymentsForm({}: Props): ReactElement {
                   </div>
                 ) : (
                   <div>
-                    <label style={{ textAlign: "center" }}>
-                      {t("nameAlreadyPublished")}
-                    </label>
+                    {projectDetails.purpose !== "planet-cash" && (
+                      <label style={{ textAlign: "center" }}>
+                        {t("nameAlreadyPublished")}
+                      </label>
+                    )}
                   </div>
                 )
               ) : null}
@@ -322,7 +325,9 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
                   authenticatedMethod:
-                    projectDetails.purpose === "funds" ? false : true,
+                    projectDetails && projectDetails.purpose === "funds"
+                      ? false
+                      : true,
                 })}
                 showSofort={showPaymentMethod({
                   paymentMethod: "sofort",

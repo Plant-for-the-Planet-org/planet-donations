@@ -159,6 +159,57 @@
   font-weight: 600;
   text-align: right;
 }
+
+.planet-cash-selector {
+  margin-top: 10px;
+
+  .planet-cash-selector-toggle {
+    display: flex;
+    justify-content: space-between;
+
+    .planet-cash-balance-positive {
+      color: $primaryColor;
+      font-weight: bold;
+    }
+
+    .planet-cash-balance-negative {
+      color: $dangerColor;
+      font-weight: bold;
+    }
+
+    .add-plant-cash-balance {
+      font-size: 12px;
+    }
+  }
+}
+
+.on-behalf-container {
+  .on-behalf-container-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .on-behalf-container-form-container {
+    .form-errors {
+      color: $dangerColor;
+    }
+  }
+}
+
+.on-behalf-donor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .remove-on-behalf-donor {
+    cursor: pointer;
+    color: $dangerColor;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
 .donations-gift-container {
   .donations-gift-toggle {
     display: flex;
@@ -946,5 +997,18 @@
   &:hover .copy-tooltip,
   & .copy-tooltip.show-tooltip {
     display: flex;
+  }
+}
+
+.thank-you-purpose {
+  text-align: center;
+  .go-back {
+    margin-bottom: 300px;
+  }
+}
+
+@include lgLaptopView {
+  .thank-you-purpose {
+    text-align: left;
   }
 }

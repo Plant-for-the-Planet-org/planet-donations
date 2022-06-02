@@ -52,13 +52,22 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setcountry(country);
     localStorage.setItem("countryCode", country);
     setcurrency(donation.currency);
-    if (donation.gift && donation.gift.recipientName) {
-      setisGift(donation.gift.recipientName);
+    if (donation.gift) {
+      setisGift(donation.gift.recipientName ? true : false);
+
+      const _giftDetails = {
+        ...(donation.gift.recipientName
+          ? { recipientName: donation.gift.recipientName }
+          : {}),
+        ...(donation.gift.recipientEmail
+          ? { recipientEmail: donation.gift.recipientEmail }
+          : {}),
+        ...(donation.gift.type ? { type: donation.gift.type } : {}),
+      };
       // TODO - Gift type invitation and direct will have different properties
-      setgiftDetails({
-        recipientName: donation.gift.recipientName,
-      });
+      setgiftDetails(_giftDetails);
     }
+
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup({

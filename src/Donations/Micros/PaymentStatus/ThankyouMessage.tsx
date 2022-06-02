@@ -15,7 +15,7 @@ function ThankyouMessage({
   donation,
   paymentTypeUsed,
 }: Props): ReactElement {
-  const { tenant, frequency, quantity } = React.useContext(QueryParamContext);
+  const { tenant, frequency } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
   let currencyFormat = () => {};
   if (donation) {
@@ -31,7 +31,8 @@ function ThankyouMessage({
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      frequency: donation.isRecurrent ? t(`${frequency}Success`) : "",
+      purpose: t(`common:${projectDetails.purpose}Purpose`),
+      frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
     }
   );
 
@@ -85,6 +86,15 @@ function ThankyouMessage({
               {t("common:fundingContributionMessage")}
             </div>
           </>
+        )}
+
+        {projectDetails.purpose === "planet-cash" && (
+          <div className="thank-you-purpose">
+            <div className="mt-20">{donationSuccessfulMessage}</div>
+            <div className="mt-10 go-back">
+              {t("common:fundingDonationSuccess")}
+            </div>
+          </div>
         )}
 
         {projectDetails.purpose === "bouquet" && (

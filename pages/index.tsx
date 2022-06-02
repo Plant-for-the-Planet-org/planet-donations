@@ -84,6 +84,18 @@ function index({
     setCallbackMethod,
   } = React.useContext(QueryParamContext);
 
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (
+      window.location.pathname !== "/" &&
+      router.locales?.filter((locale) => locale === router.locale)[0]
+    ) {
+      window.location.href =
+        window.location.origin + "/" + window.location.search;
+    }
+  }, [router.locale]);
+
   React.useEffect(() => {
     setdonationID(donationID);
     if (isDirectDonation) {
@@ -123,8 +135,6 @@ function index({
       loadselectedProjects();
     }
   }, [donationStep]);
-
-  const router = useRouter();
 
   const defaultLanguage = router.query.locale ? router.query.locale : "en";
   if (router.query.context) {
@@ -242,7 +252,7 @@ export async function getServerSideProps(context: any) {
     donationStep = 1;
     try {
       const requestParams = {
-        url: `/app/projects/${to}/paymentOptions?country=${country}`,
+        url: `/app/paymentOptions/${to}?country=${country}`,
         setshowErrorCard,
         tenant,
       };
@@ -311,7 +321,7 @@ export async function getServerSideProps(context: any) {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/projects/${donation.data.project.id}/paymentOptions?country=${country}`,
+            url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,

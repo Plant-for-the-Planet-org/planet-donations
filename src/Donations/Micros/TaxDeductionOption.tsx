@@ -42,13 +42,22 @@ function TaxDeductionOption({}: Props): ReactElement {
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <button
-              onClick={() => setopenTaxDeductionModal(true)}
+              onClick={() => {
+                // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
+                // since transaction needs to happen in the same currency.
+
+                projectDetails.purpose !== "planet-cash" &&
+                  setopenTaxDeductionModal(true);
+              }}
               className={"tax-country-selection text-primary text-bold"}
               data-test-id="taxCountrySelection"
             >
               {t(`country:${country?.toLowerCase()}`)}
-              <DownArrowIcon color={themeProperties.primaryColor} />
+              {projectDetails.purpose !== "planet-cash" && (
+                <DownArrowIcon color={themeProperties.primaryColor} />
+              )}
             </button>
+            &nbsp;
             {projectDetails?.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}

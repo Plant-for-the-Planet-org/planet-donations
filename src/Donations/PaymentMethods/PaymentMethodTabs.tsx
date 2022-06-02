@@ -75,7 +75,7 @@ export default function PaymentMethodTabs({
   let paymentLabel;
 
   if (paymentSetup && currency) {
-    switch (projectDetails.purpose) {
+    switch (projectDetails && projectDetails.purpose) {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,

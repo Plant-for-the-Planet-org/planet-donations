@@ -40,6 +40,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     frequency,
     setfrequency,
     retainQuantityValue,
+    isPlanetCashActive,
+    projectDetails,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -72,8 +74,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
         ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
-        : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
-          paymentSetup.unitCost;
+        : paymentSetup.frequencies[`${frequency}`].options[1] &&
+          paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+            paymentSetup.unitCost;
       newQuantity = newQuantity / paymentSetup.unitCost;
       setquantity(newQuantity);
       if (
@@ -242,15 +245,34 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         <p className="currency-selection mt-30">
           <button
             onClick={() => {
-              setopenCurrencyModal(true);
+              // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
+              // since transaction needs to happen in the same currency.
+
+              projectDetails.purpose !== "planet-cash" &&
+                !isPlanetCashActive &&
+                setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
-            style={{ marginRight: "4px" }}
+            style={{
+              marginRight: "4px",
+              ...(isPlanetCashActive && { cursor: "text" }),
+            }}
           >
-            <span style={{ marginRight: "4px" }} className={"text-normal"}>
-              {t("selectCurrency")}
-            </span>
-            {currency} <DownArrowIcon color={themeProperties.primaryColor} />
+            {projectDetails.purpose !== "planet-cash" ? (
+              <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                {t("selectCurrency")}
+              </span>
+            ) : (
+              <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                {t("currency")}
+              </span>
+            )}
+
+            {currency}
+            {projectDetails.purpose !== "planet-cash" &&
+              !isPlanetCashActive && (
+                <DownArrowIcon color={themeProperties.primaryColor} />
+              )}
           </button>
         </p>
       ) : (
