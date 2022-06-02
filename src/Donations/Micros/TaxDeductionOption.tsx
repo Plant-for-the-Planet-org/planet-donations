@@ -46,14 +46,14 @@ function TaxDeductionOption({}: Props): ReactElement {
                 // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
                 // since transaction needs to happen in the same currency.
 
-                projectDetails.purpose !== "planet-cash" &&
+                projectDetails?.purpose !== "planet-cash" &&
                   setopenTaxDeductionModal(true);
               }}
               className={"tax-country-selection text-primary text-bold"}
               data-test-id="taxCountrySelection"
             >
               {t(`country:${country?.toLowerCase()}`)}
-              {projectDetails.purpose !== "planet-cash" && (
+              {projectDetails?.purpose !== "planet-cash" && (
                 <DownArrowIcon color={themeProperties.primaryColor} />
               )}
             </button>

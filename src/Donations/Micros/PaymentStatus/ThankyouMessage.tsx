@@ -31,7 +31,7 @@ function ThankyouMessage({
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      purpose: t(`common:${projectDetails.purpose}Purpose`),
+      purpose: t(`common:${projectDetails?.purpose}Purpose`),
       frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
     }
   );
@@ -62,7 +62,7 @@ function ThankyouMessage({
   const Message = () => {
     return (
       <div>
-        {projectDetails.purpose === "trees" && (
+        {projectDetails?.purpose === "trees" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -75,7 +75,7 @@ function ThankyouMessage({
           </>
         )}
 
-        {projectDetails.purpose === "funds" && (
+        {projectDetails?.purpose === "funds" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -88,7 +88,7 @@ function ThankyouMessage({
           </>
         )}
 
-        {projectDetails.purpose === "planet-cash" && (
+        {projectDetails?.purpose === "planet-cash" && (
           <div className="thank-you-purpose">
             <div className="mt-20">{donationSuccessfulMessage}</div>
             <div className="mt-10 go-back">
@@ -97,7 +97,7 @@ function ThankyouMessage({
           </div>
         )}
 
-        {projectDetails.purpose === "bouquet" && (
+        {projectDetails?.purpose === "bouquet" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -110,7 +110,7 @@ function ThankyouMessage({
             )}
           </>
         )}
-        {projectDetails.purpose === "conservation" && (
+        {projectDetails?.purpose === "conservation" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}

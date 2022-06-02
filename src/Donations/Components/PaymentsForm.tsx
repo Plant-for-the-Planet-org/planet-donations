@@ -264,7 +264,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {/* TODO - When donations are coming from context, check for haspublicprofile */}
 
-          {projectDetails && projectDetails.purpose !== "funds" ? (
+          {projectDetails && projectDetails?.purpose !== "funds" ? (
             <div className={"mt-20"}>
               {!Object.keys(contactDetails).includes("companyName") ? (
                 askpublishName ? (
@@ -285,7 +285,7 @@ function PaymentsForm({}: Props): ReactElement {
                   </div>
                 ) : (
                   <div>
-                    {projectDetails.purpose !== "planet-cash" && (
+                    {projectDetails?.purpose !== "planet-cash" && (
                       <label style={{ textAlign: "center" }}>
                         {t("nameAlreadyPublished")}
                       </label>
@@ -325,7 +325,7 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
                   authenticatedMethod:
-                    projectDetails && projectDetails.purpose === "funds"
+                    projectDetails && projectDetails?.purpose === "funds"
                       ? false
                       : true,
                 })}

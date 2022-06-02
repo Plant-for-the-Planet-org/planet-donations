@@ -166,7 +166,7 @@ function DonationInfo() {
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep > 0 &&
             projectDetails.ownerName &&
-            (projectDetails.purpose === "trees" ? (
+            (projectDetails?.purpose === "trees" ? (
               <a
                 rel="noreferrer"
                 target="_blank"
@@ -179,8 +179,8 @@ function DonationInfo() {
               <TPOImage />
             ))}
           {(donationStep === 2 || donationStep === 3) &&
-            (projectDetails.purpose === "trees" ||
-              projectDetails.purpose === "conservation") && (
+            (projectDetails?.purpose === "trees" ||
+              projectDetails?.purpose === "conservation") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}
@@ -217,8 +217,8 @@ function DonationInfo() {
             )}
 
           {(donationStep === 2 || donationStep === 3) &&
-            (projectDetails.purpose === "bouquet" ||
-              projectDetails.purpose === "funds") && (
+            (projectDetails?.purpose === "bouquet" ||
+              projectDetails?.purpose === "funds") && (
               <div className="contact-details-info">
                 <div className={"w-100 mt-10 text-white"}>
                   {t("donating")}{" "}
@@ -240,7 +240,7 @@ function DonationInfo() {
 
           {donationStep > 0 ? (
             <>
-              {projectDetails.purpose === "trees" ? (
+              {projectDetails?.purpose === "trees" ? (
                 <a
                   rel="noreferrer"
                   target="_blank"
@@ -259,14 +259,14 @@ function DonationInfo() {
                 </h1>
               )}
 
-              {projectDetails.purpose === "funds" ||
-              projectDetails.purpose === "bouquet" ? (
+              {projectDetails?.purpose === "funds" ||
+              projectDetails?.purpose === "bouquet" ? (
                 <p className="text-white mt-10">{projectDetails.description}</p>
               ) : (
                 []
               )}
-              {(projectDetails.purpose === "trees" ||
-                projectDetails.purpose === "conservation") &&
+              {(projectDetails?.purpose === "trees" ||
+                projectDetails?.purpose === "conservation") &&
                 projectDetails.ownerName && (
                   <div className="text-white">
                     {t("byOrganization", {

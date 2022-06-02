@@ -79,7 +79,7 @@ function DonationsForm() {
 
     if (projectDetails && profile) {
       if (profile!.planetCash) {
-        if (projectDetails.purpose === "planet-cash") {
+        if (projectDetails?.purpose === "planet-cash") {
           setcountry(profile!.planetCash.country);
           setcurrency(profile!.planetCash.currency);
         }
@@ -294,8 +294,8 @@ function DonationsForm() {
           )}
 
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {projectDetails.purpose !== "funds" &&
-            projectDetails.purpose !== "planet-cash" &&
+          {projectDetails?.purpose !== "funds" &&
+            projectDetails?.purpose !== "planet-cash" &&
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
@@ -351,8 +351,8 @@ function DonationsForm() {
           >
             <div className={"horizontal-line"} />
 
-            {(projectDetails.purpose === "trees" ||
-              projectDetails.purpose === "conservation") && <DonationAmount />}
+            {(projectDetails?.purpose === "trees" ||
+              projectDetails?.purpose === "conservation") && <DonationAmount />}
 
             {/* Hide NativePay if PlanetCash is active */}
 
