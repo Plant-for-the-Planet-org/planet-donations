@@ -156,16 +156,18 @@
   "addBalance": "Add Balance",
   "onBehalfOf": "On behalf of",
   "inValidField": "{{fieldName}} is invalid",
-  "onBehalfNotification": "On Behalf Notification",
+  "onBehalfNotification": "On Behalf of (Notify Donor)",
   "genericErrorMessage": "Something went wrong please try again soon!",
   "errorStatus503": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details.",
-  "lowBalanceAndOneTimePay": "Balance is low | Donation with PlanetCash is a one time payment",
+  "lowBalanceAndOneTimePay": "Balance is low | Pay with PlanetCash is a one time payment",
   "lowBalance": "Balance is low",
-  "oneTimePay": "Donation with PlanetCash is a one time payment",
+  "oneTimePay": "Pay with PlanetCash is a one time payment",
   "currency": "Currency",
   "treesPurpose": "tree donation",
   "fundsPurpose": "donation",
   "bouquetPurpose": "donation",
   "conservationPurpose": "conservation donation",
-  "planet-cashPurpose": "PlanetCash donation"
+  "planet-cashPurpose": "PlanetCash donation",
+  "myContributionIsPartOfThat": "And my contribution is a part of that.",
+  "planet-cashPurpose": "PlanetCash Donation"
 }
