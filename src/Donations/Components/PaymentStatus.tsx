@@ -63,7 +63,9 @@ function ThankYou() {
 
   React.useEffect(() => {
     if (donation) {
-      setTransferDetails(donation.account);
+      if (donation.account) {
+        setTransferDetails(donation.account);
+      }
     }
   }, [donation]);
 
