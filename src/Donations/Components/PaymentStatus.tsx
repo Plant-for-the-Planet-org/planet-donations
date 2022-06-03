@@ -12,6 +12,8 @@ import PendingDonation from "../Micros/PaymentStatus/PendingDonation";
 import { useRouter } from "next/router";
 import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDonationJane";
 import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import styles from "./PaymentStatus.module.scss";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -149,7 +151,9 @@ function ThankYou() {
                 />
               )
             ) : (
-              <></>
+              <div className={styles.loaderContainer}>
+                <CircularProgress color="inherit" />
+              </div>
             )}
           </div>
         )}
