@@ -24,6 +24,7 @@ function ThankYou() {
     transferDetails,
     donation,
     setdonation,
+    setTransferDetails,
   } = React.useContext(QueryParamContext);
 
   async function loadDonation() {
@@ -58,6 +59,12 @@ function ThankYou() {
     return () => {
       clearInterval(interval);
     };
+  }, [donation]);
+
+  React.useEffect(() => {
+    if (donation) {
+      setTransferDetails(donation.account);
+    }
   }, [donation]);
 
   function Alert(props: AlertProps) {
