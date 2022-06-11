@@ -232,7 +232,7 @@ Cypress.Commands.add('bankTransfer', () => {
     cy.wait(5000)
     // cy.get('.frequency-selection-option').eq(0).should("have.text", "Once").click()
     cy.contactForm("Peter", "Payer", "peter.payer@gmail.com", "Unbekannt 1", "Uffing am Staffelsee", "Germany{enter}", "82449")
-    cy.wait(10000)
+    cy.wait(15000)
     cy.get('[data-test-id="bankTransfer"]').click()
     cy.get('[data-test-id="bankDonateContinue"]').click()
     cy.wait(10000)
