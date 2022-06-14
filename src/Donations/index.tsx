@@ -255,7 +255,7 @@ function DonationInfo() {
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {paymentSetup.name && paymentSetup.name}
                 </h1>
               )}
 
