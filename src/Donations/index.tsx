@@ -261,7 +261,9 @@ function DonationInfo() {
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">{projectDetails.description}</p>
+                <p className="text-white mt-10">
+                  {paymentSetup.description ? paymentSetup.description : ""}
+                </p>
               ) : (
                 []
               )}
