@@ -252,7 +252,7 @@ function LanguageModal({
                   loadPaymentSetup({
                     projectGUID: router.query.to,
                     paymentSetupCountry: country,
-                    shouldSetPaymentDetails: true,
+                    shouldSetPaymentDetails: false,
                   });
                 }
                 setlanguageModalOpen(false);

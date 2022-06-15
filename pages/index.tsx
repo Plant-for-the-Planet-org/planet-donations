@@ -255,6 +255,7 @@ export async function getServerSideProps(context: any) {
         url: `/app/paymentOptions/${to}?country=${country}`,
         setshowErrorCard,
         tenant,
+        locale,
       };
       const paymentOptionsResponse = await apiRequest(requestParams);
       if (paymentOptionsResponse.data) {

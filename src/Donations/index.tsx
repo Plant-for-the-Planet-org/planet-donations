@@ -255,14 +255,14 @@ function DonationInfo() {
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {paymentSetup.name ? paymentSetup.name : ""}
+                  {projectDetails.name ? projectDetails.name : ""}
                 </h1>
               )}
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
                 <p className="text-white mt-10">
-                  {paymentSetup.description ? paymentSetup.description : ""}
+                  {projectDetails.description ? projectDetails.description : ""}
                 </p>
               ) : (
                 []
