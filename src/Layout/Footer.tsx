@@ -255,6 +255,8 @@ function LanguageModal({
                     shouldSetPaymentDetails: false,
                   });
                 }
+                router.query.locale = event.target.value;
+                router.push(router);
                 setlanguageModalOpen(false);
               }}
             >
