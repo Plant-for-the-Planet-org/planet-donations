@@ -8,6 +8,7 @@ import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -105,6 +106,7 @@ export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
   const { i18n } = useTranslation();
+  const { getAccessTokenSilently } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
@@ -282,8 +284,31 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
+  const _loadProfile = async () => {
+    let _profile;
+      const loadProfile = async () => {
+        const token = await getAccessTokenSilently();
+        try {
+          _profile = await apiRequest({
+            url: "/app/profile",
+            token: token,
+            setshowErrorCard,
+            tenant,
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      await loadProfile();
+      if (_profile) {
+        console.log("===>", _profile);
+      }
+  }
+
   React.useEffect(() => {
-    if (router.query.to && country !== undefined && country !== "") {
+    if (router.query.to === "planetCash") {
+      
+    } else if (router.query.to && country !== undefined && country !== "") {
       const to = String(router.query.to).replace(/\//g, "");
       loadPaymentSetup({
         projectGUID: to,
