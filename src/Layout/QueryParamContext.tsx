@@ -106,7 +106,7 @@ export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
   const { i18n } = useTranslation();
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isLoading, isAuthenticated } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
@@ -284,30 +284,44 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  const _loadProfile = async () => {
-    let _profile;
-      const loadProfile = async () => {
-        const token = await getAccessTokenSilently();
-        try {
-          _profile = await apiRequest({
-            url: "/app/profile",
-            token: token,
-            setshowErrorCard,
-            tenant,
-          });
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      await loadProfile();
-      if (_profile) {
-        console.log("===>", _profile);
-      }
-  }
+  const loadProfile = React.useCallback(async () => {
+    const token = await getAccessTokenSilently();
+    try {
+      const profile: any = await apiRequest({
+        url: "/app/profile",
+        token: token,
+        setshowErrorCard,
+        tenant,
+      });
+      setprofile(profile.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   React.useEffect(() => {
-    if (router.query.to === "planetCash") {
-      
+    if (!isLoading && isAuthenticated) {
+      loadProfile();
+    }
+  }, [isLoading, isAuthenticated, loadProfile]);
+
+  React.useEffect(() => {
+    const regex = /^pcash_/;
+    if (regex.test(router.query.to)) {
+      router.push("/");
+    } else if (router.query.to === "planetCash") {
+      if (profile && profile?.planetCash?.account) {
+        loadPaymentSetup({
+          projectGUID: profile?.planetCash?.account,
+          paymentSetupCountry: country,
+          shouldSetPaymentDetails: true,
+        });
+        setdonationStep(1);
+      } else if (!profile?.planetCash) {
+        setPaymentError("PlanetCash is not enabled");
+        setdonationStep(1);
+        console.log("Here..");
+      }
     } else if (router.query.to && country !== undefined && country !== "") {
       const to = String(router.query.to).replace(/\//g, "");
       loadPaymentSetup({
@@ -316,7 +330,7 @@ export default function QueryParamProvider({ children }: any) {
         shouldSetPaymentDetails: true,
       });
     }
-  }, [router.query.to, country]);
+  }, [router.query.to, country, profile]);
 
   async function loadConfig() {
     let userLang;

@@ -114,7 +114,7 @@ const PlanetCashSelector: FC = (props) => {
 
   const handleAddBalance = () => {
     router.replace({
-      query: { ...router.query, to: profile!.planetCash.account },
+      query: { ...router.query, to: "planetCash" },
     });
   };
 
