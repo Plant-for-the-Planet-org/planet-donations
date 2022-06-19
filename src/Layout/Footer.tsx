@@ -122,10 +122,7 @@ function Footer({}: Props): ReactElement {
             </div>
           </div>
           <div className="planet-support-text">
-            <p style={{ fontStyle: "italic" }}>
-              Plant-for-the-Planet Supports the United Nations Environment
-              Program{" "}
-            </p>
+            <p style={{ fontStyle: "italic" }}>{t("pfpSupportsUNEP")}</p>
           </div>
         </div>
 
