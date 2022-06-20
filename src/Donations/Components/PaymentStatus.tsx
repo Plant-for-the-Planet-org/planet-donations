@@ -94,7 +94,8 @@ function ThankYou() {
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
 
-  const { callbackUrl, paymentError } = React.useContext(QueryParamContext);
+  const { callbackUrl, paymentError, projectDetails } =
+    React.useContext(QueryParamContext);
 
   const router = useRouter();
 
@@ -150,6 +151,8 @@ function ThankYou() {
                   sendToReturn={sendToReturn}
                 />
               )
+            ) : projectDetails?.purpose === "planet-cash" ? (
+              <div>{t("common:planetCashDisabled")}</div>
             ) : (
               <div className={styles.loaderContainer}>
                 <CircularProgress color="inherit" />

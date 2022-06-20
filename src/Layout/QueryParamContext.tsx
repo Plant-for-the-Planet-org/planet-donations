@@ -318,9 +318,15 @@ export default function QueryParamProvider({ children }: any) {
         });
         setdonationStep(1);
       } else if (!profile?.planetCash) {
-        setPaymentError("PlanetCash is not enabled");
-        setdonationStep(1);
-        console.log("Here..");
+        if (profile?.name) {
+          setprojectDetails({
+            name: `PlanetCash - ${profile?.name}`,
+            ownerName: profile?.name,
+            ownerAvatar: profile?.image,
+            purpose: "planet-cash",
+          });
+        }
+        setdonationStep(4);
       }
     } else if (router.query.to && country !== undefined && country !== "") {
       const to = String(router.query.to).replace(/\//g, "");
