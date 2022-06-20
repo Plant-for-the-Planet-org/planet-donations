@@ -243,30 +243,32 @@ export async function getServerSideProps(context: any) {
   ) {
     const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
-    try {
-      const requestParams = {
-        url: `/app/paymentOptions/${to}?country=${country}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentOptionsResponse = await apiRequest(requestParams);
-      if (paymentOptionsResponse.data) {
-        projectDetails = {
-          id: paymentOptionsResponse.data.id,
-          name: paymentOptionsResponse.data.name,
-          description: paymentOptionsResponse.data.description,
-          purpose: paymentOptionsResponse.data.purpose,
-          ownerName: paymentOptionsResponse.data.ownerName,
-          taxDeductionCountries:
-            paymentOptionsResponse.data.taxDeductionCountries,
-          projectImage: paymentOptionsResponse.data.image,
-          ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+    if (to !== "planetCash") {
+      try {
+        const requestParams = {
+          url: `/app/paymentOptions/${to}?country=${country}`,
+          setshowErrorCard,
+          tenant,
         };
-        donationStep = 1;
+        const paymentOptionsResponse = await apiRequest(requestParams);
+        if (paymentOptionsResponse.data) {
+          projectDetails = {
+            id: paymentOptionsResponse.data.id,
+            name: paymentOptionsResponse.data.name,
+            description: paymentOptionsResponse.data.description,
+            purpose: paymentOptionsResponse.data.purpose,
+            ownerName: paymentOptionsResponse.data.ownerName,
+            taxDeductionCountries:
+              paymentOptionsResponse.data.taxDeductionCountries,
+            projectImage: paymentOptionsResponse.data.image,
+            ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+          };
+          donationStep = 1;
+        }
+      } catch (err) {
+        donationStep = 0;
+        console.log("err", err);
       }
-    } catch (err) {
-      donationStep = 0;
-      console.log("err", err);
     }
   } else {
     if (!context.query.context) {

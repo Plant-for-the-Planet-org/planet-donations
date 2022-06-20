@@ -47,7 +47,7 @@ function Donations({}: Props): ReactElement {
         step = router.query?.step;
       }
 
-      switch (step) {
+      switch (step) {        
         case SELECT_PROJECT:
           setdonationStep(0);
           break;
