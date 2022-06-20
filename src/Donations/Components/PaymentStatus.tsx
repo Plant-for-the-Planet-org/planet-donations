@@ -77,11 +77,11 @@ function ThankYou() {
     setTextCopiedSnackbarOpen(false);
   };
 
-  let currencyFormat = () => {};
-  if (donation) {
-    currencyFormat = () =>
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
-  }
+  // let currencyFormat = () => {};
+  // if (donation) {
+  //   currencyFormat = () =>
+  //     getFormatedCurrency(i18n.language, donation.currency, donation.amount);
+  // }
 
   const { callbackUrl, paymentError } = React.useContext(QueryParamContext);
 

@@ -11,7 +11,7 @@ import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
 
 interface ShareOptionsProps {
-  treeCount: String;
+  treeCount: string;
   sendRef: any;
   donor: Object;
 }
@@ -31,7 +31,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
     textToShare = ready ? t("donate:textToShareForMe") : "";
   }
 
-  const exportComponent = (node, fileName, backgroundColor, type) => {
+  const exportComponent = (node, fileName) => {
     const element = ReactDOM.findDOMNode(node.current);
     const options = {
       quality: 1,

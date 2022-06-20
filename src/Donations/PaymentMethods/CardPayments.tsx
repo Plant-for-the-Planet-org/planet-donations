@@ -60,7 +60,7 @@ function CardPayments({
   onPaymentFunction,
   donorDetails,
 }: any): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();
   const [cardNumber, setCardNumber] = React.useState(false);

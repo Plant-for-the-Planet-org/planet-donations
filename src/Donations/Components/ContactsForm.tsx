@@ -37,10 +37,10 @@ function ContactsForm({}: Props): ReactElement {
   const {
     contactDetails,
     setContactDetails,
-    setdonationStep,
+    // setdonationStep,
     country,
     isTaxDeductible,
-    isSignedUp,
+    // isSignedUp,
     currency,
     quantity,
     paymentSetup,
@@ -50,7 +50,7 @@ function ContactsForm({}: Props): ReactElement {
     setTaxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {

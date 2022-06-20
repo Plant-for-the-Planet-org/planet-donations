@@ -23,7 +23,7 @@ function SepaPayments({
   onPaymentFunction,
   contactDetails,
 }: any): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();
 

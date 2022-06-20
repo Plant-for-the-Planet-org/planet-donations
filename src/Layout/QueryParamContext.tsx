@@ -19,7 +19,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: ({}) => {},
+  setpaymentSetup: (value: {}) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -86,7 +86,7 @@ export const QueryParamContext = React.createContext({
   loadPaymentSetup: (value: {
     projectGUID: string;
     paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
+    shouldSetPaymentDetails?: boolean;
   }) => {},
   profile: null,
   isPlanetCashActive: false,
@@ -415,7 +415,7 @@ export default function QueryParamProvider({ children }: any) {
   }: {
     projectGUID: string;
     paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
+    shouldSetPaymentDetails?: boolean;
   }) => {
     setIsPaymentOptionsLoading(true);
     try {

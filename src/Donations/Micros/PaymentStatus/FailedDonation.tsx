@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import { apiRequest } from "src/Utils/api";
+// import { useRouter } from "next/router";
+// import { PAYMENT } from "src/Utils/donationStepConstants";
 import { useTranslation } from "next-i18next";
 import PaymentFailedIllustration from "../../../../public/assets/icons/donation/PaymentFailed";
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import { apiRequest } from "src/Utils/api";
-import { useRouter } from "next/router";
-import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
 

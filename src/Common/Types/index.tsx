@@ -75,16 +75,16 @@ export interface ProjectTypes {
 }
 
 export interface giftDetailsProps {
-  type: String | null;
-  recipientName: String | null;
-  email: String | null;
-  giftMessage: String | null;
-  recipientTreecounter: Number | null;
+  type: string | null;
+  recipientName: string | null;
+  email: string | null;
+  giftMessage: string | null;
+  recipientTreecounter: number | null;
   receipients: {} | null;
 }
 
 export interface CreateDonationFunctionProps {
-  isTaxDeductible: Boolean | null;
+  isTaxDeductible: boolean | null;
   country: any;
   projectDetails: Object;
   quantity: number;
@@ -92,7 +92,7 @@ export interface CreateDonationFunctionProps {
   currency: String;
   contactDetails: Object;
   giftDetails: giftDetailsProps;
-  isGift: Boolean;
+  isGift: boolean;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   setdonationID: any;

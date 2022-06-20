@@ -12,7 +12,6 @@ import {
   createDonationFunction,
   payDonationFunction,
 } from "../PaymentMethods/PaymentFunctions";
-import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
@@ -26,7 +25,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
-import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
+import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}

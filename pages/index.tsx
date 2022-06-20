@@ -5,7 +5,6 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
-import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
@@ -42,7 +41,7 @@ function index({
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl,
+  // resolvedUrl,
   isDirectDonation,
   hideTaxDeduction,
   isTaxDeductible,
@@ -53,7 +52,7 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
-  treecount,
+  // treecount,
   amount,
   meta,
   frequency,

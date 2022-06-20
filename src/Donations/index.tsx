@@ -9,7 +9,6 @@ import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
-import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import {
   CONTACT,

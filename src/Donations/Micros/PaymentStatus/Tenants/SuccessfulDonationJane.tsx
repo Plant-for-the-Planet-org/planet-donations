@@ -6,7 +6,7 @@ import ThankyouMessage from "./../ThankyouMessage";
 import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
 
 function SuccessfulDonationJane({ donation, sendToReturn }: any) {
-  const { t, i18n } = useTranslation(["common", "country", "donate"]);
+  const { t } = useTranslation(["common", "country", "donate"]);
 
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
@@ -15,7 +15,7 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
 
   const paymentTypeUsed = getPaymentType(paymentType);
 
-  const sendRef = () => imageRef;
+  // const sendRef = () => imageRef;
 
   let returnDisplay;
   if (callbackUrl) {

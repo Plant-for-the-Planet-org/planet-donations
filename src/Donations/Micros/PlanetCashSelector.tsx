@@ -7,7 +7,7 @@ import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
 
-const PlanetCashSelector: FC = (props) => {
+const PlanetCashSelector: FC = () => {
   const { t, i18n } = useTranslation("common");
   const {
     profile,

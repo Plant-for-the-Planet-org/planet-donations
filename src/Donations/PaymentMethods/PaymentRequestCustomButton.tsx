@@ -1,5 +1,5 @@
 import { useStripe } from "@stripe/react-stripe-js";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -94,20 +94,17 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     if (paymentRequest && !paymentLoading) {
       setPaymentLoading(true);
-      paymentRequest.on(
-        "paymentmethod",
-        ({ complete, paymentMethod, ...data }: any) => {
-          onPaymentFunction(paymentMethod, paymentRequest);
-          complete("success");
-          setPaymentLoading(false);
-        }
-      );
+      paymentRequest.on("paymentmethod", ({ complete, paymentMethod }: any) => {
+        onPaymentFunction(paymentMethod, paymentRequest);
+        complete("success");
+        setPaymentLoading(false);
+      });
     }
     return () => {
       if (paymentRequest && !paymentLoading) {
         paymentRequest.off(
           "paymentmethod",
-          ({ complete, paymentMethod, ...data }: any) => {
+          ({ complete, paymentMethod }: any) => {
             onPaymentFunction(paymentMethod, paymentRequest);
             complete("success");
             setPaymentLoading(false);

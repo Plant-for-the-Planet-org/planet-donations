@@ -4,7 +4,6 @@ import {
   PayDonationProps,
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
-import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
 //rename to buildPaymentProviderRequest
@@ -57,7 +56,7 @@ export function buildPaymentProviderRequest(
   };
 }
 
-export function getPaymentType(paymentType: String) {
+export function getPaymentType(paymentType: string) {
   let paymentTypeUsed;
   switch (paymentType) {
     case "CARD":
@@ -425,8 +424,8 @@ export async function handleStripeSCAPayment({
   });
   switch (method) {
     case "card": {
-      let successData: {};
-      let stripeResponse: {};
+      let successData = {};
+      let stripeResponse = {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
@@ -532,7 +531,7 @@ export async function handleStripeSCAPayment({
     }
     case "sepa_debit": {
       try {
-        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
+       await stripe.confirmSepaDebitPayment(clientSecret);
       } catch {
         (err: any) => {
           handlePaymentError(err, setIsPaymentProcessing, setPaymentError);

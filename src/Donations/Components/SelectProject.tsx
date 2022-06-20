@@ -2,9 +2,9 @@ import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
 import getImageUrl from "../../Utils/getImageURL";
-import { getCountryDataBy } from "../../Utils/countryUtils";
+// import { getCountryDataBy } from "../../Utils/countryUtils";
 import {
-  getFilteredProjects,
+  // getFilteredProjects,
   getRandomProjects,
   getSearchProjects,
 } from "../../Utils/projects/filterProjects";
@@ -24,7 +24,7 @@ function SelectProject({}: Props): ReactElement {
     setSelectedProjects,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common", "country"]);
+  const { t } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
