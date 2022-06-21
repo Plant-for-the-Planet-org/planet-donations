@@ -14,6 +14,7 @@ import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDo
 import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
+import PlanetCashSignup from "../Micros/PlanetCashSignup";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -152,7 +153,7 @@ function ThankYou() {
                 />
               )
             ) : projectDetails?.purpose === "planet-cash" ? (
-              <div>{t("common:planetCashDisabled")}</div>
+              <PlanetCashSignup />
             ) : (
               <div className={styles.loaderContainer}>
                 <CircularProgress color="inherit" />

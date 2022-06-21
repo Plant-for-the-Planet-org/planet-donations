@@ -169,5 +169,9 @@
   "conservationPurpose": "conservation donation",
   "planet-cashPurpose": "PlanetCash donation",
   "pfpSupportsUNEP": "Plant-for-the-Planet Supports the United Nations Environment Program",
-  "planetCashDisabled": "Your PlanetCash account is not activated. Please activate PlanetCash."
+  "noPlanetCashAccount": "You do not have a PlanetCash account, however you can signup for one below",
+  "planetCashSignup": "SIGNUP for PLANETCASH",
+  "planetCashTC": "By clicking Continue, I agree to the Terms and Conditions of Plant-for-the-Planet Platform, and PlanetCash.",
+  "planetCashIUnderstand": "I understand that PlanetCash donation/payments are non-refundable, and unallocated payments will be auto allocated to projects after six months.",
+  "createPlanetCashAccount": "Create PlanetCash Account"
 }
