@@ -309,7 +309,7 @@ export default function QueryParamProvider({ children }: any) {
     const regex = /^pcash_/;
     if (regex.test(router.query.to)) {
       router.push("/");
-    } else if (router.query.to === "planetCash") {
+    } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
       if (profile && profile?.planetCash?.account) {
         loadPaymentSetup({
           projectGUID: profile?.planetCash?.account,
