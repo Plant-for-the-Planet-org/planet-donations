@@ -318,10 +318,10 @@ export default function QueryParamProvider({ children }: any) {
         });
         setdonationStep(1);
       } else if (!profile?.planetCash) {
-        if (profile?.name) {
+        if (profile?.displayName) {
           setprojectDetails({
-            name: `PlanetCash - ${profile?.name}`,
-            ownerName: profile?.name,
+            name: `PlanetCash - ${profile?.displayName}`,
+            ownerName: profile?.displayName,
             ownerAvatar: profile?.image,
             purpose: "planet-cash",
           });
