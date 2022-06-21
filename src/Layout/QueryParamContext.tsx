@@ -287,7 +287,7 @@ export default function QueryParamProvider({ children }: any) {
   const loadProfile = React.useCallback(async () => {
     const token = await getAccessTokenSilently();
     try {
-      const profile: any = await apiRequest({
+      const profile = await apiRequest({
         url: "/app/profile",
         token: token,
         setshowErrorCard,

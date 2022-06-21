@@ -13,11 +13,11 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
-  projectDetails: Object;
+  projectDetails?: Object;
   donationStep: any;
   giftDetails: Object;
   isGift: boolean;
-  resolvedUrl: any;
+  resolvedUrl?: any;
   isDirectDonation: boolean;
   hideTaxDeduction: boolean;
   isTaxDeductible: boolean;
@@ -28,7 +28,7 @@ interface Props {
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
-  treecount: any;
+  treecount?: any;
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
@@ -38,11 +38,9 @@ interface Props {
 }
 
 function index({
-  projectDetails,
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl,
   isDirectDonation,
   hideTaxDeduction,
   isTaxDeductible,
@@ -53,7 +51,6 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
-  treecount,
   amount,
   meta,
   frequency,
@@ -62,7 +59,6 @@ function index({
   callbackMethod,
 }: Props): ReactElement {
   const {
-    setprojectDetails,
     setdonationStep,
     loadselectedProjects,
     setgiftDetails,
