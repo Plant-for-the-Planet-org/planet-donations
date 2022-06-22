@@ -22,16 +22,9 @@ import router, { useRouter } from "next/router";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
-  const {
-    paymentSetup,
-    donationStep,
-    projectDetails,
-    setdonationStep,
-    allProjects,
-  } = React.useContext(QueryParamContext);
+  const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
 
   useEffect(() => {
     if (router.query?.step) {

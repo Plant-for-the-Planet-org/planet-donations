@@ -7,7 +7,7 @@ interface Props {
 }
 
 function SofortPayments({ onSubmitPayment }: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   return (
     <div>

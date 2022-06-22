@@ -263,7 +263,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const projects: any = await apiRequest(requestParams);
+      const projects: object = await apiRequest(requestParams);
       if (projects.data) {
         const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
@@ -297,8 +297,6 @@ export default function QueryParamProvider({ children }: any) {
     let userLang;
     if (localStorage) {
       userLang = localStorage.getItem("language") || "en";
-    } else {
-      userLang = "en";
     }
     try {
       const requestParams = {
@@ -306,7 +304,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: any = await apiRequest(requestParams);
+      const config: object = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(
@@ -424,7 +422,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const paymentSetupData: any = await apiRequest(requestParams);
+      const paymentSetupData: object = await apiRequest(requestParams);
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -563,7 +561,7 @@ function ErrorCard({
   showErrorCard,
   setShowErrorCard,
 }: CardProps): ReactElement {
-  const { t, ready } = useTranslation(["common"]);
+  const { t } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
 

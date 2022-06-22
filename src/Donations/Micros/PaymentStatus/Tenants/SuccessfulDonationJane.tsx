@@ -11,11 +11,7 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
-
   const paymentTypeUsed = getPaymentType(paymentType);
-
-  // const sendRef = () => imageRef;
 
   let returnDisplay;
   if (callbackUrl) {

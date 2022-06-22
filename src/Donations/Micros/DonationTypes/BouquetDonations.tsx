@@ -7,11 +7,6 @@ import getFormatedCurrency, {
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
-// import LeafIcon from "../../../../public/assets/icons/LeafIcon";
-// import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
-// import TreeIcon from "../../../../public/assets/icons/TreeIcon";
-// import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
-// import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";

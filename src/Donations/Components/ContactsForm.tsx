@@ -37,10 +37,8 @@ function ContactsForm({}: Props): ReactElement {
   const {
     contactDetails,
     setContactDetails,
-    // setdonationStep,
     country,
     isTaxDeductible,
-    // isSignedUp,
     currency,
     quantity,
     paymentSetup,

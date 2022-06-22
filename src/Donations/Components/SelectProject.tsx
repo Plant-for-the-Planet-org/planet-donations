@@ -2,9 +2,7 @@ import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
 import getImageUrl from "../../Utils/getImageURL";
-// import { getCountryDataBy } from "../../Utils/countryUtils";
 import {
-  // getFilteredProjects,
   getRandomProjects,
   getSearchProjects,
 } from "../../Utils/projects/filterProjects";

@@ -1,9 +1,5 @@
 import React, { ReactElement } from "react";
 
-interface Props {
-  color: any;
-}
-
 function CopyIcon(): ReactElement {
   return (
     <svg

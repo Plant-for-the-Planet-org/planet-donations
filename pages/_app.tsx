@@ -1,6 +1,6 @@
-import type { AppProps /*, AppContext */ } from "next/app";
+import type { AppProps } from "next/app";
 import Layout from "../src/Layout";
-import ThemeProvider, { useTheme } from "../styles/themeContext";
+import ThemeProvider from "../styles/themeContext";
 import getConfig from "next/config";
 import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";

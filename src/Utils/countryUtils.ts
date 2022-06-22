@@ -54,9 +54,7 @@ export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
     // filter priority countries from list
     const filteredCountries = countriesData.filter(function (
       value,
-      index,
-      arr
-    ) {
+     ) {
       if (priorityCountryCodes?.includes(value.countryCode)) {
         priorityCountries.push(value);
         return false;

@@ -45,7 +45,6 @@ function PaymentsForm({}: Props): ReactElement {
     paymentSetup,
     country,
     currency,
-    setdonationStep,
     donationID,
     setdonationID,
     paymentType,
@@ -198,12 +197,20 @@ function PaymentsForm({}: Props): ReactElement {
   }, [currency]);
   const { theme } = React.useContext(ThemeContext);
 
+  interface showPaymentMethod {
+    paymentMethod: any;
+    countries: string[];
+    currencies: string[];
+    authenticatedMethod: boolean;
+  }
+
   const showPaymentMethod = ({
     paymentMethod,
     countries,
     currencies,
     authenticatedMethod,
-  }: any) => {
+  }: showPaymentMethod) => {
+    console.log(authenticatedMethod);
     const isAvailableInCountry = countries ? countries.includes(country) : true;
     const isAvailableForCurrency = currencies
       ? currencies.includes(currency)

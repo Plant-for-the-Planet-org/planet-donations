@@ -11,7 +11,6 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
-// import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
@@ -29,7 +28,6 @@ function Authentication({}: Props): ReactElement {
     setprofile,
     setIsSignedUp,
     hideLogin,
-    // setHideLogin,
     setcurrency,
     setcountry,
     tenant,
