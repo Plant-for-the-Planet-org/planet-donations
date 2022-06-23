@@ -149,7 +149,7 @@ const PlanetCashSignup = () => {
 
         <div className={"form-field mb-20"}>
           <CountrySelect
-            allowedCountries={["DE", "ES", "US", "CZ"]}
+            allowedCountries={["DE", "ES", "US"]}
             label={t("country")}
             name="country"
             onChange={onChangeCountry}
