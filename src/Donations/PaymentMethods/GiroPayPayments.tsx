@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 
 interface Props {
-  onSubmitPayment: Function;
+  onSubmitPayment: (...args: unknown[]) => unknown;
 }
 
 function GiroPayPayments({ onSubmitPayment }: Props): ReactElement {

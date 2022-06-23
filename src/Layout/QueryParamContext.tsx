@@ -108,7 +108,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
-  const [projectDetails, setprojectDetails] = useState<Object | null>(null);
+  const [projectDetails, setprojectDetails] = useState<{} | null>(null);
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -140,7 +140,7 @@ export default function QueryParamProvider({ children }: any) {
   const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<object>({
+  const [giftDetails, setgiftDetails] = useState<{}>({
     recipientName: "",
     recipientEmail: "",
     giftMessage: "",
@@ -174,7 +174,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = React.useState<null | Object>(null);
+  const [profile, setprofile] = React.useState<null | {}>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] =
     React.useState<boolean>(false);
@@ -183,9 +183,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [paymentError, setPaymentError] = React.useState("");
-  const [transferDetails, setTransferDetails] = React.useState<Object | null>(
-    null
-  );
+  const [transferDetails, setTransferDetails] = React.useState<{} | null>(null);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
 
@@ -194,7 +192,7 @@ export default function QueryParamProvider({ children }: any) {
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
 
-  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+  const [onBehalfDonor, setOnBehalfDonor] = useState<{}>({
     firstName: "",
     lastName: "",
     email: "",
@@ -263,7 +261,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const projects: object = await apiRequest(requestParams);
+      const projects: {} = await apiRequest(requestParams);
       if (projects.data) {
         const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
@@ -304,7 +302,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: object = await apiRequest(requestParams);
+      const config: {} = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(
@@ -422,7 +420,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const paymentSetupData: object = await apiRequest(requestParams);
+      const paymentSetupData: {} = await apiRequest(requestParams);
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -554,7 +552,7 @@ export default function QueryParamProvider({ children }: any) {
 
 interface CardProps {
   showErrorCard: boolean;
-  setShowErrorCard: Function;
+  setShowErrorCard: (...args: unknown[]) => unknown;
 }
 
 function ErrorCard({

@@ -23,7 +23,7 @@ export default function TransitionsModal(props: any) {
 
   const { theme } = React.useContext(ThemeContext);
 
-  const [importantList, setImportantList] = React.useState<Array<Object>>([]);
+  const [importantList, setImportantList] = React.useState<Array<{}>>([]);
 
   React.useEffect(() => {
     // sets two default country as important country which is US(United States) and DE (Germany)

@@ -86,18 +86,18 @@ export interface giftDetailsProps {
 export interface CreateDonationFunctionProps {
   isTaxDeductible: boolean | null;
   country: any;
-  projectDetails: Object;
+  projectDetails: {};
   quantity: number;
   paymentSetup: {};
-  currency: String;
-  contactDetails: Object;
+  currency: string;
+  contactDetails: {};
   giftDetails: giftDetailsProps;
   isGift: boolean;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
   setdonationID: any;
   token: any;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   frequency: string | null;
   amount?: number | null;
   callbackUrl?: string | undefined;
@@ -108,33 +108,33 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject: Object;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  providerObject: {};
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
   t: any;
-  paymentSetup: Object;
+  paymentSetup: {};
   donationID: string;
-  contactDetails: Object;
+  contactDetails: {};
   token: string;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   router: any;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: (...args: unknown[]) => unknown;
 }
 
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: Object;
+  paymentSetup: {};
   window: any;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: {};
   token: string;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   router: any;
   tenant: string;
 }

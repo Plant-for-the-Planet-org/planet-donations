@@ -175,10 +175,10 @@ interface  createDonationData {
     Recurrency: Recurrency;
     RootObject: RootObject;
   },
-  currency: string,
-  contactDetails: object,
-  taxDeductionCountry: string,
-  isGift: boolean,
+  currency: string;
+  contactDetails: {};
+  taxDeductionCountry: string;
+  isGift: boolean;
   giftDetails: {
     recipientName: string;
     recipientEmail: string;
@@ -380,7 +380,7 @@ export async function confirmPaymentIntent(
   donationId: string,
   // paymentIntentId: string,
   // account: string,
-  payDonationData: object,
+  payDonationData: {},
   token: string,
   setshowErrorCard: any,
   setPaymentError: any,
@@ -418,10 +418,10 @@ export async function confirmPaymentIntent(
 }
 
 interface buildBillingDetails {
-  firstname: string,
-  lastname: string,
-  email: string,
-  address: object
+  firstname: string;
+  lastname: string;
+  email: string;
+  address:{}
 }
 
 const buildBillingDetails = (contactDetails: buildBillingDetails) => {
@@ -438,7 +438,7 @@ const buildBillingDetails = (contactDetails: buildBillingDetails) => {
 };
 
 const handlePaymentError = (
-  paymentError: object,
+  paymentError: {},
   setIsPaymentProcessing: any,
   setPaymentError: any
 ) => {

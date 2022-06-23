@@ -13,7 +13,7 @@ import { useTranslation } from "next-i18next";
 interface ShareOptionsProps {
   treeCount: string;
   sendRef: any;
-  donor: Object;
+  donor: {};
 }
 const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(["common", "donate"]);

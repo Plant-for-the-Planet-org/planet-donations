@@ -219,8 +219,8 @@ export default Authentication;
 
 interface VerifyEmailProps {
   openModal: boolean;
-  handleModalClose: Function;
-  logout: Function;
+  handleModalClose: (...args: unknown[]) => unknown;
+  logout: (...args: unknown[]) => unknown;
 }
 
 function VerifyEmailModal({
@@ -309,8 +309,8 @@ function VerifyEmailModal({
 }
 
 interface UserProfileProps {
-  profile: Object;
-  user: Object;
+  profile: {};
+  user: {};
 }
 function UserProfile({ profile, user }: UserProfileProps) {
   return (

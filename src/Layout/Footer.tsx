@@ -206,7 +206,7 @@ function CookiePolicy() {
 
 interface ModalProps {
   languageModalOpen: boolean;
-  setlanguageModalOpen: Function;
+  setlanguageModalOpen: (...args: unknown[]) => unknown;
 }
 
 function LanguageModal({

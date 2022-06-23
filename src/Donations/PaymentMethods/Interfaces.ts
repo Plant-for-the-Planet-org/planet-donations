@@ -173,9 +173,9 @@
     export interface  serverProps {
         donationStep: number;
         showErrorCard: boolean;
-        projectDetails: object | null;
+        projectDetails:{} | null;
         isGift: boolean;
-        giftDetails: object;
+        giftDetails:{};
         frequency: string;
         hideTaxDeduction: boolean;
         isTaxDeductible: boolean;
@@ -183,11 +183,11 @@
         shouldCreateDonation: boolean;
         country: string;
         isDirectDonation: boolean;
-        contactDetails: object;
+        contactDetails:{};
         treecount: number;
         allowTaxDeductionChange: boolean;
         currency: string;
-        paymentSetup: object;
+        paymentSetup:{};
         amount: number;
         tenant: string;
         locale: string;

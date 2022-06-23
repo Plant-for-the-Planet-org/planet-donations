@@ -12,14 +12,14 @@ import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 interface PaymentButtonProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
-  continueNext: Function;
+  onPaymentFunction: (...args: unknown[]) => unknown;
+  continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
-  paymentSetup: Object;
+  paymentSetup: {};
 }
 export const PaymentRequestCustomButton = ({
   country,
@@ -210,11 +210,11 @@ export const PaymentRequestCustomButton = ({
 
 interface NativePayProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
-  paymentSetup: Object;
-  continueNext: Function;
+  onPaymentFunction: (...args: unknown[]) => unknown;
+  paymentSetup: {};
+  continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;

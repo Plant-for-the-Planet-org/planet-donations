@@ -12,8 +12,8 @@ interface Props {
   unitCost: number;
   currency: string;
   donationID: any;
-  payDonationFunction: Function;
-  setPaymentError: Function;
+  payDonationFunction: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
 }
 
 function NewPaypal({
