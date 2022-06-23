@@ -10,10 +10,17 @@ import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
+import {
+  contactDetails,
+  Frequencies,
+  Gateways,
+  Recurrency,
+  serverProps,
+} from "../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
   projectDetails: Object;
-  donationStep: any;
+  donationStep: number;
   giftDetails: Object;
   isGift: boolean;
   resolvedUrl: any;
@@ -22,13 +29,20 @@ interface Props {
   isTaxDeductible: boolean;
   donationID: any;
   shouldCreateDonation: boolean;
-  country: any;
-  contactDetails: any;
+  country: string;
+  contactDetails: contactDetails;
   allowTaxDeductionChange: boolean;
-  currency: any;
-  paymentSetup: any;
+  currency: string;
+  paymentSetup: {
+    currency: string;
+    description: string;
+    effectiveCountry: string;
+    frequencies: Frequencies;
+    gateways: Gateways;
+    recurrency: Recurrency;
+  };
   treecount: any;
-  amount: any;
+  amount: number;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
   tenant: string;
@@ -192,7 +206,7 @@ function index({
 
 export default index;
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: serverProps) {
   let donationStep = 0;
   let showErrorCard = false;
   let projectDetails = null;
@@ -287,6 +301,7 @@ export async function getServerSideProps(context: any) {
         setshowErrorCard,
       };
       const donation: any = await apiRequest(requestParams);
+      console.log(donation);
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];

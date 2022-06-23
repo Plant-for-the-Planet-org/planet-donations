@@ -5,6 +5,7 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
+import React from "react";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);

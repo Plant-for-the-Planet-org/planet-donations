@@ -5,6 +5,10 @@ import {
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject} from './Interfaces'
+
+
+
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
@@ -146,6 +150,45 @@ export async function createDonationFunction({
   }
 }
 
+interface  createDonationData {
+  projectDetails: {
+    id: string;
+    name: string;
+    description: string;
+    purpose: string;
+    ownerName: string;
+    taxDeductionCountries: string[];
+    projectImage: string;
+    ownerAvatar: string;
+  },
+  quantity: number,
+  paymentSetup: {
+    Once: Once;
+    Monthly: Monthly;
+    Yearly: Yearly;
+    Frequencies: Frequencies;
+    Authorization: Authorization;
+    Paypal: Paypal;
+    Authorization2: Authorization2;
+    Stripe: Stripe;
+    Offline: Offline;
+    Recurrency: Recurrency;
+    RootObject: RootObject;
+  },
+  currency: string,
+  contactDetails: object,
+  taxDeductionCountry: string,
+  isGift: boolean,
+  giftDetails: {
+    recipientName: string;
+    recipientEmail: string;
+    giftMessage: string;
+    type: null;
+  },
+  frequency: string,
+  amount: number | null
+}
+
 export function createDonationData({
   projectDetails,
   quantity,
@@ -159,7 +202,7 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: any) {
+}: createDonationData) {
   let donationData = {
     purpose: projectDetails.purpose,
     project: projectDetails.id,
@@ -337,7 +380,7 @@ export async function confirmPaymentIntent(
   donationId: string,
   // paymentIntentId: string,
   // account: string,
-  payDonationData: any,
+  payDonationData: object,
   token: string,
   setshowErrorCard: any,
   setPaymentError: any,
@@ -374,8 +417,15 @@ export async function confirmPaymentIntent(
   }
 }
 
-const buildBillingDetails = (contactDetails: any) => {
-  return {
+interface buildBillingDetails {
+  firstname: string,
+  lastname: string,
+  email: string,
+  address: object
+}
+
+const buildBillingDetails = (contactDetails: buildBillingDetails) => {
+ return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,
     address: {
@@ -388,7 +438,7 @@ const buildBillingDetails = (contactDetails: any) => {
 };
 
 const handlePaymentError = (
-  paymentError: any,
+  paymentError: object,
   setIsPaymentProcessing: any,
   setPaymentError: any
 ) => {

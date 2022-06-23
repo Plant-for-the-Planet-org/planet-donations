@@ -7,6 +7,10 @@ import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
 interface Props {}
 
+interface giftReceiver {
+  recipientName: string;
+}
+
 export default function GiftForm({}: Props): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setshowEmail] = React.useState(false);
@@ -32,7 +36,7 @@ export default function GiftForm({}: Props): ReactElement {
     }
   }, [isGift]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: giftReceiver) => {
     setgiftDetails({ ...giftDetails, ...data });
   };
 

@@ -18,6 +18,17 @@ function a11yProps(index: any) {
   };
 }
 
+interface PaymentMethodTabs {
+  paymentType: string;
+  showPaypal: boolean;
+  showGiroPay: boolean;
+  showSepa: boolean;
+  showCC: boolean;
+  showSofort: boolean;
+  showBankTransfer: boolean;
+  showNativePay: boolean;
+}
+
 export default function PaymentMethodTabs({
   paymentType,
   setPaymentType,
@@ -29,7 +40,7 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
   showBankTransfer,
-}: any) {
+}: PaymentMethodTabs) {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {

@@ -89,7 +89,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: any
+    providerObject?: string
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
@@ -210,7 +210,6 @@ function PaymentsForm({}: Props): ReactElement {
     currencies,
     authenticatedMethod,
   }: showPaymentMethod) => {
-    console.log(authenticatedMethod);
     const isAvailableInCountry = countries ? countries.includes(country) : true;
     const isAvailableForCurrency = currencies
       ? currencies.includes(currency)
