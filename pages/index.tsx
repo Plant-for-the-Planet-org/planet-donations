@@ -19,9 +19,9 @@ import {
 } from "../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  projectDetails: Object;
+  projectDetails: {};
   donationStep: number;
-  giftDetails: Object;
+  giftDetails: {};
   isGift: boolean;
   resolvedUrl: any;
   isDirectDonation: boolean;
