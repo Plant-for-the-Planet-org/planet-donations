@@ -326,7 +326,7 @@ export default function QueryParamProvider({ children }: any) {
               name: `PlanetCash - ${profile?.displayName}`,
               ownerName: profile?.displayName,
               ownerAvatar: profile?.image,
-              purpose: "planet-cash",
+              purpose: "planet-cash-signup",
             });
           }
           setdonationStep(4);
