@@ -29,9 +29,7 @@ export default function CountrySelect(props: {
     | undefined;
   name: string | undefined;
   defaultValue: String | undefined;
-  onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (event: string) => void;
 }) {
   const { t, ready } = useTranslation("country");
   const { theme } = React.useContext(ThemeContext);

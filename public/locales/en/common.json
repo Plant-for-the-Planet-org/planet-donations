@@ -171,6 +171,8 @@
   "pfpSupportsUNEP": "Plant-for-the-Planet Supports the United Nations Environment Program",
   "noPlanetCashAccount": "You do not have a PlanetCash account, however you can signup for one below",
   "planetCashSignup": "SIGNUP for PLANETCASH",
+  "activatePlanetCash": "Activate PlanetCash",
+  "activatePlanetCashMsg": "Your PlanetCash account for currency {{currency}} is deactivated. To use PlanetCash account for currency {{currency}} please activate your account.",
   "planetCashTC": "By clicking Continue, I agree to the Terms and Conditions of Plant-for-the-Planet Platform, and PlanetCash.",
   "planetCashIUnderstand": "I understand that PlanetCash donation/payments are non-refundable, and unallocated payments will be auto allocated to projects after six months.",
   "createPlanetCashAccount": "Create PlanetCash Account"

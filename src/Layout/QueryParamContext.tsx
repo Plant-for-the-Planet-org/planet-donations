@@ -310,23 +310,27 @@ export default function QueryParamProvider({ children }: any) {
     if (regex.test(router.query.to)) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
-      if (profile && profile?.planetCash?.account) {
-        loadPaymentSetup({
-          projectGUID: profile?.planetCash?.account,
-          paymentSetupCountry: country,
-          shouldSetPaymentDetails: true,
-        });
-        setdonationStep(1);
-      } else if (!profile?.planetCash) {
-        if (profile?.displayName) {
-          setprojectDetails({
-            name: `PlanetCash - ${profile?.displayName}`,
-            ownerName: profile?.displayName,
-            ownerAvatar: profile?.image,
-            purpose: "planet-cash",
+      if (!isLoading && !isAuthenticated) {
+        router.push("/");
+      } else {
+        if (profile && profile?.planetCash?.account) {
+          loadPaymentSetup({
+            projectGUID: profile?.planetCash?.account,
+            paymentSetupCountry: country,
+            shouldSetPaymentDetails: true,
           });
+          setdonationStep(1);
+        } else if (!profile?.planetCash) {
+          if (profile?.displayName) {
+            setprojectDetails({
+              name: `PlanetCash - ${profile?.displayName}`,
+              ownerName: profile?.displayName,
+              ownerAvatar: profile?.image,
+              purpose: "planet-cash",
+            });
+          }
+          setdonationStep(4);
         }
-        setdonationStep(4);
       }
     } else if (router.query.to && country !== undefined && country !== "") {
       const to = String(router.query.to).replace(/\//g, "");
@@ -336,7 +340,7 @@ export default function QueryParamProvider({ children }: any) {
         shouldSetPaymentDetails: true,
       });
     }
-  }, [router.query.to, country, profile]);
+  }, [router.query.to, country, profile, isLoading, isAuthenticated]);
 
   async function loadConfig() {
     let userLang;
