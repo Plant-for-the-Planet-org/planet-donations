@@ -116,7 +116,11 @@ function DonationsForm() {
     };
 
     let token = null;
-    if ((!isLoading && isAuthenticated) || (queryToken && profile.address)) {
+    if (
+      (!isLoading && isAuthenticated) ||
+      (queryToken && profile.address) ||
+      projectDetails.purpose === "planet-cash"
+    ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
