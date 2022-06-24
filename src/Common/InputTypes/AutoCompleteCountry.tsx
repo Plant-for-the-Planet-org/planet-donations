@@ -115,7 +115,7 @@ export default function CountrySelect(props: {
     if (allowedCountries) {
       const allowedCountriesResult: CountryType[] = [];
       countries.forEach((country) => {
-        for (let allowedCountry of allowedCountries) {
+        for (const allowedCountry of allowedCountries) {
           if (country.code === allowedCountry) {
             allowedCountriesResult.push(country);
           }
