@@ -434,7 +434,10 @@ function ContactsForm({}: Props): ReactElement {
           errors.city ||
           errors.zipCode ||
           errors.country ? (
-            <button className={"secondary-button mt-30"}>
+            <button
+              className={"secondary-button mt-30"}
+              data-test-id="test-continueDisabled"
+            >
               {t("continue")}
             </button>
           ) : (
