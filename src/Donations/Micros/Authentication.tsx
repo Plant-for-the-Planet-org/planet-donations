@@ -55,6 +55,7 @@ function Authentication({}: Props): ReactElement {
           tenant,
         };
         const profile: any = await apiRequest(requestParams);
+        console.log(profile);
 
         if (profile.data) {
           if (profile.data.currency) {

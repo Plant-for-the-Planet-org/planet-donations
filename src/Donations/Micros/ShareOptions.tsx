@@ -12,7 +12,7 @@ import { useTranslation } from "next-i18next";
 
 interface ShareOptionsProps {
   treeCount: string;
-  sendRef: any;
+  sendRef: {};
   donor: {};
 }
 const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {

@@ -3,11 +3,15 @@ import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import {
+  Donation,
+  projectDetails,
+} from "../../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  projectDetails: any;
-  donation: any;
-  paymentTypeUsed: any;
+  projectDetails: projectDetails;
+  donation: Donation;
+  paymentTypeUsed: string;
 }
 
 function ThankyouMessage({

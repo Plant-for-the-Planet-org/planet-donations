@@ -12,6 +12,15 @@ import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { ContactDetails } from "../../../src/Donations/PaymentMethods/Interfaces";
+
+interface CardPayments {
+  totalCost: string;
+  paymentType: string;
+  setPaymentType: (...args: unknown[]) => unknown;
+  onPaymentFunction: (...args: unknown[]) => unknown;
+  donorDetails: ContactDetails;
+}
 
 const FormControlNew = withStyles({
   root: {
@@ -59,7 +68,7 @@ function CardPayments({
   setPaymentType,
   onPaymentFunction,
   donorDetails,
-}: any): ReactElement {
+}: CardPayments): ReactElement {
   const { t, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();

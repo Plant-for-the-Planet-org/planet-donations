@@ -4,11 +4,15 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import {
+  projectDetails,
+  Donation,
+} from "../../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  projectDetails: any;
-  donation: any;
-  imageRef: any;
+  projectDetails: projectDetails;
+  donation: Donation;
+  imageRef: object;
 }
 
 const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {

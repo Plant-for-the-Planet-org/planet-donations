@@ -10,6 +10,7 @@ import { ThemeContext } from "../../../styles/themeContext";
 import GreenRadio from "../../Common/InputTypes/GreenRadio";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { Country } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 export default function TaxDeductionCountryModal(props: any) {
   const { openModal, handleModalClose, taxDeductionCountries } = props;
@@ -35,7 +36,7 @@ export default function TaxDeductionCountryModal(props: any) {
   };
 
   React.useEffect(() => {
-    let tempCountriesData: any = [];
+    let tempCountriesData: Array<{}> = [];
     if (taxDeductionCountries && taxDeductionCountries.length > 0) {
       taxDeductionCountries.forEach((countryCode: string) => {
         tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
@@ -74,7 +75,7 @@ export default function TaxDeductionCountryModal(props: any) {
                 value={`${country},${currency}`}
                 onChange={handleCountryChange}
               >
-                {countriesData.map((country: any, index: number) => (
+                {countriesData.map((country: Country, index: number) => (
                   <FormControlLabel
                     key={country.countryCode + "-" + index}
                     value={`${country.countryCode},${country.currencyCode}`} // need both info

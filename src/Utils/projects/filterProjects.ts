@@ -1,4 +1,4 @@
-export function getFilteredProjects(projects: Array<any>, type: string) {
+export function getFilteredProjects(projects: Array<{}>, type: string) {
   if (type === "featured") {
     return projects.filter(
       (project: { properties: { isFeatured: boolean } }) =>
@@ -9,7 +9,7 @@ export function getFilteredProjects(projects: Array<any>, type: string) {
   }
 }
 
-export function getSearchProjects(projects: Array<any>, keyword: string) {
+export function getSearchProjects(projects: Array<{}>, keyword: string) {
   let resultProjects = [];
   if (keyword !== "") {
     const keywords = keyword.split(/[\s\-.,+]+/);

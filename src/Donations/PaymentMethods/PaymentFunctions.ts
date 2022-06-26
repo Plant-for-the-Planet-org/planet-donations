@@ -465,6 +465,7 @@ export async function handleStripeSCAPayment({
   router,
   tenant,
 }: HandleStripeSCAPaymentProps) {
+ 
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey

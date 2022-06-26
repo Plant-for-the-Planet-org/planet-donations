@@ -48,15 +48,15 @@ export interface ProjectTypes {
       fixedTreeCountOptions: Array<any>;
     };
     plantingDensity: number;
-    plantingSeasons: Array<any>;
+    plantingSeasons: Array<string>;
     reviewRequested: true;
     siteOwnerName: string;
-    siteOwnerType: Array<any>;
+    siteOwnerType: Array<string>;
     sites: Array<{}>;
     slug: string;
     survivalRate: number;
     survivalRateStatus: string;
-    taxDeductionCountries: Array<any>;
+    taxDeductionCountries: Array<string>;
     tpo: {
       id: string;
       name: string;
@@ -85,7 +85,7 @@ export interface giftDetailsProps {
 
 export interface CreateDonationFunctionProps {
   isTaxDeductible: boolean | null;
-  country: any;
+  country: string;
   projectDetails: {};
   quantity: number;
   paymentSetup: {};
@@ -95,7 +95,7 @@ export interface CreateDonationFunctionProps {
   isGift: boolean;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
-  setdonationID: any;
+  setdonationID: (...args: unknown[]) => unknown;
   token: any;
   setshowErrorCard: (...args: unknown[]) => unknown;
   frequency: string | null;

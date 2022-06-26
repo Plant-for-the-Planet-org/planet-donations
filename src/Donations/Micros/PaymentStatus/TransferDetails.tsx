@@ -5,8 +5,21 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import CopyIcon from "public/assets/icons/CopyIcon";
 import ReturnToButton from "./Components/ReturnToButton";
+import { Donation } from "../../../../src/Donations/PaymentMethods/Interfaces";
 
-function TransferDetails({ donationID, donation, sendToReturn }: any) {
+interface TransferDetails {
+  donationID: string;
+  donation: Donation;
+  sendToReturn: (...args: unknown[]) => unknown;
+}
+
+function TransferDetails({
+  donationID,
+  donation,
+  sendToReturn,
+}: TransferDetails) {
+  console.log(donationID, donation, sendToReturn);
+
   const { t } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
   const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);
