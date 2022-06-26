@@ -12,7 +12,7 @@ import {
 interface Props {
   projectDetails: projectDetails;
   donation: Donation;
-  imageRef: object;
+  imageRef: {};
 }
 
 const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
