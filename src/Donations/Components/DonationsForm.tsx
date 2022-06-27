@@ -79,7 +79,7 @@ function DonationsForm() {
 
     if (projectDetails && profile) {
       if (profile!.planetCash) {
-        if (projectDetails?.purpose === "planet-cash") {
+        if (projectDetails.purpose === "planet-cash") {
           setcountry(profile!.planetCash.country);
           setcurrency(profile!.planetCash.currency);
         }
@@ -187,7 +187,7 @@ function DonationsForm() {
   let paymentLabel = "";
 
   if (paymentSetup && currency && projectDetails) {
-    switch (projectDetails?.purpose) {
+    switch (projectDetails.purpose) {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
@@ -216,7 +216,7 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails?.country?.toLowerCase()}`),
+          country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
@@ -293,20 +293,20 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          {projectDetails?.purpose !== "funds" && (
+          {projectDetails.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
 
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {projectDetails?.purpose !== "funds" &&
-            projectDetails?.purpose !== "planet-cash" &&
+          {projectDetails.purpose !== "funds" &&
+            projectDetails.purpose !== "planet-cash" &&
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
             profile!.planetCash && <PlanetCashSelector />}
 
           {!(onBehalf && onBehalfDonor.firstName === "") &&
-            (projectDetails?.purpose === "trees" ? (
+            (projectDetails.purpose === "trees" ? (
               <div className="donations-gift-container mt-10">
                 <GiftForm />
               </div>
@@ -355,8 +355,8 @@ function DonationsForm() {
           >
             <div className={"horizontal-line"} />
 
-            {(projectDetails?.purpose === "trees" ||
-              projectDetails?.purpose === "conservation") && <DonationAmount />}
+            {(projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {/* Hide NativePay if PlanetCash is active */}
 

@@ -24,7 +24,7 @@ function TaxDeductionOption({}: Props): ReactElement {
     if (
       projectDetails &&
       projectDetails.taxDeductionCountries &&
-      projectDetails?.taxDeductionCountries?.includes(country)
+      projectDetails.taxDeductionCountries?.includes(country)
     ) {
       setIsTaxDeductible(true);
     } else {
@@ -38,7 +38,7 @@ function TaxDeductionOption({}: Props): ReactElement {
       projectDetails.taxDeductionCountries.length > 0 ? (
         allowTaxDeductionChange ? (
           <div className={"d-inline"}>
-            {projectDetails?.taxDeductionCountries?.includes(country)
+            {projectDetails.taxDeductionCountries?.includes(country)
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <button
@@ -46,31 +46,31 @@ function TaxDeductionOption({}: Props): ReactElement {
                 // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
                 // since transaction needs to happen in the same currency.
 
-                projectDetails?.purpose !== "planet-cash" &&
+                projectDetails.purpose !== "planet-cash" &&
                   setopenTaxDeductionModal(true);
               }}
               className={"tax-country-selection text-primary text-bold"}
               data-test-id="taxCountrySelection"
             >
               {t(`country:${country?.toLowerCase()}`)}
-              {projectDetails?.purpose !== "planet-cash" && (
+              {projectDetails.purpose !== "planet-cash" && (
                 <DownArrowIcon color={themeProperties.primaryColor} />
               )}
             </button>
             &nbsp;
-            {projectDetails?.taxDeductionCountries?.includes(country)
+            {projectDetails.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}
           </div>
         ) : isTaxDeductible ? (
           <div className={"d-inline"}>
-            {projectDetails?.taxDeductionCountries?.includes(country)
+            {projectDetails.taxDeductionCountries?.includes(country)
               ? t("youWillReceiveTaxDeduction")
               : t("taxDeductionNotYetAvailable")}
             <div className={"tax-country-selection text-primary text-bold"}>
               {t(`country:${country?.toLowerCase()}`)}
             </div>{" "}
-            {projectDetails?.taxDeductionCountries?.includes(country)
+            {projectDetails.taxDeductionCountries?.includes(country)
               ? t("inTimeOfTaxReturns")
               : null}
           </div>
