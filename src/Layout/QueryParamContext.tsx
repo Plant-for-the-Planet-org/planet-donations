@@ -106,7 +106,12 @@ export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
   const { i18n } = useTranslation();
-  const { getAccessTokenSilently, isLoading, isAuthenticated } = useAuth0();
+  const {
+    getAccessTokenSilently,
+    isLoading,
+    isAuthenticated,
+    loginWithRedirect,
+  } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
@@ -311,7 +316,9 @@ export default function QueryParamProvider({ children }: any) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
       if (!isLoading && !isAuthenticated) {
-        window.location.replace("/");
+        loginWithRedirect({
+          redirectUri: window?.location.href,
+        });
       } else {
         if (profile && profile?.planetCash?.account) {
           loadPaymentSetup({
