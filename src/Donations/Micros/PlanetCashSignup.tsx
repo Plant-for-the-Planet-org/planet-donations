@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { useTranslation } from "next-i18next";
+import { useTranslation, Trans } from "next-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import CountrySelect from "src/Common/InputTypes/AutoCompleteCountry";
 import { apiRequest } from "src/Utils/api";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
+import themeProperties from "styles/themeProperties";
+import { ThemeContext } from "styles/themeContext";
 
 interface PlanetCashAccount {
   id: string;
@@ -21,19 +23,11 @@ interface PlanetCashAccount {
   fee: number;
 }
 
-const usePlanetCashSignupStyles = makeStyles({
-  rootContainer: {
-    height: 500,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-});
-
 const PlanetCashSignup = () => {
-  const { t } = useTranslation(["common"]);
+  const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
   const { setshowErrorCard } = useContext(QueryParamContext);
+  const { theme } = React.useContext(ThemeContext);
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,6 +37,25 @@ const PlanetCashSignup = () => {
   >([]);
   const [currentPlanetCashAccount, setCurrentPlanetCashAccount] =
     useState<PlanetCashAccount | null>(null);
+
+  const usePlanetCashSignupStyles = makeStyles({
+    rootContainer: {
+      height: 500,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    tcLink: {
+      display: "inline",
+      color:
+        theme === "theme-light"
+          ? themeProperties.light.primaryFontColor
+          : themeProperties.dark.primaryFontColor,
+      "&:hover": {
+        color: themeProperties.primaryColor,
+      },
+    },
+  });
 
   const classes = usePlanetCashSignupStyles();
 
@@ -156,7 +169,16 @@ const PlanetCashSignup = () => {
             defaultValue={country}
           />
         </div>
-        <p className="mb-20">{t("planetCashTC")}</p>
+        <div className="mb-20">
+          <Trans i18nKey={"common:planetCashTC"}>
+            <a
+              className={classes.tcLink}
+              rel="noopener noreferrer"
+              href={`https://pp.eco/legal/${i18n.language}/terms`}
+              target={"_blank"}
+            ></a>
+          </Trans>
+        </div>
         <p>{t("planetCashIUnderstand")}</p>
       </div>
       {!loading && currentPlanetCashAccount ? (
