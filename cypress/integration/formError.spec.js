@@ -15,7 +15,7 @@ describe("Form Error Tests", () => {
         cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}").get('body').click(0,0)
         cy.get('[data-test-id="test-continueToPayment"]').click()
         cy.get('.form-errors').should("have.text", "First Name is required")
-        cy.get('[data-test-id="test-firstName"]').type("Peter")
+        cy.get('[data-test-id="test-firstName"]').click().type("Peter")
         cy.get('body').should("not.have.text", "First Name is required")
     })
 
@@ -31,7 +31,7 @@ describe("Form Error Tests", () => {
         cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}").get('body').click(0,0)
         cy.get('[data-test-id="test-continueToPayment"]').click()
         cy.get('.form-errors').should("have.text", "Last Name is required")
-        cy.get('[data-test-id="test-lastName"]').type("Payer")
+        cy.get('[data-test-id="test-lastName"]').click().type("Payer")
         cy.get('body').should("not.have.text", "Last Name is required")
     })
 
@@ -69,7 +69,7 @@ describe("Form Error Tests", () => {
         cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}").get('body').click(0, 0)
         cy.get('[data-test-id="test-continueToPayment"]').click()
         cy.get('.form-errors').should("have.text", "Address is required")
-        cy.get('[data-test-id="test-address"]').type("Unbekannt 1")
+        cy.get('[data-test-id="test-address"]').clear().type("Unbekannt 1")
         cy.get('body').should("not.have.text", "Address is required")
     })
 
@@ -83,11 +83,14 @@ describe("Form Error Tests", () => {
         cy.get('[data-test-id="test-address"]').type("Unbekannt 1");
         cy.get('[data-test-id="test-city"]').clear()
         cy.get('[data-test-id="test-zipCode"]').clear().type("82449")
-        cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}").get('body').click(0, 0)
-        cy.get('[data-test-id="test-continueToPayment"]').click()
-        cy.get('.form-errors').should("have.text", "City is required")
-        cy.get('[data-test-id="test-city"]').type("Uffing am Staffelsee")
-        cy.get('body').should("not.have.text", "City is required")
+        cy.get('[data-test-id="test-country"]').clear().type("Germany{enter}").get('body').click(0, 0).then(() => {
+            cy.get('[data-test-id="test-continueDisabled"]').click().then(() => {
+                cy.get('.form-errors').should("have.text", "City is required")
+                cy.get('[data-test-id="test-city"]').click().type("Uffing am Staffelsee").then(() => {
+                    cy.get('body').should("not.have.text", "City is required")
+                })
+            })
+        })
     })
 
     it("ZipCode error", () => {
@@ -104,10 +107,13 @@ describe("Form Error Tests", () => {
         cy.get('[data-test-id="test-address"]').type("Unbekannt 1");
         cy.get('[data-test-id="test-city"]').clear().type("Uffing am Staffelsee")
         cy.get('[data-test-id="test-zipCode"]').clear()
-        cy.get('[data-test-id="test-country"]').clear().type(`${selectedCountry}{enter}`).get('body').click(0, 0)
-        cy.get('[data-test-id="test-continueToPayment"]').click()
-        cy.get('.form-errors').should("have.text", "ZipCode is invalid")
-        cy.get('[data-test-id="test-zipCode"]').type(new RandExp(fiteredCountry[0].postal).gen())
-        cy.get('body').should("not.have.text", "ZipCode is invalid")
+        cy.get('[data-test-id="test-country"]').clear().type(`${selectedCountry}{enter}`).get('body').click(0, 0).then (() => {
+            cy.get('[data-test-id="test-continueDisabled"]').click().then(() => {
+                cy.get('.form-errors').should("have.text", "ZipCode is invalid")
+                cy.get('[data-test-id="test-zipCode"]').click().type(new RandExp(fiteredCountry[0].postal).gen()).then(() => {
+                    cy.get('body').should("not.have.text", "ZipCode is invalid")
+                })
+            })
+        })
     })
 })
