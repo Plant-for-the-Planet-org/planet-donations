@@ -311,7 +311,7 @@ export default function QueryParamProvider({ children }: any) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
       if (!isLoading && !isAuthenticated) {
-        router.push("/");
+        window.location.replace("/");
       } else {
         if (profile && profile?.planetCash?.account) {
           loadPaymentSetup({
