@@ -424,17 +424,17 @@ export async function getServerSideProps(context: any) {
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
-    if (projectDetails?.purpose === "trees") {
+    if (projectDetails.purpose === "trees") {
       description = `Plant trees with ${projectDetails.ownerName}. Your journey to a trillion trees starts here.`;
     } else if (
-      projectDetails?.purpose === "conservation" &&
+      projectDetails.purpose === "conservation" &&
       !projectDetails.description
     ) {
       description = `Conserve forests with  ${projectDetails.ownerName}. Your journey to a trillion trees starts here.`;
     } else if (
-      (projectDetails?.purpose === "bouquet" ||
-        projectDetails?.purpose === "funds" ||
-        projectDetails?.purpose === "conservation") &&
+      (projectDetails.purpose === "bouquet" ||
+        projectDetails.purpose === "funds" ||
+        projectDetails.purpose === "conservation") &&
       projectDetails.description
     ) {
       description = projectDetails.description;
