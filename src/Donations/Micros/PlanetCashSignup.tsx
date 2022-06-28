@@ -23,6 +23,8 @@ interface PlanetCashAccount {
   fee: number;
 }
 
+const allowedCountries = ["DE", "ES", "US"];
+
 const PlanetCashSignup = () => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
@@ -61,8 +63,8 @@ const PlanetCashSignup = () => {
 
   const fetchPlanetCashAccounts = useCallback(async () => {
     const token = await getAccessTokenSilently();
+    setLoading(true);
     try {
-      setLoading(true);
       const options = {
         url: "/app/planetCash",
         token,
@@ -70,10 +72,10 @@ const PlanetCashSignup = () => {
       };
       const { data } = await apiRequest(options);
       setPlanetCashAccounts(data);
-      setLoading(false);
     } catch (err) {
       console.error(err);
     }
+    setLoading(false);
   }, [apiRequest, getAccessTokenSilently]);
 
   useEffect(() => {
@@ -144,25 +146,13 @@ const PlanetCashSignup = () => {
   return (
     <div className={classes.rootContainer}>
       <div>
-        {!loading && currentPlanetCashAccount ? (
-          <p className="title-text mb-20">{t("activatePlanetCash")}</p>
-        ) : (
-          <p className="title-text mb-20">{t("planetCashSignup")}</p>
-        )}
+        <p className="title-text mb-20">{t("planetCashSignup")}</p>
 
-        {!loading && currentPlanetCashAccount ? (
-          <p className="mb-20">
-            {t("activatePlanetCashMsg", {
-              currency: currentPlanetCashAccount.currency,
-            })}
-          </p>
-        ) : (
-          <p className="mb-20">{t("noPlanetCashAccount")}</p>
-        )}
+        <p className="mb-20">{t("noPlanetCashAccount")}</p>
 
         <div className={"form-field mb-20"}>
           <CountrySelect
-            allowedCountries={["DE", "ES", "US"]}
+            allowedCountries={allowedCountries}
             label={t("country")}
             name="country"
             onChange={onChangeCountry}
@@ -181,21 +171,16 @@ const PlanetCashSignup = () => {
         </div>
         <p>{t("planetCashIUnderstand")}</p>
       </div>
-      {!loading && currentPlanetCashAccount ? (
-        <button
-          onClick={handleActivatePlanetCashAccount}
-          className="primary-button w-100 mt-30"
-        >
-          {t("activatePlanetCash")}
-        </button>
-      ) : (
-        <button
-          onClick={handleCreatePlanetCashAccount}
-          className="primary-button w-100 mt-30"
-        >
-          {t("createPlanetCashAccount")}
-        </button>
-      )}
+      <button
+        onClick={
+          !loading && currentPlanetCashAccount
+            ? handleActivatePlanetCashAccount
+            : handleCreatePlanetCashAccount
+        }
+        className="primary-button w-100 mt-30"
+      >
+        {t("createPlanetCashAccount")}
+      </button>
     </div>
   );
 };
