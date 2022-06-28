@@ -22,17 +22,18 @@ interface PaymentButtonProps {
   frequency: string | null;
   paymentSetup: RootObject;
 }
-export const PaymentRequestCustomButton = ({
-  country,
-  currency,
-  amount,
-  onPaymentFunction,
-  continueNext,
-  isPaymentPage,
-  paymentLabel,
-  frequency,
-  paymentSetup,
-}: PaymentButtonProps) => {
+export const PaymentRequestCustomButton = (props: PaymentButtonProps) => {
+  const {
+    country,
+    currency,
+    amount,
+    onPaymentFunction,
+    continueNext,
+    isPaymentPage,
+    paymentLabel,
+    frequency,
+    paymentSetup,
+  } = props;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
