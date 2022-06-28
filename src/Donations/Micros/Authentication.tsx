@@ -15,6 +15,7 @@ import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
+import { Profile } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {}
 
@@ -55,7 +56,6 @@ function Authentication({}: Props): ReactElement {
           tenant,
         };
         const profile: any = await apiRequest(requestParams);
-        console.log(profile);
 
         if (profile.data) {
           if (profile.data.currency) {
@@ -310,8 +310,16 @@ function VerifyEmailModal({
 }
 
 interface UserProfileProps {
-  profile: {};
-  user: {};
+  profile: Profile;
+  user: {
+    email: string;
+    email_verified: boolean;
+    name: string;
+    nickname: string;
+    picture: string;
+    sub: string;
+    updated_at: string;
+  };
 }
 function UserProfile({ profile, user }: UserProfileProps) {
   return (

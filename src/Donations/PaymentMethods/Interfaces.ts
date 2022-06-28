@@ -208,10 +208,10 @@
         }
     
         export interface Metadata {
-            degradationCause?: any;
-            longTermPlan?: any;
-            mainChallenge?: any;
-            motivation?: any;
+            degradationCause?: string;
+            longTermPlan?: string;
+            mainChallenge?: string;
+            motivation?: string;
         }
     
         export interface Properties {
@@ -238,7 +238,7 @@
             tpo: Tpo;
             treeCost: number;
             unitCost: number;
-            description?: any;
+            description?: string;
             metadata: Metadata;
             options: any[];
         }
@@ -258,3 +258,75 @@
             currencyName: string;
             languageCode: string
         } 
+
+        export interface giftDetails {
+            giftMessage: string;
+            recipientEmail: string;
+            recipientName: string;
+            type:string;
+        }
+
+        export interface paymentSetupData {
+            config: {};
+            data: {currency: string; effectiveCountry: string} ;
+            headers: {};
+            request: {};
+            status: number;
+            statusText: string;
+        }
+
+       
+        export interface Score {
+                personal: number;
+                received: number;
+                target: number;
+            }
+        export interface Profile {
+                id: string;
+                slug: string;
+                type: string;
+                currency: string;
+                name: string;
+                firstname: string;
+                lastname: string;
+                country: string;
+                email: string;
+                image?: any;
+                url?: any;
+                urlText?: any;
+                planetCash?: any;
+                displayName: string;
+                score: Score;
+                supportedProfile?: any;
+                isReviewer: boolean;
+                isPrivate: boolean;
+                getNews: boolean;
+                bio?: any;
+                address: Address;
+                locale: string;
+                hasLogoLicense?: any;
+                tin?: any;
+            }
+
+        export interface Config {
+
+        }
+        
+        export interface Datum {
+            type: string;
+            geometry: Geometry;
+            properties: Properties;
+        }
+        export interface Request {
+
+        }
+        export interface projects {
+            config: {};
+            data: Datum[];
+            headers: {};
+            request: Request;
+            status: number;
+            statusText: string;
+        }
+        
+       

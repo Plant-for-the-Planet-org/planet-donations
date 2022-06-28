@@ -11,17 +11,19 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
-  contactDetails,
+  ContactDetails,
   Frequencies,
   Gateways,
   Recurrency,
   serverProps,
+  projectDetails,
 } from "../src/Donations/PaymentMethods/Interfaces";
 
+interface GiftDetails {}
 interface Props {
-  projectDetails: {};
+  projectDetails: projectDetails;
   donationStep: number;
-  giftDetails: {};
+  giftDetails: GiftDetails;
   isGift: boolean;
   resolvedUrl: any;
   isDirectDonation: boolean;
@@ -30,7 +32,7 @@ interface Props {
   donationID: any;
   shouldCreateDonation: boolean;
   country: string;
-  contactDetails: contactDetails;
+  contactDetails: ContactDetails;
   allowTaxDeductionChange: boolean;
   currency: string;
   paymentSetup: {
@@ -106,7 +108,6 @@ function index({
         window.location.origin + "/" + window.location.search;
     }
   }, [router.locale]);
-
   React.useEffect(() => {
     setdonationID(donationID);
     if (isDirectDonation) {

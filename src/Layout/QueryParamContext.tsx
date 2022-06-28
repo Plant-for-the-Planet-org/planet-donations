@@ -8,6 +8,14 @@ import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
+import {
+  RootObject,
+  giftDetails,
+  paymentSetupData,
+  Profile,
+  projectDetails,
+  projects,
+} from "src/Donations/PaymentMethods/Interfaces";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -19,7 +27,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: (value: {}) => {},
+  setpaymentSetup: (value: RootObject) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -108,7 +116,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
-  const [projectDetails, setprojectDetails] = useState<{} | null>(null);
+  const [projectDetails, setprojectDetails] = useState<projectDetails | null>(
+    null
+  );
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -140,7 +150,7 @@ export default function QueryParamProvider({ children }: any) {
   const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<{}>({
+  const [giftDetails, setgiftDetails] = useState<giftDetails>({
     recipientName: "",
     recipientEmail: "",
     giftMessage: "",
@@ -174,7 +184,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = React.useState<null | {}>(null);
+  const [profile, setprofile] = React.useState<null | Profile>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] =
     React.useState<boolean>(false);
@@ -261,7 +271,8 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const projects: {} = await apiRequest(requestParams);
+      const projects: projects = await apiRequest(requestParams);
+
       if (projects.data) {
         const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
@@ -292,10 +303,6 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.to, country]);
 
   async function loadConfig() {
-    let userLang;
-    if (localStorage) {
-      userLang = localStorage.getItem("language") || "en";
-    }
     try {
       const requestParams = {
         url: `/app/config`,
@@ -420,7 +427,9 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const paymentSetupData: {} = await apiRequest(requestParams);
+      const paymentSetupData: paymentSetupData = await apiRequest(
+        requestParams
+      );
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {

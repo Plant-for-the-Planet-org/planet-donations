@@ -1,3 +1,9 @@
+import {
+  RootObject,
+  ContactDetails,
+  projectDetails,
+} from "src/Donations/PaymentMethods/Interfaces";
+
 export interface ProjectTypes {
   data: {
     allowDonations: boolean;
@@ -65,7 +71,7 @@ export interface ProjectTypes {
       slug: string;
     };
     treeCost: number;
-    videoUrl: null;
+    videoUrl: string | null;
     visitorAssistance: false;
     website: string;
     yearAbandoned: number;
@@ -86,11 +92,11 @@ export interface giftDetailsProps {
 export interface CreateDonationFunctionProps {
   isTaxDeductible: boolean | null;
   country: string;
-  projectDetails: {};
+  projectDetails: projectDetails;
   quantity: number;
-  paymentSetup: {};
+  paymentSetup: RootObject;
   currency: string;
-  contactDetails: {};
+  contactDetails: ContactDetails;
   giftDetails: giftDetailsProps;
   isGift: boolean;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
@@ -112,9 +118,9 @@ export interface PayDonationProps {
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
   t: any;
-  paymentSetup: {};
+  paymentSetup: RootObject;
   donationID: string;
-  contactDetails: {};
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: (...args: unknown[]) => unknown;
@@ -126,12 +132,12 @@ export interface PayDonationProps {
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: {};
+  paymentSetup: RootObject;
   window: any;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
   donationID: string;
-  contactDetails: {};
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: (...args: unknown[]) => unknown;

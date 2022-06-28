@@ -198,7 +198,7 @@ function PaymentsForm({}: Props): ReactElement {
   const { theme } = React.useContext(ThemeContext);
 
   interface showPaymentMethod {
-    paymentMethod: any;
+    paymentMethod: string;
     countries: string[];
     currencies: string[];
     authenticatedMethod: boolean;

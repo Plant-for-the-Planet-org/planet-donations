@@ -6,6 +6,7 @@ import {
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject} from './Interfaces'
+import { ContactDetails } from "./Interfaces";
 
 
 
@@ -176,7 +177,7 @@ interface  createDonationData {
     RootObject: RootObject;
   },
   currency: string;
-  contactDetails: {};
+  contactDetails: ContactDetails;
   taxDeductionCountry: string;
   isGift: boolean;
   giftDetails: {
@@ -396,7 +397,6 @@ export async function confirmPaymentIntent(
   //     },
   //   },
   // };
-
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
@@ -405,6 +405,7 @@ export async function confirmPaymentIntent(
     token: token ? token : false,
     tenant,
   };
+ 
   const confirmationResponse = await apiRequest(requestParams);
   if (
     confirmationResponse.data.paymentStatus ||
@@ -421,10 +422,16 @@ interface buildBillingDetails {
   firstname: string;
   lastname: string;
   email: string;
-  address:{}
+  address: { 
+    city: string;
+    country: string;
+    postal_code: string;
+    line1: {};
+  }
 }
 
 const buildBillingDetails = (contactDetails: buildBillingDetails) => {
+  
  return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,
