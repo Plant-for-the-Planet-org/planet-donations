@@ -266,11 +266,21 @@
             type:string;
         }
 
+        export interface Request {
+            
+        }
+        export interface Config {
+
+        }
+
+        export interface Header {
+
+        }
         export interface paymentSetupData {
-            config: {};
+            config: Config;
             data: {currency: string; effectiveCountry: string} ;
-            headers: {};
-            request: {};
+            headers: Header;
+            request: Request;
             status: number;
             statusText: string;
         }
@@ -291,7 +301,7 @@
                 lastname: string;
                 country: string;
                 email: string;
-                image?: any;
+                image?: string | null;
                 url?: any;
                 urlText?: any;
                 planetCash?: any;
@@ -308,22 +318,16 @@
                 tin?: any;
             }
 
-        export interface Config {
-
-        }
         
         export interface Datum {
             type: string;
             geometry: Geometry;
             properties: Properties;
         }
-        export interface Request {
-
-        }
         export interface projects {
-            config: {};
+            config: Config;
             data: Datum[];
-            headers: {};
+            headers: Header;
             request: Request;
             status: number;
             statusText: string;
