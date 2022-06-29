@@ -97,12 +97,6 @@ const PlanetCashSignup = () => {
 
   const onChangeCountry = (_country: string) => {
     setCountry(_country);
-    const _currentPlanetCashAccount = planetCashAccounts.find((account) => {
-      return account.country === _country;
-    });
-    if (_currentPlanetCashAccount) {
-      setCurrentPlanetCashAccount(_currentPlanetCashAccount);
-    } else setCurrentPlanetCashAccount(null);
   };
 
   const handleActivatePlanetCashAccount = useCallback(async () => {
