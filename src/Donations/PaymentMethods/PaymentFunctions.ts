@@ -381,7 +381,7 @@ export async function confirmPaymentIntent(
   donationId: string,
   // paymentIntentId: string,
   // account: string,
-  payDonationData: {},
+  payDonationData: {paymentProviderRequest: {}},
   token: string,
   setshowErrorCard: any,
   setPaymentError: any,
@@ -417,7 +417,8 @@ export async function confirmPaymentIntent(
     return confirmationResponse.data;
   }
 }
-
+interface Line1 {
+}
 interface buildBillingDetails {
   firstname: string;
   lastname: string;
@@ -426,7 +427,7 @@ interface buildBillingDetails {
     city: string;
     country: string;
     postal_code: string;
-    line1: {};
+    line1: Line1;
   }
 }
 

@@ -77,7 +77,6 @@ function SepaPayments({
     sepaElement: any,
     contactDetails: ContactDetails
   ) => {
-    console.log(sepaElement);
     return stripe?.createPaymentMethod({
       type: "sepa_debit",
       sepa_debit: sepaElement,

@@ -12,10 +12,9 @@ import { Donation } from "../../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
   donation: Donation;
-  sendToReturn: (...args: unknown[]) => unknown;
 }
 
-function SuccessfulDonation({ donation, sendToReturn }: Props) {
+function SuccessfulDonation({ donation }: Props) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);

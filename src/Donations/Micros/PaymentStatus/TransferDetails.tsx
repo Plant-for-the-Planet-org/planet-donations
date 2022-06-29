@@ -18,8 +18,6 @@ function TransferDetails({
   donation,
   sendToReturn,
 }: TransferDetails) {
-  console.log(donationID, donation, sendToReturn);
-
   const { t } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
   const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);

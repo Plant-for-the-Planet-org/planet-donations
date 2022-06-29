@@ -87,7 +87,7 @@
         zipCode: string;
         country: string;
         companyname?: string;
-        tin?: any;
+        tin?: string | undefined;
     }
 
     //2
@@ -123,7 +123,11 @@
         isRecurrent: boolean;
         tenant: string;
         project: Project;
-        gift?: any;
+        gift?: {
+            code: string;
+            recipientName: string;
+            type: string
+        } | null;
         donor: ContactDetails;
         destination: Destination;
         paymentDate?: any;
@@ -133,7 +137,7 @@
         donorAlias?: any;
         amount: number;
         currency: string;
-        frequency?: any;
+        frequency?: Frequencies | null;
         gateway: string;
         paymentStatus: string;
         taxDeductionCountry: string;
@@ -153,7 +157,7 @@
         frequency: string;
         hideTaxDeduction: boolean;
         isTaxDeductible: boolean;
-        donationID: any;
+        donationID: string | null;
         shouldCreateDonation: boolean;
         country: string;
         isDirectDonation: boolean;
@@ -223,7 +227,6 @@
             countTarget: number;
             country: string;
             currency: string;
-            fixedRates: any[];
             image: string;
             isFeatured: boolean;
             isPublished: boolean;
@@ -240,7 +243,6 @@
             unitCost: number;
             description?: string;
             metadata: Metadata;
-            options: any[];
         }
     
         export interface project {
@@ -315,7 +317,7 @@
                 address: Address;
                 locale: string;
                 hasLogoLicense?: any;
-                tin?: any;
+                tin?: string | undefined;
             }
 
         
