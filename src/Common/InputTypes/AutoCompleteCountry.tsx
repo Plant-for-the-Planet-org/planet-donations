@@ -29,7 +29,7 @@ export default function CountrySelect(props: {
     | undefined;
   name: string | undefined;
   defaultValue: String | undefined;
-  onChange: (value: string) => void;
+  onValueChange: (value: string) => void;
 }) {
   const { t, ready } = useTranslation("country");
   const { theme } = React.useContext(ThemeContext);
@@ -70,7 +70,7 @@ export default function CountrySelect(props: {
   const classes = useStylesAutoComplete();
 
   // This value is in country code - eg. DE, IN, US
-  const { defaultValue, onChange, allowedCountries } = props;
+  const { defaultValue, onValueChange, allowedCountries } = props;
 
   // This value is an object with keys - code, label and phone
   // This has to be passed to the component as default value
@@ -86,14 +86,14 @@ export default function CountrySelect(props: {
       // set initial value
       setValue(defaultCountry[0]);
       // set contact details
-      onChange(defaultCountry[0].code);
+      onValueChange(defaultCountry[0].code);
     }
   }, [defaultValue]);
 
   // Set contact details everytime value changes
   React.useEffect(() => {
     if (value) {
-      onChange(value?.code);
+      onValueChange(value?.code);
     }
   }, [value]);
 

@@ -149,7 +149,7 @@ const PlanetCashSignup = () => {
             allowedCountries={allowedCountries}
             label={t("country")}
             name="country"
-            onChange={onChangeCountry}
+            onValueChange={onChangeCountry}
             defaultValue={country}
           />
         </div>
