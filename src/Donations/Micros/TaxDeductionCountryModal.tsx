@@ -36,7 +36,7 @@ export default function TaxDeductionCountryModal(props: any) {
   };
 
   React.useEffect(() => {
-    let tempCountriesData: Array<{}> = [];
+    let tempCountriesData: Array<{ country: Country }> = [];
     if (taxDeductionCountries && taxDeductionCountries.length > 0) {
       taxDeductionCountries.forEach((countryCode: string) => {
         tempCountriesData.push(getCountryDataBy("countryCode", countryCode));

@@ -2,17 +2,17 @@
 
     export interface Once {
         minQuantity: number;
-        options: any[];
+        options: string[] | undefined;
     }
 
     export interface Monthly {
         minQuantity: number;
-        options: any[];
+        options: string[] | undefined;
     }
 
     export interface Yearly {
         minQuantity: number;
-        options: any[];
+        options: string[] | undefined;
     }
 
     export interface Frequencies {
@@ -148,12 +148,18 @@
 
     //3
 
+    export interface giftDetails {
+        giftMessage: string;
+        recipientEmail: string;
+        recipientName: string;
+        type:string;
+    }
     export interface  serverProps {
         donationStep: number;
         showErrorCard: boolean;
         projectDetails:{} | null;
         isGift: boolean;
-        giftDetails:{};
+        giftDetails: giftDetails;
         frequency: string;
         hideTaxDeduction: boolean;
         isTaxDeductible: boolean;
@@ -161,7 +167,7 @@
         shouldCreateDonation: boolean;
         country: string;
         isDirectDonation: boolean;
-        contactDetails:{};
+        contactDetails: ContactDetails;
         treecount: number;
         allowTaxDeductionChange: boolean;
         currency: string;
@@ -169,9 +175,9 @@
         amount: number;
         tenant: string;
         locale: string;
-       }
-
-       //
+    }
+    
+    //
 
        export interface projectDetails {
         description: string;
@@ -261,12 +267,6 @@
             languageCode: string
         } 
 
-        export interface giftDetails {
-            giftMessage: string;
-            recipientEmail: string;
-            recipientName: string;
-            type:string;
-        }
 
         export interface Request {
             
@@ -304,9 +304,9 @@
                 country: string;
                 email: string;
                 image?: string | null;
-                url?: any;
-                urlText?: any;
-                planetCash?: any;
+                url?: string | null;
+                urlText?: string | null;
+                planetCash?: boolean | null;
                 displayName: string;
                 score: Score;
                 supportedProfile?: any;

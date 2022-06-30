@@ -1,4 +1,12 @@
-export function getFilteredProjects(projects: Array<{}>, type: string) {
+import { Geometry, Properties } from "src/Donations/PaymentMethods/Interfaces";
+interface project {
+  geometry : Geometry;
+  properties: Properties;
+  type: string;
+}
+
+export function getFilteredProjects(projects: Array<{project: project}>, type: string) {
+ 
   if (type === "featured") {
     return projects.filter(
       (project: { properties: { isFeatured: boolean } }) =>
@@ -9,7 +17,8 @@ export function getFilteredProjects(projects: Array<{}>, type: string) {
   }
 }
 
-export function getSearchProjects(projects: Array<{}>, keyword: string) {
+
+export function getSearchProjects(projects: Array<{project: project}>, keyword: string) {
   let resultProjects = [];
   if (keyword !== "") {
     const keywords = keyword.split(/[\s\-.,+]+/);
