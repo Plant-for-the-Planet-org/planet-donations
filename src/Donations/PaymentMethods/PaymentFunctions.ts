@@ -5,18 +5,15 @@ import {
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject} from './Interfaces'
+import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject,Gateways } from './Interfaces'
 import { ContactDetails } from "./Interfaces";
-
-
-
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
-  gateway,
-  method,
-  paymentSetup,
-  providerObject
+  gateway: Gateways,
+  method: string,
+  paymentSetup: RootObject,
+  providerObject: string
 ) {
   let account;
   let source;
@@ -292,7 +289,7 @@ export async function payDonationFunction({
   setTransferDetails,
 }: PayDonationProps) {
   // const router = useRouter();
-  setIsPaymentProcessing(true);
+ setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {
       setIsPaymentProcessing(false);

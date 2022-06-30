@@ -114,7 +114,7 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject: {};
+  providerObject: string;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
   t: any;

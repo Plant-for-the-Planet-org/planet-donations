@@ -148,47 +148,47 @@
 
     //3
 
-    export interface giftDetails {
-        giftMessage: string;
-        recipientEmail: string;
-        recipientName: string;
-        type:string;
-    }
-    export interface  serverProps {
-        donationStep: number;
-        showErrorCard: boolean;
-        projectDetails:{} | null;
-        isGift: boolean;
-        giftDetails: giftDetails;
-        frequency: string;
-        hideTaxDeduction: boolean;
-        isTaxDeductible: boolean;
-        donationID: string | null;
-        shouldCreateDonation: boolean;
-        country: string;
-        isDirectDonation: boolean;
-        contactDetails: ContactDetails;
-        treecount: number;
-        allowTaxDeductionChange: boolean;
-        currency: string;
-        paymentSetup:{};
-        amount: number;
-        tenant: string;
-        locale: string;
-    }
+        export interface giftDetails {
+            giftMessage: string;
+            recipientEmail: string;
+            recipientName: string;
+            type:string;
+        }
+        
+        export interface projectDetails {
+                description: string;
+                id: string;
+                name: string;
+                ownerAvatar: string;
+                ownerName: string;
+                projectImage: string;
+                purpose: string;
+                taxDeductionCountries: string[] | string;
+            }
+        export interface  serverProps {
+            donationStep: number;
+            showErrorCard: boolean;
+            projectDetails: projectDetails | null;
+            isGift: boolean;
+            giftDetails: giftDetails;
+            frequency: string;
+            hideTaxDeduction: boolean;
+            isTaxDeductible: boolean;
+            donationID: string | null;
+            shouldCreateDonation: boolean;
+            country: string;
+            isDirectDonation: boolean;
+            contactDetails: ContactDetails;
+            treecount: number;
+            allowTaxDeductionChange: boolean;
+            currency: string;
+            paymentSetup: RootObject;
+            amount: number;
+            tenant: string;
+            locale: string;
+        }
     
     //
-
-       export interface projectDetails {
-        description: string;
-        id: string;
-        name: string;
-        ownerAvatar: string;
-        ownerName: string;
-        projectImage: string;
-        purpose: string;
-        taxDeductionCountries: string[] | string;
-       }
 
        
         export interface Geometry {
