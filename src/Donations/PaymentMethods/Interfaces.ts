@@ -335,4 +335,11 @@
             statusText: string;
         }
         
+
+
+        export interface onBehalfDonar {
+            firstName: string;
+            lastName: string;
+            email: string;
+        }
        

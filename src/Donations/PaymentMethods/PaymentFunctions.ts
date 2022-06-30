@@ -443,10 +443,11 @@ const buildBillingDetails = (contactDetails: buildBillingDetails) => {
 };
 
 const handlePaymentError = (
-  paymentError: {},
+  paymentError: { message: string, data: { message: string}},
   setIsPaymentProcessing: any,
   setPaymentError: any
 ) => {
+  
   setIsPaymentProcessing(false);
   if (paymentError?.message || paymentError?.data?.message) {
     setPaymentError(paymentError.message ?? paymentError.data.message);

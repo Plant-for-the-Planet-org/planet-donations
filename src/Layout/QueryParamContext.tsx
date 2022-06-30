@@ -15,6 +15,7 @@ import {
   Profile,
   projectDetails,
   projects,
+  onBehalfDonar,
 } from "src/Donations/PaymentMethods/Interfaces";
 
 export const QueryParamContext = React.createContext({
@@ -202,7 +203,7 @@ export default function QueryParamProvider({ children }: any) {
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
 
-  const [onBehalfDonor, setOnBehalfDonor] = useState<{}>({
+  const [onBehalfDonor, setOnBehalfDonor] = useState<onBehalfDonar>({
     firstName: "",
     lastName: "",
     email: "",
