@@ -116,6 +116,8 @@ function index({
   }, []);
 
   // If project details are present set project details
+  // This will be set from getServerSideProps.
+
   React.useEffect(() => {
     if (projectDetails) {
       setprojectDetails(projectDetails);
@@ -255,6 +257,7 @@ export async function getServerSideProps(context: any) {
         url: `/app/paymentOptions/${to}?country=${country}`,
         setshowErrorCard,
         tenant,
+        locale,
       };
       const paymentOptionsResponse = await apiRequest(requestParams);
       if (paymentOptionsResponse.data) {
