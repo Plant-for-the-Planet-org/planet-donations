@@ -150,7 +150,7 @@ function ContactsForm({}: Props): ReactElement {
     if (
       projectDetails &&
       projectDetails.taxDeductionCountries &&
-      projectDetails?.taxDeductionCountries?.includes("ES") &&
+      projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
     ) {
       setTaxIdentificationAvail(true);

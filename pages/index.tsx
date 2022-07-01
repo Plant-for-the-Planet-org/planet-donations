@@ -321,7 +321,7 @@ export async function getServerSideProps(context: any) {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
+            url: `/app/paymentOptions/${donation.data.destination.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,

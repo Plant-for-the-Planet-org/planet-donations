@@ -162,7 +162,7 @@ export function createDonationData({
   callbackMethod,
 }: any) {
   let donationData = {
-    purpose: projectDetails.purpose,
+    purpose: projectDetails?.purpose,
     project: projectDetails.id,
     amount:
       paymentSetup.unitCost * quantity
@@ -218,7 +218,7 @@ export function createDonationData({
     }
   }
 
-  if (projectDetails.purpose === "planet-cash") {
+  if (projectDetails?.purpose === "planet-cash") {
     // For PlanetCash Top-up
 
     // No need to send quantity.

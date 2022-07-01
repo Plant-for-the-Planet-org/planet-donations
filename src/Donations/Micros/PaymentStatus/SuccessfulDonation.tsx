@@ -43,7 +43,7 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
         projectDetails={projectDetails}
         donation={donation}
       />
-      {projectDetails.purpose !== "planet-cash" && (
+      {projectDetails?.purpose !== "planet-cash" && (
         <>
           <ImageComponent
             projectDetails={projectDetails}
