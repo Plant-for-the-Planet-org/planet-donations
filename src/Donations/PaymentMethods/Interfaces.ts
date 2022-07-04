@@ -1,18 +1,28 @@
-
-
-    export interface Once {
+     export interface Once {
         minQuantity: number;
-        options: string[] | undefined;
+        options: {
+            id: string;
+            quantity: number;
+            isDefault: number;
+        } | undefined
     }
 
     export interface Monthly {
         minQuantity: number;
-        options: string[] | undefined;
+        options: {
+            id: string;
+            quantity: number;
+            isDefault: number;
+        } | undefined
     }
 
     export interface Yearly {
         minQuantity: number;
-        options: string[] | undefined;
+        options: {
+            id: string;
+            quantity: number;
+            isDefault: number;
+        } | undefined
     }
 
     export interface Frequencies {
