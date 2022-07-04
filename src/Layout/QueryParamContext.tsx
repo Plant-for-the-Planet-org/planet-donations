@@ -580,7 +580,7 @@ function ErrorCard({
     if (showErrorCard) {
       setTimeout(() => {
         setShowErrorCard(false);
-      }, 100000);
+      }, 3000);
     }
   }, [showErrorCard]);
 
@@ -590,7 +590,7 @@ function ErrorCard({
       style={{ zIndex: 15, flexDirection: "column" }}
     >
       {t("errorOccurred")}
-      <h5>errorMessage</h5>
+      <h5>Error</h5>
       <p style={{ font: "inherit" }}>{errorMessage}</p>
     </div>
   ) : (

@@ -137,7 +137,7 @@ export const apiRequest = async (
             "Request failed with status code 303"
           ) {
             setshowErrorCard(true);
-            setErrorMessage ? setErrorMessage(JSON.stringify(err.message)) : "cool";
+            setErrorMessage ? setErrorMessage(JSON.stringify(err.message)) : " ";
           }
           reject(err);
         });
