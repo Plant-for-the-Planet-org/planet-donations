@@ -339,7 +339,16 @@ export default function QueryParamProvider({ children }: any) {
           setdonationStep(4);
         }
       }
-    } else if (router.query.to && country !== undefined && country !== "") {
+    }
+  }, [router.query.to, country, profile, isLoading, isAuthenticated]);
+
+  React.useEffect(() => {
+    if (
+      router.query.to &&
+      country !== undefined &&
+      country !== "" &&
+      router.query.to?.toString().toLowerCase() !== "planetcash"
+    ) {
       const to = String(router.query.to).replace(/\//g, "");
       loadPaymentSetup({
         projectGUID: to,
@@ -347,7 +356,7 @@ export default function QueryParamProvider({ children }: any) {
         shouldSetPaymentDetails: true,
       });
     }
-  }, [router.query.to, country, profile, isLoading, isAuthenticated]);
+  }, [router.query.to, country]);
 
   async function loadConfig() {
     let userLang;
