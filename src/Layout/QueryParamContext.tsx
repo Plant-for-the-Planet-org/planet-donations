@@ -343,8 +343,10 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.to, country, profile, isLoading, isAuthenticated]);
 
   React.useEffect(() => {
+    const regex = /^pcash_/;
     if (
       router.query.to &&
+      !regex.test(router.query.to) &&
       country !== undefined &&
       country !== "" &&
       router.query.to?.toString().toLowerCase() !== "planetcash"
