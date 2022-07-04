@@ -4,18 +4,23 @@ import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
 import ThankyouMessage from "./../ThankyouMessage";
 import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
+import { Donation } from "../../../../../src/Donations/PaymentMethods/Interfaces";
 
-function SuccessfulDonationJane({ donation, sendToReturn }: any) {
-  const { t, i18n } = useTranslation(["common", "country", "donate"]);
+interface SuccessfulDonationJane {
+  donation: Donation;
+  sendToReturn: (...args: unknown[]) => unknown;
+}
+
+function SuccessfulDonationJane({
+  donation,
+  sendToReturn,
+}: SuccessfulDonationJane) {
+  const { t } = useTranslation(["common", "country", "donate"]);
 
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
-
   const paymentTypeUsed = getPaymentType(paymentType);
-
-  const sendRef = () => imageRef;
 
   let returnDisplay;
   if (callbackUrl) {

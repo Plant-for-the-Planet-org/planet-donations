@@ -26,7 +26,6 @@ import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
-import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
 
 function DonationsForm() {
@@ -93,7 +92,6 @@ function DonationsForm() {
     }
   }, [paymentSetup]);
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-  const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle

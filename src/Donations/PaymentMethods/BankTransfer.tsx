@@ -3,11 +3,11 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import { useTranslation } from "next-i18next";
 
 interface Props {
-  onSubmitPayment: Function;
+  onSubmitPayment: (...args: unknown[]) => unknown;
 }
 
 function BankTransfer({ onSubmitPayment }: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   return (
     <div>

@@ -12,7 +12,6 @@ import {
   createDonationFunction,
   payDonationFunction,
 } from "../PaymentMethods/PaymentFunctions";
-import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
@@ -26,7 +25,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
-import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
+import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 
 interface Props {}
@@ -46,7 +45,6 @@ function PaymentsForm({}: Props): ReactElement {
     paymentSetup,
     country,
     currency,
-    setdonationStep,
     donationID,
     setdonationID,
     paymentType,
@@ -91,7 +89,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: any
+    providerObject?: string
   ) => {
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
@@ -202,12 +200,19 @@ function PaymentsForm({}: Props): ReactElement {
   }, [currency]);
   const { theme } = React.useContext(ThemeContext);
 
+  interface showPaymentMethod {
+    paymentMethod: string;
+    countries: string[];
+    currencies: string[];
+    authenticatedMethod: boolean;
+  }
+
   const showPaymentMethod = ({
     paymentMethod,
     countries,
     currencies,
     authenticatedMethod,
-  }: any) => {
+  }: showPaymentMethod) => {
     const isAvailableInCountry = countries ? countries.includes(country) : true;
     const isAvailableForCurrency = currencies
       ? currencies.includes(currency)

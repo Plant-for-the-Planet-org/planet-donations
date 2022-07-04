@@ -5,17 +5,25 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
-import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
+import {
+  ContactDetails,
+  Frequencies,
+  Gateways,
+  Recurrency,
+  serverProps,
+  projectDetails,
+} from "../src/Donations/PaymentMethods/Interfaces";
 
+interface GiftDetails {}
 interface Props {
-  projectDetails: Object;
-  donationStep: any;
-  giftDetails: Object;
+  projectDetails: projectDetails;
+  donationStep: number;
+  giftDetails: GiftDetails;
   isGift: boolean;
   resolvedUrl: any;
   isDirectDonation: boolean;
@@ -23,13 +31,20 @@ interface Props {
   isTaxDeductible: boolean;
   donationID: any;
   shouldCreateDonation: boolean;
-  country: any;
-  contactDetails: any;
+  country: string;
+  contactDetails: ContactDetails;
   allowTaxDeductionChange: boolean;
-  currency: any;
-  paymentSetup: any;
+  currency: string;
+  paymentSetup: {
+    currency: string;
+    description: string;
+    effectiveCountry: string;
+    frequencies: Frequencies;
+    gateways: Gateways;
+    recurrency: Recurrency;
+  };
   treecount: any;
-  amount: any;
+  amount: number;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
   tenant: string;
@@ -42,7 +57,6 @@ function index({
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl,
   isDirectDonation,
   hideTaxDeduction,
   isTaxDeductible,
@@ -53,7 +67,6 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
-  treecount,
   amount,
   meta,
   frequency,
@@ -95,7 +108,6 @@ function index({
         window.location.origin + "/" + window.location.search;
     }
   }, [router.locale]);
-
   React.useEffect(() => {
     setdonationID(donationID);
     if (isDirectDonation) {
@@ -197,7 +209,7 @@ function index({
 
 export default index;
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: serverProps) {
   let donationStep = 0;
   let showErrorCard = false;
   let projectDetails = null;
@@ -293,6 +305,7 @@ export async function getServerSideProps(context: any) {
         setshowErrorCard,
       };
       const donation: any = await apiRequest(requestParams);
+      console.log(donation);
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];

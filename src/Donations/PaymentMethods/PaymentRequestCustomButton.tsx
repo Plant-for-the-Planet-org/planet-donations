@@ -1,5 +1,5 @@
 import { useStripe } from "@stripe/react-stripe-js";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -9,29 +9,31 @@ import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon
 import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { RootObject } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface PaymentButtonProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
-  continueNext: Function;
+  onPaymentFunction: (...args: unknown[]) => unknown;
+  continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
-  paymentSetup: Object;
+  paymentSetup: RootObject;
 }
-export const PaymentRequestCustomButton = ({
-  country,
-  currency,
-  amount,
-  onPaymentFunction,
-  continueNext,
-  isPaymentPage,
-  paymentLabel,
-  frequency,
-  paymentSetup,
-}: PaymentButtonProps) => {
+export const PaymentRequestCustomButton = (props: PaymentButtonProps) => {
+  const {
+    country,
+    currency,
+    amount,
+    onPaymentFunction,
+    continueNext,
+    isPaymentPage,
+    paymentLabel,
+    frequency,
+    paymentSetup,
+  } = props;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
@@ -94,20 +96,17 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     if (paymentRequest && !paymentLoading) {
       setPaymentLoading(true);
-      paymentRequest.on(
-        "paymentmethod",
-        ({ complete, paymentMethod, ...data }: any) => {
-          onPaymentFunction(paymentMethod, paymentRequest);
-          complete("success");
-          setPaymentLoading(false);
-        }
-      );
+      paymentRequest.on("paymentmethod", ({ complete, paymentMethod }: any) => {
+        onPaymentFunction(paymentMethod, paymentRequest);
+        complete("success");
+        setPaymentLoading(false);
+      });
     }
     return () => {
       if (paymentRequest && !paymentLoading) {
         paymentRequest.off(
           "paymentmethod",
-          ({ complete, paymentMethod, ...data }: any) => {
+          ({ complete, paymentMethod }: any) => {
             onPaymentFunction(paymentMethod, paymentRequest);
             complete("success");
             setPaymentLoading(false);
@@ -213,11 +212,11 @@ export const PaymentRequestCustomButton = ({
 
 interface NativePayProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
-  paymentSetup: Object;
-  continueNext: Function;
+  onPaymentFunction: (...args: unknown[]) => unknown;
+  paymentSetup: RootObject;
+  continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;

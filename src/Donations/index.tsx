@@ -9,7 +9,6 @@ import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
-import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import {
   CONTACT,
@@ -23,16 +22,9 @@ import router, { useRouter } from "next/router";
 interface Props {}
 
 function Donations({}: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
-  const {
-    paymentSetup,
-    donationStep,
-    projectDetails,
-    setdonationStep,
-    allProjects,
-  } = React.useContext(QueryParamContext);
+  const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
 
   useEffect(() => {
     if (router.query?.step) {

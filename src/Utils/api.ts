@@ -45,7 +45,7 @@ interface RequestParams {
   url: string;
   token?: any;
   data?: any;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
   headers?: { [k: string]: string }; // additional headers

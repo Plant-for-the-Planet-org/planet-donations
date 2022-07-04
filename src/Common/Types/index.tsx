@@ -1,3 +1,9 @@
+import {
+  RootObject,
+  ContactDetails,
+  projectDetails,
+} from "src/Donations/PaymentMethods/Interfaces";
+
 export interface ProjectTypes {
   data: {
     allowDonations: boolean;
@@ -48,15 +54,15 @@ export interface ProjectTypes {
       fixedTreeCountOptions: Array<any>;
     };
     plantingDensity: number;
-    plantingSeasons: Array<any>;
+    plantingSeasons: Array<string>;
     reviewRequested: true;
     siteOwnerName: string;
-    siteOwnerType: Array<any>;
+    siteOwnerType: Array<string>;
     sites: Array<{}>;
     slug: string;
     survivalRate: number;
     survivalRateStatus: string;
-    taxDeductionCountries: Array<any>;
+    taxDeductionCountries: Array<string>;
     tpo: {
       id: string;
       name: string;
@@ -65,7 +71,7 @@ export interface ProjectTypes {
       slug: string;
     };
     treeCost: number;
-    videoUrl: null;
+    videoUrl: string | null;
     visitorAssistance: false;
     website: string;
     yearAbandoned: number;
@@ -75,29 +81,29 @@ export interface ProjectTypes {
 }
 
 export interface giftDetailsProps {
-  type: String | null;
-  recipientName: String | null;
-  email: String | null;
-  giftMessage: String | null;
-  recipientTreecounter: Number | null;
+  type: string | null;
+  recipientName: string | null;
+  email: string | null;
+  giftMessage: string | null;
+  recipientTreecounter: number | null;
   receipients: {} | null;
 }
 
 export interface CreateDonationFunctionProps {
-  isTaxDeductible: Boolean | null;
-  country: any;
-  projectDetails: Object;
+  isTaxDeductible: boolean | null;
+  country: string;
+  projectDetails: projectDetails;
   quantity: number;
-  paymentSetup: {};
-  currency: String;
-  contactDetails: Object;
+  paymentSetup: RootObject;
+  currency: string;
+  contactDetails: ContactDetails;
   giftDetails: giftDetailsProps;
-  isGift: Boolean;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
-  setdonationID: any;
+  isGift: boolean;
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
+  setdonationID: (...args: unknown[]) => unknown;
   token: any;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   frequency: string | null;
   amount?: number | null;
   callbackUrl?: string | undefined;
@@ -108,33 +114,33 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject: Object;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  providerObject: string;
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
   t: any;
-  paymentSetup: Object;
+  paymentSetup: RootObject;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   router: any;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: (...args: unknown[]) => unknown;
 }
 
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: Object;
+  paymentSetup: RootObject;
   window: any;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  setIsPaymentProcessing: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: (...args: unknown[]) => unknown;
   router: any;
   tenant: string;
 }

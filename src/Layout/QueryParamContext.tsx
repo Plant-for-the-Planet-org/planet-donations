@@ -8,6 +8,15 @@ import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
+import {
+  RootObject,
+  giftDetails,
+  paymentSetupData,
+  Profile,
+  projectDetails,
+  projects,
+  onBehalfDonar,
+} from "src/Donations/PaymentMethods/Interfaces";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -19,7 +28,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: ({}) => {},
+  setpaymentSetup: (value: RootObject) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -86,7 +95,7 @@ export const QueryParamContext = React.createContext({
   loadPaymentSetup: (value: {
     projectGUID: string;
     paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
+    shouldSetPaymentDetails?: boolean;
   }) => {},
   profile: null,
   isPlanetCashActive: false,
@@ -108,7 +117,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
-  const [projectDetails, setprojectDetails] = useState<Object | null>(null);
+  const [projectDetails, setprojectDetails] = useState<projectDetails | null>(
+    null
+  );
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -140,7 +151,7 @@ export default function QueryParamProvider({ children }: any) {
   const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<object>({
+  const [giftDetails, setgiftDetails] = useState<giftDetails>({
     recipientName: "",
     recipientEmail: "",
     giftMessage: "",
@@ -174,7 +185,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = React.useState<null | Object>(null);
+  const [profile, setprofile] = React.useState<null | Profile>(null);
   const [amount, setAmount] = React.useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] =
     React.useState<boolean>(false);
@@ -183,9 +194,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [paymentError, setPaymentError] = React.useState("");
-  const [transferDetails, setTransferDetails] = React.useState<Object | null>(
-    null
-  );
+  const [transferDetails, setTransferDetails] = React.useState<{} | null>(null);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
 
@@ -194,7 +203,7 @@ export default function QueryParamProvider({ children }: any) {
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
 
-  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+  const [onBehalfDonor, setOnBehalfDonor] = useState<onBehalfDonar>({
     firstName: "",
     lastName: "",
     email: "",
@@ -263,7 +272,8 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const projects: any = await apiRequest(requestParams);
+      const projects: projects = await apiRequest(requestParams);
+
       if (projects.data) {
         const allowedDonationsProjects = projects.data.filter(
           (project: { properties: { allowDonations: boolean } }) =>
@@ -294,19 +304,13 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.to, country]);
 
   async function loadConfig() {
-    let userLang;
-    if (localStorage) {
-      userLang = localStorage.getItem("language") || "en";
-    } else {
-      userLang = "en";
-    }
     try {
       const requestParams = {
         url: `/app/config`,
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: any = await apiRequest(requestParams);
+      const config: {} = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(
@@ -415,7 +419,7 @@ export default function QueryParamProvider({ children }: any) {
   }: {
     projectGUID: string;
     paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
+    shouldSetPaymentDetails?: boolean;
   }) => {
     setIsPaymentOptionsLoading(true);
     try {
@@ -424,7 +428,9 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const paymentSetupData: any = await apiRequest(requestParams);
+      const paymentSetupData: paymentSetupData = await apiRequest(
+        requestParams
+      );
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -556,14 +562,14 @@ export default function QueryParamProvider({ children }: any) {
 
 interface CardProps {
   showErrorCard: boolean;
-  setShowErrorCard: Function;
+  setShowErrorCard: (...args: unknown[]) => unknown;
 }
 
 function ErrorCard({
   showErrorCard,
   setShowErrorCard,
 }: CardProps): ReactElement {
-  const { t, ready } = useTranslation(["common"]);
+  const { t } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
 

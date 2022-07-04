@@ -4,10 +4,18 @@ const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
 
 import getImageUrl from "./getImageURL";
+import {projectDetails} from "../.././src/Donations/PaymentMethods/Interfaces"
+
+interface getTenantBackground {
+  tenant: string;
+  projectDetails: projectDetails
+}
 
 // Set tenant image -> set tenant image where needed, except for default
 // Default -> Check for tenant image if not found, use project image, if not found, use base
-export function getTenantBackground(tenant: any, projectDetails: any) {
+export function getTenantBackground({tenant, projectDetails}: getTenantBackground) {
+
+  
   let tenantImage = null;
   let imageUrl = defaultForest;
 

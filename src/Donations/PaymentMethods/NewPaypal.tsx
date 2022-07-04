@@ -5,15 +5,16 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { RootObject } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  paymentSetup: any;
+  paymentSetup: RootObject;
   quantity: number;
   unitCost: number;
   currency: string;
-  donationID: any;
-  payDonationFunction: Function;
-  setPaymentError: Function;
+  donationID: string;
+  payDonationFunction: (...args: unknown[]) => unknown;
+  setPaymentError: (...args: unknown[]) => unknown;
 }
 
 function NewPaypal({
@@ -94,7 +95,7 @@ function NewPaypal({
   );
 }
 
-function ReloadButton({ currency }: any) {
+function ReloadButton({ currency }: Props) {
   const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
 
   React.useEffect(() => {

@@ -6,7 +6,12 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import ReturnToButton from "./Components/ReturnToButton";
 
-function PendingDonation({ donationID, sendToReturn }: any) {
+interface PendingDonation {
+  donationID: string;
+  sendToReturn: (...args: unknown[]) => unknown;
+}
+
+function PendingDonation({ donationID, sendToReturn }: PendingDonation) {
   const { t } = useTranslation(["common"]);
   const { callbackUrl } = React.useContext(QueryParamContext);
   return (

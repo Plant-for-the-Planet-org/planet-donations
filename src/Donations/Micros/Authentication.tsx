@@ -11,11 +11,11 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
-import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
+import { Profile } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {}
 
@@ -29,7 +29,6 @@ function Authentication({}: Props): ReactElement {
     setprofile,
     setIsSignedUp,
     hideLogin,
-    setHideLogin,
     setcurrency,
     setcountry,
     tenant,
@@ -133,7 +132,7 @@ function Authentication({}: Props): ReactElement {
     router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
-  const { t, ready } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   const loginUser = () => {
     localStorage.setItem("queryparams", router.asPath);
@@ -221,8 +220,8 @@ export default Authentication;
 
 interface VerifyEmailProps {
   openModal: boolean;
-  handleModalClose: Function;
-  logout: Function;
+  handleModalClose: (...args: unknown[]) => unknown;
+  logout: (...args: unknown[]) => unknown;
 }
 
 function VerifyEmailModal({
@@ -311,8 +310,16 @@ function VerifyEmailModal({
 }
 
 interface UserProfileProps {
-  profile: Object;
-  user: Object;
+  profile: Profile;
+  user: {
+    email: string;
+    email_verified: boolean;
+    name: string;
+    nickname: string;
+    picture: string;
+    sub: string;
+    updated_at: string;
+  };
 }
 function UserProfile({ profile, user }: UserProfileProps) {
   return (

@@ -7,8 +7,6 @@ import getFormatedCurrency, {
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
-import { getCountryDataBy } from "../../../Utils/countryUtils";
-// import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
 
@@ -23,13 +21,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
 
-  const AllIcons = [
-    "/assets/images/funding/shovel.png",
-    "/assets/images/funding/collect.png",
-    "/assets/images/funding/sunshine.png",
-    "/assets/images/funding/sprout.png",
-  ];
-
   const {
     paymentSetup,
     currency,
@@ -38,7 +29,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
-    setfrequency,
     retainQuantityValue,
     isPlanetCashActive,
     projectDetails,

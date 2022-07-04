@@ -11,7 +11,7 @@ import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 interface Props {
-  setopenCurrencyModal: any;
+  setopenCurrencyModal: (...args: unknown[]) => unknown;
 }
 
 function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {

@@ -8,8 +8,13 @@ import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
+import { Donation } from "../../../../src/Donations/PaymentMethods/Interfaces";
 
-function SuccessfulDonation({ donation, sendToReturn }: any) {
+interface Props {
+  donation: Donation;
+}
+
+function SuccessfulDonation({ donation }: Props) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);

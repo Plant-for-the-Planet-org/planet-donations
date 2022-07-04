@@ -4,15 +4,16 @@ import {
   PayDonationProps,
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
-import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject,Gateways } from './Interfaces'
+import { ContactDetails } from "./Interfaces";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
-  gateway,
-  method,
-  paymentSetup,
-  providerObject
+  gateway: Gateways,
+  method: string,
+  paymentSetup: RootObject,
+  providerObject: string
 ) {
   let account;
   let source;
@@ -57,7 +58,7 @@ export function buildPaymentProviderRequest(
   };
 }
 
-export function getPaymentType(paymentType: String) {
+export function getPaymentType(paymentType: string) {
   let paymentTypeUsed;
   switch (paymentType) {
     case "CARD":
@@ -147,6 +148,45 @@ export async function createDonationFunction({
   }
 }
 
+interface  createDonationData {
+  projectDetails: {
+    id: string;
+    name: string;
+    description: string;
+    purpose: string;
+    ownerName: string;
+    taxDeductionCountries: string[];
+    projectImage: string;
+    ownerAvatar: string;
+  },
+  quantity: number,
+  paymentSetup: {
+    Once: Once;
+    Monthly: Monthly;
+    Yearly: Yearly;
+    Frequencies: Frequencies;
+    Authorization: Authorization;
+    Paypal: Paypal;
+    Authorization2: Authorization2;
+    Stripe: Stripe;
+    Offline: Offline;
+    Recurrency: Recurrency;
+    RootObject: RootObject;
+  },
+  currency: string;
+  contactDetails: ContactDetails;
+  taxDeductionCountry: string;
+  isGift: boolean;
+  giftDetails: {
+    recipientName: string;
+    recipientEmail: string;
+    giftMessage: string;
+    type: null;
+  },
+  frequency: string,
+  amount: number | null
+}
+
 export function createDonationData({
   projectDetails,
   quantity,
@@ -160,7 +200,7 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: any) {
+}: createDonationData) {
   let donationData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,
@@ -249,7 +289,7 @@ export async function payDonationFunction({
   setTransferDetails,
 }: PayDonationProps) {
   // const router = useRouter();
-  setIsPaymentProcessing(true);
+ setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {
       setIsPaymentProcessing(false);
@@ -338,7 +378,7 @@ export async function confirmPaymentIntent(
   donationId: string,
   // paymentIntentId: string,
   // account: string,
-  payDonationData: any,
+  payDonationData: {paymentProviderRequest: {}},
   token: string,
   setshowErrorCard: any,
   setPaymentError: any,
@@ -354,7 +394,6 @@ export async function confirmPaymentIntent(
   //     },
   //   },
   // };
-
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
@@ -363,6 +402,7 @@ export async function confirmPaymentIntent(
     token: token ? token : false,
     tenant,
   };
+ 
   const confirmationResponse = await apiRequest(requestParams);
   if (
     confirmationResponse.data.paymentStatus ||
@@ -374,9 +414,23 @@ export async function confirmPaymentIntent(
     return confirmationResponse.data;
   }
 }
+interface Line1 {
+}
+interface buildBillingDetails {
+  firstname: string;
+  lastname: string;
+  email: string;
+  address: { 
+    city: string;
+    country: string;
+    postal_code: string;
+    line1: Line1;
+  }
+}
 
-const buildBillingDetails = (contactDetails: any) => {
-  return {
+const buildBillingDetails = (contactDetails: buildBillingDetails) => {
+  
+ return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,
     address: {
@@ -389,10 +443,11 @@ const buildBillingDetails = (contactDetails: any) => {
 };
 
 const handlePaymentError = (
-  paymentError: any,
+  paymentError: { message: string, data: { message: string}},
   setIsPaymentProcessing: any,
   setPaymentError: any
 ) => {
+  
   setIsPaymentProcessing(false);
   if (paymentError?.message || paymentError?.data?.message) {
     setPaymentError(paymentError.message ?? paymentError.data.message);
@@ -416,6 +471,7 @@ export async function handleStripeSCAPayment({
   router,
   tenant,
 }: HandleStripeSCAPaymentProps) {
+ 
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -425,8 +481,8 @@ export async function handleStripeSCAPayment({
   });
   switch (method) {
     case "card": {
-      let successData: {};
-      let stripeResponse: {};
+      let successData = {};
+      let stripeResponse = {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
@@ -532,7 +588,7 @@ export async function handleStripeSCAPayment({
     }
     case "sepa_debit": {
       try {
-        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
+       await stripe.confirmSepaDebitPayment(clientSecret);
       } catch {
         (err: any) => {
           handlePaymentError(err, setIsPaymentProcessing, setPaymentError);
