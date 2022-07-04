@@ -78,6 +78,8 @@ function index({
     settenant,
     setcallbackUrl,
     setCallbackMethod,
+    projectDetails,
+    setprojectDetails,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -110,6 +112,15 @@ function index({
     setCallbackMethod(callbackMethod);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
+
+  // If project details are present set project details
+  // This will be set from getServerSideProps.
+
+  React.useEffect(() => {
+    if (projectDetails) {
+      setprojectDetails(projectDetails);
+    }
+  }, [projectDetails]);
 
   settenant(tenant);
   // If gift details are present set gift
@@ -245,6 +256,7 @@ export async function getServerSideProps(context: any) {
           url: `/app/paymentOptions/${to}?country=${country}`,
           setshowErrorCard,
           tenant,
+          locale,
         };
         const paymentOptionsResponse = await apiRequest(requestParams);
         if (paymentOptionsResponse.data) {
@@ -312,7 +324,7 @@ export async function getServerSideProps(context: any) {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
+            url: `/app/paymentOptions/${donation.data.destination.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,

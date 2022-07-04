@@ -59,7 +59,7 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
               i18n.language,
               Number(donation.treeCount)
             ),
-            location: t("country:" + donation.project.country.toLowerCase()),
+            location: t("country:" + donation.destination.country.toLowerCase()),
           })}
         {projectDetails?.purpose === "conservation" &&
           t(
@@ -74,7 +74,7 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
                 donation.currency,
                 Number(donation.amount)
               ),
-              location: t("country:" + donation.project.country.toLowerCase()),
+              location: t("country:" + donation.destination.country.toLowerCase()),
             }
           )}
         {projectDetails?.purpose === "funds" &&

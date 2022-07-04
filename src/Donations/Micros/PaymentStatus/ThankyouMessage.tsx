@@ -47,15 +47,15 @@ function ThankyouMessage({
       : null;
 
   // EXAMPLE: Your 50 trees will be planted by AMU EcoVillage Project, Ethiopia in Ethiopia.
-  const donationProjectMessage = donation.project
+  const donationProjectMessage = donation.destination
     ? " " +
       t("common:yourTreesPlantedByOnLocation", {
         treeCount: getFormattedNumber(
           i18n.language,
           Number(donation.treeCount)
         ),
-        projectName: donation.project.name,
-        location: t("country:" + donation.project.country.toLowerCase()),
+        projectName: donation.destination.name,
+        location: t("country:" + donation.destination.country.toLowerCase()),
       })
     : null;
 
