@@ -51,6 +51,7 @@ interface RequestParams {
   headers?: { [k: string]: string }; // additional headers
   addIdempotencyKeyHeader?: boolean;
   locale?: string;
+  setErrorMessage?: Function;
 }
 interface ExtendedRequestParams extends RequestParams {
   method?: string | undefined;
@@ -70,6 +71,7 @@ export const apiRequest = async (
     headers = {},
     addIdempotencyKeyHeader = false,
     locale,
+    setErrorMessage
   } = extendedRequestParams;
 
   try {
@@ -129,11 +131,13 @@ export const apiRequest = async (
           resolve(response);
         })
         .catch((err) => {
+          
           if (
             JSON.parse(JSON.stringify(err)).message !==
             "Request failed with status code 303"
           ) {
             setshowErrorCard(true);
+            setErrorMessage ? setErrorMessage(JSON.stringify(err.message)) : "cool";
           }
           reject(err);
         });

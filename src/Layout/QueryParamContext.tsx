@@ -99,6 +99,8 @@ export const QueryParamContext = React.createContext({
   setdonation: (value: {}) => {},
   paymentRequest: null,
   setPaymentRequest: (value: {}) => {},
+  errorMessage: " ",
+  setErrorMessage: (value: "") => "",
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -107,6 +109,7 @@ export default function QueryParamProvider({ children }: any) {
   const { i18n } = useTranslation();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
+  const [errorMessage, setErrorMessage] = useState<string>("cool");
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
@@ -262,6 +265,7 @@ export default function QueryParamProvider({ children }: any) {
         url: `/app/projects?_scope=map`,
         setshowErrorCard,
         tenant,
+        setErrorMessage,
       };
       const projects: any = await apiRequest(requestParams);
       if (projects.data) {
@@ -305,6 +309,7 @@ export default function QueryParamProvider({ children }: any) {
         url: `/app/config`,
         setshowErrorCard,
         shouldQueryParamAdd: false,
+        setErrorMessage,
       };
       const config: any = await apiRequest(requestParams);
       if (config.data) {
@@ -423,6 +428,7 @@ export default function QueryParamProvider({ children }: any) {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
         tenant,
+        setErrorMessage,
       };
       const paymentSetupData: any = await apiRequest(requestParams);
       if (paymentSetupData.data) {
@@ -542,6 +548,8 @@ export default function QueryParamProvider({ children }: any) {
         setdonation,
         paymentRequest,
         setPaymentRequest,
+        errorMessage,
+        setErrorMessage,
       }}
     >
       {children}
@@ -564,6 +572,7 @@ function ErrorCard({
   setShowErrorCard,
 }: CardProps): ReactElement {
   const { t, ready } = useTranslation(["common"]);
+  const { errorMessage } = React.useContext(QueryParamContext);
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -571,13 +580,18 @@ function ErrorCard({
     if (showErrorCard) {
       setTimeout(() => {
         setShowErrorCard(false);
-      }, 3000);
+      }, 100000);
     }
   }, [showErrorCard]);
 
   return showErrorCard ? (
-    <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
+    <div
+      className={`${theme} test-donation-bar`}
+      style={{ zIndex: 15, flexDirection: "column" }}
+    >
       {t("errorOccurred")}
+      <h5>errorMessage</h5>
+      <p style={{ font: "inherit" }}>{errorMessage}</p>
     </div>
   ) : (
     <></>
