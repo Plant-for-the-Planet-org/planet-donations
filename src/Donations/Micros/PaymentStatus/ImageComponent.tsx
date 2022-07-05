@@ -83,7 +83,7 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
             organization: projectDetails.ownerName,
           })}
 
-        {projectDetails.purpose === "bouquet" &&
+        {projectDetails?.purpose === "bouquet" &&
           t("common:myContributionIsPartOfThat")}
       </div>
     );

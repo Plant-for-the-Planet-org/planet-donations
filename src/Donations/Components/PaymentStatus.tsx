@@ -14,6 +14,7 @@ import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDo
 import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
+import PlanetCashSignup from "../Micros/PlanetCashSignup";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -94,7 +95,8 @@ function ThankYou() {
       getFormatedCurrency(i18n.language, donation.currency, donation.amount);
   }
 
-  const { callbackUrl, paymentError } = React.useContext(QueryParamContext);
+  const { callbackUrl, paymentError, projectDetails } =
+    React.useContext(QueryParamContext);
 
   const router = useRouter();
 
@@ -122,52 +124,56 @@ function ThankYou() {
 
   return (
     <div className="donations-forms-container" style={{ paddingBottom: "0px" }}>
-      <div className="donations-form w-100">
-        {!ready && !donation ? (
-          <PaymentProgress isPaymentProcessing={true} />
-        ) : (
-          <div>
-            {donation && donation.paymentStatus ? (
-              status === "success" ||
-              status === "paid" ||
-              status === "succeeded" ? (
-                <SuccessComponent />
-              ) : status === "failed" || paymentError ? (
-                <FailedDonation
-                  donationID={donationID}
-                  sendToReturn={sendToReturn}
-                  donation={donation}
-                />
-              ) : transferDetails ? (
-                <TransferDetails
-                  donationID={donationID}
-                  donation={donation}
-                  sendToReturn={sendToReturn}
-                />
+      {projectDetails?.purpose === "planet-cash-signup" ? (
+        <PlanetCashSignup />
+      ) : (
+        <div className="donations-form w-100">
+          {!ready && !donation ? (
+            <PaymentProgress isPaymentProcessing={true} />
+          ) : (
+            <div>
+              {donation && donation.paymentStatus ? (
+                status === "success" ||
+                status === "paid" ||
+                status === "succeeded" ? (
+                  <SuccessComponent />
+                ) : status === "failed" || paymentError ? (
+                  <FailedDonation
+                    donationID={donationID}
+                    sendToReturn={sendToReturn}
+                    donation={donation}
+                  />
+                ) : transferDetails ? (
+                  <TransferDetails
+                    donationID={donationID}
+                    donation={donation}
+                    sendToReturn={sendToReturn}
+                  />
+                ) : (
+                  <PendingDonation
+                    donationID={donationID}
+                    sendToReturn={sendToReturn}
+                  />
+                )
               ) : (
-                <PendingDonation
-                  donationID={donationID}
-                  sendToReturn={sendToReturn}
-                />
-              )
-            ) : (
-              <div className={styles.loaderContainer}>
-                <CircularProgress color="inherit" />
-              </div>
-            )}
-          </div>
-        )}
+                <div className={styles.loaderContainer}>
+                  <CircularProgress color="inherit" />
+                </div>
+              )}
+            </div>
+          )}
 
-        <Snackbar
-          open={textCopiedsnackbarOpen}
-          autoHideDuration={4000}
-          onClose={handleTextCopiedSnackbarClose}
-        >
-          <Alert onClose={handleTextCopiedSnackbarClose} severity="success">
-            {t("donate:copiedToClipboard")}
-          </Alert>
-        </Snackbar>
-      </div>
+          <Snackbar
+            open={textCopiedsnackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleTextCopiedSnackbarClose}
+          >
+            <Alert onClose={handleTextCopiedSnackbarClose} severity="success">
+              {t("donate:copiedToClipboard")}
+            </Alert>
+          </Snackbar>
+        </div>
+      )}
     </div>
   );
 }

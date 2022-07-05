@@ -101,7 +101,7 @@ function ContactsForm({}: Props): ReactElement {
     )[0]?.postal
   );
 
-  const changeCountry = (country: any) => {
+  const changeCountry = (country: string) => {
     let data = getValues();
     data = {
       ...data,
@@ -352,7 +352,7 @@ function ContactsForm({}: Props): ReactElement {
                   inputRef={ref}
                   label={t("country")}
                   name="country"
-                  onChange={changeCountry}
+                  onValueChange={changeCountry}
                   defaultValue={value}
                 />
               )}

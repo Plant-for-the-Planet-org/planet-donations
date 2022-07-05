@@ -169,5 +169,10 @@
   "conservationPurpose": "conservation donation",
   "planet-cashPurpose": "PlanetCash donation",
   "pfpSupportsUNEP": "Plant-for-the-Planet Supports the United Nations Environment Program",
+  "noPlanetCashAccount": "You do not have a PlanetCash account, however you can signup for one below",
+  "planetCashSignup": "Sign Up for PlanetCash",
+  "planetCashTC": "By clicking \"Create PlanetCash Account\", I agree to the <0>Terms and Conditions</0> of Plant-for-the-Planet Platform, and PlanetCash.",
+  "planetCashIUnderstand": "I understand that PlanetCash donation/payments are non-refundable, and unallocated payments will be auto allocated to projects on the Platform after six months of Payment.",
+  "createPlanetCashAccount": "Create PlanetCash Account",
   "myContributionIsPartOfThat": "And my contribution is a part of that."
 }
