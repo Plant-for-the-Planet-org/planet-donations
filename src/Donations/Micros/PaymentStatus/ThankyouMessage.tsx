@@ -57,7 +57,15 @@ function ThankyouMessage({
         projectName: donation.destination.name,
         location: t("country:" + donation.destination.country.toLowerCase()),
       })
-    : null;
+    : donation.project ? " " +
+    t("common:yourTreesPlantedByOnLocation", {
+      treeCount: getFormattedNumber(
+        i18n.language,
+        Number(donation.treeCount)
+      ),
+      projectName: donation.project.name,
+      location: t("country:" + donation.project.country.toLowerCase()),
+    }) : null;
 
   const Message = () => {
     return (
