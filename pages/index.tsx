@@ -57,6 +57,7 @@ function index({
   tenant,
   callbackUrl,
   callbackMethod,
+  projectDetails,
 }: Props): ReactElement {
   const {
     setdonationStep,
@@ -78,7 +79,6 @@ function index({
     settenant,
     setcallbackUrl,
     setCallbackMethod,
-    projectDetails,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
 
