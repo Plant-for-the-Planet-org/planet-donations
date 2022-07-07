@@ -169,5 +169,10 @@
   "conservationPurpose": "Naturschutzspende",
   "planet-cashPurpose": "PlanetCash-Spende",
   "pfpSupportsUNEP": "Plant-for-the-Planet unterstützt das Umweltprogramm der Vereinten Nationen",
+  "noPlanetCashAccount": "Du hast noch kein PlanetCash-Konto, kannst dich aber unten für eines anmelden",
+  "planetCashSignup": "Anmeldung für PlanetCash",
+  "planetCashTC": "Indem ich auf \"PlanetCash-Konto erstellen\" klicke, erkläre ich mich mit den <0>Allgemeinen Geschäftsbedingungen</0> der Plant-for-the-Planet-Plattform und von PlanetCash einverstanden.",
+  "planetCashIUnderstand": "Ich verstehe, dass PlanetCash Spenden/Zahlungen nicht zurückerstattet werden können, und dass nicht zugewiesene Zahlungen nach sechs Monaten automatisch Projekten auf der Plattform zugewiesen werden.",
+  "createPlanetCashAccount": "PlanetCash Konto erstellen",
   "myContributionIsPartOfThat": "Und meine Spende ist Teil davon."
 }
