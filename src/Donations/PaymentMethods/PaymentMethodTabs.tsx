@@ -182,12 +182,12 @@ export default function PaymentMethodTabs({
           className={`${"payment-method"} ${"bank"} ${
             paymentType === "Bank" ? "payment-method-selected" : ""
           }`}
+          data-test-id="bankTransfer"
           onClick={(e) => handleChange(e, "Bank")}
           {...a11yProps("Bank")}
         >
           <div
             style={{ display: "flex", alignItems: "center" }}
-            data-test-id="bankTransfer"
           >
             <BankIcon />
             <text>{t("bankTransfer")}</text>
