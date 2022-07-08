@@ -11,6 +11,7 @@ import { getCountryDataBy } from "../../../Utils/countryUtils";
 // import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
+import { getFormattedNumber } from "../../../Utils/getFormattedNumber";
 
 interface Props {
   setopenCurrencyModal: any;
@@ -100,6 +101,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       customInputRef?.current?.focus();
     }
   }, [isCustomDonation]);
+
+  const setCustomInputOnBlur = () => {
+    setCustomInputValue(
+      isNaN(quantity)
+        ? ""
+        : getFormattedNumber(i18n.language, parseFloat(quantity.toFixed(2)))
+    );
+  };
+
+  React.useEffect(() => {
+    setCustomInputOnBlur();
+  }, [i18n.language]);
 
   const customInputRef = React.useRef(null);
 
@@ -205,10 +218,13 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         }}
                         onInput={(e) => {
                           // replaces any character other than number to blank
-                          e.target.value = e.target.value.replace(
-                            /[^0-9]/g,
-                            ""
-                          );
+                          e.target.value = e.target.value
+                            .replace(/[^0-9^\.]+/g, "")
+                            .replace(".", "$#$")
+                            .replace(/\./g, "")
+                            .replace("$#$", ".")
+                            .replace(/^0+/, "");
+
                           //  if length of input more than 12, display only 12 digits
                           if (e.target.value.toString().length >= 12) {
                             e.target.value = e.target.value
@@ -224,6 +240,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           setCustomValue(e);
                           setCustomInputValue(e.target.value);
                         }}
+                        onBlur={setCustomInputOnBlur}
                         ref={customInputRef}
                       />
                     </div>
