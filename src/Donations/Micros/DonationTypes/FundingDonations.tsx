@@ -248,7 +248,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               // if the purpose is planet-cash (i.e Top-up PlanetCash) then lock the currency and country for transaction.
               // since transaction needs to happen in the same currency.
 
-              projectDetails.purpose !== "planet-cash" &&
+              projectDetails?.purpose !== "planet-cash" &&
                 !isPlanetCashActive &&
                 setopenCurrencyModal(true);
             }}
@@ -258,7 +258,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
               ...(isPlanetCashActive && { cursor: "text" }),
             }}
           >
-            {projectDetails.purpose !== "planet-cash" ? (
+            {projectDetails?.purpose !== "planet-cash" ? (
               <span style={{ marginRight: "4px" }} className={"text-normal"}>
                 {t("selectCurrency")}
               </span>
@@ -269,7 +269,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
             )}
 
             {currency}
-            {projectDetails.purpose !== "planet-cash" &&
+            {projectDetails?.purpose !== "planet-cash" &&
               !isPlanetCashActive && (
                 <DownArrowIcon color={themeProperties.primaryColor} />
               )}

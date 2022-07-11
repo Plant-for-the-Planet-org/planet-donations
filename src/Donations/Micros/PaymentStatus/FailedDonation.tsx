@@ -37,7 +37,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
 
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
-    setprojectDetails(donation.project);
+    setprojectDetails(donation.destination);
     setPaymentError("");
     setquantity(donation?.quantity);
     setContactDetails(donation.donor);
@@ -71,7 +71,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     // TODO - Test this again after backend is updated
     setfrequency(donation.isRecurrent ? donation.frequency : "once");
     await loadPaymentSetup({
-      projectGUID: donation.project.id,
+      projectGUID: donation.destination.id,
       paymentSetupCountry: country,
       shouldSetPaymentDetails: true,
     });

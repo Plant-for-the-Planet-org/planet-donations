@@ -255,13 +255,15 @@ function DonationInfo() {
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
-                  {projectDetails.name}
+                  {projectDetails.name ? projectDetails.name : ""}
                 </h1>
               )}
 
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
-                <p className="text-white mt-10">{projectDetails.description}</p>
+                <p className="text-white mt-10">
+                  {projectDetails.description ? projectDetails.description : ""}
+                </p>
               ) : (
                 []
               )}
