@@ -9,7 +9,7 @@ import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon
 import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { RootObject } from "../../../src/Donations/PaymentMethods/Interfaces";
+import { PaymentSetup } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface PaymentButtonProps {
   country: string;
@@ -20,7 +20,7 @@ interface PaymentButtonProps {
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
 }
 export const PaymentRequestCustomButton = (props: PaymentButtonProps) => {
   const {
@@ -215,7 +215,7 @@ interface NativePayProps {
   currency: string;
   amount: number;
   onPaymentFunction: (...args: unknown[]) => unknown;
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
   continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;
   paymentLabel: string;

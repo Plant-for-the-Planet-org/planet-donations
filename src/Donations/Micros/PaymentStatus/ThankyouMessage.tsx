@@ -5,11 +5,11 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import {
   Donation,
-  projectDetails,
+  ProjectDetails,
 } from "../../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  projectDetails: projectDetails;
+  projectDetails: ProjectDetails;
   donation: Donation;
   paymentTypeUsed: string;
 }

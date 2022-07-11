@@ -4,11 +4,11 @@ const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
 
 import getImageUrl from "./getImageURL";
-import {projectDetails} from "../.././src/Donations/PaymentMethods/Interfaces"
+import {ProjectDetails} from "../.././src/Donations/PaymentMethods/Interfaces"
 
 interface getTenantBackground {
   tenant: string;
-  projectDetails: projectDetails
+  projectDetails: ProjectDetails
 }
 
 // Set tenant image -> set tenant image where needed, except for default

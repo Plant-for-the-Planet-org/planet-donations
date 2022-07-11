@@ -5,10 +5,10 @@ import {
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { RootObject } from "../../../src/Donations/PaymentMethods/Interfaces";
+import { PaymentSetup } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
   quantity: number;
   unitCost: number;
   currency: string;

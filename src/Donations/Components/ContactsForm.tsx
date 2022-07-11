@@ -14,7 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
-import { contactDetails } from "../../../src/Donations/PaymentMethods/Interfaces";
+import { ContactDetails } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {}
 
@@ -80,7 +80,7 @@ function ContactsForm({}: Props): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: contactDetails) => {
+  const onSubmit = (data: ContactDetails) => {
     router.push(
       {
         query: { ...router.query, step: PAYMENT },

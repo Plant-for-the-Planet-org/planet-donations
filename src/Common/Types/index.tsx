@@ -1,7 +1,8 @@
 import {
-  RootObject,
+  PaymentSetup,
   ContactDetails,
-  projectDetails,
+  ProjectDetails,
+  Gateways,
 } from "src/Donations/PaymentMethods/Interfaces";
 
 export interface ProjectTypes {
@@ -54,15 +55,15 @@ export interface ProjectTypes {
       fixedTreeCountOptions: Array<any>;
     };
     plantingDensity: number;
-    plantingSeasons: Array<string>;
+    plantingSeasons: string[];
     reviewRequested: true;
     siteOwnerName: string;
-    siteOwnerType: Array<string>;
+    siteOwnerType: string[];
     sites: Array<{}>;
     slug: string;
     survivalRate: number;
     survivalRateStatus: string;
-    taxDeductionCountries: Array<string>;
+    taxDeductionCountries: string[];
     tpo: {
       id: string;
       name: string;
@@ -92,9 +93,9 @@ export interface giftDetailsProps {
 export interface CreateDonationFunctionProps {
   isTaxDeductible: boolean | null;
   country: string;
-  projectDetails: projectDetails;
+  projectDetails: ProjectDetails;
   quantity: number;
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
   currency: string;
   contactDetails: ContactDetails;
   giftDetails: giftDetailsProps;
@@ -118,7 +119,7 @@ export interface PayDonationProps {
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
   t: any;
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
   donationID: string;
   contactDetails: ContactDetails;
   token: string;
@@ -132,7 +133,7 @@ export interface PayDonationProps {
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: RootObject;
+  paymentSetup: PaymentSetup;
   window: any;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
@@ -160,19 +161,8 @@ export interface PaymentSetupProps {
   unit: string;
   unitCost: number;
 }
-export interface Gateways {
-  paypal: Paypal;
-  stripe: Stripe;
-  offline: Offline;
-}
-export interface Paypal {
-  methods?: string[] | null;
-  account: string;
-  authorization: AuthorizationPaypal;
-}
-export interface AuthorizationPaypal {
-  client_id: string;
-}
+//
+
 export interface Stripe {
   methods?: string[] | null;
   account: string;

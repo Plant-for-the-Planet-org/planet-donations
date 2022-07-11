@@ -15,15 +15,15 @@ import {
   Frequencies,
   Gateways,
   Recurrency,
-  serverProps,
-  projectDetails,
+  ServerProps,
+  ProjectDetails,
+  giftDetails,
 } from "../src/Donations/PaymentMethods/Interfaces";
 
-interface GiftDetails {}
 interface Props {
-  projectDetails: projectDetails;
+  projectDetails: ProjectDetails;
   donationStep: number;
-  giftDetails: GiftDetails;
+  giftDetails: giftDetails;
   isGift: boolean;
   resolvedUrl: any;
   isDirectDonation: boolean;
@@ -207,7 +207,7 @@ function index({
 
 export default index;
 
-export async function getServerSideProps(context: serverProps) {
+export async function getServerSideProps(context: ServerProps) {
   let donationStep = 0;
   let showErrorCard = false;
   let projectDetails = null;
@@ -302,7 +302,6 @@ export async function getServerSideProps(context: serverProps) {
         setshowErrorCard,
       };
       const donation: any = await apiRequest(requestParams);
-      console.log(donation);
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];

@@ -9,6 +9,8 @@ interface Props {}
 
 interface giftReceiver {
   recipientName: string;
+  giftMessage?: string;
+  recipientEmail?: string;
 }
 
 export default function GiftForm({}: Props): ReactElement {

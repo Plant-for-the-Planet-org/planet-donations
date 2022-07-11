@@ -1,9 +1,9 @@
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { RootObject } from "../../../src/Donations/PaymentMethods/Interfaces";
+import { PaymentSetup } from "../../../src/Donations/PaymentMethods/Interfaces";
 
 let stripePromise: Promise<Stripe | null>;
 
-const getStripe = (paymentSetup: RootObject) => {
+const getStripe = (paymentSetup: PaymentSetup) => {
   const lang = localStorage.getItem("language") || "en";
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey

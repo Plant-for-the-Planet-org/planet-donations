@@ -1,47 +1,29 @@
-     export interface Once {
+     export interface Date {
         minQuantity: number;
         options: {
             id: string;
             quantity: number;
             isDefault: number;
-        } | undefined
-    }
-
-    export interface Monthly {
-        minQuantity: number;
-        options: {
-            id: string;
-            quantity: number;
-            isDefault: number;
-        } | undefined
-    }
-
-    export interface Yearly {
-        minQuantity: number;
-        options: {
-            id: string;
-            quantity: number;
-            isDefault: number;
-        } | undefined
+        }[]
     }
 
     export interface Frequencies {
-        once: Once;
-        monthly: Monthly;
-        yearly: Yearly;
+        once: Date;
+        monthly: Date;
+        yearly: Date;
     }
 
-    export interface Authorization {
+    export interface PaypalAuthorization {
         client_id: string;
     }
 
     export interface Paypal {
-        methods: string[];
+        methods: string[] | null;
         account: string;
-        authorization: Authorization;
+        authorization: PaypalAuthorization;
     }
 
-    export interface Authorization2 {
+    export interface StripeAuthorization {
         stripePublishableKey: string;
         accountId: string;
     }
@@ -49,7 +31,7 @@
     export interface Stripe {
         methods: string[];
         account: string;
-        authorization: Authorization2;
+        authorization: StripeAuthorization;
         stripePublishableKey?: string;
     }
 
@@ -69,7 +51,7 @@
         methods: string[];
     }
 
-    export interface RootObject {
+    export interface PaymentSetup {
         id: string;
         name: string;
         ownerName: string;
@@ -165,7 +147,7 @@
             type:string;
         }
         
-        export interface projectDetails {
+        export interface ProjectDetails {
                 description: string;
                 id: string;
                 name: string;
@@ -175,10 +157,10 @@
                 purpose: string;
                 taxDeductionCountries: string[] | string;
             }
-        export interface  serverProps {
+        export interface  ServerProps {
             donationStep: number;
             showErrorCard: boolean;
-            projectDetails: projectDetails | null;
+            projectDetails: ProjectDetails | null;
             isGift: boolean;
             giftDetails: giftDetails;
             frequency: string;
@@ -192,7 +174,7 @@
             treecount: number;
             allowTaxDeductionChange: boolean;
             currency: string;
-            paymentSetup: RootObject;
+            paymentSetup: PaymentSetup;
             amount: number;
             tenant: string;
             locale: string;
@@ -234,7 +216,7 @@
             motivation?: string;
         }
     
-        export interface Properties {
+        export interface ProjectProperties {
             id: string;
             _scope: string;
             allowDonations: boolean;
@@ -260,12 +242,7 @@
             description?: string;
             metadata: Metadata;
         }
-    
-        export interface project {
-            type: string;
-            geometry: Geometry;
-            properties: Properties;
-        }
+
      //
 
         export interface Country {
@@ -334,7 +311,7 @@
         export interface Datum {
             type: string;
             geometry: Geometry;
-            properties: Properties;
+            properties: ProjectProperties;
         }
         export interface projects {
             config: Config;

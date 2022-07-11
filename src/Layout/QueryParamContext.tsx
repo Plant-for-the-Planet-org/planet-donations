@@ -9,11 +9,11 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
 import {
-  RootObject,
+  PaymentSetup,
   giftDetails,
   paymentSetupData,
   Profile,
-  projectDetails,
+  ProjectDetails,
   projects,
   onBehalfDonar,
 } from "src/Donations/PaymentMethods/Interfaces";
@@ -28,7 +28,7 @@ export const QueryParamContext = React.createContext({
   country: "",
   setcountry: (value: "") => {},
   paymentSetup: {},
-  setpaymentSetup: (value: RootObject) => {},
+  setpaymentSetup: (value: PaymentSetup) => {},
   currency: "",
   setcurrency: (value: "") => {},
   donationStep: null,
@@ -117,7 +117,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
 
-  const [projectDetails, setprojectDetails] = useState<projectDetails | null>(
+  const [projectDetails, setprojectDetails] = useState<ProjectDetails | null>(
     null
   );
 
