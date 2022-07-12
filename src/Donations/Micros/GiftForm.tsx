@@ -33,7 +33,7 @@ export default function GiftForm({}: Props): ReactElement {
   }, [isGift]);
 
   const onSubmit = (data: any) => {
-    setgiftDetails({ ...giftDetails, ...data });
+    setgiftDetails({ ...giftDetails, ...data, type: "invitation" });
   };
 
   const resetGiftForm = () => {
@@ -41,6 +41,7 @@ export default function GiftForm({}: Props): ReactElement {
       recipientName: "",
       email: "",
       giftMessage: "",
+      type: null,
     };
     setgiftDetails(defaultDeails);
     reset(defaultDeails);
