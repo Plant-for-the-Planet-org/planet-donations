@@ -9,11 +9,12 @@ import InstagramIcon from "../../../public/assets/icons/share/Instagram";
 import ReactDOM from "react-dom";
 import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
+import { ContactDetails } from "../../../src/Donations/PaymentMethods/GiroPayPayments";
 
 interface ShareOptionsProps {
   treeCount: string;
-  sendRef: {};
-  donor: { name: string };
+  sendRef: () => React.RefObject<HTMLInputElement | HTMLParagraphElement>;
+  donor: ContactDetails;
 }
 const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(["common", "donate"]);

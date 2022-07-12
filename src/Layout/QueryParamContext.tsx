@@ -16,6 +16,7 @@ import {
   ProjectDetails,
   projects,
   onBehalfDonar,
+  LoadConfig,
 } from "src/Donations/PaymentMethods/Interfaces";
 
 export const QueryParamContext = React.createContext({
@@ -310,7 +311,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: {} = await apiRequest(requestParams);
+      const config: LoadConfig = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(

@@ -18,7 +18,11 @@ interface CardPayments {
   totalCost: string;
   paymentType: string;
   setPaymentType: (...args: unknown[]) => unknown;
-  onPaymentFunction: (...args: unknown[]) => unknown;
+  onPaymentFunction: (
+    gateway: string,
+    method: string,
+    providerObject?: string
+  ) => Promise<void>;
   donorDetails: ContactDetails;
 }
 

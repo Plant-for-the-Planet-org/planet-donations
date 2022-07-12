@@ -214,7 +214,7 @@ interface NativePayProps {
   country: string;
   currency: string;
   amount: number;
-  onPaymentFunction: (...args: unknown[]) => unknown;
+  onPaymentFunction: (paymentMethod: any, paymentRequest: any) => Promise<void>;
   paymentSetup: PaymentSetup;
   continueNext: (...args: unknown[]) => unknown;
   isPaymentPage: boolean;

@@ -28,7 +28,10 @@ interface PaymentMethodTabs {
   showBankTransfer: boolean;
   showNativePay: boolean;
   setPaymentType: (...args: unknown[]) => unknown;
-  onNativePaymentFunction: (...args: unknown[]) => unknown;
+  onNativePaymentFunction: (
+    paymentMethod: any,
+    paymentRequest: any
+  ) => Promise<void>;
 }
 
 export default function PaymentMethodTabs({

@@ -13,7 +13,11 @@ interface Props {
   unitCost: number;
   currency: string;
   donationID: string;
-  payDonationFunction: (...args: unknown[]) => unknown;
+  payDonationFunction: (
+    gateway: string,
+    method: string,
+    providerObject?: string
+  ) => Promise<void>;
   setPaymentError: (...args: unknown[]) => unknown;
 }
 

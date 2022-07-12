@@ -5,14 +5,14 @@ import {
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,RootObject,Gateways } from './Interfaces'
+import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,PaymentSetup,Gateways } from './Interfaces'
 import { ContactDetails } from "./Interfaces";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
   gateway: Gateways,
   method: string,
-  paymentSetup: RootObject,
+  paymentSetup: PaymentSetup,
   providerObject: string
 ) {
   let account;
@@ -374,11 +374,27 @@ export async function payDonationFunction({
   }
 }
 
+
+
+interface  PaymentProviderRequest{
+  account: string;
+  gateway: string;
+  method: string;
+  source: {
+    billingToken : string | null ;
+    facilitatorAccessToken : string;
+    orderID: string;
+    payerID: string;
+    paymentID: string | null;
+    paymentSource: string;
+    type: string
+  }
+}
 export async function confirmPaymentIntent(
   donationId: string,
   // paymentIntentId: string,
   // account: string,
-  payDonationData: {paymentProviderRequest: {}},
+  payDonationData: {paymentProviderRequest: PaymentProviderRequest},
   token: string,
   setshowErrorCard: any,
   setPaymentError: any,
@@ -414,23 +430,9 @@ export async function confirmPaymentIntent(
     return confirmationResponse.data;
   }
 }
-interface Line1 {
-}
-interface buildBillingDetails {
-  firstname: string;
-  lastname: string;
-  email: string;
-  address: { 
-    city: string;
-    country: string;
-    postal_code: string;
-    line1: Line1;
-  }
-}
 
-const buildBillingDetails = (contactDetails: buildBillingDetails) => {
-  
- return {
+const buildBillingDetails = (contactDetails: ContactDetails) => {
+return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,
     address: {

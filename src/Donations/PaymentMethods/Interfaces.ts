@@ -28,8 +28,18 @@
         accountId: string;
     }
 
+    enum StripeMethods {
+        CARD = "card",
+        SEPA_DEBIT = "sepa_debit",
+        GIROPAY = "giropay",
+        SOFORT = "sofort",
+        APPLE_PAY = "apple_pay",
+        BROWSER =  "browser",
+        GOOGLEPAY =  "google_pay",
+    }
+
     export interface Stripe {
-        methods: string[];
+        methods: StripeMethods[];
         account: string;
         authorization: StripeAuthorization;
         stripePublishableKey?: string;
@@ -253,22 +263,49 @@
             currencyName: string;
             languageCode: string
         } 
-
-
-        export interface Request {
-            
+        export interface Transitional {
+            silentJSONParsing: boolean
+            forcedJSONParsing: boolean
+            clarifyTimeoutError: boolean
         }
+        export interface Headers2 {
+            Accept: string
+            "X-SESSION-ID": string
+            "X-ACCEPT-VERSION": string
+        }
+
+        export interface Params {
+            tenant: string
+            locale: string
+        }
+
         export interface Config {
-
+            url: string;
+            method: string;
+            headers: Headers2;
+            params: Params;
+            baseURL: string;
+            transformRequest: any[];
+            transformResponse: any[];
+            timeout: number;
+            xsrfCookieName: string;
+            xsrfHeaderName: string;
+            maxContentLength: number;
+            maxBodyLength: number;
+            transitional: Transitional;
+        }
+      
+        export interface Headers {
+            "cache-control": string
+            "content-type": string
+            expires: string
         }
 
-        export interface Header {
-
-        }
+        export interface Request {}
         export interface paymentSetupData {
             config: Config;
-            data: {currency: string; effectiveCountry: string} ;
-            headers: Header;
+            data: {currency: string; effectiveCountry: string};
+            headers: Headers;
             request: Request;
             status: number;
             statusText: string;
@@ -329,4 +366,44 @@
             lastName: string;
             email: string;
         }
+
+        export interface AppVersion {
+            android: string;
+            ios: string;
+        }
+
+        export interface CdnMedia {
+            cache: string;
+            images: string;
+            pdfs: string
+        }
        
+        export interface Loc {
+            city: string;
+            countryCode: string;
+            latitude: string;
+            longitude: string;
+            postalCode: string;
+            regionCode: string;
+            timezone: string;
+        }
+
+        export interface LoadConfig {
+            config: Config;
+            data: {
+                appVersions: AppVersion;
+                cdnMedia:  CdnMedia;
+                clientIp: string;
+                country: string;
+                currency: string;
+
+            };
+            loc: Loc;
+            headers: {
+                "cache-control": string
+                "content-type": string
+            }
+            request: Request;
+            status: number;
+            statusText: string;
+        }
