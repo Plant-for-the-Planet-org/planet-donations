@@ -13,7 +13,7 @@ export default function GiftForm({}: Props): ReactElement {
   const { giftDetails, setgiftDetails, isGift, setisGift } =
     React.useContext(QueryParamContext);
 
-  const defaultDeails = {
+  const defaultDetails = {
     recipientName: giftDetails.recipientName,
     recipientEmail: giftDetails.recipientEmail,
     giftMessage: giftDetails.giftMessage,
@@ -21,7 +21,7 @@ export default function GiftForm({}: Props): ReactElement {
 
   const { register, errors, handleSubmit, reset } = useForm({
     mode: "all",
-    defaultValues: defaultDeails,
+    defaultValues: defaultDetails,
   });
 
   React.useEffect(() => {
@@ -37,14 +37,14 @@ export default function GiftForm({}: Props): ReactElement {
   };
 
   const resetGiftForm = () => {
-    const defaultDeails = {
+    const defaultDetails = {
       recipientName: "",
       email: "",
       giftMessage: "",
       type: null,
     };
-    setgiftDetails(defaultDeails);
-    reset(defaultDeails);
+    setgiftDetails(defaultDetails);
+    reset(defaultDetails);
   };
 
   const router = useRouter();
