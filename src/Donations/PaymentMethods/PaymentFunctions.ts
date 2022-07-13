@@ -5,8 +5,7 @@ import {
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Once,Monthly,Yearly,Frequencies,Authorization,Paypal,Authorization2,Stripe,Offline,Recurrency,PaymentSetup,Gateways } from './Interfaces'
-import { ContactDetails } from "./Interfaces";
+import { ContactDetails, PaymentSetup,Gateways} from "./Interfaces";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
@@ -160,19 +159,7 @@ interface  createDonationData {
     ownerAvatar: string;
   },
   quantity: number,
-  paymentSetup: {
-    Once: Once;
-    Monthly: Monthly;
-    Yearly: Yearly;
-    Frequencies: Frequencies;
-    Authorization: Authorization;
-    Paypal: Paypal;
-    Authorization2: Authorization2;
-    Stripe: Stripe;
-    Offline: Offline;
-    Recurrency: Recurrency;
-    RootObject: RootObject;
-  },
+  paymentSetup: PaymentSetup;
   currency: string;
   contactDetails: ContactDetails;
   taxDeductionCountry: string;
@@ -473,7 +460,7 @@ export async function handleStripeSCAPayment({
   router,
   tenant,
 }: HandleStripeSCAPaymentProps) {
- 
+ console.log(method)
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -489,6 +476,7 @@ export async function handleStripeSCAPayment({
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
           stripeResponse = await stripe.handleCardAction(clientSecret);
+          console.log(stripeResponse)
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(stripeResponse.error.message);
@@ -514,6 +502,7 @@ export async function handleStripeSCAPayment({
               tenant
             );
             successData = successResponse.data;
+            console.log(successData)
           } catch (error: any) {
             // implement and call an exception handling function
             handlePaymentError(error, setIsPaymentProcessing, setPaymentError);

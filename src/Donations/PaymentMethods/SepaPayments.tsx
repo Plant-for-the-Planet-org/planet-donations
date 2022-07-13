@@ -10,7 +10,11 @@ import { ContactDetails } from "../../../src/Donations/PaymentMethods/Interfaces
 
 interface SepaPayments {
   paymentType: string;
-  onPaymentFunction: (...args: unknown[]) => unknown;
+  onPaymentFunction: (
+    gateway: string,
+    method: string,
+    providerObject?: providerObject | string
+  ) => Promise<void>;
   contactDetails: ContactDetails;
 }
 

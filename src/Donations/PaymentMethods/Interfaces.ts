@@ -139,7 +139,7 @@
         donorAlias?: any;
         amount: number;
         currency: string;
-        frequency?: Frequencies | null;
+        frequency?: string | null;
         gateway: string;
         paymentStatus: string;
         taxDeductionCountry: string;
@@ -406,4 +406,12 @@
             request: Request;
             status: number;
             statusText: string;
+        }
+
+
+        export interface TransferDetails {
+            bankName: string;
+            beneficiary: string;
+            bic: string;
+            iban: string;
         }

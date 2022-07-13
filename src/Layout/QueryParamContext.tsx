@@ -17,6 +17,7 @@ import {
   projects,
   onBehalfDonar,
   LoadConfig,
+  TransferDetails,
 } from "src/Donations/PaymentMethods/Interfaces";
 
 export const QueryParamContext = React.createContext({
@@ -195,7 +196,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [paymentError, setPaymentError] = React.useState("");
-  const [transferDetails, setTransferDetails] = React.useState<{} | null>(null);
+  const [transferDetails, setTransferDetails] =
+    React.useState<TransferDetails | null>(null);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
 
