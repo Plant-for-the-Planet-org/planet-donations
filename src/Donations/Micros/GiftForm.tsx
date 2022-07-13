@@ -37,14 +37,14 @@ export default function GiftForm({}: Props): ReactElement {
   };
 
   const resetGiftForm = () => {
-    const defaultDetails = {
+    const _defaultDetails = {
       recipientName: "",
       email: "",
       giftMessage: "",
       type: null,
     };
-    setgiftDetails(defaultDetails);
-    reset(defaultDetails);
+    setgiftDetails(_defaultDetails);
+    reset(_defaultDetails);
   };
 
   const router = useRouter();
