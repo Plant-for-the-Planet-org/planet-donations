@@ -460,7 +460,7 @@ export async function handleStripeSCAPayment({
   router,
   tenant,
 }: HandleStripeSCAPaymentProps) {
- console.log(method)
+
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
     ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -476,7 +476,7 @@ export async function handleStripeSCAPayment({
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
           stripeResponse = await stripe.handleCardAction(clientSecret);
-          console.log(stripeResponse)
+        
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(stripeResponse.error.message);
@@ -502,7 +502,7 @@ export async function handleStripeSCAPayment({
               tenant
             );
             successData = successResponse.data;
-            console.log(successData)
+          
           } catch (error: any) {
             // implement and call an exception handling function
             handlePaymentError(error, setIsPaymentProcessing, setPaymentError);

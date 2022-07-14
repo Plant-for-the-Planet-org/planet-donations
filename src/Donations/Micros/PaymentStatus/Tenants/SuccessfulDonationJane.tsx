@@ -17,8 +17,6 @@ function SuccessfulDonationJane({
 }: SuccessfulDonationJane) {
   const { t } = useTranslation(["common", "country", "donate"]);
 
-  console.log(donation);
-
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
