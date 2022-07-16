@@ -109,7 +109,7 @@ export default function QueryParamProvider({ children }: any) {
   const { i18n } = useTranslation();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
-  const [errorMessage, setErrorMessage] = useState<string>("cool");
+  const [errorMessage, setErrorMessage] = useState<string>(" ");
 
   const [projectDetails, setprojectDetails] = useState<Object | null>(null);
 
