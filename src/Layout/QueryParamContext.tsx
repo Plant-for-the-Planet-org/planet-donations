@@ -10,13 +10,12 @@ import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
 import {
   PaymentSetup,
-  giftDetails,
+  GiftDetails,
   paymentSetupData,
   Profile,
   ProjectDetails,
   projects,
   onBehalfDonar,
-  LoadConfig,
   TransferDetails,
 } from "src/Donations/PaymentMethods/Interfaces";
 
@@ -153,7 +152,7 @@ export default function QueryParamProvider({ children }: any) {
   const [frequency, setfrequency] = useState<null | string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<giftDetails>({
+  const [giftDetails, setgiftDetails] = useState<GiftDetails>({
     recipientName: "",
     recipientEmail: "",
     giftMessage: "",
@@ -313,7 +312,7 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: LoadConfig = await apiRequest(requestParams);
+      const config: any = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(

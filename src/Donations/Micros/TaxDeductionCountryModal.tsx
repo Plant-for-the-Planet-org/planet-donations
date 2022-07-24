@@ -20,7 +20,7 @@ export default function TaxDeductionCountryModal(props: any) {
 
   const { t, ready } = useTranslation("common");
 
-  const [countriesData, setCountriesData] = useState([]);
+  const [countriesData, setCountriesData] = useState<Country[]>([]);
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -75,7 +75,7 @@ export default function TaxDeductionCountryModal(props: any) {
                 value={`${country},${currency}`}
                 onChange={handleCountryChange}
               >
-                {countriesData.map((country: Country[], index: number) => (
+                {countriesData.map((country: Country, index: number) => (
                   <FormControlLabel
                     key={country.countryCode + "-" + index}
                     value={`${country.countryCode},${country.currencyCode}`} // need both info

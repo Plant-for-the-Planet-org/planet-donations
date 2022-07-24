@@ -1,16 +1,21 @@
-     export interface Date {
+    import { AuthorizationStripe } from "../../Common/Types/index"
+     
+     export interface FrequencyDetails {
         minQuantity: number;
         options: {
             id: string;
             quantity: number;
-            isDefault: number;
+            isDefault: Boolean;
+            caption: null;
+            description: null;
+            icon: null
         }[]
     }
 
     export interface Frequencies {
-        once: Date;
-        monthly: Date;
-        yearly: Date;
+        once: FrequencyDetails;
+        monthly: FrequencyDetails;
+        yearly: FrequencyDetails;
     }
 
     export interface PaypalAuthorization {
@@ -23,10 +28,7 @@
         authorization: PaypalAuthorization;
     }
 
-    export interface StripeAuthorization {
-        stripePublishableKey: string;
-        accountId: string;
-    }
+   
 
     enum StripeMethods {
         CARD = "card",
@@ -41,12 +43,12 @@
     export interface Stripe {
         methods: StripeMethods[];
         account: string;
-        authorization: StripeAuthorization;
+        authorization: AuthorizationStripe;
         stripePublishableKey?: string;
     }
 
     export interface Offline {
-        methods: string[];
+        methods: StripeMethods[];
         account: string;
     }
 
@@ -58,7 +60,7 @@
 
     export interface Recurrency {
         supported: boolean;
-        methods: string[];
+        methods: StripeMethods[];
     }
 
     export interface PaymentSetup {
@@ -70,7 +72,7 @@
         image: string;
         requestedCountry: string;
         effectiveCountry: string;
-        frequencies: Frequencies;
+        frequencies: Frequencies | null;
         taxDeductionCountries: string[];
         gateways: Gateways;
         purpose: string;
@@ -139,7 +141,7 @@
         donorAlias?: any;
         amount: number;
         currency: string;
-        frequency?: string | null;
+        frequency?: Frequencies | null;
         gateway: string;
         paymentStatus: string;
         taxDeductionCountry: string;
@@ -150,12 +152,12 @@
 
     //3
 
-        export interface giftDetails {
-            giftMessage: string;
-            recipientEmail: string;
-            recipientName: string;
-            type:string;
-        }
+        export interface GiftDetails {
+            giftMessage: string | null;
+            recipientEmail: string | null;
+            recipientName: string | null;
+            type:string | null;
+           }
         
         export interface ProjectDetails {
                 description: string;
@@ -172,7 +174,7 @@
             showErrorCard: boolean;
             projectDetails: ProjectDetails | null;
             isGift: boolean;
-            giftDetails: giftDetails;
+            giftDetails: GiftDetails;
             frequency: string;
             hideTaxDeduction: boolean;
             isTaxDeductible: boolean;
@@ -353,7 +355,7 @@
         export interface projects {
             config: Config;
             data: Datum[];
-            headers: Header;
+            headers: Headers;
             request: Request;
             status: number;
             statusText: string;

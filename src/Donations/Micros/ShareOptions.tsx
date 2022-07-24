@@ -9,7 +9,7 @@ import InstagramIcon from "../../../public/assets/icons/share/Instagram";
 import ReactDOM from "react-dom";
 import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
-import { ContactDetails } from "../../../src/Donations/PaymentMethods/GiroPayPayments";
+import { ContactDetails } from ".././PaymentMethods/Interfaces";
 
 interface ShareOptionsProps {
   treeCount: string;

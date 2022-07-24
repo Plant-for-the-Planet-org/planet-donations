@@ -17,13 +17,13 @@ import {
   Recurrency,
   ServerProps,
   ProjectDetails,
-  giftDetails,
+  GiftDetails,
 } from "../src/Donations/PaymentMethods/Interfaces";
 
 interface Props {
   projectDetails: ProjectDetails;
   donationStep: number;
-  giftDetails: giftDetails;
+  giftDetails: GiftDetails;
   isGift: boolean;
   resolvedUrl: any;
   isDirectDonation: boolean;

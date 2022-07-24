@@ -3,6 +3,7 @@ import {
   ContactDetails,
   ProjectDetails,
   Gateways,
+  GiftDetails,
 } from "src/Donations/PaymentMethods/Interfaces";
 
 export interface ProjectTypes {
@@ -81,15 +82,6 @@ export interface ProjectTypes {
   };
 }
 
-export interface giftDetailsProps {
-  type: string | null;
-  recipientName: string | null;
-  email: string | null;
-  giftMessage: string | null;
-  recipientTreecounter: number | null;
-  receipients: {} | null;
-}
-
 export interface CreateDonationFunctionProps {
   isTaxDeductible: boolean | null;
   country: string;
@@ -98,7 +90,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentSetup;
   currency: string;
   contactDetails: ContactDetails;
-  giftDetails: giftDetailsProps;
+  giftDetails: GiftDetails;
   isGift: boolean;
   setIsPaymentProcessing: (...args: unknown[]) => unknown;
   setPaymentError: (...args: unknown[]) => unknown;
