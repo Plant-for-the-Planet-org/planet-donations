@@ -39,7 +39,10 @@ export default function TaxDeductionCountryModal(props: any) {
     let tempCountriesData: Country[] = [];
     if (taxDeductionCountries && taxDeductionCountries.length > 0) {
       taxDeductionCountries.forEach((countryCode: string) => {
-        tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
+        const _country = getCountryDataBy("countryCode", countryCode);
+        if (_country) {
+          tempCountriesData.push(_country);
+        }
       });
       tempCountriesData = tempCountriesData.sort(function (a, b) {
         const countryA = t(`country:${a.countryCode.toLowerCase()}`);

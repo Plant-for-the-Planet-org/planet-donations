@@ -445,6 +445,12 @@ const handlePaymentError = (
   }
 };
 
+
+
+interface SuccessData {
+  id: string;
+  status: string
+}
 export async function handleStripeSCAPayment({
   method,
   paymentResponse,
@@ -470,7 +476,7 @@ export async function handleStripeSCAPayment({
   });
   switch (method) {
     case "card": {
-      let successData = {};
+      let successData : SuccessData = {};
       let stripeResponse = {};
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side

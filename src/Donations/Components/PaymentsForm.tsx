@@ -89,8 +89,9 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: any
+    providerObject?: string
   ) => {
+    console.log(providerObject);
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
@@ -375,7 +376,7 @@ function PaymentsForm({}: Props): ReactElement {
                       currency,
                       paymentSetup.unitCost * quantity
                     )}
-                    onPaymentFunction={(providerObject: any) =>
+                    onPaymentFunction={(providerObject: string) =>
                       onSubmitPayment("stripe", "card", providerObject)
                     }
                     paymentType={paymentType}

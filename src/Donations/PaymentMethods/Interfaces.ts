@@ -96,7 +96,7 @@
 
     //2
 
-    export interface Metadata {
+    export interface MetadataCallback {
         callback_url: string;
         callback_method: string;
     }
@@ -123,7 +123,7 @@
         id: string;
         treeCount: number;
         token: string;
-        metadata: Metadata;
+        metadata: MetadataCallback;
         isRecurrent: boolean;
         tenant: string;
         project: Project;
@@ -222,10 +222,10 @@
         }
     
         export interface Metadata {
-            degradationCause?: string;
-            longTermPlan?: string;
-            mainChallenge?: string;
-            motivation?: string;
+            degradationCause: null | string;
+            longTermPlan: null | string;
+            mainChallenge: null | string;
+            motivation: null | string;
         }
     
         export interface ProjectProperties {

@@ -7,7 +7,7 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps } from "src/Common/Types";
+
 import {
   PaymentSetup,
   GiftDetails,
@@ -116,7 +116,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const { i18n } = useTranslation();
 
-  const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
+  const [paymentSetup, setpaymentSetup] = useState<PaymentSetup | {}>({});
 
   const [projectDetails, setprojectDetails] = useState<ProjectDetails | null>(
     null
