@@ -290,7 +290,7 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   const loadProfile = React.useCallback(async () => {
-    const token = await getAccessTokenSilently();
+    const token = queryToken || router.query.token || await getAccessTokenSilently();
     try {
       const profile = await apiRequest({
         url: "/app/profile",
@@ -315,7 +315,7 @@ export default function QueryParamProvider({ children }: any) {
     if (regex.test(router.query.to)) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
-      if (!isLoading && !isAuthenticated) {
+      if (!queryToken && !router.query.token && !isLoading && !isAuthenticated) {
         loginWithRedirect({
           redirectUri: window?.location.href,
         });
@@ -328,19 +328,21 @@ export default function QueryParamProvider({ children }: any) {
           });
           setdonationStep(1);
         } else if (!profile?.planetCash) {
-          if (profile?.displayName) {
+          if(router.query.token){
+            loadProfile();
+          } else if (profile?.displayName) {
             setprojectDetails({
               name: `PlanetCash - ${profile?.displayName}`,
               ownerName: profile?.displayName,
               ownerAvatar: profile?.image,
               purpose: "planet-cash-signup",
             });
+            setdonationStep(4);
           }
-          setdonationStep(4);
         }
       }
     }
-  }, [router.query.to, country, profile, isLoading, isAuthenticated]);
+  }, [router.query.to, country, profile, isLoading, isAuthenticated, router.query.token]);
 
   React.useEffect(() => {
     const regex = /^pcash_/;
