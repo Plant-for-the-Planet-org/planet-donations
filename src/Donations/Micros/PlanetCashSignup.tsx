@@ -28,7 +28,7 @@ const allowedCountries = ["DE", "ES", "US"];
 const PlanetCashSignup = () => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
-  const { setshowErrorCard } = useContext(QueryParamContext);
+  const { setshowErrorCard, queryToken } = useContext(QueryParamContext);
   const { theme } = React.useContext(ThemeContext);
   const router = useRouter();
 
@@ -62,7 +62,7 @@ const PlanetCashSignup = () => {
   const classes = usePlanetCashSignupStyles();
 
   const fetchPlanetCashAccounts = useCallback(async () => {
-    const token = await getAccessTokenSilently();
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
     setLoading(true);
     try {
       const options = {
@@ -101,7 +101,7 @@ const PlanetCashSignup = () => {
 
   const handleActivatePlanetCashAccount = useCallback(async () => {
     if (currentPlanetCashAccount) {
-      const token = await getAccessTokenSilently();
+      const token = queryToken ? queryToken : await getAccessTokenSilently();
       try {
         const options = {
           method: "POST",
@@ -118,7 +118,7 @@ const PlanetCashSignup = () => {
   }, [currentPlanetCashAccount]);
 
   const handleCreatePlanetCashAccount = async () => {
-    const token = await getAccessTokenSilently();
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
     try {
       const options = {
         method: "POST",
