@@ -423,7 +423,7 @@ export async function getServerSideProps(context: any) {
   const url = process.env.APP_URL + resolvedUrl;
 
   const res = await fetch(
-    `/api/image?path=${encodeURIComponent(url)}`
+    `pages/api/image?path=${encodeURIComponent(url)}`
   )
 
   const image = await res.blob()
