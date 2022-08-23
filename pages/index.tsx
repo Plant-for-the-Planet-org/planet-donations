@@ -421,9 +421,12 @@ export async function getServerSideProps(context: any) {
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = process.env.APP_URL + resolvedUrl;
-  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
-    url
-  )}?w=1200&h=770.jpg`;
+
+  const res = await fetch(
+    `/api/image?path=${encodeURIComponent(url)}`
+  )
+
+  const image = await res.blob()
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
