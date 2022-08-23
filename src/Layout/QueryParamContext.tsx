@@ -9,6 +9,7 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
+import {validateToken} from "../Utils/tokenActions";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -329,7 +330,9 @@ export default function QueryParamProvider({ children }: any) {
           setdonationStep(1);
         } else if (!profile?.planetCash) {
           if(router.query.token){
-            loadProfile();
+            if(validateToken(router.query.token)){
+              loadProfile();
+            }
           } else if (profile?.displayName) {
             setprojectDetails({
               name: `PlanetCash - ${profile?.displayName}`,
