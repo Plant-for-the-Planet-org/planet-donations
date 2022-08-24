@@ -24,7 +24,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Extract the url from the query parameter `path`
   const url = req.query.path as string
 
-  await page.goto(url)
+  await page.goto(url, {
+    timeout: 15 * 1000
+  })
 
   const data = await page.screenshot({
     type: "png",
@@ -33,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   await browser.close()
 
   // Set the `s-maxage` property to cache at the CDN layer
-  res.setHeader("Cache-Control", "s-maxage=31536000, public")
+  res.setHeader("Cache-Control", "s-maxage=31536000, stale-while-revalidate")
   res.setHeader("Content-Type", "image/png")
   res.end(data)
 }
