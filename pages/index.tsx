@@ -426,9 +426,10 @@ export async function getServerSideProps(context: any) {
 
   const res = await fetch(process.env.APP_URL + `/api/image?path=${encodeURIComponent(url)}`)
   _image  = await res.blob()
+  let buffer = Buffer.from(await _image.text());
 
-
-  const image = URL.createObjectURL(_image as Blob)
+  // const image = URL.createObjectURL(_image as Blob)
+  const image = buffer.toString('base64')
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
