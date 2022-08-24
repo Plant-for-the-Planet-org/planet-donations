@@ -423,7 +423,7 @@ export async function getServerSideProps(context: any) {
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = process.env.APP_URL + resolvedUrl;
 
-  const image = encodeURIComponent(url);
+  const image = url;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
