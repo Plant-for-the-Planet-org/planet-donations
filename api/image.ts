@@ -25,7 +25,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const url = req.query.path as string
 
   await page.goto(url, {
-    waitUntil: "domcontentloaded"
+    timeout: 15 * 1000,
+    waitUntil: "networkidle"
   })
 
   const data = await page.screenshot({
