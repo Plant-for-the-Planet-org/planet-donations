@@ -422,11 +422,9 @@ export async function getServerSideProps(context: any) {
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
   const url = process.env.APP_URL + resolvedUrl;
 
-  let _image;
-
   const res = await fetch(process.env.APP_URL + `/api/image?path=${encodeURIComponent(url)}`)
-  _image  = await res.blob()
-  let buffer = Buffer.from(await _image.text());
+  const _image  = await res.blob()
+  const buffer = Buffer.from(await _image.text());
 
   // const image = URL.createObjectURL(_image as Blob)
   const image = buffer.toString('base64')
