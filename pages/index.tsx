@@ -172,13 +172,12 @@ function index({
         <meta property="og:description" content={meta.description} />
         <meta name="description" content={meta.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content={process.env.APP_URL + "/api/image?path=" + meta.image} />
-        {/* <meta property="og:image" content={meta.image} /> */}
+        <meta property="og:image" content={meta.image} />
         <meta property="og:url" content={meta.url} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={meta.title} />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content={process.env.APP_URL + "/api/image?path=" + meta.image}></meta>
+        <meta property="twitter:image" content={meta.image}></meta>
         <meta property="twitter:url" content={meta.url} />
         <meta name="twitter:description" content={meta.description} />
 
@@ -421,10 +420,9 @@ export async function getServerSideProps(context: any) {
   }
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = process.env.APP_URL + resolvedUrl;
-
+  const url = process.env.APP_URL + "/api/image?path=" + process.env.APP_URL + resolvedUrl;
   const image = url;
-
+  
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
     if (projectDetails.purpose === "trees") {
