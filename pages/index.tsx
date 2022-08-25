@@ -420,11 +420,17 @@ export async function getServerSideProps(context: any) {
   }
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url =
+
+  let url =
     process.env.APP_URL +
     "/api/image?path=" +
     process.env.APP_URL +
     resolvedUrl;
+
+  if (!context.query.step) {
+    url = url + "&step=donate";
+  }
+
   const image = url;
 
   if (projectDetails) {
