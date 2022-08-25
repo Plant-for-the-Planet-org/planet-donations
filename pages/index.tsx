@@ -427,7 +427,7 @@ export async function getServerSideProps(context: any) {
     process.env.APP_URL +
     resolvedUrl;
 
-  if (!context.query.step) {
+  if (Object.keys(context.query).length > 0 && context.query.to && !context.query.step) {
     url = url + "&step=donate";
   }
 
