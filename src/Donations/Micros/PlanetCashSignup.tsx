@@ -62,7 +62,11 @@ const PlanetCashSignup = () => {
   const classes = usePlanetCashSignupStyles();
 
   const fetchPlanetCashAccounts = useCallback(async () => {
-    const token = queryToken ? queryToken : await getAccessTokenSilently();
+    const token = router.query.token
+      ? router.query.token
+      : queryToken
+      ? queryToken
+      : await getAccessTokenSilently();
     setLoading(true);
     try {
       const options = {
@@ -101,7 +105,11 @@ const PlanetCashSignup = () => {
 
   const handleActivatePlanetCashAccount = useCallback(async () => {
     if (currentPlanetCashAccount) {
-      const token = queryToken ? queryToken : await getAccessTokenSilently();
+      const token = router.query.token
+        ? router.query.token
+        : queryToken
+        ? queryToken
+        : await getAccessTokenSilently();
       try {
         const options = {
           method: "POST",
@@ -118,7 +126,11 @@ const PlanetCashSignup = () => {
   }, [currentPlanetCashAccount]);
 
   const handleCreatePlanetCashAccount = async () => {
-    const token = queryToken ? queryToken : await getAccessTokenSilently();
+    const token = router.query.token
+      ? router.query.token
+      : queryToken
+      ? queryToken
+      : await getAccessTokenSilently();
     try {
       const options = {
         method: "POST",
