@@ -352,6 +352,9 @@ export default function QueryParamProvider({ children }: any) {
               } else if (!profile?.planetCash && profile?.displayName) {
                 showPlanetCashSignUpScreen();
               }
+            } else {
+              // If token is invalid force user to login
+              router.push("/?to=planetcash&step=donate");
             }
           } else if (profile?.displayName) {
             showPlanetCashSignUpScreen();
