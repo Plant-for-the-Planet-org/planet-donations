@@ -250,7 +250,7 @@ export async function getServerSideProps(context: any) {
   ) {
     const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
-    if (to !== "planetCash") {
+    if (to?.toString().toLowerCase() !== "planetcash") {
       try {
         const requestParams = {
           url: `/app/paymentOptions/${to}?country=${country}`,
