@@ -313,6 +313,9 @@ export async function getServerSideProps(context: any) {
         if (donation.data.taxDeductionCountry) {
           country = donation.data.taxDeductionCountry;
           isTaxDeductible = true;
+        } else if (donation.data.gateway === "planet-cash") {
+          hideTaxDeduction = true;
+          country = donation.data.destination.country;
         } else {
           hideTaxDeduction = true;
           country = donorData.country;
@@ -427,7 +430,11 @@ export async function getServerSideProps(context: any) {
     process.env.APP_URL +
     resolvedUrl;
 
-  if (Object.keys(context.query).length > 0 && context.query.to && !context.query.step) {
+  if (
+    Object.keys(context.query).length > 0 &&
+    context.query.to &&
+    !context.query.step
+  ) {
     url = url + "&step=donate";
   }
 
