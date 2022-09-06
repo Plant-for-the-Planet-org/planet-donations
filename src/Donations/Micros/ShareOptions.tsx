@@ -19,7 +19,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(["common", "donate"]);
 
   const titleToShare = ready ? t("donate:titleToShare") : "";
-  const urlToShare = "";
+  const urlToShare = encodeURI(`${window.location.href}`);
   const linkToShare = "";
   let textToShare = "";
   // donor may be undefined or empty for legacy donations or redeem
@@ -69,7 +69,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
 
   const [currentHover, setCurrentHover] = React.useState(-1);
 
-  const shareClicked = async (shareUrl) => {
+  const shareClicked = (shareUrl) => {
     openWindowLinks(shareUrl);
   };
 
