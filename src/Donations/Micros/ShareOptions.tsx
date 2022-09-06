@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import EmailIcon from "../../../public/assets/icons/share/Email";
 import EmailSolid from "../../../public/assets/icons/share/EmailSolid";
 import FacebookIcon from "../../../public/assets/icons/share/Facebook";
@@ -9,7 +9,7 @@ import InstagramIcon from "../../../public/assets/icons/share/Instagram";
 import ReactDOM from "react-dom";
 import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
+import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 interface ShareOptionsProps {
   treeCount: String;
@@ -18,13 +18,18 @@ interface ShareOptionsProps {
 }
 const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(["common", "donate"]);
+  const [urlToShare, setUrlToShare] = useState("");
+  const { donation } = useContext(QueryParamContext);
 
-  const router = useRouter();
+  useEffect(() => {
+    if (donation) {
+      setUrlToShare(
+        encodeURIComponent(`${window.location.origin}?context=${donation!.id}`)
+      );
+    }
+  }, [donation]);
 
   const titleToShare = ready ? t("donate:titleToShare") : "";
-  const urlToShare = encodeURIComponent(
-    `${window.location.origin}?to=${router.query.to}&step=${router.query.step}`
-  );
   const linkToShare = "";
   let textToShare = "";
   // donor may be undefined or empty for legacy donations or redeem
@@ -106,12 +111,13 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
       <button
         id={"shareFacebook"}
         onClick={() =>
+          donation &&
           shareClicked(
             `https://www.facebook.com/sharer.php?u=${urlToShare}&quote=${textToShare}&hashtag=%23StopTalkingStartPlanting`,
             "_blank"
           )
         }
-        onMouseOver={() => setCurrentHover(2)}
+        onMouseOver={() => donation && setCurrentHover(2)}
       >
         <FacebookIcon
           color={currentHover === 2 ? "#3b5998" : "backgroundColorDark"}
