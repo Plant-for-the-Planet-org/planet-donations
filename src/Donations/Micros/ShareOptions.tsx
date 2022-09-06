@@ -22,7 +22,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const router = useRouter();
 
   const titleToShare = ready ? t("donate:titleToShare") : "";
-  const urlToShare = encodeURI(
+  const urlToShare = encodeURIComponent(
     `${window.location.origin}?to=${router.query.to}&step=${router.query.step}`
   );
   const linkToShare = "";
