@@ -113,7 +113,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
         onClick={() =>
           donation &&
           shareClicked(
-            `https://www.facebook.com/sharer.php?u=${urlToShare}&quote=${textToShare}&hashtag=%23StopTalkingStartPlanting`,
+            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`,
             "_blank"
           )
         }
