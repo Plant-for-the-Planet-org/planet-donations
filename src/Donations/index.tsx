@@ -26,7 +26,6 @@ interface Props {}
 function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
-  console.log(router.query);
 
   const {
     paymentSetup,
