@@ -53,15 +53,15 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
   const ImageDonationText = () => {
     return (
       <div className={"donation-count p-20"}>
-        {projectDetails.purpose === "trees" &&
+        {projectDetails?.purpose === "trees" &&
           t("common:myTreesPlantedByOnLocation", {
             treeCount: getFormattedNumber(
               i18n.language,
               Number(donation.treeCount)
             ),
-            location: t("country:" + donation.project.country.toLowerCase()),
+            location: t("country:" + donation.destination.country.toLowerCase()),
           })}
-        {projectDetails.purpose === "conservation" &&
+        {projectDetails?.purpose === "conservation" &&
           t(
             `common:${
               profile?.type && pluralProfileTypes.includes(profile?.type)
@@ -74,16 +74,16 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
                 donation.currency,
                 Number(donation.amount)
               ),
-              location: t("country:" + donation.project.country.toLowerCase()),
+              location: t("country:" + donation.destination.country.toLowerCase()),
             }
           )}
-        {projectDetails.purpose === "funds" &&
+        {projectDetails?.purpose === "funds" &&
           t("common:contributedToTpo", {
             amount: currencyFormat(),
             organization: projectDetails.ownerName,
           })}
 
-        {projectDetails.purpose === "bouquet" &&
+        {projectDetails?.purpose === "bouquet" &&
           t("common:myContributionIsPartOfThat")}
       </div>
     );

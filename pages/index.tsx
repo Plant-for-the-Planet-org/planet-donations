@@ -13,11 +13,11 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 
 interface Props {
-  projectDetails: Object;
+  projectDetails?: Object;
   donationStep: any;
   giftDetails: Object;
   isGift: boolean;
-  resolvedUrl: any;
+  resolvedUrl?: any;
   isDirectDonation: boolean;
   hideTaxDeduction: boolean;
   isTaxDeductible: boolean;
@@ -28,7 +28,7 @@ interface Props {
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: any;
-  treecount: any;
+  treecount?: any;
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
@@ -38,11 +38,9 @@ interface Props {
 }
 
 function index({
-  projectDetails,
   donationStep,
   giftDetails,
   isGift,
-  resolvedUrl,
   isDirectDonation,
   hideTaxDeduction,
   isTaxDeductible,
@@ -53,16 +51,15 @@ function index({
   allowTaxDeductionChange,
   currency,
   paymentSetup,
-  treecount,
   amount,
   meta,
   frequency,
   tenant,
   callbackUrl,
   callbackMethod,
+  projectDetails,
 }: Props): ReactElement {
   const {
-    setprojectDetails,
     setdonationStep,
     loadselectedProjects,
     setgiftDetails,
@@ -82,6 +79,7 @@ function index({
     settenant,
     setcallbackUrl,
     setCallbackMethod,
+    setprojectDetails,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -116,6 +114,8 @@ function index({
   }, []);
 
   // If project details are present set project details
+  // This will be set from getServerSideProps.
+
   React.useEffect(() => {
     if (projectDetails) {
       setprojectDetails(projectDetails);
@@ -250,30 +250,33 @@ export async function getServerSideProps(context: any) {
   ) {
     const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
-    try {
-      const requestParams = {
-        url: `/app/paymentOptions/${to}?country=${country}`,
-        setshowErrorCard,
-        tenant,
-      };
-      const paymentOptionsResponse = await apiRequest(requestParams);
-      if (paymentOptionsResponse.data) {
-        projectDetails = {
-          id: paymentOptionsResponse.data.id,
-          name: paymentOptionsResponse.data.name,
-          description: paymentOptionsResponse.data.description,
-          purpose: paymentOptionsResponse.data.purpose,
-          ownerName: paymentOptionsResponse.data.ownerName,
-          taxDeductionCountries:
-            paymentOptionsResponse.data.taxDeductionCountries,
-          projectImage: paymentOptionsResponse.data.image,
-          ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+    if (to?.toString().toLowerCase() !== "planetcash") {
+      try {
+        const requestParams = {
+          url: `/app/paymentOptions/${to}?country=${country}`,
+          setshowErrorCard,
+          tenant,
+          locale,
         };
-        donationStep = 1;
+        const paymentOptionsResponse = await apiRequest(requestParams);
+        if (paymentOptionsResponse.data) {
+          projectDetails = {
+            id: paymentOptionsResponse.data.id,
+            name: paymentOptionsResponse.data.name,
+            description: paymentOptionsResponse.data.description,
+            purpose: paymentOptionsResponse.data.purpose,
+            ownerName: paymentOptionsResponse.data.ownerName,
+            taxDeductionCountries:
+              paymentOptionsResponse.data.taxDeductionCountries,
+            projectImage: paymentOptionsResponse.data.image,
+            ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+          };
+          donationStep = 1;
+        }
+      } catch (err) {
+        donationStep = 0;
+        console.log("err", err);
       }
-    } catch (err) {
-      donationStep = 0;
-      console.log("err", err);
     }
   } else {
     if (!context.query.context) {
@@ -321,7 +324,7 @@ export async function getServerSideProps(context: any) {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.data.project.id}?country=${country}`,
+            url: `/app/paymentOptions/${donation.data.destination.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,

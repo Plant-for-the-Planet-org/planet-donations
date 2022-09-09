@@ -46,7 +46,10 @@ const PlanetCashSelector: FC = (props) => {
     ) {
       setIsPlanetCashActive(true);
     }
-  }, [paymentRequest]);
+    if (frequency !== "once") {
+      setIsPlanetCashActive(false);
+    }
+  }, [paymentRequest, frequency]);
 
   useEffect(() => {
     // This is done to lock the transaction with PlanetCash in a single currency.
@@ -57,13 +60,6 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
-
-  useEffect(() => {
-    // Donation with PlanetCash is a one time process.
-    if (frequency !== "once") {
-      setIsPlanetCashActive(false);
-    }
-  }, [frequency]);
 
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
@@ -114,7 +110,7 @@ const PlanetCashSelector: FC = (props) => {
 
   const handleAddBalance = () => {
     router.replace({
-      query: { ...router.query, to: profile!.planetCash.account },
+      query: { ...router.query, to: "planetCash" },
     });
   };
 

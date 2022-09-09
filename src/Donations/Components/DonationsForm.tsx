@@ -116,7 +116,11 @@ function DonationsForm() {
     };
 
     let token = null;
-    if ((!isLoading && isAuthenticated) || (queryToken && profile.address)) {
+    if (
+      (!isLoading && isAuthenticated) ||
+      (queryToken && profile.address) ||
+      projectDetails.purpose === "planet-cash"
+    ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
@@ -183,7 +187,7 @@ function DonationsForm() {
   let paymentLabel = "";
 
   if (paymentSetup && currency && projectDetails) {
-    switch (projectDetails?.purpose) {
+    switch (projectDetails.purpose) {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
@@ -212,7 +216,7 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails?.country?.toLowerCase()}`),
+          country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
@@ -246,7 +250,7 @@ function DonationsForm() {
 
     const cleanedDonationData = cleanObject(donationData);
 
-    const token = await getAccessTokenSilently();
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
 
     // @method    POST
     // @endpoint  /app/donation
@@ -289,7 +293,7 @@ function DonationsForm() {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          {projectDetails?.purpose !== "funds" && (
+          {projectDetails.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
 
@@ -302,7 +306,7 @@ function DonationsForm() {
             profile!.planetCash && <PlanetCashSelector />}
 
           {!(onBehalf && onBehalfDonor.firstName === "") &&
-            (projectDetails?.purpose === "trees" ? (
+            (projectDetails.purpose === "trees" ? (
               <div className="donations-gift-container mt-10">
                 <GiftForm />
               </div>
