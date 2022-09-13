@@ -61,13 +61,16 @@
   max-width: 360px;
   min-height: 560px;
   align-self: center;
-  height:560px;
-  overflow:auto;
   background-color: $backgroundColor;
   border-radius: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
   box-shadow: 0px 3px 6px -3px rgba($color: #000000, $alpha: 0.16);
+}
+
+.scroll-donation-forms{
+  height:560px;
+  overflow:auto;
 }
 
 .background-image {

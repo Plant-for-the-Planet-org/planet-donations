@@ -70,7 +70,11 @@ function SelectProject({}: Props): ReactElement {
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
-    <div className="donations-forms-container column">
+    <div
+      className={`donations-forms-container column ${
+        selectedProjects.length > 8 ? "scroll-donation-forms" : ""
+      }`}
+    >
       <p className="title-text">{t("findProjects")}</p>
       <div className={"form-field mt-30 w-100"} style={{ alignSelf: "center" }}>
         <div className="project-search-input">
