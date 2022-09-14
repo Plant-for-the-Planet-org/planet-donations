@@ -173,11 +173,13 @@ function DonationInfo() {
           style={{
             cursor: "pointer",
             width: "fit-content",
-            position: "absolute",
             zIndex: 1000,
             background: "#fff",
             padding: "7px",
             borderRadius: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           onClick={goBack}
         >
