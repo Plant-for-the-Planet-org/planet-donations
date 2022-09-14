@@ -70,8 +70,24 @@
 
 .scroll-donation-forms{
   height:560px;
-  overflow:auto;
-}
+  overflow-y:scroll;
+  
+  //edit scroll bar for webkit browsers
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: $dividerColor;
+    border-radius: 20px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: $darkGreyColor;
+    border-radius: 20px;
+  }
+  
+} 
 
 .background-image {
   position: absolute;
