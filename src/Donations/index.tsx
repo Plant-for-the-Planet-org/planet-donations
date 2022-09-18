@@ -170,17 +170,7 @@ function DonationInfo() {
       {isMobile && (
         <button
           id={"backButtonSingleP"}
-          style={{
-            cursor: "pointer",
-            width: "fit-content",
-            zIndex: 1000,
-            background: "#fff",
-            padding: "7px",
-            borderRadius: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          className={"callbackButton"}
           onClick={goBack}
         >
           <BackButton color={"#000"} />
