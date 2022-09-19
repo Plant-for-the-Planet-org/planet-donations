@@ -313,6 +313,9 @@ export async function getServerSideProps(context: any) {
         if (donation.data.taxDeductionCountry) {
           country = donation.data.taxDeductionCountry;
           isTaxDeductible = true;
+        } else if (donation.data.gateway === "planet-cash") {
+          hideTaxDeduction = true;
+          country = donation.data.destination.country;
         } else {
           hideTaxDeduction = true;
           country = donorData.country;
@@ -420,10 +423,22 @@ export async function getServerSideProps(context: any) {
   }
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
-  const url = process.env.APP_URL + resolvedUrl;
-  const image = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(
-    url
-  )}?w=1200&h=770.jpg`;
+
+  let url =
+    process.env.APP_URL +
+    "/api/image?path=" +
+    process.env.APP_URL +
+    resolvedUrl;
+
+  if (
+    Object.keys(context.query).length > 0 &&
+    context.query.to &&
+    !context.query.step
+  ) {
+    url = url + "&step=donate";
+  }
+
+  const image = url;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
