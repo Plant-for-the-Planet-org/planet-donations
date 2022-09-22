@@ -72,7 +72,11 @@
   height:560px;
   overflow-y:scroll;
   
-  //edit scroll bar for webkit browsers
+  //firefox
+  scrollbar-width: thin;
+  scrollbar-color: $darkGreyColor $dividerColor;
+  
+  //edit scroll bar for webkit browsers:  Safari & Chrome
   &::-webkit-scrollbar {
     width: 6px;
   }
