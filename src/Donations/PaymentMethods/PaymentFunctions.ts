@@ -209,7 +209,7 @@ export function createDonationData({
           gift: {
             type: "direct",
             recipientTreecounter: giftDetails.recipientTreecounter,
-            message: giftDetails.giftMessage,
+            // message: giftDetails.giftMessage, //A direct gift does not have a message
           },
         },
       };
