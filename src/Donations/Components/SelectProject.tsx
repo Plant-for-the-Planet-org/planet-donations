@@ -108,7 +108,9 @@ function SelectProject({}: Props): ReactElement {
                   />
                 ) : (
                   <div className="project-organisation-image no-project-organisation-image">
-                    {project.properties.tpo.name.charAt(0)}
+                    {project.properties.tpo.name?.charAt(0) ||
+                      project.properties.tpo.slug?.charAt(0).toUpperCase() ||
+                      ""}
                   </div>
                 )}
                 {project.properties.country && (
