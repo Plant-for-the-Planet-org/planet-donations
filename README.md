@@ -1,7 +1,6 @@
 <h1 align="center"> Donate with Plant-for-the-Planet</h1>
-<p align="center">
-<a href="https://www.codefactor.io/repository/github/plant-for-the-planet-org/planet-donations"><img src="https://www.codefactor.io/repository/github/plant-for-the-planet-org/planet-donations/badge" alt="CodeFactor" /></a>
-</p>
+<p align="center"><a href="https://www.codefactor.io/repository/github/plant-for-the-planet-org/planet-donations"><img src="https://www.codefactor.io/repository/github/plant-for-the-planet-org/planet-donations/badge" alt="CodeFactor" /></a></p>
+
 Welcome to the Donation Gateway that powers the [Plant-for-the-Planet Platform](https://www.plant-for-the-planet.org/). You can make donations to restoration organizations, plant trees and support forest conservation.
 
 Donate with Plant-for-the-Planet relies on the Plant-for-the-Planet Open APIs. The Foundation takes no commission from donations made through the gateway, however payment portal fees eg: Stripe, PayPal will still apply.
