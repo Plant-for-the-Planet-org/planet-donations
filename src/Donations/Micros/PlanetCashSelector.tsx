@@ -1,9 +1,10 @@
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import countriesData from "../../Utils/countriesData.json";
 
 // TODO - Sentry captureException;
 
@@ -21,6 +22,7 @@ const PlanetCashSelector: FC = (props) => {
     paymentRequest,
   } = useContext(QueryParamContext);
   const router = useRouter();
+  const [planetCashCounrty, setplanetCashCountry] = useState();
 
   useEffect(() => {
     // Here checking country is important as many countries could have same currency.
@@ -60,6 +62,15 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
+
+  useEffect(() => {
+    const countryData = countriesData.filter(
+      (singleCountryData) =>
+        singleCountryData.countryCode == profile?.planetCash.country
+    );
+    setplanetCashCountry(countryData[0].countryName);
+    console.log(countryData);
+  }, [profile]);
 
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
@@ -121,6 +132,9 @@ const PlanetCashSelector: FC = (props) => {
           <p>{t("usePlanetCash")}</p>
           {isPlanetCashActive ? (
             <>
+              <span>
+                {planetCashCounrty} / {profile?.planetCash.currency}
+              </span>
               <p>
                 {t("balance")}&nbsp;
                 <span
