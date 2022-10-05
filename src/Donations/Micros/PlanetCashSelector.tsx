@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FC, useContext, useEffect, useState } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { getCountryDataBy } from "src/Utils/countryUtils";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import countriesData from "../../Utils/countriesData.json";
 
@@ -22,7 +23,6 @@ const PlanetCashSelector: FC = (props) => {
     paymentRequest,
   } = useContext(QueryParamContext);
   const router = useRouter();
-  const [planetCashCounrty, setplanetCashCountry] = useState();
 
   useEffect(() => {
     // Here checking country is important as many countries could have same currency.
@@ -62,16 +62,6 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
-
-  useEffect(() => {
-    const countryData = countriesData.filter(
-      (singleCountryData) =>
-        singleCountryData.countryCode == profile?.planetCash.country
-    );
-    setplanetCashCountry(countryData[0].countryName);
-    console.log(countryData);
-  }, [profile]);
-
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
     let isOnce = false;
@@ -125,6 +115,8 @@ const PlanetCashSelector: FC = (props) => {
     });
   };
 
+  const CountryData = getCountryDataBy("countryCode", country);
+
   return (
     <div className="planet-cash-selector">
       <div className="planet-cash-selector-toggle">
@@ -132,8 +124,9 @@ const PlanetCashSelector: FC = (props) => {
           <p>{t("usePlanetCash")}</p>
           {isPlanetCashActive ? (
             <>
+              <br />
               <span>
-                {planetCashCounrty} / {profile?.planetCash.currency}
+                {CountryData?.countryName} / {profile?.planetCash.currency}
               </span>
               <p>
                 {t("balance")}&nbsp;
