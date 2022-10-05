@@ -1,11 +1,10 @@
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { getCountryDataBy } from "src/Utils/countryUtils";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
-import countriesData from "../../Utils/countriesData.json";
 
 // TODO - Sentry captureException;
 
