@@ -114,7 +114,7 @@ const PlanetCashSelector: FC = (props) => {
     });
   };
 
-  const CountryData = getCountryDataBy("countryCode", country);
+  const countryData = getCountryDataBy("countryCode", country);
 
   return (
     <div className="planet-cash-selector">
@@ -125,7 +125,7 @@ const PlanetCashSelector: FC = (props) => {
             <>
               <br />
               <span>
-                {CountryData?.countryName} / {profile?.planetCash.currency}
+                {countryData?.countryName} / {profile?.planetCash.currency}
               </span>
               <p>
                 {t("balance")}&nbsp;
