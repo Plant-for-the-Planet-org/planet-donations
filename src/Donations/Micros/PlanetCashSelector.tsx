@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { getCountryDataBy } from "src/Utils/countryUtils";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
@@ -60,7 +61,6 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
-
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
     let isOnce = false;
@@ -114,6 +114,8 @@ const PlanetCashSelector: FC = (props) => {
     });
   };
 
+  const countryData = getCountryDataBy("countryCode", country);
+
   return (
     <div className="planet-cash-selector">
       <div className="planet-cash-selector-toggle">
@@ -121,6 +123,10 @@ const PlanetCashSelector: FC = (props) => {
           <p>{t("usePlanetCash")}</p>
           {isPlanetCashActive ? (
             <>
+              <br />
+              <span>
+                {countryData?.countryName} / {profile?.planetCash.currency}
+              </span>
               <p>
                 {t("balance")}&nbsp;
                 <span
