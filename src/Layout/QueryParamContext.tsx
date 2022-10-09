@@ -10,7 +10,7 @@ import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { PaymentSetupProps } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
-import allLocales from "../../i18n.json";
+import allLocales from "../../public/static/localeList.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -220,7 +220,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [paymentError]);
   React.useEffect(() => {
-    if (allLocales.locales.indexOf(router.query.locale) !== -1) {
+    if (allLocales.find((locale) => locale.key === router.query.locale)) {
       setlanguage(router.query.locale);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
@@ -230,7 +230,7 @@ export default function QueryParamProvider({ children }: any) {
           : navigator.languages;
       const newLocale = userLocale[0].trim().split(/-|_/)[0];
 
-      if (allLocales.locales.indexOf(newLocale) === -1) {
+      if (allLocales.find((locale) => locale.key === newLocale)) {
         setlanguage("en");
       } else {
         setlanguage(newLocale);
