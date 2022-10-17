@@ -220,20 +220,18 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [paymentError]);
   React.useEffect(() => {
-    if (allLocales.find((locale) => locale.key === router.query.locale)) {
+    if (allLocales.some((locale) => locale.key === router.query.locale)) {
       setlanguage(router.query.locale);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
-      const userLocale =
-        navigator.languages === undefined
-          ? [navigator.language]
-          : navigator.languages;
+      const userLocale = navigator.languages ?? [navigator.language];
       const newLocale = userLocale[0].trim().split(/-|_/)[0];
 
-      if (allLocales.find((locale) => locale.key === newLocale)) {
-        setlanguage("en");
-      } else {
+      if (allLocales.some((locale) => locale.key === newLocale)) {
+        //if user locale is supported by us
         setlanguage(newLocale);
+      } else {
+        setlanguage("en");
       }
     }
   }, [router.query.locale]);
