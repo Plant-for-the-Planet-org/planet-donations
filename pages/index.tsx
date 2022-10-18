@@ -299,6 +299,8 @@ export async function getServerSideProps(context: any) {
       const queryMethodForStep4 = ["Sofort", "Giropay"];
       const queryRedirectStatus = ["succeeded", "failed"];
 
+      let paymentOptionsCountry;
+
       if (donation.status === 200) {
         const donorData = donation.data.donor;
         donationID = context.query.context;
@@ -331,6 +333,7 @@ export async function getServerSideProps(context: any) {
           };
           const paymentSetupData: any = await apiRequest(requestParams);
           if (paymentSetupData.data) {
+            paymentOptionsCountry = paymentSetupData.data.country;
             currency = paymentSetupData.data.currency;
             paymentSetup = paymentSetupData.data;
             projectDetails = {
@@ -384,7 +387,12 @@ export async function getServerSideProps(context: any) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
           isDirectDonation = true;
-          donationStep = 3;
+
+          // If paymentOptionsCountry is brazil only Card and boleto is supported
+          // For boleto payment cnpOrCnjpNumber
+          if (paymentOptionsCountry && paymentOptionsCountry == "BR") {
+            donationStep = 2;
+          } else donationStep = 3;
         }
       } else {
         // SET Error that no donation is found

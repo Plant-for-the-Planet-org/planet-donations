@@ -10,6 +10,7 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import BoletoIcon from "public/assets/icons/donation/BoletoIcon";
 
 function a11yProps(index: any) {
   return {
@@ -29,6 +30,7 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
   showBankTransfer,
+  showBoleto,
 }: any) {
   const { t, i18n } = useTranslation(["common", "country"]);
 
@@ -174,6 +176,18 @@ export default function PaymentMethodTabs({
           {...a11yProps("SEPA")}
         >
           <SepaIcon />
+          <CheckMark />
+        </button>
+      )}
+      {showBoleto && (
+        <button
+          className={`${"payment-method"} ${"boleto"} ${
+            paymentType === "Boleto" ? "payment-method-selected" : ""
+          }`}
+          onClick={(e) => handleChange(e, "Boleto")}
+          {...a11yProps("Boleto")}
+        >
+          <BoletoIcon />
           <CheckMark />
         </button>
       )}
