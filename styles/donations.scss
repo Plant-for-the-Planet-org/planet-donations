@@ -146,6 +146,18 @@
     }
   }
 }
+.topProjectBadge{
+  position: absolute;
+  top: 30px;
+  right: 16px;
+  background-color: $backgroundColor;
+  border-radius: 20px;
+  padding: 0 10px;
+  color: $primaryColor;
+  border: 1px solid $primaryColor;
+  text-transform: uppercase;
+  font-weight: 400;
+}
 
 .donations-transaction-details {
   font-size: 12px;

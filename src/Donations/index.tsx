@@ -20,6 +20,7 @@ import {
 } from "src/Utils/donationStepConstants";
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
+import { VerifiedIcon } from "public/assets/icons/VerifiedIcon";
 
 interface Props {}
 
@@ -176,6 +177,7 @@ function DonationInfo() {
           <BackButton color={"#000"} />
         </button>
       )}
+      {router.query.to && <div className={"topProjectBadge"}>Top Project</div>}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -265,6 +267,7 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
+                  <VerifiedIcon />
                 </a>
               ) : (
                 <h1
@@ -272,6 +275,7 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name ? projectDetails.name : ""}
+                  {projectDetails.name && <VerifiedIcon />}
                 </h1>
               )}
 
