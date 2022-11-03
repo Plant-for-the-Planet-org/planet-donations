@@ -76,17 +76,36 @@ function PaymentsForm({}: Props): ReactElement {
     callbackMethod,
   } = React.useContext(QueryParamContext);
 
+  // This will prevent the replacement of paymentIntentID in donation in boleto
+  React.useEffect(() => {
+    const { expiresAt, hostedVoucherURL, number, pdf } = router.query;
+    if (hostedVoucherURL) {
+      setTransferDetails({
+        expiresAt,
+        hostedVoucherURL,
+        number,
+        pdf,
+      });
+      setdonationStep(4);
+    }
+  }, []);
+
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
 
-  // React.useEffect(() => {
-  //   if (paymentError) {
-  //     router.replace({
-  //       query: { ...router.query, step: THANK_YOU },
-  //     });
-  //   }
-  // }, [paymentError]);
+  // This will retain transaction in process or thank you screen even after reload
+  React.useEffect(() => {
+    if (donationID) {
+      router.replace({
+        query: {
+          ...router.query,
+          context: donationID,
+        },
+      });
+    }
+  }, [donationID]);
+
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (

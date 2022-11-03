@@ -637,6 +637,7 @@
       justify-content: space-between;
       > .detail-value {
         color: #48aadd;
+        word-break: break-all;
       }
     }
   }
@@ -983,6 +984,7 @@
 
 .copy-container {
   position: relative;
+  margin-left: 15px;
   & .copy-tooltip {
     position: absolute;
     bottom: 36px;

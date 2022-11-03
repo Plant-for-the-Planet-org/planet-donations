@@ -7,7 +7,11 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps } from "src/Common/Types";
+import {
+  BankTransferDetails,
+  BoletoTransferDetails,
+  PaymentSetupProps,
+} from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const QueryParamContext = React.createContext({
@@ -190,9 +194,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideLogin, setHideLogin] = React.useState<boolean>(false);
   const [paymentError, setPaymentError] = React.useState("");
-  const [transferDetails, setTransferDetails] = React.useState<Object | null>(
-    null
-  );
+  const [transferDetails, setTransferDetails] = React.useState<
+    BoletoTransferDetails | BankTransferDetails | null
+  >(null);
   const [projectName, setProjectName] = React.useState("");
   const [projectDescription, setProjectDescription] = React.useState("");
 

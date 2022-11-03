@@ -18,7 +18,7 @@ import {
   SELECT_PROJECT,
   THANK_YOU,
 } from "src/Utils/donationStepConstants";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 interface Props {}
 
@@ -104,7 +104,10 @@ function DonationInfo() {
     onBehalfDonor,
     isPlanetCashActive,
     country,
+    transferDetails,
   } = React.useContext(QueryParamContext);
+
+  const router = useRouter();
 
   const [isMobile, setIsMobile] = React.useState(false);
   React.useEffect(() => {
@@ -355,21 +358,39 @@ function DonationInfo() {
             </div>
           )}
 
-          {donationID && !(isMobile && router.query.step === "thankyou") && (
-            <a
-              href={`${
-                process.env.APP_URL
-              }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
-                localStorage.getItem("language")
-                  ? localStorage.getItem("language")
-                  : "en"
-              }`}
-              className="donations-transaction-details mt-20"
-              data-test-id="referenceDonation"
-            >
-              {`Ref - ${donationID}`}
-            </a>
-          )}
+          {donationID &&
+            !(isMobile && router.query.step === "thankyou") &&
+            (transferDetails?.hostedVoucherURL ? (
+              <a
+                href={`${
+                  process.env.APP_URL
+                }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
+                  localStorage.getItem("language")
+                    ? localStorage.getItem("language")
+                    : "en"
+                }&expiresAt=${transferDetails.expiresAt}&hostedVoucherURL=${
+                  transferDetails.hostedVoucherURL
+                }&number=${transferDetails.number}&pdf=${transferDetails.pdf}`}
+                className="donations-transaction-details mt-20"
+                data-test-id="referenceDonation"
+              >
+                {`Ref - ${donationID}`}
+              </a>
+            ) : (
+              <a
+                href={`${
+                  process.env.APP_URL
+                }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
+                  localStorage.getItem("language")
+                    ? localStorage.getItem("language")
+                    : "en"
+                }`}
+                className="donations-transaction-details mt-20"
+                data-test-id="referenceDonation"
+              >
+                {`Ref - ${donationID}`}
+              </a>
+            ))}
         </div>
       ) : null}
     </div>

@@ -1,3 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+
+export type SetState<T> = Dispatch<SetStateAction<T>>;
+
 export interface ProjectTypes {
   data: {
     allowDonations: boolean;
@@ -120,7 +124,19 @@ export interface PayDonationProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: SetState<BoletoTransferDetails | BankTransferDetails | null>;
+}
+export interface BoletoTransferDetails {
+  expiresAt: string;
+  hostedVoucherURL: string;
+  number: string;
+  pdf: string;
+}
+export interface BankTransferDetails {
+  bankName: string;
+  beneficiary: string;
+  bic: string;
+  iban: string;
 }
 
 export interface HandleStripeSCAPaymentProps {
@@ -137,6 +153,7 @@ export interface HandleStripeSCAPaymentProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
+  setTransferDetails: SetState<BoletoTransferDetails | BankTransferDetails | null>;
 }
 
 export interface PaymentSetupProps {

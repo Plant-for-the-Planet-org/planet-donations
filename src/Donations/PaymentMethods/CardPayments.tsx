@@ -68,7 +68,11 @@ function CardPayments({
   const [cardDate, setCardDate] = React.useState(false);
 
   React.useEffect(() => {
-    setPaymentType("CARD");
+    if (paymentType) {
+      setPaymentType(paymentType);
+    } else {
+      setPaymentType("CARD");
+    }
   }, []);
   const { frequency, paymentError, setPaymentError } =
     React.useContext(QueryParamContext);
