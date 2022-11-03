@@ -246,9 +246,8 @@ function LanguageModal({
               name="language"
               value={language}
               onChange={(event) => {
-                const value: string = event.target.value;
-                setlanguage(value);
-                localStorage.setItem("language", value);
+                setlanguage(event.target.value);
+                localStorage.setItem("language", event.target.value);
                 if (projectDetails && router.query.to) {
                   loadPaymentSetup({
                     projectGUID: router.query.to,

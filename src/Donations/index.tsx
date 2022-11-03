@@ -378,8 +378,8 @@ function DonationInfo() {
             !(isMobile && router.query.step === "thankyou") &&
             (transferDetails?.hostedVoucherURL ? (
               <p
-                onClick={() =>
-                  window.location.replace(
+                onClick={() => {
+                  const url = encodeURI(
                     `${
                       process.env.APP_URL
                     }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
@@ -391,8 +391,10 @@ function DonationInfo() {
                     }&number=${transferDetails.number}&pdf=${
                       transferDetails.pdf
                     }`
-                  )
-                }
+                  );
+
+                  window.location.replace(url);
+                }}
                 className="donations-transaction-details mt-20"
                 data-test-id="referenceDonation"
               >
@@ -400,8 +402,8 @@ function DonationInfo() {
               </p>
             ) : (
               <p
-                onClick={() =>
-                  window.location.replace(
+                onClick={() => {
+                  const url = encodeURI(
                     `${
                       process.env.APP_URL
                     }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
@@ -409,8 +411,9 @@ function DonationInfo() {
                         ? localStorage.getItem("language")
                         : "en"
                     }`
-                  )
-                }
+                  );
+                  window.location.replace(url);
+                }}
                 className="donations-transaction-details mt-20"
                 data-test-id="referenceDonation"
               >
