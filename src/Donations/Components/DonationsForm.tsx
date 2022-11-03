@@ -237,6 +237,11 @@ function DonationsForm() {
 
     delete _gift.giftMessage;
 
+    if (giftDetails.type === "direct") {
+      delete _gift.message;
+      delete _gift.recipientName;
+    }
+
     // create Donation data
     const donationData = {
       purpose: projectDetails!.purpose,
@@ -250,7 +255,7 @@ function DonationsForm() {
 
     const cleanedDonationData = cleanObject(donationData);
 
-    const token = await getAccessTokenSilently();
+    const token = queryToken ? queryToken : await getAccessTokenSilently();
 
     // @method    POST
     // @endpoint  /app/donation

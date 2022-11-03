@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { getCountryDataBy } from "src/Utils/countryUtils";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
@@ -46,7 +47,10 @@ const PlanetCashSelector: FC = (props) => {
     ) {
       setIsPlanetCashActive(true);
     }
-  }, [paymentRequest]);
+    if (frequency !== "once") {
+      setIsPlanetCashActive(false);
+    }
+  }, [paymentRequest, frequency]);
 
   useEffect(() => {
     // This is done to lock the transaction with PlanetCash in a single currency.
@@ -57,14 +61,6 @@ const PlanetCashSelector: FC = (props) => {
       setcountry(profile!.planetCash.country);
     }
   }, [isPlanetCashActive, setcountry]);
-
-  useEffect(() => {
-    // Donation with PlanetCash is a one time process.
-    if (frequency !== "once") {
-      setIsPlanetCashActive(false);
-    }
-  }, [frequency]);
-
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
     let isOnce = false;
@@ -118,6 +114,8 @@ const PlanetCashSelector: FC = (props) => {
     });
   };
 
+  const countryData = getCountryDataBy("countryCode", country);
+
   return (
     <div className="planet-cash-selector">
       <div className="planet-cash-selector-toggle">
@@ -125,6 +123,10 @@ const PlanetCashSelector: FC = (props) => {
           <p>{t("usePlanetCash")}</p>
           {isPlanetCashActive ? (
             <>
+              <br />
+              <span>
+                {countryData?.countryName} / {profile?.planetCash.currency}
+              </span>
               <p>
                 {t("balance")}&nbsp;
                 <span

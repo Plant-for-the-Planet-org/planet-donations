@@ -19,6 +19,7 @@ import {
   THANK_YOU,
 } from "src/Utils/donationStepConstants";
 import { useRouter } from "next/router";
+import BackButton from "public/assets/icons/BackButton";
 
 interface Props {}
 
@@ -146,6 +147,11 @@ function DonationInfo() {
       </div>
     );
   };
+  const router = useRouter();
+  const goBack = () => {
+    const callbackUrl = router.query.callback_url;
+    router.push(`${callbackUrl ? callbackUrl : "/"}`);
+  };
   return (
     <div
       style={{
@@ -163,6 +169,16 @@ function DonationInfo() {
         className="background-image"
         alt="Background image with trees"
       /> */}
+
+      {isMobile && (
+        <button
+          id={"backButtonSingleP"}
+          className={"callbackButton"}
+          onClick={goBack}
+        >
+          <BackButton color={"#000"} />
+        </button>
+      )}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">

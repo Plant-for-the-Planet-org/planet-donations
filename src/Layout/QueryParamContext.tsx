@@ -13,6 +13,8 @@ import {
   PaymentSetupProps,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
+import { validateToken } from "../Utils/tokenActions";
+import allLocales from "../../public/static/localeList.json";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -222,8 +224,19 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [paymentError]);
   React.useEffect(() => {
-    if (router.query.locale) {
+    if (allLocales.some((locale) => locale.key === router.query.locale)) {
       setlanguage(router.query.locale);
+    } else {
+      //conditional operator to check if navigator.languages property is supported by browser.
+      const userLocale = navigator.languages ?? [navigator.language];
+      const newLocale = userLocale[0].trim().split(/-|_/)[0];
+
+      if (allLocales.some((locale) => locale.key === newLocale)) {
+        //if user locale is supported by us
+        setlanguage(newLocale);
+      } else {
+        setlanguage("en");
+      }
     }
   }, [router.query.locale]);
 
@@ -294,7 +307,8 @@ export default function QueryParamProvider({ children }: any) {
   }
 
   const loadProfile = React.useCallback(async () => {
-    const token = await getAccessTokenSilently();
+    const token =
+      queryToken || router.query.token || (await getAccessTokenSilently());
     try {
       const profile = await apiRequest({
         url: "/app/profile",
@@ -308,6 +322,16 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, []);
 
+  const showPlanetCashSignUpScreen = () => {
+    setprojectDetails({
+      name: `PlanetCash - ${profile?.displayName}`,
+      ownerName: profile?.displayName,
+      ownerAvatar: profile?.image,
+      purpose: "planet-cash-signup",
+    });
+    setdonationStep(4);
+  };
+
   React.useEffect(() => {
     if (!isLoading && isAuthenticated) {
       loadProfile();
@@ -319,7 +343,12 @@ export default function QueryParamProvider({ children }: any) {
     if (regex.test(router.query.to)) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
-      if (!isLoading && !isAuthenticated) {
+      if (
+        !queryToken &&
+        !router.query.token &&
+        !isLoading &&
+        !isAuthenticated
+      ) {
         loginWithRedirect({
           redirectUri: window?.location.href,
         });
@@ -332,19 +361,31 @@ export default function QueryParamProvider({ children }: any) {
           });
           setdonationStep(1);
         } else if (!profile?.planetCash) {
-          if (profile?.displayName) {
-            setprojectDetails({
-              name: `PlanetCash - ${profile?.displayName}`,
-              ownerName: profile?.displayName,
-              ownerAvatar: profile?.image,
-              purpose: "planet-cash-signup",
-            });
+          if (router.query.token) {
+            if (validateToken(router.query.token)) {
+              if (!profile) {
+                loadProfile();
+              } else if (!profile?.planetCash && profile?.displayName) {
+                showPlanetCashSignUpScreen();
+              }
+            } else {
+              // If token is invalid force user to login
+              router.push("/?to=planetcash&step=donate");
+            }
+          } else if (profile?.displayName) {
+            showPlanetCashSignUpScreen();
           }
-          setdonationStep(4);
         }
       }
     }
-  }, [router.query.to, country, profile, isLoading, isAuthenticated]);
+  }, [
+    router.query.to,
+    country,
+    profile,
+    isLoading,
+    isAuthenticated,
+    router.query.token,
+  ]);
 
   React.useEffect(() => {
     const regex = /^pcash_/;
