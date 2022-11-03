@@ -158,6 +158,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
               <a
                 href={transferDetails?.hostedVoucherURL}
                 target="_blank"
+                rel="noopener noreferrer"
                 className={"detail-value"}
               >
                 {transferDetails?.hostedVoucherURL}
@@ -184,6 +185,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
               <a
                 href={transferDetails?.pdf}
                 target="_blank"
+                rel="noopener noreferrer"
                 className={"detail-value"}
               >
                 {transferDetails?.pdf}

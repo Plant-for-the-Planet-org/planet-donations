@@ -147,7 +147,7 @@ function DonationInfo() {
       </div>
     );
   };
-  const router = useRouter();
+
   const goBack = () => {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
@@ -377,35 +377,45 @@ function DonationInfo() {
           {donationID &&
             !(isMobile && router.query.step === "thankyou") &&
             (transferDetails?.hostedVoucherURL ? (
-              <a
-                href={`${
-                  process.env.APP_URL
-                }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
-                  localStorage.getItem("language")
-                    ? localStorage.getItem("language")
-                    : "en"
-                }&expiresAt=${transferDetails.expiresAt}&hostedVoucherURL=${
-                  transferDetails.hostedVoucherURL
-                }&number=${transferDetails.number}&pdf=${transferDetails.pdf}`}
+              <p
+                onClick={() =>
+                  window.location.replace(
+                    `${
+                      process.env.APP_URL
+                    }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
+                      localStorage.getItem("language")
+                        ? localStorage.getItem("language")
+                        : "en"
+                    }&expiresAt=${transferDetails.expiresAt}&hostedVoucherURL=${
+                      transferDetails.hostedVoucherURL
+                    }&number=${transferDetails.number}&pdf=${
+                      transferDetails.pdf
+                    }`
+                  )
+                }
                 className="donations-transaction-details mt-20"
                 data-test-id="referenceDonation"
               >
                 {`Ref - ${donationID}`}
-              </a>
+              </p>
             ) : (
-              <a
-                href={`${
-                  process.env.APP_URL
-                }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
-                  localStorage.getItem("language")
-                    ? localStorage.getItem("language")
-                    : "en"
-                }`}
+              <p
+                onClick={() =>
+                  window.location.replace(
+                    `${
+                      process.env.APP_URL
+                    }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
+                      localStorage.getItem("language")
+                        ? localStorage.getItem("language")
+                        : "en"
+                    }`
+                  )
+                }
                 className="donations-transaction-details mt-20"
                 data-test-id="referenceDonation"
               >
                 {`Ref - ${donationID}`}
-              </a>
+              </p>
             ))}
         </div>
       ) : null}

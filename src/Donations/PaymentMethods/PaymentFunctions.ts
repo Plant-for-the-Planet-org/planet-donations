@@ -537,6 +537,7 @@ export async function handleStripeSCAPayment({
 
       if (error) {
         handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
+        return;
       }
 
       const _boletoTransferDetails =
