@@ -125,7 +125,10 @@ export default function StateSelect(props: {
           {option.name}
         </>
       )}
-      onChange={(_: React.ChangeEvent<{}>, newValue: State | null) => {
+      onChange={(
+        _: React.ChangeEvent<Record<string, unknown>>,
+        newValue: State | null
+      ) => {
         if (newValue) {
           setValue(newValue);
         }

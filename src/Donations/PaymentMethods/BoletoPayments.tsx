@@ -2,7 +2,11 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 
 interface Props {
-  onSubmitPayment: Function;
+  onSubmitPayment: (
+    gateway: string,
+    method: string,
+    providerObject?: any
+  ) => void;
 }
 
 function BoletoPayPayments({ onSubmitPayment }: Props): ReactElement {
