@@ -385,7 +385,7 @@ function ContactsForm({}: Props): ReactElement {
                 }}
                 name="state"
                 defaultValue={"SP"}
-                render={({ value, ref }) => (
+                render={({ ref }) => (
                   <StateSelect
                     inputRef={ref}
                     label={t("state")}

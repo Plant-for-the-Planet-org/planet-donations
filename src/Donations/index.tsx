@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import ContactsForm from "./Components/ContactsForm";
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
@@ -109,7 +109,7 @@ function DonationInfo() {
 
   const router = useRouter();
 
-  const [isMobile, setIsMobile] = React.useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {

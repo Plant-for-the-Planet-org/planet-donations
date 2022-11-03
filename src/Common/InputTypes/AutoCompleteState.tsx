@@ -7,6 +7,7 @@ import { useTranslation } from "next-i18next";
 import themeProperties from "./../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import BRAZILIAN_STATES from "../../Utils/brazilianStateCodes";
+import { ControllerRenderProps } from "react-hook-form";
 
 function stateToFlag(isoCode: string) {
   return typeof String.fromCodePoint !== "undefined"
@@ -20,16 +21,12 @@ function stateToFlag(isoCode: string) {
 
 export default function StateSelect(props: {
   label: React.ReactNode;
-  inputRef?:
-    | ((instance: any) => void)
-    | React.RefObject<any>
-    | null
-    | undefined;
+  inputRef?: ControllerRenderProps["ref"];
   name: string | undefined;
   defaultValue: string | undefined;
   onValueChange: (value: string) => void;
 }) {
-  const { t, ready } = useTranslation("country");
+  const { ready } = useTranslation("country");
   const { theme } = React.useContext(ThemeContext);
   const useStylesAutoComplete = makeStyles({
     paper: {
@@ -128,7 +125,7 @@ export default function StateSelect(props: {
           {option.name}
         </>
       )}
-      onChange={(event: any, newValue: State | null) => {
+      onChange={(_: React.ChangeEvent<{}>, newValue: State | null) => {
         if (newValue) {
           setValue(newValue);
         }

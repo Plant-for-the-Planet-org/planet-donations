@@ -591,13 +591,12 @@ export async function handleStripeSCAPayment({
       break;
     }
     case "sepa_debit": {
-      try {
-        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
-      } catch {
-        (err: any) => {
-          handlePaymentError(err, setIsPaymentProcessing, setPaymentError);
-        };
+      const { error } = await stripe.confirmSepaDebitPayment(clientSecret);
+
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
       }
+
       router.push({
         query: { ...router.query, step: THANK_YOU },
       });
