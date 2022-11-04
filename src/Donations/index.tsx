@@ -177,7 +177,9 @@ function DonationInfo() {
           <BackButton color={"#000"} />
         </button>
       )}
-      {router.query.to && <div className={"topProjectBadge"}>Top Project</div>}
+      {projectDetails && projectDetails.isTopProject && (
+        <div className={"topProjectBadge"}>Top Project</div>
+      )}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
@@ -267,7 +269,7 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
-                  <VerifiedIcon />
+                  {projectDetails.isApproved && <VerifiedIcon />}
                 </a>
               ) : (
                 <h1
