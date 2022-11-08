@@ -106,6 +106,8 @@ function DonationInfo() {
     onBehalfDonor,
     isPlanetCashActive,
     country,
+    isApproved,
+    isTopProject,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -177,7 +179,7 @@ function DonationInfo() {
           <BackButton color={"#000"} />
         </button>
       )}
-      {projectDetails && projectDetails.isTopProject && (
+      {isApproved && isTopProject && (
         <div className={"topProjectBadge"}>Top Project</div>
       )}
       <div className="background-image-overlay"></div>
@@ -269,7 +271,7 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
-                  {projectDetails.isApproved && <VerifiedIcon />}
+                  {isApproved && <VerifiedIcon />}
                 </a>
               ) : (
                 <h1

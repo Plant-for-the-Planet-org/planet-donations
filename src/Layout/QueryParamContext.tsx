@@ -211,6 +211,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donation, setdonation] = React.useState(null);
   const [paymentRequest, setPaymentRequest] = React.useState(null);
+  const [isApproved, setIsApproved] = React.useState(false);
+  const [isTopProject, setIsTopProject] = React.useState(false);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -554,6 +556,8 @@ export default function QueryParamProvider({ children }: any) {
           projectImage: paymentSetup.image,
           ownerAvatar: paymentSetup.ownerAvatar,
         });
+        setIsApproved(paymentSetup.isApproved);
+        setIsTopProject(paymentSetup.isTopProject);
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -650,6 +654,8 @@ export default function QueryParamProvider({ children }: any) {
         setdonation,
         paymentRequest,
         setPaymentRequest,
+        isTopProject,
+        isApproved,
       }}
     >
       {children}
