@@ -21,6 +21,20 @@ import {
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { VerifiedIcon } from "public/assets/icons/VerifiedIcon";
+import Popover from "@material-ui/core/Popover";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    popover: {
+      pointerEvents: "none",
+    },
+    paper: {
+      padding: theme.spacing(1),
+    },
+  })
+);
 
 interface Props {}
 
@@ -152,6 +166,20 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   return (
     <div
       style={{
@@ -271,7 +299,42 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
-                  {isApproved && <VerifiedIcon />}
+                  {isApproved && (
+                    <div>
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className={classes.popover}
+                        classes={{
+                          paper: classes.paper,
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                      >
+                        <Typography className="verified-icon-popup">
+                          This project has been verified by a multi day field
+                          review. To learn more visit the project on pp.eco.
+                        </Typography>
+                      </Popover>
+                    </div>
+                  )}
                 </a>
               ) : (
                 <h1
