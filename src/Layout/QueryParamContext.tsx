@@ -25,6 +25,8 @@ export const QueryParamContext = React.createContext({
   setpaymentSetup: ({}) => {},
   currency: "",
   setcurrency: (value: "") => {},
+  enabledCurrencies: {},
+  setEnabledCurrencies: (value: {}) => {},
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
@@ -170,6 +172,7 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
+  const [enabledCurrencies, setEnabledCurrencies] = useState({});
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
@@ -211,6 +214,19 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donation, setdonation] = React.useState(null);
   const [paymentRequest, setPaymentRequest] = React.useState(null);
+
+  const loadEnabledCurrencies = async () => {
+    const requestParams = {
+      url: `/public/v1.1/en/currencies`,
+      setshowErrorCard,
+    };
+    const response: any = await apiRequest(requestParams);
+    setEnabledCurrencies(response.data.currency_names);
+  };
+
+  React.useEffect(() => {
+    loadEnabledCurrencies();
+  }, []);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -575,6 +591,8 @@ export default function QueryParamProvider({ children }: any) {
         paymentSetup,
         currency,
         setcurrency,
+        enabledCurrencies,
+        setEnabledCurrencies,
         donationStep,
         setdonationStep,
         projectDetails,
