@@ -1,6 +1,6 @@
 import countriesData from "./countriesData.json";
 
-const sortedCountries = [];
+const sortedCountries = {};
 
 /**
  * * Returns country details by searching country data json file and options
