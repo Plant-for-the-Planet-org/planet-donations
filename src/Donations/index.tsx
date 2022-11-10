@@ -208,7 +208,7 @@ function DonationInfo() {
         </button>
       )}
       {isApproved && isTopProject && (
-        <div className={"topProjectBadge"}>Top Project</div>
+        <div className={"topProjectBadge theme-light"}>Top Project</div>
       )}
       <div className="background-image-overlay"></div>
       {projectDetails && paymentSetup ? (
@@ -295,7 +295,7 @@ function DonationInfo() {
                   rel="noreferrer"
                   target="_blank"
                   href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-                  className="title-text text-white"
+                  className="title-text text-white d-flex align-items-center"
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
@@ -329,8 +329,7 @@ function DonationInfo() {
                         disableRestoreFocus
                       >
                         <Typography className="verified-icon-popup">
-                          This project has been verified by a multi day field
-                          review. To learn more visit the project on pp.eco.
+                          {t("verifiedIconInfo")}
                         </Typography>
                       </Popover>
                     </div>
