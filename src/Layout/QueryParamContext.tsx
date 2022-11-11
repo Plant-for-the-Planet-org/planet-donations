@@ -172,7 +172,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
-  const [enabledCurrencies, setEnabledCurrencies] = useState({});
+  const [enabledCurrencies, setEnabledCurrencies] = useState<null | Object>(
+    null
+  );
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
@@ -225,8 +227,10 @@ export default function QueryParamProvider({ children }: any) {
   };
 
   React.useEffect(() => {
-    loadEnabledCurrencies();
-  }, []);
+    // Enabled currencies are only needed on step 1, if not already populated
+    if (!enabledCurrencies && donationStep !== null && donationStep <= 1)
+      loadEnabledCurrencies();
+  }, [donationStep, enabledCurrencies]);
 
   React.useEffect(() => {
     if (paymentError) {
