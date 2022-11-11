@@ -4,7 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
@@ -26,15 +26,15 @@ export default function SelectCurrencyModal({
   handleModalClose,
 }: SelectCurrencyModalProps): ReactElement | null {
   const { setcountry, country, currency, enabledCurrencies } =
-    React.useContext(QueryParamContext);
+    useContext(QueryParamContext);
 
   const { t, ready } = useTranslation(["common", "country"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
-  const [importantList, setImportantList] = React.useState<Array<string>>([]);
+  const [importantList, setImportantList] = useState<Array<string>>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // sets two default country as important country which is US(United States) and DE (Germany)
     const impCountryList = ["US", "DE"];
     // if the selected country is other than US and DE then add that country to important country list
@@ -117,7 +117,7 @@ function MapCurrency({
 }: MapCurrencyProps) {
   const { t, i18n, ready } = useTranslation(["country"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const useStylesAutoComplete = makeStyles({
     paper: {
