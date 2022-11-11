@@ -17,7 +17,8 @@ import themeProperties from "../../../styles/themeProperties";
 export default function TransitionsModal(props: any) {
   const { openModal, handleModalClose } = props;
 
-  const { setcountry, country, currency } = React.useContext(QueryParamContext);
+  const { setcountry, country, currency, enabledCurrencies } =
+    React.useContext(QueryParamContext);
 
   const { t, ready } = useTranslation(["common", "country"]);
 
@@ -56,6 +57,7 @@ export default function TransitionsModal(props: any) {
               <p className={"select-language-title"}>{t("selectCurrency")}</p>
               <MapCurrency
                 // this is selectedValue, country wala object
+                enabledCurrencies={enabledCurrencies}
                 priorityCountries={importantList}
                 value={country}
                 handleChange={(value) => {
@@ -101,7 +103,7 @@ function countryToFlag(isoCode: string) {
 function MapCurrency(props: any) {
   const { t, i18n, ready } = useTranslation(["country"]);
 
-  const { priorityCountries, value, handleChange } = props;
+  const { enabledCurrencies, priorityCountries, value, handleChange } = props;
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -140,7 +142,12 @@ function MapCurrency(props: any) {
   const classes = useStylesAutoComplete();
 
   const sortedCountriesData = ready
-    ? sortCountriesByTranslation(t, i18n.language, priorityCountries)
+    ? sortCountriesByTranslation(
+        t,
+        i18n.language,
+        priorityCountries,
+        enabledCurrencies
+      )
     : {};
 
   const selectedCountry = getCountryDataBy("countryCode", value);

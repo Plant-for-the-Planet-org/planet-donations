@@ -1,5 +1,7 @@
 import countriesData from "./countriesData.json";
 
+type CountriesArray = typeof countriesData;
+
 const sortedCountries = {};
 
 /**
@@ -42,21 +44,40 @@ export function sortCountriesData(sortBy) {
 }
 
 /**
+ * Filters countries array and returns countries with enabled currencies (for payment)
+ * @param countriesData
+ * @param enabledCurrencies
+ * @returns {CountriesArray} Countries with currencies enabled for payment
+ */
+function filterByEnabledCurrencies(
+  countriesData: CountriesArray,
+  enabledCurrencies
+) {
+  return countriesData.filter((country) => {
+    return enabledCurrencies[country.currencyCode] !== undefined;
+  });
+}
+
+/**
  * Sorts the countries array for the translated country name
  * @param {Function} t - translation function
  * @param {String} language - language to get country names for
  * @param {Array} priorityCountries - country code to always show first in given order
  */
-export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
+export function sortCountriesByTranslation(
+  t,
+  language,
+  priorityCountryCodes,
+  enabledCurrencies
+) {
   const key = `${language}.${priorityCountryCodes}`;
   if (!sortedCountries[key]) {
     const priorityCountries = [];
     // filter priority countries from list
-    const filteredCountries = countriesData.filter(function (
-      value,
-      index,
-      arr
-    ) {
+    const filteredCountries = filterByEnabledCurrencies(
+      countriesData,
+      enabledCurrencies
+    ).filter(function (value, index, arr) {
       if (priorityCountryCodes?.includes(value.countryCode)) {
         priorityCountries.push(value);
         return false;
