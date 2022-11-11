@@ -4,7 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
@@ -14,9 +14,17 @@ import {
   sortCountriesByTranslation,
 } from "../../Utils/countryUtils";
 import themeProperties from "../../../styles/themeProperties";
-export default function TransitionsModal(props: any) {
-  const { openModal, handleModalClose } = props;
+import { Country, CurrencyList } from "src/Common/Types";
 
+interface SelectCurrencyModalProps {
+  openModal: boolean;
+  handleModalClose: () => void;
+}
+
+export default function SelectCurrencyModal({
+  openModal,
+  handleModalClose,
+}: SelectCurrencyModalProps): ReactElement | null {
   const { setcountry, country, currency, enabledCurrencies } =
     React.useContext(QueryParamContext);
 
@@ -24,7 +32,7 @@ export default function TransitionsModal(props: any) {
 
   const { theme } = React.useContext(ThemeContext);
 
-  const [importantList, setImportantList] = React.useState<Array<Object>>([]);
+  const [importantList, setImportantList] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     // sets two default country as important country which is US(United States) and DE (Germany)
@@ -60,7 +68,7 @@ export default function TransitionsModal(props: any) {
                 enabledCurrencies={enabledCurrencies}
                 priorityCountries={importantList}
                 value={country}
-                handleChange={(value) => {
+                handleChange={(value: Country) => {
                   setcountry(value.countryCode);
                   // setcurrency
                   localStorage.setItem("countryCode", value.countryCode);
@@ -81,12 +89,6 @@ const FormControlNew = withStyles({
   },
 })(FormControl);
 
-interface CountryType {
-  countryCode: string;
-  label: string;
-  currencyCode: string;
-}
-
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
 function countryToFlag(isoCode: string) {
@@ -99,11 +101,21 @@ function countryToFlag(isoCode: string) {
     : isoCode;
 }
 
-// Maps the radio buttons for currency
-function MapCurrency(props: any) {
-  const { t, i18n, ready } = useTranslation(["country"]);
+interface MapCurrencyProps {
+  enabledCurrencies: CurrencyList;
+  priorityCountries: string[];
+  value: string;
+  handleChange: (value: Country) => void;
+}
 
-  const { enabledCurrencies, priorityCountries, value, handleChange } = props;
+// Shows autocomplete options for currency
+function MapCurrency({
+  enabledCurrencies,
+  priorityCountries,
+  value,
+  handleChange,
+}: MapCurrencyProps) {
+  const { t, i18n, ready } = useTranslation(["country"]);
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -159,7 +171,7 @@ function MapCurrency(props: any) {
           <Autocomplete
             data-test-id="country-select"
             style={{ width: "100%" }}
-            options={sortedCountriesData as CountryType[]}
+            options={sortedCountriesData as Country[]}
             classes={{
               option: classes.option,
               paper: classes.paper,
@@ -179,16 +191,14 @@ function MapCurrency(props: any) {
                 } `}
               </>
             )}
-            onChange={(event: any, newValue: CountryType | null) => {
+            onChange={(_event, newValue: Country | null) => {
               if (newValue) {
                 handleChange(newValue);
               }
             }}
-            defaultValue={value.label}
             renderInput={(params) => (
               <MaterialTextField
                 {...params}
-                label={props.label}
                 variant="outlined"
                 inputProps={{
                   ...params.inputProps,

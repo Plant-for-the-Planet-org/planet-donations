@@ -193,3 +193,18 @@ export interface Recurrency {
   methods?: string[] | null;
   frequencies?: string[] | null;
 }
+
+export interface Country {
+  countryName: string;
+  countryCode: string;
+  currencyName: string;
+  currencyCode: string;
+  currencyCountryFlag: string;
+  languageCode: string;
+}
+
+export type CountryProperty = keyof Country;
+
+export interface CurrencyList {
+  [key: string]: string;
+}

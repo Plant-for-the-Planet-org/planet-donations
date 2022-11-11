@@ -7,7 +7,7 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps } from "src/Common/Types";
+import { PaymentSetupProps, CurrencyList } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
@@ -26,7 +26,7 @@ export const QueryParamContext = React.createContext({
   currency: "",
   setcurrency: (value: "") => {},
   enabledCurrencies: {},
-  setEnabledCurrencies: (value: {}) => {},
+  setEnabledCurrencies: (value: CurrencyList) => {},
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
@@ -172,9 +172,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
-  const [enabledCurrencies, setEnabledCurrencies] = useState<null | Object>(
-    null
-  );
+  const [enabledCurrencies, setEnabledCurrencies] =
+    useState<null | CurrencyList>(null);
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
