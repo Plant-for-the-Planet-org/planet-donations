@@ -217,12 +217,16 @@ export default function QueryParamProvider({ children }: any) {
   const [paymentRequest, setPaymentRequest] = React.useState(null);
 
   const loadEnabledCurrencies = async () => {
-    const requestParams = {
-      url: `/public/v1.1/en/currencies`,
-      setshowErrorCard,
-    };
-    const response: any = await apiRequest(requestParams);
-    setEnabledCurrencies(response.data.currency_names);
+    try {
+      const requestParams = {
+        url: `/public/v1.1/en/currencies`,
+        setshowErrorCard,
+      };
+      const response: any = await apiRequest(requestParams);
+      setEnabledCurrencies(response.data.currency_names);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   React.useEffect(() => {
