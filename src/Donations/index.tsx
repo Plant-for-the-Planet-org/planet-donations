@@ -207,7 +207,7 @@ function DonationInfo() {
           <BackButton color={"#000"} />
         </button>
       )}
-      {isApproved && isTopProject && (
+      {isApproved && isTopProject && router.query.to && (
         <div className={"topProjectBadge theme-light"}>Top Project</div>
       )}
       <div className="background-image-overlay"></div>
