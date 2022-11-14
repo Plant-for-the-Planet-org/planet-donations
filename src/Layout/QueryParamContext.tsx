@@ -231,6 +231,7 @@ export default function QueryParamProvider({ children }: any) {
       setEnabledCurrencies(response.data.currency_names);
     } catch (err) {
       console.log(err);
+      setEnabledCurrencies(null);
     }
   };
 
@@ -239,6 +240,16 @@ export default function QueryParamProvider({ children }: any) {
     if (!enabledCurrencies && donationStep !== null && donationStep <= 1)
       loadEnabledCurrencies();
   }, [donationStep, enabledCurrencies]);
+
+  useEffect(() => {
+    if (
+      currency &&
+      enabledCurrencies &&
+      enabledCurrencies[currency] === undefined
+    ) {
+      setCountryCode({ setcountry, setcurrency, country: "DE" });
+    }
+  }, [currency, enabledCurrencies]);
 
   useEffect(() => {
     if (paymentError) {
