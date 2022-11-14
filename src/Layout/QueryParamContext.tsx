@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useContext,
   useCallback,
-  FC,
 } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
@@ -19,12 +18,102 @@ import { PaymentSetupProps, CurrencyList } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
-import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 
-export const QueryParamContext =
-  createContext<QueryParamContextInterface>(null);
+export const QueryParamContext = createContext({
+  isGift: false,
+  setisGift: (value: boolean) => {},
+  giftDetails: {},
+  setgiftDetails: (value: {}) => {},
+  contactDetails: {},
+  setContactDetails: (value: {}) => {},
+  country: "",
+  setcountry: (value: "") => {},
+  paymentSetup: {},
+  setpaymentSetup: ({}) => {},
+  currency: "",
+  setcurrency: (value: "") => {},
+  enabledCurrencies: {},
+  setEnabledCurrencies: (value: CurrencyList) => {},
+  donationStep: null,
+  setdonationStep: (value: number) => {},
+  projectDetails: null,
+  quantity: 50,
+  setquantity: (value: number) => {},
+  language: "en",
+  setlanguage: (value: string) => {},
+  donationID: null,
+  setdonationID: (value: string) => {},
+  paymentType: "",
+  setPaymentType: (value: string) => "",
+  shouldCreateDonation: false,
+  setshouldCreateDonation: (value: boolean) => {},
+  setIsTaxDeductible: (value: boolean) => {},
+  isTaxDeductible: false,
+  isPaymentOptionsLoading: false,
+  redirectstatus: "",
+  setredirectstatus: (value: string) => {},
+  callbackUrl: "",
+  setcallbackUrl: (value: string) => {},
+  isDirectDonation: false,
+  tenant: "",
+  settenant: (value: string) => {},
+  selectedProjects: [],
+  setSelectedProjects: (value: Array<any>) => {},
+  allProjects: [],
+  allowTaxDeductionChange: true,
+  setallowTaxDeductionChange: (value: boolean) => {},
+  donationUid: null,
+  setDonationUid: (value: string) => "",
+  setshowErrorCard: (value: boolean) => {},
+  setprojectDetails: (value: {}) => {},
+  transferDetails: null,
+  setTransferDetails: (value: {}) => {},
+  loadselectedProjects: () => {},
+  hideTaxDeduction: false,
+  queryToken: "",
+  setqueryToken: (value: string) => "",
+  sethideTaxDeduction: (value: boolean) => {},
+  setisDirectDonation: (value: boolean) => {},
+  isSignedUp: false,
+  setIsSignedUp: (value: boolean) => {},
+  frequency: "",
+  setfrequency: (value: string) => {},
+  hideLogin: false,
+  setHideLogin: (value: boolean) => {},
+  paymentError: "",
+  setPaymentError: (value: string) => {},
+  amount: null,
+  setAmount: (value: number) => {},
+  taxIdentificationAvail: {},
+  setTaxIdentificationAvail: (value: boolean) => {},
+  callbackMethod: "",
+  setCallbackMethod: (value: string) => {},
+  retainQuantityValue: false,
+  setRetainQuantityValue: (value: boolean) => {},
+  projectName: "",
+  setProjectName: (value: string) => {},
+  projectDescription: "",
+  setProjectDescription: (value: string) => {},
+  setIsPaymentOptionsLoading: (value: boolean) => {},
+  loadPaymentSetup: (value: {
+    projectGUID: string;
+    paymentSetupCountry: string | string[];
+    shouldSetPaymentDetails?: Boolean;
+  }) => {},
+  profile: null,
+  isPlanetCashActive: false,
+  setIsPlanetCashActive: (value: boolean) => {},
+  onBehalf: false,
+  setOnBehalf: (value: boolean) => {},
+  onBehalfDonor: {},
+  setOnBehalfDonor: (value: {}) => {},
+  donation: null,
+  setdonation: (value: {}) => {},
+  paymentRequest: null,
+  setPaymentRequest: (value: {}) => {},
+});
 
-const QueryParamProvider: FC = ({ children }) => {
+export default function QueryParamProvider({ children }: any) {
   const router = useRouter();
 
   const { i18n } = useTranslation();
@@ -45,11 +134,11 @@ const QueryParamProvider: FC = ({ children }) => {
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
     typeof window !== "undefined" && localStorage.getItem("language")
-      ? (localStorage.getItem("language") as string)
+      ? localStorage.getItem("language")
       : "en"
   );
 
-  const [donationID, setdonationID] = useState<string | null>(null);
+  const [donationID, setdonationID] = useState(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
 
   // for tax deduction part
@@ -88,10 +177,10 @@ const QueryParamProvider: FC = ({ children }) => {
     companyname: "",
   });
 
-  const [country, setcountry] = useState<string>("");
+  const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
   const [enabledCurrencies, setEnabledCurrencies] =
-    useState<CurrencyList | null>(null);
+    useState<null | CurrencyList>(null);
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
@@ -160,7 +249,7 @@ const QueryParamProvider: FC = ({ children }) => {
   }, [paymentError]);
   useEffect(() => {
     if (allLocales.some((locale) => locale.key === router.query.locale)) {
-      setlanguage(router.query.locale as string);
+      setlanguage(router.query.locale);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
       const userLocale = navigator.languages ?? [navigator.language];
@@ -512,7 +601,6 @@ const QueryParamProvider: FC = ({ children }) => {
         country,
         setcountry,
         paymentSetup,
-        setpaymentSetup,
         currency,
         setcurrency,
         enabledCurrencies,
@@ -520,7 +608,6 @@ const QueryParamProvider: FC = ({ children }) => {
         donationStep,
         setdonationStep,
         projectDetails,
-        setprojectDetails,
         quantity,
         setquantity,
         language,
@@ -548,10 +635,12 @@ const QueryParamProvider: FC = ({ children }) => {
         donationUid,
         setDonationUid,
         setshowErrorCard,
+        setprojectDetails,
         loadselectedProjects,
         hideTaxDeduction,
         queryToken,
         setqueryToken,
+        setpaymentSetup,
         sethideTaxDeduction,
         setallowTaxDeductionChange,
         setisDirectDonation,
@@ -601,9 +690,7 @@ const QueryParamProvider: FC = ({ children }) => {
       />
     </QueryParamContext.Provider>
   );
-};
-
-export default QueryParamProvider;
+}
 
 interface CardProps {
   showErrorCard: boolean;
@@ -633,4 +720,8 @@ function ErrorCard({
   ) : (
     <></>
   );
+}
+
+export function useTheme() {
+  return useContext(QueryParamContext);
 }
