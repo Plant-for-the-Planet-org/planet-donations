@@ -224,14 +224,15 @@ export default function QueryParamProvider({ children }: any) {
       setlanguage(router.query.locale);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
-      const userLocale = navigator.languages ?? [navigator.language];
-      const newLocale = userLocale[0].trim().split(/-|_/)[0];
-
-      if (allLocales.some((locale) => locale.key === newLocale)) {
-        //if user locale is supported by us
-        setlanguage(newLocale);
-      } else {
-        setlanguage("en");
+      if (localStorage.getItem("language") === null) {
+        const userLocale = navigator.languages ?? [navigator.language];
+        const newLocale = userLocale[0].trim().split(/-|_/)[0];
+        if (allLocales.some((locale) => locale.key === newLocale)) {
+          //if user locale is supported by us
+          setlanguage(newLocale);
+        } else {
+          setlanguage("en");
+        }
       }
     }
   }, [router.query.locale]);
