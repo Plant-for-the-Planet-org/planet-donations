@@ -224,11 +224,11 @@ export default function QueryParamProvider({ children }: any) {
   const loadEnabledCurrencies = async () => {
     try {
       const requestParams = {
-        url: `/public/v1.1/en/currencies`,
+        url: `/app/currencies`,
         setshowErrorCard,
       };
       const response: any = await apiRequest(requestParams);
-      setEnabledCurrencies(response.data.currency_names);
+      setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
       setEnabledCurrencies(null);
