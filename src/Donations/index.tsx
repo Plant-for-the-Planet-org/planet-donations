@@ -365,12 +365,6 @@ function DonationInfo() {
                     }`
                   : null}
               </p>
-              <p>
-                {contactDetails.cnpOrCnjpNumber &&
-                  `${t("common:cnpOrCnjpNumber")} ${": "}${
-                    contactDetails.cnpOrCnjpNumber
-                  }`}
-              </p>
             </div>
           )}
 

@@ -59,6 +59,7 @@ function DonationsForm() {
     setcountry,
     setcurrency,
     donation,
+    boletoBillingDetails,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -163,6 +164,7 @@ function DonationsForm() {
           router,
           tenant,
           setTransferDetails,
+          boletoBillingDetails,
         });
       }
     });

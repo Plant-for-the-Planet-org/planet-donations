@@ -229,15 +229,6 @@ export function createDonationData({
     delete donationData.project;
   }
 
-  // Backend does not expects cnpOrCnjpNumber
-  if (donationData.donor.cnpOrCnjpNumber) {
-    delete donationData.donor.cnpOrCnjpNumber;
-  }
-  // Backend does not expects state
-  if (donationData.donor.state) {
-    delete donationData.donor.state;
-  }
-
   return donationData;
 }
 
@@ -257,6 +248,7 @@ export async function payDonationFunction({
   router,
   tenant,
   setTransferDetails,
+  boletoBillingDetails,
 }: PayDonationProps) {
   // const router = useRouter();
   setIsPaymentProcessing(true);
@@ -323,6 +315,7 @@ export async function payDonationFunction({
           router,
           tenant,
           setTransferDetails,
+          boletoBillingDetails,
         });
       }
     }
@@ -428,6 +421,7 @@ export async function handleStripeSCAPayment({
   router,
   tenant,
   setTransferDetails,
+  boletoBillingDetails,
 }: HandleStripeSCAPaymentProps) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
@@ -526,8 +520,10 @@ export async function handleStripeSCAPayment({
         {
           payment_method: {
             type: "boleto",
-            billing_details: buildBillingDetails(contactDetails),
-            boleto: { tax_id: contactDetails.cnpOrCnjpNumber },
+            billing_details: buildBillingDetails(boletoBillingDetails),
+            boleto: {
+              tax_id: boletoBillingDetails.cnpOrCnjpNumber,
+            },
           },
         },
         {

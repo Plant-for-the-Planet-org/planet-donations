@@ -9,6 +9,7 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import {
   BankTransferDetails,
+  BoletoBillingDetails,
   BoletoTransferDetails,
   PaymentSetupProps,
 } from "src/Common/Types";
@@ -106,6 +107,8 @@ export const QueryParamContext = React.createContext({
   setdonation: (value: {}) => {},
   paymentRequest: null,
   setPaymentRequest: (value: {}) => {},
+  boletoBillingDetails: null,
+  setBoletoBillingDetails: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -215,6 +218,9 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donation, setdonation] = React.useState(null);
   const [paymentRequest, setPaymentRequest] = React.useState(null);
+
+  const [boletoBillingDetails, setBoletoBillingDetails] =
+    React.useState<BoletoBillingDetails | null>(null);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -654,6 +660,8 @@ export default function QueryParamProvider({ children }: any) {
         setdonation,
         paymentRequest,
         setPaymentRequest,
+        boletoBillingDetails,
+        setBoletoBillingDetails,
       }}
     >
       {children}

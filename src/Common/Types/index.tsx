@@ -124,13 +124,28 @@ export interface PayDonationProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
-  setTransferDetails: SetState<BoletoTransferDetails | BankTransferDetails | null>;
+  setTransferDetails: SetState<
+    BoletoTransferDetails | BankTransferDetails | null
+  >;
+  boletoBillingDetails: BoletoBillingDetails;
 }
 export interface BoletoTransferDetails {
   expiresAt: string;
   hostedVoucherURL: string;
   number: string;
   pdf: string;
+}
+
+export interface BoletoBillingDetails {
+  firstname: string;
+  lastname: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  cnpOrCnjpNumber: string;
+  email: string;
+  state: string;
+  country: string;
 }
 export interface BankTransferDetails {
   bankName: string;
@@ -153,7 +168,10 @@ export interface HandleStripeSCAPaymentProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
-  setTransferDetails: SetState<BoletoTransferDetails | BankTransferDetails | null>;
+  setTransferDetails: SetState<
+    BoletoTransferDetails | BankTransferDetails | null
+  >;
+  boletoBillingDetails: BoletoBillingDetails;
 }
 
 export interface PaymentSetupProps {

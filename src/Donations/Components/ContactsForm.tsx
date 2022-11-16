@@ -111,16 +111,6 @@ function ContactsForm({}: Props): ReactElement {
     setContactDetails(data);
   };
 
-  const changeBrazilianState = (state: string) => {
-    let data = getValues();
-    data = {
-      ...data,
-      country,
-      state,
-    };
-    setContactDetails(data);
-  };
-
   const [addressSugggestions, setaddressSugggestions] = React.useState([]);
 
   const suggestAddress = (value) => {
@@ -362,8 +352,7 @@ function ContactsForm({}: Props): ReactElement {
                   label={t("country")}
                   name="country"
                   onValueChange={changeCountry}
-                  defaultValue={country === "BR" ? "BR" : value}
-                  allowedCountries={country === "BR" ? ["BR"] : []}
+                  defaultValue={value}
                 />
               )}
             />
@@ -372,35 +361,6 @@ function ContactsForm({}: Props): ReactElement {
               <span className={"form-errors"}>{t("countryRequired")}</span>
             )}
           </div>
-
-          {country === "BR" && (
-            <div className={"form-field mt-30"}>
-              <Controller
-                control={control}
-                rules={{
-                  required: {
-                    value: true,
-                    message: t("stateRequired"),
-                  },
-                }}
-                name="state"
-                defaultValue={"SP"}
-                render={({ ref }) => (
-                  <StateSelect
-                    inputRef={ref}
-                    label={t("state")}
-                    name="state"
-                    onValueChange={changeBrazilianState}
-                    defaultValue={"SP"}
-                  />
-                )}
-              />
-
-              {errors.state && (
-                <span className={"form-errors"}>{t("stateRequired")}</span>
-              )}
-            </div>
-          )}
 
           {taxIdentificationAvail ? (
             <div
@@ -423,30 +383,6 @@ function ContactsForm({}: Props): ReactElement {
             </div>
           ) : (
             <></>
-          )}
-
-          {country === "BR" && (
-            <div
-              className={"form-field mt-30"}
-              data-test-id="taxIdentiication"
-              id="taxIdentificationAvail"
-            >
-              <MaterialTextField
-                inputRef={register({
-                  required: true,
-                  pattern: /^[\w\W]{11}$|^[\w\W]{14}$|^[\w\W]{18}$/,
-                })}
-                label={t("cnpOrCnjpNumber")}
-                variant="outlined"
-                name="cnpOrCnjpNumber"
-              />
-              {errors.cnpOrCnjpNumber &&
-                errors.cnpOrCnjpNumber.type !== "validate" && (
-                  <span className={"form-errors"}>
-                    {t("cnpOrCnjpNumberRequired")}
-                  </span>
-                )}
-            </div>
           )}
 
           <div className="contacts-isCompany-toggle mt-20">

@@ -74,6 +74,7 @@ function PaymentsForm({}: Props): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    boletoBillingDetails
   } = React.useContext(QueryParamContext);
 
   // This will prevent the replacement of paymentIntentID in donation in boleto
@@ -133,6 +134,7 @@ function PaymentsForm({}: Props): ReactElement {
       router,
       tenant,
       setTransferDetails,
+      boletoBillingDetails
     });
   };
 

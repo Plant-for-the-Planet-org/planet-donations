@@ -9,16 +9,6 @@ import { ThemeContext } from "../../../styles/themeContext";
 import BRAZILIAN_STATES from "../../Utils/brazilianStateCodes";
 import { ControllerRenderProps } from "react-hook-form";
 
-function stateToFlag(isoCode: string) {
-  return typeof String.fromCodePoint !== "undefined"
-    ? isoCode
-        .toUpperCase()
-        .replace(/./g, (char) =>
-          String.fromCodePoint(char.charCodeAt(0) + 127397)
-        )
-    : isoCode;
-}
-
 export default function StateSelect(props: {
   label: React.ReactNode;
   inputRef?: ControllerRenderProps["ref"];
@@ -119,12 +109,7 @@ export default function StateSelect(props: {
       value={value}
       autoHighlight
       getOptionLabel={(option) => option.name}
-      renderOption={(option) => (
-        <>
-          <span>{stateToFlag(option.code)}</span>
-          {option.name}
-        </>
-      )}
+      renderOption={(option) => <>{option.name}</>}
       onChange={(
         _: React.ChangeEvent<Record<string, unknown>>,
         newValue: State | null
