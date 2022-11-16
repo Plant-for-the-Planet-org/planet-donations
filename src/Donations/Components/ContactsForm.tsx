@@ -14,7 +14,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
-import StateSelect from "src/Common/InputTypes/AutoCompleteState";
 
 interface Props {}
 

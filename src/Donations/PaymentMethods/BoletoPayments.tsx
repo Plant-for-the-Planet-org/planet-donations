@@ -16,19 +16,14 @@ interface Props {
 
 function BoletoPayPayments({ onSubmitPayment }: Props): ReactElement {
   const { t } = useTranslation("common");
-  const {
-    contactDetails,
-    setContactDetails,
-    boletoBillingDetails,
-    setBoletoBillingDetails,
-  } = useContext(QueryParamContext);
+  const { contactDetails, boletoBillingDetails, setBoletoBillingDetails } =
+    useContext(QueryParamContext);
 
   const {
     register,
     errors,
     handleSubmit,
     control,
-    reset,
     getValues,
     setValue,
     setError,

@@ -559,8 +559,6 @@ export async function handleStripeSCAPayment({
         query: { ...routerParams, step: THANK_YOU },
       });
 
-      setIsPaymentProcessing(false);
-
       break;
     }
 

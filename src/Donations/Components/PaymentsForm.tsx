@@ -74,7 +74,7 @@ function PaymentsForm({}: Props): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
-    boletoBillingDetails
+    boletoBillingDetails,
   } = React.useContext(QueryParamContext);
 
   // This will prevent the replacement of paymentIntentID in donation in boleto
@@ -94,18 +94,6 @@ function PaymentsForm({}: Props): ReactElement {
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
-
-  // This will retain transaction in process or thank you screen even after reload
-  React.useEffect(() => {
-    if (donationID) {
-      router.replace({
-        query: {
-          ...router.query,
-          context: donationID,
-        },
-      });
-    }
-  }, [donationID]);
 
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
@@ -134,7 +122,7 @@ function PaymentsForm({}: Props): ReactElement {
       router,
       tenant,
       setTransferDetails,
-      boletoBillingDetails
+      boletoBillingDetails,
     });
   };
 
