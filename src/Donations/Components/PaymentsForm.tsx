@@ -363,11 +363,20 @@ function PaymentsForm({}: Props): ReactElement {
                     ? paymentSetup?.recurrency.methods.includes("card")
                     : true)
                 }
-                showBoleto={showPaymentMethod({
-                  paymentMethod: "boleto",
-                  currencies: ["BRL"],
-                  countries: ["BR"],
-                })}
+                showBoleto={
+                  currency === "BRL" &&
+                  country === "BR" &&
+                  quantity &&
+                  paymentSetup &&
+                  (quantity * paymentSetup.unitCost > 49999.99 ||
+                    quantity * paymentSetup.unitCost < 5.0)
+                    ? false
+                    : showPaymentMethod({
+                        paymentMethod: "boleto",
+                        currencies: ["BRL"],
+                        countries: ["BR"],
+                      })
+                }
                 onNativePaymentFunction={onPaymentFunction}
               />
             )}
