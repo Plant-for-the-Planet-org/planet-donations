@@ -20,6 +20,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
+import { Project } from "src/Common/Types/project";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -99,8 +100,8 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
 
-  const [selectedProjects, setSelectedProjects] = useState<Array<any>>([]);
-  const [allProjects, setAllProjects] = useState<Array<any>>([]);
+  const [selectedProjects, setSelectedProjects] = useState<Array<Project>>([]);
+  const [allProjects, setAllProjects] = useState<Array<Project>>([]);
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
@@ -234,11 +235,11 @@ const QueryParamProvider: FC = ({ children }) => {
         setshowErrorCard,
         tenant,
       };
-      const projects: any = await apiRequest(requestParams);
-      if (projects.data) {
-        const allowedDonationsProjects = projects.data.filter(
-          (project: { properties: { allowDonations: boolean } }) =>
-            project.properties.allowDonations === true
+      const response = await apiRequest(requestParams);
+      const projects = response.data as Project[];
+      if (projects) {
+        const allowedDonationsProjects = projects.filter(
+          (project) => project.properties.allowDonations === true
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {

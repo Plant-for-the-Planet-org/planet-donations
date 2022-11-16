@@ -1,4 +1,5 @@
 import { CurrencyList } from ".";
+import { Project } from "./project";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -43,9 +44,9 @@ export default interface QueryParamContextInterface {
   setisDirectDonation: (isDirectDonation: boolean) => void;
   tenant: string;
   settenant: (tenant: string) => void;
-  selectedProjects: Array<any>; //TODOO
-  setSelectedProjects: (value: Array<any>) => void; //TODOO
-  allProjects: Array<any>; //TODOO
+  selectedProjects: Array<Project>;
+  setSelectedProjects: (value: Array<Project>) => void;
+  allProjects: Array<Project>;
   allowTaxDeductionChange: boolean;
   setallowTaxDeductionChange: (allowTaxDeductionChange: boolean) => void;
   donationUid: string | null;
