@@ -8,6 +8,7 @@ import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
+import { FetchedProjectDetails } from "src/Common/Types";
 
 function SuccessfulDonation({ donation, sendToReturn }: any) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
@@ -32,7 +33,9 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
 
   const sendRef = () => imageRef;
 
-  return donation ? (
+  return donation &&
+    projectDetails &&
+    projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}

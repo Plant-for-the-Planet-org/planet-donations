@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
+import { FetchedProjectDetails } from "src/Common/Types";
 
 function FailedDonation({ sendToReturn, donation }: any) {
   const { t } = useTranslation(["common"]);
@@ -18,6 +19,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     donationID,
     setcountry,
     setIsTaxDeductible,
+    projectDetails,
     setprojectDetails,
     setquantity,
     setContactDetails,
@@ -37,7 +39,10 @@ function FailedDonation({ sendToReturn, donation }: any) {
 
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
-    setprojectDetails(donation.destination);
+    setprojectDetails({
+      ...(projectDetails as FetchedProjectDetails),
+      id: donation.destination.id as string,
+    });
     setPaymentError("");
     setquantity(donation?.quantity);
     setContactDetails(donation.donor);

@@ -9,6 +9,7 @@ import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon
 import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { PaymentOptions } from "src/Common/Types";
 
 interface PaymentButtonProps {
   country: string;
@@ -21,6 +22,8 @@ interface PaymentButtonProps {
   frequency: string | null;
   paymentSetup: Object;
 }
+
+//Delete this FC? It isn't being used. Same for the interface above.
 export const PaymentRequestCustomButton = ({
   country,
   currency,
@@ -216,7 +219,7 @@ interface NativePayProps {
   currency: String;
   amount: number;
   onPaymentFunction: Function;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
   continueNext: Function;
   isPaymentPage: boolean;
   paymentLabel: string;

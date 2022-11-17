@@ -149,6 +149,7 @@ function ContactsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
+      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
@@ -446,15 +447,16 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("donate_button", {
-                totalCost: getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.unitCost * quantity
-                ),
-                frequency:
-                  frequency === "once" ? "" : t(frequency).toLowerCase(),
-              })}
+              {paymentSetup &&
+                t("donate_button", {
+                  totalCost: getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.unitCost * quantity
+                  ),
+                  frequency:
+                    frequency === "once" ? "" : t(frequency).toLowerCase(),
+                })}
             </button>
           )}
         </form>

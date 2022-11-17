@@ -47,7 +47,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   const router = useRouter();
 
   const setCustomValue = (e: any) => {
-    if (e.target) {
+    if (e.target && paymentSetup) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(
@@ -75,13 +75,14 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   React.useEffect(() => {
     if (
+      paymentSetup &&
       paymentSetup.frequencies &&
       paymentSetup.frequencies[`${frequency}`].options
     ) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.frequencies[`${frequency}`].options) {
-        newallOptionsArray.push(option.quantity * paymentSetup.unitCost);
+        newallOptionsArray.push((option.quantity || 0) * paymentSetup.unitCost);
       }
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
@@ -92,8 +93,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         : router.query.units
         ? Number(router.query.units * paymentSetup.unitCost)
         : defaultPaymentOption.length > 0
-        ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
-        : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+        ? (defaultPaymentOption[0].quantity || 0) * paymentSetup.unitCost
+        : (paymentSetup.frequencies[`${frequency}`].options[1].quantity || 0) *
           paymentSetup.unitCost;
       newQuantity = Number(
         getFormattedNumber(
@@ -141,14 +142,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           isGift && giftDetails.recipientName === "" ? "display-none" : ""
         }`}
       >
-        {paymentSetup.frequencies &&
+        {paymentSetup &&
+          paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`].options.map(
             (option, index) => {
               return option.quantity ? (
                 <div
                   key={index}
                   onClick={() => {
-                    setquantity(option.quantity);
+                    setquantity(option.quantity as number);
                     setisCustomDonation(false);
                     setCustomInputValue("");
                   }}

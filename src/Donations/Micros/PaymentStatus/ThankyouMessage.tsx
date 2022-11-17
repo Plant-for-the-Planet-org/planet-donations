@@ -3,9 +3,10 @@ import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { FetchedProjectDetails } from "src/Common/Types";
 
 interface Props {
-  projectDetails: any;
+  projectDetails: FetchedProjectDetails;
   donation: any;
   paymentTypeUsed: any;
 }

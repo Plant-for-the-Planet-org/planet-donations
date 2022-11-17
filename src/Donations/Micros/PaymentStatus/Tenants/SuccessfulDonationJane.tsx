@@ -23,7 +23,9 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
     returnDisplay = x.split("/", 2);
   }
 
-  return donation ? (
+  return donation &&
+    projectDetails &&
+    projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
       {callbackUrl && (
         <button

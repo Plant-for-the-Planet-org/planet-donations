@@ -3,6 +3,8 @@ import {
   CreateDonationFunctionProps,
   PayDonationProps,
   HandleStripeSCAPaymentProps,
+  PaymentOptions,
+  CreateDonationDataProps,
 } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
@@ -11,7 +13,7 @@ import { THANK_YOU } from "src/Utils/donationStepConstants";
 export function buildPaymentProviderRequest(
   gateway,
   method,
-  paymentSetup,
+  paymentSetup: PaymentOptions,
   providerObject
 ) {
   let account;
@@ -42,7 +44,7 @@ export function buildPaymentProviderRequest(
       source = providerObject;
       break;
     case "offline":
-      account = paymentSetup.gateways.offline.account;
+      account = paymentSetup.gateways.offline?.account;
       source = {};
 
     // throw some exception here 'unsupported gateway'
@@ -160,7 +162,7 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: any) {
+}: CreateDonationDataProps) {
   let donationData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,

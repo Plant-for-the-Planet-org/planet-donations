@@ -15,7 +15,12 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps, CurrencyList } from "src/Common/Types";
+import {
+  CurrencyList,
+  PaymentOptions,
+  FetchedProjectDetails,
+  PlanetCashSignupDetails,
+} from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
@@ -36,9 +41,11 @@ const QueryParamProvider: FC = ({ children }) => {
     loginWithRedirect,
   } = useAuth0();
 
-  const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
+  const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
 
-  const [projectDetails, setprojectDetails] = useState<Object | null>(null);
+  const [projectDetails, setprojectDetails] = useState<
+    FetchedProjectDetails | PlanetCashSignupDetails | null
+  >(null);
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -414,7 +421,7 @@ const QueryParamProvider: FC = ({ children }) => {
   useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
+      if (Number(router.query.units) > 0 && paymentSetup?.unitCost) {
         setquantity(Number(router.query.units));
       }
     }
@@ -503,7 +510,7 @@ const QueryParamProvider: FC = ({ children }) => {
           purpose: paymentSetup.purpose,
           ownerName: paymentSetup.ownerName,
           taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          projectImage: paymentSetup.image,
+          image: paymentSetup.image,
           ownerAvatar: paymentSetup.ownerAvatar,
         });
       }
@@ -641,7 +648,7 @@ function ErrorCard({
 
   return showErrorCard ? (
     <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
-      {t("errorOccurred")}
+      {ready && t("errorOccurred")}
     </div>
   ) : (
     <></>

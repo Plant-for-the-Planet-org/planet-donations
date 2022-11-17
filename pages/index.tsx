@@ -11,9 +11,14 @@ import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
+import {
+  FetchedProjectDetails,
+  PaymentOptions,
+  PlanetCashSignupDetails,
+} from "src/Common/Types";
 
 interface Props {
-  projectDetails?: Object;
+  projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
   donationStep: any;
   giftDetails: Object;
   isGift: boolean;
@@ -27,7 +32,7 @@ interface Props {
   contactDetails: any;
   allowTaxDeductionChange: boolean;
   currency: any;
-  paymentSetup: any;
+  paymentSetup: PaymentOptions;
   treecount?: any;
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
@@ -198,7 +203,7 @@ export default index;
 export async function getServerSideProps(context: any) {
   let donationStep = 0;
   let showErrorCard = false;
-  let projectDetails = null;
+  let projectDetails: FetchedProjectDetails | null = null;
 
   // Variables that will be affected with Gift details
   let isGift = false;
@@ -215,7 +220,7 @@ export async function getServerSideProps(context: any) {
   let treecount = 50;
   let allowTaxDeductionChange = true;
   let currency = "EUR";
-  let paymentSetup = {};
+  let paymentSetup: PaymentOptions | null = null;
   let amount = 0;
   let tenant = "ten_I9TW3ncG";
   let callbackUrl = "";
@@ -259,17 +264,17 @@ export async function getServerSideProps(context: any) {
           locale,
         };
         const paymentOptionsResponse = await apiRequest(requestParams);
-        if (paymentOptionsResponse.data) {
+        const paymentOptionsData: PaymentOptions = paymentOptionsResponse?.data;
+        if (paymentOptionsData) {
           projectDetails = {
-            id: paymentOptionsResponse.data.id,
-            name: paymentOptionsResponse.data.name,
-            description: paymentOptionsResponse.data.description,
-            purpose: paymentOptionsResponse.data.purpose,
-            ownerName: paymentOptionsResponse.data.ownerName,
-            taxDeductionCountries:
-              paymentOptionsResponse.data.taxDeductionCountries,
-            projectImage: paymentOptionsResponse.data.image,
-            ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+            id: paymentOptionsData.id,
+            name: paymentOptionsData.name,
+            description: paymentOptionsData.description,
+            purpose: paymentOptionsData.purpose,
+            ownerName: paymentOptionsData.ownerName,
+            taxDeductionCountries: paymentOptionsData.taxDeductionCountries,
+            image: paymentOptionsData.image,
+            ownerAvatar: paymentOptionsData.ownerAvatar,
           };
           donationStep = 1;
         }
@@ -332,20 +337,20 @@ export async function getServerSideProps(context: any) {
             tenant,
             locale,
           };
-          const paymentSetupData: any = await apiRequest(requestParams);
-          if (paymentSetupData.data) {
-            currency = paymentSetupData.data.currency;
-            paymentSetup = paymentSetupData.data;
+          const paymentSetupResponse: any = await apiRequest(requestParams);
+          const paymentSetupData: PaymentOptions = paymentSetupResponse?.data;
+          if (paymentSetupData) {
+            currency = paymentSetupData.currency;
+            paymentSetup = paymentSetupData;
             projectDetails = {
-              id: paymentSetupData.data.id,
-              name: paymentSetupData.data.name,
-              description: paymentSetupData.data.description,
-              purpose: paymentSetupData.data.purpose,
-              ownerName: paymentSetupData.data.ownerName,
-              taxDeductionCountries:
-                paymentSetupData.data.taxDeductionCountries,
-              projectImage: paymentSetupData.data.image,
-              ownerAvatar: paymentSetupData.data.ownerAvatar,
+              id: paymentSetupData.id,
+              name: paymentSetupData.name,
+              description: paymentSetupData.description,
+              purpose: paymentSetupData.purpose,
+              ownerName: paymentSetupData.ownerName,
+              taxDeductionCountries: paymentSetupData.taxDeductionCountries,
+              image: paymentSetupData.image,
+              ownerAvatar: paymentSetupData.ownerAvatar,
             };
             donationStep = 3;
           }

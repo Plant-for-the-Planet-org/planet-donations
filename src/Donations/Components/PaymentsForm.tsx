@@ -93,6 +93,10 @@ function PaymentsForm({}: Props): ReactElement {
     method: string,
     providerObject?: any
   ) => {
+    if (!paymentSetup) {
+      console.log("Missing payment options");
+      return;
+    }
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
@@ -123,6 +127,13 @@ function PaymentsForm({}: Props): ReactElement {
   };
 
   async function getDonation() {
+    if (
+      !projectDetails ||
+      projectDetails.purpose === "planet-cash-signup" ||
+      !paymentSetup
+    )
+      return;
+
     let token = null;
     if (
       (((!isLoading && isAuthenticated) || queryToken) && profile?.address) ||
@@ -218,9 +229,9 @@ function PaymentsForm({}: Props): ReactElement {
       isAvailableInCountry &&
       isAvailableForCurrency &&
       isAuthenticatedMethod &&
-      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      paymentSetup?.gateways.stripe.methods?.includes(paymentMethod) &&
       (frequency !== "once"
-        ? paymentSetup?.recurrency.methods.includes(paymentMethod)
+        ? paymentSetup?.recurrency.methods?.includes(paymentMethod)
         : true)
     );
   };
@@ -350,14 +361,14 @@ function PaymentsForm({}: Props): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("card")
+                    ? paymentSetup?.recurrency.methods?.includes("card")
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
               />
             )}
 
-          {!isCreatingDonation && donationID ? (
+          {!isCreatingDonation && donationID && paymentSetup ? (
             <div className="mt-30">
               <div
                 role="tabpanel"
@@ -371,7 +382,7 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup?.unitCost * quantity
                     )}
                     onPaymentFunction={(providerObject: any) =>
                       onSubmitPayment("stripe", "card", providerObject)

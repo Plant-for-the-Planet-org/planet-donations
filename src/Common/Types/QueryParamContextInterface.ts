@@ -1,4 +1,9 @@
-import { CurrencyList } from ".";
+import {
+  CurrencyList,
+  FetchedProjectDetails,
+  PaymentOptions,
+  PlanetCashSignupDetails,
+} from ".";
 import { Project } from "./project";
 
 export default interface QueryParamContextInterface {
@@ -10,16 +15,18 @@ export default interface QueryParamContextInterface {
   setContactDetails: (value: {}) => void; //TODOO
   country: string;
   setcountry: (country: string) => void;
-  paymentSetup: {}; //TODOO
-  setpaymentSetup: ({}) => void; //TODOO
+  paymentSetup: PaymentOptions | null;
+  setpaymentSetup: (paymentSetup: PaymentOptions) => void;
   currency: string;
   setcurrency: (currency: string) => void;
   enabledCurrencies: CurrencyList | null;
   setEnabledCurrencies: (enabledCurrencies: CurrencyList) => void;
   donationStep: number | null;
   setdonationStep: (donationStep: number) => void;
-  projectDetails: {}; //TODOO
-  setprojectDetails: (value: {}) => void; //TODOO
+  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null;
+  setprojectDetails: (
+    projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null
+  ) => void;
   quantity: number;
   setquantity: (quantity: number) => void;
   language: string | null;

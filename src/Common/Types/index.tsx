@@ -86,13 +86,13 @@ export interface giftDetailsProps {
 export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
-  projectDetails: Object;
+  projectDetails: FetchedProjectDetails;
   quantity: number;
-  paymentSetup: {};
-  currency: String;
+  paymentSetup: PaymentOptions;
+  currency: string;
   contactDetails: Object;
   giftDetails: giftDetailsProps;
-  isGift: Boolean;
+  isGift: boolean;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   setdonationID: any;
@@ -112,7 +112,7 @@ export interface PayDonationProps {
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   t: any;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
   donationID: string;
   contactDetails: Object;
   token: string;
@@ -126,7 +126,7 @@ export interface PayDonationProps {
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
   window: any;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
@@ -139,59 +139,113 @@ export interface HandleStripeSCAPaymentProps {
   tenant: string;
 }
 
-export interface PaymentSetupProps {
+export interface CreateDonationDataProps {
+  projectDetails: FetchedProjectDetails;
+  quantity: number;
+  paymentSetup: PaymentOptions;
   currency: string;
-  effectiveCountry: string;
-  frequencies?: string[] | null;
-  gateways: Gateways;
-  minQuantity: number;
-  options?: OptionsEntity[] | null;
-  project: string;
-  purpose: string;
-  recurrency: Recurrency;
+  contactDetails: any;
+  taxDeductionCountry: any;
+  isGift: boolean;
+  giftDetails: any;
+  frequency: any;
+  amount: number | undefined;
+  callbackUrl: string | undefined;
+  callbackMethod: string | undefined;
+}
+
+export interface PlanetCashSignupDetails {
+  name: string;
+  ownerName: string | null;
+  ownerAvatar: string | null;
+  purpose: "planet-cash-signup";
+}
+
+export interface FetchedProjectDetails {
+  id: string;
+  name: string;
+  description?: string | null;
+  ownerAvatar?: string | null;
+  ownerName?: string;
+  image?: string | null;
+  purpose: ProjectPurpose;
+  taxDeductionCountries?: Array<string>;
+}
+
+type ProjectPurpose =
+  | "trees"
+  | "conservation"
+  | "funds"
+  | "reforestation"
+  | "bouquet"
+  | "planet-cash";
+
+export interface PaymentOptions extends FetchedProjectDetails {
   requestedCountry: string;
-  treeCost: number;
+  effectiveCountry: string;
+  frequencies: Frequencies;
+  gateways: Gateways;
+  recurrency: Recurrency;
   unit: string;
   unitCost: number;
+  currency: string;
+  destination: string;
+  isApproved?: boolean;
+  isTopProject?: boolean;
 }
+
+interface Frequencies {
+  [key: string]: Frequency;
+}
+
+interface Frequency {
+  minQuantity: number;
+  options: OptionsEntity[];
+}
+
 export interface Gateways {
   paypal: Paypal;
   stripe: Stripe;
-  offline: Offline;
+  offline?: Offline;
 }
 export interface Paypal {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationPaypal;
 }
+
 export interface AuthorizationPaypal {
   client_id: string;
 }
+
 export interface Stripe {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationStripe;
 }
+
 export interface AuthorizationStripe {
   stripePublishableKey: string;
   accountId: string;
 }
+
 export interface Offline {
   methods?: string[] | null;
   account: string;
 }
+
 export interface OptionsEntity {
-  id: string;
-  caption: string;
-  description?: string | null;
-  icon?: string | null;
-  quantity?: number | null;
+  id?: string;
+  caption: string | null;
+  description: string | null;
+  icon: string | null;
+  quantity: number | null;
   isDefault: boolean;
 }
+
 export interface Recurrency {
   supported: boolean;
-  methods?: string[] | null;
-  frequencies?: string[] | null;
+  methods: string[] | null;
 }
 
 export interface Country {

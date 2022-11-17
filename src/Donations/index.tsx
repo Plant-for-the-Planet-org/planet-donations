@@ -20,6 +20,7 @@ import {
 } from "src/Utils/donationStepConstants";
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
+import { FetchedProjectDetails } from "src/Common/Types";
 
 interface Props {}
 
@@ -27,13 +28,7 @@ function Donations({}: Props): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const router = useRouter();
 
-  const {
-    paymentSetup,
-    donationStep,
-    projectDetails,
-    setdonationStep,
-    allProjects,
-  } = React.useContext(QueryParamContext);
+  const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
 
   useEffect(() => {
     if (router.query?.step) {
@@ -140,7 +135,7 @@ function DonationInfo() {
         }}
         className="project-organisation-image no-project-organisation-image mb-10"
       >
-        {projectDetails.ownerName.charAt(0)}
+        {projectDetails?.ownerName?.charAt(0)}
       </div>
     );
   };
@@ -154,7 +149,10 @@ function DonationInfo() {
       style={{
         backgroundImage:
           projectDetails || donationStep === 0
-            ? `url(${getTenantBackground(tenant, projectDetails)})`
+            ? `url(${getTenantBackground(
+                tenant,
+                projectDetails as FetchedProjectDetails | null
+              )})`
             : "none",
         backgroundSize: "cover",
         backgroundPosition: "center center",

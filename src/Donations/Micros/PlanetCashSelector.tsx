@@ -28,19 +28,21 @@ const PlanetCashSelector: FC = (props) => {
 
     if (
       country === profile!.planetCash.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
         profile!.planetCash.balance / 100 +
           profile!.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
     }
-  }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
+  }, [paymentSetup?.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
     // On Load If selected country is planetCash Country and balance is sufficient activate planetCash.
 
     if (
       country === profile!.planetCash.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity <=
         profile!.planetCash.balance / 100 +
           profile!.planetCash.creditLimit / 100
@@ -67,6 +69,7 @@ const PlanetCashSelector: FC = (props) => {
 
     if (
       country === profile!.planetCash.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
         profile!.planetCash.balance / 100 +
           profile!.planetCash.creditLimit / 100
@@ -88,6 +91,7 @@ const PlanetCashSelector: FC = (props) => {
 
     if (
       country === profile!.planetCash.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
         profile!.planetCash.balance / 100 +
           profile!.planetCash.creditLimit / 100
@@ -191,6 +195,7 @@ const PlanetCashSelector: FC = (props) => {
 
           {(isPlanetCashActive ||
             (country === profile!.planetCash.country &&
+              paymentSetup &&
               paymentSetup.unitCost * quantity >
                 profile!.planetCash.balance / 100 +
                   profile!.planetCash.creditLimit / 100)) && (
