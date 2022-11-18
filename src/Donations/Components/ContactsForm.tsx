@@ -15,9 +15,19 @@ import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 
-interface Props {}
+type ContactFormData = {
+  firstname: string;
+  lastname: string;
+  tin?: string;
+  email: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  companyname?: string;
+};
 
-function ContactsForm({}: Props): ReactElement {
+function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
 
   React.useEffect(() => {
@@ -55,7 +65,7 @@ function ContactsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (contactDetails) {
       reset(contactDetails);
-      if (contactDetails.companyName) {
+      if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
@@ -69,7 +79,7 @@ function ContactsForm({}: Props): ReactElement {
     reset,
     getValues,
     setValue,
-  } = useForm({
+  } = useForm<ContactFormData>({
     mode: "all",
     defaultValues: {},
   });
@@ -81,7 +91,7 @@ function ContactsForm({}: Props): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ContactFormData) => {
     router.push(
       {
         query: { ...router.query, step: PAYMENT },

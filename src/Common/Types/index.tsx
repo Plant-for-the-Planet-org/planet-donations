@@ -98,6 +98,18 @@ export interface DefaultGift {
 
 export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
 
+export interface ContactDetails {
+  firstname: string;
+  lastname: string;
+  tin?: string;
+  email: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  companyname?: string;
+}
+
 export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
@@ -105,7 +117,7 @@ export interface CreateDonationFunctionProps {
   quantity: number;
   paymentSetup: PaymentOptions;
   currency: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   giftDetails: GiftDetails;
   isGift: boolean;
   setIsPaymentProcessing: Function;
@@ -129,7 +141,7 @@ export interface PayDonationProps {
   t: any;
   paymentSetup: PaymentOptions;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: Function;
@@ -146,7 +158,7 @@ export interface HandleStripeSCAPaymentProps {
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: Function;
@@ -159,7 +171,7 @@ export interface CreateDonationDataProps {
   quantity: number;
   paymentSetup: PaymentOptions;
   currency: string;
-  contactDetails: any;
+  contactDetails: ContactDetails;
   taxDeductionCountry: any;
   isGift: boolean;
   giftDetails: GiftDetails;

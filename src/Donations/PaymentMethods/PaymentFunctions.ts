@@ -5,6 +5,7 @@ import {
   HandleStripeSCAPaymentProps,
   PaymentOptions,
   CreateDonationDataProps,
+  ContactDetails,
 } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
@@ -377,7 +378,7 @@ export async function confirmPaymentIntent(
   }
 }
 
-const buildBillingDetails = (contactDetails: any) => {
+const buildBillingDetails = (contactDetails: ContactDetails) => {
   return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,

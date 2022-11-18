@@ -16,11 +16,13 @@ import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
+import { ContactDetails } from "src/Common/Types";
 
 interface Props {}
 
 function Authentication({}: Props): ReactElement {
   const {
+    contactDetails,
     setContactDetails,
     setshowErrorCard,
     setqueryToken,
@@ -73,7 +75,7 @@ function Authentication({}: Props): ReactElement {
           }
           setprofile(profile.data);
           setIsSignedUp(true);
-          const newContactDetails = {
+          const newContactDetails: ContactDetails = {
             firstname: profile.data.firstname ? profile.data.firstname : "",
             lastname: profile.data.lastname ? profile.data.lastname : "",
             email: profile.data.email ? profile.data.email : "",
@@ -98,7 +100,7 @@ function Authentication({}: Props): ReactElement {
           displayName: user?.nickname ? user.nickname : "",
         };
         setprofile(newContactDetails);
-        setContactDetails(newContactDetails);
+        setContactDetails({ ...contactDetails, ...newContactDetails });
         console.log(err);
       }
     } else {
@@ -108,7 +110,7 @@ function Authentication({}: Props): ReactElement {
         displayName: user?.nickname ? user.nickname : "",
       };
       setprofile(newContactDetails);
-      setContactDetails(newContactDetails);
+      setContactDetails({ ...contactDetails, ...newContactDetails });
       // setopenVerifyEmailModal(true);
     }
   };

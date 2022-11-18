@@ -1,4 +1,5 @@
 import {
+  ContactDetails,
   CurrencyList,
   FetchedProjectDetails,
   GiftDetails,
@@ -12,8 +13,8 @@ export default interface QueryParamContextInterface {
   setisGift: (isGift: boolean) => void;
   giftDetails: GiftDetails;
   setgiftDetails: (value: GiftDetails) => void;
-  contactDetails: {}; //TODOO
-  setContactDetails: (value: {}) => void; //TODOO
+  contactDetails: ContactDetails;
+  setContactDetails: (value: ContactDetails) => void;
   country: string;
   setcountry: (country: string) => void;
   paymentSetup: PaymentOptions | null;

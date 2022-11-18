@@ -280,7 +280,7 @@ function PaymentsForm({}: Props): ReactElement {
 
           {projectDetails && projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
-              {!Object.keys(contactDetails).includes("companyName") ? (
+              {!Object.keys(contactDetails).includes("companyname") ? (
                 askpublishName ? (
                   <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <CheckBox

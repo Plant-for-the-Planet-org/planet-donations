@@ -21,6 +21,7 @@ import {
   FetchedProjectDetails,
   PlanetCashSignupDetails,
   GiftDetails,
+  ContactDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -84,7 +85,7 @@ const QueryParamProvider: FC = ({ children }) => {
     type: null,
   });
 
-  const [contactDetails, setContactDetails] = useState({
+  const [contactDetails, setContactDetails] = useState<ContactDetails>({
     firstname: "",
     lastname: "",
     tin: "",

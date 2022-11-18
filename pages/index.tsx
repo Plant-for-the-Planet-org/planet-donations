@@ -12,6 +12,7 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
+  ContactDetails,
   FetchedProjectDetails,
   GiftDetails,
   PaymentOptions,
@@ -30,7 +31,7 @@ interface Props {
   donationID: any;
   shouldCreateDonation: boolean;
   country: any;
-  contactDetails: any;
+  contactDetails: ContactDetails;
   allowTaxDeductionChange: boolean;
   currency: any;
   paymentSetup: PaymentOptions;
@@ -106,7 +107,7 @@ function index({
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
-      setContactDetails(contactDetails);
+      if (contactDetails) setContactDetails(contactDetails);
       setallowTaxDeductionChange(allowTaxDeductionChange);
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
@@ -217,7 +218,7 @@ export async function getServerSideProps(context: any) {
   let shouldCreateDonation = false;
   let country = "";
   let isDirectDonation = false;
-  let contactDetails = {};
+  let contactDetails: ContactDetails | null = null;
   let treecount = 50;
   let allowTaxDeductionChange = true;
   let currency = "EUR";
