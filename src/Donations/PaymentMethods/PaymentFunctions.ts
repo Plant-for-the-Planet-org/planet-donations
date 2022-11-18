@@ -200,7 +200,7 @@ export function createDonationData({
             type: "invitation",
             recipientName: giftDetails.recipientName,
             recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.giftMessage,
+            message: giftDetails.message,
           },
         },
       };

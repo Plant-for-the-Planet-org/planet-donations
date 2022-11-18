@@ -1,6 +1,7 @@
 import {
   CurrencyList,
   FetchedProjectDetails,
+  GiftDetails,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from ".";
@@ -9,8 +10,8 @@ import { Project } from "./project";
 export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: (isGift: boolean) => void;
-  giftDetails: {}; //TODOO
-  setgiftDetails: (value: {}) => void; //TODOO
+  giftDetails: GiftDetails;
+  setgiftDetails: (value: GiftDetails) => void;
   contactDetails: {}; //TODOO
   setContactDetails: (value: {}) => void; //TODOO
   country: string;

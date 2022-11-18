@@ -74,14 +74,29 @@ export interface ProjectTypes {
   };
 }
 
-export interface giftDetailsProps {
-  type: String | null;
-  recipientName: String | null;
-  email: String | null;
-  giftMessage: String | null;
-  recipientTreecounter: Number | null;
-  receipients: {} | null;
+export interface DirectGift {
+  type: "direct";
+  recipientName: string;
+  recipientTreecounter: string;
+  recipientEmail: "";
+  message: "";
 }
+
+export interface InvitationGift {
+  type: "invitation";
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+}
+
+export interface DefaultGift {
+  type: null;
+  recipientName: string;
+  recipientEmail: "";
+  message: "";
+}
+
+export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
 
 export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
@@ -91,7 +106,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: Object;
-  giftDetails: giftDetailsProps;
+  giftDetails: GiftDetails;
   isGift: boolean;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
@@ -147,7 +162,7 @@ export interface CreateDonationDataProps {
   contactDetails: any;
   taxDeductionCountry: any;
   isGift: boolean;
-  giftDetails: any;
+  giftDetails: GiftDetails;
   frequency: any;
   amount: number | undefined;
   callbackUrl: string | undefined;

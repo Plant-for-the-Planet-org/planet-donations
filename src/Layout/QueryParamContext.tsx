@@ -20,6 +20,7 @@ import {
   PaymentOptions,
   FetchedProjectDetails,
   PlanetCashSignupDetails,
+  GiftDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -76,11 +77,11 @@ const QueryParamProvider: FC = ({ children }) => {
   const [frequency, setfrequency] = useState<string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<object>({
+  const [giftDetails, setgiftDetails] = useState<GiftDetails>({
     recipientName: "",
     recipientEmail: "",
-    giftMessage: "",
-    type: "",
+    message: "",
+    type: null,
   });
 
   const [contactDetails, setContactDetails] = useState({

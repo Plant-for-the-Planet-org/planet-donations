@@ -240,15 +240,7 @@ function DonationsForm() {
 
       const _gift = {
         ...giftDetails,
-        message: giftDetails.giftMessage,
       };
-
-      delete _gift.giftMessage;
-
-      if (giftDetails.type === "direct") {
-        delete _gift.message;
-        delete _gift.recipientName;
-      }
 
       // create Donation data
       const donationData = {

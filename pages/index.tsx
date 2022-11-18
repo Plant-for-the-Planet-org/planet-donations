@@ -13,6 +13,7 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
   FetchedProjectDetails,
+  GiftDetails,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from "src/Common/Types";
@@ -20,7 +21,7 @@ import {
 interface Props {
   projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
   donationStep: any;
-  giftDetails: Object;
+  giftDetails: GiftDetails | null;
   isGift: boolean;
   resolvedUrl?: any;
   isDirectDonation: boolean;
@@ -207,7 +208,7 @@ export async function getServerSideProps(context: any) {
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails = {};
+  let giftDetails: GiftDetails | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
@@ -417,7 +418,7 @@ export async function getServerSideProps(context: any) {
         giftDetails = {
           recipientName: newProfile.data.displayName,
           recipientEmail: "",
-          giftMessage: "",
+          message: "",
           type: "direct",
           recipientTreecounter: newProfile.data.slug,
         };

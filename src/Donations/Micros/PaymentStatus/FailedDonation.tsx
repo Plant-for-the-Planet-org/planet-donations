@@ -61,13 +61,13 @@ function FailedDonation({ sendToReturn, donation }: any) {
       setisGift(donation.gift.recipientName ? true : false);
 
       const _giftDetails = {
-        ...(donation.gift.recipientName
-          ? { recipientName: donation.gift.recipientName }
+        type: donation.gift.type || null,
+        recipientName: donation.gift.recipientName || "",
+        recipientEmail: donation.gift.recipientEmail || "",
+        message: donation.gift.message || "",
+        ...(donation.gift.recipientTreeCounter
+          ? { recipientTreecounter: donation.gift.recipientTreecounter }
           : {}),
-        ...(donation.gift.recipientEmail
-          ? { recipientEmail: donation.gift.recipientEmail }
-          : {}),
-        ...(donation.gift.type ? { type: donation.gift.type } : {}),
       };
       // TODO - Gift type invitation and direct will have different properties
       setgiftDetails(_giftDetails);

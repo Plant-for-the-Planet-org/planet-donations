@@ -5,21 +5,27 @@ import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
-interface Props {}
+import { DefaultGift } from "src/Common/Types";
 
-export default function GiftForm({}: Props): ReactElement {
+type GiftFormData = {
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+};
+
+export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setshowEmail] = React.useState(false);
   const { giftDetails, setgiftDetails, isGift, setisGift } =
     React.useContext(QueryParamContext);
 
-  const defaultDetails = {
+  const defaultDetails: GiftFormData = {
     recipientName: giftDetails.recipientName,
     recipientEmail: giftDetails.recipientEmail,
-    giftMessage: giftDetails.giftMessage,
+    message: giftDetails.message,
   };
 
-  const { register, errors, handleSubmit, reset } = useForm({
+  const { register, errors, handleSubmit, reset } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
@@ -28,19 +34,19 @@ export default function GiftForm({}: Props): ReactElement {
     if (isGift && giftDetails) {
       setgiftDetails({ ...giftDetails, type: "invitation" });
     } else {
-      setgiftDetails({ ...giftDetails, type: null });
+      setgiftDetails({ ...(giftDetails as DefaultGift), type: null });
     }
   }, [isGift]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: GiftFormData) => {
     setgiftDetails({ ...giftDetails, ...data, type: "invitation" });
   };
 
   const resetGiftForm = () => {
-    const _defaultDetails = {
+    const _defaultDetails: Readonly<DefaultGift> = {
       recipientName: "",
-      email: "",
-      giftMessage: "",
+      recipientEmail: "",
+      message: "",
       type: null,
     };
     setgiftDetails(_defaultDetails);
@@ -117,7 +123,7 @@ export default function GiftForm({}: Props): ReactElement {
                     rowsMax="4"
                     label={t("giftMessage")}
                     variant="outlined"
-                    name={"giftMessage"}
+                    name={"message"}
                     inputRef={register()}
                     data-test-id="giftMessage"
                   />

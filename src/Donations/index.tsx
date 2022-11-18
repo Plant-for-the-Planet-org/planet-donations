@@ -301,7 +301,8 @@ function DonationInfo() {
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
                 <p>{t("dedicatedTo")}</p>
-                {giftDetails.recipientTreecounter ? (
+                {giftDetails.type === "direct" &&
+                giftDetails.recipientTreecounter ? (
                   <a
                     rel="noreferrer"
                     target="_blank"
@@ -314,9 +315,9 @@ function DonationInfo() {
                   <p className="text-bold">{giftDetails.recipientName}</p>
                 )}
 
-                {giftDetails.giftMessage && (
+                {giftDetails.message && (
                   <p>
-                    {t("message")}: {giftDetails.giftMessage}
+                    {t("message")}: {giftDetails.message}
                   </p>
                 )}
               </div>
