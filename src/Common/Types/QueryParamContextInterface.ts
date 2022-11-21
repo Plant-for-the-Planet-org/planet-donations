@@ -85,10 +85,6 @@ export default interface QueryParamContextInterface {
   setTaxIdentificationAvail: (taxIdentificationAvail: boolean) => void;
   retainQuantityValue: boolean;
   setRetainQuantityValue: (retainQuantityValue: boolean) => void;
-  projectName: string; //is this used, should it be removed?
-  setProjectName: (projectName: string) => void; //is this used, should it be removed?
-  projectDescription: string; //is this used, should it be removed?
-  setProjectDescription: (projectDescription: string) => void; //is this used, should it be removed?
   loadPaymentSetup: (value: {
     projectGUID: string;
     paymentSetupCountry: string | string[];

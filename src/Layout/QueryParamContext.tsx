@@ -124,8 +124,6 @@ const QueryParamProvider: FC = ({ children }) => {
   const [hideLogin, setHideLogin] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [transferDetails, setTransferDetails] = useState<Object | null>(null);
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
@@ -593,10 +591,6 @@ const QueryParamProvider: FC = ({ children }) => {
         setTaxIdentificationAvail,
         retainQuantityValue,
         setRetainQuantityValue,
-        projectName,
-        setProjectName,
-        projectDescription,
-        setProjectDescription,
         loadPaymentSetup,
         isPlanetCashActive,
         setIsPlanetCashActive,
