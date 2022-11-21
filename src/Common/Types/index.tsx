@@ -296,3 +296,9 @@ export interface BankTransferDetails {
   bic: string;
   bankName: string;
 }
+
+export interface OnBehalfDonor {
+  firstName: string;
+  lastName: string;
+  email: string;
+}

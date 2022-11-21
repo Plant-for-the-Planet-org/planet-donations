@@ -4,11 +4,13 @@ import {
   CurrencyList,
   FetchedProjectDetails,
   GiftDetails,
+  OnBehalfDonor,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from ".";
 import { Project } from "./project";
 import { User } from "./user";
+import { Dispatch, SetStateAction } from "react";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -63,8 +65,8 @@ export default interface QueryParamContextInterface {
   donationUid: string | null;
   setDonationUid: (donationUid: string) => void;
   setshowErrorCard: (showErrorCard: boolean) => void;
-  transferDetails: BankTransferDetails | null; //TODOO
-  setTransferDetails: (transferDetails: BankTransferDetails | null) => void; //TODOO
+  transferDetails: BankTransferDetails | null;
+  setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
   loadselectedProjects: () => Promise<void>;
   hideTaxDeduction: boolean;
   sethideTaxDeduction: (hideTaxDeduction: boolean) => void;
@@ -94,9 +96,9 @@ export default interface QueryParamContextInterface {
   isPlanetCashActive: boolean;
   setIsPlanetCashActive: (isPlanetCashActive: boolean) => void;
   onBehalf: boolean;
-  setOnBehalf: (onBehalf: boolean) => void;
-  onBehalfDonor: {}; //TODOO
-  setOnBehalfDonor: (value: {}) => void; //TODOO
+  setOnBehalf: Dispatch<SetStateAction<boolean>>;
+  onBehalfDonor: OnBehalfDonor;
+  setOnBehalfDonor: Dispatch<SetStateAction<OnBehalfDonor>>;
   donation: {} | null; //TODOO
   setdonation: (value: {}) => void; //TODOO
   paymentRequest: {} | null; //TODOO

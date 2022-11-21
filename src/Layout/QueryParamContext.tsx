@@ -23,6 +23,7 @@ import {
   GiftDetails,
   ContactDetails,
   BankTransferDetails,
+  OnBehalfDonor,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -132,7 +133,7 @@ const QueryParamProvider: FC = ({ children }) => {
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
 
-  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+  const [onBehalfDonor, setOnBehalfDonor] = useState<OnBehalfDonor>({
     firstName: "",
     lastName: "",
     email: "",
