@@ -72,23 +72,24 @@ export function sortCountriesByTranslation(
   t: TFunction,
   language: string,
   priorityCountryCodes: string[],
-  enabledCurrencies: CurrencyList
+  enabledCurrencies: CurrencyList | null
 ): Country[] {
   const key = `${language}.${priorityCountryCodes}`;
   if (!sortedCountries[key]) {
     const priorityCountries: Country[] = [];
     // filter priority countries from list
-    const filteredCountries = filterByEnabledCurrencies(
-      countriesData,
-      enabledCurrencies
-    ).filter(function (value) {
-      if (priorityCountryCodes?.includes(value.countryCode)) {
-        priorityCountries.push(value);
-        return false;
-      } else {
-        return true;
-      }
-    });
+    const filteredCountries = enabledCurrencies
+      ? filterByEnabledCurrencies(countriesData, enabledCurrencies).filter(
+          function (value) {
+            if (priorityCountryCodes?.includes(value.countryCode)) {
+              priorityCountries.push(value);
+              return false;
+            } else {
+              return true;
+            }
+          }
+        )
+      : countriesData;
     // sort array of countries
     sortedCountries[key] = priorityCountries.concat(
       filteredCountries.sort((a, b) => {

@@ -102,7 +102,7 @@ function countryToFlag(isoCode: string) {
 }
 
 interface MapCurrencyProps {
-  enabledCurrencies: CurrencyList;
+  enabledCurrencies: CurrencyList | null;
   priorityCountries: string[];
   value: string;
   handleChange: (value: Country) => void;
