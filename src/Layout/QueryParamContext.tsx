@@ -28,6 +28,7 @@ import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { Project } from "src/Common/Types/project";
+import { User } from "src/Common/Types/user";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -114,7 +115,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = useState<null | Object>(null);
+  const [profile, setprofile] = useState<User | null>(null);
   const [amount, setAmount] = useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] = useState(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
@@ -282,8 +283,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const showPlanetCashSignUpScreen = () => {
     setprojectDetails({
       name: `PlanetCash - ${profile?.displayName}`,
-      ownerName: profile?.displayName,
-      ownerAvatar: profile?.image,
+      ownerName: profile?.displayName || "",
+      ownerAvatar: profile?.image || "",
       purpose: "planet-cash-signup",
     });
     setdonationStep(4);

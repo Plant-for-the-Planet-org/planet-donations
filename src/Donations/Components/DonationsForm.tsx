@@ -78,10 +78,10 @@ function DonationsForm() {
     // since transaction needs to happen in the same currency.
 
     if (projectDetails && profile) {
-      if (profile!.planetCash) {
+      if (profile?.planetCash) {
         if (projectDetails.purpose === "planet-cash") {
-          setcountry(profile!.planetCash.country);
-          setcurrency(profile!.planetCash.currency);
+          setcountry(profile?.planetCash.country);
+          setcurrency(profile?.planetCash.currency);
         }
       }
     }
@@ -119,7 +119,7 @@ function DonationsForm() {
     let token = null;
     if (
       (!isLoading && isAuthenticated) ||
-      (queryToken && profile.address) ||
+      (queryToken && profile?.address) ||
       projectDetails?.purpose === "planet-cash"
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
@@ -309,7 +309,7 @@ function DonationsForm() {
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
-            profile!.planetCash && <PlanetCashSelector />}
+            profile?.planetCash && <PlanetCashSelector />}
 
           {!(onBehalf && onBehalfDonor.firstName === "") &&
             (projectDetails.purpose === "trees" ? (

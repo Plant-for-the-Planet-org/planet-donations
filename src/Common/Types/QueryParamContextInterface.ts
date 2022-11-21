@@ -7,6 +7,7 @@ import {
   PlanetCashSignupDetails,
 } from ".";
 import { Project } from "./project";
+import { User } from "./user";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -72,8 +73,8 @@ export default interface QueryParamContextInterface {
   setIsSignedUp: (isSignedUp: boolean) => void;
   frequency: string;
   setfrequency: (frequency: string) => void;
-  profile: {} | null; //TODOO
-  setprofile: (profile: {}) => void; //TODOO
+  profile: User | null;
+  setprofile: (profile: User) => void;
   hideLogin: boolean;
   setHideLogin: (hideLogin: boolean) => void;
   paymentError: string;

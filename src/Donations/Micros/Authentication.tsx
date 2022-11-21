@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, User as AuthUser } from "@auth0/auth0-react";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
@@ -17,6 +17,7 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
 import { ContactDetails } from "src/Common/Types";
+import { User } from "src/Common/Types/user";
 
 interface Props {}
 
@@ -42,7 +43,7 @@ function Authentication({}: Props): ReactElement {
     loginWithRedirect,
     logout,
     getAccessTokenSilently,
-    user,
+    user: authUser,
   } = useAuth0();
 
   const [openVerifyEmailModal, setopenVerifyEmailModal] = React.useState(false);
@@ -50,7 +51,7 @@ function Authentication({}: Props): ReactElement {
   const loadUserProfile = async () => {
     // if we have access token in the query params we use it instead of using the
     const token = queryToken ? queryToken : await getAccessTokenSilently();
-    if ((user && user.email_verified) || validateToken(token)) {
+    if ((authUser && authUser.email_verified) || validateToken(token)) {
       try {
         const requestParams = {
           url: "/app/profile",
@@ -95,21 +96,21 @@ function Authentication({}: Props): ReactElement {
         }
       } catch (err) {
         const newContactDetails = {
-          firstname: user?.nickname ? user.nickname : "",
-          email: user?.email ? user.email : "",
-          displayName: user?.nickname ? user.nickname : "",
+          firstname: authUser?.nickname ? authUser.nickname : "",
+          email: authUser?.email ? authUser.email : "",
+          displayName: authUser?.nickname ? authUser.nickname : "",
         };
-        setprofile(newContactDetails);
+        setprofile(newContactDetails); //TODOO - resolve TS warning
         setContactDetails({ ...contactDetails, ...newContactDetails });
         console.log(err);
       }
     } else {
       const newContactDetails = {
-        firstname: user?.nickname ? user.nickname : "",
-        email: user?.email ? user.email : "",
-        displayName: user?.nickname ? user.nickname : "",
+        firstname: authUser?.nickname ? authUser.nickname : "",
+        email: authUser?.email ? authUser.email : "",
+        displayName: authUser?.nickname ? authUser.nickname : "",
       };
-      setprofile(newContactDetails);
+      setprofile(newContactDetails); //TODOO - resolve TS warning
       setContactDetails({ ...contactDetails, ...newContactDetails });
       // setopenVerifyEmailModal(true);
     }
@@ -191,12 +192,12 @@ function Authentication({}: Props): ReactElement {
               target={"_blank"}
               rel="noreferrer"
             >
-              <UserProfile profile={profile} user={user} />
+              <UserProfile profile={profile} authUser={authUser} />
             </a>
           ) : (
-            <UserProfile profile={profile} user={user} />
+            <UserProfile profile={profile} authUser={authUser} />
           )}
-          {user || profile ? (
+          {authUser || profile ? (
             <button
               className="login-continue"
               onClick={() => logout({ returnTo: window?.location.href })}
@@ -313,31 +314,35 @@ function VerifyEmailModal({
 }
 
 interface UserProfileProps {
-  profile: Object;
-  user: Object;
+  profile: User;
+  authUser?: AuthUser;
 }
-function UserProfile({ profile, user }: UserProfileProps) {
+function UserProfile({ profile, authUser }: UserProfileProps) {
   return (
     <div className="user-profile">
       {profile.image ? (
         <img
           className="profile-pic"
           src={getImageUrl("profile", "avatar", profile.image)}
-          alt={profile ? profile.displayName : user?.name}
+          alt={profile ? profile.displayName : authUser?.name}
         />
-      ) : user?.picture ? (
-        <img className="profile-pic" src={user.picture} alt={user?.name} />
+      ) : authUser?.picture ? (
+        <img
+          className="profile-pic"
+          src={authUser.picture}
+          alt={authUser?.name}
+        />
       ) : (
         <div className="profile-pic no-pic">
-          {profile ? profile.displayName.charAt(0) : user?.name.charAt(0)}
+          {profile ? profile.displayName.charAt(0) : authUser?.name?.charAt(0)}
         </div>
       )}
       {profile.isPrivate ? (
         <div className="profile-name">
-          {profile ? profile.displayName : user?.name}
+          {profile ? profile.displayName : authUser?.name}
         </div>
       ) : (
-        <p>{profile ? profile.displayName : user?.name}</p>
+        <p>{profile ? profile.displayName : authUser?.name}</p>
       )}
     </div>
   );
