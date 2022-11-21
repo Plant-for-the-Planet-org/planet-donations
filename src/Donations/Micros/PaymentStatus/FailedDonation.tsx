@@ -39,9 +39,11 @@ function FailedDonation({ sendToReturn, donation }: any) {
 
   async function getDonation() {
     setIsTaxDeductible(donation.taxDeductionCountry);
-    setprojectDetails({
-      ...(projectDetails as FetchedProjectDetails),
-      id: donation.destination.id as string,
+    setprojectDetails((projectDetails) => {
+      return {
+        ...(projectDetails as FetchedProjectDetails),
+        id: donation.destination.id as string,
+      };
     });
     setPaymentError("");
     setquantity(donation?.quantity);

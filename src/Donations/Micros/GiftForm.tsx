@@ -32,14 +32,20 @@ export default function GiftForm(): ReactElement {
 
   React.useEffect(() => {
     if (isGift && giftDetails) {
-      setgiftDetails({ ...giftDetails, type: "invitation" });
+      setgiftDetails((giftDetails) => {
+        return { ...giftDetails, type: "invitation" };
+      });
     } else {
-      setgiftDetails({ ...(giftDetails as DefaultGift), type: null });
+      setgiftDetails((giftDetails) => {
+        return { ...(giftDetails as DefaultGift), type: null };
+      });
     }
   }, [isGift]);
 
   const onSubmit = (data: GiftFormData) => {
-    setgiftDetails({ ...giftDetails, ...data, type: "invitation" });
+    setgiftDetails((giftDetails) => {
+      return { ...giftDetails, ...data, type: "invitation" };
+    });
   };
 
   const resetGiftForm = () => {
@@ -65,7 +71,7 @@ export default function GiftForm(): ReactElement {
               name="show-gift-form-toggle"
               checked={isGift}
               onChange={() => {
-                setisGift(!isGift);
+                setisGift((isGift) => !isGift);
               }}
               id="show-gift-form-toggle"
             />

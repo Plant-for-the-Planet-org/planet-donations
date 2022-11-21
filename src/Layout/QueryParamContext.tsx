@@ -7,6 +7,8 @@ import React, {
   useContext,
   useCallback,
   FC,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
@@ -391,16 +393,18 @@ const QueryParamProvider: FC = ({ children }) => {
           }
         }
         if (!router.query.context) {
-          setContactDetails({
-            ...contactDetails,
-            city:
-              config.data.loc && config.data.loc.city
-                ? config.data.loc.city
-                : "",
-            zipCode:
-              config.data.loc && config.data.loc.postalCode
-                ? config.data.loc.postalCode
-                : "",
+          setContactDetails((contactDetails) => {
+            return {
+              ...contactDetails,
+              city:
+                config.data.loc && config.data.loc.city
+                  ? config.data.loc.city
+                  : "",
+              zipCode:
+                config.data.loc && config.data.loc.postalCode
+                  ? config.data.loc.postalCode
+                  : "",
+            };
           });
         }
       }
@@ -621,7 +625,7 @@ export default QueryParamProvider;
 
 interface CardProps {
   showErrorCard: boolean;
-  setShowErrorCard: Function;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
 }
 
 function ErrorCard({

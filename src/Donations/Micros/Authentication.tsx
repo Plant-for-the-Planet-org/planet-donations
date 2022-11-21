@@ -101,7 +101,9 @@ function Authentication({}: Props): ReactElement {
           displayName: authUser?.nickname ? authUser.nickname : "",
         };
         setprofile(newContactDetails); //TODOO - resolve TS warning
-        setContactDetails({ ...contactDetails, ...newContactDetails });
+        setContactDetails((contactDetails) => {
+          return { ...contactDetails, ...newContactDetails };
+        });
         console.log(err);
       }
     } else {
@@ -111,7 +113,9 @@ function Authentication({}: Props): ReactElement {
         displayName: authUser?.nickname ? authUser.nickname : "",
       };
       setprofile(newContactDetails); //TODOO - resolve TS warning
-      setContactDetails({ ...contactDetails, ...newContactDetails });
+      setContactDetails((contactDetails) => {
+        return { ...contactDetails, ...newContactDetails };
+      });
       // setopenVerifyEmailModal(true);
     }
   };
