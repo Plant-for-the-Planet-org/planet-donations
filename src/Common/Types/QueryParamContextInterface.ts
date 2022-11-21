@@ -94,7 +94,7 @@ export default interface QueryParamContextInterface {
     shouldSetPaymentDetails?: boolean;
   }) => Promise<void>;
   isPlanetCashActive: boolean;
-  setIsPlanetCashActive: (isPlanetCashActive: boolean) => void;
+  setIsPlanetCashActive: Dispatch<SetStateAction<boolean>>;
   onBehalf: boolean;
   setOnBehalf: Dispatch<SetStateAction<boolean>>;
   onBehalfDonor: OnBehalfDonor;

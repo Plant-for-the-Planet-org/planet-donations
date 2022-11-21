@@ -210,7 +210,9 @@ const PlanetCashSelector: FC = () => {
           <ToggleSwitch
             checked={isPlanetCashActive}
             disabled={shouldPlanetCashDisable()}
-            onChange={() => setIsPlanetCashActive(!isPlanetCashActive)}
+            onChange={() =>
+              setIsPlanetCashActive((isPlanetCashActive) => !isPlanetCashActive)
+            }
           />
         </div>
       </div>
