@@ -88,9 +88,9 @@ export default interface QueryParamContextInterface {
   setRetainQuantityValue: (retainQuantityValue: boolean) => void;
   loadPaymentSetup: (value: {
     projectGUID: string;
-    paymentSetupCountry: string | string[];
+    paymentSetupCountry: string;
     shouldSetPaymentDetails?: boolean;
-  }) => Promise<void>; //TODOO
+  }) => Promise<void>;
   isPlanetCashActive: boolean;
   setIsPlanetCashActive: (isPlanetCashActive: boolean) => void;
   onBehalf: boolean;

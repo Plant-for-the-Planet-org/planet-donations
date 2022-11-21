@@ -478,7 +478,7 @@ const QueryParamProvider: FC = ({ children }) => {
     shouldSetPaymentDetails,
   }: {
     projectGUID: string;
-    paymentSetupCountry: string | string[];
+    paymentSetupCountry: string;
     shouldSetPaymentDetails?: boolean;
   }) => {
     setIsPaymentOptionsLoading(true);

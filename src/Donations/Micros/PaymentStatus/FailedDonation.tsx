@@ -48,7 +48,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     setContactDetails(donation.donor);
     setAmount(donation.amount);
 
-    let country;
+    let country: string;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;
     } else {
