@@ -15,7 +15,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
     setCopiedText(textCopied);
     setTimeout(() => setCopiedText(""), 2000);
   };
-  return (
+  return transferDetails ? (
     <div>
       {callbackUrl && (
         <button
@@ -62,10 +62,10 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         <div className={"single-detail"}>
           <p>{t("beneficiary")}</p>
           <div className={"value-container"}>
-            <p className={"detail-value"}>{transferDetails?.beneficiary}</p>
+            <p className={"detail-value"}>{transferDetails.beneficiary}</p>
             <div
               onClick={() =>
-                copyDetails(transferDetails?.beneficiary, "beneficiary")
+                copyDetails(transferDetails.beneficiary, "beneficiary")
               }
             >
               <CopyButton
@@ -79,8 +79,8 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         <div className={"single-detail"}>
           <p>IBAN</p>
           <div className={"value-container"}>
-            <p className={"detail-value"}>{transferDetails?.iban}</p>
-            <div onClick={() => copyDetails(transferDetails?.iban, "iban")}>
+            <p className={"detail-value"}>{transferDetails.iban}</p>
+            <div onClick={() => copyDetails(transferDetails.iban, "iban")}>
               <CopyButton copiedText={copiedText} buttonFor={"iban"} t={t} />
             </div>
           </div>
@@ -88,8 +88,8 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         <div className={"single-detail"}>
           <p>BIC</p>
           <div className={"value-container"}>
-            <p className={"detail-value"}>{transferDetails?.bic}</p>
-            <div onClick={() => copyDetails(transferDetails?.bic, "bic")}>
+            <p className={"detail-value"}>{transferDetails.bic}</p>
+            <div onClick={() => copyDetails(transferDetails.bic, "bic")}>
               <CopyButton copiedText={copiedText} buttonFor={"bic"} t={t} />
             </div>
           </div>
@@ -97,8 +97,8 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         <div className={"single-detail"}>
           <p>{t("bank")}</p>
           <div className={"value-container"}>
-            <p className={"detail-value"}>{transferDetails?.bankName}</p>
-            <div onClick={() => copyDetails(transferDetails?.bankName, "bank")}>
+            <p className={"detail-value"}>{transferDetails.bankName}</p>
+            <div onClick={() => copyDetails(transferDetails.bankName, "bank")}>
               <CopyButton copiedText={copiedText} buttonFor={"bank"} t={t} />
             </div>
           </div>
@@ -114,7 +114,7 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
         <ReturnToButton donationContext={donationID} donationStatus="pending" />
       )}
     </div>
-  );
+  ) : null;
 }
 
 export default TransferDetails;

@@ -1,4 +1,5 @@
 import {
+  BankTransferDetails,
   ContactDetails,
   CurrencyList,
   FetchedProjectDetails,
@@ -62,8 +63,8 @@ export default interface QueryParamContextInterface {
   donationUid: string | null;
   setDonationUid: (donationUid: string) => void;
   setshowErrorCard: (showErrorCard: boolean) => void;
-  transferDetails: {} | null; //TODOO
-  setTransferDetails: (value: {}) => void; //TODOO
+  transferDetails: BankTransferDetails | null; //TODOO
+  setTransferDetails: (transferDetails: BankTransferDetails | null) => void; //TODOO
   loadselectedProjects: () => Promise<void>;
   hideTaxDeduction: boolean;
   sethideTaxDeduction: (hideTaxDeduction: boolean) => void;

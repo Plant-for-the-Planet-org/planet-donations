@@ -15,6 +15,7 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
+import { BankTransferDetails } from "src/Common/Types";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -67,7 +68,7 @@ function ThankYou() {
   React.useEffect(() => {
     if (donation) {
       if (donation.account) {
-        setTransferDetails(donation.account);
+        setTransferDetails(donation.account as BankTransferDetails); //TODOO - remove this annotation
       }
     }
   }, [donation]);

@@ -147,7 +147,7 @@ export interface PayDonationProps {
   setshowErrorCard: Function;
   router: any;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
 }
 
 export interface HandleStripeSCAPaymentProps {
@@ -288,4 +288,11 @@ export type CountryProperty = keyof Country;
 
 export interface CurrencyList {
   [key: string]: string;
+}
+
+export interface BankTransferDetails {
+  beneficiary: string;
+  iban: string;
+  bic: string;
+  bankName: string;
 }

@@ -22,6 +22,7 @@ import {
   PlanetCashSignupDetails,
   GiftDetails,
   ContactDetails,
+  BankTransferDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -123,7 +124,8 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [hideLogin, setHideLogin] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-  const [transferDetails, setTransferDetails] = useState<Object | null>(null);
+  const [transferDetails, setTransferDetails] =
+    useState<BankTransferDetails | null>(null);
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
