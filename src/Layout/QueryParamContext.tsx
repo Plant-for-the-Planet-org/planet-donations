@@ -363,12 +363,6 @@ const QueryParamProvider: FC = ({ children }) => {
   }, [router.query.to, country]);
 
   async function loadConfig() {
-    let userLang;
-    if (localStorage) {
-      userLang = localStorage.getItem("language") || "en";
-    } else {
-      userLang = "en";
-    }
     try {
       const requestParams = {
         url: `/app/config`,
