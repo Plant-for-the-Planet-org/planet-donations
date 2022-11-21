@@ -13,9 +13,9 @@ export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: (isGift: boolean) => void;
   giftDetails: GiftDetails;
-  setgiftDetails: (value: GiftDetails) => void;
+  setgiftDetails: (giftDetails: GiftDetails) => void;
   contactDetails: ContactDetails;
-  setContactDetails: (value: ContactDetails) => void;
+  setContactDetails: (contactDetails: ContactDetails) => void;
   country: string;
   setcountry: (country: string) => void;
   paymentSetup: PaymentOptions | null;
@@ -55,7 +55,7 @@ export default interface QueryParamContextInterface {
   tenant: string;
   settenant: (tenant: string) => void;
   selectedProjects: Array<Project>;
-  setSelectedProjects: (value: Array<Project>) => void;
+  setSelectedProjects: (selectedProjects: Array<Project>) => void;
   allProjects: Array<Project>;
   allowTaxDeductionChange: boolean;
   setallowTaxDeductionChange: (allowTaxDeductionChange: boolean) => void;
