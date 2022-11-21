@@ -55,7 +55,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
     typeof window !== "undefined" && localStorage.getItem("language")
-      ? localStorage.getItem("language" as string)
+      ? (localStorage.getItem("language") as string)
       : "en"
   );
 
@@ -297,7 +297,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   useEffect(() => {
     const regex = /^pcash_/;
-    if (regex.test(router.query.to)) {
+    if (router.query.to && regex.test(router.query.to as string)) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
       if (
@@ -319,7 +319,7 @@ const QueryParamProvider: FC = ({ children }) => {
           setdonationStep(1);
         } else if (!profile?.planetCash) {
           if (router.query.token) {
-            if (validateToken(router.query.token)) {
+            if (validateToken(router.query.token as string)) {
               if (!profile) {
                 loadProfile();
               } else if (!profile?.planetCash && profile?.displayName) {
@@ -348,7 +348,7 @@ const QueryParamProvider: FC = ({ children }) => {
     const regex = /^pcash_/;
     if (
       router.query.to &&
-      !regex.test(router.query.to) &&
+      !regex.test(router.query.to as string) &&
       country !== undefined &&
       country !== "" &&
       router.query.to?.toString().toLowerCase() !== "planetcash"
@@ -433,7 +433,7 @@ const QueryParamProvider: FC = ({ children }) => {
   useEffect(() => {
     if (router.query.method) {
       // TODO => only allow the ones which we use, add an array and check if it exists in that array
-      setPaymentType(router.query.method);
+      setPaymentType(router.query.method as string);
     }
   }, [router.query.method]);
 
