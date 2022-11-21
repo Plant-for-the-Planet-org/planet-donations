@@ -23,7 +23,6 @@ interface PaymentButtonProps {
   paymentSetup: Object;
 }
 
-//Delete this FC? It isn't being used. Same for the interface above.
 export const PaymentRequestCustomButton = ({
   country,
   currency,

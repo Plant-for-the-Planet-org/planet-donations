@@ -35,8 +35,8 @@ export default interface QueryParamContextInterface {
   setlanguage: (language: string) => void;
   donationID: string | null;
   setdonationID: (donationID: string) => void;
-  paymentType: string; //TOCHECK
-  setPaymentType: (paymentType: string) => void; //TOCHECK
+  paymentType: string;
+  setPaymentType: (paymentType: string) => void;
   shouldCreateDonation: boolean;
   setshouldCreateDonation: (shouldCreateDonation: boolean) => void;
   isTaxDeductible: boolean;
