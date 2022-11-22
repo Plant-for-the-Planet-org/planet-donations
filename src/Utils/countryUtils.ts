@@ -1,6 +1,8 @@
 import countriesData from "./countriesData.json";
+import { Country, CountryProperty, CurrencyList } from "src/Common/Types";
+import { TFunction } from "react-i18next";
 
-const sortedCountries = [];
+const sortedCountries: { [key: string]: Country[] } = {};
 
 /**
  * * Returns country details by searching country data json file and options
@@ -13,7 +15,10 @@ const sortedCountries = [];
  *  - {countryCode, countryName, currencyName, currencyCode, currencyCountryFlag}
  */
 // eslint-disable-next-line consistent-return
-export function getCountryDataBy(key, value) {
+export function getCountryDataBy(
+  key: CountryProperty,
+  value: string
+): Country | undefined {
   // Finds required country data from the country data array and returns the
   // matched country result
   for (let i = 0; i < countriesData.length; i += 1) {
@@ -28,7 +33,7 @@ export function getCountryDataBy(key, value) {
  * @param {String} sortBy - can have values
  *    countryName, currencyName, currencyCode, currencyCountryFlag
  */
-export function sortCountriesData(sortBy) {
+export function sortCountriesData(sortBy: CountryProperty): Country[] {
   // returns a sorted array which is sorted by passed value
   return countriesData.sort((a, b) => {
     if (a[sortBy] > b[sortBy]) {
@@ -42,21 +47,41 @@ export function sortCountriesData(sortBy) {
 }
 
 /**
+ * Filters countries array and returns countries with enabled currencies (for payment)
+ * @param countriesData
+ * @param enabledCurrencies
+ * @returns {CountriesArray} Countries with currencies enabled for payment
+ */
+function filterByEnabledCurrencies(
+  countriesData: Country[],
+  enabledCurrencies: CurrencyList
+) {
+  return countriesData.filter((country) => {
+    return enabledCurrencies[country.currencyCode] !== undefined;
+  });
+}
+
+/**
  * Sorts the countries array for the translated country name
  * @param {Function} t - translation function
  * @param {String} language - language to get country names for
  * @param {Array} priorityCountries - country code to always show first in given order
+ * @param {CurrencyList} enabledCurrencies - object containing enabled currencies
  */
-export function sortCountriesByTranslation(t, language, priorityCountryCodes) {
+export function sortCountriesByTranslation(
+  t: TFunction,
+  language: string,
+  priorityCountryCodes: string[],
+  enabledCurrencies: CurrencyList
+): Country[] {
   const key = `${language}.${priorityCountryCodes}`;
   if (!sortedCountries[key]) {
-    const priorityCountries = [];
+    const priorityCountries: Country[] = [];
     // filter priority countries from list
-    const filteredCountries = countriesData.filter(function (
-      value,
-      index,
-      arr
-    ) {
+    const filteredCountries = filterByEnabledCurrencies(
+      countriesData,
+      enabledCurrencies
+    ).filter(function (value) {
       if (priorityCountryCodes?.includes(value.countryCode)) {
         priorityCountries.push(value);
         return false;

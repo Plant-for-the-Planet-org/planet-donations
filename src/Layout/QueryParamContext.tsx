@@ -1,5 +1,12 @@
 import { useRouter } from "next/dist/client/router";
-import React, { useState, ReactElement } from "react";
+import React, {
+  useState,
+  ReactElement,
+  createContext,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
 import { getRandomProjects } from "../Utils/projects/filterProjects";
@@ -7,12 +14,12 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps } from "src/Common/Types";
+import { PaymentSetupProps, CurrencyList } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
 
-export const QueryParamContext = React.createContext({
+export const QueryParamContext = createContext({
   isGift: false,
   setisGift: (value: boolean) => {},
   giftDetails: {},
@@ -25,6 +32,8 @@ export const QueryParamContext = React.createContext({
   setpaymentSetup: ({}) => {},
   currency: "",
   setcurrency: (value: "") => {},
+  enabledCurrencies: {},
+  setEnabledCurrencies: (value: CurrencyList) => {},
   donationStep: null,
   setdonationStep: (value: number) => {},
   projectDetails: null,
@@ -133,17 +142,17 @@ export default function QueryParamProvider({ children }: any) {
   const [tenant, settenant] = useState("ten_I9TW3ncG");
 
   // for tax deduction part
-  const [isTaxDeductible, setIsTaxDeductible] = React.useState(false);
+  const [isTaxDeductible, setIsTaxDeductible] = useState(false);
   const [allowTaxDeductionChange, setallowTaxDeductionChange] = useState(true);
 
-  const [isDirectDonation, setisDirectDonation] = React.useState(false);
+  const [isDirectDonation, setisDirectDonation] = useState(false);
 
   const [donationUid, setDonationUid] = useState(null);
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
 
-  const [paymentType, setPaymentType] = React.useState("");
+  const [paymentType, setPaymentType] = useState("");
 
   const [quantity, setquantity] = useState(50);
   const [frequency, setfrequency] = useState<null | string>("once");
@@ -156,7 +165,7 @@ export default function QueryParamProvider({ children }: any) {
     type: "",
   });
 
-  const [contactDetails, setContactDetails] = React.useState({
+  const [contactDetails, setContactDetails] = useState({
     firstname: "",
     lastname: "",
     tin: "",
@@ -170,6 +179,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [country, setcountry] = useState<string | string[]>("");
   const [currency, setcurrency] = useState("");
+  const [enabledCurrencies, setEnabledCurrencies] =
+    useState<null | CurrencyList>(null);
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
@@ -183,20 +194,18 @@ export default function QueryParamProvider({ children }: any) {
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = React.useState<null | Object>(null);
-  const [amount, setAmount] = React.useState<null | number>(null);
+  const [profile, setprofile] = useState<null | Object>(null);
+  const [amount, setAmount] = useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] =
-    React.useState<boolean>(false);
+    useState<boolean>(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
-  const [isSignedUp, setIsSignedUp] = React.useState<boolean>(false);
+  const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
 
-  const [hideLogin, setHideLogin] = React.useState<boolean>(false);
-  const [paymentError, setPaymentError] = React.useState("");
-  const [transferDetails, setTransferDetails] = React.useState<Object | null>(
-    null
-  );
-  const [projectName, setProjectName] = React.useState("");
-  const [projectDescription, setProjectDescription] = React.useState("");
+  const [hideLogin, setHideLogin] = useState<boolean>(false);
+  const [paymentError, setPaymentError] = useState("");
+  const [transferDetails, setTransferDetails] = useState<Object | null>(null);
+  const [projectName, setProjectName] = useState("");
+  const [projectDescription, setProjectDescription] = useState("");
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
@@ -209,17 +218,47 @@ export default function QueryParamProvider({ children }: any) {
     email: "",
   });
 
-  const [donation, setdonation] = React.useState(null);
-  const [paymentRequest, setPaymentRequest] = React.useState(null);
+  const [donation, setdonation] = useState(null);
+  const [paymentRequest, setPaymentRequest] = useState(null);
 
-  React.useEffect(() => {
+  const loadEnabledCurrencies = async () => {
+    try {
+      const requestParams = {
+        url: `/app/currencies`,
+        setshowErrorCard,
+      };
+      const response: any = await apiRequest(requestParams);
+      setEnabledCurrencies(response.data);
+    } catch (err) {
+      console.log(err);
+      setEnabledCurrencies(null);
+    }
+  };
+
+  useEffect(() => {
+    // Enabled currencies are only needed on step 1, if not already populated
+    if (!enabledCurrencies && donationStep !== null && donationStep <= 1)
+      loadEnabledCurrencies();
+  }, [donationStep, enabledCurrencies]);
+
+  useEffect(() => {
+    if (
+      currency &&
+      enabledCurrencies &&
+      enabledCurrencies[currency] === undefined
+    ) {
+      setCountryCode({ setcountry, setcurrency, country: "DE" });
+    }
+  }, [currency, enabledCurrencies]);
+
+  useEffect(() => {
     if (paymentError) {
       router.replace({
         query: { ...router.query, step: THANK_YOU },
       });
     }
   }, [paymentError]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (allLocales.some((locale) => locale.key === router.query.locale)) {
       setlanguage(router.query.locale);
     } else {
@@ -236,7 +275,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.locale]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (i18n && i18n.isInitialized) {
       i18n.changeLanguage(language);
       localStorage.setItem("language", language);
@@ -252,7 +291,7 @@ export default function QueryParamProvider({ children }: any) {
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
   }
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query.callback_url) {
       if (testURL(router.query.callback_url)) {
         setcallbackUrl(router.query.callback_url);
@@ -260,13 +299,13 @@ export default function QueryParamProvider({ children }: any) {
     }
   }, [router.query.callback_url]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query.callback_method) {
       setCallbackMethod(router.query.callback_method);
     }
   }, [router.query.callback_method]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       paymentSetup?.frequencies &&
       Object.keys(paymentSetup.frequencies).length === 2
@@ -302,7 +341,7 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  const loadProfile = React.useCallback(async () => {
+  const loadProfile = useCallback(async () => {
     const token =
       queryToken || router.query.token || (await getAccessTokenSilently());
     try {
@@ -328,13 +367,13 @@ export default function QueryParamProvider({ children }: any) {
     setdonationStep(4);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoading && isAuthenticated) {
       loadProfile();
     }
   }, [isLoading, isAuthenticated, loadProfile]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const regex = /^pcash_/;
     if (regex.test(router.query.to)) {
       router.push("/");
@@ -383,7 +422,7 @@ export default function QueryParamProvider({ children }: any) {
     router.query.token,
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const regex = /^pcash_/;
     if (
       router.query.to &&
@@ -452,14 +491,14 @@ export default function QueryParamProvider({ children }: any) {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.isReady) {
       loadConfig();
     }
   }, [router.isReady]);
 
   // Tree Count = treecount => Received from the URL
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
       if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
@@ -469,20 +508,20 @@ export default function QueryParamProvider({ children }: any) {
     setRetainQuantityValue(false);
   }, [router.query.units, paymentSetup]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query.method) {
       // TODO => only allow the ones which we use, add an array and check if it exists in that array
       setPaymentType(router.query.method);
     }
   }, [router.query.method]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query.redirect_status) {
       setredirectstatus(router.query.redirect_status);
     }
   }, [router.query.redirect_status]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setshouldCreateDonation(true);
   }, [
     paymentSetup,
@@ -501,8 +540,8 @@ export default function QueryParamProvider({ children }: any) {
     isTaxDeductible,
   ]);
 
-  const [showErrorCard, setshowErrorCard] = React.useState(false);
-  React.useEffect(() => {
+  const [showErrorCard, setshowErrorCard] = useState(false);
+  useEffect(() => {
     if (router.query.error) {
       if (
         router.query.error_description === "401" &&
@@ -575,6 +614,8 @@ export default function QueryParamProvider({ children }: any) {
         paymentSetup,
         currency,
         setcurrency,
+        enabledCurrencies,
+        setEnabledCurrencies,
         donationStep,
         setdonationStep,
         projectDetails,
@@ -673,9 +714,9 @@ function ErrorCard({
 }: CardProps): ReactElement {
   const { t, ready } = useTranslation(["common"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (showErrorCard) {
       setTimeout(() => {
         setShowErrorCard(false);
@@ -693,5 +734,5 @@ function ErrorCard({
 }
 
 export function useTheme() {
-  return React.useContext(QueryParamContext);
+  return useContext(QueryParamContext);
 }

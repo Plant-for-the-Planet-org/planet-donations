@@ -4,7 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Modal from "@material-ui/core/Modal";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import React from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
@@ -14,18 +14,27 @@ import {
   sortCountriesByTranslation,
 } from "../../Utils/countryUtils";
 import themeProperties from "../../../styles/themeProperties";
-export default function TransitionsModal(props: any) {
-  const { openModal, handleModalClose } = props;
+import { Country, CurrencyList } from "src/Common/Types";
 
-  const { setcountry, country, currency } = React.useContext(QueryParamContext);
+interface SelectCurrencyModalProps {
+  openModal: boolean;
+  handleModalClose: () => void;
+}
+
+export default function SelectCurrencyModal({
+  openModal,
+  handleModalClose,
+}: SelectCurrencyModalProps): ReactElement | null {
+  const { setcountry, country, currency, enabledCurrencies } =
+    useContext(QueryParamContext);
 
   const { t, ready } = useTranslation(["common", "country"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
-  const [importantList, setImportantList] = React.useState<Array<Object>>([]);
+  const [importantList, setImportantList] = useState<Array<string>>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // sets two default country as important country which is US(United States) and DE (Germany)
     const impCountryList = ["US", "DE"];
     // if the selected country is other than US and DE then add that country to important country list
@@ -56,9 +65,10 @@ export default function TransitionsModal(props: any) {
               <p className={"select-language-title"}>{t("selectCurrency")}</p>
               <MapCurrency
                 // this is selectedValue, country wala object
+                enabledCurrencies={enabledCurrencies}
                 priorityCountries={importantList}
                 value={country}
-                handleChange={(value) => {
+                handleChange={(value: Country) => {
                   setcountry(value.countryCode);
                   // setcurrency
                   localStorage.setItem("countryCode", value.countryCode);
@@ -79,12 +89,6 @@ const FormControlNew = withStyles({
   },
 })(FormControl);
 
-interface CountryType {
-  countryCode: string;
-  label: string;
-  currencyCode: string;
-}
-
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
 function countryToFlag(isoCode: string) {
@@ -97,13 +101,23 @@ function countryToFlag(isoCode: string) {
     : isoCode;
 }
 
-// Maps the radio buttons for currency
-function MapCurrency(props: any) {
+interface MapCurrencyProps {
+  enabledCurrencies: CurrencyList;
+  priorityCountries: string[];
+  value: string;
+  handleChange: (value: Country) => void;
+}
+
+// Shows autocomplete options for currency
+function MapCurrency({
+  enabledCurrencies,
+  priorityCountries,
+  value,
+  handleChange,
+}: MapCurrencyProps) {
   const { t, i18n, ready } = useTranslation(["country"]);
 
-  const { priorityCountries, value, handleChange } = props;
-
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const useStylesAutoComplete = makeStyles({
     paper: {
@@ -140,7 +154,12 @@ function MapCurrency(props: any) {
   const classes = useStylesAutoComplete();
 
   const sortedCountriesData = ready
-    ? sortCountriesByTranslation(t, i18n.language, priorityCountries)
+    ? sortCountriesByTranslation(
+        t,
+        i18n.language,
+        priorityCountries,
+        enabledCurrencies
+      )
     : {};
 
   const selectedCountry = getCountryDataBy("countryCode", value);
@@ -152,7 +171,7 @@ function MapCurrency(props: any) {
           <Autocomplete
             data-test-id="country-select"
             style={{ width: "100%" }}
-            options={sortedCountriesData as CountryType[]}
+            options={sortedCountriesData as Country[]}
             classes={{
               option: classes.option,
               paper: classes.paper,
@@ -172,16 +191,14 @@ function MapCurrency(props: any) {
                 } `}
               </>
             )}
-            onChange={(event: any, newValue: CountryType | null) => {
+            onChange={(_event, newValue: Country | null) => {
               if (newValue) {
                 handleChange(newValue);
               }
             }}
-            defaultValue={value.label}
             renderInput={(params) => (
               <MaterialTextField
                 {...params}
-                label={props.label}
                 variant="outlined"
                 inputProps={{
                   ...params.inputProps,
