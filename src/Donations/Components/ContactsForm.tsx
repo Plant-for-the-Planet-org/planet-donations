@@ -14,18 +14,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
-
-type ContactFormData = {
-  firstname: string;
-  lastname: string;
-  tin?: string;
-  email: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  country: string;
-  companyname?: string;
-};
+import { ContactDetails } from "src/Common/Types";
 
 function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -79,7 +68,7 @@ function ContactsForm(): ReactElement {
     reset,
     getValues,
     setValue,
-  } = useForm<ContactFormData>({
+  } = useForm<ContactDetails>({
     mode: "all",
     defaultValues: {},
   });
@@ -91,7 +80,7 @@ function ContactsForm(): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: ContactFormData) => {
+  const onSubmit = (data: ContactDetails) => {
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
