@@ -18,6 +18,7 @@ import {
   PaymentOptions,
   PlanetCashSignupDetails,
 } from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
 interface Props {
   projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
@@ -299,42 +300,43 @@ export async function getServerSideProps(context: any) {
         url: `/app/donations/${context.query.context}`,
         setshowErrorCard,
       };
-      const donation: any = await apiRequest(requestParams);
+      const donationResponse: any = await apiRequest(requestParams);
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];
       const queryMethodForStep4 = ["Sofort", "Giropay"];
       const queryRedirectStatus = ["succeeded", "failed"];
 
-      if (donation.status === 200) {
-        const donorData = donation.data.donor;
+      if (donationResponse.status === 200) {
+        const donation: Donation = donationResponse.data;
+        const donorData = donation.donor as ContactDetails;
         donationID = context.query.context;
         // if the donation is present means the donation is already created
         // Set shouldCreateDonation as false
         shouldCreateDonation = false;
         // fetch project - payment setup
-        tenant = donation.data.tenant;
-        if (donation.data.frequency) {
-          frequency = donation.data.frequency;
+        tenant = donation.tenant;
+        if (donation.frequency) {
+          frequency = donation.frequency;
         }
-        if (donation.data.taxDeductionCountry) {
-          country = donation.data.taxDeductionCountry;
+        if (donation.taxDeductionCountry) {
+          country = donation.taxDeductionCountry;
           isTaxDeductible = true;
-        } else if (donation.data.gateway === "planet-cash") {
+        } else if (donation.gateway === "planet-cash") {
           hideTaxDeduction = true;
-          country = donation.data.destination.country;
+          country = donation.destination.country;
         } else {
           hideTaxDeduction = true;
           country = donorData.country;
         }
-        if (donation.data.metadata) {
-          callbackMethod = donation.data.metadata?.callback_method;
-          callbackUrl = donation.data.metadata?.callback_url;
+        if (donation.metadata) {
+          callbackMethod = donation.metadata.callback_method;
+          callbackUrl = donation.metadata.callback_url;
         }
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.data.destination.id}?country=${country}`,
+            url: `/app/paymentOptions/${donation.destination.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,
@@ -360,8 +362,8 @@ export async function getServerSideProps(context: any) {
           // console.log(err);
         }
         allowTaxDeductionChange = false;
-        treecount = donation.data.treeCount;
-        amount = donation.data.amount;
+        treecount = donation.treeCount;
+        amount = donation.amount;
         // Setting contact details from donor details
         if (donorData) {
           contactDetails = {
@@ -384,13 +386,9 @@ export async function getServerSideProps(context: any) {
           context.query.payment_intent
         ) {
           donationStep = 4;
-        } else if (
-          paymentStatusForStep4.includes(donation.data.paymentStatus)
-        ) {
+        } else if (paymentStatusForStep4.includes(donation.paymentStatus)) {
           donationStep = 4;
-        } else if (
-          paymentStatusForStep3.includes(donation.data.paymentStatus)
-        ) {
+        } else if (paymentStatusForStep3.includes(donation.paymentStatus)) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
           isDirectDonation = true;

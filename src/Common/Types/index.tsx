@@ -101,13 +101,14 @@ export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
 export interface ContactDetails {
   firstname: string;
   lastname: string;
-  tin?: string;
+  tin?: string | null;
   email: string;
   address: string;
   city: string;
   zipCode: string;
   country: string;
-  companyname?: string;
+  companyname?: string | null;
+  name?: string; //Check if this is still there. Possible legacy.
 }
 
 export interface CreateDonationFunctionProps {
@@ -176,7 +177,7 @@ export interface CreateDonationDataProps {
   isGift: boolean;
   giftDetails: GiftDetails;
   frequency: any;
-  amount: number | undefined;
+  amount?: number | null;
   callbackUrl: string | undefined;
   callbackMethod: string | undefined;
 }

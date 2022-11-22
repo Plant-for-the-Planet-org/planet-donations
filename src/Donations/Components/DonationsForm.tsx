@@ -28,6 +28,7 @@ import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
+import { Donation } from "src/Common/Types/donation";
 
 function DonationsForm() {
   const {
@@ -223,7 +224,7 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country?.toLowerCase()}`),
+          // country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
@@ -271,7 +272,7 @@ function DonationsForm() {
         });
 
         if (status === 200) {
-          setdonation(data);
+          setdonation(data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
           router.replace({
             query: { ...router.query, step: THANK_YOU },
           });

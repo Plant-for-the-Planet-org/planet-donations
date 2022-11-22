@@ -8,9 +8,17 @@ import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
-import { FetchedProjectDetails } from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
-function SuccessfulDonation({ donation, sendToReturn }: any) {
+interface SuccessfulDonationProps {
+  donation: Donation;
+  sendToReturn: () => void;
+}
+
+function SuccessfulDonation({
+  donation,
+  sendToReturn,
+}: SuccessfulDonationProps) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);
@@ -78,12 +86,8 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
           {`Ref - ${donationID}`}
         </a>
       )}
-      {callbackUrl && (
-        <ReturnToButton
-          callbackUrl={callbackUrl}
-          donationContext={donationID}
-          donationStatus="success"
-        />
+      {donationID && callbackUrl && (
+        <ReturnToButton donationContext={donationID} donationStatus="success" />
       )}
     </div>
   ) : (

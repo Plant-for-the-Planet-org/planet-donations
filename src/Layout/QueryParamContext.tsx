@@ -33,6 +33,7 @@ import allLocales from "../../public/static/localeList.json";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
+import { Donation } from "src/Common/Types/donation";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -141,7 +142,7 @@ const QueryParamProvider: FC = ({ children }) => {
     email: "",
   });
 
-  const [donation, setdonation] = useState<Object | null>(null);
+  const [donation, setdonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<Object | null>(null);
 
   const loadEnabledCurrencies = async () => {

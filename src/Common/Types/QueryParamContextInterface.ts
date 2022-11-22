@@ -11,6 +11,7 @@ import {
 import { Project } from "./project";
 import { User } from "./user";
 import { Dispatch, SetStateAction } from "react";
+import { Donation } from "./donation";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -99,8 +100,8 @@ export default interface QueryParamContextInterface {
   setOnBehalf: Dispatch<SetStateAction<boolean>>;
   onBehalfDonor: OnBehalfDonor;
   setOnBehalfDonor: Dispatch<SetStateAction<OnBehalfDonor>>;
-  donation: {} | null; //TODOO
-  setdonation: (value: {}) => void; //TODOO
-  paymentRequest: {} | null; //TODOO
-  setPaymentRequest: (value: {}) => void; //TODOO
+  donation: Donation | null; //TODOO
+  setdonation: Dispatch<SetStateAction<Donation | null>>; //TODOO
+  paymentRequest: {} | null; //TODOO - LEFT FOR NOW AS IT INVOLVES NATIVE PAY
+  setPaymentRequest: (value: {}) => void; //TODOO - LEFT FOR NOW AS IT INVOLVES NATIVE PAY
 }

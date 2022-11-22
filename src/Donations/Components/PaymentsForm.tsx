@@ -171,7 +171,7 @@ function PaymentsForm({}: Props): ReactElement {
     }
     if (router.query.context) {
       router.replace({
-        query: { context: donation.id, step: PAYMENT },
+        query: { context: donation?.id, step: PAYMENT },
       });
     }
     if (donation) {

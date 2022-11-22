@@ -9,6 +9,7 @@ import {
 } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { Donation } from "src/Common/Types/donation";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
@@ -104,7 +105,7 @@ export async function createDonationFunction({
   callbackUrl,
   callbackMethod,
   tenant,
-}: CreateDonationFunctionProps) {
+}: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
     projectDetails,
@@ -132,7 +133,7 @@ export async function createDonationFunction({
     const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
       setdonationID(donation.data.id);
-      return donation.data;
+      return donation.data as Donation;
     }
   } catch (error) {
     if (error.status === 400) {

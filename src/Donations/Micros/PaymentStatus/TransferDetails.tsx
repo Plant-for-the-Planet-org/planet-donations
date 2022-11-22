@@ -5,8 +5,19 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import CopyIcon from "public/assets/icons/CopyIcon";
 import ReturnToButton from "./Components/ReturnToButton";
+import { Donation } from "src/Common/Types/donation";
 
-function TransferDetails({ donationID, donation, sendToReturn }: any) {
+interface TransferDetailsProps {
+  donationID: string;
+  donation: Donation;
+  sendToReturn: () => void;
+}
+
+function TransferDetails({
+  donationID,
+  donation,
+  sendToReturn,
+}: TransferDetailsProps) {
   const { t } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
   const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);
@@ -54,7 +65,9 @@ function TransferDetails({ donationID, donation, sendToReturn }: any) {
             <p
               className={"detail-value"}
             >{`${donation.currency} ${donation.amount}`}</p>
-            <div onClick={() => copyDetails(donation.amount, "amount")}>
+            <div
+              onClick={() => copyDetails(donation.amount.toString(), "amount")}
+            >
               <CopyButton copiedText={copiedText} buttonFor={"amount"} t={t} />
             </div>
           </div>
