@@ -243,6 +243,11 @@ function DonationsForm() {
         ...giftDetails,
       };
 
+      if (giftDetails.type === "direct") {
+        delete _gift.message;
+        delete _gift.recipientName;
+      }
+
       // create Donation data
       const donationData = {
         purpose: projectDetails.purpose,

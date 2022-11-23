@@ -76,10 +76,10 @@ export interface ProjectTypes {
 
 export interface DirectGift {
   type: "direct";
-  recipientName: string;
+  recipientName?: string;
   recipientTreecounter: string;
-  recipientEmail: "";
-  message: "";
+  recipientEmail?: "";
+  message?: "";
 }
 
 export interface InvitationGift {
