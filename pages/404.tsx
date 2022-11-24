@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
+import { GetStaticProps } from "next/types";
 
 interface Props {}
 
@@ -14,8 +15,12 @@ function Custom404({}: Props): ReactElement {
 
 export default Custom404;
 
-export const getStaticProps = async ({ locale }) => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common", "country", "donate"])),
+    ...(await serverSideTranslations(locale || "en", [
+      "common",
+      "country",
+      "donate",
+    ])),
   },
 });
