@@ -1,7 +1,18 @@
 import { withStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
+import { ChangeEvent, InputHTMLAttributes, ReactElement } from "react";
 
-export default function ToggleSwitch(props: any) {
+interface Props {
+  [key: string]: unknown;
+  checked: boolean;
+  onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  name?: string;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
+  id?: string;
+  color?: string;
+}
+
+export default function ToggleSwitch(props: Props): ReactElement {
   const ToggleSwitch = withStyles({
     switchBase: {
       color: "#fff",
@@ -15,9 +26,13 @@ export default function ToggleSwitch(props: any) {
     checked: {},
     track: {},
   })(Switch);
+
+  // Remove color from props as expected values are "default", "primary" etc. as defined by Mui
+  const cleanedProps = { ...props, color: undefined };
+
   return (
     <ToggleSwitch
-      {...props} // pass down additional props
+      {...cleanedProps} // pass down additional props
       checked={props.checked}
       onChange={props.onChange}
       name={props.name}
