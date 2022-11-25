@@ -1,4 +1,6 @@
-export default function BrowserNotSupported() {
+import { ReactElement } from "react";
+
+export default function BrowserNotSupported(): ReactElement {
   return (
     <div
       style={{
