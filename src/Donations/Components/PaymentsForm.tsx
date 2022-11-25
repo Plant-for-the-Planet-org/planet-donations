@@ -175,7 +175,7 @@ function PaymentsForm({}: Props): ReactElement {
       });
     }
     if (donation) {
-      setaskpublishName(!donation.hasPublicProfile);
+      setCanAskPublishPermission(!donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
@@ -185,21 +185,24 @@ function PaymentsForm({}: Props): ReactElement {
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
-  const [publishName, setpublishName] = React.useState(null);
-  const [askpublishName, setaskpublishName] = React.useState(false);
+  const [isPublishPermitted, setIsPublishPermitted] = React.useState<
+    boolean | null
+  >(null);
+  const [canAskPublishPermission, setCanAskPublishPermission] =
+    React.useState(false);
 
   React.useEffect(() => {
-    if (donationID && publishName !== null) {
+    if (donationID && isPublishPermitted !== null) {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
-        data: { publish: publishName },
+        data: { publish: isPublishPermitted },
         method: "PUT",
         setshowErrorCard,
         tenant,
       };
       apiRequest(requestParams);
     }
-  }, [publishName, donationID]);
+  }, [isPublishPermitted, donationID]);
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
@@ -281,14 +284,14 @@ function PaymentsForm({}: Props): ReactElement {
           {projectDetails && projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
               {!Object.keys(contactDetails).includes("companyname") ? (
-                askpublishName ? (
+                canAskPublishPermission ? (
                   <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <CheckBox
                       id="publishName"
                       name="checkedB"
-                      checked={publishName}
+                      checked={isPublishPermitted ? true : false}
                       onChange={() => {
-                        setpublishName(!publishName);
+                        setIsPublishPermitted(!isPublishPermitted);
                       }}
                       inputProps={{ "aria-label": "primary checkbox" }}
                       color={"primary"}
@@ -300,9 +303,9 @@ function PaymentsForm({}: Props): ReactElement {
                 ) : (
                   <div>
                     {projectDetails.purpose !== "planet-cash" && (
-                      <label style={{ textAlign: "center" }}>
+                      <div /* style={{ textAlign: "center" }} */>
                         {t("nameAlreadyPublished")}
-                      </label>
+                      </div>
                     )}
                   </div>
                 )
