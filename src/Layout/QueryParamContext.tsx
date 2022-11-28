@@ -6,6 +6,9 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  FC,
+  Dispatch,
+  SetStateAction,
 } from "react";
 import { apiRequest } from "../Utils/api";
 import { useTranslation } from "next-i18next";
@@ -14,106 +17,28 @@ import { ThemeContext } from "../../styles/themeContext";
 import countriesData from "../Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { PaymentSetupProps, CurrencyList } from "src/Common/Types";
+import {
+  CurrencyList,
+  PaymentOptions,
+  FetchedProjectDetails,
+  PlanetCashSignupDetails,
+  GiftDetails,
+  ContactDetails,
+  BankTransferDetails,
+  OnBehalfDonor,
+} from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
+import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
+import { Project } from "src/Common/Types/project";
+import { User } from "src/Common/Types/user";
+import { Donation } from "src/Common/Types/donation";
 
-export const QueryParamContext = createContext({
-  isGift: false,
-  setisGift: (value: boolean) => {},
-  giftDetails: {},
-  setgiftDetails: (value: {}) => {},
-  contactDetails: {},
-  setContactDetails: (value: {}) => {},
-  country: "",
-  setcountry: (value: "") => {},
-  paymentSetup: {},
-  setpaymentSetup: ({}) => {},
-  currency: "",
-  setcurrency: (value: "") => {},
-  enabledCurrencies: {},
-  setEnabledCurrencies: (value: CurrencyList) => {},
-  donationStep: null,
-  setdonationStep: (value: number) => {},
-  projectDetails: null,
-  quantity: 50,
-  setquantity: (value: number) => {},
-  language: "en",
-  setlanguage: (value: string) => {},
-  donationID: null,
-  setdonationID: (value: string) => {},
-  paymentType: "",
-  setPaymentType: (value: string) => "",
-  shouldCreateDonation: false,
-  setshouldCreateDonation: (value: boolean) => {},
-  setIsTaxDeductible: (value: boolean) => {},
-  isTaxDeductible: false,
-  isPaymentOptionsLoading: false,
-  redirectstatus: "",
-  setredirectstatus: (value: string) => {},
-  callbackUrl: "",
-  setcallbackUrl: (value: string) => {},
-  isDirectDonation: false,
-  tenant: "",
-  settenant: (value: string) => {},
-  selectedProjects: [],
-  setSelectedProjects: (value: Array<any>) => {},
-  allProjects: [],
-  allowTaxDeductionChange: true,
-  setallowTaxDeductionChange: (value: boolean) => {},
-  donationUid: null,
-  setDonationUid: (value: string) => "",
-  setshowErrorCard: (value: boolean) => {},
-  setprojectDetails: (value: {}) => {},
-  transferDetails: null,
-  setTransferDetails: (value: {}) => {},
-  loadselectedProjects: () => {},
-  hideTaxDeduction: false,
-  queryToken: "",
-  setqueryToken: (value: string) => "",
-  sethideTaxDeduction: (value: boolean) => {},
-  setisDirectDonation: (value: boolean) => {},
-  isSignedUp: false,
-  setIsSignedUp: (value: boolean) => {},
-  frequency: "",
-  setfrequency: (value: string) => {},
-  hideLogin: false,
-  setHideLogin: (value: boolean) => {},
-  paymentError: "",
-  setPaymentError: (value: string) => {},
-  amount: null,
-  setAmount: (value: number) => {},
-  taxIdentificationAvail: {},
-  setTaxIdentificationAvail: (value: boolean) => {},
-  callbackMethod: "",
-  setCallbackMethod: (value: string) => {},
-  retainQuantityValue: false,
-  setRetainQuantityValue: (value: boolean) => {},
-  projectName: "",
-  setProjectName: (value: string) => {},
-  projectDescription: "",
-  setProjectDescription: (value: string) => {},
-  setIsPaymentOptionsLoading: (value: boolean) => {},
-  loadPaymentSetup: (value: {
-    projectGUID: string;
-    paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
-  }) => {},
-  profile: null,
-  isPlanetCashActive: false,
-  setIsPlanetCashActive: (value: boolean) => {},
-  onBehalf: false,
-  setOnBehalf: (value: boolean) => {},
-  onBehalfDonor: {},
-  setOnBehalfDonor: (value: {}) => {},
-  donation: null,
-  setdonation: (value: {}) => {},
-  paymentRequest: null,
-  setPaymentRequest: (value: {}) => {},
-});
+export const QueryParamContext =
+  createContext<QueryParamContextInterface>(null);
 
-export default function QueryParamProvider({ children }: any) {
+const QueryParamProvider: FC = ({ children }) => {
   const router = useRouter();
 
   const { i18n } = useTranslation();
@@ -124,9 +49,11 @@ export default function QueryParamProvider({ children }: any) {
     loginWithRedirect,
   } = useAuth0();
 
-  const [paymentSetup, setpaymentSetup] = useState<PaymentSetupProps | {}>({});
+  const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
 
-  const [projectDetails, setprojectDetails] = useState<Object | null>(null);
+  const [projectDetails, setprojectDetails] = useState<
+    FetchedProjectDetails | PlanetCashSignupDetails | null
+  >(null);
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -134,11 +61,11 @@ export default function QueryParamProvider({ children }: any) {
   const [donationStep, setdonationStep] = useState<null | number>(null);
   const [language, setlanguage] = useState(
     typeof window !== "undefined" && localStorage.getItem("language")
-      ? localStorage.getItem("language")
+      ? (localStorage.getItem("language") as string)
       : "en"
   );
 
-  const [donationID, setdonationID] = useState(null);
+  const [donationID, setdonationID] = useState<string | null>(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
 
   // for tax deduction part
@@ -147,25 +74,24 @@ export default function QueryParamProvider({ children }: any) {
 
   const [isDirectDonation, setisDirectDonation] = useState(false);
 
-  const [donationUid, setDonationUid] = useState(null);
+  const [donationUid, setDonationUid] = useState<string | null>(null);
 
-  const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] =
-    useState<boolean>(false);
+  const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] = useState(false);
 
   const [paymentType, setPaymentType] = useState("");
 
   const [quantity, setquantity] = useState(50);
-  const [frequency, setfrequency] = useState<null | string>("once");
+  const [frequency, setfrequency] = useState<string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<object>({
+  const [giftDetails, setgiftDetails] = useState<GiftDetails>({
     recipientName: "",
     recipientEmail: "",
-    giftMessage: "",
-    type: "",
+    message: "",
+    type: null,
   });
 
-  const [contactDetails, setContactDetails] = useState({
+  const [contactDetails, setContactDetails] = useState<ContactDetails>({
     firstname: "",
     lastname: "",
     tin: "",
@@ -177,49 +103,47 @@ export default function QueryParamProvider({ children }: any) {
     companyname: "",
   });
 
-  const [country, setcountry] = useState<string | string[]>("");
+  const [country, setcountry] = useState("");
   const [currency, setcurrency] = useState("");
   const [enabledCurrencies, setEnabledCurrencies] =
-    useState<null | CurrencyList>(null);
+    useState<CurrencyList | null>(null);
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
 
-  const [redirectstatus, setredirectstatus] = useState(null);
+  const [redirectstatus, setredirectstatus] = useState<string | null>(null);
 
   const [shouldCreateDonation, setshouldCreateDonation] = useState(false);
 
-  const [selectedProjects, setSelectedProjects] = useState([]);
-  const [allProjects, setAllProjects] = useState([]);
+  const [selectedProjects, setSelectedProjects] = useState<Array<Project>>([]);
+  const [allProjects, setAllProjects] = useState<Array<Project>>([]);
 
   const [hideTaxDeduction, sethideTaxDeduction] = useState(false);
 
-  const [profile, setprofile] = useState<null | Object>(null);
+  const [profile, setprofile] = useState<User | null>(null);
   const [amount, setAmount] = useState<null | number>(null);
-  const [retainQuantityValue, setRetainQuantityValue] =
-    useState<boolean>(false);
+  const [retainQuantityValue, setRetainQuantityValue] = useState(false);
   // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
-  const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
+  const [isSignedUp, setIsSignedUp] = useState(false);
 
-  const [hideLogin, setHideLogin] = useState<boolean>(false);
+  const [hideLogin, setHideLogin] = useState(false);
   const [paymentError, setPaymentError] = useState("");
-  const [transferDetails, setTransferDetails] = useState<Object | null>(null);
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
+  const [transferDetails, setTransferDetails] =
+    useState<BankTransferDetails | null>(null);
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
 
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
 
-  const [onBehalfDonor, setOnBehalfDonor] = useState<object>({
+  const [onBehalfDonor, setOnBehalfDonor] = useState<OnBehalfDonor>({
     firstName: "",
     lastName: "",
     email: "",
   });
 
-  const [donation, setdonation] = useState(null);
-  const [paymentRequest, setPaymentRequest] = useState(null);
+  const [donation, setdonation] = useState<Donation | null>(null);
+  const [paymentRequest, setPaymentRequest] = useState<Object | null>(null);
 
   const loadEnabledCurrencies = async () => {
     try {
@@ -260,7 +184,7 @@ export default function QueryParamProvider({ children }: any) {
   }, [paymentError]);
   useEffect(() => {
     if (allLocales.some((locale) => locale.key === router.query.locale)) {
-      setlanguage(router.query.locale);
+      setlanguage(router.query.locale as string);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
       if (localStorage.getItem("language") === null) {
@@ -293,7 +217,10 @@ export default function QueryParamProvider({ children }: any) {
     return !!pattern.test(url);
   }
   useEffect(() => {
-    if (router.query.callback_url) {
+    if (
+      router.query.callback_url &&
+      typeof router.query.callback_url === "string"
+    ) {
       if (testURL(router.query.callback_url)) {
         setcallbackUrl(router.query.callback_url);
       }
@@ -302,7 +229,7 @@ export default function QueryParamProvider({ children }: any) {
 
   useEffect(() => {
     if (router.query.callback_method) {
-      setCallbackMethod(router.query.callback_method);
+      setCallbackMethod(router.query.callback_method as string);
     }
   }, [router.query.callback_method]);
 
@@ -323,11 +250,11 @@ export default function QueryParamProvider({ children }: any) {
         setshowErrorCard,
         tenant,
       };
-      const projects: any = await apiRequest(requestParams);
-      if (projects.data) {
-        const allowedDonationsProjects = projects.data.filter(
-          (project: { properties: { allowDonations: boolean } }) =>
-            project.properties.allowDonations === true
+      const response = await apiRequest(requestParams);
+      const projects = response.data as Project[];
+      if (projects) {
+        const allowedDonationsProjects = projects.filter(
+          (project) => project.properties.allowDonations === true
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -361,8 +288,8 @@ export default function QueryParamProvider({ children }: any) {
   const showPlanetCashSignUpScreen = () => {
     setprojectDetails({
       name: `PlanetCash - ${profile?.displayName}`,
-      ownerName: profile?.displayName,
-      ownerAvatar: profile?.image,
+      ownerName: profile?.displayName || "",
+      ownerAvatar: profile?.image || "",
       purpose: "planet-cash-signup",
     });
     setdonationStep(4);
@@ -376,7 +303,7 @@ export default function QueryParamProvider({ children }: any) {
 
   useEffect(() => {
     const regex = /^pcash_/;
-    if (regex.test(router.query.to)) {
+    if (router.query.to && regex.test(router.query.to as string)) {
       router.push("/");
     } else if (router.query.to?.toString().toLowerCase() === "planetcash") {
       if (
@@ -398,7 +325,7 @@ export default function QueryParamProvider({ children }: any) {
           setdonationStep(1);
         } else if (!profile?.planetCash) {
           if (router.query.token) {
-            if (validateToken(router.query.token)) {
+            if (validateToken(router.query.token as string)) {
               if (!profile) {
                 loadProfile();
               } else if (!profile?.planetCash && profile?.displayName) {
@@ -427,7 +354,7 @@ export default function QueryParamProvider({ children }: any) {
     const regex = /^pcash_/;
     if (
       router.query.to &&
-      !regex.test(router.query.to) &&
+      !regex.test(router.query.to as string) &&
       country !== undefined &&
       country !== "" &&
       router.query.to?.toString().toLowerCase() !== "planetcash"
@@ -442,12 +369,6 @@ export default function QueryParamProvider({ children }: any) {
   }, [router.query.to, country]);
 
   async function loadConfig() {
-    let userLang;
-    if (localStorage) {
-      userLang = localStorage.getItem("language") || "en";
-    } else {
-      userLang = "en";
-    }
     try {
       const requestParams = {
         url: `/app/config`,
@@ -474,16 +395,18 @@ export default function QueryParamProvider({ children }: any) {
           }
         }
         if (!router.query.context) {
-          setContactDetails({
-            ...contactDetails,
-            city:
-              config.data.loc && config.data.loc.city
-                ? config.data.loc.city
-                : "",
-            zipCode:
-              config.data.loc && config.data.loc.postalCode
-                ? config.data.loc.postalCode
-                : "",
+          setContactDetails((contactDetails) => {
+            return {
+              ...contactDetails,
+              city:
+                config.data.loc && config.data.loc.city
+                  ? config.data.loc.city
+                  : "",
+              zipCode:
+                config.data.loc && config.data.loc.postalCode
+                  ? config.data.loc.postalCode
+                  : "",
+            };
           });
         }
       }
@@ -502,7 +425,7 @@ export default function QueryParamProvider({ children }: any) {
   useEffect(() => {
     if (router.query.units) {
       // Do not allow 0 or negative numbers and string
-      if (Number(router.query.units) > 0 && paymentSetup.unitCost) {
+      if (Number(router.query.units) > 0 && paymentSetup?.unitCost) {
         setquantity(Number(router.query.units));
       }
     }
@@ -512,13 +435,13 @@ export default function QueryParamProvider({ children }: any) {
   useEffect(() => {
     if (router.query.method) {
       // TODO => only allow the ones which we use, add an array and check if it exists in that array
-      setPaymentType(router.query.method);
+      setPaymentType(router.query.method as string);
     }
   }, [router.query.method]);
 
   useEffect(() => {
     if (router.query.redirect_status) {
-      setredirectstatus(router.query.redirect_status);
+      setredirectstatus(router.query.redirect_status as string);
     }
   }, [router.query.redirect_status]);
 
@@ -562,8 +485,8 @@ export default function QueryParamProvider({ children }: any) {
     shouldSetPaymentDetails,
   }: {
     projectGUID: string;
-    paymentSetupCountry: string | string[];
-    shouldSetPaymentDetails?: Boolean;
+    paymentSetupCountry: string;
+    shouldSetPaymentDetails?: boolean;
   }) => {
     setIsPaymentOptionsLoading(true);
     try {
@@ -591,7 +514,7 @@ export default function QueryParamProvider({ children }: any) {
           purpose: paymentSetup.purpose,
           ownerName: paymentSetup.ownerName,
           taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          projectImage: paymentSetup.image,
+          image: paymentSetup.image,
           ownerAvatar: paymentSetup.ownerAvatar,
         });
       }
@@ -613,6 +536,7 @@ export default function QueryParamProvider({ children }: any) {
         country,
         setcountry,
         paymentSetup,
+        setpaymentSetup,
         currency,
         setcurrency,
         enabledCurrencies,
@@ -620,6 +544,7 @@ export default function QueryParamProvider({ children }: any) {
         donationStep,
         setdonationStep,
         projectDetails,
+        setprojectDetails,
         quantity,
         setquantity,
         language,
@@ -633,54 +558,48 @@ export default function QueryParamProvider({ children }: any) {
         isTaxDeductible,
         setIsTaxDeductible,
         isPaymentOptionsLoading,
+        setIsPaymentOptionsLoading,
         redirectstatus,
         setredirectstatus,
         callbackUrl,
         setcallbackUrl,
+        callbackMethod,
+        setCallbackMethod,
         isDirectDonation,
+        setisDirectDonation,
         tenant,
         settenant,
         selectedProjects,
         setSelectedProjects,
         allProjects,
         allowTaxDeductionChange,
+        setallowTaxDeductionChange,
         donationUid,
         setDonationUid,
         setshowErrorCard,
-        setprojectDetails,
         loadselectedProjects,
+        transferDetails,
+        setTransferDetails,
         hideTaxDeduction,
+        sethideTaxDeduction,
         queryToken,
         setqueryToken,
-        setpaymentSetup,
-        sethideTaxDeduction,
-        setallowTaxDeductionChange,
-        setisDirectDonation,
-        profile,
-        setprofile,
         isSignedUp,
         setIsSignedUp,
         frequency,
         setfrequency,
+        profile,
+        setprofile,
         hideLogin,
         setHideLogin,
         paymentError,
         setPaymentError,
         amount,
         setAmount,
-        transferDetails,
-        setTransferDetails,
         taxIdentificationAvail,
         setTaxIdentificationAvail,
-        callbackMethod,
-        setCallbackMethod,
         retainQuantityValue,
         setRetainQuantityValue,
-        projectDescription,
-        projectName,
-        setProjectName,
-        setProjectDescription,
-        setIsPaymentOptionsLoading,
         loadPaymentSetup,
         isPlanetCashActive,
         setIsPlanetCashActive,
@@ -702,11 +621,13 @@ export default function QueryParamProvider({ children }: any) {
       />
     </QueryParamContext.Provider>
   );
-}
+};
+
+export default QueryParamProvider;
 
 interface CardProps {
   showErrorCard: boolean;
-  setShowErrorCard: Function;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
 }
 
 function ErrorCard({
@@ -727,13 +648,9 @@ function ErrorCard({
 
   return showErrorCard ? (
     <div className={`${theme} test-donation-bar`} style={{ zIndex: 15 }}>
-      {t("errorOccurred")}
+      {ready && t("errorOccurred")}
     </div>
   ) : (
     <></>
   );
-}
-
-export function useTheme() {
-  return useContext(QueryParamContext);
 }

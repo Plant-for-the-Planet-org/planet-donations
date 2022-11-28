@@ -15,6 +15,7 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
+import { Donation } from "src/Common/Types/donation";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -38,7 +39,7 @@ function ThankYou() {
     };
     const donation = await apiRequest(requestParams);
     if (donation.status === 200) {
-      setdonation(donation.data);
+      setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
     }
   }
 
@@ -111,13 +112,16 @@ function ThankYou() {
       case "ten_1e5WejOp":
         return (
           <SuccessfulDonationJane
-            donation={donation}
+            donation={donation as Donation}
             sendToReturn={sendToReturn}
           />
         );
       default:
         return (
-          <SuccessfulDonation donation={donation} sendToReturn={sendToReturn} />
+          <SuccessfulDonation
+            donation={donation as Donation}
+            sendToReturn={sendToReturn}
+          />
         );
     }
   };
@@ -139,13 +143,12 @@ function ThankYou() {
                   <SuccessComponent />
                 ) : status === "failed" || paymentError ? (
                   <FailedDonation
-                    donationID={donationID}
                     sendToReturn={sendToReturn}
                     donation={donation}
                   />
                 ) : transferDetails ? (
                   <TransferDetails
-                    donationID={donationID}
+                    donationID={donationID as string}
                     donation={donation}
                     sendToReturn={sendToReturn}
                   />

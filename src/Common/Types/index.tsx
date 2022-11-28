@@ -74,25 +74,53 @@ export interface ProjectTypes {
   };
 }
 
-export interface giftDetailsProps {
-  type: String | null;
-  recipientName: String | null;
-  email: String | null;
-  giftMessage: String | null;
-  recipientTreecounter: Number | null;
-  receipients: {} | null;
+export interface DirectGift {
+  type: "direct";
+  recipientName?: string;
+  recipientTreecounter: string;
+  recipientEmail?: "";
+  message?: "";
+}
+
+export interface InvitationGift {
+  type: "invitation";
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+}
+
+export interface DefaultGift {
+  type: null;
+  recipientName: string;
+  recipientEmail: "";
+  message: "";
+}
+
+export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
+
+export interface ContactDetails {
+  firstname: string;
+  lastname: string;
+  tin?: string | null;
+  email: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  companyname?: string | null;
+  name?: string; //Check if this is still there. Possible legacy.
 }
 
 export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
-  projectDetails: Object;
+  projectDetails: FetchedProjectDetails;
   quantity: number;
-  paymentSetup: {};
-  currency: String;
-  contactDetails: Object;
-  giftDetails: giftDetailsProps;
-  isGift: Boolean;
+  paymentSetup: PaymentOptions;
+  currency: string;
+  contactDetails: ContactDetails;
+  giftDetails: GiftDetails;
+  isGift: boolean;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   setdonationID: any;
@@ -112,26 +140,26 @@ export interface PayDonationProps {
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   t: any;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: Function;
   router: any;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
 }
 
 export interface HandleStripeSCAPaymentProps {
   method: string;
   paymentResponse: any;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
   window: any;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   donationID: string;
-  contactDetails: Object;
+  contactDetails: ContactDetails;
   token: string;
   country: string;
   setshowErrorCard: Function;
@@ -139,59 +167,113 @@ export interface HandleStripeSCAPaymentProps {
   tenant: string;
 }
 
-export interface PaymentSetupProps {
+export interface CreateDonationDataProps {
+  projectDetails: FetchedProjectDetails;
+  quantity: number;
+  paymentSetup: PaymentOptions;
   currency: string;
-  effectiveCountry: string;
-  frequencies?: string[] | null;
-  gateways: Gateways;
-  minQuantity: number;
-  options?: OptionsEntity[] | null;
-  project: string;
-  purpose: string;
-  recurrency: Recurrency;
+  contactDetails: ContactDetails;
+  taxDeductionCountry: any;
+  isGift: boolean;
+  giftDetails: GiftDetails;
+  frequency: any;
+  amount?: number | null;
+  callbackUrl: string | undefined;
+  callbackMethod: string | undefined;
+}
+
+export interface PlanetCashSignupDetails {
+  name: string;
+  ownerName: string | null;
+  ownerAvatar: string | null;
+  purpose: "planet-cash-signup";
+}
+
+export interface FetchedProjectDetails {
+  id: string;
+  name: string;
+  description?: string | null;
+  ownerAvatar?: string | null;
+  ownerName?: string;
+  image?: string | null;
+  purpose: ProjectPurpose;
+  taxDeductionCountries?: Array<string>;
+}
+
+type ProjectPurpose =
+  | "trees"
+  | "conservation"
+  | "funds"
+  | "reforestation"
+  | "bouquet"
+  | "planet-cash";
+
+export interface PaymentOptions extends FetchedProjectDetails {
   requestedCountry: string;
-  treeCost: number;
+  effectiveCountry: string;
+  frequencies: Frequencies;
+  gateways: Gateways;
+  recurrency: Recurrency;
   unit: string;
   unitCost: number;
+  currency: string;
+  destination: string;
+  isApproved?: boolean;
+  isTopProject?: boolean;
 }
+
+interface Frequencies {
+  [key: string]: Frequency;
+}
+
+interface Frequency {
+  minQuantity: number;
+  options: OptionsEntity[];
+}
+
 export interface Gateways {
   paypal: Paypal;
   stripe: Stripe;
-  offline: Offline;
+  offline?: Offline;
 }
 export interface Paypal {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationPaypal;
 }
+
 export interface AuthorizationPaypal {
   client_id: string;
 }
+
 export interface Stripe {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationStripe;
 }
+
 export interface AuthorizationStripe {
   stripePublishableKey: string;
   accountId: string;
 }
+
 export interface Offline {
   methods?: string[] | null;
   account: string;
 }
+
 export interface OptionsEntity {
-  id: string;
-  caption: string;
-  description?: string | null;
-  icon?: string | null;
-  quantity?: number | null;
+  id?: string;
+  caption: string | null;
+  description: string | null;
+  icon: string | null;
+  quantity: number | null;
   isDefault: boolean;
 }
+
 export interface Recurrency {
   supported: boolean;
-  methods?: string[] | null;
-  frequencies?: string[] | null;
+  methods: string[] | null;
 }
 
 export interface Country {
@@ -207,4 +289,17 @@ export type CountryProperty = keyof Country;
 
 export interface CurrencyList {
   [key: string]: string;
+}
+
+export interface BankTransferDetails {
+  beneficiary: string;
+  iban: string;
+  bic: string;
+  bankName: string;
+}
+
+export interface OnBehalfDonor {
+  firstName: string;
+  lastName: string;
+  email: string;
 }

@@ -64,7 +64,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
     if (![10, 20, 50, 150].includes(quantity)) {
       setisCustomDonation(true);
       setCustomTreeValue(quantity);
-      setCustomTreeInputValue(quantity);
+      setCustomTreeInputValue(quantity.toString());
     }
   }, [quantity]);
 

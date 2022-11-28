@@ -3,15 +3,19 @@ import {
   CreateDonationFunctionProps,
   PayDonationProps,
   HandleStripeSCAPaymentProps,
+  PaymentOptions,
+  CreateDonationDataProps,
+  ContactDetails,
 } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
+import { Donation } from "src/Common/Types/donation";
 
 //rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
   gateway,
   method,
-  paymentSetup,
+  paymentSetup: PaymentOptions,
   providerObject
 ) {
   let account;
@@ -42,7 +46,7 @@ export function buildPaymentProviderRequest(
       source = providerObject;
       break;
     case "offline":
-      account = paymentSetup.gateways.offline.account;
+      account = paymentSetup.gateways.offline?.account;
       source = {};
 
     // throw some exception here 'unsupported gateway'
@@ -101,7 +105,7 @@ export async function createDonationFunction({
   callbackUrl,
   callbackMethod,
   tenant,
-}: CreateDonationFunctionProps) {
+}: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
     projectDetails,
@@ -129,7 +133,7 @@ export async function createDonationFunction({
     const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
       setdonationID(donation.data.id);
-      return donation.data;
+      return donation.data as Donation;
     }
   } catch (error) {
     if (error.status === 400) {
@@ -160,7 +164,7 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: any) {
+}: CreateDonationDataProps) {
   let donationData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,
@@ -198,7 +202,7 @@ export function createDonationData({
             type: "invitation",
             recipientName: giftDetails.recipientName,
             recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.giftMessage,
+            message: giftDetails.message,
           },
         },
       };
@@ -375,7 +379,7 @@ export async function confirmPaymentIntent(
   }
 }
 
-const buildBillingDetails = (contactDetails: any) => {
+const buildBillingDetails = (contactDetails: ContactDetails) => {
   return {
     name: `${contactDetails.firstname} ${contactDetails.lastname}`,
     email: contactDetails.email,

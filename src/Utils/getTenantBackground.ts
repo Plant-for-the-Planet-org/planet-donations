@@ -3,11 +3,15 @@ const klumforest = "/tenants/leniklum/leniklum.jpg";
 const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
 
+import { FetchedProjectDetails } from "src/Common/Types";
 import getImageUrl from "./getImageURL";
 
 // Set tenant image -> set tenant image where needed, except for default
 // Default -> Check for tenant image if not found, use project image, if not found, use base
-export function getTenantBackground(tenant: any, projectDetails: any) {
+export function getTenantBackground(
+  tenant: string,
+  projectDetails: FetchedProjectDetails | null
+): string {
   let tenantImage = null;
   let imageUrl = defaultForest;
 
@@ -28,8 +32,8 @@ export function getTenantBackground(tenant: any, projectDetails: any) {
   if (tenantImage) {
     imageUrl = tenantImage;
   } else {
-    if (projectDetails && projectDetails.projectImage) {
-      imageUrl = getImageUrl("project", "large", projectDetails.projectImage);
+    if (projectDetails && projectDetails.image) {
+      imageUrl = getImageUrl("project", "large", projectDetails.image);
     } else {
       imageUrl = defaultForest;
     }
