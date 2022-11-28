@@ -79,7 +79,6 @@ export default function PaymentMethodTabs({
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -104,7 +103,6 @@ export default function PaymentMethodTabs({
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
     }

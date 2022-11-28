@@ -199,7 +199,6 @@ function DonationsForm() {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -224,7 +223,6 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
