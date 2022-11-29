@@ -167,5 +167,12 @@
   "fundsPurpose": "dar",
   "bouquetPurpose": "dar",
   "conservationPurpose": "dar na konzervaci",
-  "pfpSupportsUNEP": "Plant-for-the-Planet podporuje Program OSN pro životní prostředí"
+  "planet-cashPurpose": "dar v PlanetCash",
+  "pfpSupportsUNEP": "Plant-for-the-Planet podporuje Program OSN pro životní prostředí",
+  "noPlanetCashAccount": "Ještě nemáte účet PlanetCash, ale můžete si jeden vytvořit níže",
+  "planetCashSignup": "Vytvořit PlanetCash účet",
+  "planetCashTC": "Kliknutím na \"Vytvořit PlanetCash účet\" souhlasíte s <0>Podmínkami</0> Plant-for-the-Planet Platformy a PlanetCash",
+  "planetCashIUnderstand": "Rozumím, že PlanetCash dary/platby jsou nevratné a nealokované platby budou automaticky alokované na projekty na Platformě po 6 měsících od Platby",
+  "createPlanetCashAccount": "Vytvořit účet PlanetCash",
+  "myContributionIsPartOfThat": "A můj příspěvek je toho součástí."
 }

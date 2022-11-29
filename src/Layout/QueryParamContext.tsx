@@ -148,11 +148,11 @@ const QueryParamProvider: FC = ({ children }) => {
   const loadEnabledCurrencies = async () => {
     try {
       const requestParams = {
-        url: `/public/v1.1/en/currencies`,
+        url: `/app/currencies`,
         setshowErrorCard,
       };
       const response: any = await apiRequest(requestParams);
-      setEnabledCurrencies(response.data.currency_names);
+      setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
       setEnabledCurrencies(null);
@@ -187,14 +187,15 @@ const QueryParamProvider: FC = ({ children }) => {
       setlanguage(router.query.locale as string);
     } else {
       //conditional operator to check if navigator.languages property is supported by browser.
-      const userLocale = navigator.languages ?? [navigator.language];
-      const newLocale = userLocale[0].trim().split(/-|_/)[0];
-
-      if (allLocales.some((locale) => locale.key === newLocale)) {
-        //if user locale is supported by us
-        setlanguage(newLocale);
-      } else {
-        setlanguage("en");
+      if (localStorage.getItem("language") === null) {
+        const userLocale = navigator.languages ?? [navigator.language];
+        const newLocale = userLocale[0].trim().split(/-|_/)[0];
+        if (allLocales.some((locale) => locale.key === newLocale)) {
+          //if user locale is supported by us
+          setlanguage(newLocale);
+        } else {
+          setlanguage("en");
+        }
       }
     }
   }, [router.query.locale]);
