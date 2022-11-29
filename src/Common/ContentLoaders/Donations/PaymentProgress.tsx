@@ -4,9 +4,13 @@ import { useTranslation } from "next-i18next";
 import { ReactElement } from "react";
 import styles from "./PaymentProgress.module.scss";
 
-export default function PaymentProgress(
-  isPaymentProcessing: boolean
-): ReactElement | null {
+interface PaymentProgressProps {
+  isPaymentProcessing: boolean;
+}
+
+export default function PaymentProgress({
+  isPaymentProcessing,
+}: PaymentProgressProps): ReactElement | null {
   const { t, ready } = useTranslation("common");
 
   return ready ? (
