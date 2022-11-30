@@ -7,9 +7,9 @@ interface Props {
 }
 
 function SofortPayments({ onSubmitPayment }: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t, ready } = useTranslation("common");
 
-  return (
+  return ready ? (
     <div>
       <div className={"disclaimer-container"}>
         <InfoIcon />
@@ -25,6 +25,8 @@ function SofortPayments({ onSubmitPayment }: Props): ReactElement {
         {t("payWithSofort")}
       </button>
     </div>
+  ) : (
+    <></>
   );
 }
 
