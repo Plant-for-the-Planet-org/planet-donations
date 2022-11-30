@@ -440,7 +440,6 @@ function DonationsForm(): ReactElement {
                 <button className="secondary-button w-100 mt-30">
                   {t("donateWithPlanetCash")}
                 </button>
-                {/* QUESTION FOR MARIA - should this be shown for PlanetCash donation? */}
                 {!donation && <PaymentProgress isPaymentProcessing={true} />}
               </>
             )}
