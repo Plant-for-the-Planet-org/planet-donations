@@ -1,3 +1,5 @@
+import { PaymentMethodResult } from "@stripe/stripe-js/types/stripe-js/stripe";
+
 export interface ProjectTypes {
   data: {
     allowDonations: boolean;
@@ -136,7 +138,7 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject: Object;
+  providerObject?: string | PaymentMethodResult;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   t: any;
@@ -302,4 +304,11 @@ export interface OnBehalfDonor {
   firstName: string;
   lastName: string;
   email: string;
+}
+
+export interface ShowPaymentMethodParams {
+  paymentMethod: "card" | "giropay" | "sofort" | "sepa_debit";
+  countries?: string[];
+  currencies?: string[];
+  authenticatedMethod?: boolean;
 }
