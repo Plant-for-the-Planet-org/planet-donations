@@ -358,10 +358,12 @@ function PaymentsForm({}: Props): ReactElement {
                   (frequency !== "once" ? false : true)
                 }
                 showNativePay={
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency &&
+                  (paymentSetup?.gateways?.stripe?.account && currency
+                    ? true
+                    : false) &&
                   (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods?.includes("card")
+                    ? paymentSetup?.recurrency.methods?.includes("card") ||
+                      false
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
