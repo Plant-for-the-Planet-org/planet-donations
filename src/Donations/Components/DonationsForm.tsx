@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
@@ -26,21 +26,18 @@ import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
-import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
 import { Donation } from "src/Common/Types/donation";
 
-function DonationsForm() {
+function DonationsForm(): ReactElement {
   const {
     isGift,
-    setdonationStep,
     quantity,
     currency,
     paymentSetup,
     projectDetails,
     country,
     giftDetails,
-    setIsTaxDeductible,
     isPaymentOptionsLoading,
     setPaymentType,
     setdonationID,
@@ -95,8 +92,9 @@ function DonationsForm() {
   }, [paymentSetup]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-  const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
+
+  //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
@@ -154,23 +152,29 @@ function DonationsForm() {
           if ((!isLoading && isAuthenticated) || queryToken) {
             token = queryToken ? queryToken : await getAccessTokenSilently();
           }
-          payDonationFunction({
-            gateway: "stripe",
-            method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-            providerObject: paymentMethod, // payment method
-            setIsPaymentProcessing,
-            setPaymentError,
-            t,
-            paymentSetup,
-            donationID: res.id,
-            contactDetails,
-            token,
-            country,
-            setshowErrorCard,
-            router,
-            tenant,
-            setTransferDetails,
-          });
+
+          if (token) {
+            payDonationFunction({
+              gateway: "stripe",
+              method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+              providerObject: paymentMethod, // payment method
+              setIsPaymentProcessing,
+              setPaymentError,
+              t,
+              paymentSetup,
+              donationID: res.id,
+              contactDetails,
+              token,
+              country,
+              setshowErrorCard,
+              router,
+              tenant,
+              setTransferDetails,
+            });
+          } else {
+            console.log("Authentication failed"); //TODOO - better error handling
+            return;
+          }
         }
       });
     }
@@ -436,7 +440,8 @@ function DonationsForm() {
                 <button className="secondary-button w-100 mt-30">
                   {t("donateWithPlanetCash")}
                 </button>
-                {!donation && <PaymentProgress />}
+                {/* QUESTION FOR MARIA - should this be shown for PlanetCash donation? */}
+                {!donation && <PaymentProgress isPaymentProcessing={true} />}
               </>
             )}
           </div>
