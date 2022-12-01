@@ -1,4 +1,4 @@
-import { PaymentMethodResult } from "@stripe/stripe-js/types/stripe-js/stripe";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
 export interface ProjectTypes {
   data: {
@@ -138,7 +138,7 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject?: string | PaymentMethodResult;
+  providerObject?: string | PaymentMethod;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   t: any;

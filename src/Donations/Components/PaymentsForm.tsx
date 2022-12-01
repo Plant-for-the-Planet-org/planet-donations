@@ -27,8 +27,8 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
-import { PaymentMethodResult } from "@stripe/stripe-js/types/stripe-js/stripe";
 import { ShowPaymentMethodParams } from "src/Common/Types";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
 interface Props {}
 
@@ -83,7 +83,7 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: string | PaymentMethodResult
+    providerObject?: string | PaymentMethod
   ) => {
     if (!paymentSetup || !donationID) {
       console.log("Missing payment options"); //TODOO - better error handling
@@ -380,7 +380,7 @@ function PaymentsForm({}: Props): ReactElement {
                       currency,
                       paymentSetup?.unitCost * quantity
                     )}
-                    onPaymentFunction={(providerObject: PaymentMethodResult) =>
+                    onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)
                     }
                     paymentType={paymentType}
