@@ -14,10 +14,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
+import { ContactDetails } from "src/Common/Types";
 
-interface Props {}
-
-function ContactsForm({}: Props): ReactElement {
+function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
 
   React.useEffect(() => {
@@ -55,7 +54,7 @@ function ContactsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (contactDetails) {
       reset(contactDetails);
-      if (contactDetails.companyName) {
+      if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
@@ -69,7 +68,7 @@ function ContactsForm({}: Props): ReactElement {
     reset,
     getValues,
     setValue,
-  } = useForm({
+  } = useForm<ContactDetails>({
     mode: "all",
     defaultValues: {},
   });
@@ -81,7 +80,7 @@ function ContactsForm({}: Props): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ContactDetails) => {
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
@@ -149,6 +148,7 @@ function ContactsForm({}: Props): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
+      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
@@ -446,15 +446,16 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("donate_button", {
-                totalCost: getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.unitCost * quantity
-                ),
-                frequency:
-                  frequency === "once" ? "" : t(frequency).toLowerCase(),
-              })}
+              {paymentSetup &&
+                t("donate_button", {
+                  totalCost: getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.unitCost * quantity
+                  ),
+                  frequency:
+                    frequency === "once" ? "" : t(frequency).toLowerCase(),
+                })}
             </button>
           )}
         </form>
