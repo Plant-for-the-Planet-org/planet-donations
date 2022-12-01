@@ -145,7 +145,7 @@ export interface PayDonationProps {
   paymentSetup: PaymentOptions;
   donationID: string;
   contactDetails: ContactDetails;
-  token: string;
+  token: string | null;
   country: string;
   setshowErrorCard: Function;
   router: any;

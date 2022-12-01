@@ -93,29 +93,23 @@ function PaymentsForm({}: Props): ReactElement {
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
-
-    if (token) {
-      payDonationFunction({
-        gateway,
-        method,
-        providerObject,
-        setIsPaymentProcessing,
-        setPaymentError,
-        t,
-        paymentSetup,
-        donationID,
-        contactDetails,
-        token,
-        country,
-        setshowErrorCard,
-        router,
-        tenant,
-        setTransferDetails,
-      });
-    } else {
-      console.log("Authentication failed"); //TODOO - better error handling
-      return;
-    }
+    payDonationFunction({
+      gateway,
+      method,
+      providerObject,
+      setIsPaymentProcessing,
+      setPaymentError,
+      t,
+      paymentSetup,
+      donationID,
+      contactDetails,
+      token,
+      country,
+      setshowErrorCard,
+      router,
+      tenant,
+      setTransferDetails,
+    });
   };
 
   // Seems to work only for native pay. Should this be removed?
