@@ -435,8 +435,8 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  // Set gift details if gift = true in the query params
-  if (context.query.gift === "true") {
+  // Set gift details if gift = true in the query params (only for tree projects)
+  if (context.query.gift === "true" && projectDetails?.purpose === "trees") {
     isGift = true;
     giftDetails = {
       type: "invitation",
