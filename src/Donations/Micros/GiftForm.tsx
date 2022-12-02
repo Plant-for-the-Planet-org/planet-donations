@@ -1,11 +1,13 @@
 import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
 import { DefaultGift } from "src/Common/Types";
+import GiftIcon from "public/assets/icons/GiftIcon";
 
 type GiftFormData = {
   recipientName: string;
@@ -86,6 +88,13 @@ export default function GiftForm(): ReactElement {
                 variant="outlined"
                 inputRef={register({ required: true })}
                 data-test-id="recipientName"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <GiftIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
               {errors.recipientName && (
                 <span className={"form-errors"}>
