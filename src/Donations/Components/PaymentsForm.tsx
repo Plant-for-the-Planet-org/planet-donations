@@ -28,7 +28,6 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
-import { nativePayNotCompatible } from "src/Utils/browsercheck";
 
 interface Props {}
 
@@ -39,8 +38,6 @@ function PaymentsForm({}: Props): ReactElement {
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [isCreatingDonation, setisCreatingDonation] = React.useState(false);
-  const [isNativePayCompatible, setIsNativePayCompatible] =
-    React.useState(false);
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -80,10 +77,6 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     setPaymentType("CARD");
-  }, []);
-
-  React.useEffect(() => {
-    setIsNativePayCompatible(!nativePayNotCompatible());
   }, []);
 
   // React.useEffect(() => {
@@ -365,7 +358,6 @@ function PaymentsForm({}: Props): ReactElement {
                   (frequency !== "once" ? false : true)
                 }
                 showNativePay={
-                  isNativePayCompatible &&
                   paymentSetup?.gateways?.stripe?.account &&
                   currency &&
                   (frequency !== "once"

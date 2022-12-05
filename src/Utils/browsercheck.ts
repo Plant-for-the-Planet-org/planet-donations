@@ -54,7 +54,7 @@ export function browserNotCompatible() {
   );
 }
 
-export function nativePayNotCompatible(): boolean {
+export function browserPayNotCompatible(): boolean {
   const userAgent = (window.navigator.userAgent || "").toLowerCase();
   const matchChrome = userAgent.match(/chrome/);
   const matchAndroid = userAgent.match(/android/);
