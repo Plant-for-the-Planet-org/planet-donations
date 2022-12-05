@@ -5,7 +5,6 @@ import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
 import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
 import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
-import BrowserPayIcon from "../../../public/assets/icons/donation/BrowserPayIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
@@ -182,22 +181,7 @@ export const PaymentRequestCustomButton = ({
               <div className="separator-text mb-10">{t("or")}</div>
             )}
           </div>
-        ) : (
-          <div className="w-100">
-            <button
-              onClick={() => paymentRequest.show()}
-              className={`donate-now ${
-                isPaymentPage ? "donate-small" : "primary-button mb-10 w-100"
-              }`}
-              style={{ border: "none" }}
-            >
-              {isPaymentPage ? "" : t("donateNow")} <BrowserPayIcon />
-            </button>
-            {!isPaymentPage && (
-              <div className="separator-text mb-10">{t("or")}</div>
-            )}
-          </div>
-        )
+        ) : null
       ) : null}
 
       {!isPaymentPage && (
