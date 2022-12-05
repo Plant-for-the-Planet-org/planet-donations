@@ -11,6 +11,8 @@ import { PaymentSetupProps } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
+import { SerializedError } from "@planet-sdk/common";
+import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -102,6 +104,8 @@ export const QueryParamContext = React.createContext({
   setdonation: (value: {}) => {},
   paymentRequest: null,
   setPaymentRequest: (value: {}) => {},
+  errors: null,
+  setErrors: (value: {}) => {},
 });
 
 export default function QueryParamProvider({ children }: any) {
@@ -211,6 +215,8 @@ export default function QueryParamProvider({ children }: any) {
 
   const [donation, setdonation] = React.useState(null);
   const [paymentRequest, setPaymentRequest] = React.useState(null);
+
+  const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
 
   React.useEffect(() => {
     if (paymentError) {
@@ -650,6 +656,8 @@ export default function QueryParamProvider({ children }: any) {
         setdonation,
         paymentRequest,
         setPaymentRequest,
+        errors,
+        setErrors,
       }}
     >
       {children}
@@ -658,6 +666,7 @@ export default function QueryParamProvider({ children }: any) {
         showErrorCard={showErrorCard}
         setShowErrorCard={setshowErrorCard}
       />
+      <ErrorPopup />
     </QueryParamContext.Provider>
   );
 }

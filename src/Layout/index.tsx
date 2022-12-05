@@ -6,7 +6,7 @@ import { QueryParamContext } from "./QueryParamContext";
 
 function Layout(props: any): ReactElement {
   const { paymentSetup } = React.useContext(QueryParamContext);
-  const {theme} = React.useContext(ThemeContext);
+  const { theme } = React.useContext(ThemeContext);
   return (
     <div className={`page-container ${theme}`}>
       {paymentSetup?.gateways?.stripe?.isLive === false ? (

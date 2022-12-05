@@ -28,6 +28,7 @@ import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
+import { APIError, handleError } from "@planet-sdk/common";
 
 function DonationsForm() {
   const {
@@ -59,6 +60,7 @@ function DonationsForm() {
     setcountry,
     setcurrency,
     donation,
+    setErrors,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -276,8 +278,9 @@ function DonationsForm() {
           query: { ...router.query, step: THANK_YOU },
         });
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      console.log("==> from PCash", handleError(err as APIError));
+      setErrors(handleError(err as APIError));
       if (err.status === 400) {
         setPaymentError(err.data.message);
       } else if (err.status === 500) {

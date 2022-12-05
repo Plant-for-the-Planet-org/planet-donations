@@ -4,8 +4,8 @@ function CloseIcon(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16.097"
-      height="16.093"
+      width={props.width ? props.width : "16.097"}
+      height={props.height ? props.height : "16.093"}
       viewBox="0 0 16.097 16.093"
     >
       <path

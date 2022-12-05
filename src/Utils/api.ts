@@ -1,6 +1,7 @@
 import getsessionId from "./getSessionId";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { APIError } from "@planet-sdk/common";
 
 // creates and axios instance with base url
 const axiosInstance = axios.create({
@@ -135,7 +136,8 @@ export const apiRequest = async (
           ) {
             setshowErrorCard(true);
           }
-          reject(err);
+
+          reject(new APIError(err.response.status, err.response.data));
         });
     });
   } catch (err) {
