@@ -131,15 +131,10 @@ function index({
   }, [projectDetails]);
 
   settenant(tenant);
-  // If gift details are present set gift (for direct gifts as it is not possible to unset them)
-  if (giftDetails && isGift && giftDetails.type === "direct") {
-    setgiftDetails(giftDetails);
-    setisGift(true);
-  }
 
-  // If gift details are present, initialize gift (only for "invitation gifts")
+  // If gift details are present, initialize gift in context
   React.useEffect(() => {
-    if (giftDetails && isGift && giftDetails.type === "invitation") {
+    if (giftDetails && isGift) {
       setgiftDetails(giftDetails);
       setisGift(true);
     }

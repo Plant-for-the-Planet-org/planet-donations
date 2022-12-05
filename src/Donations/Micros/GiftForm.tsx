@@ -34,9 +34,11 @@ export default function GiftForm(): ReactElement {
 
   React.useEffect(() => {
     if (isGift && giftDetails) {
-      setgiftDetails((giftDetails) => {
-        return { ...giftDetails, type: "invitation" };
-      });
+      if (giftDetails.type !== "direct") {
+        setgiftDetails((giftDetails) => {
+          return { ...giftDetails, type: "invitation" };
+        });
+      }
     } else {
       setgiftDetails((giftDetails) => {
         return { ...(giftDetails as DefaultGift), type: null };
