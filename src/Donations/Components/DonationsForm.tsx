@@ -29,6 +29,7 @@ import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
 import { Donation } from "src/Common/Types/donation";
+import { nativePayNotCompatible } from "src/Utils/browsercheck";
 
 function DonationsForm() {
   const {
@@ -68,7 +69,13 @@ function DonationsForm() {
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [showDisablePlanetCashButton, setShowDisablePlanetCashButton] =
     React.useState(false);
+  const [isNativePayCompatible, setIsNativePayCompatible] =
+    React.useState(false);
   const router = useRouter();
+
+  React.useEffect(() => {
+    setIsNativePayCompatible(!nativePayNotCompatible());
+  }, []);
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
@@ -369,9 +376,9 @@ function DonationsForm() {
             {(projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
-            {/* Hide NativePay if PlanetCash is active */}
+            {/* Hide NativePay if PlanetCash is active or if not compatible with browser*/}
 
-            {!isPlanetCashActive ? (
+            {!isPlanetCashActive && isNativePayCompatible ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
                 minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                   !isPaymentOptionsLoading &&
