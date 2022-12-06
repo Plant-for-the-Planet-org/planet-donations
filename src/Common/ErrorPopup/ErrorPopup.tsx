@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import styles from "./ErrorPopup.module.scss";
 import { useTranslation } from "next-i18next";
@@ -8,6 +8,18 @@ import { SerializedError } from "@planet-sdk/common";
 export default function ErrorPopup(): ReactElement {
   const { t, ready } = useTranslation(["common"]);
   const { errors, setErrors } = React.useContext(QueryParamContext);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (errors) {
+      timer = setTimeout(() => {
+        setErrors(null);
+      }, 5000);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errors]);
 
   const handleRemoveError = (message: string) => {
     if (errors) {

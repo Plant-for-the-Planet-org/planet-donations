@@ -688,7 +688,7 @@ function ErrorCard({
     if (showErrorCard) {
       setTimeout(() => {
         setShowErrorCard(false);
-      }, 3000);
+      }, 5000);
     }
   }, [showErrorCard]);
 
