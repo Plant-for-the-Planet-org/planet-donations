@@ -20,7 +20,6 @@ import { useTranslation } from "next-i18next";
 import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
-import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 

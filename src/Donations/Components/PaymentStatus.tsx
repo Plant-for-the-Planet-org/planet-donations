@@ -15,6 +15,7 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
+import { APIError, handleError } from "@planet-sdk/common";
 
 function ThankYou() {
   const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
@@ -28,17 +29,22 @@ function ThankYou() {
     donation,
     setdonation,
     setTransferDetails,
+    setErrors,
   } = React.useContext(QueryParamContext);
 
   async function loadDonation() {
-    const requestParams = {
-      url: `/app/donations/${donationID}`,
-      setshowErrorCard,
-      tenant,
-    };
-    const donation = await apiRequest(requestParams);
-    if (donation.status === 200) {
-      setdonation(donation.data);
+    try {
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const donation = await apiRequest(requestParams);
+      if (donation.status === 200) {
+        setdonation(donation.data);
+      }
+    } catch (err) {
+      setErrors(handleError(err as APIError));
     }
   }
 

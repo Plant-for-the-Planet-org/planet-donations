@@ -11,11 +11,11 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
-import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
+import { APIError, handleError } from "@planet-sdk/common";
 
 interface Props {}
 
@@ -33,6 +33,7 @@ function Authentication({}: Props): ReactElement {
     setcurrency,
     setcountry,
     tenant,
+    setErrors,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -92,6 +93,7 @@ function Authentication({}: Props): ReactElement {
           setContactDetails(newContactDetails);
         }
       } catch (err) {
+        setErrors(handleError(err as APIError));
         const newContactDetails = {
           firstname: user?.nickname ? user.nickname : "",
           email: user?.email ? user.email : "",
@@ -99,7 +101,6 @@ function Authentication({}: Props): ReactElement {
         };
         setprofile(newContactDetails);
         setContactDetails(newContactDetails);
-        console.log(err);
       }
     } else {
       const newContactDetails = {

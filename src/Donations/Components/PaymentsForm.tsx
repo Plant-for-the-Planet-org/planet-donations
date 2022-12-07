@@ -28,6 +28,7 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
+import { APIError, handleError } from "@planet-sdk/common";
 
 interface Props {}
 
@@ -73,6 +74,7 @@ function PaymentsForm({}: Props): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    setErrors,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -179,14 +181,18 @@ function PaymentsForm({}: Props): ReactElement {
 
   React.useEffect(() => {
     if (donationID && publishName !== null) {
-      const requestParams = {
-        url: `/app/donations/${donationID}/publish`,
-        data: { publish: publishName },
-        method: "PUT",
-        setshowErrorCard,
-        tenant,
-      };
-      apiRequest(requestParams);
+      try {
+        const requestParams = {
+          url: `/app/donations/${donationID}/publish`,
+          data: { publish: publishName },
+          method: "PUT",
+          setshowErrorCard,
+          tenant,
+        };
+        apiRequest(requestParams);
+      } catch (err) {
+        setErrors(handleError(err as APIError));
+      }
     }
   }, [publishName, donationID]);
 

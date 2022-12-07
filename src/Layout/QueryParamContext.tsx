@@ -13,6 +13,7 @@ import { validateToken } from "../Utils/tokenActions";
 import allLocales from "../../public/static/localeList.json";
 import { SerializedError } from "@planet-sdk/common";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
+import { APIError, handleError } from "@planet-sdk/common";
 
 export const QueryParamContext = React.createContext({
   isGift: false,
@@ -304,7 +305,7 @@ export default function QueryParamProvider({ children }: any) {
         }
       }
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   }
 
@@ -320,7 +321,7 @@ export default function QueryParamProvider({ children }: any) {
       });
       setprofile(profile.data);
     } catch (err) {
-      console.error(err);
+      setErrors(handleError(err as APIError));
     }
   }, []);
 
@@ -454,7 +455,7 @@ export default function QueryParamProvider({ children }: any) {
         }
       }
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   }
 
@@ -563,7 +564,7 @@ export default function QueryParamProvider({ children }: any) {
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   };
 

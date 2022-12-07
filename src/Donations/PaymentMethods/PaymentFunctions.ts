@@ -4,7 +4,6 @@ import {
   PayDonationProps,
   HandleStripeSCAPaymentProps,
 } from "../../Common/Types";
-import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 
 //rename to buildPaymentProviderRequest
@@ -248,7 +247,6 @@ export async function payDonationFunction({
   tenant,
   setTransferDetails,
 }: PayDonationProps) {
-  // const router = useRouter();
   setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {

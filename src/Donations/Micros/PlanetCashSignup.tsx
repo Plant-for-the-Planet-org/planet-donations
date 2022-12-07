@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import { ThemeContext } from "styles/themeContext";
+import { APIError, handleError } from "@planet-sdk/common";
 
 interface PlanetCashAccount {
   id: string;
@@ -28,7 +29,8 @@ const allowedCountries = ["DE", "ES", "US"];
 const PlanetCashSignup = () => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
-  const { setshowErrorCard, queryToken } = useContext(QueryParamContext);
+  const { setshowErrorCard, queryToken, setErrors } =
+    useContext(QueryParamContext);
   const { theme } = React.useContext(ThemeContext);
   const router = useRouter();
 
@@ -77,7 +79,7 @@ const PlanetCashSignup = () => {
       const { data } = await apiRequest(options);
       setPlanetCashAccounts(data);
     } catch (err) {
-      console.error(err);
+      setErrors(handleError(err as APIError));
     }
     setLoading(false);
   }, [apiRequest, getAccessTokenSilently]);
@@ -120,7 +122,7 @@ const PlanetCashSignup = () => {
         await apiRequest(options);
         router.reload();
       } catch (err) {
-        console.error(err);
+        setErrors(handleError(err as APIError));
       }
     }
   }, [currentPlanetCashAccount]);
@@ -145,7 +147,7 @@ const PlanetCashSignup = () => {
       await apiRequest(options);
       router.reload();
     } catch (err) {
-      console.error(err);
+      setErrors(handleError(err as APIError));
     }
   };
 

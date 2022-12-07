@@ -178,5 +178,6 @@
   "notFound": "Resource not found",
   "unauthorized": "Not Authorized",
   "validationFailed": "Validation Failed",
-  "internalServerError": "Internal Server Error"
+  "internalServerError": "Internal Server Error",
+  "serviceUnavailable": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
 }
