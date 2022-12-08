@@ -10,6 +10,8 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 function a11yProps(index: string) {
   return {
@@ -27,7 +29,10 @@ interface PaymentMethodTabsProps {
   showSofort?: boolean;
   showCC?: boolean;
   showNativePay?: boolean;
-  onNativePaymentFunction: (...args: unknown[]) => void;
+  onNativePaymentFunction: (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => Promise<void>;
   showBankTransfer?: boolean;
 }
 

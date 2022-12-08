@@ -29,6 +29,7 @@ import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 import { ShowPaymentMethodParams } from "src/Common/Types";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 interface Props {}
 
@@ -113,8 +114,11 @@ function PaymentsForm({}: Props): ReactElement {
   };
 
   // Seems to work only for native pay. Should this be removed?
-  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
-    setPaymentType(paymentRequest._activeBackingLibraryName);
+  const onPaymentFunction = async (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO --_activeBackingLibraryName is a private variable?
     const gateway = "stripe";
     onSubmitPayment(gateway, "card", paymentMethod);
   };

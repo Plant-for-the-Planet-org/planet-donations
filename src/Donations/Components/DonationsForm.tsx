@@ -28,6 +28,8 @@ import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import cleanObject from "src/Utils/cleanObject";
 import { Donation } from "src/Common/Types/donation";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 function DonationsForm(): ReactElement {
   const {
@@ -95,7 +97,10 @@ function DonationsForm(): ReactElement {
   const [paymentError, setPaymentError] = React.useState("");
 
   //Only used for native pay. Is this still applicable, or should this be removed?
-  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
+  const onPaymentFunction = async (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName);
 
