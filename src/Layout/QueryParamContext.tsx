@@ -34,6 +34,7 @@ import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterf
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
 import { Donation } from "src/Common/Types/donation";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -143,7 +144,9 @@ const QueryParamProvider: FC = ({ children }) => {
   });
 
   const [donation, setdonation] = useState<Donation | null>(null);
-  const [paymentRequest, setPaymentRequest] = useState<Object | null>(null);
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
+    null
+  );
 
   const loadEnabledCurrencies = async () => {
     try {
