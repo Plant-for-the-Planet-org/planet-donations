@@ -6,18 +6,21 @@ import {
   PaymentOptions,
   CreateDonationDataProps,
   ContactDetails,
+  PaypalErrorData,
+  PaypalApproveData,
+  PaymentProviderRequest,
 } from "../../Common/Types";
 import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { Donation } from "src/Common/Types/donation";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
-//rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
-  gateway,
-  method,
+  gateway: string,
+  method: string,
   paymentSetup: PaymentOptions,
-  providerObject
-) {
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
+): { paymentProviderRequest: PaymentProviderRequest } {
   let account;
   let source;
   switch (gateway) {
@@ -29,7 +32,7 @@ export function buildPaymentProviderRequest(
         case "stripe_sepa":
         case "sepa_debit":
           source = {
-            id: providerObject.id,
+            id: (providerObject as PaymentMethod).id,
             object: "payment_method",
           };
           break;

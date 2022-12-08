@@ -114,6 +114,13 @@ export interface ContactDetails {
   name?: string; //Check if this is still there. Possible legacy.
 }
 
+export interface PaymentProviderRequest {
+  account?: string;
+  gateway: string;
+  method: string;
+  source?: {}; //TODOO - define better type
+}
+
 export interface CreateDonationFunctionProps {
   isTaxDeductible: Boolean | null;
   country: any;
