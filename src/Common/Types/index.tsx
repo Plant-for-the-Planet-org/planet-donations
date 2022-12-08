@@ -1,4 +1,5 @@
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 
 export interface ProjectTypes {
   data: {
@@ -138,7 +139,7 @@ export interface CreateDonationFunctionProps {
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject?: string | PaymentMethod;
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
   setIsPaymentProcessing: Function;
   setPaymentError: Function;
   t: any;
@@ -311,4 +312,15 @@ export interface ShowPaymentMethodParams {
   countries?: string[];
   currencies?: string[];
   authenticatedMethod?: boolean;
+}
+
+export interface PaypalApproveData extends OnApproveData {
+  type: string;
+}
+
+export interface PaypalErrorData {
+  type: string;
+  status: "error";
+  errorMessage?: unknown;
+  [key: string]: unknown;
 }

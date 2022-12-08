@@ -1,20 +1,33 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, Dispatch, SetStateAction } from "react";
 import {
   PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
+import {
+  CreateOrderActions,
+  OnApproveData,
+  OnApproveActions,
+} from "@paypal/paypal-js/types/components/buttons";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import { PaymentOptions } from "src/Common/Types";
+import {
+  PaymentOptions,
+  PaypalApproveData,
+  PaypalErrorData,
+} from "src/Common/Types";
 
 interface Props {
   paymentSetup: PaymentOptions;
   quantity: number;
   unitCost: number;
   currency: string;
-  donationID: any;
-  payDonationFunction: Function;
-  setPaymentError: Function;
+  donationID: string;
+  payDonationFunction: (
+    gateway: string,
+    method: string,
+    providerObject?: PaypalApproveData | PaypalErrorData
+  ) => Promise<void>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
 }
 
 function NewPaypal({
@@ -35,14 +48,17 @@ function NewPaypal({
 
   const { donationUid } = React.useContext(QueryParamContext);
 
-  function createOrder(data, actions) {
+  function createOrder(
+    _data: Record<string, unknown>,
+    actions: CreateOrderActions
+  ): Promise<string> {
     const amount = (quantity * unitCost).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
       purchase_units: [
         {
           amount: {
-            value: Number(amount),
-            currency: currency,
+            value: amount,
+            currency_code: currency,
           },
           invoice_id: `planet-${donationID}`,
           custom_id: donationUid,
@@ -54,31 +70,34 @@ function NewPaypal({
     });
   }
 
-  function onApprove(data, actions) {
-    return actions.order.capture().then(function (details) {
+  function onApprove(
+    data: OnApproveData,
+    actions: OnApproveActions
+  ): Promise<void> {
+    return actions.order.capture().then(function () {
       // This function shows a transaction success message to your buyer.
-      data = {
+      const _data = {
         ...data,
         type: "sdk",
       };
-      payDonationFunction("paypal", "paypal", data);
+      payDonationFunction("paypal", "paypal", _data);
     });
   }
 
-  const onError = (data) => {
+  const onError = (data: Record<string, unknown>): void => {
     setPaymentError(`Your order failed due to some error.`);
 
     // This function shows a transaction success message to your buyer.
-    data = {
+    const _data: Readonly<PaypalErrorData> = {
       ...data,
       type: "sdk",
       status: "error",
       errorMessage: data?.message,
     };
-    payDonationFunction("paypal", "paypal", data);
+    payDonationFunction("paypal", "paypal", _data);
   };
 
-  const onCancel = () => {};
+  const onCancel = (): void => {};
 
   return (
     <>
@@ -95,7 +114,7 @@ function NewPaypal({
   );
 }
 
-function ReloadButton({ currency }: any) {
+function ReloadButton({ currency }: { currency: string }): ReactElement | null {
   const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
 
   React.useEffect(() => {

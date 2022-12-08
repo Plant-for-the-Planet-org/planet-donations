@@ -64,8 +64,8 @@ export default interface QueryParamContextInterface {
   allProjects: Array<Project>;
   allowTaxDeductionChange: boolean;
   setallowTaxDeductionChange: Dispatch<SetStateAction<boolean>>;
-  donationUid: string | null;
-  setDonationUid: Dispatch<SetStateAction<string | null>>;
+  donationUid: string;
+  setDonationUid: Dispatch<SetStateAction<string>>;
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   transferDetails: BankTransferDetails | null;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;

@@ -75,7 +75,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [isDirectDonation, setisDirectDonation] = useState(false);
 
-  const [donationUid, setDonationUid] = useState<string | null>(null);
+  const [donationUid, setDonationUid] = useState<string>("");
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] = useState(false);
 

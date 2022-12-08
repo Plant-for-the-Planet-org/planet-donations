@@ -27,7 +27,11 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
-import { ShowPaymentMethodParams } from "src/Common/Types";
+import {
+  PaypalApproveData,
+  PaypalErrorData,
+  ShowPaymentMethodParams,
+} from "src/Common/Types";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
@@ -84,7 +88,11 @@ function PaymentsForm({}: Props): ReactElement {
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: string | PaymentMethod
+    providerObject?:
+      | string
+      | PaymentMethod
+      | PaypalApproveData
+      | PaypalErrorData
   ) => {
     if (!paymentSetup || !donationID) {
       console.log("Missing payment options"); //TODOO - better error handling
