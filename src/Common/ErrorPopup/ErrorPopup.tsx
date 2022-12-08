@@ -35,9 +35,9 @@ export default function ErrorPopup(): ReactElement {
       {ready &&
         errors &&
         (errors as SerializedError[]).length > 0 &&
-        (errors as SerializedError[]).map((err: SerializedError) => {
+        (errors as SerializedError[]).map((err: SerializedError, index) => {
           return (
-            <div className={styles.errorContainer}>
+            <div key={index} className={styles.errorContainer}>
               <button
                 id={"errorCloseButton"}
                 className={`${styles.closeButton}`}
