@@ -10,7 +10,6 @@ import {
   PaypalApproveData,
   PaymentProviderRequest,
 } from "../../Common/Types";
-import { useRouter } from "next/router";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { Donation } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
@@ -54,6 +53,7 @@ export function buildPaymentProviderRequest(
 
     // throw some exception here 'unsupported gateway'
   }
+
   return {
     paymentProviderRequest: {
       account,

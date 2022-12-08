@@ -1,5 +1,6 @@
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
+import { Dispatch, SetStateAction } from "react";
 
 export interface ProjectTypes {
   data: {
@@ -122,8 +123,8 @@ export interface PaymentProviderRequest {
 }
 
 export interface CreateDonationFunctionProps {
-  isTaxDeductible: Boolean | null;
-  country: any;
+  isTaxDeductible: boolean | null;
+  country: string;
   projectDetails: FetchedProjectDetails;
   quantity: number;
   paymentSetup: PaymentOptions;
@@ -131,11 +132,11 @@ export interface CreateDonationFunctionProps {
   contactDetails: ContactDetails;
   giftDetails: GiftDetails;
   isGift: boolean;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
-  setdonationID: any;
-  token: any;
-  setshowErrorCard: Function;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
+  setdonationID: Dispatch<SetStateAction<string | null>>;
+  token: string | null;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   frequency: string | null;
   amount?: number | null;
   callbackUrl?: string | undefined;
