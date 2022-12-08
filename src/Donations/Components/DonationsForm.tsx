@@ -29,6 +29,7 @@ import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
 import { APIError, handleError } from "@planet-sdk/common";
+import { Donation } from "src/Common/Types/donation";
 
 function DonationsForm() {
   const {
@@ -80,10 +81,10 @@ function DonationsForm() {
     // since transaction needs to happen in the same currency.
 
     if (projectDetails && profile) {
-      if (profile!.planetCash) {
+      if (profile?.planetCash) {
         if (projectDetails.purpose === "planet-cash") {
-          setcountry(profile!.planetCash.country);
-          setcurrency(profile!.planetCash.currency);
+          setcountry(profile?.planetCash.country);
+          setcurrency(profile?.planetCash.currency);
         }
       }
     }
@@ -94,6 +95,7 @@ function DonationsForm() {
       setShowFrequencyOptions(paymentSetup?.recurrency.supported);
     }
   }, [paymentSetup]);
+
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const purposes = ["trees"];
   const [paymentError, setPaymentError] = React.useState("");
@@ -120,54 +122,60 @@ function DonationsForm() {
     let token = null;
     if (
       (!isLoading && isAuthenticated) ||
-      (queryToken && profile.address) ||
-      projectDetails.purpose === "planet-cash"
+      (queryToken && profile?.address) ||
+      projectDetails?.purpose === "planet-cash"
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
-    await createDonationFunction({
-      isTaxDeductible,
-      country,
-      projectDetails,
-      paymentSetup,
-      quantity,
-      currency,
-      contactDetails,
-      isGift,
-      giftDetails,
-      setIsPaymentProcessing,
-      setPaymentError,
-      setdonationID,
-      token,
-      setshowErrorCard,
-      frequency,
-      tenant,
-    }).then(async (res) => {
-      if (res) {
-        let token = null;
-        if ((!isLoading && isAuthenticated) || queryToken) {
-          token = queryToken ? queryToken : await getAccessTokenSilently();
+    if (
+      projectDetails &&
+      projectDetails.purpose !== "planet-cash-signup" &&
+      paymentSetup
+    ) {
+      await createDonationFunction({
+        isTaxDeductible,
+        country,
+        projectDetails,
+        paymentSetup,
+        quantity,
+        currency,
+        contactDetails,
+        isGift,
+        giftDetails,
+        setIsPaymentProcessing,
+        setPaymentError,
+        setdonationID,
+        token,
+        setshowErrorCard,
+        frequency,
+        tenant,
+      }).then(async (res) => {
+        if (res) {
+          let token = null;
+          if ((!isLoading && isAuthenticated) || queryToken) {
+            token = queryToken ? queryToken : await getAccessTokenSilently();
+          }
+          payDonationFunction({
+            gateway: "stripe",
+            method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+            providerObject: paymentMethod, // payment method
+            setIsPaymentProcessing,
+            setPaymentError,
+            t,
+            paymentSetup,
+            donationID: res.id,
+            contactDetails,
+            token,
+            country,
+            setshowErrorCard,
+            router,
+            tenant,
+            setTransferDetails,
+          });
         }
-        payDonationFunction({
-          gateway: "stripe",
-          method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-          providerObject: paymentMethod, // payment method
-          setIsPaymentProcessing,
-          setPaymentError,
-          t,
-          paymentSetup,
-          donationID: res.id,
-          contactDetails,
-          token,
-          country,
-          setshowErrorCard,
-          router,
-          tenant,
-          setTransferDetails,
-        });
-      }
-    });
+      });
+    }
   };
 
   const [openCurrencyModal, setopenCurrencyModal] = React.useState(false);
@@ -193,7 +201,6 @@ function DonationsForm() {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -218,69 +225,67 @@ function DonationsForm() {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
   }
 
   const handlePlanetCashDonate = async () => {
-    setShowDisablePlanetCashButton(true);
-    const _onBehalfDonor = {
-      firstname: onBehalfDonor.firstName,
-      lastname: onBehalfDonor.lastName,
-      email: onBehalfDonor.email,
-    };
+    if (projectDetails && projectDetails.purpose !== "planet-cash-signup") {
+      setShowDisablePlanetCashButton(true);
+      const _onBehalfDonor = {
+        firstname: onBehalfDonor.firstName,
+        lastname: onBehalfDonor.lastName,
+        email: onBehalfDonor.email,
+      };
 
-    const _gift = {
-      ...giftDetails,
-      message: giftDetails.giftMessage,
-    };
+      const _gift = {
+        ...giftDetails,
+      };
 
-    delete _gift.giftMessage;
-
-    if (giftDetails.type === "direct") {
-      delete _gift.message;
-      delete _gift.recipientName;
-    }
-
-    // create Donation data
-    const donationData = {
-      purpose: projectDetails!.purpose,
-      project: projectDetails!.id,
-      units: quantity,
-      prePaid: true,
-      onBehalf: onBehalf,
-      ...(onBehalf && { donor: _onBehalfDonor }),
-      ...(isGift && { gift: _gift }),
-    };
-
-    const cleanedDonationData = cleanObject(donationData);
-
-    const token = queryToken ? queryToken : await getAccessTokenSilently();
-
-    // @method    POST
-    // @endpoint  /app/donation
-
-    try {
-      const { data, status } = await apiRequest({
-        url: "/app/donations",
-        method: "POST",
-        setshowErrorCard,
-        data: cleanedDonationData,
-        token,
-        addIdempotencyKeyHeader: true,
-      });
-
-      if (status === 200) {
-        setdonation(data);
-        router.replace({
-          query: { ...router.query, step: THANK_YOU },
-        });
+      if (giftDetails.type === "direct") {
+        delete _gift.message;
+        delete _gift.recipientName;
       }
-    } catch (err: unknown) {
-      setErrors(handleError(err as APIError));
-      setShowDisablePlanetCashButton(false);
+
+      // create Donation data
+      const donationData = {
+        purpose: projectDetails.purpose,
+        project: projectDetails.id,
+        units: quantity,
+        prePaid: true,
+        onBehalf: onBehalf,
+        ...(onBehalf && { donor: _onBehalfDonor }),
+        ...(isGift && { gift: _gift }),
+      };
+
+      const cleanedDonationData = cleanObject(donationData);
+
+      const token = queryToken ? queryToken : await getAccessTokenSilently();
+
+      // @method    POST
+      // @endpoint  /app/donation
+
+      try {
+        const { data, status } = await apiRequest({
+          url: "/app/donations",
+          method: "POST",
+          setshowErrorCard,
+          data: cleanedDonationData,
+          token,
+          addIdempotencyKeyHeader: true,
+        });
+
+        if (status === 200) {
+          setdonation(data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+          router.replace({
+            query: { ...router.query, step: THANK_YOU },
+          });
+        }
+      } catch (err) {
+        setErrors(handleError(err as APIError));
+        setShowDisablePlanetCashButton(false);
+      }
     }
   };
 
@@ -301,7 +306,7 @@ function DonationsForm() {
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
-            profile!.planetCash && <PlanetCashSelector />}
+            profile?.planetCash && <PlanetCashSelector />}
 
           {!(onBehalf && onBehalfDonor.firstName === "") &&
             (projectDetails.purpose === "trees" ? (
@@ -314,6 +319,7 @@ function DonationsForm() {
 
           {process.env.RECURRENCY &&
             showFrequencyOptions &&
+            paymentSetup &&
             (!(onBehalf && onBehalfDonor.firstName === "") &&
             !(isGift && giftDetails.recipientName === "") ? (
               <div

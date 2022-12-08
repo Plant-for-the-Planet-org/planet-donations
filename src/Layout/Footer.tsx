@@ -181,7 +181,7 @@ function CookiePolicy() {
   }, []);
 
   React.useEffect(() => {
-    localStorage.setItem("cookieNotice", showCookieNotice);
+    localStorage.setItem("cookieNotice", showCookieNotice.toString());
   }, [showCookieNotice]);
 
   return showCookieNotice ? (
@@ -247,9 +247,13 @@ function LanguageModal({
               onChange={(event) => {
                 setlanguage(event.target.value);
                 localStorage.setItem("language", event.target.value);
-                if (projectDetails && router.query.to) {
+                if (
+                  projectDetails &&
+                  projectDetails.purpose !== "planet-cash-signup" &&
+                  router.query.to
+                ) {
                   loadPaymentSetup({
-                    projectGUID: router.query.to,
+                    projectGUID: router.query.to as string,
                     paymentSetupCountry: country,
                     shouldSetPaymentDetails: false,
                   });

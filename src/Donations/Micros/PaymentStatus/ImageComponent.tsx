@@ -4,10 +4,12 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { FetchedProjectDetails } from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
 interface Props {
-  projectDetails: any;
-  donation: any;
+  projectDetails: FetchedProjectDetails;
+  donation: Donation;
   imageRef: any;
 }
 
@@ -59,7 +61,9 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
               i18n.language,
               Number(donation.treeCount)
             ),
-            location: t("country:" + donation.destination.country.toLowerCase()),
+            location: t(
+              "country:" + donation.destination.country.toLowerCase()
+            ),
           })}
         {projectDetails?.purpose === "conservation" &&
           t(
@@ -74,7 +78,9 @@ const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
                 donation.currency,
                 Number(donation.amount)
               ),
-              location: t("country:" + donation.destination.country.toLowerCase()),
+              location: t(
+                "country:" + donation.destination.country.toLowerCase()
+              ),
             }
           )}
         {projectDetails?.purpose === "funds" &&

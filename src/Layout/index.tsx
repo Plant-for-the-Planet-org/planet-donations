@@ -5,15 +5,16 @@ import Header from "./Header";
 import { QueryParamContext } from "./QueryParamContext";
 
 function Layout(props: any): ReactElement {
-  const { paymentSetup } = React.useContext(QueryParamContext);
+  /* const { paymentSetup } = React.useContext(QueryParamContext); */
   const { theme } = React.useContext(ThemeContext);
   return (
     <div className={`page-container ${theme}`}>
-      {paymentSetup?.gateways?.stripe?.isLive === false ? (
+      {/* Remove code below after confirmation */}
+      {/* {!paymentSetup?.gateways?.stripe?.isLive === false ? (
         <div className={"test-donation-bar"}>
           Test Mode: Your donations will not be charged
         </div>
-      ) : null}
+      ) : null} */}
       <Header />
       {props.children}
       <Footer />
