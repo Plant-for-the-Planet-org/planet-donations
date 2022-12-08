@@ -64,8 +64,8 @@ export function buildPaymentProviderRequest(
   };
 }
 
-export function getPaymentType(paymentType: String) {
-  let paymentTypeUsed;
+export function getPaymentType(paymentType: string): string {
+  let paymentTypeUsed: string;
   switch (paymentType) {
     case "CARD":
       paymentTypeUsed = "Credit Card";
