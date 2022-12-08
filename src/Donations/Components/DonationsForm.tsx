@@ -94,7 +94,7 @@ function DonationsForm(): ReactElement {
   }, [paymentSetup]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-  const [paymentError, setPaymentError] = React.useState("");
+  const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
@@ -102,22 +102,22 @@ function DonationsForm(): ReactElement {
     paymentRequest: PaymentRequest
   ) => {
     // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName);
+    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
 
-    let fullName = paymentMethod.billing_details.name;
-    fullName = String(fullName).split(" ");
+    const fullName = String(paymentMethod.billing_details.name).split(" ");
     const firstName = fullName[0];
     fullName.shift();
     const lastName = String(fullName).replace(/,/g, " ");
 
+    //TODOO - remove type annotations by typing ContactDetails/adding better typeguards
     const contactDetails = {
       firstname: firstName,
       lastname: lastName,
-      email: paymentMethod.billing_details.email,
-      address: paymentMethod.billing_details.address.line1,
-      zipCode: paymentMethod.billing_details.address.postal_code,
-      city: paymentMethod.billing_details.address.city,
-      country: paymentMethod.billing_details.address.country,
+      email: paymentMethod.billing_details.email as string,
+      address: paymentMethod.billing_details.address?.line1 as string,
+      zipCode: paymentMethod.billing_details.address?.postal_code as string,
+      city: paymentMethod.billing_details.address?.city as string,
+      country: paymentMethod.billing_details.address?.country as string,
     };
 
     let token = null;
@@ -158,28 +158,23 @@ function DonationsForm(): ReactElement {
             token = queryToken ? queryToken : await getAccessTokenSilently();
           }
 
-          if (token) {
-            payDonationFunction({
-              gateway: "stripe",
-              method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
-              providerObject: paymentMethod, // payment method
-              setIsPaymentProcessing,
-              setPaymentError,
-              t,
-              paymentSetup,
-              donationID: res.id,
-              contactDetails,
-              token,
-              country,
-              setshowErrorCard,
-              router,
-              tenant,
-              setTransferDetails,
-            });
-          } else {
-            console.log("Authentication failed"); //TODOO - better error handling
-            return;
-          }
+          payDonationFunction({
+            gateway: "stripe",
+            method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
+            providerObject: paymentMethod, // payment method
+            setIsPaymentProcessing,
+            setPaymentError,
+            t,
+            paymentSetup,
+            donationID: res.id,
+            contactDetails,
+            token,
+            country,
+            setshowErrorCard,
+            router,
+            tenant,
+            setTransferDetails,
+          });
         }
       });
     }
