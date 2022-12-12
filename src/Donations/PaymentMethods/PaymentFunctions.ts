@@ -11,7 +11,7 @@ import {
   PaymentProviderRequest,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Donation } from "src/Common/Types/donation";
+import { Donation, DonationRequestData } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
 export function buildPaymentProviderRequest(
@@ -167,14 +167,14 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: CreateDonationDataProps) {
-  let donationData = {
+}: CreateDonationDataProps): DonationRequestData {
+  let donationData: DonationRequestData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,
     amount:
       paymentSetup.unitCost * quantity
         ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
-        : amount,
+        : (amount as number), //amount is null when quantity has a value
     currency,
     donor: { ...contactDetails },
     frequency: frequency,
@@ -182,12 +182,9 @@ export function createDonationData({
       callback_url: callbackUrl,
       callback_method: callbackMethod,
     },
-  };
-  // if (paymentSetup.unitBased) {
-  donationData = {
-    ...donationData,
     quantity,
   };
+
   // }
   if (taxDeductionCountry) {
     donationData = {
@@ -220,8 +217,6 @@ export function createDonationData({
           },
         },
       };
-    } else if (giftDetails.type === "bulk") {
-      // for multiple receipients
     }
   }
 

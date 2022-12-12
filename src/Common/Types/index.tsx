@@ -137,7 +137,7 @@ export interface CreateDonationFunctionProps {
   setdonationID: Dispatch<SetStateAction<string | null>>;
   token: string | null;
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
-  frequency: string | null;
+  frequency: string;
   amount?: number | null;
   callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
@@ -184,10 +184,10 @@ export interface CreateDonationDataProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: ContactDetails;
-  taxDeductionCountry: any;
+  taxDeductionCountry: string | null;
   isGift: boolean;
   giftDetails: GiftDetails;
-  frequency: any;
+  frequency: string;
   amount?: number | null;
   callbackUrl: string | undefined;
   callbackMethod: string | undefined;
@@ -211,7 +211,7 @@ export interface FetchedProjectDetails {
   taxDeductionCountries?: Array<string>;
 }
 
-type ProjectPurpose =
+export type ProjectPurpose =
   | "trees"
   | "conservation"
   | "funds"
