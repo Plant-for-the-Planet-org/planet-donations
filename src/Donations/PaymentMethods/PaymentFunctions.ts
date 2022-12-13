@@ -424,8 +424,11 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
-}: HandleStripeSCAPaymentProps) {
+}: HandleStripeSCAPaymentProps): Promise<void> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
+  const key =
+    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
+
   const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
   });
@@ -439,7 +442,9 @@ export async function handleStripeSCAPayment({
           stripeResponse = await stripe.handleCardAction(clientSecret);
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
-            setPaymentError(stripeResponse.error.message);
+            setPaymentError(
+              stripeResponse.error.message || "Something went wrong"
+            );
             return;
           }
           try {
@@ -473,7 +478,9 @@ export async function handleStripeSCAPayment({
           stripeResponse = await stripe.confirmCardPayment(clientSecret);
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
-            setPaymentError(stripeResponse.error.message);
+            setPaymentError(
+              stripeResponse.error.message || "Something went wrong."
+            );
             return;
           }
           break;
