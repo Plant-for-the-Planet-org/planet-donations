@@ -167,8 +167,8 @@ export interface HandleStripeSCAPaymentProps {
   paymentResponse: any;
   paymentSetup: PaymentOptions;
   window: any;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
   donationID: string;
   contactDetails: ContactDetails;
   token: string;

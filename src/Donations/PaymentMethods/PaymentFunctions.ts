@@ -13,6 +13,8 @@ import {
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { Donation, DonationRequestData } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
+import { Dispatch, SetStateAction } from "react";
 
 export function buildPaymentProviderRequest(
   gateway: string,
@@ -391,15 +393,20 @@ const buildBillingDetails = (contactDetails: ContactDetails) => {
 };
 
 const handlePaymentError = (
-  paymentError: any,
-  setIsPaymentProcessing: any,
-  setPaymentError: any
-) => {
+  paymentError: StripeError | string | undefined, //TODOO - identify and set better error types
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>,
+  setPaymentError: Dispatch<SetStateAction<string>>
+): void => {
   setIsPaymentProcessing(false);
-  if (paymentError?.message || paymentError?.data?.message) {
-    setPaymentError(paymentError.message ?? paymentError.data.message);
+  if (
+    (typeof paymentError !== "string" && paymentError?.message) ||
+    paymentError?.data?.message
+  ) {
+    setPaymentError(
+      (paymentError as StripeError).message ?? paymentError.data.message
+    );
   } else {
-    setPaymentError(paymentError);
+    setPaymentError(paymentError as string);
   }
 };
 
@@ -419,16 +426,13 @@ export async function handleStripeSCAPayment({
   tenant,
 }: HandleStripeSCAPaymentProps) {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
-  const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
-    ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
-    : paymentSetup?.gateways?.stripe?.stripePublishableKey;
-  const stripe = window.Stripe(key, {
+  const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
   });
   switch (method) {
     case "card": {
       let successData: {};
-      let stripeResponse: {};
+      let stripeResponse: PaymentIntentResult;
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
@@ -489,56 +493,55 @@ export async function handleStripeSCAPayment({
       return successData;
     }
     case "giropay": {
-      const { errorGiropay, paymentIntentGiropay } =
-        await stripe.confirmGiropayPayment(
-          paymentResponse.response.payment_intent_client_secret,
-          {
-            payment_method: {
-              billing_details: buildBillingDetails(contactDetails),
-            },
-            return_url: `${
-              window.location.origin
-            }/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}&locale=${
-              localStorage.getItem("language")
-                ? localStorage.getItem("language")
-                : "en"
-            }`,
-          }
-        );
-      handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
+      const { error } = await stripe.confirmGiropayPayment(
+        paymentResponse.response.payment_intent_client_secret,
+        {
+          payment_method: {
+            billing_details: buildBillingDetails(contactDetails),
+          },
+          return_url: `${
+            window.location.origin
+          }/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}&locale=${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`,
+        }
+      );
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
+      }
       break;
     }
 
     case "sofort": {
-      const { errorSofort, paymentIntentSofort } =
-        await stripe.confirmSofortPayment(
-          paymentResponse.response.payment_intent_client_secret,
-          {
-            payment_method: {
-              sofort: {
-                country: country,
-              },
-              billing_details: buildBillingDetails(contactDetails),
+      const { error } = await stripe.confirmSofortPayment(
+        paymentResponse.response.payment_intent_client_secret,
+        {
+          payment_method: {
+            sofort: {
+              country: country,
             },
-            return_url: `${
-              window.location.origin
-            }/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}&locale=${
-              localStorage.getItem("language")
-                ? localStorage.getItem("language")
-                : "en"
-            }`,
-          }
-        );
-      handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
+            billing_details: buildBillingDetails(contactDetails),
+          },
+          return_url: `${
+            window.location.origin
+          }/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}&locale=${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`,
+        }
+      );
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
+      }
       break;
     }
     case "sepa_debit": {
-      try {
-        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
-      } catch {
-        (err: any) => {
-          handlePaymentError(err, setIsPaymentProcessing, setPaymentError);
-        };
+      const { error } = await stripe.confirmSepaDebitPayment(clientSecret);
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
       }
       router.push({
         query: { ...router.query, step: THANK_YOU },
