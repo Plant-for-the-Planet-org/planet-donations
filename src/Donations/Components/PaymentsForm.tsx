@@ -35,9 +35,7 @@ import {
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
-interface Props {}
-
-function PaymentsForm({}: Props): ReactElement {
+function PaymentsForm(): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
 
   const router = useRouter();
