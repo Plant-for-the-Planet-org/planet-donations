@@ -118,8 +118,15 @@ export interface ContactDetails {
 export interface PaymentProviderRequest {
   account?: string;
   gateway: string;
-  method: string;
-  source?: {}; //TODOO - define better type
+  method?: string;
+  source?:
+    | {
+        id?: string;
+        object?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
+      }
+    | {}
+    | PaypalApproveData
+    | PaypalErrorData;
 }
 
 export interface CreateDonationFunctionProps {
@@ -148,15 +155,15 @@ export interface PayDonationProps {
   gateway: string;
   method: string;
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
   t: any;
   paymentSetup: PaymentOptions;
   donationID: string;
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: any;
   tenant: string;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
@@ -171,9 +178,9 @@ export interface HandleStripeSCAPaymentProps {
   setPaymentError: Dispatch<SetStateAction<string>>;
   donationID: string;
   contactDetails: ContactDetails;
-  token: string;
+  token: string | null;
   country: string;
-  setshowErrorCard: Function;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: any;
   tenant: string;
 }
@@ -332,3 +339,48 @@ export interface PaypalErrorData {
   errorMessage?: unknown;
   [key: string]: unknown;
 }
+
+export interface UpdateDonationResponse {
+  data: UpdateDonationData;
+  [key: string]: unknown;
+}
+
+export type UpdateDonationData =
+  | UpdateDonationSuccessData
+  | UpdateDonationFailureData
+  | UpdateDonationActionRequiredData;
+
+type UpdateDonationSuccessData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "success" | "pending" | "paid";
+  id: string;
+  response?: {
+    type: "transfer_required";
+    account: {
+      beneficiary: string;
+      iban: string;
+      bic: string;
+      bankName: string;
+    };
+  };
+};
+
+type UpdateDonationFailureData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "failed";
+  id: string;
+  errorCode: string;
+  message: string;
+};
+
+type UpdateDonationActionRequiredData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "action_required";
+  id: string;
+  response: {
+    type: string;
+    requires_action: boolean;
+    payment_intent_client_secret: string;
+    account: string;
+  };
+};

@@ -9,6 +9,8 @@ import {
   PaypalErrorData,
   PaypalApproveData,
   PaymentProviderRequest,
+  UpdateDonationResponse,
+  UpdateDonationData,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import { Donation, DonationRequestData } from "src/Common/Types/donation";
@@ -251,8 +253,7 @@ export async function payDonationFunction({
   router,
   tenant,
   setTransferDetails,
-}: PayDonationProps) {
-  // const router = useRouter();
+}: PayDonationProps): Promise<UpdateDonationData | undefined> {
   setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {
@@ -280,9 +281,10 @@ export async function payDonationFunction({
     );
     if (paymentResponse) {
       if (
-        ["success", "pending", "paid"].includes(
-          paymentResponse.paymentStatus
-        ) ||
+        (paymentResponse.paymentStatus &&
+          ["success", "pending", "paid"].includes(
+            paymentResponse.paymentStatus
+          )) ||
         ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
         if (paymentResponse.status === "failed") {
@@ -290,7 +292,10 @@ export async function payDonationFunction({
           setPaymentError(paymentResponse.message);
         }
         // setIsPaymentProcessing(false);
-        if (paymentResponse?.response?.type === "transfer_required") {
+        if (
+          paymentResponse.status === "success" &&
+          paymentResponse?.response?.type === "transfer_required"
+        ) {
           setTransferDetails(paymentResponse?.response?.account);
         } else {
           setTransferDetails(null);
@@ -302,7 +307,6 @@ export async function payDonationFunction({
         return paymentResponse;
       } else if (paymentResponse.status === "action_required") {
         handleStripeSCAPayment({
-          gateway,
           method,
           paymentResponse,
           paymentSetup,
@@ -340,25 +344,12 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  // paymentIntentId: string,
-  // account: string,
-  payDonationData: any,
-  token: string,
-  setshowErrorCard: any,
-  setPaymentError: any,
+  payDonationData: { paymentProviderRequest: PaymentProviderRequest },
+  token: string | null,
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>,
+  setPaymentError: Dispatch<SetStateAction<string>>,
   tenant: string
-) {
-  // const payDonationData = {
-  //   paymentProviderRequest: {
-  //     account: account,
-  //     gateway: "stripe",
-  //     source: {
-  //       id: paymentIntentId,
-  //       object: "payment_intent",
-  //     },
-  //   },
-  // };
-
+): Promise<UpdateDonationData | undefined> {
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
@@ -367,7 +358,9 @@ export async function confirmPaymentIntent(
     token: token ? token : false,
     tenant,
   };
-  const confirmationResponse = await apiRequest(requestParams);
+  const confirmationResponse: UpdateDonationResponse = await apiRequest(
+    requestParams
+  );
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
@@ -424,7 +417,7 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
-}: HandleStripeSCAPaymentProps): Promise<void> {
+}: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key =
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
@@ -434,7 +427,7 @@ export async function handleStripeSCAPayment({
   });
   switch (method) {
     case "card": {
-      let successData: {};
+      let successData: UpdateDonationData | undefined;
       let stripeResponse: PaymentIntentResult;
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
@@ -458,7 +451,7 @@ export async function handleStripeSCAPayment({
                 },
               },
             };
-            const successResponse = confirmPaymentIntent(
+            const successResponse = await confirmPaymentIntent(
               donationID,
               payDonationData,
               token,
@@ -466,8 +459,8 @@ export async function handleStripeSCAPayment({
               setPaymentError,
               tenant
             );
-            successData = successResponse.data;
-          } catch (error: any) {
+            successData = successResponse;
+          } catch (error) {
             // implement and call an exception handling function
             handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
             return;
