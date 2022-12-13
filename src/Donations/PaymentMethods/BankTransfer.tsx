@@ -3,7 +3,7 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import { useTranslation } from "next-i18next";
 
 interface Props {
-  onSubmitPayment: Function;
+  onSubmitPayment: (gateway: string, method: string) => Promise<void>;
 }
 
 function BankTransfer({ onSubmitPayment }: Props): ReactElement {
