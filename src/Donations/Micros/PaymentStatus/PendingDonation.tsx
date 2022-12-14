@@ -5,8 +5,17 @@ import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import ReturnToButton from "./Components/ReturnToButton";
+import { ReactElement } from "react";
 
-function PendingDonation({ donationID, sendToReturn }: any) {
+interface PendingDonationProps {
+  donationID: string;
+  sendToReturn: () => void;
+}
+
+function PendingDonation({
+  donationID,
+  sendToReturn,
+}: PendingDonationProps): ReactElement {
   const { t } = useTranslation(["common"]);
   const { callbackUrl } = React.useContext(QueryParamContext);
   return (

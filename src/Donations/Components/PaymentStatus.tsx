@@ -110,12 +110,7 @@ function ThankYou(): ReactElement {
           />
         );
       default:
-        return (
-          <SuccessfulDonation
-            donation={donation as Donation}
-            sendToReturn={sendToReturn}
-          />
-        );
+        return <SuccessfulDonation donation={donation as Donation} />;
     }
   };
 
@@ -147,7 +142,7 @@ function ThankYou(): ReactElement {
                   />
                 ) : (
                   <PendingDonation
-                    donationID={donationID}
+                    donationID={donationID as string}
                     sendToReturn={sendToReturn}
                   />
                 )
