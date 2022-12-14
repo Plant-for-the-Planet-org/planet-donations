@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  ReactElement,
+  RefObject,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import EmailIcon from "../../../public/assets/icons/share/Email";
 import EmailSolid from "../../../public/assets/icons/share/EmailSolid";
 import FacebookIcon from "../../../public/assets/icons/share/Facebook";
@@ -14,10 +20,14 @@ import { ContactDetails } from "src/Common/Types";
 
 interface ShareOptionsProps {
   treeCount: string;
-  sendRef: any;
+  sendRef: () => RefObject<HTMLDivElement>;
   donor?: ContactDetails;
 }
-const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
+const ShareOptions = ({
+  treeCount,
+  sendRef,
+  donor,
+}: ShareOptionsProps): ReactElement | null => {
   const { t, ready } = useTranslation(["common", "donate"]);
   const [urlToShare, setUrlToShare] = useState("");
   const { donation } = useContext(QueryParamContext);
@@ -42,45 +52,48 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
     textToShare = ready ? t("donate:textToShareForMe") : "";
   }
 
-  const exportComponent = (node, fileName, backgroundColor, type) => {
+  const exportComponent = (
+    node: RefObject<HTMLDivElement>,
+    fileName: string
+    // backgroundColor: string | null,
+    // type: string
+  ) => {
     const element = ReactDOM.findDOMNode(node.current);
     const options = {
       quality: 1,
     };
-    domtoimage
-      .toJpeg(element, options)
-      .then((dataUrl) => {
-        domtoimage.toJpeg(element, options).then((dataUrl) => {
-          domtoimage.toJpeg(element, options).then((dataUrl) => {
-            const link = document.createElement("a");
-            link.download = fileName;
-            link.href = dataUrl;
-            link.click();
-          });
+    if (element) {
+      domtoimage
+        .toJpeg(element, options)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = fileName;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch(function (error) {
+          console.error("Image cannot be downloaded", error);
         });
-      })
-      .catch(function (error) {
-        console.error("Image cannot be downloaded", error);
-      });
+    }
   };
 
   const exportComponentAsJPEG = (
-    node,
-    fileName = `My_${treeCount}_tree_donation.jpeg`,
-    backgroundColor = null,
-    type = "image/jpeg"
+    node: RefObject<HTMLDivElement>,
+    fileName = `My_${treeCount}_tree_donation.jpeg`
+    /* backgroundColor: string | null = null,
+    type = "image/jpeg" */
   ) => {
     const modifiedFileName = fileName.replace(".", "");
-    return exportComponent(node, modifiedFileName, backgroundColor, type);
+    return exportComponent(node, modifiedFileName);
   };
 
-  const openWindowLinks = (shareUrl) => {
+  const openWindowLinks = (shareUrl: string) => {
     window.open(shareUrl, "_blank");
   };
 
   const [currentHover, setCurrentHover] = React.useState(-1);
 
-  const shareClicked = (shareUrl) => {
+  const shareClicked = (shareUrl: string) => {
     openWindowLinks(shareUrl);
   };
 
@@ -114,8 +127,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
         onClick={() =>
           donation &&
           shareClicked(
-            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`,
-            "_blank"
+            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`
           )
         }
         onMouseOver={() => donation && setCurrentHover(2)}
