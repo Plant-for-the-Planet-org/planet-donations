@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  ReactElement,
+} from "react";
 import { useTranslation, Trans } from "next-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import CountrySelect from "src/Common/InputTypes/AutoCompleteCountry";
@@ -25,7 +31,7 @@ interface PlanetCashAccount {
 
 const allowedCountries = ["DE", "ES", "US"];
 
-const PlanetCashSignup = () => {
+const PlanetCashSignup = (): ReactElement => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
   const { setshowErrorCard, queryToken } = useContext(QueryParamContext);

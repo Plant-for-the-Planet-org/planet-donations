@@ -20,6 +20,7 @@ export default function GiftForm(): ReactElement {
     React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
+    // TODOO - resolve donation/gift related TS warnings
     recipientName: giftDetails.recipientName,
     recipientEmail: giftDetails.recipientEmail,
     message: giftDetails.message,
