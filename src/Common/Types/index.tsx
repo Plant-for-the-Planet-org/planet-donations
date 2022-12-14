@@ -329,6 +329,30 @@ export interface ShowPaymentMethodParams {
   authenticatedMethod?: boolean;
 }
 
+export interface ConfigResponse {
+  appVersions: {
+    ios: string;
+    android: string;
+  };
+  clientIp: string;
+  country?: string;
+  currency: string;
+  cdnMedia: {
+    images: string;
+    cache: string;
+    pdfs: string;
+  };
+  loc: {
+    latitude: string;
+    longitude: string;
+    city: string;
+    postalCode: string;
+    countryCode: string;
+    regionCode: string;
+    timezone: string;
+  };
+}
+
 export interface PaypalApproveData extends OnApproveData {
   type: string;
 }
