@@ -49,12 +49,12 @@ export function buildPaymentProviderRequest(
       break;
     case "paypal":
       account = paymentSetup.gateways.paypal.account;
-      source = providerObject;
+      source = providerObject as PaypalApproveData | PaypalErrorData;
       break;
     case "offline":
       account = paymentSetup.gateways.offline?.account;
       source = {};
-
+      break;
     // throw some exception here 'unsupported gateway'
   }
 
@@ -422,6 +422,7 @@ export async function handleStripeSCAPayment({
   const key =
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
 
+  if (!window.Stripe) return;
   const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
   });

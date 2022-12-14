@@ -1,82 +1,8 @@
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { Dispatch, SetStateAction } from "react";
-
-export interface ProjectTypes {
-  data: {
-    allowDonations: boolean;
-    certificates: Array<{}>;
-    classification: string;
-    coordinates: { lat: number; lon: number };
-    countDonated: number;
-    countPlanted: number;
-    countRegistered: number;
-    countTarget: number;
-    country: string;
-    currency: string;
-    degradationCause: string;
-    degradationYear: number;
-    description: string;
-    employeesCount: number;
-    enablePlantLocations: false;
-    expenses: Array<any>;
-    firstTreePlanted: {
-      date: string;
-      timezone_type: number;
-      timezone: string;
-    };
-    fixedRates: [];
-    geoLocation: {
-      boundingBox: null;
-      crs: null;
-      type: string;
-      coordinates: Array<any>;
-    };
-    id: string;
-    image: string;
-    images: Array<{}>;
-    isCertified: false;
-    isPublished: true;
-    lastUpdated: {
-      date: string;
-      timezone_type: number;
-      timezone: string;
-    };
-    location: string;
-    longTermPlan: string;
-    mainChallenge: string;
-    minTreeCount: number;
-    motivation: string;
-    paymentDefaults: {
-      fixedDefaultTreeCount: number;
-      fixedTreeCountOptions: Array<any>;
-    };
-    plantingDensity: number;
-    plantingSeasons: Array<any>;
-    reviewRequested: true;
-    siteOwnerName: string;
-    siteOwnerType: Array<any>;
-    sites: Array<{}>;
-    slug: string;
-    survivalRate: number;
-    survivalRateStatus: string;
-    taxDeductionCountries: Array<any>;
-    tpo: {
-      id: string;
-      name: string;
-      email: string;
-      address: {};
-      slug: string;
-    };
-    treeCost: number;
-    videoUrl: null;
-    visitorAssistance: false;
-    website: string;
-    yearAbandoned: number;
-    yearAcquired: number;
-    _scope: string;
-  };
-}
+import { TFunction } from "react-i18next";
+import { NextRouter } from "next/router";
 
 export interface DirectGift {
   type: "direct";
@@ -124,9 +50,9 @@ export interface PaymentProviderRequest {
         id?: string;
         object?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
       }
-    | {}
     | PaypalApproveData
-    | PaypalErrorData;
+    | PaypalErrorData
+    | Record<string, never>;
 }
 
 export interface CreateDonationFunctionProps {
@@ -157,23 +83,23 @@ export interface PayDonationProps {
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
-  t: any;
+  t: TFunction;
   paymentSetup: PaymentOptions;
   donationID: string;
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
-  router: any;
+  router: NextRouter;
   tenant: string;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
 }
 
 export interface HandleStripeSCAPaymentProps {
   method: string;
-  paymentResponse: any;
+  paymentResponse: UpdateDonationActionRequiredData;
   paymentSetup: PaymentOptions;
-  window: any;
+  window: Window & typeof globalThis;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
   donationID: string;
@@ -181,7 +107,7 @@ export interface HandleStripeSCAPaymentProps {
   token: string | null;
   country: string;
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
-  router: any;
+  router: NextRouter;
   tenant: string;
 }
 
