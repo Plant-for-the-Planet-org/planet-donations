@@ -131,11 +131,14 @@ function index({
   }, [projectDetails]);
 
   settenant(tenant);
-  // If gift details are present set gift
-  if (giftDetails && isGift) {
-    setgiftDetails(giftDetails);
-    setisGift(true);
-  }
+
+  // If gift details are present, initialize gift in context
+  React.useEffect(() => {
+    if (giftDetails && isGift) {
+      setgiftDetails(giftDetails);
+      setisGift(true);
+    }
+  }, []);
 
   React.useEffect(() => {
     setdonationStep(donationStep);
@@ -429,6 +432,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       console.log("Error", err);
     }
   }
+
+  // Set gift details if gift = true in the query params (only for tree projects)
+  if (context.query.gift === "true" && projectDetails?.purpose === "trees") {
+    isGift = true;
+    giftDetails = {
+      type: "invitation",
+      recipientName: "",
+      recipientEmail: "",
+      message: "",
+    };
+  }
+
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
 

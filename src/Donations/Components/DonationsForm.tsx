@@ -203,7 +203,6 @@ function DonationsForm(): ReactElement {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -228,7 +227,6 @@ function DonationsForm(): ReactElement {
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country?.toLowerCase()}`),
         });
         break;
     }
