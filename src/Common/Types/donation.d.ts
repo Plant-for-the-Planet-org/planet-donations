@@ -90,7 +90,7 @@ export interface Project2 {
   purpose: string;
 }
 
-export interface DonationRequestData {
+export type DonationRequestData = {
   purpose: ProjectPurpose;
   project?: string;
   amount: number;
@@ -101,4 +101,4 @@ export interface DonationRequestData {
   quantity?: number;
   taxDeductionCountry?: string;
   gift?: GiftDetails;
-}
+};

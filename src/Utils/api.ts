@@ -1,6 +1,7 @@
 import getsessionId from "./getSessionId";
-import axios from "axios";
+import axios, { AxiosRequestConfig, Method } from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { Dispatch, SetStateAction } from "react";
 
 // creates and axios instance with base url
 const axiosInstance = axios.create({
@@ -43,9 +44,9 @@ axiosInstance.interceptors.response.use(
 
 interface RequestParams {
   url: string;
-  token?: any;
-  data?: any;
-  setshowErrorCard: Function;
+  token?: string | null;
+  data?: Record<string, unknown>;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
   headers?: { [k: string]: string }; // additional headers
@@ -53,7 +54,7 @@ interface RequestParams {
   locale?: string;
 }
 interface ExtendedRequestParams extends RequestParams {
-  method?: string | undefined;
+  method?: Method | undefined;
 }
 
 export const apiRequest = async (
@@ -74,7 +75,7 @@ export const apiRequest = async (
 
   try {
     //  sets the options which is passed to axios to make the request
-    const options = {
+    const options: AxiosRequestConfig = {
       method,
       url,
     };

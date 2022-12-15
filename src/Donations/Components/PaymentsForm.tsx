@@ -197,7 +197,7 @@ function PaymentsForm(): ReactElement {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
         data: { publish: isPublishPermitted },
-        method: "PUT",
+        method: "PUT" as const,
         setshowErrorCard,
         tenant,
       };

@@ -132,10 +132,10 @@ export async function createDonationFunction({
     const requestParams = {
       url: `/app/donations`,
       data: donationData,
-      method: "POST",
+      method: "POST" as const,
       setshowErrorCard,
       tenant,
-      token: token ? token : false,
+      token: token ? token : null,
     };
     const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
@@ -353,9 +353,9 @@ export async function confirmPaymentIntent(
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
-    method: "PUT",
+    method: "PUT" as const,
     setshowErrorCard,
-    token: token ? token : false,
+    token: token ? token : null,
     tenant,
   };
   const confirmationResponse: UpdateDonationResponse = await apiRequest(

@@ -277,7 +277,9 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const loadProfile = useCallback(async () => {
     const token =
-      queryToken || router.query.token || (await getAccessTokenSilently());
+      queryToken ||
+      (router.query.token as string) ||
+      (await getAccessTokenSilently());
     try {
       const profile = await apiRequest({
         url: "/app/profile",

@@ -69,7 +69,7 @@ const PlanetCashSignup = (): ReactElement => {
 
   const fetchPlanetCashAccounts = useCallback(async () => {
     const token = router.query.token
-      ? router.query.token
+      ? (router.query.token as string)
       : queryToken
       ? queryToken
       : await getAccessTokenSilently();
@@ -112,13 +112,13 @@ const PlanetCashSignup = (): ReactElement => {
   const handleActivatePlanetCashAccount = useCallback(async () => {
     if (currentPlanetCashAccount) {
       const token = router.query.token
-        ? router.query.token
+        ? (router.query.token as string)
         : queryToken
         ? queryToken
         : await getAccessTokenSilently();
       try {
         const options = {
-          method: "POST",
+          method: "POST" as const,
           url: `/app/planetCash/${currentPlanetCashAccount.id}/activate`,
           token,
           setshowErrorCard,
@@ -133,13 +133,13 @@ const PlanetCashSignup = (): ReactElement => {
 
   const handleCreatePlanetCashAccount = async () => {
     const token = router.query.token
-      ? router.query.token
+      ? (router.query.token as string)
       : queryToken
       ? queryToken
       : await getAccessTokenSilently();
     try {
       const options = {
-        method: "POST",
+        method: "POST" as const,
         url: "/app/planetCash",
         token,
         data: {
