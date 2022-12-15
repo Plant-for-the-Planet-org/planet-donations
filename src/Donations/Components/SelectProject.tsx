@@ -13,9 +13,7 @@ import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { DONATE } from "src/Utils/donationStepConstants";
 
-interface Props {}
-
-function SelectProject({}: Props): ReactElement {
+function SelectProject(): ReactElement {
   const {
     selectedProjects,
     allProjects,

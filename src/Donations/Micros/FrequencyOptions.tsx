@@ -2,9 +2,7 @@ import { useTranslation } from "next-i18next";
 import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 
-interface Props {}
-
-function FrequencyOptions({}: Props): ReactElement {
+function FrequencyOptions(): ReactElement {
   const { paymentSetup, setfrequency, frequency } =
     React.useContext(QueryParamContext);
   const { t } = useTranslation(["common"]);

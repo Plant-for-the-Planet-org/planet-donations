@@ -3,9 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next/types";
 
-interface Props {}
-
-function Custom404({}: Props): ReactElement {
+function Custom404(): ReactElement {
   const router = useRouter();
   if (typeof window !== "undefined") {
     router.push("/");

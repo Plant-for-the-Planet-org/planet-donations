@@ -18,9 +18,7 @@ import { Skeleton } from "@material-ui/lab";
 import { ContactDetails } from "src/Common/Types";
 import { User } from "src/Common/Types/user";
 
-interface Props {}
-
-function Authentication({}: Props): ReactElement {
+function Authentication(): ReactElement {
   const {
     setContactDetails,
     setshowErrorCard,

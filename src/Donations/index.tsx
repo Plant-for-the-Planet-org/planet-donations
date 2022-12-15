@@ -21,9 +21,7 @@ import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
 
-interface Props {}
-
-function Donations({}: Props): ReactElement {
+function Donations(): ReactElement {
   const router = useRouter();
 
   const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
