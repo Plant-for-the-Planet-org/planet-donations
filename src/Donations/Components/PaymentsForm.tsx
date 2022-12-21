@@ -170,11 +170,6 @@ function PaymentsForm({}: Props): ReactElement {
       utmSource,
       tenant,
     });
-    if (router.query.to) {
-      router.replace({
-        query: { to: router.query.to, step: PAYMENT },
-      });
-    }
     if (router.query.context) {
       router.replace({
         query: { context: donation?.id, step: PAYMENT },
