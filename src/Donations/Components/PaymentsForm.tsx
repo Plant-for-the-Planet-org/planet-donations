@@ -73,6 +73,9 @@ function PaymentsForm({}: Props): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -162,6 +165,9 @@ function PaymentsForm({}: Props): ReactElement {
       paymentSetup,
       callbackUrl,
       callbackMethod,
+      utmCampaign,
+      utmMedium,
+      utmSource,
       tenant,
     });
     if (router.query.to) {

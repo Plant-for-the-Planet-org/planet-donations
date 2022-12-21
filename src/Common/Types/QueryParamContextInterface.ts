@@ -54,6 +54,12 @@ export default interface QueryParamContextInterface {
   setcallbackUrl: Dispatch<SetStateAction<string>>;
   callbackMethod: string;
   setCallbackMethod: Dispatch<SetStateAction<string>>;
+  utmCampaign: string;
+  setUtmCampaign: Dispatch<SetStateAction<string>>;
+  utmMedium: string;
+  setUtmMedium: Dispatch<SetStateAction<string>>;
+  utmSource: string;
+  setUtmSource: Dispatch<SetStateAction<string>>;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
   tenant: string;

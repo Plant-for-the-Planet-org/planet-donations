@@ -76,6 +76,9 @@ export interface Organization {
 export interface Metadata {
   callback_method: string;
   callback_url: string;
+  utm_campaign: string;
+  utm_medium: string;
+  utm_source: string;
 }
 
 export interface Project2 {

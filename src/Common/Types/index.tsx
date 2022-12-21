@@ -130,6 +130,9 @@ export interface CreateDonationFunctionProps {
   amount?: number | null;
   callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
+  utmCampaign?: string | undefined;
+  utmMedium?: string | undefined;
+  utmSource?: string | undefined;
   tenant: string;
 }
 
@@ -180,6 +183,9 @@ export interface CreateDonationDataProps {
   amount?: number | null;
   callbackUrl: string | undefined;
   callbackMethod: string | undefined;
+  utmCampaign: string | undefined;
+  utmMedium: string | undefined;
+  utmSource: string | undefined;
 }
 
 export interface PlanetCashSignupDetails {

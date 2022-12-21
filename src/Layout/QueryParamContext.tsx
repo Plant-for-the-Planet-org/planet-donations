@@ -110,6 +110,9 @@ const QueryParamProvider: FC = ({ children }) => {
   const [callbackUrl, setcallbackUrl] = useState("");
   const [taxIdentificationAvail, setTaxIdentificationAvail] = useState(false);
   const [callbackMethod, setCallbackMethod] = useState("");
+  const [utmCampaign, setUtmCampaign] = useState("");
+  const [utmMedium, setUtmMedium] = useState("");
+  const [utmSource, setUtmSource] = useState("");
 
   const [redirectstatus, setredirectstatus] = useState<string | null>(null);
 
@@ -565,6 +568,12 @@ const QueryParamProvider: FC = ({ children }) => {
         setcallbackUrl,
         callbackMethod,
         setCallbackMethod,
+        utmCampaign,
+        setUtmCampaign,
+        utmMedium,
+        setUtmMedium,
+        utmSource,
+        setUtmSource,
         isDirectDonation,
         setisDirectDonation,
         tenant,

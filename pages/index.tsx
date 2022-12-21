@@ -43,6 +43,9 @@ interface Props {
   tenant: string;
   callbackUrl: string;
   callbackMethod: string;
+  utmCampaign: string;
+  utmMedium: string;
+  utmSource: string;
 }
 
 function index({
@@ -65,6 +68,9 @@ function index({
   tenant,
   callbackUrl,
   callbackMethod,
+  utmCampaign,
+  utmMedium,
+  utmSource,
   projectDetails,
 }: Props): ReactElement {
   const {
@@ -87,6 +93,9 @@ function index({
     settenant,
     setcallbackUrl,
     setCallbackMethod,
+    setUtmCampaign,
+    setUtmMedium,
+    setUtmSource,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
 
@@ -118,6 +127,9 @@ function index({
     }
     setcallbackUrl(callbackUrl);
     setCallbackMethod(callbackMethod);
+    utmCampaign && setUtmCampaign(utmCampaign);
+    utmMedium && setUtmMedium(utmMedium);
+    utmSource && setUtmSource(utmSource);
     setCountryCode({ setcountry, setcurrency, country });
   }, []);
 
@@ -231,6 +243,9 @@ export async function getServerSideProps(context: any) {
   let tenant = "ten_I9TW3ncG";
   let callbackUrl = "";
   let callbackMethod = "";
+  let utmCampaign = "";
+  let utmMedium = "";
+  let utmSource = "";
   let locale = "en";
 
   function setshowErrorCard() {
@@ -335,6 +350,9 @@ export async function getServerSideProps(context: any) {
         if (donation.metadata) {
           callbackMethod = donation.metadata.callback_method;
           callbackUrl = donation.metadata.callback_url;
+          utmCampaign = donation.metadata.utm_campaign;
+          utmMedium = donation.metadata.utm_medium;
+          utmSource = donation.metadata.utm_source;
         }
         // This will fetch the payment options
         try {
@@ -405,6 +423,10 @@ export async function getServerSideProps(context: any) {
       donationStep = 0;
     }
   }
+
+  if (context.query.utm_campaign) utmCampaign = context.query.utm_campaign;
+  if (context.query.utm_medium) utmMedium = context.query.utm_medium;
+  if (context.query.utm_source) utmSource = context.query.utm_source;
 
   // Set gift details if there is s (support link) in the query params
   if (context.query.s) {
@@ -512,6 +534,9 @@ export async function getServerSideProps(context: any) {
       tenant,
       callbackMethod,
       callbackUrl,
+      utmCampaign,
+      utmMedium,
+      utmSource,
     }, // will be passed to the page component as props
   };
 }

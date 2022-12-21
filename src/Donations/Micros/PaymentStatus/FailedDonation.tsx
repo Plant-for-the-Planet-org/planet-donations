@@ -40,6 +40,9 @@ function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
     setAmount,
     setcallbackUrl,
     setCallbackMethod,
+    setUtmCampaign,
+    setUtmMedium,
+    setUtmSource,
     setredirectstatus,
     loadPaymentSetup,
   } = React.useContext(QueryParamContext);
@@ -91,6 +94,9 @@ function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
     });
     setcallbackUrl(donation.metadata.callback_url);
     setCallbackMethod(donation.metadata.callback_method);
+    setUtmCampaign(donation.metadata?.utm_campaign);
+    setUtmMedium(donation.metadata?.utm_medium);
+    setUtmSource(donation.metadata?.utm_source);
     setredirectstatus("");
     setdonationStep(3);
   }

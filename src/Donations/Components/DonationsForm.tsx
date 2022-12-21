@@ -60,6 +60,9 @@ function DonationsForm() {
     setcountry,
     setcurrency,
     donation,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -148,6 +151,9 @@ function DonationsForm() {
         setshowErrorCard,
         frequency,
         tenant,
+        utmCampaign,
+        utmMedium,
+        utmSource,
       }).then(async (res) => {
         if (res) {
           let token = null;
@@ -237,6 +243,12 @@ function DonationsForm() {
         email: onBehalfDonor.email,
       };
 
+      const _metadata = {
+        utm_campaign: utmCampaign,
+        utm_medium: utmMedium,
+        utm_source: utmSource,
+      };
+
       const _gift = {
         ...giftDetails,
       };
@@ -253,6 +265,7 @@ function DonationsForm() {
         units: quantity,
         prePaid: true,
         onBehalf: onBehalf,
+        metadata: _metadata,
         ...(onBehalf && { donor: _onBehalfDonor }),
         ...(isGift && { gift: _gift }),
       };
