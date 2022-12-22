@@ -103,6 +103,7 @@ function DonationInfo() {
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
+  const [showBackButton, setShowBackButton] = React.useState(null);
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
@@ -140,6 +141,36 @@ function DonationInfo() {
     );
   };
   const router = useRouter();
+
+  function storePathValues() {
+    const storage = globalThis?.sessionStorage;
+    if (!storage) return;
+    // Set the previous path as the value of the current path.
+    const prevPath = storage.getItem("currentPath");
+    storage.setItem("prevPath", prevPath);
+    // Set the current path value by looking at the window object.
+    storage.setItem("currentPath", window.origin);
+  }
+
+  useEffect(storePathValues, [router]);
+
+  useEffect(() => {
+    const storage = globalThis?.sessionStorage;
+    if (
+      !storage ||
+      router.query.step !== "donate" ||
+      storage.getItem("showBackButton") === "false"
+    )
+      return;
+    storage.setItem(
+      "showBackButton",
+      `${storage.getItem("prevPath") === window.origin}`
+    );
+    const isShow = storage.getItem("showBackButton") === "true";
+
+    setShowBackButton(isShow);
+  }, [router.query.step]);
+
   const goBack = () => {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
@@ -165,7 +196,7 @@ function DonationInfo() {
         alt="Background image with trees"
       /> */}
 
-      {isMobile && (
+      {isMobile && (router.query["callback_url"] || showBackButton) && (
         <button
           id={"backButtonSingleP"}
           className={"callbackButton"}
