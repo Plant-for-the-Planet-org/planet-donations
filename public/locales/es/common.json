@@ -66,6 +66,7 @@
   "thankyouHeaderText": "Estamos en el camino hacia una \n <h1>Trillón de árboles</h1>",
   "donationFailed": "Donación fallida",
   "donationFailedMessage": "Algo ha ido mal al completar el pago. Si sigue teniendo problemas, póngase en contacto con nosotros en support@plant-for-the-planet.org",
+  "paypalPaymentError": "Lamentablemente, estamos experimentando problemas con los pagos de PayPal. Por favor, inténtelo de nuevo con otro método de pago. Gracias por su apoyo y comprensión. Estamos trabajando en una solución al problema.",
   "donationPending": "Completar su donación",
   "donationPendingMessage": "Actualmente estamos esperando la confirmación de su banco. Esto puede llevar algún tiempo, así que no dude en cerrar esta página. En breve le enviaremos su recibo por correo electrónico.",
   "transactionId": "Ref. de la donación",
