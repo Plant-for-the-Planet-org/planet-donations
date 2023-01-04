@@ -79,6 +79,7 @@
   "thankyouHeaderText": "Wir sind auf dem Weg zu einer \n <h1>Billion Bäume</h1>.",
   "donationFailed": "Spende fehlgeschlagen",
   "donationFailedMessage": "Beim Abschluss deiner Zahlung ist etwas schief gelaufen. Wenn du weiterhin Probleme hast, kontaktiere uns bitte unter support@plant-for-the-planet.org.",
+  "paypalPaymentError": "Leider haben wir bei PayPal Zahlungen aktuell vereinzelt Probleme. Bitte versuchen Sie es erneut mit einer anderen Zahlart. Vielen Dank für Ihre Unterstützung und Ihr Verständnis. Wir arbeiten an der Problemlösung.",
   "donationPending": "Abschließen deiner Spende",
   "donationPendingMessage": "Wir warten derzeit auf die Bestätigung von deiner Bank. Dies kann einige Zeit dauern, daher kannst du diese Seite auch schließen. Wir werden dir den Beleg in Kürze per E-Mail zusenden.",
   "transactionId": "Transaktions-ID",
