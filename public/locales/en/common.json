@@ -177,7 +177,7 @@
   "myContributionIsPartOfThat": "And my contribution is a part of that.",
   "notFound": "Resource not found",
   "unauthorized": "Not Authorized",
-  "validationFailed": "Validation Failed",
+  "validationError": "Validation Error",
   "internalServerError": "Internal Server Error",
   "serviceUnavailable": "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
   "account_duplicate": "Account already exists",

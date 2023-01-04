@@ -1,6 +1,12 @@
 import React from "react";
 
-function CloseIcon(props) {
+interface Props {
+  width?: string | number;
+  height?: string | number;
+  color?: string;
+}
+
+function CloseIcon(props: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
