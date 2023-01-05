@@ -11,11 +11,19 @@ import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
+import {
+  ContactDetails,
+  FetchedProjectDetails,
+  GiftDetails,
+  PaymentOptions,
+  PlanetCashSignupDetails,
+} from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
 interface Props {
-  projectDetails?: Object;
+  projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
   donationStep: any;
-  giftDetails: Object;
+  giftDetails: GiftDetails | null;
   isGift: boolean;
   resolvedUrl?: any;
   isDirectDonation: boolean;
@@ -24,10 +32,10 @@ interface Props {
   donationID: any;
   shouldCreateDonation: boolean;
   country: any;
-  contactDetails: any;
+  contactDetails: ContactDetails;
   allowTaxDeductionChange: boolean;
   currency: any;
-  paymentSetup: any;
+  paymentSetup: PaymentOptions;
   treecount?: any;
   amount: any;
   meta: { title: string; description: string; image: string; url: string };
@@ -100,7 +108,7 @@ function index({
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
-      setContactDetails(contactDetails);
+      if (contactDetails) setContactDetails(contactDetails);
       setallowTaxDeductionChange(allowTaxDeductionChange);
       setcurrency(currency);
       setpaymentSetup(paymentSetup);
@@ -123,11 +131,14 @@ function index({
   }, [projectDetails]);
 
   settenant(tenant);
-  // If gift details are present set gift
-  if (giftDetails && isGift) {
-    setgiftDetails(giftDetails);
-    setisGift(true);
-  }
+
+  // If gift details are present, initialize gift in context
+  React.useEffect(() => {
+    if (giftDetails && isGift) {
+      setgiftDetails(giftDetails);
+      setisGift(true);
+    }
+  }, []);
 
   React.useEffect(() => {
     setdonationStep(donationStep);
@@ -198,11 +209,11 @@ export default index;
 export async function getServerSideProps(context: any) {
   let donationStep = 0;
   let showErrorCard = false;
-  let projectDetails = null;
+  let projectDetails: FetchedProjectDetails | null = null;
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails = {};
+  let giftDetails: GiftDetails | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
@@ -211,11 +222,11 @@ export async function getServerSideProps(context: any) {
   let shouldCreateDonation = false;
   let country = "";
   let isDirectDonation = false;
-  let contactDetails = {};
+  let contactDetails: ContactDetails | null = null;
   let treecount = 50;
   let allowTaxDeductionChange = true;
   let currency = "EUR";
-  let paymentSetup = {};
+  let paymentSetup: PaymentOptions | null = null;
   let amount = 0;
   let tenant = "ten_I9TW3ncG";
   let callbackUrl = "";
@@ -259,17 +270,17 @@ export async function getServerSideProps(context: any) {
           locale,
         };
         const paymentOptionsResponse = await apiRequest(requestParams);
-        if (paymentOptionsResponse.data) {
+        const paymentOptionsData: PaymentOptions = paymentOptionsResponse?.data;
+        if (paymentOptionsData) {
           projectDetails = {
-            id: paymentOptionsResponse.data.id,
-            name: paymentOptionsResponse.data.name,
-            description: paymentOptionsResponse.data.description,
-            purpose: paymentOptionsResponse.data.purpose,
-            ownerName: paymentOptionsResponse.data.ownerName,
-            taxDeductionCountries:
-              paymentOptionsResponse.data.taxDeductionCountries,
-            projectImage: paymentOptionsResponse.data.image,
-            ownerAvatar: paymentOptionsResponse.data.ownerAvatar,
+            id: paymentOptionsData.id,
+            name: paymentOptionsData.name,
+            description: paymentOptionsData.description,
+            purpose: paymentOptionsData.purpose,
+            ownerName: paymentOptionsData.ownerName,
+            taxDeductionCountries: paymentOptionsData.taxDeductionCountries,
+            image: paymentOptionsData.image,
+            ownerAvatar: paymentOptionsData.ownerAvatar,
           };
           donationStep = 1;
         }
@@ -292,60 +303,61 @@ export async function getServerSideProps(context: any) {
         url: `/app/donations/${context.query.context}`,
         setshowErrorCard,
       };
-      const donation: any = await apiRequest(requestParams);
+      const donationResponse: any = await apiRequest(requestParams);
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];
       const queryMethodForStep4 = ["Sofort", "Giropay"];
       const queryRedirectStatus = ["succeeded", "failed"];
 
-      if (donation.status === 200) {
-        const donorData = donation.data.donor;
+      if (donationResponse.status === 200) {
+        const donation: Donation = donationResponse.data;
+        const donorData = donation.donor as ContactDetails;
         donationID = context.query.context;
         // if the donation is present means the donation is already created
         // Set shouldCreateDonation as false
         shouldCreateDonation = false;
         // fetch project - payment setup
-        tenant = donation.data.tenant;
-        if (donation.data.frequency) {
-          frequency = donation.data.frequency;
+        tenant = donation.tenant;
+        if (donation.frequency) {
+          frequency = donation.frequency;
         }
-        if (donation.data.taxDeductionCountry) {
-          country = donation.data.taxDeductionCountry;
+        if (donation.taxDeductionCountry) {
+          country = donation.taxDeductionCountry;
           isTaxDeductible = true;
-        } else if (donation.data.gateway === "planet-cash") {
+        } else if (donation.gateway === "planet-cash") {
           hideTaxDeduction = true;
-          country = donation.data.destination.country;
+          country = donation.destination.country;
         } else {
           hideTaxDeduction = true;
           country = donorData.country;
         }
-        if (donation.data.metadata) {
-          callbackMethod = donation.data.metadata?.callback_method;
-          callbackUrl = donation.data.metadata?.callback_url;
+        if (donation.metadata) {
+          callbackMethod = donation.metadata.callback_method;
+          callbackUrl = donation.metadata.callback_url;
         }
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.data.destination.id}?country=${country}`,
+            url: `/app/paymentOptions/${donation.destination.id}?country=${country}`,
             setshowErrorCard,
             tenant,
             locale,
           };
-          const paymentSetupData: any = await apiRequest(requestParams);
-          if (paymentSetupData.data) {
-            currency = paymentSetupData.data.currency;
-            paymentSetup = paymentSetupData.data;
+          const paymentSetupResponse: any = await apiRequest(requestParams);
+          const paymentSetupData: PaymentOptions = paymentSetupResponse?.data;
+          if (paymentSetupData) {
+            currency = paymentSetupData.currency;
+            paymentSetup = paymentSetupData;
             projectDetails = {
-              id: paymentSetupData.data.id,
-              name: paymentSetupData.data.name,
-              description: paymentSetupData.data.description,
-              purpose: paymentSetupData.data.purpose,
-              ownerName: paymentSetupData.data.ownerName,
-              taxDeductionCountries:
-                paymentSetupData.data.taxDeductionCountries,
-              projectImage: paymentSetupData.data.image,
-              ownerAvatar: paymentSetupData.data.ownerAvatar,
+              id: paymentSetupData.id,
+              name: paymentSetupData.name,
+              description: paymentSetupData.description,
+              purpose: paymentSetupData.purpose,
+              ownerName: paymentSetupData.ownerName,
+              taxDeductionCountries: paymentSetupData.taxDeductionCountries,
+              image: paymentSetupData.image,
+              ownerAvatar: paymentSetupData.ownerAvatar,
             };
             donationStep = 3;
           }
@@ -353,8 +365,8 @@ export async function getServerSideProps(context: any) {
           // console.log(err);
         }
         allowTaxDeductionChange = false;
-        treecount = donation.data.treeCount;
-        amount = donation.data.amount;
+        treecount = donation.treeCount;
+        amount = donation.amount;
         // Setting contact details from donor details
         if (donorData) {
           contactDetails = {
@@ -377,13 +389,9 @@ export async function getServerSideProps(context: any) {
           context.query.payment_intent
         ) {
           donationStep = 4;
-        } else if (
-          paymentStatusForStep4.includes(donation.data.paymentStatus)
-        ) {
+        } else if (paymentStatusForStep4.includes(donation.paymentStatus)) {
           donationStep = 4;
-        } else if (
-          paymentStatusForStep3.includes(donation.data.paymentStatus)
-        ) {
+        } else if (paymentStatusForStep3.includes(donation.paymentStatus)) {
           // Check if all contact details are present - if not send user to step 2 else step 3
           // Check if all payment cards are present - if yes then show it on step 3
           isDirectDonation = true;
@@ -412,7 +420,7 @@ export async function getServerSideProps(context: any) {
         giftDetails = {
           recipientName: newProfile.data.displayName,
           recipientEmail: "",
-          giftMessage: "",
+          message: "",
           type: "direct",
           recipientTreecounter: newProfile.data.slug,
         };
@@ -421,6 +429,18 @@ export async function getServerSideProps(context: any) {
       console.log("Error", err);
     }
   }
+
+  // Set gift details if gift = true in the query params (only for tree projects)
+  if (context.query.gift === "true" && projectDetails?.purpose === "trees") {
+    isGift = true;
+    giftDetails = {
+      type: "invitation",
+      recipientName: "",
+      recipientEmail: "",
+      message: "",
+    };
+  }
+
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
 

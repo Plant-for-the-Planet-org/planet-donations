@@ -47,7 +47,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   const router = useRouter();
 
   const setCustomValue = (e: any) => {
-    if (e.target) {
+    if (paymentSetup && e.target) {
       if (e.target.value === "" || e.target.value < 1) {
         // if input is '', default 1
         setquantity(1 / paymentSetup.unitCost);
@@ -58,11 +58,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   };
 
   React.useEffect(() => {
-    if (paymentSetup.frequencies && paymentSetup.frequencies[`${frequency}`]) {
+    if (
+      paymentSetup &&
+      paymentSetup.frequencies &&
+      paymentSetup.frequencies[`${frequency}`]
+    ) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.frequencies[`${frequency}`].options) {
-        newallOptionsArray.push(option.quantity * paymentSetup.unitCost);
+        newallOptionsArray.push((option.quantity || 0) * paymentSetup.unitCost);
       }
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
@@ -73,9 +77,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         : router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
-        ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
+        ? (defaultPaymentOption[0].quantity || 0) * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1] &&
-          paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+          (paymentSetup.frequencies[`${frequency}`].options[1].quantity || 0) *
             paymentSetup.unitCost;
       newQuantity = newQuantity / paymentSetup.unitCost;
       setquantity(newQuantity);
@@ -85,7 +89,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           approximatelyEqual(option, newQuantity * paymentSetup.unitCost)
         ).length == 0
       ) {
-        setCustomInputValue(newQuantity * paymentSetup.unitCost);
+        setCustomInputValue((newQuantity * paymentSetup.unitCost).toString());
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
@@ -110,7 +114,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           isGift && giftDetails.recipientName === "" ? "display-none" : ""
         }`}
       >
-        {paymentSetup.frequencies &&
+        {paymentSetup &&
+          paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`] &&
           paymentSetup.frequencies[`${frequency}`].options.map(
             (option, index) => {
@@ -118,7 +123,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 <div
                   key={index}
                   onClick={() => {
-                    setquantity(option.quantity);
+                    setquantity(option.quantity as number);
                     setisCustomDonation(false);
                     setCustomInputValue("");
                   }}
@@ -151,7 +156,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       // />
                       getPaymentOptionIcons(
                         paymentSetup.frequencies[`${frequency}`].options[index]
-                          .icon
+                          .icon as string
                       )
                     : []}
                   <div

@@ -10,11 +10,12 @@ import ReactDOM from "react-dom";
 import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { ContactDetails } from "src/Common/Types";
 
 interface ShareOptionsProps {
-  treeCount: String;
+  treeCount: string;
   sendRef: any;
-  donor: Object;
+  donor?: ContactDetails;
 }
 const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   const { t, ready } = useTranslation(["common", "donate"]);
@@ -24,7 +25,7 @@ const ShareOptions = ({ treeCount, sendRef, donor }: ShareOptionsProps) => {
   useEffect(() => {
     if (donation) {
       setUrlToShare(
-        encodeURIComponent(`${window.location.origin}?context=${donation!.id}`)
+        encodeURIComponent(`${window.location.origin}?context=${donation.id}`)
       );
     }
   }, [donation]);

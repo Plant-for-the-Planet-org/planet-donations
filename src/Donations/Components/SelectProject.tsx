@@ -30,7 +30,7 @@ function SelectProject({}: Props): ReactElement {
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
 
   React.useEffect(() => {
-    setprojectDetails({});
+    setprojectDetails(null);
   }, []);
 
   useDebouncedEffect(

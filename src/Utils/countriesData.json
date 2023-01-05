@@ -890,8 +890,8 @@
   {
     "countryName": "Croatia (Hrvatska)",
     "countryCode": "HR",
-    "currencyName": "Croatian Dinar",
-    "currencyCode": "HRK",
+    "currencyName": "Euros",
+    "currencyCode": "EUR",
     "currencyCountryFlag": "HR",
     "languageCode": "en"
   },
@@ -1957,14 +1957,6 @@
     "currencyName": "Serbian dinar",
     "currencyCode": "RSD",
     "currencyCountryFlag": "RS",
-    "languageCode": "en"
-  },
-  {
-    "countryName": "US Armed Forces",
-    "countryCode": "USAF",
-    "currencyName": "US Dollar",
-    "currencyCode": "USD",
-    "currencyCountryFlag": "US",
     "languageCode": "en"
   }
 ]

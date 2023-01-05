@@ -1,3 +1,4 @@
+// TODOO - resolve TS warnings related to donations (after donations API is updated to correctly send gift info)
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentFailedIllustration from "../../../../public/assets/icons/donation/PaymentFailed";
@@ -9,8 +10,15 @@ import { useRouter } from "next/router";
 import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
+import { ContactDetails, FetchedProjectDetails } from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
-function FailedDonation({ sendToReturn, donation }: any) {
+interface FailedDonationProps {
+  donation: Donation;
+  sendToReturn: () => void;
+}
+
+function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
   const { t } = useTranslation(["common"]);
 
   const {
@@ -18,6 +26,7 @@ function FailedDonation({ sendToReturn, donation }: any) {
     donationID,
     setcountry,
     setIsTaxDeductible,
+    projectDetails,
     setprojectDetails,
     setquantity,
     setContactDetails,
@@ -36,18 +45,23 @@ function FailedDonation({ sendToReturn, donation }: any) {
   } = React.useContext(QueryParamContext);
 
   async function getDonation() {
-    setIsTaxDeductible(donation.taxDeductionCountry);
-    setprojectDetails(donation.destination);
+    setIsTaxDeductible(donation.taxDeductionCountry ? true : false);
+    setprojectDetails((projectDetails) => {
+      return {
+        ...(projectDetails as FetchedProjectDetails),
+        id: donation.destination.id as string,
+      };
+    });
     setPaymentError("");
     setquantity(donation?.quantity);
-    setContactDetails(donation.donor);
+    setContactDetails(donation.donor as ContactDetails);
     setAmount(donation.amount);
 
-    let country;
+    let country: string;
     if (donation.taxDeductionCountry) {
       country = donation.taxDeductionCountry;
     } else {
-      country = donation.donor.country;
+      country = donation?.donor?.country as string;
     }
     setcountry(country);
     localStorage.setItem("countryCode", country);
@@ -56,13 +70,13 @@ function FailedDonation({ sendToReturn, donation }: any) {
       setisGift(donation.gift.recipientName ? true : false);
 
       const _giftDetails = {
-        ...(donation.gift.recipientName
-          ? { recipientName: donation.gift.recipientName }
+        type: donation.gift.type || null,
+        recipientName: donation.gift.recipientName || "",
+        recipientEmail: donation.gift.recipientEmail || "",
+        message: donation.gift.message || "",
+        ...(donation.gift.recipientTreeCounter
+          ? { recipientTreecounter: donation.gift.recipientTreecounter }
           : {}),
-        ...(donation.gift.recipientEmail
-          ? { recipientEmail: donation.gift.recipientEmail }
-          : {}),
-        ...(donation.gift.type ? { type: donation.gift.type } : {}),
       };
       // TODO - Gift type invitation and direct will have different properties
       setgiftDetails(_giftDetails);

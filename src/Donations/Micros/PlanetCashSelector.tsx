@@ -8,7 +8,7 @@ import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
 
-const PlanetCashSelector: FC = (props) => {
+const PlanetCashSelector: FC = () => {
   const { t, i18n } = useTranslation("common");
   const {
     profile,
@@ -27,23 +27,23 @@ const PlanetCashSelector: FC = (props) => {
     // Here checking country is important as many countries could have same currency.
 
     if (
-      country === profile!.planetCash.country &&
+      country === profile?.planetCash?.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
-        profile!.planetCash.balance / 100 +
-          profile!.planetCash.creditLimit / 100
+        profile.planetCash.balance / 100 + profile.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(false);
     }
-  }, [paymentSetup.unitCost, quantity, setIsPlanetCashActive]);
+  }, [paymentSetup?.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
     // On Load If selected country is planetCash Country and balance is sufficient activate planetCash.
 
     if (
-      country === profile!.planetCash.country &&
+      country === profile?.planetCash?.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity <=
-        profile!.planetCash.balance / 100 +
-          profile!.planetCash.creditLimit / 100
+        profile.planetCash.balance / 100 + profile.planetCash.creditLimit / 100
     ) {
       setIsPlanetCashActive(true);
     }
@@ -57,19 +57,19 @@ const PlanetCashSelector: FC = (props) => {
     // Here setting country is important as many countries could have same currency.
 
     // Setting country in global context changes currency of the selected country.
-    if (isPlanetCashActive) {
-      setcountry(profile!.planetCash.country);
+    if (isPlanetCashActive && profile?.planetCash) {
+      setcountry(profile.planetCash.country);
     }
-  }, [isPlanetCashActive, setcountry]);
+  }, [isPlanetCashActive, profile?.planetCash, setcountry]);
   const shouldPlanetCashDisable = () => {
     let lowBalance = false;
     let isOnce = false;
 
     if (
-      country === profile!.planetCash.country &&
+      country === profile?.planetCash?.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
-        profile!.planetCash.balance / 100 +
-          profile!.planetCash.creditLimit / 100
+        profile.planetCash.balance / 100 + profile.planetCash.creditLimit / 100
     ) {
       lowBalance = true;
     }
@@ -87,10 +87,10 @@ const PlanetCashSelector: FC = (props) => {
     let isOnce = false;
 
     if (
-      country === profile!.planetCash.country &&
+      country === profile?.planetCash?.country &&
+      paymentSetup &&
       paymentSetup.unitCost * quantity >
-        profile!.planetCash.balance / 100 +
-          profile!.planetCash.creditLimit / 100
+        profile.planetCash.balance / 100 + profile.planetCash.creditLimit / 100
     ) {
       lowBalance = true;
     }
@@ -116,7 +116,7 @@ const PlanetCashSelector: FC = (props) => {
 
   const countryData = getCountryDataBy("countryCode", country);
 
-  return (
+  return profile?.planetCash ? (
     <div className="planet-cash-selector">
       <div className="planet-cash-selector-toggle">
         <div>
@@ -132,34 +132,34 @@ const PlanetCashSelector: FC = (props) => {
                 <span
                   className={
                     "planet-cash-balance" +
-                    (Math.sign(profile!.planetCash.balance / 100) !== -1
+                    (Math.sign(profile.planetCash.balance / 100) !== -1
                       ? "-positive"
                       : "-negative")
                   }
                 >
                   {getFormatedCurrency(
                     i18n.language,
-                    profile!.planetCash.currency,
-                    profile!.planetCash.balance / 100
+                    profile.planetCash.currency,
+                    profile.planetCash.balance / 100
                   )}
                 </span>
               </p>
-              {profile!.planetCash.creditLimit !== null &&
-                profile!.planetCash.creditLimit !== 0 && (
+              {profile.planetCash.creditLimit !== null &&
+                profile.planetCash.creditLimit !== 0 && (
                   <p>
                     {t("credit")}&nbsp;
                     <span
                       className={
                         "planet-cash-balance" +
-                        (Math.sign(profile!.planetCash.creditLimit / 100) !== -1
+                        (Math.sign(profile.planetCash.creditLimit / 100) !== -1
                           ? "-positive"
                           : "-negative")
                       }
                     >
                       {getFormatedCurrency(
                         i18n.language,
-                        profile!.planetCash.currency,
-                        profile!.planetCash.creditLimit / 100
+                        profile.planetCash.currency,
+                        profile.planetCash.creditLimit / 100
                       )}
                     </span>
                   </p>
@@ -172,8 +172,8 @@ const PlanetCashSelector: FC = (props) => {
                 className={
                   "planet-cash-balance" +
                   (Math.sign(
-                    profile!.planetCash.balance / 100 +
-                      profile!.planetCash.creditLimit / 100
+                    profile.planetCash.balance / 100 +
+                      profile.planetCash.creditLimit / 100
                   ) !== -1
                     ? "-positive"
                     : "-negative")
@@ -181,19 +181,20 @@ const PlanetCashSelector: FC = (props) => {
               >
                 {getFormatedCurrency(
                   i18n.language,
-                  profile!.planetCash.currency,
-                  profile!.planetCash.balance / 100 +
-                    profile!.planetCash.creditLimit / 100
+                  profile.planetCash.currency,
+                  profile.planetCash.balance / 100 +
+                    profile.planetCash.creditLimit / 100
                 )}
               </span>
             </p>
           )}
 
           {(isPlanetCashActive ||
-            (country === profile!.planetCash.country &&
+            (country === profile.planetCash.country &&
+              paymentSetup &&
               paymentSetup.unitCost * quantity >
-                profile!.planetCash.balance / 100 +
-                  profile!.planetCash.creditLimit / 100)) && (
+                profile.planetCash.balance / 100 +
+                  profile.planetCash.creditLimit / 100)) && (
             <button
               className="add-plant-cash-balance"
               onClick={() => {
@@ -216,7 +217,7 @@ const PlanetCashSelector: FC = (props) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default PlanetCashSelector;

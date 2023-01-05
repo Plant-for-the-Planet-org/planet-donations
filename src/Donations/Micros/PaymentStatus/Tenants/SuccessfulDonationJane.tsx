@@ -4,8 +4,17 @@ import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
 import ThankyouMessage from "./../ThankyouMessage";
 import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
+import { Donation } from "src/Common/Types/donation";
 
-function SuccessfulDonationJane({ donation, sendToReturn }: any) {
+interface SuccessfulDonationJaneProps {
+  donation: Donation;
+  sendToReturn: () => void;
+}
+
+function SuccessfulDonationJane({
+  donation,
+  sendToReturn,
+}: SuccessfulDonationJaneProps) {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const { paymentType, callbackUrl, projectDetails } =
@@ -23,7 +32,9 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
     returnDisplay = x.split("/", 2);
   }
 
-  return donation ? (
+  return donation &&
+    projectDetails &&
+    projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
       {callbackUrl && (
         <button

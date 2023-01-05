@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import { ContactDetails } from "src/Common/Types";
 
 const FormControlNew = withStyles({
   root: {
@@ -18,11 +19,21 @@ const FormControlNew = withStyles({
   },
 })(FormControl);
 
+interface SepaPaymentsProps {
+  paymentType: string;
+  onPaymentFunction: (
+    gateway: string,
+    method: string,
+    providerObject?: any
+  ) => Promise<void>;
+  contactDetails: ContactDetails;
+}
+
 function SepaPayments({
   paymentType,
   onPaymentFunction,
   contactDetails,
-}: any): ReactElement {
+}: SepaPaymentsProps): ReactElement {
   const { t, i18n, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();
@@ -66,7 +77,10 @@ function SepaPayments({
     });
   };
 
-  const createPaymentMethodSepa = (sepaElement: any, contactDetails: any) => {
+  const createPaymentMethodSepa = (
+    sepaElement: any,
+    contactDetails: ContactDetails
+  ) => {
     return stripe?.createPaymentMethod({
       type: "sepa_debit",
       sepa_debit: sepaElement,

@@ -1,13 +1,15 @@
 import React, { ReactElement } from "react";
+import { useTranslation, UseTranslation } from "next-i18next";
 import {
   PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
 } from "@paypal/react-paypal-js";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { PaymentOptions } from "src/Common/Types";
 
 interface Props {
-  paymentSetup: any;
+  paymentSetup: PaymentOptions;
   quantity: number;
   unitCost: number;
   currency: string;
@@ -25,6 +27,7 @@ function NewPaypal({
   payDonationFunction,
   setPaymentError,
 }: Props): ReactElement {
+  const { t } = useTranslation("common");
   const initialOptions = {
     "client-id": paymentSetup?.gateways.paypal.authorization.client_id,
     "enable-funding": "venmo",
@@ -65,9 +68,9 @@ function NewPaypal({
   }
 
   const onError = (data) => {
-    setPaymentError(`Your order failed due to some error.`);
+    setPaymentError(t("paypalPaymentError"));
 
-    // This function shows a transaction success message to your buyer.
+    // This function shows a transaction error message to your buyer.
     data = {
       ...data,
       type: "sdk",
