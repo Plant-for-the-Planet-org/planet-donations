@@ -1,4 +1,4 @@
-name: 'ESLint error report'
+name: "ESLint error report"
 on:
   pull_request:
     branches:
@@ -6,18 +6,17 @@ on:
       - main
 jobs:
   ubuntu-job:
-    name: 'ESLint on Ubuntu'
-    runs-on: ubuntu-latest  # Can be self-hosted runner also
+    name: "ESLint on Ubuntu"
+    runs-on: ubuntu-latest # Can be self-hosted runner also
     steps:
-
-      - name: 'Checkout the repository'
-        uses: actions/checkout@v2
+      - name: "Checkout the repository"
+        uses: actions/checkout@v3
 
       - name: Upgrade npm to latest version
         run: sudo npm i -g npm@latest
 
-      - name: 'Install Node Modules'
-        run: npm install
+      - name: "Install Node Modules"
+        run: npm install --legacy-peer-deps
 
-      - name: 'Running ESLint only showing errors'
+      - name: "Running ESLint only showing errors"
         run: npm run lint:errors
