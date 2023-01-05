@@ -39,6 +39,12 @@ module.exports = {
     "react/display-name": "off",
     "react/no-find-dom-node": "off",
     "i18next/no-literal-string": "off",
+    "react/no-unknown-property": [
+      2,
+      {
+        ignore: ["jsx", "global"],
+      },
+    ],
   },
   globals: {
     React: "writable",
