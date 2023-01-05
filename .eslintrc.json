@@ -1,32 +1,32 @@
-module.exports = {
-  env: {
-    browser: true,
-    es2020: true,
+{
+  "env": {
+    "browser": true,
+    "es2020": true
   },
-  extends: [
+  "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:@next/next/recommended",
+    "plugin:@next/next/recommended"
     // 'airbnb',
   ],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    ecmaVersion: 11,
-    sourceType: "module",
+    "ecmaVersion": 11,
+    "sourceType": "module"
   },
-  plugins: ["react", "@typescript-eslint", "i18next"],
-  rules: {
+  "plugins": ["react", "@typescript-eslint", "i18next"],
+  "rules": {
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",
     "no-use-before-define": "off",
     "react/jsx-filename-extension": [
       1,
-      { extensions: [".js", ".jsx", ".tsx"] },
+      { "extensions": [".js", ".jsx", ".tsx"] }
     ],
     "react/jsx-indent": "off",
     "import/extensions": "off",
@@ -42,11 +42,11 @@ module.exports = {
     "react/no-unknown-property": [
       2,
       {
-        ignore: ["jsx", "global"],
-      },
-    ],
+        "ignore": ["jsx", "global"]
+      }
+    ]
   },
-  globals: {
-    React: "writable",
-  },
-};
+  "globals": {
+    "React": "writable"
+  }
+}
