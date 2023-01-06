@@ -1,13 +1,15 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useContext } from "react";
 import CloseIcon from "../../../public/assets/icons/CloseIcon";
 import styles from "./ErrorPopup.module.scss";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { SerializedError } from "@planet-sdk/common";
+import { ThemeContext } from "styles/themeContext";
 
 export default function ErrorPopup(): ReactElement {
   const { t, ready } = useTranslation(["common"]);
-  const { errors, setErrors } = React.useContext(QueryParamContext);
+  const { errors, setErrors } = useContext(QueryParamContext);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -37,7 +39,7 @@ export default function ErrorPopup(): ReactElement {
         (errors as SerializedError[]).length > 0 &&
         (errors as SerializedError[]).map((err: SerializedError, index) => {
           return (
-            <div key={index} className={styles.errorContainer}>
+            <div key={index} className={`${theme} ${styles.errorContainer}`}>
               <button
                 id={"errorCloseButton"}
                 className={`${styles.closeButton}`}
