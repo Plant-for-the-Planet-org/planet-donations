@@ -23,10 +23,12 @@ export default function ErrorPopup(): ReactElement {
 
   const handleRemoveError = (message: string) => {
     if (errors) {
-      const updatedErrors = (errors as SerializedError[]).filter(
-        (err: SerializedError) => err.message !== message
-      );
-      setErrors(updatedErrors);
+      const updatedErrors = errors.filter((err) => err.message !== message);
+      if (updatedErrors.length === 0) {
+        setErrors(null);
+      } else {
+        setErrors(updatedErrors);
+      }
     }
   };
 
