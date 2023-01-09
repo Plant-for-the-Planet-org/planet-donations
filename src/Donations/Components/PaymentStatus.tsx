@@ -42,7 +42,7 @@ function ThankYou() {
       };
       const donation = await apiRequest(requestParams);
       if (donation.status === 200) {
-        setdonation(donation.data as Donation);
+        setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
       }
     } catch (err) {
       setErrors(handleError(err as APIError));
