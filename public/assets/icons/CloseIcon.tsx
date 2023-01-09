@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
 interface Props {
   width?: string | number;
@@ -6,7 +6,7 @@ interface Props {
   color?: string;
 }
 
-function CloseIcon(props: Props) {
+function CloseIcon(props: Props): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
