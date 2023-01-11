@@ -16,7 +16,7 @@ export default function ErrorPopup(): ReactElement {
     if (errors) {
       timer = setTimeout(() => {
         setErrors(null);
-      }, 5000);
+      }, 10000);
     }
     return () => {
       clearTimeout(timer);
