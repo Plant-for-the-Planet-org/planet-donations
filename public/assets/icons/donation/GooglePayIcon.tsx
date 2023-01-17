@@ -1,6 +1,9 @@
-import React from "react";
+import React, { ReactElement } from "react";
+interface Props {
+  textColor: string;
+}
 
-function GooglePayIcon(props) {
+function GooglePayIcon({ textColor }: Props): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +12,7 @@ function GooglePayIcon(props) {
       viewBox="0 0 523 205.2"
     >
       <g transform="translate(-285.2 -284.4)">
-        <g fill={props.textColor ?props.textColor : "#fff"}>
+        <g fill={textColor ? textColor : "#fff"}>
           <path d="M529.3 384.2v60.5h-19.2V295.3H561c12.9 0 23.9 4.3 32.9 12.9q13.8 12.9 13.8 31.5a41.3 41.3 0 01-13.8 31.7c-8.9 8.5-19.9 12.7-32.9 12.7h-31.7zm0-70.5v52.1h32.1a25.627 25.627 0 0019-7.7 25.181 25.181 0 007.7-18.3 24.9 24.9 0 00-7.7-18.1c-5-5.3-11.3-7.9-19-7.9h-32.1z"></path>
           <path d="M657.9 339.1q21.3 0 33.6 11.4t12.3 31.2v63h-18.3v-14.2h-.8c-7.9 11.7-18.5 17.5-31.7 17.5-11.3 0-20.7-3.3-28.3-10a31.931 31.931 0 01-11.4-25q0-15.9 12-25.2c8-6.3 18.7-9.4 32-9.4 11.4 0 20.8 2.1 28.1 6.3v-4.4c0-6.7-2.6-12.3-7.9-17a27.1 27.1 0 00-18.6-7c-10.7 0-19.2 4.5-25.4 13.6l-16.9-10.6q13.95-20.25 41.3-20.2zm-24.8 74.2a15.139 15.139 0 006.4 12.5 23.5 23.5 0 0014.9 5q12.15 0 21.6-9c6.3-6 9.5-13 9.5-21.1-6-4.7-14.3-7.1-25-7.1-7.8 0-14.3 1.9-19.5 5.6-5.3 3.9-7.9 8.6-7.9 14.1z"></path>
           <path d="M808.2 342.4l-64 147.2h-19.8l23.8-51.5-42.2-95.7h20.9l30.4 73.4h.4l29.6-73.4z"></path>

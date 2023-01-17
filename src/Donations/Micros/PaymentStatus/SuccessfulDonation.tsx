@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../../PaymentMethods/PaymentFunctions";
 import { getFormattedNumber } from "../../../Utils/getFormattedNumber";
@@ -9,16 +9,15 @@ import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
 import { Donation } from "src/Common/Types/donation";
+import { ReactElement } from "react";
 
 interface SuccessfulDonationProps {
   donation: Donation;
-  sendToReturn: () => void;
 }
 
 function SuccessfulDonation({
   donation,
-  sendToReturn,
-}: SuccessfulDonationProps) {
+}: SuccessfulDonationProps): ReactElement {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);
@@ -35,7 +34,7 @@ function SuccessfulDonation({
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const paymentTypeUsed = getPaymentType(paymentType);
 

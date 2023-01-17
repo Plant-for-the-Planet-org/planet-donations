@@ -1,6 +1,9 @@
-import React from "react";
+import React, { ReactElement } from "react";
+interface Props {
+  textColor: string;
+}
 
-function AppleIcon(props) {
+function AppleIcon({ textColor }: Props): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +12,7 @@ function AppleIcon(props) {
       viewBox="0 0 120.377 51.064"
     >
       <g
-        fill={props.textColor ? props.textColor :"#fff"}
+        fill={textColor ? textColor : "#fff"}
         data-name="Group 3399"
         transform="translate(-22.436 -29.056)"
       >

@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 import { ContactDetails } from "src/Common/Types";
+import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 
 function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -36,10 +37,8 @@ function ContactsForm(): ReactElement {
   const {
     contactDetails,
     setContactDetails,
-    setdonationStep,
     country,
     isTaxDeductible,
-    isSignedUp,
     currency,
     quantity,
     paymentSetup,
@@ -49,7 +48,7 @@ function ContactsForm(): ReactElement {
     setTaxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
@@ -109,16 +108,18 @@ function ContactsForm(): ReactElement {
     setContactDetails(data);
   };
 
-  const [addressSugggestions, setaddressSugggestions] = React.useState([]);
+  const [addressSugggestions, setaddressSugggestions] = React.useState<
+    GeocodeSuggestion[]
+  >([]);
 
-  const suggestAddress = (value) => {
+  const suggestAddress = (value: string) => {
     if (value.length > 3) {
       geocoder
         .suggest(value, {
           category: "Address",
           countryCode: contactDetails.country,
         })
-        .then((result) => {
+        .then((result: { suggestions: GeocodeSuggestion[] }) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
           });
@@ -128,10 +129,10 @@ function ContactsForm(): ReactElement {
     }
   };
 
-  const getAddress = (value) => {
+  const getAddress = (value: string) => {
     geocoder
       .findAddressCandidates(value, { outfields: "*" })
-      .then((result) => {
+      .then((result: { candidates: AddressCandidate[] }) => {
         setValue("address", result.candidates[0].attributes.ShortLabel, {
           shouldValidate: true,
         });
@@ -145,6 +146,7 @@ function ContactsForm(): ReactElement {
       })
       .catch(console.log);
   };
+
   React.useEffect(() => {
     if (
       projectDetails &&

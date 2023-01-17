@@ -9,7 +9,6 @@ import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
-import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import {
   CONTACT,
@@ -22,10 +21,7 @@ import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
 
-interface Props {}
-
-function Donations({}: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+function Donations(): ReactElement {
   const router = useRouter();
 
   const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
@@ -83,7 +79,7 @@ function Donations({}: Props): ReactElement {
 }
 
 function DonationInfo() {
-  const { t, i18n } = useTranslation("common", "country");
+  const { t, i18n } = useTranslation("common");
   const {
     projectDetails,
     donationID,
@@ -178,7 +174,8 @@ function DonationInfo() {
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
-          {donationStep > 0 &&
+          {donationStep &&
+            donationStep > 0 &&
             projectDetails.ownerName &&
             (projectDetails.purpose === "trees" ? (
               <a
@@ -252,7 +249,7 @@ function DonationInfo() {
               </div>
             )}
 
-          {donationStep > 0 ? (
+          {donationStep && donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
                 <a

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  ReactElement,
+} from "react";
 import { useTranslation, Trans } from "next-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import CountrySelect from "src/Common/InputTypes/AutoCompleteCountry";
@@ -25,7 +31,7 @@ interface PlanetCashAccount {
 
 const allowedCountries = ["DE", "ES", "US"];
 
-const PlanetCashSignup = () => {
+const PlanetCashSignup = (): ReactElement => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
   const { setshowErrorCard, queryToken } = useContext(QueryParamContext);
@@ -63,7 +69,7 @@ const PlanetCashSignup = () => {
 
   const fetchPlanetCashAccounts = useCallback(async () => {
     const token = router.query.token
-      ? router.query.token
+      ? (router.query.token as string)
       : queryToken
       ? queryToken
       : await getAccessTokenSilently();
@@ -106,13 +112,13 @@ const PlanetCashSignup = () => {
   const handleActivatePlanetCashAccount = useCallback(async () => {
     if (currentPlanetCashAccount) {
       const token = router.query.token
-        ? router.query.token
+        ? (router.query.token as string)
         : queryToken
         ? queryToken
         : await getAccessTokenSilently();
       try {
         const options = {
-          method: "POST",
+          method: "POST" as const,
           url: `/app/planetCash/${currentPlanetCashAccount.id}/activate`,
           token,
           setshowErrorCard,
@@ -127,13 +133,13 @@ const PlanetCashSignup = () => {
 
   const handleCreatePlanetCashAccount = async () => {
     const token = router.query.token
-      ? router.query.token
+      ? (router.query.token as string)
       : queryToken
       ? queryToken
       : await getAccessTokenSilently();
     try {
       const options = {
-        method: "POST",
+        method: "POST" as const,
         url: "/app/planetCash",
         token,
         data: {

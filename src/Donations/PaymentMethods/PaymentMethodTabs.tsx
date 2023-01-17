@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
@@ -10,12 +10,30 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
-function a11yProps(index: any) {
+function a11yProps(index: string) {
   return {
     id: `scrollable-force-tab-${index}`,
     "aria-controls": `payment-methods-tabpanel-${index}`,
   };
+}
+
+interface PaymentMethodTabsProps {
+  paymentType: string;
+  setPaymentType: Dispatch<SetStateAction<string>>;
+  showPaypal?: boolean;
+  showGiroPay?: boolean;
+  showSepa?: boolean;
+  showSofort?: boolean;
+  showCC?: boolean;
+  showNativePay?: boolean;
+  onNativePaymentFunction: (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => Promise<void>;
+  showBankTransfer?: boolean;
 }
 
 export default function PaymentMethodTabs({
@@ -29,10 +47,13 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
   showBankTransfer,
-}: any) {
+}: PaymentMethodTabsProps): ReactElement | null {
   const { t, i18n } = useTranslation(["common", "country"]);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
     setPaymentType(newValue);
   };
 
