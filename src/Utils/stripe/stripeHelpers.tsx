@@ -1,37 +1,38 @@
-import AmexIcon from '../../../public/assets/icons/CreditCardIcons/AmexIcon';
-import DinersClub from '../../../public/assets/icons/CreditCardIcons/DinersClub';
-import DiscoverIcon from '../../../public/assets/icons/CreditCardIcons/DiscoverIcon';
-import JcbIcon from '../../../public/assets/icons/CreditCardIcons/JcbIcon';
-import Mastercard from '../../../public/assets/icons/CreditCardIcons/Mastercard';
-import StripeIcon from '../../../public/assets/icons/CreditCardIcons/StripeIcon';
-import VisaIcon from '../../../public/assets/icons/CreditCardIcons/VisaIcon';
+import AmexIcon from "../../../public/assets/icons/CreditCardIcons/AmexIcon";
+import DinersClub from "../../../public/assets/icons/CreditCardIcons/DinersClub";
+import DiscoverIcon from "../../../public/assets/icons/CreditCardIcons/DiscoverIcon";
+import JcbIcon from "../../../public/assets/icons/CreditCardIcons/JcbIcon";
+import Mastercard from "../../../public/assets/icons/CreditCardIcons/Mastercard";
+import StripeIcon from "../../../public/assets/icons/CreditCardIcons/StripeIcon";
+import VisaIcon from "../../../public/assets/icons/CreditCardIcons/VisaIcon";
 
 export function formatAmountForDisplay(
   amount: number,
-  currency: string,
+  currency: string
 ): string {
-  const numberFormat = new Intl.NumberFormat(['en-US'], {
-    style: 'currency',
+  const numberFormat = new Intl.NumberFormat(["en-US"], {
+    style: "currency",
     currency,
-    currencyDisplay: 'symbol',
+    currencyDisplay: "symbol",
   });
   return numberFormat.format(amount);
 }
 
 export function formatAmountForStripe(
   amount: number,
-  currency: string,
+  currency: string
 ): number {
-  const numberFormat = new Intl.NumberFormat(['en-US'], {
-    style: 'currency',
+  const numberFormat = new Intl.NumberFormat(["en-US"], {
+    style: "currency",
     currency,
-    currencyDisplay: 'symbol',
+    currencyDisplay: "symbol",
+    maximumSignificantDigits: 21,
   });
   const parts = numberFormat.formatToParts(amount);
   let zeroDecimalCurrency = true;
 
   parts.forEach((part) => {
-    if (part.type === 'decimal') {
+    if (part.type === "decimal") {
       zeroDecimalCurrency = false;
     }
   });
@@ -40,21 +41,21 @@ export function formatAmountForStripe(
 
 export const getCardBrand = (brand: String) => {
   switch (brand) {
-    case 'visa':
+    case "visa":
       return <VisaIcon />;
-    case 'mastercard':
+    case "mastercard":
       return <Mastercard />;
-    case 'amex':
+    case "amex":
       return <AmexIcon />;
-    case 'discover':
+    case "discover":
       return <DiscoverIcon />;
-    case 'diners':
+    case "diners":
       return <DinersClub />;
-    case 'jcb':
+    case "jcb":
       return <JcbIcon />;
-    case 'unionpay':
+    case "unionpay":
       return <StripeIcon />;
-    case 'unknown':
+    case "unknown":
       return <StripeIcon />;
     default:
       return <StripeIcon />;
