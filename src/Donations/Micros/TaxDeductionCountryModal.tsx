@@ -4,41 +4,49 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Modal from "@material-ui/core/Modal";
 import RadioGroup from "@material-ui/core/RadioGroup";
-import React, { useState } from "react";
+import React, { useState, ReactElement, ChangeEvent } from "react";
 import { getCountryDataBy } from "../../Utils/countryUtils";
 import { ThemeContext } from "../../../styles/themeContext";
 import GreenRadio from "../../Common/InputTypes/GreenRadio";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import { Country } from "src/Common/Types";
 
-export default function TaxDeductionCountryModal(props: any) {
-  const { openModal, handleModalClose, taxDeductionCountries } = props;
+interface TaxDeductionCountryModalProps {
+  openModal: boolean;
+  handleModalClose: () => void;
+  taxDeductionCountries?: string[];
+}
 
-  const { setcountry, country, setcurrency, currency } =
-    React.useContext(QueryParamContext);
+export default function TaxDeductionCountryModal({
+  openModal,
+  handleModalClose,
+  taxDeductionCountries,
+}: TaxDeductionCountryModalProps): ReactElement | null {
+  const { setcountry, country, currency } = React.useContext(QueryParamContext);
 
   const { t, ready } = useTranslation("common");
 
-  const [countriesData, setCountriesData] = useState([]);
+  const [countriesData, setCountriesData] = useState<Country[]>([]);
 
   const { theme } = React.useContext(ThemeContext);
 
   // changes the currency in when a currency is selected
-  const handleCountryChange = (event: any) => {
+  const handleCountryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedData = event.target.value.split(",");
     setcountry(selectedData[0]);
     localStorage.setItem("countryCode", selectedData[0]);
-
-    // Not needed as new payment setup will be fetched
-    // setcurrency(selectedData[1]);
     handleModalClose();
   };
 
   React.useEffect(() => {
-    let tempCountriesData: any = [];
+    let tempCountriesData: Country[] = [];
     if (taxDeductionCountries && taxDeductionCountries.length > 0) {
       taxDeductionCountries.forEach((countryCode: string) => {
-        tempCountriesData.push(getCountryDataBy("countryCode", countryCode));
+        const countryData = getCountryDataBy("countryCode", countryCode);
+        if (countryData) {
+          tempCountriesData.push(countryData);
+        }
       });
       tempCountriesData = tempCountriesData.sort(function (a, b) {
         const countryA = t(`country:${a.countryCode.toLowerCase()}`);
@@ -74,7 +82,7 @@ export default function TaxDeductionCountryModal(props: any) {
                 value={`${country},${currency}`}
                 onChange={handleCountryChange}
               >
-                {countriesData.map((country: any, index: number) => (
+                {countriesData.map((country, index) => (
                   <FormControlLabel
                     key={country.countryCode + "-" + index}
                     value={`${country.countryCode},${country.currencyCode}`} // need both info

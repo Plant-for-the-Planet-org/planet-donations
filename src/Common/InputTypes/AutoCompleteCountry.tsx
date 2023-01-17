@@ -28,7 +28,7 @@ export default function CountrySelect(props: {
     | null
     | undefined;
   name: string | undefined;
-  defaultValue: String | undefined;
+  defaultValue: string | undefined;
   onValueChange: (value: string) => void;
 }) {
   const { t, ready } = useTranslation("country");

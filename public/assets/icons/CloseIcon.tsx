@@ -1,6 +1,10 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
-function CloseIcon(props) {
+interface Props {
+  color: string;
+}
+
+function CloseIcon({ color }: Props): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +13,7 @@ function CloseIcon(props) {
       viewBox="0 0 16.097 16.093"
     >
       <path
-        fill={props.color ? props.color : "#fff"}
+        fill={color ? color : "#fff"}
         d="M19.36 17.454l5.749-5.754A1.347 1.347 0 1023.2 9.8l-5.749 5.749L11.706 9.8A1.347 1.347 0 109.8 11.7l5.749 5.749L9.8 23.2a1.347 1.347 0 101.905 1.905l5.749-5.749 5.746 5.752a1.347 1.347 0 101.909-1.908z"
         data-name="Icon ionic-ios-close"
         transform="translate(-9.404 -9.407)"

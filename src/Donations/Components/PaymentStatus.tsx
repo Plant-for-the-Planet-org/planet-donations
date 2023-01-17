@@ -1,9 +1,8 @@
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
-import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import FailedDonation from "../Micros/PaymentStatus/FailedDonation";
@@ -17,8 +16,8 @@ import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
 import { Donation } from "src/Common/Types/donation";
 
-function ThankYou() {
-  const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
+function ThankYou(): ReactElement {
+  const { t, ready } = useTranslation(["common", "country", "donate"]);
 
   const {
     donationID,
@@ -90,12 +89,6 @@ function ThankYou() {
     setTextCopiedSnackbarOpen(false);
   };
 
-  let currencyFormat = () => {};
-  if (donation) {
-    currencyFormat = () =>
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
-  }
-
   const { callbackUrl, paymentError, projectDetails } =
     React.useContext(QueryParamContext);
 
@@ -117,12 +110,7 @@ function ThankYou() {
           />
         );
       default:
-        return (
-          <SuccessfulDonation
-            donation={donation as Donation}
-            sendToReturn={sendToReturn}
-          />
-        );
+        return <SuccessfulDonation donation={donation as Donation} />;
     }
   };
 
@@ -154,7 +142,7 @@ function ThankYou() {
                   />
                 ) : (
                   <PendingDonation
-                    donationID={donationID}
+                    donationID={donationID as string}
                     sendToReturn={sendToReturn}
                   />
                 )

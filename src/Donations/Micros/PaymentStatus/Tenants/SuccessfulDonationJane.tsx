@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
@@ -14,17 +14,13 @@ interface SuccessfulDonationJaneProps {
 function SuccessfulDonationJane({
   donation,
   sendToReturn,
-}: SuccessfulDonationJaneProps) {
-  const { t, i18n } = useTranslation(["common", "country", "donate"]);
+}: SuccessfulDonationJaneProps): ReactElement {
+  const { t } = useTranslation(["common", "country", "donate"]);
 
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
-
   const paymentTypeUsed = getPaymentType(paymentType);
-
-  const sendRef = () => imageRef;
 
   let returnDisplay;
   if (callbackUrl) {
@@ -36,7 +32,7 @@ function SuccessfulDonationJane({
     projectDetails &&
     projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
-      {callbackUrl && (
+      {callbackUrl && returnDisplay && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}

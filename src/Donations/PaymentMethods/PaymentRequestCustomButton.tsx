@@ -1,5 +1,5 @@
 import { useStripe } from "@stripe/react-stripe-js";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "next-i18next";
 import getStripe from "../../Utils/stripe/getStripe";
@@ -10,17 +10,26 @@ import themeProperties from "../../../styles/themeProperties";
 import { stripeAllowedCountries } from "../../Utils/countryUtils";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { PaymentOptions } from "src/Common/Types";
+import {
+  PaymentRequest,
+  PaymentRequestPaymentMethodEvent,
+} from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { Stripe } from "@stripe/stripe-js/types/stripe-js/stripe";
 
 interface PaymentButtonProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
-  continueNext: Function;
+  onPaymentFunction: (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => Promise<void>;
+  continueNext: () => void;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
-  paymentSetup: Object;
+  paymentSetup: PaymentOptions;
 }
 
 export const PaymentRequestCustomButton = ({
@@ -33,7 +42,7 @@ export const PaymentRequestCustomButton = ({
   paymentLabel,
   frequency,
   paymentSetup,
-}: PaymentButtonProps) => {
+}: PaymentButtonProps): ReactElement | null => {
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
@@ -79,7 +88,7 @@ export const PaymentRequestCustomButton = ({
     if (paymentRequest) {
       paymentRequest
         .canMakePayment()
-        .then((res: any) => {
+        .then((res) => {
           if (res && subscribed) {
             setCanMakePayment(true);
           }
@@ -98,7 +107,7 @@ export const PaymentRequestCustomButton = ({
       setPaymentLoading(true);
       paymentRequest.on(
         "paymentmethod",
-        ({ complete, paymentMethod, ...data }: any) => {
+        ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
           onPaymentFunction(paymentMethod, paymentRequest);
           complete("success");
           setPaymentLoading(false);
@@ -109,7 +118,7 @@ export const PaymentRequestCustomButton = ({
       if (paymentRequest && !paymentLoading) {
         paymentRequest.off(
           "paymentmethod",
-          ({ complete, paymentMethod, ...data }: any) => {
+          ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
             onPaymentFunction(paymentMethod, paymentRequest);
             complete("success");
             setPaymentLoading(false);
@@ -130,11 +139,11 @@ export const PaymentRequestCustomButton = ({
       {stripeAllowedCountries?.includes(country) &&
       canMakePayment &&
       paymentRequest &&
-      paymentRequest._canMakePaymentAvailability &&
+      paymentRequest._canMakePaymentAvailability && //TODOO - is _canMakePaymentAvailability a private variable?
       (frequency !== "once"
-        ? paymentSetup?.recurrency.methods.includes("card")
+        ? paymentSetup?.recurrency?.methods?.includes("card")
         : true) ? (
-        paymentRequest._canMakePaymentAvailability.APPLE_PAY ? (
+        paymentRequest._canMakePaymentAvailability.APPLE_PAY ? ( //TODOO - is _canMakePaymentAvailability a private variable?
           <div className="w-100">
             <button
               onClick={() => paymentRequest.show()}
@@ -157,7 +166,7 @@ export const PaymentRequestCustomButton = ({
               <div className="separator-text mb-10">{t("or")}</div>
             )}
           </div>
-        ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? (
+        ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? ( //TODOO - is _canMakePaymentAvailability a private variable?
           <div className="w-100">
             <button
               onClick={() => {
@@ -215,11 +224,14 @@ export const PaymentRequestCustomButton = ({
 
 interface NativePayProps {
   country: string;
-  currency: String;
+  currency: string;
   amount: number;
-  onPaymentFunction: Function;
+  onPaymentFunction: (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => Promise<void>;
   paymentSetup: PaymentOptions;
-  continueNext: Function;
+  continueNext: () => void;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
@@ -234,10 +246,9 @@ export const NativePay = ({
   isPaymentPage,
   paymentLabel,
   frequency,
-}: NativePayProps) => {
-  const [stripePromise, setStripePromise] = useState(() =>
-    getStripe(paymentSetup)
-  );
+}: NativePayProps): ReactElement => {
+  const [stripePromise, setStripePromise] =
+    useState<null | Promise<Stripe | null>>(() => getStripe(paymentSetup));
 
   useEffect(() => {
     const fetchStripeObject = async () => {
