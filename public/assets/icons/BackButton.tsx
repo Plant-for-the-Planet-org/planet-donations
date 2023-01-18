@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
 
 interface Props {
-  color:any
+  color: string;
 }
 
-function BackButton({color}: Props): ReactElement {
+function BackButton({ color }: Props): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

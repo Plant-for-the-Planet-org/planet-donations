@@ -1,4 +1,9 @@
-import { BankTransferDetails, ContactDetails } from ".";
+import {
+  BankTransferDetails,
+  ContactDetails,
+  ProjectPurpose,
+  GiftDetails,
+} from ".";
 
 enum PaymentStatusValues {
   PENDING = "pending",
@@ -74,8 +79,8 @@ export interface Organization {
 }
 
 export interface Metadata {
-  callback_method: string;
-  callback_url: string;
+  callback_method?: string;
+  callback_url?: string;
 }
 
 export interface Project2 {
@@ -84,3 +89,16 @@ export interface Project2 {
   name: string;
   purpose: string;
 }
+
+export type DonationRequestData = {
+  purpose: ProjectPurpose;
+  project?: string;
+  amount: number;
+  currency: string;
+  donor: ContactDetails;
+  frequency: string;
+  metadata: Metadata;
+  quantity?: number;
+  taxDeductionCountry?: string;
+  gift?: GiftDetails;
+};

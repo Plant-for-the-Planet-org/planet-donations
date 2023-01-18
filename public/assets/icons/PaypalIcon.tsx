@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { ReactElement } from "react";
 
-function PaypalIcon() {
+function PaypalIcon(): ReactElement {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

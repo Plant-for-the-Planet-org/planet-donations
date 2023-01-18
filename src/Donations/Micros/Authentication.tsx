@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { useAuth0, User as AuthUser } from "@auth0/auth0-react";
+import { LogoutOptions, useAuth0, User as AuthUser } from "@auth0/auth0-react";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
@@ -11,7 +11,6 @@ import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
 import AppleMailIcon from "../../../public/assets/icons/AppleMailIcon";
 import getImageUrl from "../../Utils/getImageURL";
 import { useRouter } from "next/router";
-import themeProperties from "styles/themeProperties";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
@@ -19,11 +18,8 @@ import { Skeleton } from "@material-ui/lab";
 import { ContactDetails } from "src/Common/Types";
 import { User } from "src/Common/Types/user";
 
-interface Props {}
-
-function Authentication({}: Props): ReactElement {
+function Authentication(): ReactElement {
   const {
-    contactDetails,
     setContactDetails,
     setshowErrorCard,
     setqueryToken,
@@ -32,7 +28,6 @@ function Authentication({}: Props): ReactElement {
     setprofile,
     setIsSignedUp,
     hideLogin,
-    setHideLogin,
     setcurrency,
     setcountry,
     tenant,
@@ -59,37 +54,30 @@ function Authentication({}: Props): ReactElement {
           setshowErrorCard,
           tenant,
         };
-        const profile: any = await apiRequest(requestParams);
+        const profileResponse: { data: User } = await apiRequest(requestParams);
+        const profile = profileResponse.data;
 
-        if (profile.data) {
-          if (profile.data.currency) {
-            setcurrency(profile.data.currency);
+        if (profile) {
+          if (profile.currency) {
+            setcurrency(profile.currency);
           }
-          if (profile.data.address.country) {
-            // setcountry(profile.data.address.country);
+          if (profile.address.country) {
             setCountryCode({
               setcountry,
               setcurrency,
-              profileCountry: profile.data.address.country,
+              profileCountry: profile.address.country,
             });
-            // localStorage.setItem("countryCode", profile.data.address.country);
           }
-          setprofile(profile.data);
+          setprofile(profile);
           setIsSignedUp(true);
           const newContactDetails: ContactDetails = {
-            firstname: profile.data.firstname ? profile.data.firstname : "",
-            lastname: profile.data.lastname ? profile.data.lastname : "",
-            email: profile.data.email ? profile.data.email : "",
-            address: profile.data.address.address
-              ? profile.data.address.address
-              : "",
-            city: profile.data.address.city ? profile.data.address.city : "",
-            zipCode: profile.data.address.zipCode
-              ? profile.data.address.zipCode
-              : "",
-            country: profile.data.address.country
-              ? profile.data.address.country
-              : "",
+            firstname: profile.firstname ? profile.firstname : "",
+            lastname: profile.lastname ? profile.lastname : "",
+            email: profile.email ? profile.email : "",
+            address: profile.address.address ? profile.address.address : "",
+            city: profile.address.city ? profile.address.city : "",
+            zipCode: profile.address.zipCode ? profile.address.zipCode : "",
+            country: profile.address.country ? profile.address.country : "",
             companyname: "",
           };
           setContactDetails(newContactDetails);
@@ -125,9 +113,9 @@ function Authentication({}: Props): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      if (localStorage.getItem("queryparams")) {
-        const queryparams = localStorage.getItem("queryparams");
-        router.push(queryparams);
+      const queryParams = localStorage.getItem("queryparams");
+      if (queryParams) {
+        router.push(queryParams);
         localStorage.removeItem("queryparams");
       }
       // If details present store in contact details
@@ -140,7 +128,7 @@ function Authentication({}: Props): ReactElement {
     router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
-  const { t, ready } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   const loginUser = () => {
     localStorage.setItem("queryparams", router.asPath);
@@ -153,10 +141,10 @@ function Authentication({}: Props): ReactElement {
   React.useEffect(() => {
     // if there is token in the query params use it
     if (
-      (router.query.token && validateToken(router.query.token)) ||
-      validateToken(queryToken)
+      (router.query.token && validateToken(router.query.token as string)) ||
+      validateToken(queryToken as string)
     ) {
-      setqueryToken(router.query.token || queryToken);
+      setqueryToken((router.query.token as string | null) || queryToken);
       // If user is logged in via auth0, log them out
       if (!isLoading && isAuthenticated) {
         logout({ returnTo: window?.location.href });
@@ -228,8 +216,8 @@ export default Authentication;
 
 interface VerifyEmailProps {
   openModal: boolean;
-  handleModalClose: Function;
-  logout: Function;
+  handleModalClose: () => void;
+  logout: (options?: LogoutOptions | undefined) => void;
 }
 
 function VerifyEmailModal({
@@ -263,9 +251,6 @@ function VerifyEmailModal({
           >
             <CloseIcon
               color={theme === "theme-light" ? "#2f3336" : "#ffffff"}
-              style={{
-                alignSelf: "flex-end",
-              }}
             />
           </button>
           <p className={"select-language-title mb-20"}>

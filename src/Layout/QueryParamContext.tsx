@@ -26,6 +26,7 @@ import {
   ContactDetails,
   BankTransferDetails,
   OnBehalfDonor,
+  ConfigResponse,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -34,6 +35,7 @@ import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterf
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
 import { Donation } from "src/Common/Types/donation";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -74,7 +76,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [isDirectDonation, setisDirectDonation] = useState(false);
 
-  const [donationUid, setDonationUid] = useState<string | null>(null);
+  const [donationUid, setDonationUid] = useState<string>("");
 
   const [isPaymentOptionsLoading, setIsPaymentOptionsLoading] = useState(false);
 
@@ -143,7 +145,9 @@ const QueryParamProvider: FC = ({ children }) => {
   });
 
   const [donation, setdonation] = useState<Donation | null>(null);
-  const [paymentRequest, setPaymentRequest] = useState<Object | null>(null);
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
+    null
+  );
 
   const loadEnabledCurrencies = async () => {
     try {
@@ -151,7 +155,9 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/currencies`,
         setshowErrorCard,
       };
-      const response: any = await apiRequest(requestParams);
+      const response: { data: Record<string, string> } = await apiRequest(
+        requestParams
+      );
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -271,7 +277,9 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const loadProfile = useCallback(async () => {
     const token =
-      queryToken || router.query.token || (await getAccessTokenSilently());
+      queryToken ||
+      (router.query.token as string) ||
+      (await getAccessTokenSilently());
     try {
       const profile = await apiRequest({
         url: "/app/profile",
@@ -375,7 +383,7 @@ const QueryParamProvider: FC = ({ children }) => {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const config: any = await apiRequest(requestParams);
+      const config: { data: ConfigResponse } = await apiRequest(requestParams);
       if (config.data) {
         if (!router.query.country) {
           const found = countriesData.some(
@@ -389,7 +397,7 @@ const QueryParamProvider: FC = ({ children }) => {
               setCountryCode({
                 setcountry,
                 setcurrency,
-                configCountry: config.data.country.toUpperCase(),
+                configCountry: config.data.country?.toUpperCase(),
               });
             }
           }
@@ -495,7 +503,9 @@ const QueryParamProvider: FC = ({ children }) => {
         setshowErrorCard,
         tenant,
       };
-      const paymentSetupData: any = await apiRequest(requestParams);
+      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
+        requestParams
+      );
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {

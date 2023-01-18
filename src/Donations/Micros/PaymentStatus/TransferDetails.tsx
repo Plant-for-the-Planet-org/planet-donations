@@ -6,6 +6,8 @@ import themeProperties from "../../../../styles/themeProperties";
 import CopyIcon from "public/assets/icons/CopyIcon";
 import ReturnToButton from "./Components/ReturnToButton";
 import { Donation } from "src/Common/Types/donation";
+import { ReactElement } from "react";
+import { TFunction } from "react-i18next";
 
 interface TransferDetailsProps {
   donationID: string;
@@ -17,7 +19,7 @@ function TransferDetails({
   donationID,
   donation,
   sendToReturn,
-}: TransferDetailsProps) {
+}: TransferDetailsProps): ReactElement | null {
   const { t } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
   const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);
@@ -132,7 +134,13 @@ function TransferDetails({
 
 export default TransferDetails;
 
-const CopyButton = ({ copiedText, buttonFor, t }: any) => {
+interface CopyButtonProps {
+  copiedText: string;
+  buttonFor: string;
+  t: TFunction;
+}
+
+const CopyButton = ({ copiedText, buttonFor, t }: CopyButtonProps) => {
   return (
     <div className="copy-container">
       <p
