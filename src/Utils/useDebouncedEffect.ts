@@ -1,7 +1,11 @@
 // credits to https://stackoverflow.com/questions/54666401/how-to-use-throttle-or-debounce-with-react-hook
-import { useCallback, useEffect } from "react";
+import { DependencyList, useCallback, useEffect } from "react";
 
-export const useDebouncedEffect = (effect, delay , deps) => {
+export const useDebouncedEffect = (
+  effect: (...args: unknown[]) => void,
+  delay: number,
+  deps: DependencyList
+): void => {
   const callback = useCallback(effect, deps);
 
   useEffect(() => {
@@ -13,4 +17,4 @@ export const useDebouncedEffect = (effect, delay , deps) => {
       clearTimeout(handler);
     };
   }, [callback, delay]);
-}
+};

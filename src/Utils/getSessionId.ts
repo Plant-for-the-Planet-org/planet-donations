@@ -1,6 +1,10 @@
 import { v1 } from "uuid";
 
-export default async function getsessionId() {
+/**
+ * Async function to return a sessionId string
+ * @returns {Promise<string>} sessionId
+ */
+export default async function getsessionId(): Promise<string> {
   let sessionId;
   if (typeof Storage !== "undefined") {
     if (typeof window !== "undefined") {

@@ -1,9 +1,14 @@
-import React from "react";
-function TreeCostLoader(props:any) {
+import { ReactElement } from "react";
+
+interface Props {
+  width: string | number;
+}
+
+function TreeCostLoader({ width }: Props): ReactElement {
   return (
     <svg
       role="img"
-      width={props.width ? props.width : "100%"}
+      width={width ? width : "100%"}
       height="20"
       aria-labelledby="loading-aria"
       viewBox="0 0 150 36"

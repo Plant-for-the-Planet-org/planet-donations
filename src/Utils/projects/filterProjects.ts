@@ -1,15 +1,20 @@
-export function getFilteredProjects(projects: Array<any>, type: string) {
+import { Project } from "src/Common/Types/project";
+
+export function getFilteredProjects(
+  projects: Array<Project>,
+  type: string
+): Project[] | undefined {
   if (type === "featured") {
-    return projects.filter(
-      (project: { properties: { isFeatured: boolean } }) =>
-        project.properties.isFeatured === true
-    );
+    return projects.filter((project) => project.properties.isFeatured === true);
   } else if (type === "all") {
     return projects;
   }
 }
 
-export function getSearchProjects(projects: Array<any>, keyword: string) {
+export function getSearchProjects(
+  projects: Array<Project>,
+  keyword: string
+): Project[] {
   let resultProjects = [];
   if (keyword !== "") {
     const keywords = keyword.split(/[\s\-.,+]+/);
@@ -60,16 +65,19 @@ export function getSearchProjects(projects: Array<any>, keyword: string) {
   }
 }
 
-export function getRandomProjects(arr:Array<any>, n:number) {
-  const result = new Array(n);
+/**
+ * Returns an array of random projects of length n
+ */
+export function getRandomProjects(arr: Array<Project>, n: number): Project[] {
+  const result = new Array<Project>(n);
   let len = arr.length;
   const taken = new Array(len);
   if (n > len)
-      throw new RangeError("getRandom: more elements taken than available");
+    throw new RangeError("getRandom: more elements taken than available");
   while (n--) {
-      const x = Math.floor(Math.random() * len);
-      result[n] = arr[x in taken ? taken[x] : x];
-      taken[x] = --len in taken ? taken[len] : len;
+    const x = Math.floor(Math.random() * len);
+    result[n] = arr[x in taken ? taken[x] : x];
+    taken[x] = --len in taken ? taken[len] : len;
   }
   return result;
 }

@@ -1,5 +1,6 @@
-import React from "react";
-export default function LeafIcon() {
+import React, { ReactElement } from "react";
+
+export default function LeafIcon(): ReactElement {
   return (
     <svg
       id="leaf"

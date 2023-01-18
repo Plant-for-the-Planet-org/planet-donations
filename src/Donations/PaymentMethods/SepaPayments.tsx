@@ -7,6 +7,8 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { ContactDetails } from "src/Common/Types";
+import { StripeIbanElement } from "@stripe/stripe-js/types/stripe-js/elements/iban";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
 const FormControlNew = withStyles({
   root: {
@@ -24,7 +26,7 @@ interface SepaPaymentsProps {
   onPaymentFunction: (
     gateway: string,
     method: string,
-    providerObject?: any
+    providerObject?: PaymentMethod
   ) => Promise<void>;
   contactDetails: ContactDetails;
 }
@@ -34,7 +36,7 @@ function SepaPayments({
   onPaymentFunction,
   contactDetails,
 }: SepaPaymentsProps): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();
 
@@ -67,8 +69,8 @@ function SepaPayments({
   };
 
   const validateChange = () => {
-    const sepaElement = elements.getElement(IbanElement)!;
-    sepaElement.on("change", ({ error }) => {
+    const sepaElement = elements?.getElement(IbanElement);
+    sepaElement?.on("change", ({ error }) => {
       if (error) {
         setShowContinue(false);
       } else {
@@ -78,7 +80,7 @@ function SepaPayments({
   };
 
   const createPaymentMethodSepa = (
-    sepaElement: any,
+    sepaElement: StripeIbanElement,
     contactDetails: ContactDetails
   ) => {
     return stripe?.createPaymentMethod({
@@ -90,21 +92,23 @@ function SepaPayments({
       },
     });
   };
+
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     setShowContinue(false);
     event.preventDefault();
     if (!stripe || !elements) {
       return;
     }
-    let paymentMethod: any;
+    let paymentMethod;
 
     if (paymentType === "SEPA") {
-      const sepaElement = elements.getElement(IbanElement)!;
+      const sepaElement = elements.getElement(IbanElement);
+      if (!sepaElement) return;
       const payload = await createPaymentMethodSepa(
         sepaElement,
         contactDetails
       );
-      paymentMethod = payload.paymentMethod;
+      paymentMethod = payload?.paymentMethod;
       // Add payload error if failed
     }
     if (paymentMethod) {

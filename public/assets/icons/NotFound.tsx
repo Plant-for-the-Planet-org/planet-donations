@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { ReactElement } from "react";
 
-function NotFound(props: any) {
+interface Props {
+  className: string;
+}
+
+function NotFound({ className }: Props): ReactElement {
   return (
     <svg
-      className={props.className}
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       width={"100%"}
       height={"100%"}

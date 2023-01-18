@@ -6,17 +6,24 @@ import {
   PaymentOptions,
   CreateDonationDataProps,
   ContactDetails,
+  PaypalErrorData,
+  PaypalApproveData,
+  PaymentProviderRequest,
+  UpdateDonationResponse,
+  UpdateDonationData,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Donation } from "src/Common/Types/donation";
+import { Donation, DonationRequestData } from "src/Common/Types/donation";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
+import { Dispatch, SetStateAction } from "react";
 
-//rename to buildPaymentProviderRequest
 export function buildPaymentProviderRequest(
-  gateway,
-  method,
+  gateway: string,
+  method: string,
   paymentSetup: PaymentOptions,
-  providerObject
-) {
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
+): { paymentProviderRequest: PaymentProviderRequest } {
   let account;
   let source;
   switch (gateway) {
@@ -28,7 +35,7 @@ export function buildPaymentProviderRequest(
         case "stripe_sepa":
         case "sepa_debit":
           source = {
-            id: providerObject.id,
+            id: (providerObject as PaymentMethod).id,
             object: "payment_method",
           };
           break;
@@ -42,14 +49,15 @@ export function buildPaymentProviderRequest(
       break;
     case "paypal":
       account = paymentSetup.gateways.paypal.account;
-      source = providerObject;
+      source = providerObject as PaypalApproveData | PaypalErrorData;
       break;
     case "offline":
       account = paymentSetup.gateways.offline?.account;
       source = {};
-
+      break;
     // throw some exception here 'unsupported gateway'
   }
+
   return {
     paymentProviderRequest: {
       account,
@@ -60,8 +68,8 @@ export function buildPaymentProviderRequest(
   };
 }
 
-export function getPaymentType(paymentType: String) {
-  let paymentTypeUsed;
+export function getPaymentType(paymentType: string): string {
+  let paymentTypeUsed: string;
   switch (paymentType) {
     case "CARD":
       paymentTypeUsed = "Credit Card";
@@ -124,10 +132,10 @@ export async function createDonationFunction({
     const requestParams = {
       url: `/app/donations`,
       data: donationData,
-      method: "POST",
+      method: "POST" as const,
       setshowErrorCard,
       tenant,
-      token: token ? token : false,
+      token: token ? token : null,
     };
     const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
@@ -163,14 +171,14 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
-}: CreateDonationDataProps) {
-  let donationData = {
+}: CreateDonationDataProps): DonationRequestData {
+  let donationData: DonationRequestData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,
     amount:
       paymentSetup.unitCost * quantity
         ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
-        : amount,
+        : (amount as number), //amount is null when quantity has a value
     currency,
     donor: { ...contactDetails },
     frequency: frequency,
@@ -178,12 +186,9 @@ export function createDonationData({
       callback_url: callbackUrl,
       callback_method: callbackMethod,
     },
-  };
-  // if (paymentSetup.unitBased) {
-  donationData = {
-    ...donationData,
     quantity,
   };
+
   // }
   if (taxDeductionCountry) {
     donationData = {
@@ -216,8 +221,6 @@ export function createDonationData({
           },
         },
       };
-    } else if (giftDetails.type === "bulk") {
-      // for multiple receipients
     }
   }
 
@@ -250,7 +253,7 @@ export async function payDonationFunction({
   router,
   tenant,
   setTransferDetails,
-}: PayDonationProps) {
+}: PayDonationProps): Promise<UpdateDonationData | undefined> {
   setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {
@@ -278,9 +281,10 @@ export async function payDonationFunction({
     );
     if (paymentResponse) {
       if (
-        ["success", "pending", "paid"].includes(
-          paymentResponse.paymentStatus
-        ) ||
+        (paymentResponse.paymentStatus &&
+          ["success", "pending", "paid"].includes(
+            paymentResponse.paymentStatus
+          )) ||
         ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
         if (paymentResponse.status === "failed") {
@@ -288,7 +292,10 @@ export async function payDonationFunction({
           setPaymentError(paymentResponse.message);
         }
         // setIsPaymentProcessing(false);
-        if (paymentResponse?.response?.type === "transfer_required") {
+        if (
+          paymentResponse.status === "success" &&
+          paymentResponse?.response?.type === "transfer_required"
+        ) {
           setTransferDetails(paymentResponse?.response?.account);
         } else {
           setTransferDetails(null);
@@ -300,7 +307,6 @@ export async function payDonationFunction({
         return paymentResponse;
       } else if (paymentResponse.status === "action_required") {
         handleStripeSCAPayment({
-          gateway,
           method,
           paymentResponse,
           paymentSetup,
@@ -338,34 +344,23 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  // paymentIntentId: string,
-  // account: string,
-  payDonationData: any,
-  token: string,
-  setshowErrorCard: any,
-  setPaymentError: any,
+  payDonationData: { paymentProviderRequest: PaymentProviderRequest },
+  token: string | null,
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>,
+  setPaymentError: Dispatch<SetStateAction<string>>,
   tenant: string
-) {
-  // const payDonationData = {
-  //   paymentProviderRequest: {
-  //     account: account,
-  //     gateway: "stripe",
-  //     source: {
-  //       id: paymentIntentId,
-  //       object: "payment_intent",
-  //     },
-  //   },
-  // };
-
+): Promise<UpdateDonationData | undefined> {
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
-    method: "PUT",
+    method: "PUT" as const,
     setshowErrorCard,
-    token: token ? token : false,
+    token: token ? token : null,
     tenant,
   };
-  const confirmationResponse = await apiRequest(requestParams);
+  const confirmationResponse: UpdateDonationResponse = await apiRequest(
+    requestParams
+  );
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
@@ -391,15 +386,20 @@ const buildBillingDetails = (contactDetails: ContactDetails) => {
 };
 
 const handlePaymentError = (
-  paymentError: any,
-  setIsPaymentProcessing: any,
-  setPaymentError: any
-) => {
+  paymentError: StripeError | string | undefined, //TODOO - identify and set better error types
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>,
+  setPaymentError: Dispatch<SetStateAction<string>>
+): void => {
   setIsPaymentProcessing(false);
-  if (paymentError?.message || paymentError?.data?.message) {
-    setPaymentError(paymentError.message ?? paymentError.data.message);
+  if (
+    (typeof paymentError !== "string" && paymentError?.message) ||
+    paymentError?.data?.message
+  ) {
+    setPaymentError(
+      (paymentError as StripeError).message ?? paymentError.data.message
+    );
   } else {
-    setPaymentError(paymentError);
+    setPaymentError(paymentError as string);
   }
 };
 
@@ -417,25 +417,28 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
-}: HandleStripeSCAPaymentProps) {
+}: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
-  const key = paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
-    ? paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey
-    : paymentSetup?.gateways?.stripe?.stripePublishableKey;
-  const stripe = window.Stripe(key, {
+  const key =
+    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
+
+  if (!window.Stripe) return;
+  const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
   });
   switch (method) {
     case "card": {
-      let successData: {};
-      let stripeResponse: {};
+      let successData: UpdateDonationData | undefined;
+      let stripeResponse: PaymentIntentResult;
       switch (paymentResponse.response.type) {
         // cardAction requires confirmation of the payment intent to execute the payment server side
         case "cardAction":
           stripeResponse = await stripe.handleCardAction(clientSecret);
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
-            setPaymentError(stripeResponse.error.message);
+            setPaymentError(
+              stripeResponse.error.message || "Something went wrong"
+            );
             return;
           }
           try {
@@ -449,7 +452,7 @@ export async function handleStripeSCAPayment({
                 },
               },
             };
-            const successResponse = confirmPaymentIntent(
+            const successResponse = await confirmPaymentIntent(
               donationID,
               payDonationData,
               token,
@@ -457,8 +460,8 @@ export async function handleStripeSCAPayment({
               setPaymentError,
               tenant
             );
-            successData = successResponse.data;
-          } catch (error: any) {
+            successData = successResponse;
+          } catch (error) {
             // implement and call an exception handling function
             handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
             return;
@@ -469,7 +472,9 @@ export async function handleStripeSCAPayment({
           stripeResponse = await stripe.confirmCardPayment(clientSecret);
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
-            setPaymentError(stripeResponse.error.message);
+            setPaymentError(
+              stripeResponse.error.message || "Something went wrong."
+            );
             return;
           }
           break;
@@ -489,56 +494,55 @@ export async function handleStripeSCAPayment({
       return successData;
     }
     case "giropay": {
-      const { errorGiropay, paymentIntentGiropay } =
-        await stripe.confirmGiropayPayment(
-          paymentResponse.response.payment_intent_client_secret,
-          {
-            payment_method: {
-              billing_details: buildBillingDetails(contactDetails),
-            },
-            return_url: `${
-              window.location.origin
-            }/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}&locale=${
-              localStorage.getItem("language")
-                ? localStorage.getItem("language")
-                : "en"
-            }`,
-          }
-        );
-      handlePaymentError(errorGiropay, setIsPaymentProcessing, setPaymentError);
+      const { error } = await stripe.confirmGiropayPayment(
+        paymentResponse.response.payment_intent_client_secret,
+        {
+          payment_method: {
+            billing_details: buildBillingDetails(contactDetails),
+          },
+          return_url: `${
+            window.location.origin
+          }/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}&locale=${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`,
+        }
+      );
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
+      }
       break;
     }
 
     case "sofort": {
-      const { errorSofort, paymentIntentSofort } =
-        await stripe.confirmSofortPayment(
-          paymentResponse.response.payment_intent_client_secret,
-          {
-            payment_method: {
-              sofort: {
-                country: country,
-              },
-              billing_details: buildBillingDetails(contactDetails),
+      const { error } = await stripe.confirmSofortPayment(
+        paymentResponse.response.payment_intent_client_secret,
+        {
+          payment_method: {
+            sofort: {
+              country: country,
             },
-            return_url: `${
-              window.location.origin
-            }/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}&locale=${
-              localStorage.getItem("language")
-                ? localStorage.getItem("language")
-                : "en"
-            }`,
-          }
-        );
-      handlePaymentError(errorSofort, setIsPaymentProcessing, setPaymentError);
+            billing_details: buildBillingDetails(contactDetails),
+          },
+          return_url: `${
+            window.location.origin
+          }/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}&locale=${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`,
+        }
+      );
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
+      }
       break;
     }
     case "sepa_debit": {
-      try {
-        const sepaResponse = await stripe.confirmSepaDebitPayment(clientSecret);
-      } catch {
-        (err: any) => {
-          handlePaymentError(err, setIsPaymentProcessing, setPaymentError);
-        };
+      const { error } = await stripe.confirmSepaDebitPayment(clientSecret);
+      if (error) {
+        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
       }
       router.push({
         query: { ...router.query, step: THANK_YOU },
