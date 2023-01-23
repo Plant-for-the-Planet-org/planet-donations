@@ -9,7 +9,7 @@ import { Donation } from "src/Common/Types/donation";
 interface Props {
   projectDetails: FetchedProjectDetails;
   donation: Donation;
-  paymentTypeUsed: any;
+  paymentTypeUsed: string;
 }
 
 function ThankyouMessage({

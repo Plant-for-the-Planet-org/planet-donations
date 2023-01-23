@@ -5,7 +5,6 @@ import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
-import { getCountryDataBy } from "../src/Utils/countryUtils";
 import locales from "../public/static/localeList.json";
 import { useRouter } from "next/router";
 import countriesData from "./../src/Utils/countriesData.json";
@@ -19,25 +18,26 @@ import {
   PlanetCashSignupDetails,
 } from "src/Common/Types";
 import { Donation } from "src/Common/Types/donation";
+import { GetServerSideProps } from "next/types";
 
 interface Props {
   projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
-  donationStep: any;
+  donationStep: number | null;
   giftDetails: GiftDetails | null;
   isGift: boolean;
-  resolvedUrl?: any;
+  resolvedUrl?: string;
   isDirectDonation: boolean;
   hideTaxDeduction: boolean;
   isTaxDeductible: boolean;
-  donationID: any;
+  donationID: string | null;
   shouldCreateDonation: boolean;
-  country: any;
+  country: string;
   contactDetails: ContactDetails;
   allowTaxDeductionChange: boolean;
-  currency: any;
+  currency: string;
   paymentSetup: PaymentOptions;
-  treecount?: any;
-  amount: any;
+  treecount?: number;
+  amount: number;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
   tenant: string;
@@ -131,11 +131,14 @@ function index({
   }, [projectDetails]);
 
   settenant(tenant);
-  // If gift details are present set gift
-  if (giftDetails && isGift) {
-    setgiftDetails(giftDetails);
-    setisGift(true);
-  }
+
+  // If gift details are present, initialize gift in context
+  React.useEffect(() => {
+    if (giftDetails && isGift) {
+      setgiftDetails(giftDetails);
+      setisGift(true);
+    }
+  }, []);
 
   React.useEffect(() => {
     setdonationStep(donationStep);
@@ -203,7 +206,7 @@ function index({
 
 export default index;
 
-export async function getServerSideProps(context: any) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   let donationStep = 0;
   let showErrorCard = false;
   let projectDetails: FetchedProjectDetails | null = null;
@@ -233,28 +236,29 @@ export async function getServerSideProps(context: any) {
   function setshowErrorCard() {
     showErrorCard = true;
   }
-  if (context.query.tenant) {
+  if (typeof context.query.tenant === "string") {
     tenant = context.query.tenant;
   }
 
   // Country = country => This can be received from the URL, can also be set by the user, can be extracted from browser location (config API)
-  if (context.query.country) {
+  if (typeof context.query.country === "string") {
+    const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() ===
-        context.query.country?.toUpperCase()
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
     );
     if (found) {
-      country = context.query.country.toUpperCase();
+      country = queryCountry.toUpperCase();
     }
   }
-  if (context.query.locale) {
+  if (typeof context.query.locale === "string") {
     locale = context.query.locale;
   }
   // Set project details if there is to (project slug) in the query params
   if (
-    (context.query.to && !context.query.context) ||
-    context.query.step === DONATE
+    ((context.query.to && !context.query.context) ||
+      context.query.step === DONATE) &&
+    typeof context.query.to === "string"
   ) {
     const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
@@ -381,6 +385,8 @@ export async function getServerSideProps(context: any) {
         // Check if the donation status is paid or successful - if yes directly show thank you page
         // other payment statuses paymentStatus =  'refunded'; 'referred'; 'in-dispute'; 'dispute-lost';
         if (
+          typeof context.query.method === "string" &&
+          typeof context.query.redirect_status === "string" &&
           queryMethodForStep4.includes(context.query.method) &&
           queryRedirectStatus.includes(context.query.redirect_status) &&
           context.query.payment_intent
@@ -426,6 +432,18 @@ export async function getServerSideProps(context: any) {
       console.log("Error", err);
     }
   }
+
+  // Set gift details if gift = true in the query params (only for tree projects)
+  if (context.query.gift === "true" && projectDetails?.purpose === "trees") {
+    isGift = true;
+    giftDetails = {
+      type: "invitation",
+      recipientName: "",
+      recipientEmail: "",
+      message: "",
+    };
+  }
+
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
 
@@ -469,7 +487,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       ...(await serverSideTranslations(
-        context.locale,
+        context.locale || "en",
         ["common", "country", "donate"],
         nextI18NextConfig
       )),
@@ -497,6 +515,6 @@ export async function getServerSideProps(context: any) {
       tenant,
       callbackMethod,
       callbackUrl,
-    }, // will be passed to the page component as props
+    }, // will be passed to the page component as props */
   };
-}
+};

@@ -1,6 +1,6 @@
-import type { AppProps /*, AppContext */ } from "next/app";
+import type { AppProps } from "next/app";
 import Layout from "../src/Layout";
-import ThemeProvider, { useTheme } from "../styles/themeContext";
+import ThemeProvider from "../styles/themeContext";
 import getConfig from "next/config";
 import * as Sentry from "@sentry/node";
 import { RewriteFrames } from "@sentry/integrations";
@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { browserNotCompatible } from "../src/Utils/browsercheck";
 import BrowserNotSupported from "./../src/Common/ContentLoaders/BrowserNotSupported";
+import MisconfiguredEnvironment from "src/Common/ContentLoaders/MisconfiguredEnvironment";
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   const config = getConfig();
   const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
@@ -57,7 +58,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
       /window\._sharedData\.entry_data/,
       /ztePageScrollModule/,
     ],
-    denyUrls: [],
+    // denyUrls: [], //commented out as this option is currently not utilized
   });
 }
 
@@ -81,6 +82,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   if (browserIncompatible) {
     return <BrowserNotSupported />;
+  } else if (!process.env.AUTH0_CUSTOM_DOMAIN || !process.env.AUTH0_CLIENT_ID) {
+    return <MisconfiguredEnvironment />;
   } else {
     return (
       <Auth0Provider

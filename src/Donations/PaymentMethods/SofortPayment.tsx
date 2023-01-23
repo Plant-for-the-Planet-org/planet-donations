@@ -3,13 +3,17 @@ import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import { useTranslation } from "next-i18next";
 
 interface Props {
-  onSubmitPayment: Function;
+  onSubmitPayment: (
+    gateway: string,
+    method: string,
+    providerObject?: string
+  ) => Promise<void>;
 }
 
 function SofortPayments({ onSubmitPayment }: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+  const { t, ready } = useTranslation("common");
 
-  return (
+  return ready ? (
     <div>
       <div className={"disclaimer-container"}>
         <InfoIcon />
@@ -25,6 +29,8 @@ function SofortPayments({ onSubmitPayment }: Props): ReactElement {
         {t("payWithSofort")}
       </button>
     </div>
+  ) : (
+    <></>
   );
 }
 

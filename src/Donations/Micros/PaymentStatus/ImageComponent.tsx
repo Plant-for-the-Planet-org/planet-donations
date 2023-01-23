@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement, RefObject } from "react";
 import { useTranslation } from "next-i18next";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
@@ -10,10 +10,14 @@ import { Donation } from "src/Common/Types/donation";
 interface Props {
   projectDetails: FetchedProjectDetails;
   donation: Donation;
-  imageRef: any;
+  imageRef: RefObject<HTMLDivElement>;
 }
 
-const ImageComponent = ({ projectDetails, donation, imageRef }: Props) => {
+const ImageComponent = ({
+  projectDetails,
+  donation,
+  imageRef,
+}: Props): ReactElement => {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
   const { profile } = React.useContext(QueryParamContext);

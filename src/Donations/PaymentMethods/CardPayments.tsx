@@ -7,11 +7,19 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import React, { ReactElement } from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { ContactDetails } from "src/Common/Types";
+import {
+  PaymentMethod,
+  StripeCardCvcElementChangeEvent,
+  StripeCardExpiryElementChangeEvent,
+  StripeCardNumberElement,
+  StripeCardNumberElementChangeEvent,
+} from "@stripe/stripe-js";
 
 const FormControlNew = withStyles({
   root: {
@@ -53,14 +61,22 @@ const getInputOptions = (placeholder: string, theme: string) => {
   return ObjectM;
 };
 
+interface CardPaymentsProps {
+  totalCost: string;
+  paymentType: string;
+  setPaymentType: Dispatch<SetStateAction<string>>;
+  onPaymentFunction: (providerObject: PaymentMethod) => Promise<void>;
+  donorDetails: ContactDetails;
+}
+
 function CardPayments({
   totalCost,
   paymentType,
   setPaymentType,
   onPaymentFunction,
   donorDetails,
-}: any): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+}: CardPaymentsProps): ReactElement {
+  const { t, ready } = useTranslation("common");
   const stripe = useStripe();
   const elements = useElements();
   const [cardNumber, setCardNumber] = React.useState(false);
@@ -74,23 +90,23 @@ function CardPayments({
     React.useContext(QueryParamContext);
   // const [paymentError, setPaymentError] = React.useState("");
   const [showContinue, setShowContinue] = React.useState(false);
-  const [showBrand, setShowBrand] = React.useState("");
+  // const [showBrand, setShowBrand] = React.useState("");
   React.useEffect(() => {
     if (elements) {
-      const cardNumberElement = elements!.getElement(CardNumberElement);
+      const cardNumberElement = elements.getElement(CardNumberElement);
       cardNumberElement &&
-        cardNumberElement!.on("change", ({ error, complete, brand }) => {
+        cardNumberElement.on("change", ({ error, complete /* , brand */ }) => {
           if (error) {
             setShowContinue(false);
           } else if (complete) {
-            setShowBrand(brand);
-            const cardExpiryElement = elements!.getElement(CardExpiryElement);
-            cardExpiryElement!.on("change", ({ error, complete }) => {
+            // setShowBrand(brand);
+            const cardExpiryElement = elements.getElement(CardExpiryElement);
+            cardExpiryElement?.on("change", ({ error, complete }) => {
               if (error) {
                 setShowContinue(false);
               } else if (complete) {
-                const cardCvcElement = elements!.getElement(CardCvcElement);
-                cardCvcElement!.on("change", ({ error, complete }) => {
+                const cardCvcElement = elements.getElement(CardCvcElement);
+                cardCvcElement?.on("change", ({ error, complete }) => {
                   if (error) {
                     setShowContinue(false);
                   } else if (complete) {
@@ -104,9 +120,9 @@ function CardPayments({
     }
   }, [CardNumberElement, CardExpiryElement, CardCvcElement]);
 
-  const createPaymentMethodCC = (cardElement: any) => {
+  const createPaymentMethodCC = (cardElement: StripeCardNumberElement) => {
     if (donorDetails) {
-      return stripe.createPaymentMethod({
+      return stripe?.createPaymentMethod({
         type: "card",
         card: cardElement,
         billing_details: {
@@ -121,7 +137,8 @@ function CardPayments({
         },
       });
     } else {
-      return stripe.createPaymentMethod("card", cardElement);
+      return;
+      //return stripe.createPaymentMethod("card", cardElement); //Check with Shreyas
     }
   };
   const handleSubmit = async (event: { preventDefault: () => void }) => {
@@ -131,14 +148,15 @@ function CardPayments({
       return;
     }
 
-    let paymentMethod: any;
+    let paymentMethod;
 
     if (paymentType === "CARD") {
-      const cardElement = elements!.getElement(CardNumberElement);
+      const cardElement = elements.getElement(CardNumberElement);
+      if (!cardElement) return;
       setCardCvv(false);
       setCardDate(false);
       setCardNumber(false);
-      cardElement!.on("change", ({ error }) => {
+      cardElement.on("change", ({ error }) => {
         if (error) {
           // setPaymentError(error.message);
           setPaymentError(t("noPaymentMethodError"));
@@ -146,7 +164,7 @@ function CardPayments({
         }
       });
       const payload = await createPaymentMethodCC(cardElement);
-      paymentMethod = payload.paymentMethod;
+      paymentMethod = payload?.paymentMethod;
       // Add payload error if failed
     }
     if (paymentMethod) {
@@ -157,21 +175,21 @@ function CardPayments({
     }
   };
 
-  const handleChange = (change) => {
+  const handleChange = (change: StripeCardNumberElementChangeEvent) => {
     if (change.complete === true) {
       setCardNumber(true);
     } else {
       setCardNumber(false);
     }
   };
-  const handleChangeCvv = (change) => {
+  const handleChangeCvv = (change: StripeCardCvcElementChangeEvent) => {
     if (change.complete === true) {
       setCardCvv(true);
     } else {
       setCardCvv(false);
     }
   };
-  const handleChangeCardDate = (change) => {
+  const handleChangeCardDate = (change: StripeCardExpiryElementChangeEvent) => {
     if (change.complete === true) {
       setCardDate(true);
     } else {

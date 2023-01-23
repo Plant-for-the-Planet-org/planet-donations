@@ -5,9 +5,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import TaxDeductionCountryModal from "./TaxDeductionCountryModal";
 
-interface Props {}
-
-function TaxDeductionOption({}: Props): ReactElement {
+function TaxDeductionOption(): ReactElement {
   const { t } = useTranslation(["common"]);
 
   const {

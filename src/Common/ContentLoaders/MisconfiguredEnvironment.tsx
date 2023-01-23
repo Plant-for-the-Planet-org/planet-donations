@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 
-export default function BrowserNotSupported(): ReactElement {
+export default function MisconfiguredEnvironment(): ReactElement {
   return (
     <div
       style={{
@@ -12,10 +12,7 @@ export default function BrowserNotSupported(): ReactElement {
         alignItems: "center",
       }}
     >
-      <p>
-        Your browser is not supported. Please use a newer version or another
-        browser.
-      </p>
+      <p>Server config error. Please try after some time.</p>
     </div>
   );
 }
