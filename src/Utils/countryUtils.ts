@@ -63,7 +63,7 @@ function filterByEnabledCurrencies(
 
 /**
  * Sorts the countries array for the translated country name
- * @param {Function} t - translation function
+ * @param {TFunction} t - translation function
  * @param {String} language - language to get country names for
  * @param {Array} priorityCountries - country code to always show first in given order
  * @param {CurrencyList} enabledCurrencies - object containing enabled currencies

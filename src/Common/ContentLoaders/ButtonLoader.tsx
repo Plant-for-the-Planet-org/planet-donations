@@ -1,5 +1,6 @@
-import React from "react";
-function ButtonLoader() {
+import { ReactElement } from "react";
+
+function ButtonLoader(): ReactElement {
   return (
     <svg
       role="img"

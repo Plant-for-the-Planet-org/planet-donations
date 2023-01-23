@@ -1,14 +1,15 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { ReactElement } from "react";
 
-export default function Header() {
+export default function Header(): ReactElement {
   const router = useRouter();
 
   const getMetaTag = () => {
     const regex = /^pcash_/;
 
     if (
-      (router.query.to && regex.test(router.query.to)) ||
+      (router.query.to && regex.test(router.query.to as string)) ||
       router.query.context
     ) {
       return <meta name="robots" content="noindex" />;

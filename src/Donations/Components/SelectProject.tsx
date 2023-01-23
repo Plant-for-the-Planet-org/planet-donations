@@ -2,9 +2,7 @@ import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
 import getImageUrl from "../../Utils/getImageURL";
-import { getCountryDataBy } from "../../Utils/countryUtils";
 import {
-  getFilteredProjects,
   getRandomProjects,
   getSearchProjects,
 } from "../../Utils/projects/filterProjects";
@@ -15,16 +13,14 @@ import SearchIcon from "../../../public/assets/icons/SearchIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { DONATE } from "src/Utils/donationStepConstants";
 
-interface Props {}
-
-function SelectProject({}: Props): ReactElement {
+function SelectProject(): ReactElement {
   const {
     selectedProjects,
     allProjects,
     setSelectedProjects,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
-  const { t, i18n } = useTranslation(["common", "country"]);
+  const { t } = useTranslation(["common", "country"]);
 
   const [searchValue, setSearchValue] = React.useState("");
   const [trottledSearchValue, setTrottledSearchValue] = React.useState("");
@@ -61,7 +57,7 @@ function SelectProject({}: Props): ReactElement {
 
   const router = useRouter();
 
-  const donateToProject = (slug) => {
+  const donateToProject = (slug: string) => {
     router.push(
       { query: { ...router.query, to: slug, step: DONATE } },
       undefined,
@@ -93,7 +89,7 @@ function SelectProject({}: Props): ReactElement {
 
       {selectedProjects.length > 0 ? (
         <div className="project-container mt-30">
-          {selectedProjects.map((project: any, index) => {
+          {selectedProjects.map((project, index) => {
             return (
               <div
                 onClick={() => donateToProject(project.properties.slug)}
