@@ -53,11 +53,3 @@ export function browserNotCompatible() {
     !window.crypto
   );
 }
-
-export function browserPayNotCompatible(): boolean {
-  const userAgent = (window.navigator.userAgent || "").toLowerCase();
-  const matchChrome = userAgent.match(/chrome/);
-  const matchAndroid = userAgent.match(/android/);
-  const matchMobile = userAgent.match(/mobile/);
-  return matchChrome !== null && matchAndroid === null && matchMobile === null;
-}
