@@ -75,6 +75,9 @@ function PaymentsForm(): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
@@ -164,13 +167,11 @@ function PaymentsForm(): ReactElement {
       paymentSetup,
       callbackUrl,
       callbackMethod,
+      utmCampaign,
+      utmMedium,
+      utmSource,
       tenant,
     });
-    if (router.query.to) {
-      router.replace({
-        query: { to: router.query.to, step: PAYMENT },
-      });
-    }
     if (router.query.context) {
       router.replace({
         query: { context: donation?.id, step: PAYMENT },
