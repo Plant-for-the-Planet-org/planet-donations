@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
@@ -26,21 +26,20 @@ import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
 import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
-import OnBehalf from "../Micros/OnBehalf";
 import cleanObject from "src/Utils/cleanObject";
 import { Donation } from "src/Common/Types/donation";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
-function DonationsForm() {
+function DonationsForm(): ReactElement {
   const {
     isGift,
-    setdonationStep,
     quantity,
     currency,
     paymentSetup,
     projectDetails,
     country,
     giftDetails,
-    setIsTaxDeductible,
     isPaymentOptionsLoading,
     setPaymentType,
     setdonationID,
@@ -60,6 +59,9 @@ function DonationsForm() {
     setcountry,
     setcurrency,
     donation,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -95,26 +97,30 @@ function DonationsForm() {
   }, [paymentSetup]);
 
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
-  const purposes = ["trees"];
-  const [paymentError, setPaymentError] = React.useState("");
-  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
-    // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName);
+  const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
-    let fullName = paymentMethod.billing_details.name;
-    fullName = String(fullName).split(" ");
+  //Only used for native pay. Is this still applicable, or should this be removed?
+  const onPaymentFunction = async (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => {
+    // eslint-disable-next-line no-underscore-dangle
+    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
+
+    const fullName = String(paymentMethod.billing_details.name).split(" ");
     const firstName = fullName[0];
     fullName.shift();
     const lastName = String(fullName).replace(/,/g, " ");
 
+    //TODOO - remove type annotations by typing ContactDetails/adding better typeguards
     const contactDetails = {
       firstname: firstName,
       lastname: lastName,
-      email: paymentMethod.billing_details.email,
-      address: paymentMethod.billing_details.address.line1,
-      zipCode: paymentMethod.billing_details.address.postal_code,
-      city: paymentMethod.billing_details.address.city,
-      country: paymentMethod.billing_details.address.country,
+      email: paymentMethod.billing_details.email as string,
+      address: paymentMethod.billing_details.address?.line1 as string,
+      zipCode: paymentMethod.billing_details.address?.postal_code as string,
+      city: paymentMethod.billing_details.address?.city as string,
+      country: paymentMethod.billing_details.address?.country as string,
     };
 
     let token = null;
@@ -148,12 +154,16 @@ function DonationsForm() {
         setshowErrorCard,
         frequency,
         tenant,
+        utmCampaign,
+        utmMedium,
+        utmSource,
       }).then(async (res) => {
         if (res) {
           let token = null;
           if ((!isLoading && isAuthenticated) || queryToken) {
             token = queryToken ? queryToken : await getAccessTokenSilently();
           }
+
           payDonationFunction({
             gateway: "stripe",
             method: "card", // Hard coding card here since we only have card enabled in gpay and apple pay
@@ -237,6 +247,12 @@ function DonationsForm() {
         email: onBehalfDonor.email,
       };
 
+      const _metadata = {
+        utm_campaign: utmCampaign,
+        utm_medium: utmMedium,
+        utm_source: utmSource,
+      };
+
       const _gift = {
         ...giftDetails,
       };
@@ -253,6 +269,7 @@ function DonationsForm() {
         units: quantity,
         prePaid: true,
         onBehalf: onBehalf,
+        metadata: _metadata,
         ...(onBehalf && { donor: _onBehalfDonor }),
         ...(isGift && { gift: _gift }),
       };
@@ -434,7 +451,7 @@ function DonationsForm() {
                 <button className="secondary-button w-100 mt-30">
                   {t("donateWithPlanetCash")}
                 </button>
-                {!donation && <PaymentProgress />}
+                {!donation && <PaymentProgress isPaymentProcessing={true} />}
               </>
             )}
           </div>

@@ -1,9 +1,11 @@
 // This function removes all the null,  empty objects, "" (empty string values), undefined values from the object
 
-const cleanObject = (object) => {
+const cleanObject = (
+  object: Record<string, unknown>
+): Record<string, unknown> => {
   Object.entries(object).forEach(([key, value]) => {
     if (value && typeof value === "object") {
-      cleanObject(value);
+      cleanObject(value as Record<string, unknown>);
     }
     if (
       (value && typeof value === "object" && !Object.keys(value).length) ||
@@ -12,9 +14,9 @@ const cleanObject = (object) => {
       value === ""
     ) {
       if (Array.isArray(object)) {
-        object.splice(key, 1);
+        object.splice(Number(key), 1);
       } else {
-        delete object[key];
+        delete object[key as keyof typeof object];
       }
     }
   });

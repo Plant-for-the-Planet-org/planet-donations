@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
-function BankIcon() {
+function BankIcon(): ReactElement {
   return (
     <svg
       aria-hidden="true"

@@ -12,6 +12,7 @@ import { Project } from "./project";
 import { User } from "./user";
 import { Dispatch, SetStateAction } from "react";
 import { Donation } from "./donation";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -54,6 +55,12 @@ export default interface QueryParamContextInterface {
   setcallbackUrl: Dispatch<SetStateAction<string>>;
   callbackMethod: string;
   setCallbackMethod: Dispatch<SetStateAction<string>>;
+  utmCampaign: string;
+  setUtmCampaign: Dispatch<SetStateAction<string>>;
+  utmMedium: string;
+  setUtmMedium: Dispatch<SetStateAction<string>>;
+  utmSource: string;
+  setUtmSource: Dispatch<SetStateAction<string>>;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
   tenant: string;
@@ -63,8 +70,8 @@ export default interface QueryParamContextInterface {
   allProjects: Array<Project>;
   allowTaxDeductionChange: boolean;
   setallowTaxDeductionChange: Dispatch<SetStateAction<boolean>>;
-  donationUid: string | null;
-  setDonationUid: Dispatch<SetStateAction<string | null>>;
+  donationUid: string;
+  setDonationUid: Dispatch<SetStateAction<string>>;
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   transferDetails: BankTransferDetails | null;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
@@ -100,8 +107,8 @@ export default interface QueryParamContextInterface {
   setOnBehalf: Dispatch<SetStateAction<boolean>>;
   onBehalfDonor: OnBehalfDonor;
   setOnBehalfDonor: Dispatch<SetStateAction<OnBehalfDonor>>;
-  donation: Donation | null; //TODOO
-  setdonation: Dispatch<SetStateAction<Donation | null>>; //TODOO
-  paymentRequest: {} | null; //TODOO - LEFT FOR NOW AS IT INVOLVES NATIVE PAY
-  setPaymentRequest: (value: {}) => void; //TODOO - LEFT FOR NOW AS IT INVOLVES NATIVE PAY
+  donation: Donation | null;
+  setdonation: Dispatch<SetStateAction<Donation | null>>;
+  paymentRequest: PaymentRequest | null;
+  setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
 }

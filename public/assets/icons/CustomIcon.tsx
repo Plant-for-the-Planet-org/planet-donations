@@ -1,6 +1,6 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
-function CustomIcon() {
+function CustomIcon(): ReactElement {
   return (
     <svg
       id="plant_2_"

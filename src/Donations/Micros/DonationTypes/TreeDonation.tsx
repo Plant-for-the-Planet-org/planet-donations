@@ -1,4 +1,9 @@
-import React, { ReactElement } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+} from "react";
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
@@ -11,7 +16,7 @@ import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 interface Props {
-  setopenCurrencyModal: any;
+  setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
 }
 
 function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
@@ -50,25 +55,25 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
 
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
 
-  const setCustomTreeValue = (e: any) => {
+  const setCustomTreeValue = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target) {
-      if (e.target.value === "" || e.target.value < 1) {
+      if (e.target.value === "" || Number(e.target.value) < 1) {
         // if input is '', default 1
         setquantity(1);
       } else if (e.target.value.toString().length <= 12) {
-        setquantity(e.target.value);
+        setquantity(Number(e.target.value));
       }
     }
   };
+
   React.useEffect(() => {
     if (![10, 20, 50, 150].includes(quantity)) {
       setisCustomDonation(true);
-      setCustomTreeValue(quantity);
       setCustomTreeInputValue(quantity.toString());
     }
   }, [quantity]);
 
-  const customInputRef = React.useRef(null);
+  const customInputRef = React.useRef<HTMLInputElement>(null);
   return (
     <div
       className={`donations-tree-selection ${
@@ -106,14 +111,14 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
           }`}
           onClick={() => {
             setisCustomDonation(true);
-            customInputRef.current.focus();
+            customInputRef?.current?.focus();
           }}
         >
           <CustomIcon />
           <div className="tree-selection-option-text custom-tree-option">
             <input
               className={"custom-tree-input"}
-              onInput={(e) => {
+              onInput={(e: ChangeEvent<HTMLInputElement>) => {
                 // replaces any character other than number to blank
                 e.target.value = e.target.value.replace(/[^0-9]/g, "");
                 //  if length of input more than 12, display only 12 digits

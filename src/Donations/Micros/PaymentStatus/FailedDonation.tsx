@@ -1,13 +1,10 @@
 // TODOO - resolve TS warnings related to donations (after donations API is updated to correctly send gift info)
-import React, { useState } from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentFailedIllustration from "../../../../public/assets/icons/donation/PaymentFailed";
 import CloseIcon from "../../../../public/assets/icons/CloseIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import { apiRequest } from "src/Utils/api";
-import { useRouter } from "next/router";
-import { PAYMENT } from "src/Utils/donationStepConstants";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
 import { ContactDetails, FetchedProjectDetails } from "src/Common/Types";
@@ -18,7 +15,10 @@ interface FailedDonationProps {
   sendToReturn: () => void;
 }
 
-function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
+function FailedDonation({
+  sendToReturn,
+  donation,
+}: FailedDonationProps): ReactElement {
   const { t } = useTranslation(["common"]);
 
   const {
@@ -26,7 +26,6 @@ function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
     donationID,
     setcountry,
     setIsTaxDeductible,
-    projectDetails,
     setprojectDetails,
     setquantity,
     setContactDetails,
@@ -40,6 +39,9 @@ function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
     setAmount,
     setcallbackUrl,
     setCallbackMethod,
+    setUtmCampaign,
+    setUtmMedium,
+    setUtmSource,
     setredirectstatus,
     loadPaymentSetup,
   } = React.useContext(QueryParamContext);
@@ -91,6 +93,9 @@ function FailedDonation({ sendToReturn, donation }: FailedDonationProps) {
     });
     setcallbackUrl(donation.metadata.callback_url);
     setCallbackMethod(donation.metadata.callback_method);
+    setUtmCampaign(donation.metadata?.utm_campaign);
+    setUtmMedium(donation.metadata?.utm_medium);
+    setUtmSource(donation.metadata?.utm_source);
     setredirectstatus("");
     setdonationStep(3);
   }
