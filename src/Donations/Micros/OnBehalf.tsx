@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { OnBehalfDonor } from "src/Common/Types";
 
 const OnBehalf: FC = () => {
   const { t } = useTranslation("common");
@@ -19,12 +20,12 @@ const OnBehalf: FC = () => {
     email: onBehalfDonor.email,
   };
 
-  const { register, errors, handleSubmit, reset } = useForm({
+  const { register, errors, handleSubmit, reset } = useForm<OnBehalfDonor>({
     mode: "all",
     defaultValues,
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: OnBehalfDonor) => {
     setOnBehalfDonor(data);
   };
 

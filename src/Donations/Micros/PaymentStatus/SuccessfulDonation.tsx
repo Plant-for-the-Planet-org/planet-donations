@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../../PaymentMethods/PaymentFunctions";
 import { getFormattedNumber } from "../../../Utils/getFormattedNumber";
@@ -8,8 +8,16 @@ import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
+import { Donation } from "src/Common/Types/donation";
+import { ReactElement } from "react";
 
-function SuccessfulDonation({ donation, sendToReturn }: any) {
+interface SuccessfulDonationProps {
+  donation: Donation;
+}
+
+function SuccessfulDonation({
+  donation,
+}: SuccessfulDonationProps): ReactElement {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
   const router = useRouter();
   const [isMobile, setIsMobile] = React.useState(false);
@@ -26,13 +34,15 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const paymentTypeUsed = getPaymentType(paymentType);
 
   const sendRef = () => imageRef;
 
-  return donation ? (
+  return donation &&
+    projectDetails &&
+    projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}
@@ -75,12 +85,8 @@ function SuccessfulDonation({ donation, sendToReturn }: any) {
           {`Ref - ${donationID}`}
         </a>
       )}
-      {callbackUrl && (
-        <ReturnToButton
-          callbackUrl={callbackUrl}
-          donationContext={donationID}
-          donationStatus="success"
-        />
+      {donationID && callbackUrl && (
+        <ReturnToButton donationContext={donationID} donationStatus="success" />
       )}
     </div>
   ) : (

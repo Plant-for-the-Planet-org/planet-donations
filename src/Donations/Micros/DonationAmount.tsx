@@ -5,9 +5,7 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import { useTranslation } from "next-i18next";
 
-interface Props {}
-
-function DonationAmount({}: Props): ReactElement {
+function DonationAmount(): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const { quantity, currency, paymentSetup } =

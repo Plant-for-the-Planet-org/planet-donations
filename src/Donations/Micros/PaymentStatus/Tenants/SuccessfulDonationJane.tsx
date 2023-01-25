@@ -1,21 +1,26 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
 import ThankyouMessage from "./../ThankyouMessage";
 import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
+import { Donation } from "src/Common/Types/donation";
 
-function SuccessfulDonationJane({ donation, sendToReturn }: any) {
-  const { t, i18n } = useTranslation(["common", "country", "donate"]);
+interface SuccessfulDonationJaneProps {
+  donation: Donation;
+  sendToReturn: () => void;
+}
+
+function SuccessfulDonationJane({
+  donation,
+  sendToReturn,
+}: SuccessfulDonationJaneProps): ReactElement {
+  const { t } = useTranslation(["common", "country", "donate"]);
 
   const { paymentType, callbackUrl, projectDetails } =
     React.useContext(QueryParamContext);
 
-  const imageRef = React.createRef();
-
   const paymentTypeUsed = getPaymentType(paymentType);
-
-  const sendRef = () => imageRef;
 
   let returnDisplay;
   if (callbackUrl) {
@@ -23,9 +28,11 @@ function SuccessfulDonationJane({ donation, sendToReturn }: any) {
     returnDisplay = x.split("/", 2);
   }
 
-  return donation ? (
+  return donation &&
+    projectDetails &&
+    projectDetails.purpose !== "planet-cash-signup" ? (
     <div>
-      {callbackUrl && (
+      {callbackUrl && returnDisplay && (
         <button
           id={"thank-you-close"}
           onClick={() => sendToReturn()}

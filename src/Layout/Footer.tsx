@@ -1,5 +1,4 @@
-import React, { ReactElement } from "react";
-import Image from "next/image";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import SunIcon from "../../public/assets/icons/SunIcon";
 import MoonIcon from "../../public/assets/icons/MoonIcon";
@@ -17,26 +16,22 @@ import { QueryParamContext } from "./QueryParamContext";
 import supportedLanguages from "../../supportedLanguages.json";
 import getLanguageName from "../Utils/getLanguageName";
 import { useTranslation } from "next-i18next";
-import CloseIcon from "../../public/assets/icons/CloseIcon";
 import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
-import { apiRequest } from "src/Utils/api";
 import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 
-interface Props {}
-
-function Footer({}: Props): ReactElement {
+function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
 
-  const { callbackUrl, donationStep, language, setlanguage } =
+  const { callbackUrl, donationStep, language } =
     React.useContext(QueryParamContext);
 
   const { t, i18n, ready } = useTranslation(["common"]);
 
   const { theme } = React.useContext(ThemeContext);
 
-  return (
+  return ready ? (
     <div className="footer">
       <div className="footer-container">
         <DarkModeSwitch />
@@ -134,6 +129,8 @@ function Footer({}: Props): ReactElement {
       <div style={{ paddingTop: "10px", paddingBottom: "10px" }}></div>
       <CookiePolicy />
     </div>
+  ) : (
+    <></>
   );
 }
 
@@ -182,10 +179,10 @@ function CookiePolicy() {
   }, []);
 
   React.useEffect(() => {
-    localStorage.setItem("cookieNotice", showCookieNotice);
+    localStorage.setItem("cookieNotice", showCookieNotice.toString());
   }, [showCookieNotice]);
 
-  return showCookieNotice ? (
+  return showCookieNotice && ready ? (
     <div className={"cookie-policy"}>
       <div>
         {t("privacyPolicyNotice")}{" "}
@@ -209,7 +206,7 @@ function CookiePolicy() {
 
 interface ModalProps {
   languageModalOpen: boolean;
-  setlanguageModalOpen: Function;
+  setlanguageModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function LanguageModal({
@@ -239,7 +236,9 @@ function LanguageModal({
     >
       <Fade in={languageModalOpen}>
         <div className="modal p-20">
-          <p className="select-language-title">{t("selectLanguage")}</p>
+          <p className="select-language-title">
+            {ready && t("selectLanguage")}
+          </p>
           <FormControl component="fieldset">
             <RadioGroup
               aria-label="language"
@@ -248,9 +247,13 @@ function LanguageModal({
               onChange={(event) => {
                 setlanguage(event.target.value);
                 localStorage.setItem("language", event.target.value);
-                if (projectDetails && router.query.to) {
+                if (
+                  projectDetails &&
+                  projectDetails.purpose !== "planet-cash-signup" &&
+                  router.query.to
+                ) {
                   loadPaymentSetup({
-                    projectGUID: router.query.to,
+                    projectGUID: router.query.to as string,
                     paymentSetupCountry: country,
                     shouldSetPaymentDetails: false,
                   });

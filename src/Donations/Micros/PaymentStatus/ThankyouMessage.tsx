@@ -3,11 +3,13 @@ import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { FetchedProjectDetails } from "src/Common/Types";
+import { Donation } from "src/Common/Types/donation";
 
 interface Props {
-  projectDetails: any;
-  donation: any;
-  paymentTypeUsed: any;
+  projectDetails: FetchedProjectDetails;
+  donation: Donation;
+  paymentTypeUsed: string;
 }
 
 function ThankyouMessage({
@@ -39,7 +41,7 @@ function ThankyouMessage({
   // EXAMPLE: We've sent an email to Sagar Aryal about the gift.
   // TO DO - if recipientEmail is not present, then show message - You will receive the Gift certificate for {{recipientName}} on your email
   const donationGiftMessage =
-    donation && donation.gift && donation.gift.recipientEmail
+    donation && donation.gift && donation.gift.recipientEmail //TODOO - address TS warnings after /donations is updated to send gift data
       ? " " +
         t("common:giftSentMessage", {
           recipientName: donation.gift.recipientName,

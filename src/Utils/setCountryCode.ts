@@ -7,18 +7,18 @@ export const setCountryCode = ({
   configCountry,
   country,
 }: {
-  setcountry: (value: string) => {};
-  setcurrency: (value: string) => {};
-  profileCountry: string;
-  configCountry: string;
-  country: string;
-}) => {
+  setcountry: (value: string) => void;
+  setcurrency: (value: string) => void;
+  profileCountry?: string;
+  configCountry?: string;
+  country?: string;
+}): void => {
   let newCountry: string | null = "DE";
   if (
     localStorage.getItem("countryCode") &&
     localStorage.getItem("countryCode") !== "undefined"
   ) {
-    newCountry = localStorage.getItem("countryCode");
+    newCountry = localStorage.getItem("countryCode") as string;
   } else if (profileCountry) {
     newCountry = profileCountry;
   } else if (configCountry) {
@@ -30,10 +30,10 @@ export const setCountryCode = ({
 };
 
 export const setCountryInLocalAndContext = (
-  setcountry: (value: string) => {},
-  setcurrency: (value: string) => {},
+  setcountry: (value: string) => void,
+  setcurrency: (value: string) => void,
   country: string
-) => {
+): void => {
   setcountry(country);
   const countryData = countriesData.filter(
     (singleCountryData) => singleCountryData.countryCode == country

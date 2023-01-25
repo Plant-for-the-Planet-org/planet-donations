@@ -1,4 +1,10 @@
-import React, { ReactElement, useEffect } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+} from "react";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
@@ -7,31 +13,20 @@ import getFormatedCurrency, {
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
-import LeafIcon from "../../../../public/assets/icons/LeafIcon";
-import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
-import TreeIcon from "../../../../public/assets/icons/TreeIcon";
-import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
-import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 
 interface Props {
-  setopenCurrencyModal: any;
+  setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
 }
 
-function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
+function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [customInputValue, setCustomInputValue] = React.useState("");
-
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
-  // const AllIcons = [
-  //   <LeafIcon />,
-  //   <TwoLeafIcon />,
-  //   <PlantPotIcon />,
-  //   <TreeIcon />,
-  // ];
+
   const {
     paymentSetup,
     currency,
@@ -46,20 +41,20 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const router = useRouter();
 
-  const setCustomValue = (e: any) => {
-    if (e.target) {
-      if (e.target.value === "" || e.target.value < 1) {
+  const setCustomValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target && paymentSetup) {
+      if (e.target.value === "" || Number(e.target.value) < 1) {
         // if input is '', default 1
         setquantity(
           paymentSetup.purpose === "conservation"
             ? 1
             : 1 / paymentSetup.unitCost
         );
-      } else if (e.target.value.toString().length <= 12) {
+      } else if (e.target.value.length <= 12) {
         setquantity(
           paymentSetup.purpose === "conservation"
-            ? e.target.value
-            : e.target.value / paymentSetup.unitCost
+            ? Number(e.target.value)
+            : Number(e.target.value) / paymentSetup.unitCost
         );
       }
     }
@@ -71,17 +66,18 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [isCustomDonation]);
 
-  const customInputRef = React.useRef(null);
+  const customInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (
+      paymentSetup &&
       paymentSetup.frequencies &&
       paymentSetup.frequencies[`${frequency}`].options
     ) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.frequencies[`${frequency}`].options) {
-        newallOptionsArray.push(option.quantity * paymentSetup.unitCost);
+        newallOptionsArray.push((option.quantity || 0) * paymentSetup.unitCost);
       }
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
@@ -90,10 +86,10 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
       let newQuantity = retainQuantityValue
         ? quantity * paymentSetup.unitCost
         : router.query.units
-        ? Number(router.query.units * paymentSetup.unitCost)
+        ? Number(router.query.units) * paymentSetup.unitCost
         : defaultPaymentOption.length > 0
-        ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
-        : paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+        ? (defaultPaymentOption[0].quantity || 0) * paymentSetup.unitCost
+        : (paymentSetup.frequencies[`${frequency}`].options[1].quantity || 0) *
           paymentSetup.unitCost;
       newQuantity = Number(
         getFormattedNumber(
@@ -141,14 +137,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           isGift && giftDetails.recipientName === "" ? "display-none" : ""
         }`}
       >
-        {paymentSetup.frequencies &&
+        {paymentSetup &&
+          paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`].options.map(
             (option, index) => {
               return option.quantity ? (
                 <div
                   key={index}
                   onClick={() => {
-                    setquantity(option.quantity);
+                    setquantity(option.quantity as number);
                     setisCustomDonation(false);
                     setCustomInputValue("");
                   }}
@@ -158,14 +155,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       ? "funding-selection-option-selected"
                       : ""
                   }`}
-                  // style={{ maxWidth: "100px" }}
                 >
-                  {/* <div
-                  className={"funding-icon"}
-                  style={{ height: "auto", width: "auto" }}
-                >
-                  {AllIcons[index]}
-                </div> */}
                   <div className="funding-selection-option-text m-10">
                     <span style={{ fontSize: "18px" }}>
                       {paymentSetup.purpose === "conservation"
@@ -205,7 +195,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       <input
                         className={"funding-custom-tree-input"}
                         style={{ fontSize: "18px" }}
-                        onInput={(e) => {
+                        onInput={(e: ChangeEvent<HTMLInputElement>) => {
                           // replaces any character other than number to blank
                           // e.target.value = e.target.value.replace(/[,]/g, '.');
                           e.target.value = e.target.value.replace(
@@ -303,4 +293,4 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   );
 }
 
-export default FundingDonations;
+export default BouquetDonations;

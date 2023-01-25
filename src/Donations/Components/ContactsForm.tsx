@@ -14,10 +14,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
+import { ContactDetails } from "src/Common/Types";
+import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 
-interface Props {}
-
-function ContactsForm({}: Props): ReactElement {
+function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
 
   React.useEffect(() => {
@@ -37,10 +37,8 @@ function ContactsForm({}: Props): ReactElement {
   const {
     contactDetails,
     setContactDetails,
-    setdonationStep,
     country,
     isTaxDeductible,
-    isSignedUp,
     currency,
     quantity,
     paymentSetup,
@@ -50,12 +48,12 @@ function ContactsForm({}: Props): ReactElement {
     setTaxIdentificationAvail,
   } = React.useContext(QueryParamContext);
 
-  const { user, isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
       reset(contactDetails);
-      if (contactDetails.companyName) {
+      if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
@@ -69,7 +67,7 @@ function ContactsForm({}: Props): ReactElement {
     reset,
     getValues,
     setValue,
-  } = useForm({
+  } = useForm<ContactDetails>({
     mode: "all",
     defaultValues: {},
   });
@@ -81,7 +79,7 @@ function ContactsForm({}: Props): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ContactDetails) => {
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
@@ -110,16 +108,18 @@ function ContactsForm({}: Props): ReactElement {
     setContactDetails(data);
   };
 
-  const [addressSugggestions, setaddressSugggestions] = React.useState([]);
+  const [addressSugggestions, setaddressSugggestions] = React.useState<
+    GeocodeSuggestion[]
+  >([]);
 
-  const suggestAddress = (value) => {
+  const suggestAddress = (value: string) => {
     if (value.length > 3) {
       geocoder
         .suggest(value, {
           category: "Address",
           countryCode: contactDetails.country,
         })
-        .then((result) => {
+        .then((result: { suggestions: GeocodeSuggestion[] }) => {
           const filterdSuggestions = result.suggestions.filter((suggestion) => {
             return !suggestion.isCollection;
           });
@@ -129,10 +129,10 @@ function ContactsForm({}: Props): ReactElement {
     }
   };
 
-  const getAddress = (value) => {
+  const getAddress = (value: string) => {
     geocoder
       .findAddressCandidates(value, { outfields: "*" })
-      .then((result) => {
+      .then((result: { candidates: AddressCandidate[] }) => {
         setValue("address", result.candidates[0].attributes.ShortLabel, {
           shouldValidate: true,
         });
@@ -146,9 +146,11 @@ function ContactsForm({}: Props): ReactElement {
       })
       .catch(console.log);
   };
+
   React.useEffect(() => {
     if (
       projectDetails &&
+      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
@@ -446,15 +448,16 @@ function ContactsForm({}: Props): ReactElement {
               className={"primary-button mt-30"}
               data-test-id="test-continueToPayment"
             >
-              {t("donate_button", {
-                totalCost: getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.unitCost * quantity
-                ),
-                frequency:
-                  frequency === "once" ? "" : t(frequency).toLowerCase(),
-              })}
+              {paymentSetup &&
+                t("donate_button", {
+                  totalCost: getFormatedCurrency(
+                    i18n.language,
+                    currency,
+                    paymentSetup.unitCost * quantity
+                  ),
+                  frequency:
+                    frequency === "once" ? "" : t(frequency).toLowerCase(),
+                })}
             </button>
           )}
         </form>

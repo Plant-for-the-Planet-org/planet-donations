@@ -12,7 +12,6 @@ import {
   createDonationFunction,
   payDonationFunction,
 } from "../PaymentMethods/PaymentFunctions";
-import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
@@ -26,13 +25,18 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
-import { CONTACT, PAYMENT, THANK_YOU } from "src/Utils/donationStepConstants";
+import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
+import {
+  PaypalApproveData,
+  PaypalErrorData,
+  ShowPaymentMethodParams,
+} from "src/Common/Types";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
-interface Props {}
-
-function PaymentsForm({}: Props): ReactElement {
-  const { t, ready, i18n } = useTranslation("common", "donate");
+function PaymentsForm(): ReactElement {
+  const { t, ready, i18n } = useTranslation("common");
 
   const router = useRouter();
 
@@ -41,12 +45,10 @@ function PaymentsForm({}: Props): ReactElement {
 
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  const [isDonationLoading, setisDonationLoading] = React.useState(false);
   const {
     paymentSetup,
     country,
     currency,
-    setdonationStep,
     donationID,
     setdonationID,
     paymentType,
@@ -73,26 +75,30 @@ function PaymentsForm({}: Props): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   } = React.useContext(QueryParamContext);
 
   React.useEffect(() => {
     setPaymentType("CARD");
   }, []);
 
-  // React.useEffect(() => {
-  //   if (paymentError) {
-  //     router.replace({
-  //       query: { ...router.query, step: THANK_YOU },
-  //     });
-  //   }
-  // }, [paymentError]);
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
     gateway: string,
     method: string,
-    providerObject?: any
+    providerObject?:
+      | string
+      | PaymentMethod
+      | PaypalApproveData
+      | PaypalErrorData
   ) => {
+    if (!paymentSetup || !donationID) {
+      console.log("Missing payment options"); //TODOO - better error handling
+      return;
+    }
     let token = null;
     if ((!isLoading && isAuthenticated) || queryToken) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
@@ -116,13 +122,24 @@ function PaymentsForm({}: Props): ReactElement {
     });
   };
 
-  const onPaymentFunction = async (paymentMethod: any, paymentRequest: any) => {
-    setPaymentType(paymentRequest._activeBackingLibraryName);
+  // Seems to work only for native pay. Should this be removed?
+  const onPaymentFunction = async (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => {
+    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO --_activeBackingLibraryName is a private variable?
     const gateway = "stripe";
     onSubmitPayment(gateway, "card", paymentMethod);
   };
 
   async function getDonation() {
+    if (
+      !projectDetails ||
+      projectDetails.purpose === "planet-cash-signup" ||
+      !paymentSetup
+    )
+      return;
+
     let token = null;
     if (
       (((!isLoading && isAuthenticated) || queryToken) && profile?.address) ||
@@ -130,7 +147,6 @@ function PaymentsForm({}: Props): ReactElement {
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
-    setisDonationLoading(true);
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
@@ -151,44 +167,44 @@ function PaymentsForm({}: Props): ReactElement {
       paymentSetup,
       callbackUrl,
       callbackMethod,
+      utmCampaign,
+      utmMedium,
+      utmSource,
       tenant,
     });
-    if (router.query.to) {
-      router.replace({
-        query: { to: router.query.to, step: PAYMENT },
-      });
-    }
     if (router.query.context) {
       router.replace({
-        query: { context: donation.id, step: PAYMENT },
+        query: { context: donation?.id, step: PAYMENT },
       });
     }
     if (donation) {
-      setaskpublishName(!donation.hasPublicProfile);
+      setCanAskPublishPermission(!donation.hasPublicProfile);
       setdonationID(donation.id);
       setshouldCreateDonation(false);
       setisCreatingDonation(false);
       setDonationUid(donation.uid);
     }
-    setisDonationLoading(false);
   }
 
   // This feature allows the user to show or hide their names in the leaderboard
-  const [publishName, setpublishName] = React.useState(null);
-  const [askpublishName, setaskpublishName] = React.useState(false);
+  const [isPublishPermitted, setIsPublishPermitted] = React.useState<
+    boolean | null
+  >(null);
+  const [canAskPublishPermission, setCanAskPublishPermission] =
+    React.useState(false);
 
   React.useEffect(() => {
-    if (donationID && publishName !== null) {
+    if (donationID && isPublishPermitted !== null) {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
-        data: { publish: publishName },
-        method: "PUT",
+        data: { publish: isPublishPermitted },
+        method: "PUT" as const,
         setshowErrorCard,
         tenant,
       };
       apiRequest(requestParams);
     }
-  }, [publishName, donationID]);
+  }, [isPublishPermitted, donationID]);
 
   React.useEffect(() => {
     if (!isDirectDonation && shouldCreateDonation) {
@@ -207,7 +223,7 @@ function PaymentsForm({}: Props): ReactElement {
     countries,
     currencies,
     authenticatedMethod,
-  }: any) => {
+  }: ShowPaymentMethodParams): boolean | undefined => {
     const isAvailableInCountry = countries ? countries.includes(country) : true;
     const isAvailableForCurrency = currencies
       ? currencies.includes(currency)
@@ -218,9 +234,9 @@ function PaymentsForm({}: Props): ReactElement {
       isAvailableInCountry &&
       isAvailableForCurrency &&
       isAuthenticatedMethod &&
-      paymentSetup?.gateways.stripe.methods.includes(paymentMethod) &&
+      paymentSetup?.gateways.stripe.methods?.includes(paymentMethod) &&
       (frequency !== "once"
-        ? paymentSetup?.recurrency.methods.includes(paymentMethod)
+        ? paymentSetup?.recurrency.methods?.includes(paymentMethod)
         : true)
     );
   };
@@ -269,15 +285,15 @@ function PaymentsForm({}: Props): ReactElement {
 
           {projectDetails && projectDetails.purpose !== "funds" ? (
             <div className={"mt-20"}>
-              {!Object.keys(contactDetails).includes("companyName") ? (
-                askpublishName ? (
+              {!Object.keys(contactDetails).includes("companyname") ? (
+                canAskPublishPermission ? (
                   <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <CheckBox
                       id="publishName"
                       name="checkedB"
-                      checked={publishName}
+                      checked={isPublishPermitted ? true : false}
                       onChange={() => {
-                        setpublishName(!publishName);
+                        setIsPublishPermitted(!isPublishPermitted);
                       }}
                       inputProps={{ "aria-label": "primary checkbox" }}
                       color={"primary"}
@@ -289,9 +305,9 @@ function PaymentsForm({}: Props): ReactElement {
                 ) : (
                   <div>
                     {projectDetails.purpose !== "planet-cash" && (
-                      <label style={{ textAlign: "center" }}>
+                      <div /* style={{ textAlign: "center" }} */>
                         {t("nameAlreadyPublished")}
-                      </label>
+                      </div>
                     )}
                   </div>
                 )
@@ -347,17 +363,19 @@ function PaymentsForm({}: Props): ReactElement {
                   (frequency !== "once" ? false : true)
                 }
                 showNativePay={
-                  paymentSetup?.gateways?.stripe?.account &&
-                  currency &&
+                  (paymentSetup?.gateways?.stripe?.account && currency
+                    ? true
+                    : false) &&
                   (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods.includes("card")
+                    ? paymentSetup?.recurrency.methods?.includes("card") ||
+                      false
                     : true)
                 }
                 onNativePaymentFunction={onPaymentFunction}
               />
             )}
 
-          {!isCreatingDonation && donationID ? (
+          {!isCreatingDonation && donationID && paymentSetup ? (
             <div className="mt-30">
               <div
                 role="tabpanel"
@@ -371,9 +389,9 @@ function PaymentsForm({}: Props): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup.unitCost * quantity
+                      paymentSetup?.unitCost * quantity
                     )}
-                    onPaymentFunction={(providerObject: any) =>
+                    onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)
                     }
                     paymentType={paymentType}

@@ -9,7 +9,6 @@ import getFormatedCurrency from "../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../Utils/getFormattedNumber";
 import { getTenantBackground } from "./../Utils/getTenantBackground";
 import SelectProject from "./Components/SelectProject";
-import Image from "next/image";
 import getImageUrl from "../Utils/getImageURL";
 import {
   CONTACT,
@@ -35,20 +34,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+import { FetchedProjectDetails } from "src/Common/Types";
 
-interface Props {}
-
-function Donations({}: Props): ReactElement {
-  const { t, i18n, ready } = useTranslation("common");
+function Donations(): ReactElement {
   const router = useRouter();
 
-  const {
-    paymentSetup,
-    donationStep,
-    projectDetails,
-    setdonationStep,
-    allProjects,
-  } = React.useContext(QueryParamContext);
+  const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
 
   useEffect(() => {
     if (router.query?.step) {
@@ -103,7 +94,7 @@ function Donations({}: Props): ReactElement {
 }
 
 function DonationInfo() {
-  const { t, i18n } = useTranslation("common", "country");
+  const { t, i18n } = useTranslation("common");
   const {
     projectDetails,
     donationID,
@@ -157,7 +148,7 @@ function DonationInfo() {
         }}
         className="project-organisation-image no-project-organisation-image mb-10"
       >
-        {projectDetails.ownerName.charAt(0)}
+        {projectDetails?.ownerName?.charAt(0)}
       </div>
     );
   };
@@ -185,7 +176,10 @@ function DonationInfo() {
       style={{
         backgroundImage:
           projectDetails || donationStep === 0
-            ? `url(${getTenantBackground(tenant, projectDetails)})`
+            ? `url(${getTenantBackground(
+                tenant,
+                projectDetails as FetchedProjectDetails | null
+              )})`
             : "none",
         backgroundSize: "cover",
         backgroundPosition: "center center",
@@ -214,7 +208,8 @@ function DonationInfo() {
       {projectDetails && paymentSetup ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
-          {donationStep > 0 &&
+          {donationStep &&
+            donationStep > 0 &&
             projectDetails.ownerName &&
             (projectDetails.purpose === "trees" ? (
               <a
@@ -288,7 +283,7 @@ function DonationInfo() {
               </div>
             )}
 
-          {donationStep > 0 ? (
+          {donationStep && donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
                 <a
@@ -373,7 +368,8 @@ function DonationInfo() {
             giftDetails.recipientName && (
               <div className="contact-details-info  mt-20 donation-supports-info">
                 <p>{t("dedicatedTo")}</p>
-                {giftDetails.recipientTreecounter ? (
+                {giftDetails.type === "direct" &&
+                giftDetails.recipientTreecounter ? (
                   <a
                     rel="noreferrer"
                     target="_blank"
@@ -386,9 +382,9 @@ function DonationInfo() {
                   <p className="text-bold">{giftDetails.recipientName}</p>
                 )}
 
-                {giftDetails.giftMessage && (
+                {giftDetails.message && (
                   <p>
-                    {t("message")}: {giftDetails.giftMessage}
+                    {t("message")}: {giftDetails.message}
                   </p>
                 )}
               </div>

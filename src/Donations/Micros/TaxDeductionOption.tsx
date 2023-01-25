@@ -5,9 +5,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import TaxDeductionCountryModal from "./TaxDeductionCountryModal";
 
-interface Props {}
-
-function TaxDeductionOption({}: Props): ReactElement {
+function TaxDeductionOption(): ReactElement {
   const { t } = useTranslation(["common"]);
 
   const {
@@ -23,7 +21,7 @@ function TaxDeductionOption({}: Props): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.taxDeductionCountries &&
+      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries?.includes(country)
     ) {
       setIsTaxDeductible(true);
@@ -32,10 +30,9 @@ function TaxDeductionOption({}: Props): ReactElement {
     }
   }, [projectDetails, country]);
 
-  return projectDetails ? (
+  return projectDetails && projectDetails.purpose !== "planet-cash-signup" ? (
     <div className="mt-20">
-      {projectDetails.taxDeductionCountries &&
-      projectDetails.taxDeductionCountries.length > 0 ? (
+      {projectDetails.taxDeductionCountries?.length ? (
         allowTaxDeductionChange ? (
           <div className={"d-inline"}>
             {projectDetails.taxDeductionCountries?.includes(country)

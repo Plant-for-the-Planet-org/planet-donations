@@ -1,195 +1,342 @@
-export interface ProjectTypes {
-  data: {
-    allowDonations: boolean;
-    certificates: Array<{}>;
-    classification: string;
-    coordinates: { lat: number; lon: number };
-    countDonated: number;
-    countPlanted: number;
-    countRegistered: number;
-    countTarget: number;
-    country: string;
-    currency: string;
-    degradationCause: string;
-    degradationYear: number;
-    description: string;
-    employeesCount: number;
-    enablePlantLocations: false;
-    expenses: Array<any>;
-    firstTreePlanted: {
-      date: string;
-      timezone_type: number;
-      timezone: string;
-    };
-    fixedRates: [];
-    geoLocation: {
-      boundingBox: null;
-      crs: null;
-      type: string;
-      coordinates: Array<any>;
-    };
-    id: string;
-    image: string;
-    images: Array<{}>;
-    isCertified: false;
-    isPublished: true;
-    lastUpdated: {
-      date: string;
-      timezone_type: number;
-      timezone: string;
-    };
-    location: string;
-    longTermPlan: string;
-    mainChallenge: string;
-    minTreeCount: number;
-    motivation: string;
-    paymentDefaults: {
-      fixedDefaultTreeCount: number;
-      fixedTreeCountOptions: Array<any>;
-    };
-    plantingDensity: number;
-    plantingSeasons: Array<any>;
-    reviewRequested: true;
-    siteOwnerName: string;
-    siteOwnerType: Array<any>;
-    sites: Array<{}>;
-    slug: string;
-    survivalRate: number;
-    survivalRateStatus: string;
-    taxDeductionCountries: Array<any>;
-    tpo: {
-      id: string;
-      name: string;
-      email: string;
-      address: {};
-      slug: string;
-    };
-    treeCost: number;
-    videoUrl: null;
-    visitorAssistance: false;
-    website: string;
-    yearAbandoned: number;
-    yearAcquired: number;
-    _scope: string;
-  };
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
+import { Dispatch, SetStateAction } from "react";
+import { TFunction } from "react-i18next";
+import { NextRouter } from "next/router";
+
+export interface DirectGift {
+  type: "direct";
+  recipientName?: string;
+  recipientTreecounter: string;
+  recipientEmail?: "";
+  message?: "";
 }
 
-export interface giftDetailsProps {
-  type: String | null;
-  recipientName: String | null;
-  email: String | null;
-  giftMessage: String | null;
-  recipientTreecounter: Number | null;
-  receipients: {} | null;
+export interface InvitationGift {
+  type: "invitation";
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+}
+
+export interface DefaultGift {
+  type: null;
+  recipientName: string;
+  recipientEmail: "";
+  message: "";
+}
+
+export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
+
+export interface ContactDetails {
+  firstname: string;
+  lastname: string;
+  tin?: string | null;
+  email: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  companyname?: string | null;
+  name?: string; //Check if this is still there. Possible legacy.
+}
+
+export interface PaymentProviderRequest {
+  account?: string;
+  gateway: string;
+  method?: string;
+  source?:
+    | {
+        id?: string;
+        object?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
+      }
+    | PaypalApproveData
+    | PaypalErrorData
+    | Record<string, never>;
 }
 
 export interface CreateDonationFunctionProps {
-  isTaxDeductible: Boolean | null;
-  country: any;
-  projectDetails: Object;
+  isTaxDeductible: boolean | null;
+  country: string;
+  projectDetails: FetchedProjectDetails;
   quantity: number;
-  paymentSetup: {};
-  currency: String;
-  contactDetails: Object;
-  giftDetails: giftDetailsProps;
-  isGift: Boolean;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
-  setdonationID: any;
-  token: any;
-  setshowErrorCard: Function;
-  frequency: string | null;
+  paymentSetup: PaymentOptions;
+  currency: string;
+  contactDetails: ContactDetails;
+  giftDetails: GiftDetails;
+  isGift: boolean;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
+  setdonationID: Dispatch<SetStateAction<string | null>>;
+  token: string | null;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  frequency: string;
   amount?: number | null;
   callbackUrl?: string | undefined;
   callbackMethod?: string | undefined;
+  utmCampaign?: string | undefined;
+  utmMedium?: string | undefined;
+  utmSource?: string | undefined;
   tenant: string;
 }
 
 export interface PayDonationProps {
   gateway: string;
   method: string;
-  providerObject: Object;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
-  t: any;
-  paymentSetup: Object;
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
+  t: TFunction;
+  paymentSetup: PaymentOptions;
   donationID: string;
-  contactDetails: Object;
-  token: string;
+  contactDetails: ContactDetails;
+  token: string | null;
   country: string;
-  setshowErrorCard: Function;
-  router: any;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  router: NextRouter;
   tenant: string;
-  setTransferDetails: Function;
+  setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
 }
 
 export interface HandleStripeSCAPaymentProps {
   method: string;
-  paymentResponse: any;
-  paymentSetup: Object;
-  window: any;
-  setIsPaymentProcessing: Function;
-  setPaymentError: Function;
+  paymentResponse: UpdateDonationActionRequiredData;
+  paymentSetup: PaymentOptions;
+  window: Window & typeof globalThis;
+  setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
+  setPaymentError: Dispatch<SetStateAction<string>>;
   donationID: string;
-  contactDetails: Object;
-  token: string;
+  contactDetails: ContactDetails;
+  token: string | null;
   country: string;
-  setshowErrorCard: Function;
-  router: any;
+  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  router: NextRouter;
   tenant: string;
 }
 
-export interface PaymentSetupProps {
+export interface CreateDonationDataProps {
+  projectDetails: FetchedProjectDetails;
+  quantity: number;
+  paymentSetup: PaymentOptions;
   currency: string;
-  effectiveCountry: string;
-  frequencies?: string[] | null;
-  gateways: Gateways;
-  minQuantity: number;
-  options?: OptionsEntity[] | null;
-  project: string;
-  purpose: string;
-  recurrency: Recurrency;
+  contactDetails: ContactDetails;
+  taxDeductionCountry: string | null;
+  isGift: boolean;
+  giftDetails: GiftDetails;
+  frequency: string;
+  amount?: number | null;
+  callbackUrl: string | undefined;
+  callbackMethod: string | undefined;
+  utmCampaign: string | undefined;
+  utmMedium: string | undefined;
+  utmSource: string | undefined;
+}
+
+export interface PlanetCashSignupDetails {
+  name: string;
+  ownerName: string | null;
+  ownerAvatar: string | null;
+  purpose: "planet-cash-signup";
+}
+
+export interface FetchedProjectDetails {
+  id: string;
+  name: string;
+  description?: string | null;
+  ownerAvatar?: string | null;
+  ownerName?: string;
+  image?: string | null;
+  purpose: ProjectPurpose;
+  taxDeductionCountries?: Array<string>;
+}
+
+export type ProjectPurpose =
+  | "trees"
+  | "conservation"
+  | "funds"
+  | "reforestation"
+  | "bouquet"
+  | "planet-cash";
+
+export interface PaymentOptions extends FetchedProjectDetails {
   requestedCountry: string;
-  treeCost: number;
+  effectiveCountry: string;
+  frequencies: Frequencies;
+  gateways: Gateways;
+  recurrency: Recurrency;
   unit: string;
   unitCost: number;
+  currency: string;
+  destination: string;
+  isApproved?: boolean;
+  isTopProject?: boolean;
 }
+
+interface Frequencies {
+  [key: string]: Frequency;
+}
+
+interface Frequency {
+  minQuantity: number;
+  options: OptionsEntity[];
+}
+
 export interface Gateways {
   paypal: Paypal;
   stripe: Stripe;
-  offline: Offline;
+  offline?: Offline;
 }
 export interface Paypal {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationPaypal;
 }
+
 export interface AuthorizationPaypal {
   client_id: string;
 }
+
 export interface Stripe {
   methods?: string[] | null;
   account: string;
   authorization: AuthorizationStripe;
 }
+
 export interface AuthorizationStripe {
   stripePublishableKey: string;
   accountId: string;
 }
+
 export interface Offline {
   methods?: string[] | null;
   account: string;
 }
+
 export interface OptionsEntity {
-  id: string;
-  caption: string;
-  description?: string | null;
-  icon?: string | null;
-  quantity?: number | null;
+  id?: string;
+  caption: string | null;
+  description: string | null;
+  icon: string | null;
+  quantity: number | null;
   isDefault: boolean;
 }
+
 export interface Recurrency {
   supported: boolean;
-  methods?: string[] | null;
-  frequencies?: string[] | null;
+  methods: string[] | null;
 }
+
+export interface Country {
+  countryName: string;
+  countryCode: string;
+  currencyName: string;
+  currencyCode: string;
+  currencyCountryFlag: string;
+  languageCode: string;
+}
+
+export type CountryProperty = keyof Country;
+
+export interface CurrencyList {
+  [key: string]: string;
+}
+
+export interface BankTransferDetails {
+  beneficiary: string;
+  iban: string;
+  bic: string;
+  bankName: string;
+}
+
+export interface OnBehalfDonor {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface ShowPaymentMethodParams {
+  paymentMethod: "card" | "giropay" | "sofort" | "sepa_debit";
+  countries?: string[];
+  currencies?: string[];
+  authenticatedMethod?: boolean;
+}
+
+export interface ConfigResponse {
+  appVersions: {
+    ios: string;
+    android: string;
+  };
+  clientIp: string;
+  country?: string;
+  currency: string;
+  cdnMedia: {
+    images: string;
+    cache: string;
+    pdfs: string;
+  };
+  loc: {
+    latitude: string;
+    longitude: string;
+    city: string;
+    postalCode: string;
+    countryCode: string;
+    regionCode: string;
+    timezone: string;
+  };
+}
+
+export interface PaypalApproveData extends OnApproveData {
+  type: string;
+}
+
+export interface PaypalErrorData {
+  type: string;
+  status: "error";
+  errorMessage?: unknown;
+  [key: string]: unknown;
+}
+
+export interface UpdateDonationResponse {
+  data: UpdateDonationData;
+  [key: string]: unknown;
+}
+
+export type UpdateDonationData =
+  | UpdateDonationSuccessData
+  | UpdateDonationFailureData
+  | UpdateDonationActionRequiredData;
+
+type UpdateDonationSuccessData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "success" | "pending" | "paid";
+  id: string;
+  response?: {
+    type: "transfer_required";
+    account: {
+      beneficiary: string;
+      iban: string;
+      bic: string;
+      bankName: string;
+    };
+  };
+};
+
+type UpdateDonationFailureData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "failed";
+  id: string;
+  errorCode: string;
+  message: string;
+};
+
+type UpdateDonationActionRequiredData = {
+  paymentStatus?: string; //TODOO - May not be there. Check and remove.
+  status: "action_required";
+  id: string;
+  response: {
+    type: string;
+    requires_action: boolean;
+    payment_intent_client_secret: string;
+    account: string;
+  };
+};

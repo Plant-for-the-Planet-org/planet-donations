@@ -2,8 +2,8 @@ export default function getFormatedCurrency(
   langCode: string,
   currency: string,
   number: number
-) {
-  let options = {
+): string {
+  let options: Intl.NumberFormatOptions = {
     // These options are needed to round to whole numbers if that's what you want.
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -19,8 +19,10 @@ export default function getFormatedCurrency(
   return formatter.format(number);
 }
 
-export function getFormatedCurrencySymbol( currency: string) {
-  let options = {
+export function getFormatedCurrencySymbol(
+  currency: string
+): string | undefined {
+  let options: Intl.NumberFormatOptions = {
     // These options are needed to round to whole numbers if that's what you want.
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -32,6 +34,8 @@ export function getFormatedCurrencySymbol( currency: string) {
       ...options,
     };
   }
-  const symbol = new Intl.NumberFormat("en", options).formatToParts(0).find(part => part.type === "currency").value
+  const symbol = new Intl.NumberFormat("en", options)
+    .formatToParts(0)
+    .find((part) => part.type === "currency")?.value;
   return symbol;
 }

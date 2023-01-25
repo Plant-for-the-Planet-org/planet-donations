@@ -1,9 +1,8 @@
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
-import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import FailedDonation from "../Micros/PaymentStatus/FailedDonation";
@@ -15,9 +14,10 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
+import { Donation } from "src/Common/Types/donation";
 
-function ThankYou() {
-  const { t, i18n, ready } = useTranslation(["common", "country", "donate"]);
+function ThankYou(): ReactElement {
+  const { t, ready } = useTranslation(["common", "country", "donate"]);
 
   const {
     donationID,
@@ -38,7 +38,7 @@ function ThankYou() {
     };
     const donation = await apiRequest(requestParams);
     if (donation.status === 200) {
-      setdonation(donation.data);
+      setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
     }
   }
 
@@ -89,12 +89,6 @@ function ThankYou() {
     setTextCopiedSnackbarOpen(false);
   };
 
-  let currencyFormat = () => {};
-  if (donation) {
-    currencyFormat = () =>
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
-  }
-
   const { callbackUrl, paymentError, projectDetails } =
     React.useContext(QueryParamContext);
 
@@ -111,14 +105,12 @@ function ThankYou() {
       case "ten_1e5WejOp":
         return (
           <SuccessfulDonationJane
-            donation={donation}
+            donation={donation as Donation}
             sendToReturn={sendToReturn}
           />
         );
       default:
-        return (
-          <SuccessfulDonation donation={donation} sendToReturn={sendToReturn} />
-        );
+        return <SuccessfulDonation donation={donation as Donation} />;
     }
   };
 
@@ -139,19 +131,18 @@ function ThankYou() {
                   <SuccessComponent />
                 ) : status === "failed" || paymentError ? (
                   <FailedDonation
-                    donationID={donationID}
                     sendToReturn={sendToReturn}
                     donation={donation}
                   />
                 ) : transferDetails ? (
                   <TransferDetails
-                    donationID={donationID}
+                    donationID={donationID as string}
                     donation={donation}
                     sendToReturn={sendToReturn}
                   />
                 ) : (
                   <PendingDonation
-                    donationID={donationID}
+                    donationID={donationID as string}
                     sendToReturn={sendToReturn}
                   />
                 )

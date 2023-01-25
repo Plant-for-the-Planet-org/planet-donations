@@ -1,4 +1,9 @@
-import React, { ReactElement } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+} from "react";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
@@ -7,13 +12,11 @@ import getFormatedCurrency, {
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
-import { getCountryDataBy } from "../../../Utils/countryUtils";
-// import { getPaymentOptionIcons } from "src/Utils/getImageURL";
 import { useRouter } from "next/router";
 import { approximatelyEqual } from "src/Utils/common";
 
 interface Props {
-  setopenCurrencyModal: any;
+  setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
 }
 
 function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
@@ -23,13 +26,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const [isCustomDonation, setisCustomDonation] = React.useState(false);
 
-  const AllIcons = [
-    "/assets/images/funding/shovel.png",
-    "/assets/images/funding/collect.png",
-    "/assets/images/funding/sunshine.png",
-    "/assets/images/funding/sprout.png",
-  ];
-
   const {
     paymentSetup,
     currency,
@@ -38,7 +34,6 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     isGift,
     giftDetails,
     frequency,
-    setfrequency,
     retainQuantityValue,
     isPlanetCashActive,
     projectDetails,
@@ -46,9 +41,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
 
   const router = useRouter();
 
-  const setCustomValue = (e: any) => {
-    if (e.target) {
-      if (e.target.value === "" || e.target.value < 1) {
+  const setCustomValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (paymentSetup && e.target) {
+      if (e.target.value === "" || Number(e.target.value) < 1) {
         // if input is '', default 1
         setquantity(1 / paymentSetup.unitCost);
       } else if (e.target.value.toString().length <= 12) {
@@ -58,11 +53,15 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   };
 
   React.useEffect(() => {
-    if (paymentSetup.frequencies && paymentSetup.frequencies[`${frequency}`]) {
+    if (
+      paymentSetup &&
+      paymentSetup.frequencies &&
+      paymentSetup.frequencies[`${frequency}`]
+    ) {
       // Set all quantities in the allOptionsArray
       const newallOptionsArray = [];
       for (const option of paymentSetup.frequencies[`${frequency}`].options) {
-        newallOptionsArray.push(option.quantity * paymentSetup.unitCost);
+        newallOptionsArray.push((option.quantity || 0) * paymentSetup.unitCost);
       }
       const defaultPaymentOption = paymentSetup.frequencies[
         `${frequency}`
@@ -73,9 +72,9 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
         : router.query.units
         ? Number(router.query.units)
         : defaultPaymentOption.length > 0
-        ? defaultPaymentOption[0].quantity * paymentSetup.unitCost
+        ? (defaultPaymentOption[0].quantity || 0) * paymentSetup.unitCost
         : paymentSetup.frequencies[`${frequency}`].options[1] &&
-          paymentSetup.frequencies[`${frequency}`].options[1].quantity *
+          (paymentSetup.frequencies[`${frequency}`].options[1].quantity || 0) *
             paymentSetup.unitCost;
       newQuantity = newQuantity / paymentSetup.unitCost;
       setquantity(newQuantity);
@@ -85,7 +84,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           approximatelyEqual(option, newQuantity * paymentSetup.unitCost)
         ).length == 0
       ) {
-        setCustomInputValue(newQuantity * paymentSetup.unitCost);
+        setCustomInputValue((newQuantity * paymentSetup.unitCost).toString());
         setisCustomDonation(true);
       } else if (newQuantity == 0) {
         setisCustomDonation(true);
@@ -101,7 +100,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
     }
   }, [isCustomDonation]);
 
-  const customInputRef = React.useRef(null);
+  const customInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -110,7 +109,8 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           isGift && giftDetails.recipientName === "" ? "display-none" : ""
         }`}
       >
-        {paymentSetup.frequencies &&
+        {paymentSetup &&
+          paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`] &&
           paymentSetup.frequencies[`${frequency}`].options.map(
             (option, index) => {
@@ -118,7 +118,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                 <div
                   key={index}
                   onClick={() => {
-                    setquantity(option.quantity);
+                    setquantity(option.quantity as number);
                     setisCustomDonation(false);
                     setCustomInputValue("");
                   }}
@@ -151,7 +151,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                       // />
                       getPaymentOptionIcons(
                         paymentSetup.frequencies[`${frequency}`].options[index]
-                          .icon
+                          .icon as string
                       )
                     : []}
                   <div
@@ -203,7 +203,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           fontSize: "18px",
                           paddingBottom: "12px",
                         }}
-                        onInput={(e) => {
+                        onInput={(e: ChangeEvent<HTMLInputElement>) => {
                           // replaces any character other than number to blank
                           e.target.value = e.target.value.replace(
                             /[^0-9]/g,

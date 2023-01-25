@@ -1,46 +1,63 @@
 import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
-interface Props {}
+import { DefaultGift } from "src/Common/Types";
+import GiftIcon from "public/assets/icons/GiftIcon";
 
-export default function GiftForm({}: Props): ReactElement {
+type GiftFormData = {
+  recipientName: string;
+  recipientEmail: string;
+  message: string;
+};
+
+export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setshowEmail] = React.useState(false);
   const { giftDetails, setgiftDetails, isGift, setisGift } =
     React.useContext(QueryParamContext);
 
-  const defaultDetails = {
+  const defaultDetails: GiftFormData = {
+    // TODOO - resolve donation/gift related TS warnings
     recipientName: giftDetails.recipientName,
     recipientEmail: giftDetails.recipientEmail,
-    giftMessage: giftDetails.giftMessage,
+    message: giftDetails.message,
   };
 
-  const { register, errors, handleSubmit, reset } = useForm({
+  const { register, errors, handleSubmit, reset } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
 
   React.useEffect(() => {
     if (isGift && giftDetails) {
-      setgiftDetails({ ...giftDetails, type: "invitation" });
+      if (giftDetails.type !== "direct") {
+        setgiftDetails((giftDetails) => {
+          return { ...giftDetails, type: "invitation" };
+        });
+      }
     } else {
-      setgiftDetails({ ...giftDetails, type: null });
+      setgiftDetails((giftDetails) => {
+        return { ...(giftDetails as DefaultGift), type: null };
+      });
     }
   }, [isGift]);
 
-  const onSubmit = (data: any) => {
-    setgiftDetails({ ...giftDetails, ...data, type: "invitation" });
+  const onSubmit = (data: GiftFormData) => {
+    setgiftDetails((giftDetails) => {
+      return { ...giftDetails, ...data, type: "invitation" };
+    });
   };
 
   const resetGiftForm = () => {
-    const _defaultDetails = {
+    const _defaultDetails: Readonly<DefaultGift> = {
       recipientName: "",
-      email: "",
-      giftMessage: "",
+      recipientEmail: "",
+      message: "",
       type: null,
     };
     setgiftDetails(_defaultDetails);
@@ -59,7 +76,7 @@ export default function GiftForm({}: Props): ReactElement {
               name="show-gift-form-toggle"
               checked={isGift}
               onChange={() => {
-                setisGift(!isGift);
+                setisGift((isGift) => !isGift);
               }}
               id="show-gift-form-toggle"
             />
@@ -74,6 +91,13 @@ export default function GiftForm({}: Props): ReactElement {
                 variant="outlined"
                 inputRef={register({ required: true })}
                 data-test-id="recipientName"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <GiftIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
               {errors.recipientName && (
                 <span className={"form-errors"}>
@@ -117,7 +141,7 @@ export default function GiftForm({}: Props): ReactElement {
                     rowsMax="4"
                     label={t("giftMessage")}
                     variant="outlined"
-                    name={"giftMessage"}
+                    name={"message"}
                     inputRef={register()}
                     data-test-id="giftMessage"
                   />

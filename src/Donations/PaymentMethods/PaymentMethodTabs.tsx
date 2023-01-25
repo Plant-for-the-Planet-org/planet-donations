@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
@@ -10,12 +10,30 @@ import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
+import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
-function a11yProps(index: any) {
+function a11yProps(index: string) {
   return {
     id: `scrollable-force-tab-${index}`,
     "aria-controls": `payment-methods-tabpanel-${index}`,
   };
+}
+
+interface PaymentMethodTabsProps {
+  paymentType: string;
+  setPaymentType: Dispatch<SetStateAction<string>>;
+  showPaypal?: boolean;
+  showGiroPay?: boolean;
+  showSepa?: boolean;
+  showSofort?: boolean;
+  showCC?: boolean;
+  showNativePay?: boolean;
+  onNativePaymentFunction: (
+    paymentMethod: PaymentMethod,
+    paymentRequest: PaymentRequest
+  ) => Promise<void>;
+  showBankTransfer?: boolean;
 }
 
 export default function PaymentMethodTabs({
@@ -29,10 +47,13 @@ export default function PaymentMethodTabs({
   showNativePay,
   onNativePaymentFunction,
   showBankTransfer,
-}: any) {
+}: PaymentMethodTabsProps): ReactElement | null {
   const { t, i18n } = useTranslation(["common", "country"]);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: any) => {
+  const handleChange = (
+    _event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
     setPaymentType(newValue);
   };
 
@@ -72,14 +93,13 @@ export default function PaymentMethodTabs({
     frequency,
   } = React.useContext(QueryParamContext);
 
-  let paymentLabel;
+  let paymentLabel = "";
 
   if (paymentSetup && currency) {
     switch (projectDetails && projectDetails.purpose) {
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
       case "funds":
@@ -104,113 +124,114 @@ export default function PaymentMethodTabs({
       default:
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
-          // country: t(`country:${projectDetails.country.toLowerCase()}`),
         });
         break;
     }
   }
 
   return (
-    <div className={"payment-methods-tabs-container"}>
-      {showCC && (
-        <button
-          className={`${"payment-method"} ${
-            paymentType === "CARD" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "CARD")}
-          {...a11yProps("CARD")}
-        >
-          <CreditCard />
-          <CheckMark />
-        </button>
-      )}
-
-      {showSofort && (
-        <button
-          className={`${"payment-method"} ${
-            paymentType === "Sofort" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "Sofort")}
-          {...a11yProps("Sofort")}
-          data-test-id="sofortPayment"
-        >
-          <SofortIcon />
-          <CheckMark />
-        </button>
-      )}
-
-      {showPaypal ? (
-        <button
-          className={`${"payment-method"} ${
-            paymentType === "Paypal" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "Paypal")}
-          {...a11yProps("Paypal")}
-        >
-          <PaypalIcon />
-          <CheckMark />
-        </button>
-      ) : null}
-
-      {showGiroPay && (
-        <button
-          className={`${"payment-method"} ${
-            paymentType === "GiroPay" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "GiroPay")}
-          {...a11yProps("GiroPay")}
-        >
-          <GiroPayIcon />
-          <CheckMark />
-        </button>
-      )}
-
-      {showSepa && (
-        <button
-          className={`${"payment-method"} ${
-            paymentType === "SEPA" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "SEPA")}
-          {...a11yProps("SEPA")}
-        >
-          <SepaIcon />
-          <CheckMark />
-        </button>
-      )}
-      {showBankTransfer && (
-        <button
-          className={`${"payment-method"} ${"bank"} ${
-            paymentType === "Bank" ? "payment-method-selected" : ""
-          }`}
-          onClick={(e) => handleChange(e, "Bank")}
-          {...a11yProps("Bank")}
-        >
-          <div
-            style={{ display: "flex", alignItems: "center" }}
-            data-test-id="bankTransfer"
+    paymentSetup && (
+      <div className={"payment-methods-tabs-container"}>
+        {showCC && (
+          <button
+            className={`${"payment-method"} ${
+              paymentType === "CARD" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "CARD")}
+            {...a11yProps("CARD")}
           >
-            <BankIcon />
-            <text>{t("bankTransfer")}</text>
-          </div>
-          <CheckMark />
-        </button>
-      )}
-      {showNativePay && (
-        <NativePay
-          country={country}
-          currency={currency}
-          amount={formatAmountForStripe(
-            paymentSetup.unitCost * quantity,
-            currency.toLowerCase()
-          )}
-          onPaymentFunction={onNativePaymentFunction}
-          paymentSetup={paymentSetup}
-          continueNext={() => {}}
-          isPaymentPage
-          paymentLabel={paymentLabel}
-          frequency={frequency}
-        />
-      )}
-    </div>
+            <CreditCard />
+            <CheckMark />
+          </button>
+        )}
+
+        {showSofort && (
+          <button
+            className={`${"payment-method"} ${
+              paymentType === "Sofort" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "Sofort")}
+            {...a11yProps("Sofort")}
+            data-test-id="sofortPayment"
+          >
+            <SofortIcon />
+            <CheckMark />
+          </button>
+        )}
+
+        {showPaypal ? (
+          <button
+            className={`${"payment-method"} ${
+              paymentType === "Paypal" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "Paypal")}
+            {...a11yProps("Paypal")}
+          >
+            <PaypalIcon />
+            <CheckMark />
+          </button>
+        ) : null}
+
+        {showGiroPay && (
+          <button
+            className={`${"payment-method"} ${
+              paymentType === "GiroPay" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "GiroPay")}
+            {...a11yProps("GiroPay")}
+          >
+            <GiroPayIcon />
+            <CheckMark />
+          </button>
+        )}
+
+        {showSepa && (
+          <button
+            className={`${"payment-method"} ${
+              paymentType === "SEPA" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "SEPA")}
+            {...a11yProps("SEPA")}
+          >
+            <SepaIcon />
+            <CheckMark />
+          </button>
+        )}
+        {showBankTransfer && (
+          <button
+            className={`${"payment-method"} ${"bank"} ${
+              paymentType === "Bank" ? "payment-method-selected" : ""
+            }`}
+            onClick={(e) => handleChange(e, "Bank")}
+            {...a11yProps("Bank")}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center" }}
+              data-test-id="bankTransfer"
+            >
+              <BankIcon />
+              <text>{t("bankTransfer")}</text>
+            </div>
+            <CheckMark />
+          </button>
+        )}
+        {showNativePay && (
+          <NativePay
+            country={country}
+            currency={currency}
+            amount={formatAmountForStripe(
+              paymentSetup.unitCost * quantity,
+              currency.toLowerCase()
+            )}
+            onPaymentFunction={onNativePaymentFunction}
+            paymentSetup={paymentSetup}
+            continueNext={() => {}}
+            isPaymentPage
+            paymentLabel={paymentLabel}
+            frequency={frequency}
+          />
+        )}
+      </div>
+    )
   );
 }
