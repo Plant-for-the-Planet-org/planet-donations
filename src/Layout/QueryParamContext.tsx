@@ -146,8 +146,6 @@ const QueryParamProvider: FC = ({ children }) => {
     lastName: "",
     email: "",
   });
-  const [donation, setdonation] = React.useState(null);
-  const [paymentRequest, setPaymentRequest] = React.useState(null);
   const [isApproved, setIsApproved] = React.useState(false);
   const [isTopProject, setIsTopProject] = React.useState(false);
   const [donation, setdonation] = useState<Donation | null>(null);
