@@ -111,6 +111,9 @@ export async function createDonationFunction({
   amount,
   callbackUrl,
   callbackMethod,
+  utmCampaign,
+  utmMedium,
+  utmSource,
   tenant,
 }: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
@@ -127,6 +130,9 @@ export async function createDonationFunction({
     amount,
     callbackUrl,
     callbackMethod,
+    utmCampaign,
+    utmMedium,
+    utmSource,
   });
   try {
     const requestParams = {
@@ -171,6 +177,9 @@ export function createDonationData({
   amount,
   callbackUrl,
   callbackMethod,
+  utmCampaign,
+  utmMedium,
+  utmSource,
 }: CreateDonationDataProps): DonationRequestData {
   let donationData: DonationRequestData = {
     purpose: projectDetails?.purpose,
@@ -185,6 +194,9 @@ export function createDonationData({
     metadata: {
       callback_url: callbackUrl,
       callback_method: callbackMethod,
+      utm_campaign: utmCampaign,
+      utm_medium: utmMedium,
+      utm_source: utmSource,
     },
     quantity,
   };
