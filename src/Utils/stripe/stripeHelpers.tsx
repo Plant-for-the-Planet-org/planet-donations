@@ -1,4 +1,3 @@
-
 import { ReactElement } from "react";
 import AmexIcon from "../../../public/assets/icons/CreditCardIcons/AmexIcon";
 import DinersClub from "../../../public/assets/icons/CreditCardIcons/DinersClub";
@@ -44,21 +43,6 @@ export function formatAmountForStripe(
 export const getCardBrand = (brand: string): ReactElement => {
   switch (brand) {
     case "visa":
-      return <VisaIcon />;
-    case "mastercard":
-      return <Mastercard />;
-    case "amex":
-      return <AmexIcon />;
-    case "discover":
-      return <DiscoverIcon />;
-    case "diners":
-      return <DinersClub />;
-    case "jcb":
-      return <JcbIcon />;
-    case "unionpay":
-      return <StripeIcon />;
-    case "unknown":
-      return <StripeIcon />;
       return <VisaIcon color="currentColor" />;
     case "mastercard":
       return <Mastercard color="currentColor" />;
