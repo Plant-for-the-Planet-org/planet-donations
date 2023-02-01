@@ -353,10 +353,9 @@ function PaymentsForm(): ReactElement {
                   currencies: ["EUR"],
                   countries: sofortCountries,
                 })}
-                showBankTransfer={
-                  Object.keys(paymentSetup?.gateways).includes("offline") &&
-                  frequency === "once"
-                }
+                showBankTransfer={Object.keys(paymentSetup?.gateways).includes(
+                  "offline"
+                )}
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
                   paymentSetup?.gateways.paypal &&
