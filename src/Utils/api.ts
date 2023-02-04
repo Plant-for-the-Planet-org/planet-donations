@@ -22,6 +22,16 @@ axiosInstance.interceptors.request.use(
     config.headers["Content-Type"] = "application/json";
     config.headers["X-ACCEPT-VERSION"] = "1.2";
 
+    // track donations requests
+    if (!config.headers["Authorization"]) {
+      if ((config.method == 'post' || config.method == 'put')
+        && config.url?.includes('/app/donations')) {
+        config.headers["TRACKING-ID"] = await hmacSha256Hex(
+          process.env.TRACKING_KEY || '', JSON.stringify(config.data)
+        );
+      }
+    }
+
     return config;
   },
   (error) => {
@@ -41,6 +51,26 @@ axiosInstance.interceptors.response.use(
     console.error("Error while setting up axios response interceptor", error);
   }
 );
+
+async function hmacSha256Hex(trackingKey: string, message: string) {
+  const enc = new TextEncoder("utf-8");
+  const algorithm = { name: "HMAC", hash: "SHA-256" };
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(process.env.TRACKING_HASH),
+    algorithm,
+    false, ["sign", "verify"]
+  );
+  const hashBuffer = await crypto.subtle.sign(
+    algorithm.name,
+    key,
+    enc.encode(message)
+  );
+  const hashArray = Array.from(new Uint8Array(hashBuffer)); const hashHex = hashArray.map(
+    b => b.toString(16).padStart(2, '0')
+  ).join('');
+  return hashHex;
+}
 
 interface RequestParams {
   url: string;
@@ -107,11 +137,10 @@ export const apiRequest = async (
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
       const l = locale
         ? locale
-        : `${
-            localStorage.getItem("language")
-              ? localStorage.getItem("language")
-              : "en"
-          }`;
+        : `${localStorage.getItem("language")
+          ? localStorage.getItem("language")
+          : "en"
+        }`;
       options.params = {
         tenant: tenant,
         locale: l,

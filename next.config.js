@@ -114,6 +114,8 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
     ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,
     ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
     RECURRENCY: process.env.RECURRENCY,
+    TRACKING_KEY: process.env.TRACKING_KEY,
+    TRACKING_HASH: process.env.TRACKING_HASH
   },
   trailingSlash: false,
   reactStrictMode: true,
