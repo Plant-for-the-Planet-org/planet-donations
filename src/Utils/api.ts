@@ -57,7 +57,7 @@ async function hmacSha256Hex(trackingKey: string, message: string) {
   const algorithm = { name: "HMAC", hash: "SHA-256" };
   const key = await crypto.subtle.importKey(
     "raw",
-    enc.encode(process.env.TRACKING_HASH),
+    enc.encode(trackingKey),
     algorithm,
     false, ["sign", "verify"]
   );
