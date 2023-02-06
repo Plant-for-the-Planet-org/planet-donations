@@ -24,10 +24,13 @@ axiosInstance.interceptors.request.use(
 
     // track donations requests
     if (!config.headers["Authorization"]) {
-      if ((config.method == 'post' || config.method == 'put')
-        && config.url?.includes('/app/donations')) {
+      if (
+        (config.method == "post" || config.method == "put") &&
+        config.url?.includes("/app/donations")
+      ) {
         config.headers["TRACKING-ID"] = await hmacSha256Hex(
-          process.env.TRACKING_KEY || '', JSON.stringify(config.data)
+          process.env.TRACKING_KEY || "",
+          JSON.stringify(config.data)
         );
       }
     }
@@ -41,34 +44,34 @@ axiosInstance.interceptors.request.use(
 
 // Add a response interceptor which checks for error code for all the requests
 // TODO: handle 401 and 403 (logout or retry)
-axiosInstance.interceptors.response.use(
-  undefined,
-  async (err) => {
-    // checkErrorCode(err);
-    return Promise.reject(err);
-  },
-  (error: any) => {
-    console.error("Error while setting up axios response interceptor", error);
-  }
-);
+axiosInstance.interceptors.response.use(undefined, async (err) => {
+  // checkErrorCode(err);
+  console.error("Error while setting up axios response interceptor", err);
+  return Promise.reject(err);
+});
 
-async function hmacSha256Hex(trackingKey: string, message: string) {
-  const enc = new TextEncoder("utf-8");
+async function hmacSha256Hex(
+  trackingKey: string,
+  message: string
+): Promise<string> {
+  const enc = new TextEncoder();
   const algorithm = { name: "HMAC", hash: "SHA-256" };
   const key = await crypto.subtle.importKey(
     "raw",
     enc.encode(trackingKey),
     algorithm,
-    false, ["sign", "verify"]
+    false,
+    ["sign", "verify"]
   );
   const hashBuffer = await crypto.subtle.sign(
     algorithm.name,
     key,
     enc.encode(message)
   );
-  const hashArray = Array.from(new Uint8Array(hashBuffer)); const hashHex = hashArray.map(
-    b => b.toString(16).padStart(2, '0')
-  ).join('');
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
   return hashHex;
 }
 
@@ -137,10 +140,11 @@ export const apiRequest = async (
     if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
       const l = locale
         ? locale
-        : `${localStorage.getItem("language")
-          ? localStorage.getItem("language")
-          : "en"
-        }`;
+        : `${
+            localStorage.getItem("language")
+              ? localStorage.getItem("language")
+              : "en"
+          }`;
       options.params = {
         tenant: tenant,
         locale: l,
