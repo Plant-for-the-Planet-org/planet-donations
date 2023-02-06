@@ -8,6 +8,7 @@ import ReturnToButton from "./Components/ReturnToButton";
 import { Donation } from "src/Common/Types/donation";
 import { ReactElement } from "react";
 import { TFunction } from "react-i18next";
+import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 interface TransferDetailsProps {
   donationID: string;
@@ -20,9 +21,10 @@ function TransferDetails({
   donation,
   sendToReturn,
 }: TransferDetailsProps): ReactElement | null {
-  const { t } = useTranslation(["common"]);
+  const { t, i18n } = useTranslation(["common"]);
   const [copiedText, setCopiedText] = React.useState("");
-  const { callbackUrl, transferDetails } = React.useContext(QueryParamContext);
+  const { callbackUrl, transferDetails, frequency } =
+    React.useContext(QueryParamContext);
   const copyDetails = (detail: string, textCopied: string) => {
     navigator.clipboard.writeText(detail);
     setCopiedText(textCopied);
@@ -44,9 +46,24 @@ function TransferDetails({
       <div className={"title-text text-center"} data-test-id="test-thankYou">
         {t("common:transferDetails")}
       </div>
-      <div className={"mt-20 text-center"}>
-        {t("common:transferDetailsMessage")}
-      </div>
+
+      {frequency === "once" ? (
+        <div className={"mt-20 text-center"}>
+          {t("common:transferDetailsMessage")}
+        </div>
+      ) : (
+        <div className={"mt-20 text-center"}>
+          {t("common:recurrentTransferDetailsMsg", {
+            frequency,
+            amount: getFormatedCurrency(
+              i18n.language,
+              donation.currency,
+              donation.amount
+            ),
+          })}
+        </div>
+      )}
+
       <div className={"transfer-details"}>
         <div className={"single-detail"}>
           <p>{t("reference")}</p>
