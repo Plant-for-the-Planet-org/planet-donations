@@ -228,8 +228,10 @@ export function createDonationData({
         ...{
           gift: {
             type: "direct",
-            recipientTreecounter: giftDetails.recipientTreecounter,
-            // message: giftDetails.giftMessage, //A direct gift does not have a message
+            // Either recipientTreecounter or recipient will have a value
+            ...(giftDetails.recipient
+              ? { recipient: giftDetails.recipient }
+              : { recipientTreecounter: giftDetails.recipientTreecounter }),
           },
         },
       };

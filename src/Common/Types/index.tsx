@@ -7,7 +7,8 @@ import { NextRouter } from "next/router";
 export interface DirectGift {
   type: "direct";
   recipientName?: string;
-  recipientTreecounter: string;
+  recipientTreecounter?: string;
+  recipient?: string;
   recipientEmail?: "";
   message?: "";
 }
