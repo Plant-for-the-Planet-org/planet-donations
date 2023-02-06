@@ -46,23 +46,18 @@ function TransferDetails({
       <div className={"title-text text-center"} data-test-id="test-thankYou">
         {t("common:transferDetails")}
       </div>
-
-      {frequency === "once" ? (
-        <div className={"mt-20 text-center"}>
-          {t("common:transferDetailsMessage")}
-        </div>
-      ) : (
-        <div className={"mt-20 text-center"}>
-          {t("common:recurrentTransferDetailsMsg", {
-            frequency,
-            amount: getFormatedCurrency(
-              i18n.language,
-              donation.currency,
-              donation.amount
-            ),
-          })}
-        </div>
-      )}
+      <div className={"mt-20 text-center"}>
+        {frequency === "once"
+          ? t("common:transferDetailsMessage")
+          : t("common:recurrentTransferDetailsMsg", {
+              frequency,
+              amount: getFormatedCurrency(
+                i18n.language,
+                donation.currency,
+                donation.amount
+              ),
+            })}
+      </div>
 
       <div className={"transfer-details"}>
         <div className={"single-detail"}>
