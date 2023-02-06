@@ -68,16 +68,16 @@ function FailedDonation({
     setcountry(country);
     localStorage.setItem("countryCode", country);
     setcurrency(donation.currency);
-    if (donation.gift) {
-      setisGift(donation.gift.recipientName ? true : false);
+    if (donation.giftRequest) {
+      setisGift(donation.giftRequest.recipientName ? true : false);
 
       const _giftDetails = {
-        type: donation.gift.type || null,
-        recipientName: donation.gift.recipientName || "",
-        recipientEmail: donation.gift.recipientEmail || "",
-        message: donation.gift.message || "",
-        ...(donation.gift.recipientTreeCounter
-          ? { recipientTreecounter: donation.gift.recipientTreecounter }
+        type: donation.giftRequest.type || null,
+        recipientName: donation.giftRequest.recipientName || "",
+        recipientEmail: donation.giftRequest.recipientEmail || "",
+        message: donation.giftRequest.message || "",
+        ...(donation.giftRequest.type === "direct"
+          ? { recipient: donation.giftRequest.recipient }
           : {}),
       };
       // TODO - Gift type invitation and direct will have different properties
