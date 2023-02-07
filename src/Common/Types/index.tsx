@@ -254,8 +254,22 @@ export interface OnBehalfDonor {
   email: string;
 }
 
+export enum PaymentGateways {
+  OFFLINE = "offline",
+  PAYPAL = "paypal",
+  STRIPE = "stripe",
+}
+
 export interface ShowPaymentMethodParams {
-  paymentMethod: "card" | "giropay" | "sofort" | "sepa_debit";
+  gateway: PaymentGateways;
+  paymentMethod:
+    | "card"
+    | "giropay"
+    | "sofort"
+    | "sepa_debit"
+    | "offline"
+    | "paypal"
+    | "native_pay"; // native_pay includes apple_pay, google_pay;
   countries?: string[];
   currencies?: string[];
   authenticatedMethod?: boolean;

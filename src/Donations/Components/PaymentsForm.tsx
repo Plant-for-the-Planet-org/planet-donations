@@ -28,6 +28,7 @@ import { useRouter } from "next/router";
 import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
 import {
+  PaymentGateways,
   PaypalApproveData,
   PaypalErrorData,
   ShowPaymentMethodParams,
@@ -219,6 +220,7 @@ function PaymentsForm(): ReactElement {
   const { theme } = React.useContext(ThemeContext);
 
   const showPaymentMethod = ({
+    gateway,
     paymentMethod,
     countries,
     currencies,
@@ -230,14 +232,30 @@ function PaymentsForm(): ReactElement {
       : true;
     const isAuthenticatedMethod = authenticatedMethod ? isAuthenticated : true;
 
+    const showPaypal =
+      gateway === PaymentGateways.PAYPAL
+        ? paypalCurrencies.includes(currency)
+        : true;
+
+    const showNativePay =
+      gateway === PaymentGateways.STRIPE && paymentMethod === "native_pay"
+        ? Boolean(paymentSetup?.gateways?.stripe?.account && currency) &&
+          (frequency !== "once"
+            ? paymentSetup?.recurrency.methods?.includes("card") || false
+            : true)
+        : true;
+
     return (
       isAvailableInCountry &&
       isAvailableForCurrency &&
       isAuthenticatedMethod &&
-      paymentSetup?.gateways.stripe.methods?.includes(paymentMethod) &&
-      (frequency !== "once"
-        ? paymentSetup?.recurrency.methods?.includes(paymentMethod)
-        : true)
+      showPaypal &&
+      showNativePay &&
+      (paymentSetup?.gateways.stripe.methods?.includes(paymentMethod) ||
+        (paymentSetup?.gateways &&
+          Object.keys(paymentSetup?.gateways).includes(gateway))) && // check for gateway is for paypal and offline paymentMethods
+      (frequency === "once" ||
+        paymentSetup?.recurrency.methods?.includes(paymentMethod))
     );
   };
 
@@ -334,13 +352,18 @@ function PaymentsForm(): ReactElement {
               <PaymentMethodTabs
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
-                showCC={showPaymentMethod({ paymentMethod: "card" })}
+                showCC={showPaymentMethod({
+                  gateway: PaymentGateways.STRIPE,
+                  paymentMethod: "card",
+                })}
                 showGiroPay={showPaymentMethod({
+                  gateway: PaymentGateways.STRIPE,
                   paymentMethod: "giropay",
                   countries: ["DE"],
                   currencies: ["EUR"],
                 })}
                 showSepa={showPaymentMethod({
+                  gateway: PaymentGateways.STRIPE,
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
                   authenticatedMethod:
@@ -349,28 +372,23 @@ function PaymentsForm(): ReactElement {
                       : true,
                 })}
                 showSofort={showPaymentMethod({
+                  gateway: PaymentGateways.STRIPE,
                   paymentMethod: "sofort",
                   currencies: ["EUR"],
                   countries: sofortCountries,
                 })}
-                showBankTransfer={
-                  Object.keys(paymentSetup?.gateways).includes("offline") &&
-                  frequency === "once"
-                }
-                showPaypal={
-                  paypalCurrencies.includes(currency) &&
-                  paymentSetup?.gateways.paypal &&
-                  (frequency !== "once" ? false : true)
-                }
-                showNativePay={
-                  (paymentSetup?.gateways?.stripe?.account && currency
-                    ? true
-                    : false) &&
-                  (frequency !== "once"
-                    ? paymentSetup?.recurrency.methods?.includes("card") ||
-                      false
-                    : true)
-                }
+                showBankTransfer={showPaymentMethod({
+                  gateway: PaymentGateways.OFFLINE,
+                  paymentMethod: "offline",
+                })}
+                showPaypal={showPaymentMethod({
+                  gateway: PaymentGateways.PAYPAL,
+                  paymentMethod: "paypal",
+                })}
+                showNativePay={showPaymentMethod({
+                  gateway: PaymentGateways.STRIPE,
+                  paymentMethod: "native_pay",
+                })}
                 onNativePaymentFunction={onPaymentFunction}
               />
             )}
