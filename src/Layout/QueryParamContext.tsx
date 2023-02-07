@@ -35,6 +35,8 @@ import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterf
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
 import { Donation } from "src/Common/Types/donation";
+import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
+import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 export const QueryParamContext =
@@ -151,6 +153,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
     null
   );
+
+  const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
 
   const loadEnabledCurrencies = async () => {
     try {
@@ -274,7 +278,7 @@ const QueryParamProvider: FC = ({ children }) => {
         }
       }
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   }
 
@@ -292,7 +296,7 @@ const QueryParamProvider: FC = ({ children }) => {
       });
       setprofile(profile.data);
     } catch (err) {
-      console.error(err);
+      setErrors(handleError(err as APIError));
     }
   }, []);
 
@@ -422,7 +426,7 @@ const QueryParamProvider: FC = ({ children }) => {
         }
       }
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   }
 
@@ -533,7 +537,7 @@ const QueryParamProvider: FC = ({ children }) => {
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
-      // console.log(err);
+      setErrors(handleError(err as APIError));
     }
   };
 
@@ -630,6 +634,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setdonation,
         paymentRequest,
         setPaymentRequest,
+        errors,
+        setErrors,
       }}
     >
       {children}
@@ -638,6 +644,7 @@ const QueryParamProvider: FC = ({ children }) => {
         showErrorCard={showErrorCard}
         setShowErrorCard={setshowErrorCard}
       />
+      <ErrorPopup />
     </QueryParamContext.Provider>
   );
 };
@@ -661,7 +668,7 @@ function ErrorCard({
     if (showErrorCard) {
       setTimeout(() => {
         setShowErrorCard(false);
-      }, 3000);
+      }, 5000);
     }
   }, [showErrorCard]);
 

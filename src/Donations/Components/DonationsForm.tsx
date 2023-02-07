@@ -27,6 +27,7 @@ import { Skeleton } from "@material-ui/lab";
 import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import cleanObject from "src/Utils/cleanObject";
+import { APIError, handleError } from "@planet-sdk/common";
 import { Donation } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
@@ -59,6 +60,7 @@ function DonationsForm(): ReactElement {
     setcountry,
     setcurrency,
     donation,
+    setErrors,
     utmCampaign,
     utmMedium,
     utmSource,
@@ -298,16 +300,7 @@ function DonationsForm(): ReactElement {
           });
         }
       } catch (err) {
-        console.error(err);
-        if (err.status === 400) {
-          setPaymentError(err.data.message);
-        } else if (err.status === 500) {
-          setPaymentError(t("genericErrorMessage"));
-        } else if (err.status === 503) {
-          setPaymentError(t("errorStatus503"));
-        } else {
-          setPaymentError(err.message);
-        }
+        setErrors(handleError(err as APIError));
         setShowDisablePlanetCashButton(false);
       }
     }
