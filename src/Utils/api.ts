@@ -1,6 +1,7 @@
 import getsessionId from "./getSessionId";
 import axios, { AxiosRequestConfig, Method } from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { APIError } from "@planet-sdk/common";
 import { Dispatch, SetStateAction } from "react";
 
 // creates and axios instance with base url
@@ -169,7 +170,8 @@ export const apiRequest = async (
           ) {
             setshowErrorCard(true);
           }
-          reject(err);
+
+          reject(new APIError(err.response.status, err.response.data));
         });
     });
   } catch (err) {

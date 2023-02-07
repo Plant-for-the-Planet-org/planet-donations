@@ -15,6 +15,7 @@ import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { Skeleton } from "@material-ui/lab";
+import { APIError, handleError } from "@planet-sdk/common";
 import { ContactDetails } from "src/Common/Types";
 import { User } from "src/Common/Types/user";
 
@@ -31,6 +32,7 @@ function Authentication(): ReactElement {
     setcurrency,
     setcountry,
     tenant,
+    setErrors,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -83,6 +85,7 @@ function Authentication(): ReactElement {
           setContactDetails(newContactDetails);
         }
       } catch (err) {
+        setErrors(handleError(err as APIError));
         const newContactDetails = {
           firstname: authUser?.nickname ? authUser.nickname : "",
           email: authUser?.email ? authUser.email : "",
@@ -92,7 +95,6 @@ function Authentication(): ReactElement {
         setContactDetails((contactDetails) => {
           return { ...contactDetails, ...newContactDetails };
         });
-        console.log(err);
       }
     } else {
       const newContactDetails = {
