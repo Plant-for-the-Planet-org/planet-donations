@@ -23,6 +23,19 @@ axiosInstance.interceptors.request.use(
     config.headers["Content-Type"] = "application/json";
     config.headers["X-ACCEPT-VERSION"] = "1.2";
 
+    // track donations requests
+    if (!config.headers["Authorization"]) {
+      if (
+        (config.method == "post" || config.method == "put") &&
+        config.url?.includes("/app/donations")
+      ) {
+        config.headers["TRACKING-ID"] = await hmacSha256Hex(
+          process.env.TRACKING_KEY || "",
+          JSON.stringify(config.data)
+        );
+      }
+    }
+
     return config;
   },
   (error) => {
@@ -32,16 +45,36 @@ axiosInstance.interceptors.request.use(
 
 // Add a response interceptor which checks for error code for all the requests
 // TODO: handle 401 and 403 (logout or retry)
-axiosInstance.interceptors.response.use(
-  undefined,
-  async (err) => {
-    // checkErrorCode(err);
-    return Promise.reject(err);
-  },
-  (error: any) => {
-    console.error("Error while setting up axios response interceptor", error);
-  }
-);
+axiosInstance.interceptors.response.use(undefined, async (err) => {
+  // checkErrorCode(err);
+  console.error("Error while setting up axios response interceptor", err);
+  return Promise.reject(err);
+});
+
+async function hmacSha256Hex(
+  trackingKey: string,
+  message: string
+): Promise<string> {
+  const enc = new TextEncoder();
+  const algorithm = { name: "HMAC", hash: "SHA-256" };
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(trackingKey),
+    algorithm,
+    false,
+    ["sign", "verify"]
+  );
+  const hashBuffer = await crypto.subtle.sign(
+    algorithm.name,
+    key,
+    enc.encode(message)
+  );
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
+}
 
 interface RequestParams {
   url: string;

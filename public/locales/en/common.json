@@ -57,6 +57,7 @@
   "continueWithBank": "Continue with Bank Transfer",
   "transferDetails": "Transfer Details",
   "transferDetailsMessage": "Thank You! To complete your donation, please transfer it with the reference specified below. This information was also emailed to you.",
+  "recurrentTransferDetailsMsg": "Your {{frequency}} donation of {{currency}} {{amount}} was successful. Thank You! To complete your donation, please set up an appropriate standing order with your bank to the account specified below. This information was also emailed to you.",
   "byOrganization": "by {{organizationName}}",
   "seedingYourDonation": "Seeding your Donation",
   "pleaseDoNotCloseThisTab": "Please do not close this tab!",
