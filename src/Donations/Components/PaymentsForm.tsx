@@ -355,7 +355,8 @@ function PaymentsForm(): ReactElement {
                 })}
                 showBankTransfer={
                   Object.keys(paymentSetup?.gateways).includes("offline") &&
-                  frequency === "once"
+                  (frequency === "once" ||
+                    paymentSetup?.recurrency.methods?.includes("offline"))
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&

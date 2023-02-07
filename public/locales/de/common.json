@@ -57,6 +57,7 @@
   "continueWithBank": "Weiter mit Banküberweisung",
   "transferDetails": "Überweisungsdetails",
   "transferDetailsMessage": "Vielen Dank! Um deine Spende abzuschließen, überweise den Betrag bitte auf folgendes Bankkonto. Die Zahlungsdetails wurden dir zudem per E-Mail zugesandt. Gebe bitte den Verwendungszweck an, um eine automatische Zuordnung zu ermöglichen.",
+  "recurrentTransferDetailsMsg": "Deine {{frequency}} Spende über {{amount}} {{currency}} war erfolgreich. Vielen Dank! Um deine Spende abzuschließen, richte bitte einen entsprechenden Dauerauftrag bei deiner Bank auf folgendes Bankkonto ein. Die Zahlungsdetails wurden dir zudem per E-Mail zugesandt. Gebe bitte den Verwendungszweck an, um eine automatische Zuordnung zu ermöglichen.",
   "byOrganization": "von {{organizationName}}",
   "seedingYourDonation": "Deine Spende wird bearbeitet",
   "pleaseDoNotCloseThisTab": "Bitte schließe diesen Tab nicht!",
