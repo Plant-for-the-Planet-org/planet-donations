@@ -10,7 +10,9 @@ import "./../styles/footer.scss";
 import "./../styles/donations.scss";
 import "./../styles/projects.scss";
 import "./../styles/common.scss";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+import MuiTheme from "styles/muiTheme";
 import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
 import { Auth0Provider } from "@auth0/auth0-react";
@@ -95,15 +97,17 @@ function MyApp({ Component, pageProps }: AppProps) {
         useRefreshTokens={true}
       >
         <ThemeProvider>
-          <QueryParamProvider>
-            <CssBaseline />
-            <style jsx global>
-              {theme}
-            </style>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </QueryParamProvider>
+          <MuiThemeProvider theme={MuiTheme}>
+            <QueryParamProvider>
+              <CssBaseline />
+              <style jsx global>
+                {theme}
+              </style>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </QueryParamProvider>
+          </MuiThemeProvider>
         </ThemeProvider>
       </Auth0Provider>
     );
