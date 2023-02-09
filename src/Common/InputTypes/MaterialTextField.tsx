@@ -10,6 +10,9 @@ const MaterialTextField = withStyles({
       height: "1.1876em",
       lineHeight: "1.1876em",
     },
+    "& .MuiInputAdornment-root": {
+      color: "var(--primary-font-color)",
+    },
     "& label.Mui-focused": {
       color: "var(--primary-font-color)",
       fontFamily: themeProperties.fontFamily,
@@ -19,10 +22,10 @@ const MaterialTextField = withStyles({
       fontFamily: themeProperties.fontFamily,
       fontSize: "14px",
       lineHeight: 1,
-      top: "-3px",
     },
     "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
       transform: "translate(14px, -4px) scale(0.75)",
+      top: "-3px",
     },
     "& .MuiOutlinedInput-notchedOutline": {
       border: "0px!important",

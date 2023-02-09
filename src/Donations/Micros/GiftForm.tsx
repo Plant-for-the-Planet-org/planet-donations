@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import InputAdornment from "@mui/material/InputAdornment";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
