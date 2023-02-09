@@ -1,5 +1,5 @@
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import { withStyles } from "@mui/styles";
+import TextField from "@mui/material/TextField";
 import themeProperties from "./../../../styles/themeProperties";
 const MaterialTextField = withStyles({
   root: {
@@ -7,6 +7,7 @@ const MaterialTextField = withStyles({
     color: "var(--primary-font-color)",
     "& .MuiInputBase-input.MuiOutlinedInput-input": {
       color: "var(--primary-font-color)",
+      height: "1.1876em",
     },
     "& label.Mui-focused": {
       color: "var(--primary-font-color)",
@@ -16,6 +17,7 @@ const MaterialTextField = withStyles({
       color: "var(--primary-font-color)",
       fontFamily: themeProperties.fontFamily,
       fontSize: "14px",
+      lineHeight: 1,
       top: "-3px",
     },
     "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
