@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
-import { makeStyles } from "@material-ui/core/styles";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import makeStyles from "@mui/styles/makeStyles";
+import Autocomplete from "@mui/material/Autocomplete";
 import React from "react";
 import MaterialTextField from "./MaterialTextField";
 import { useTranslation } from "next-i18next";
@@ -139,11 +139,11 @@ export default function CountrySelect(props: {
       value={value}
       autoHighlight
       getOptionLabel={(option) => t(`country:${option.code.toLowerCase()}`)}
-      renderOption={(option) => (
-        <>
+      renderOption={(props, option) => (
+        <li {...props}>
           <span>{countryToFlag(option.code)}</span>
           {t(`country:${option.code.toLowerCase()}`)}
-        </>
+        </li>
       )}
       onChange={(event: any, newValue: CountryType | null) => {
         if (newValue) {
