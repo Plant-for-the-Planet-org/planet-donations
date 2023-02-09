@@ -1,6 +1,12 @@
 import { createTheme } from "@mui/material/styles";
+import themeProperties from "./themeProperties";
 
 const MuiTheme = createTheme({
+  palette: {
+    primary: {
+      main: themeProperties.primaryColor,
+    },
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
