@@ -1,9 +1,8 @@
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import FormControl from "@material-ui/core/FormControl";
-import Modal from "@material-ui/core/Modal";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Fade from "@mui/material/Fade";
+import FormControl from "@mui/material/FormControl";
+import Modal from "@mui/material/Modal";
+import { makeStyles, withStyles } from "@mui/styles";
+import Autocomplete from "@mui/material/Autocomplete";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -54,10 +53,7 @@ export default function SelectCurrencyModal({
         open={openModal}
         onClose={handleModalClose}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
+        slotProps={{ backdrop: { timeout: 500 } }}
       >
         <Fade in={openModal}>
           <div className={"modal p-20"}>
@@ -165,7 +161,7 @@ function MapCurrency({
   const selectedCountry = getCountryDataBy("countryCode", value);
 
   return ready ? (
-    <FormControlNew>
+    <FormControlNew variant="standard">
       {sortedCountriesData && (
         <div className={"form-field mt-20"}>
           <Autocomplete
@@ -183,13 +179,13 @@ function MapCurrency({
                 option.currencyCode
               } `
             }
-            renderOption={(option) => (
-              <>
+            renderOption={(props, option) => (
+              <li {...props}>
                 <span>{countryToFlag(option.countryCode)}</span>
                 {`${t(`country:${option.countryCode.toLowerCase()}`)} - ${
                   option.currencyCode
                 } `}
-              </>
+              </li>
             )}
             onChange={(_event, newValue: Country | null) => {
               if (newValue) {

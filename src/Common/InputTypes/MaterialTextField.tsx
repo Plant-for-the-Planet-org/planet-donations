@@ -8,6 +8,7 @@ const MaterialTextField = withStyles({
     "& .MuiInputBase-input.MuiOutlinedInput-input": {
       color: "var(--primary-font-color)",
       height: "1.1876em",
+      lineHeight: "1.1876em",
     },
     "& label.Mui-focused": {
       color: "var(--primary-font-color)",
