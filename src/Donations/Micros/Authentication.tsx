@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
-import { Skeleton } from "@material-ui/lab";
+import Skeleton from "@mui/material/Skeleton";
 import { APIError, handleError } from "@planet-sdk/common";
 import { ContactDetails } from "src/Common/Types";
 import { User } from "src/Common/Types/user";
@@ -159,7 +159,7 @@ function Authentication(): ReactElement {
     <div>
       {isLoading ? (
         <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <Skeleton variant="rect" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
         </div>
       ) : !queryToken && !isLoading && !isAuthenticated ? (
         !hideLogin ? (
