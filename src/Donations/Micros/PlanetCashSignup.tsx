@@ -10,7 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import CountrySelect from "src/Common/InputTypes/AutoCompleteCountry";
 import { apiRequest } from "src/Utils/api";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
 import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import { ThemeContext } from "styles/themeContext";
