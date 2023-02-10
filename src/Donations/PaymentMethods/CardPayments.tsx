@@ -1,5 +1,5 @@
-import { FormControl } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import FormControl from "@mui/material/FormControl";
+import { withStyles } from "@mui/styles";
 import {
   CardCvcElement,
   CardExpiryElement,
