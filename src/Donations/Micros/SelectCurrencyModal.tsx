@@ -1,8 +1,9 @@
 import Fade from "@mui/material/Fade";
 import FormControl from "@mui/material/FormControl";
 import Modal from "@mui/material/Modal";
-import { makeStyles, withStyles } from "@mui/styles";
 import Autocomplete from "@mui/material/Autocomplete";
+import Paper, { PaperProps } from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -79,11 +80,9 @@ export default function SelectCurrencyModal({
   ) : null;
 }
 
-const FormControlNew = withStyles({
-  root: {
-    width: "100%",
-  },
-})(FormControl);
+const FormControlNew = styled(FormControl)({
+  width: "100%",
+});
 
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
@@ -115,39 +114,41 @@ function MapCurrency({
 
   const { theme } = useContext(ThemeContext);
 
-  const useStylesAutoComplete = makeStyles({
-    paper: {
-      color:
-        theme === "theme-light"
-          ? themeProperties.light.primaryFontColor
-          : themeProperties.dark.primaryFontColor,
+  const StyledAutoCompletePaper = styled(Paper)({
+    color:
+      theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+    backgroundColor:
+      theme === "theme-light"
+        ? themeProperties.light.backgroundColor
+        : themeProperties.dark.backgroundColor,
+  });
+
+  const CustomPaper = (props: PaperProps) => (
+    <StyledAutoCompletePaper {...props} />
+  );
+
+  const StyledAutocompleteOption = styled("li")({
+    fontFamily: themeProperties.fontFamily,
+    fontSize: "14px",
+    "&:hover": {
       backgroundColor:
         theme === "theme-light"
-          ? themeProperties.light.backgroundColor
-          : themeProperties.dark.backgroundColor,
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
     },
-    option: {
-      fontFamily: themeProperties.fontFamily,
-      fontSize: "14px",
-      "&:hover": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      "&:active": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      "& > span": {
-        marginRight: 10,
-        fontSize: 18,
-      },
+    "&:active": {
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
+    },
+    "& > span": {
+      marginRight: 10,
+      fontSize: 18,
     },
   });
-  const classes = useStylesAutoComplete();
 
   const sortedCountriesData = ready
     ? sortCountriesByTranslation(
@@ -168,10 +169,7 @@ function MapCurrency({
             data-test-id="country-select"
             style={{ width: "100%" }}
             options={sortedCountriesData as Country[]}
-            classes={{
-              option: classes.option,
-              paper: classes.paper,
-            }}
+            PaperComponent={CustomPaper}
             value={selectedCountry}
             autoHighlight
             getOptionLabel={(option) =>
@@ -180,12 +178,12 @@ function MapCurrency({
               } `
             }
             renderOption={(props, option) => (
-              <li {...props}>
+              <StyledAutocompleteOption {...props}>
                 <span>{countryToFlag(option.countryCode)}</span>
                 {`${t(`country:${option.countryCode.toLowerCase()}`)} - ${
                   option.currencyCode
                 } `}
-              </li>
+              </StyledAutocompleteOption>
             )}
             onChange={(_event, newValue: Country | null) => {
               if (newValue) {

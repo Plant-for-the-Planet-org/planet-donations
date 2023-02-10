@@ -1,5 +1,5 @@
-import { withStyles } from "@mui/styles";
 import Checkbox from "@mui/material/Checkbox";
+import { styled } from "@mui/material/styles";
 import { ChangeEvent, InputHTMLAttributes, ReactElement } from "react";
 
 interface Props {
@@ -11,16 +11,15 @@ interface Props {
   id: string;
 }
 
+const StyledCheckbox = styled(Checkbox)({
+  "&.Mui-checked .MuiSvgIcon-root path": {
+    fill: "#68B030",
+  },
+});
+
 export default function CheckBox(props: Props): ReactElement {
-  const CheckBox = withStyles({
-    checked: {
-      "& .MuiSvgIcon-root path": {
-        fill: "#68B030",
-      },
-    },
-  })(Checkbox);
   return (
-    <CheckBox
+    <StyledCheckbox
       color={props.color}
       checked={props.checked}
       onChange={props.onChange}
