@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import Grid from "@mui/material/Grid";
 import { useTranslation } from "next-i18next";
 import { FC, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
