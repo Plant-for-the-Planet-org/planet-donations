@@ -17,6 +17,13 @@ const MuiTheme = createTheme({
         },
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        filledSuccess: {
+          backgroundColor: themeProperties.primaryColor,
+        },
+      },
+    },
   },
 });
 
