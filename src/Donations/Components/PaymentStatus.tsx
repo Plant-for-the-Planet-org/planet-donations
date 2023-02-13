@@ -14,6 +14,7 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
+import { APIError, handleError } from "@planet-sdk/common";
 import { Donation } from "src/Common/Types/donation";
 
 function ThankYou(): ReactElement {
@@ -28,17 +29,22 @@ function ThankYou(): ReactElement {
     donation,
     setdonation,
     setTransferDetails,
+    setErrors,
   } = React.useContext(QueryParamContext);
 
   async function loadDonation() {
-    const requestParams = {
-      url: `/app/donations/${donationID}`,
-      setshowErrorCard,
-      tenant,
-    };
-    const donation = await apiRequest(requestParams);
-    if (donation.status === 200) {
-      setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+    try {
+      const requestParams = {
+        url: `/app/donations/${donationID}`,
+        setshowErrorCard,
+        tenant,
+      };
+      const donation = await apiRequest(requestParams);
+      if (donation.status === 200) {
+        setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+      }
+    } catch (err) {
+      setErrors(handleError(err as APIError));
     }
   }
 
