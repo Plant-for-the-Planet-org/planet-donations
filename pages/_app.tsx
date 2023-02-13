@@ -12,6 +12,8 @@ import "./../styles/projects.scss";
 import "./../styles/common.scss";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import createEmotionCache from "styles/createEmotionCache";
 import MuiTheme from "styles/muiTheme";
 import { appWithTranslation } from "next-i18next";
 import QueryParamProvider from "../src/Layout/QueryParamContext";
@@ -21,6 +23,7 @@ import React from "react";
 import { browserNotCompatible } from "../src/Utils/browsercheck";
 import BrowserNotSupported from "./../src/Common/ContentLoaders/BrowserNotSupported";
 import MisconfiguredEnvironment from "src/Common/ContentLoaders/MisconfiguredEnvironment";
+
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   const config = getConfig();
   const distDir = `${config.serverRuntimeConfig.rootDir}/.next`;
@@ -64,7 +67,18 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   });
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+function MyApp({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache,
+}: MyAppProps) {
   const router = useRouter();
 
   if (
@@ -88,28 +102,30 @@ function MyApp({ Component, pageProps }: AppProps) {
     return <MisconfiguredEnvironment />;
   } else {
     return (
-      <Auth0Provider
-        domain={process.env.AUTH0_CUSTOM_DOMAIN}
-        clientId={process.env.AUTH0_CLIENT_ID}
-        redirectUri={process.env.APP_URL}
-        cacheLocation={"localstorage"}
-        audience={"urn:plant-for-the-planet"}
-        useRefreshTokens={true}
-      >
-        <ThemeProvider>
-          <MuiThemeProvider theme={MuiTheme}>
-            <QueryParamProvider>
-              <CssBaseline />
-              <style jsx global>
-                {theme}
-              </style>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </QueryParamProvider>
-          </MuiThemeProvider>
-        </ThemeProvider>
-      </Auth0Provider>
+      <CacheProvider value={emotionCache}>
+        <Auth0Provider
+          domain={process.env.AUTH0_CUSTOM_DOMAIN}
+          clientId={process.env.AUTH0_CLIENT_ID}
+          redirectUri={process.env.APP_URL}
+          cacheLocation={"localstorage"}
+          audience={"urn:plant-for-the-planet"}
+          useRefreshTokens={true}
+        >
+          <ThemeProvider>
+            <MuiThemeProvider theme={MuiTheme}>
+              <QueryParamProvider>
+                <CssBaseline />
+                <style jsx global>
+                  {theme}
+                </style>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </QueryParamProvider>
+            </MuiThemeProvider>
+          </ThemeProvider>
+        </Auth0Provider>
+      </CacheProvider>
     );
   }
 }
