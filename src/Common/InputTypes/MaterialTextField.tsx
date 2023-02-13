@@ -35,7 +35,7 @@ const MaterialTextField = styled(TextField)({
   },
   "& .Mui-disabled.MuiOutlinedInput-input ": {
     color: "var(--disabled-font-color)",
-    "-webkit-text-fill-color": "initial",
+    WebkitTextFillColor: "initial",
   },
   "& .MuiOutlinedInput-root": {
     backgroundColor: "var(--background-color-dark)",
