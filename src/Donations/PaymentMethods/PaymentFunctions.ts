@@ -228,10 +228,7 @@ export function createDonationData({
         ...{
           gift: {
             type: "direct",
-            // Either recipientTreecounter or recipient will have a value
-            ...(giftDetails.recipient
-              ? { recipient: giftDetails.recipient }
-              : { recipientTreecounter: giftDetails.recipientTreecounter }),
+            recipient: giftDetails.recipient,
           },
         },
       };

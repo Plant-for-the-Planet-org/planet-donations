@@ -299,7 +299,7 @@ function DonationInfo() {
               <div className="contact-details-info  mt-20 donation-supports-info">
                 <p>{t("dedicatedTo")}</p>
                 {giftDetails.type === "direct" &&
-                (giftDetails.recipientTreecounter || giftDetails.recipient) ? (
+                giftDetails.recipientTreecounter ? (
                   <a
                     rel="noreferrer"
                     target="_blank"

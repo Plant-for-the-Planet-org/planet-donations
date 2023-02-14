@@ -447,6 +447,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           recipientEmail: "",
           message: "",
           type: "direct",
+          recipient: newProfile.data.id,
           recipientTreecounter: newProfile.data.slug,
         };
       }

@@ -8,7 +8,7 @@ export interface DirectGift {
   type: "direct";
   recipientName?: string;
   recipientTreecounter?: string;
-  recipient?: string;
+  recipient: string;
   recipientEmail?: "";
   message?: "";
 }
