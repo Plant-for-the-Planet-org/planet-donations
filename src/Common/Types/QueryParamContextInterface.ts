@@ -19,7 +19,7 @@ export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: Dispatch<SetStateAction<boolean>>;
   giftDetails: GiftDetails;
-  setgiftDetails: Dispatch<SetStateAction<GiftDetails>>;
+  setGiftDetails: Dispatch<SetStateAction<GiftDetails>>;
   contactDetails: ContactDetails;
   setContactDetails: Dispatch<SetStateAction<ContactDetails>>;
   country: string;

@@ -5,6 +5,8 @@ import {
   GiftDetails,
 } from ".";
 
+type Nullable<T> = T | null;
+
 enum PaymentStatusValues {
   PENDING = "pending",
   INITIATED = "initiated",
@@ -25,6 +27,7 @@ export interface Donation {
   frequency: any;
   gateway?: string;
   gift?: Gift;
+  giftRequest?: GiftDetails;
   hasPublicProfile: boolean;
   id: string;
   isRecurrent: boolean;
@@ -55,12 +58,15 @@ export interface Destination {
 }
 
 export interface Gift {
-  code?: string;
-  id?: string;
-  project?: Project;
-  status?: string;
-  type?: string;
-  units?: number;
+  id: string;
+  type: "direct" | "invitation";
+  code: Nullable<string>;
+  status: "redeemed" | "unredeemed";
+  recipientName: string;
+  recipientEmail: Nullable<string>;
+  message: Nullable<string>;
+  notifyRecipient: Nullable<boolean>;
+  redemptionDate: Nullable<string>;
 }
 
 export interface Project {
