@@ -30,7 +30,7 @@ function FailedDonation({
     setquantity,
     setContactDetails,
     setisGift,
-    setgiftDetails,
+    setGiftDetails,
     setfrequency,
     setdonationStep,
     setcurrency,
@@ -81,7 +81,7 @@ function FailedDonation({
           : {}),
       };
       // TODO - Gift type invitation and direct will have different properties
-      setgiftDetails(_giftDetails);
+      setGiftDetails(_giftDetails);
     }
 
     // TODO - Test this again after backend is updated

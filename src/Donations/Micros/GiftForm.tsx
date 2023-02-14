@@ -18,7 +18,7 @@ type GiftFormData = {
 export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setshowEmail] = React.useState(false);
-  const { giftDetails, setgiftDetails, isGift, setisGift } =
+  const { giftDetails, setGiftDetails, isGift, setisGift } =
     React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
@@ -35,19 +35,19 @@ export default function GiftForm(): ReactElement {
   React.useEffect(() => {
     if (isGift && giftDetails) {
       if (giftDetails.type !== "direct") {
-        setgiftDetails((giftDetails) => {
+        setGiftDetails((giftDetails) => {
           return { ...giftDetails, type: "invitation" };
         });
       }
     } else {
-      setgiftDetails((giftDetails) => {
+      setGiftDetails((giftDetails) => {
         return { ...(giftDetails as DefaultGift), type: null };
       });
     }
   }, [isGift]);
 
   const onSubmit = (data: GiftFormData) => {
-    setgiftDetails((giftDetails) => {
+    setGiftDetails((giftDetails) => {
       return { ...giftDetails, ...data, type: "invitation" };
     });
   };
@@ -59,7 +59,7 @@ export default function GiftForm(): ReactElement {
       message: "",
       type: null,
     };
-    setgiftDetails(_defaultDetails);
+    setGiftDetails(_defaultDetails);
     reset(_defaultDetails);
   };
 
