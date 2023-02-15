@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import { useTranslation } from "next-i18next";
 import { FC, useContext, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
@@ -20,7 +20,12 @@ const OnBehalf: FC = () => {
     email: onBehalfDonor.email,
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<OnBehalfDonor>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<OnBehalfDonor>({
     mode: "all",
     defaultValues,
   });
@@ -53,22 +58,36 @@ const OnBehalf: FC = () => {
         <div className="on-behalf-container-form-container mt-10">
           <Grid container spacing={3}>
             <Grid item xs={6}>
-              <MaterialTextField
+              <Controller
                 name="firstName"
-                inputRef={register({ required: true })}
-                label={t("firstName")}
-                variant="outlined"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    value={value}
+                    onChange={onChange}
+                    label={t("firstName")}
+                    variant="outlined"
+                  />
+                )}
               />
               {errors.firstName && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
               )}
             </Grid>
             <Grid item xs={6}>
-              <MaterialTextField
+              <Controller
                 name="lastName"
-                inputRef={register({ required: true })}
-                label={t("lastName")}
-                variant="outlined"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    value={value}
+                    onChange={onChange}
+                    label={t("lastName")}
+                    variant="outlined"
+                  />
+                )}
               />
               {errors.lastName && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
@@ -85,14 +104,21 @@ const OnBehalf: FC = () => {
                     {t("removeRecipient")}
                   </button>
                 </div>
-                <MaterialTextField
+                <Controller
                   name="email"
-                  inputRef={register({
+                  control={control}
+                  rules={{
                     pattern:
                       /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                  })}
-                  label={t("email")}
-                  variant="outlined"
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <MaterialTextField
+                      value={value}
+                      onChange={onChange}
+                      label={t("email")}
+                      variant="outlined"
+                    />
+                  )}
                 />
                 {errors.email && (
                   <span className={"form-errors"}>
