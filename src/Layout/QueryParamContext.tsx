@@ -189,10 +189,21 @@ const QueryParamProvider: FC = ({ children }) => {
   }, [currency, enabledCurrencies]);
 
   useEffect(() => {
+    // hack to address errors when donation was not created.
+    // TODO - better error handling
     if (paymentError) {
-      router.replace({
-        query: { ...router.query, step: THANK_YOU },
-      });
+      if (paymentError === "validationError") {
+        setErrors([
+          {
+            message: paymentError,
+            errorType: "validation_error",
+          },
+        ]);
+      } else {
+        router.replace({
+          query: { ...router.query, step: THANK_YOU },
+        });
+      }
     }
   }, [paymentError]);
   useEffect(() => {
