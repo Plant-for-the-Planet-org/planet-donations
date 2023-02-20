@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
+
 const { i18n } = require("./next-i18next.config");
 
 // Use the SentryWebpack plugin to upload the source maps during build step
