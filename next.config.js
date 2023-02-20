@@ -46,6 +46,7 @@ if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
 const hasAssetPrefix =
   process.env.ASSET_PREFIX !== "" && process.env.ASSET_PREFIX !== undefined;
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
   serverRuntimeConfig: {
