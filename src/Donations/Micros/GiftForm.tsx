@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useTranslation } from "next-i18next";
@@ -28,7 +28,12 @@ export default function GiftForm(): ReactElement {
     message: giftDetails.message,
   };
 
-  const { register, errors, handleSubmit, reset } = useForm<GiftFormData>({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
@@ -85,19 +90,26 @@ export default function GiftForm(): ReactElement {
             className={`donations-gift-form ${isGift ? "" : "display-none"}`}
           >
             <div className={"form-field mt-20"}>
-              <MaterialTextField
-                name={"recipientName"}
-                label={t("recipientName")}
-                variant="outlined"
-                inputRef={register({ required: true })}
-                data-test-id="recipientName"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <GiftIcon />
-                    </InputAdornment>
-                  ),
-                }}
+              <Controller
+                name="recipientName"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("recipientName")}
+                    variant="outlined"
+                    data-test-id="recipientName"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <GiftIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                )}
               />
               {errors.recipientName && (
                 <span className={"form-errors"}>
@@ -118,32 +130,45 @@ export default function GiftForm(): ReactElement {
                       {t("removeRecipient")}
                     </button>
                   </div>
-
-                  <MaterialTextField
-                    name={"recipientEmail"}
-                    label={t("recipientEmail")}
-                    variant="outlined"
-                    inputRef={register({
+                  <Controller
+                    name="recipientEmail"
+                    control={control}
+                    rules={{
                       required: true,
                       pattern:
                         /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                    })}
-                    data-test-id="giftRecipient"
+                    }}
+                    render={({ field: { onChange, value } }) => (
+                      <MaterialTextField
+                        onChange={onChange}
+                        value={value}
+                        label={t("recipientEmail")}
+                        variant="outlined"
+                        data-test-id="giftRecipient"
+                      />
+                    )}
                   />
+
                   {errors.recipientEmail && (
                     <span className={"form-errors"}>{t("emailRequired")}</span>
                   )}
                 </div>
                 <div className={"form-field mt-30"}>
-                  <MaterialTextField
-                    multiline
-                    rows="3"
-                    rowsMax="4"
-                    label={t("giftMessage")}
-                    variant="outlined"
-                    name={"message"}
-                    inputRef={register()}
-                    data-test-id="giftMessage"
+                  <Controller
+                    name="message"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <MaterialTextField
+                        onChange={onChange}
+                        value={value}
+                        multiline
+                        minRows={3}
+                        maxRows={4}
+                        label={t("giftMessage")}
+                        variant="outlined"
+                        data-test-id="giftMessage"
+                      />
+                    )}
                   />
                 </div>
               </div>

@@ -46,7 +46,7 @@ const MaterialTextField = styled(TextField)({
   "& .MuiOutlinedInput-input": {
     padding: "14px",
   },
-  "& .MuiOutlinedInput-multiline": {
+  "& .MuiInputBase-multiline": {
     padding: "0px",
   },
   '& .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]': {

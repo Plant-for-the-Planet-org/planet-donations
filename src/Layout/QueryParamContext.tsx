@@ -421,6 +421,9 @@ const QueryParamProvider: FC = ({ children }) => {
                 config.data.loc && config.data.loc.postalCode
                   ? config.data.loc.postalCode
                   : "",
+              country: config.data.loc?.countryCode
+                ? config.data.loc.countryCode
+                : "",
             };
           });
         }
