@@ -3,13 +3,12 @@ import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import SunIcon from "../../public/assets/icons/SunIcon";
 import MoonIcon from "../../public/assets/icons/MoonIcon";
 import {
-  Backdrop,
   Fade,
   FormControl,
   FormControlLabel,
   Modal,
   RadioGroup,
-} from "@material-ui/core";
+} from "@mui/material";
 import { ThemeContext } from "../../styles/themeContext";
 import GreenRadio from "../Common/InputTypes/GreenRadio";
 import { QueryParamContext } from "./QueryParamContext";
@@ -229,17 +228,14 @@ function LanguageModal({
       open={languageModalOpen}
       onClose={() => setlanguageModalOpen(false)}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+      slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={languageModalOpen}>
         <div className="modal p-20">
           <p className="select-language-title">
             {ready && t("selectLanguage")}
           </p>
-          <FormControl component="fieldset">
+          <FormControl component="fieldset" variant="standard">
             <RadioGroup
               aria-label="language"
               name="language"

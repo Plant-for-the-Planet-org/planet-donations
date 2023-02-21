@@ -1,5 +1,5 @@
-import { FormControl } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
 import { IbanElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
@@ -10,16 +10,14 @@ import { ContactDetails } from "src/Common/Types";
 import { StripeIbanElement } from "@stripe/stripe-js/types/stripe-js/elements/iban";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
-const FormControlNew = withStyles({
-  root: {
-    width: "100%",
-    backgroundColor: "var(--background-color-dark)",
-    border: "0px!important",
-    borderRadius: "10px",
-    fontFamily: themeProperties.fontFamily,
-    padding: "14px",
-  },
-})(FormControl);
+const FormControlNew = styled(FormControl)({
+  width: "100%",
+  backgroundColor: "var(--background-color-dark)",
+  border: "0px!important",
+  borderRadius: "10px",
+  fontFamily: themeProperties.fontFamily,
+  padding: "14px",
+});
 
 interface SepaPaymentsProps {
   paymentType: string;

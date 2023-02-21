@@ -23,7 +23,7 @@ import FrequencyOptions from "../Micros/FrequencyOptions";
 import { useRouter } from "next/router";
 import BouquetDonations from "../Micros/DonationTypes/BouquetDonations";
 import { CONTACT, THANK_YOU } from "src/Utils/donationStepConstants";
-import { Skeleton } from "@material-ui/lab";
+import Skeleton from "@mui/material/Skeleton";
 import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import cleanObject from "src/Utils/cleanObject";
@@ -316,7 +316,6 @@ function DonationsForm(): ReactElement {
           {projectDetails.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
-
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {projectDetails.purpose !== "funds" &&
             projectDetails.purpose !== "planet-cash" &&
@@ -324,7 +323,6 @@ function DonationsForm(): ReactElement {
             !(onBehalf && onBehalfDonor.firstName === "") &&
             isSignedUp &&
             profile?.planetCash && <PlanetCashSelector />}
-
           {!(onBehalf && onBehalfDonor.firstName === "") &&
             (projectDetails.purpose === "trees" ? (
               <div className="donations-gift-container mt-10">
@@ -333,7 +331,6 @@ function DonationsForm(): ReactElement {
             ) : (
               <></>
             ))}
-
           {process.env.RECURRENCY &&
             showFrequencyOptions &&
             paymentSetup &&
@@ -351,21 +348,18 @@ function DonationsForm(): ReactElement {
             ) : isGift || onBehalf ? (
               <></>
             ) : (
+              // TODO - remove if we never reach this code.
               <div className={`donations-gift-container mt-10 `}>
-                <Skeleton variant="rect" width={"100%"} height={40} />
+                <Skeleton variant="rectangular" width={"100%"} height={40} />
               </div>
             ))}
-
           {!(onBehalf && onBehalfDonor.firstName === "") && donationSelection()}
-
           {/* {!(isGift && giftDetails.recipientName === "") &&
             isPlanetCashActive && <OnBehalf />} */}
-
           {!isPlanetCashActive &&
             !(isGift && giftDetails.recipientName === "") && (
               <TaxDeductionOption />
             )}
-
           <div
             className={`${
               (isGift && giftDetails.recipientName === "") ||

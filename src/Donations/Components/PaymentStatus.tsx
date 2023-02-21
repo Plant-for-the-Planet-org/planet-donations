@@ -1,5 +1,6 @@
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
@@ -11,7 +12,7 @@ import PendingDonation from "../Micros/PaymentStatus/PendingDonation";
 import { useRouter } from "next/router";
 import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDonationJane";
 import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
-import CircularProgress from "@material-ui/core/CircularProgress";
+
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
 import { APIError, handleError } from "@planet-sdk/common";
@@ -78,16 +79,12 @@ function ThankYou(): ReactElement {
     }
   }, [donation]);
 
-  function Alert(props: AlertProps) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
-
   const [textCopiedsnackbarOpen, setTextCopiedSnackbarOpen] =
     React.useState(false);
 
   const handleTextCopiedSnackbarClose = (
-    event?: React.SyntheticEvent,
-    reason?: string
+    _event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {
       return;
@@ -164,10 +161,16 @@ function ThankYou(): ReactElement {
             open={textCopiedsnackbarOpen}
             autoHideDuration={4000}
             onClose={handleTextCopiedSnackbarClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
-            <Alert onClose={handleTextCopiedSnackbarClose} severity="success">
+            <MuiAlert
+              elevation={6}
+              variant="filled"
+              onClose={handleTextCopiedSnackbarClose}
+              severity="success"
+            >
               {t("donate:copiedToClipboard")}
-            </Alert>
+            </MuiAlert>
           </Snackbar>
         </div>
       )}

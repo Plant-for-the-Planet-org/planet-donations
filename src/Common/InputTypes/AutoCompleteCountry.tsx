@@ -1,7 +1,8 @@
 /* eslint-disable no-use-before-define */
-import { makeStyles } from "@material-ui/core/styles";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import Paper, { PaperProps } from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
+import React, { ReactElement } from "react";
 import MaterialTextField from "./MaterialTextField";
 import { useTranslation } from "next-i18next";
 import themeProperties from "./../../../styles/themeProperties";
@@ -30,44 +31,45 @@ export default function CountrySelect(props: {
   name: string | undefined;
   defaultValue: string | undefined;
   onValueChange: (value: string) => void;
-}) {
+}): ReactElement | null {
   const { t, ready } = useTranslation("country");
   const { theme } = React.useContext(ThemeContext);
-  const useStylesAutoComplete = makeStyles({
-    paper: {
-      color:
-        theme === "theme-light"
-          ? themeProperties.light.primaryFontColor
-          : themeProperties.dark.primaryFontColor,
-      backgroundColor:
-        theme === "theme-light"
-          ? themeProperties.light.backgroundColor
-          : themeProperties.dark.backgroundColor,
-    },
-    option: {
-      // color: '#2F3336',
-      fontFamily: themeProperties.fontFamily,
-      "&:hover": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      "&:active": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      fontSize: "14px",
-      "& > span": {
-        marginRight: 10,
-        fontSize: 18,
-      },
-    },
+
+  const StyledAutoCompletePaper = styled(Paper)({
+    color:
+      theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+    backgroundColor:
+      theme === "theme-light"
+        ? themeProperties.light.backgroundColor
+        : themeProperties.dark.backgroundColor,
   });
 
-  const classes = useStylesAutoComplete();
+  const CustomPaper = (props: PaperProps) => (
+    <StyledAutoCompletePaper {...props} />
+  );
+
+  const StyledAutocompleteOption = styled("li")({
+    fontFamily: themeProperties.fontFamily,
+    fontSize: "14px",
+    "&:hover": {
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
+    },
+    "&:active": {
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
+    },
+    "& > span": {
+      marginRight: 10,
+      fontSize: 18,
+    },
+  });
 
   // This value is in country code - eg. DE, IN, US
   const { defaultValue, onValueChange, allowedCountries } = props;
@@ -129,21 +131,19 @@ export default function CountrySelect(props: {
 
   return value && ready ? (
     <Autocomplete
+      onBlur={(e) => e.preventDefault()}
       id="country-select"
       style={{ width: "100%" }}
+      PaperComponent={CustomPaper}
       options={getCountries()}
-      classes={{
-        option: classes.option,
-        paper: classes.paper,
-      }}
       value={value}
       autoHighlight
       getOptionLabel={(option) => t(`country:${option.code.toLowerCase()}`)}
-      renderOption={(option) => (
-        <>
+      renderOption={(props, option) => (
+        <StyledAutocompleteOption {...props}>
           <span>{countryToFlag(option.code)}</span>
           {t(`country:${option.code.toLowerCase()}`)}
-        </>
+        </StyledAutocompleteOption>
       )}
       onChange={(event: any, newValue: CountryType | null) => {
         if (newValue) {
