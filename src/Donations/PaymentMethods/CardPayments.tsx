@@ -1,5 +1,5 @@
-import { FormControl } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
 import {
   CardCvcElement,
   CardExpiryElement,
@@ -21,16 +21,14 @@ import {
   StripeCardNumberElementChangeEvent,
 } from "@stripe/stripe-js";
 
-const FormControlNew = withStyles({
-  root: {
-    width: "100%",
-    backgroundColor: "var(--background-color-dark)",
-    border: "0px!important",
-    borderRadius: "10px",
-    fontFamily: themeProperties.fontFamily,
-    padding: "14px",
-  },
-})(FormControl);
+const FormControlNew = styled(FormControl)({
+  width: "100%",
+  backgroundColor: "var(--background-color-dark)",
+  border: "0px!important",
+  borderRadius: "10px",
+  fontFamily: themeProperties.fontFamily,
+  padding: "14px",
+});
 
 const getInputOptions = (placeholder: string, theme: string) => {
   const ObjectM = {

@@ -1,5 +1,5 @@
-import { withStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
+import Switch from "@mui/material/Switch";
+import { styled } from "@mui/material/styles";
 import { ChangeEvent, InputHTMLAttributes, ReactElement } from "react";
 
 interface Props {
@@ -13,19 +13,14 @@ interface Props {
 }
 
 export default function ToggleSwitch(props: Props): ReactElement {
-  const ToggleSwitch = withStyles({
-    switchBase: {
-      color: "#fff",
-      "&$checked": {
-        color: props.color ? props.color : "#68B030",
-      },
-      "&$checked + $track": {
-        backgroundColor: props.color ? props.color : "#68B030",
-      },
+  const ToggleSwitch = styled(Switch)({
+    "& .MuiSwitch-switchBase.Mui-checked": {
+      color: props.color ? props.color : undefined, //if color is undefined, it will be taken from the theme primary color
     },
-    checked: {},
-    track: {},
-  })(Switch);
+    "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+      backgroundColor: props.color ? props.color : undefined,
+    },
+  });
 
   // Remove color from props as expected values are "default", "primary" etc. as defined by Mui
   const cleanedProps = { ...props, color: undefined };
@@ -41,5 +36,3 @@ export default function ToggleSwitch(props: Props): ReactElement {
     />
   );
 }
-
-//export default ToggleSwitch;

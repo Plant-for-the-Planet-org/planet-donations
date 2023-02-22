@@ -1,9 +1,8 @@
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Modal from "@material-ui/core/Modal";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import Fade from "@mui/material/Fade";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Modal from "@mui/material/Modal";
+import RadioGroup from "@mui/material/RadioGroup";
 import React, { useState, ReactElement, ChangeEvent } from "react";
 import { getCountryDataBy } from "../../Utils/countryUtils";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -65,17 +64,14 @@ export default function TaxDeductionCountryModal({
       open={openModal}
       onClose={handleModalClose}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+      slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>
           <div className={"radioButtonsContainer"}>
             <p className={"select-language-title"}>{t("selectCountry")}</p>
             {/* maps the radio button for country */}
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" variant="standard">
               <RadioGroup
                 aria-label="language"
                 name="language"

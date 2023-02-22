@@ -10,11 +10,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import CountrySelect from "src/Common/InputTypes/AutoCompleteCountry";
 import { apiRequest } from "src/Utils/api";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 import themeProperties from "styles/themeProperties";
 import { ThemeContext } from "styles/themeContext";
 import { APIError, handleError } from "@planet-sdk/common";
+import { styled } from "@mui/material/styles";
 
 interface PlanetCashAccount {
   id: string;
@@ -48,26 +48,23 @@ const PlanetCashSignup = (): ReactElement => {
   const [currentPlanetCashAccount, setCurrentPlanetCashAccount] =
     useState<PlanetCashAccount | null>(null);
 
-  const usePlanetCashSignupStyles = makeStyles({
-    rootContainer: {
-      height: 500,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-    },
-    tcLink: {
-      display: "inline",
-      color:
-        theme === "theme-light"
-          ? themeProperties.light.primaryFontColor
-          : themeProperties.dark.primaryFontColor,
-      "&:hover": {
-        color: themeProperties.primaryColor,
-      },
-    },
+  const RootContainer = styled("div")({
+    height: 500,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   });
 
-  const classes = usePlanetCashSignupStyles();
+  const TCLink = styled("a")({
+    display: "inline",
+    color:
+      theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+    "&:hover": {
+      color: themeProperties.primaryColor,
+    },
+  });
 
   const fetchPlanetCashAccounts = useCallback(async () => {
     const token = router.query.token
@@ -158,7 +155,7 @@ const PlanetCashSignup = (): ReactElement => {
   };
 
   return (
-    <div className={classes.rootContainer}>
+    <RootContainer>
       <div>
         <p className="title-text mb-20">{t("planetCashSignup")}</p>
 
@@ -175,12 +172,11 @@ const PlanetCashSignup = (): ReactElement => {
         </div>
         <div className="mb-20">
           <Trans i18nKey={"common:planetCashTC"}>
-            <a
-              className={classes.tcLink}
+            <TCLink
               rel="noopener noreferrer"
               href={`https://pp.eco/legal/${i18n.language}/terms`}
               target={"_blank"}
-            ></a>
+            ></TCLink>
           </Trans>
         </div>
         <p>{t("planetCashIUnderstand")}</p>
@@ -195,7 +191,7 @@ const PlanetCashSignup = (): ReactElement => {
       >
         {t("createPlanetCashAccount")}
       </button>
-    </div>
+    </RootContainer>
   );
 };
 

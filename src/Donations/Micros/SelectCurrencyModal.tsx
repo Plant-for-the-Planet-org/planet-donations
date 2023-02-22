@@ -1,9 +1,9 @@
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import FormControl from "@material-ui/core/FormControl";
-import Modal from "@material-ui/core/Modal";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Fade from "@mui/material/Fade";
+import FormControl from "@mui/material/FormControl";
+import Modal from "@mui/material/Modal";
+import Autocomplete from "@mui/material/Autocomplete";
+import Paper, { PaperProps } from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -54,10 +54,7 @@ export default function SelectCurrencyModal({
         open={openModal}
         onClose={handleModalClose}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
+        slotProps={{ backdrop: { timeout: 500 } }}
       >
         <Fade in={openModal}>
           <div className={"modal p-20"}>
@@ -83,11 +80,9 @@ export default function SelectCurrencyModal({
   ) : null;
 }
 
-const FormControlNew = withStyles({
-  root: {
-    width: "100%",
-  },
-})(FormControl);
+const FormControlNew = styled(FormControl)({
+  width: "100%",
+});
 
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
@@ -119,39 +114,41 @@ function MapCurrency({
 
   const { theme } = useContext(ThemeContext);
 
-  const useStylesAutoComplete = makeStyles({
-    paper: {
-      color:
-        theme === "theme-light"
-          ? themeProperties.light.primaryFontColor
-          : themeProperties.dark.primaryFontColor,
+  const StyledAutoCompletePaper = styled(Paper)({
+    color:
+      theme === "theme-light"
+        ? themeProperties.light.primaryFontColor
+        : themeProperties.dark.primaryFontColor,
+    backgroundColor:
+      theme === "theme-light"
+        ? themeProperties.light.backgroundColor
+        : themeProperties.dark.backgroundColor,
+  });
+
+  const CustomPaper = (props: PaperProps) => (
+    <StyledAutoCompletePaper {...props} />
+  );
+
+  const StyledAutocompleteOption = styled("li")({
+    fontFamily: themeProperties.fontFamily,
+    fontSize: "14px",
+    "&:hover": {
       backgroundColor:
         theme === "theme-light"
-          ? themeProperties.light.backgroundColor
-          : themeProperties.dark.backgroundColor,
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
     },
-    option: {
-      fontFamily: themeProperties.fontFamily,
-      fontSize: "14px",
-      "&:hover": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      "&:active": {
-        backgroundColor:
-          theme === "theme-light"
-            ? themeProperties.light.backgroundColorDark
-            : themeProperties.dark.backgroundColorDark,
-      },
-      "& > span": {
-        marginRight: 10,
-        fontSize: 18,
-      },
+    "&:active": {
+      backgroundColor:
+        theme === "theme-light"
+          ? themeProperties.light.backgroundColorDark
+          : themeProperties.dark.backgroundColorDark,
+    },
+    "& > span": {
+      marginRight: 10,
+      fontSize: 18,
     },
   });
-  const classes = useStylesAutoComplete();
 
   const sortedCountriesData = ready
     ? sortCountriesByTranslation(
@@ -165,17 +162,14 @@ function MapCurrency({
   const selectedCountry = getCountryDataBy("countryCode", value);
 
   return ready ? (
-    <FormControlNew>
+    <FormControlNew variant="standard">
       {sortedCountriesData && (
         <div className={"form-field mt-20"}>
           <Autocomplete
             data-test-id="country-select"
             style={{ width: "100%" }}
             options={sortedCountriesData as Country[]}
-            classes={{
-              option: classes.option,
-              paper: classes.paper,
-            }}
+            PaperComponent={CustomPaper}
             value={selectedCountry}
             autoHighlight
             getOptionLabel={(option) =>
@@ -183,13 +177,13 @@ function MapCurrency({
                 option.currencyCode
               } `
             }
-            renderOption={(option) => (
-              <>
+            renderOption={(props, option) => (
+              <StyledAutocompleteOption {...props}>
                 <span>{countryToFlag(option.countryCode)}</span>
                 {`${t(`country:${option.countryCode.toLowerCase()}`)} - ${
                   option.currencyCode
                 } `}
-              </>
+              </StyledAutocompleteOption>
             )}
             onChange={(_event, newValue: Country | null) => {
               if (newValue) {
