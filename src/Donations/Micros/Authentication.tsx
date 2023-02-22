@@ -81,7 +81,7 @@ function Authentication(): ReactElement {
             city: profile.address.city ? profile.address.city : "",
             zipCode: profile.address.zipCode ? profile.address.zipCode : "",
             country: profile.address.country ? profile.address.country : "",
-            companyname: "",
+            companyname: profile.name || "",
             tin: "",
           };
           setContactDetails(newContactDetails);
