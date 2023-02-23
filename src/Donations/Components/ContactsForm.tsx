@@ -35,6 +35,7 @@ function ContactsForm(): ReactElement {
       : {}
   );
   const {
+    profile,
     contactDetails,
     setContactDetails,
     country,
@@ -424,30 +425,34 @@ function ContactsForm(): ReactElement {
             <></>
           )}
 
-          <div className="contacts-isCompany-toggle mt-20">
-            <label htmlFor="isCompany-toggle">
-              {t("isACompanyDonation")}
-              {isCompany && (
-                <span
-                  className={"isCompanyText"}
-                  style={{ fontSize: "12px", fontStyle: "italic" }}
-                >
-                  {isTaxDeductible
-                    ? t("orgNamePublishedTax")
-                    : t("orgNamePublished")}
-                </span>
-              )}
-            </label>
-            <ToggleSwitch
-              name="isCompany-toggle"
-              checked={isCompany}
-              onChange={() => setIsCompany(!isCompany)}
-              id="isCompany-toggle"
-            />
-          </div>
+          {profile === null && (
+            <div className="contacts-isCompany-toggle mt-20">
+              <label htmlFor="isCompany-toggle">
+                {t("isACompanyDonation")}
+                {isCompany && (
+                  <span
+                    className={"isCompanyText"}
+                    style={{ fontSize: "12px", fontStyle: "italic" }}
+                  >
+                    {isTaxDeductible
+                      ? t("orgNamePublishedTax")
+                      : t("orgNamePublished")}
+                  </span>
+                )}
+              </label>
+              <ToggleSwitch
+                name="isCompany-toggle"
+                checked={isCompany}
+                onChange={() => setIsCompany(!isCompany)}
+                id="isCompany-toggle"
+              />
+            </div>
+          )}
 
-          {isCompany ? (
-            <div className={"form-field mt-20"}>
+          {isCompany || (profile && profile.type !== "individual") ? (
+            <div
+              className={`form-field ${profile === null ? "mt-20" : "mt-30"}`}
+            >
               <Controller
                 name="companyname"
                 control={control}
@@ -459,6 +464,10 @@ function ContactsForm(): ReactElement {
                     label={t("companyName")}
                     variant="outlined"
                     data-test-id="test-companyname"
+                    disabled={profile !== null}
+                    helperText={
+                      profile !== null ? t("companyUneditableHelpText") : ""
+                    }
                   />
                 )}
               />

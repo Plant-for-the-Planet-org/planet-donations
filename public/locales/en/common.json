@@ -31,6 +31,7 @@
   "isACompanyDonation": "This donation is made by a company",
   "companyName": "Company Name",
   "companyRequired": "Company Name is required",
+  "companyUneditableHelpText": "Edit your profile if you need to update company name",
   "askPublishName": "Show my full name on the Plant-for-the-Planet platform & leaderboards.",
   "nameAlreadyPublished": "Your full name will appear in leaderboard as your Plant-for-the-Planet profile is currently public.",
   "orgNamePublishedTax": "Company name is visible on our leaderboard and app. Tax-deduction receipts will be issued for the same name.",
