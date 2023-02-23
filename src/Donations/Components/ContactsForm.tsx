@@ -464,6 +464,12 @@ function ContactsForm(): ReactElement {
                     label={t("companyName")}
                     variant="outlined"
                     data-test-id="test-companyname"
+                    disabled={profile !== null}
+                    helperText={
+                      profile !== null
+                        ? "Edit your profile if you need to update company name"
+                        : ""
+                    }
                   />
                 )}
               />
