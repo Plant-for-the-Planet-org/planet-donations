@@ -466,9 +466,7 @@ function ContactsForm(): ReactElement {
                     data-test-id="test-companyname"
                     disabled={profile !== null}
                     helperText={
-                      profile !== null
-                        ? "Edit your profile if you need to update company name"
-                        : ""
+                      profile !== null ? t("companyUneditableHelpText") : ""
                     }
                   />
                 )}
