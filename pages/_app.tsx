@@ -23,6 +23,7 @@ import React from "react";
 import { browserNotCompatible } from "../src/Utils/browsercheck";
 import BrowserNotSupported from "./../src/Common/ContentLoaders/BrowserNotSupported";
 import MisconfiguredEnvironment from "src/Common/ContentLoaders/MisconfiguredEnvironment";
+import nextI18NextConfig from "../next-i18next.config.js";
 
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   const config = getConfig();
@@ -142,4 +143,4 @@ function MyApp({
 //   return { ...appProps }
 // }
 
-export default appWithTranslation(MyApp);
+export default appWithTranslation(MyApp, nextI18NextConfig);
