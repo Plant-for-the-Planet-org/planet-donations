@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import Donations from "./../src/Donations";
-import nextI18NextConfig from "../next-i18next.config.js";
 import { apiRequest } from "../src/Utils/api";
 import Head from "next/head";
 import { QueryParamContext } from "../src/Layout/QueryParamContext";
@@ -75,6 +75,7 @@ function index({
 }: Props): ReactElement {
   const {
     setdonationStep,
+    setSelectedProjects,
     loadselectedProjects,
     setgiftDetails,
     setisGift,
@@ -100,16 +101,8 @@ function index({
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
-
-  React.useEffect(() => {
-    if (
-      window.location.pathname !== "/" &&
-      router.locales?.filter((locale) => locale === router.locale)[0]
-    ) {
-      window.location.href =
-        window.location.origin + "/" + window.location.search;
-    }
-  }, [router.locale]);
+  const { i18n } = useTranslation();
+  const defaultLanguage = i18n.language;
 
   React.useEffect(() => {
     setdonationID(donationID);
@@ -155,11 +148,11 @@ function index({
   React.useEffect(() => {
     setdonationStep(donationStep);
     if (!donationStep) {
+      setSelectedProjects([]);
       loadselectedProjects();
     }
-  }, [donationStep]);
+  }, [donationStep, defaultLanguage]);
 
-  const defaultLanguage = router.query.locale ? router.query.locale : "en";
   if (router.query.context) {
     setfrequency(frequency);
   }
@@ -246,7 +239,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let utmCampaign = "";
   let utmMedium = "";
   let utmSource = "";
-  let locale = "en";
+  const locale = context.locale || "en";
 
   function setshowErrorCard() {
     showErrorCard = true;
@@ -266,9 +259,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       country = queryCountry.toUpperCase();
     }
   }
-  if (typeof context.query.locale === "string") {
-    locale = context.query.locale;
-  }
+
   // Set project details if there is to (project slug) in the query params
   if (
     ((context.query.to && !context.query.context) ||
@@ -508,11 +499,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     props: {
-      ...(await serverSideTranslations(
-        context.locale || "en",
-        ["common", "country", "donate"],
-        nextI18NextConfig
-      )),
+      ...(await serverSideTranslations(locale || "en", [
+        "common",
+        "country",
+        "donate",
+      ])),
       donationStep: donationStep,
       showErrorCard: showErrorCard,
       projectDetails: projectDetails,
