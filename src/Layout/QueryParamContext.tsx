@@ -30,7 +30,6 @@ import {
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
-import allLocales from "../../public/static/localeList.json";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
@@ -195,32 +194,6 @@ const QueryParamProvider: FC = ({ children }) => {
       });
     }
   }, [paymentError]);
-  useEffect(() => {
-    if (allLocales.some((locale) => locale.key === router.query.locale)) {
-      setlanguage(router.query.locale as string);
-    } else {
-      //conditional operator to check if navigator.languages property is supported by browser.
-      if (localStorage.getItem("language") === null) {
-        const userLocale = navigator.languages ?? [navigator.language];
-        const newLocale = userLocale[0].trim().split(/-|_/)[0];
-        if (allLocales.some((locale) => locale.key === newLocale)) {
-          //if user locale is supported by us
-          setlanguage(newLocale);
-        } else {
-          setlanguage("en");
-        }
-      }
-    }
-  }, [router.query.locale]);
-
-  useEffect(() => {
-    if (i18n && i18n.isInitialized) {
-      i18n.changeLanguage(language);
-      localStorage.setItem("language", language);
-    }
-  }, [language, router]);
-
-  // Return URL = callbackUrl => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
     const pattern = new RegExp(
@@ -262,6 +235,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/projects?_scope=map`,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       const response = await apiRequest(requestParams);
       const projects = response.data as Project[];
@@ -512,6 +486,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       const paymentSetupData: { data: PaymentOptions } = await apiRequest(
         requestParams

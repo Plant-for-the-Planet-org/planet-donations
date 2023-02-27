@@ -23,8 +23,7 @@ import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
 
-  const { callbackUrl, donationStep, language } =
-    React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
 
   const { t, i18n, ready } = useTranslation(["common"]);
 
@@ -45,7 +44,7 @@ function Footer(): ReactElement {
               onClick={() => setlanguageModalOpen(!languageModalOpen)}
               data-test-id="languageButton"
             >
-              {`${getLanguageName(language)}`}
+              {`${getLanguageName(i18n.language)}`}
               <DownArrowIcon
                 color={
                   theme === "theme-light"
@@ -214,11 +213,8 @@ function LanguageModal({
 }: ModalProps): ReactElement {
   const { theme } = React.useContext(ThemeContext);
 
-  const { language, setlanguage, projectDetails, country, loadPaymentSetup } =
-    React.useContext(QueryParamContext);
-
   const router = useRouter();
-  const { t, ready } = useTranslation(["common"]);
+  const { t, ready, i18n } = useTranslation(["common"]);
 
   return (
     <Modal
@@ -239,21 +235,14 @@ function LanguageModal({
             <RadioGroup
               aria-label="language"
               name="language"
-              value={language}
+              value={i18n.language}
               onChange={(event) => {
-                setlanguage(event.target.value);
-                localStorage.setItem("language", event.target.value);
-                if (
-                  projectDetails &&
-                  projectDetails.purpose !== "planet-cash-signup" &&
-                  router.query.to
-                ) {
-                  loadPaymentSetup({
-                    projectGUID: router.query.to as string,
-                    paymentSetupCountry: country,
-                    shouldSetPaymentDetails: false,
-                  });
-                }
+                const lang = event.target.value;
+                const { pathname, query, asPath } = router;
+                // set cookie to store user preferences
+                document.cookie = `NEXT_LOCALE=${lang}; max-age=31536000; path=/`;
+                // change just the locale and maintain all other route information including href's query
+                router.push({ pathname, query }, asPath, { locale: lang });
                 setlanguageModalOpen(false);
               }}
             >
