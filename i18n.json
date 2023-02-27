@@ -1,8 +1,0 @@
-{
-  "locales": ["en", "cs", "de", "es","fr","it","pt-BR"],
-  "defaultLocale": "en",
-  "pages": {
-    "*": ["common","country","donate"],
-    "/": ["common","country","donate"]
-  }
-}
