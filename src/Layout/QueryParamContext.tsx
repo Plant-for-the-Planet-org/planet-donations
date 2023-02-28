@@ -62,11 +62,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const [queryToken, setqueryToken] = useState<string | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
-  const [language, setlanguage] = useState(
-    typeof window !== "undefined" && localStorage.getItem("language")
-      ? (localStorage.getItem("language") as string)
-      : "en"
-  );
+  // TODO - remove language if not needed
+  const [language, setlanguage] = useState(i18n.language);
 
   const [donationID, setdonationID] = useState<string | null>(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
@@ -129,7 +126,6 @@ const QueryParamProvider: FC = ({ children }) => {
   const [profile, setprofile] = useState<User | null>(null);
   const [amount, setAmount] = useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] = useState(false);
-  // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = useState(false);
 
   const [hideLogin, setHideLogin] = useState(false);
