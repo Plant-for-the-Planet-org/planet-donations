@@ -1,6 +1,6 @@
 {
-  "fortreeCountTrees": "per {{treeCount}} Albero",
-  "fortreeCountTrees_plural": "per {{treeCount}} Alberi",
+  "fortreeCountTrees_one": "per {{treeCount}} Albero",
+  "fortreeCountTrees_other": "per {{treeCount}} Alberi",
   "recipientName": "Nome del destinatario",
   "recipientNameRequired": "Il nome del destinatario è richiesto",
   "email": "Email",
