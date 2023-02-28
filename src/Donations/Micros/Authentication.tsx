@@ -132,13 +132,13 @@ function Authentication(): ReactElement {
     router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   const loginUser = () => {
     localStorage.setItem("queryparams", router.asPath);
     loginWithRedirect({
       redirectUri: window?.location.href,
-      ui_locales: localStorage.getItem("language") || "en",
+      ui_locales: i18n.language || "en",
     });
   };
 
