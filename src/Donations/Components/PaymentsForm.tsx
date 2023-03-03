@@ -120,6 +120,7 @@ function PaymentsForm(): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      locale: i18n.language,
       setTransferDetails,
     });
   };
@@ -173,6 +174,7 @@ function PaymentsForm(): ReactElement {
       utmMedium,
       utmSource,
       tenant,
+      locale: i18n.language,
     });
     if (router.query.context) {
       router.replace({
@@ -203,6 +205,7 @@ function PaymentsForm(): ReactElement {
         method: "PUT" as const,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       await apiRequest(requestParams);
     } catch (err) {

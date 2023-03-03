@@ -1,7 +1,7 @@
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { Dispatch, SetStateAction } from "react";
-import { TFunction } from "react-i18next";
+import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
 
 export interface DirectGift {
@@ -78,6 +78,7 @@ export interface CreateDonationFunctionProps {
   utmMedium?: string | undefined;
   utmSource?: string | undefined;
   tenant: string;
+  locale: string;
 }
 
 export interface PayDonationProps {
@@ -95,6 +96,7 @@ export interface PayDonationProps {
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
+  locale: string;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
 }
 
@@ -112,6 +114,7 @@ export interface HandleStripeSCAPaymentProps {
   setshowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
+  locale: string;
 }
 
 export interface CreateDonationDataProps {

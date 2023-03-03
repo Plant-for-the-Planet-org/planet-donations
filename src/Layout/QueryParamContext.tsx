@@ -156,6 +156,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const requestParams = {
         url: `/app/currencies`,
         setshowErrorCard,
+        shouldQueryParamAdd: false,
       };
       const response: { data: Record<string, string> } = await apiRequest(
         requestParams
@@ -263,6 +264,7 @@ const QueryParamProvider: FC = ({ children }) => {
         token: token,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       });
       setprofile(profile.data);
     } catch (err) {

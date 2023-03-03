@@ -156,6 +156,7 @@ function DonationsForm(): ReactElement {
         setshowErrorCard,
         frequency,
         tenant,
+        locale: i18n.language,
         utmCampaign,
         utmMedium,
         utmSource,
@@ -181,6 +182,7 @@ function DonationsForm(): ReactElement {
             setshowErrorCard,
             router,
             tenant,
+            locale: i18n.language,
             setTransferDetails,
           });
         }
@@ -291,6 +293,8 @@ function DonationsForm(): ReactElement {
           data: cleanedDonationData,
           token,
           addIdempotencyKeyHeader: true,
+          tenant,
+          locale: i18n.language,
         });
 
         if (status === 200) {

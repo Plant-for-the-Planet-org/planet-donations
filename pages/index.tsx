@@ -309,6 +309,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const requestParams = {
         url: `/app/donations/${context.query.context}`,
         setshowErrorCard,
+        tenant,
+        locale,
       };
       const donationResponse: any = await apiRequest(requestParams);
 
@@ -429,6 +431,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         url: `/app/profiles/${context.query.s}`,
         setshowErrorCard,
         tenant,
+        locale,
       };
       const newProfile = await apiRequest(requestParams);
       if (newProfile.data.type !== "tpo") {

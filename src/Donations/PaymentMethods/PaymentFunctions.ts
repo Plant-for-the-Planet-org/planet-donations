@@ -115,6 +115,7 @@ export async function createDonationFunction({
   utmMedium,
   utmSource,
   tenant,
+  locale,
 }: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -141,6 +142,7 @@ export async function createDonationFunction({
       method: "POST" as const,
       setshowErrorCard,
       tenant,
+      locale,
       token: token ? token : null,
     };
     const donation = await apiRequest(requestParams);
@@ -264,13 +266,14 @@ export async function payDonationFunction({
   setshowErrorCard,
   router,
   tenant,
+  locale,
   setTransferDetails,
 }: PayDonationProps): Promise<UpdateDonationData | undefined> {
   setIsPaymentProcessing(true);
   if (method !== "offline") {
     if (!providerObject) {
       setIsPaymentProcessing(false);
-      setPaymentError(t("donate:noPaymentMethodError"));
+      setPaymentError(t("donate:noPaymentMethodError") as string);
       return;
     }
   }
@@ -289,7 +292,8 @@ export async function payDonationFunction({
       token,
       setshowErrorCard,
       setPaymentError,
-      tenant
+      tenant,
+      locale
     );
     if (paymentResponse) {
       if (
@@ -332,6 +336,7 @@ export async function payDonationFunction({
           setshowErrorCard,
           router,
           tenant,
+          locale,
         });
       }
     }
@@ -360,7 +365,8 @@ export async function confirmPaymentIntent(
   token: string | null,
   setshowErrorCard: Dispatch<SetStateAction<boolean>>,
   setPaymentError: Dispatch<SetStateAction<string>>,
-  tenant: string
+  tenant: string,
+  locale: string
 ): Promise<UpdateDonationData | undefined> {
   const requestParams = {
     url: `/app/donations/${donationId}`,
@@ -369,6 +375,7 @@ export async function confirmPaymentIntent(
     setshowErrorCard,
     token: token ? token : null,
     tenant,
+    locale,
   };
   const confirmationResponse: UpdateDonationResponse = await apiRequest(
     requestParams
@@ -429,6 +436,7 @@ export async function handleStripeSCAPayment({
   setshowErrorCard,
   router,
   tenant,
+  locale,
 }: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key =
@@ -470,7 +478,8 @@ export async function handleStripeSCAPayment({
               token,
               setshowErrorCard,
               setPaymentError,
-              tenant
+              tenant,
+              locale
             );
             successData = successResponse;
           } catch (error) {

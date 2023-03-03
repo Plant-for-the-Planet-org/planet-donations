@@ -138,22 +138,10 @@ export const apiRequest = async (
       ...headers,
     };
 
-    if (typeof Storage !== "undefined" && shouldQueryParamAdd) {
-      const l = locale
-        ? locale
-        : `${
-            localStorage.getItem("language")
-              ? localStorage.getItem("language")
-              : "en"
-          }`;
+    if (shouldQueryParamAdd) {
       options.params = {
-        tenant: tenant,
-        locale: l,
-      };
-    } else if (shouldQueryParamAdd) {
-      options.params = {
-        tenant: "ten_I9TW3ncG",
-        locale: locale ? locale : "en",
+        tenant: tenant || "ten_I9TW3ncG",
+        locale: locale || "en",
       };
     }
 
