@@ -231,13 +231,16 @@ export const NativePay = ({
   paymentLabel,
   frequency,
 }: NativePayProps): ReactElement => {
+  const { i18n } = useTranslation();
   const [stripePromise, setStripePromise] =
-    useState<null | Promise<Stripe | null>>(() => getStripe(paymentSetup));
+    useState<null | Promise<Stripe | null>>(() =>
+      getStripe(paymentSetup, i18n.language)
+    );
 
   useEffect(() => {
     const fetchStripeObject = async () => {
       if (paymentSetup) {
-        const res = () => getStripe(paymentSetup);
+        const res = () => getStripe(paymentSetup, i18n.language);
         // When we have got the Stripe object, pass it into our useState.
         setStripePromise(res);
       }
