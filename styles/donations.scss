@@ -150,13 +150,11 @@
   position: absolute;
   top: 30px;
   right: 34px;
-  background-color: $backgroundColor;
-  border-radius: 20px;
-  padding: 0 10px;
-  color: $primaryColor;
-  border: 1px solid $primaryColor;
-  text-transform: uppercase;
-  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 4px 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
 }
 
 .donations-transaction-details {

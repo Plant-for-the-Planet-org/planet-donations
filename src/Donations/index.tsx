@@ -19,7 +19,7 @@ import {
 } from "src/Utils/donationStepConstants";
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
-import { VerifiedIcon } from "public/assets/icons/VerifiedIcon";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -302,7 +302,7 @@ function DonationInfo() {
                         onMouseEnter={handlePopoverOpen}
                         onMouseLeave={handlePopoverClose}
                       >
-                        <VerifiedIcon />
+                        <VerifiedIcon sx={{ color: "#fff" }} />
                       </Typography>
                       <Popover
                         id="mouse-over-popover"
