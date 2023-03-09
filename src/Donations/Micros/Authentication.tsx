@@ -4,7 +4,9 @@ import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
 import { ThemeContext } from "../../../styles/themeContext";
-import { Backdrop, Fade, Modal } from "@material-ui/core";
+import Fade from "@mui/material/Fade";
+import Modal from "@mui/material/Modal";
+import Skeleton from "@mui/material/Skeleton";
 import VerifyEmailIcon from "../../../public/assets/icons/VerifyEmailIcon";
 import GmailIcon from "../../../public/assets/icons/GmailIcon";
 import OutlookIcon from "../../../public/assets/icons/OutlookIcon";
@@ -14,7 +16,7 @@ import { useRouter } from "next/router";
 import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
-import { Skeleton } from "@material-ui/lab";
+import { APIError, handleError } from "@planet-sdk/common";
 import { ContactDetails } from "src/Common/Types";
 import { User } from "src/Common/Types/user";
 
@@ -31,6 +33,7 @@ function Authentication(): ReactElement {
     setcurrency,
     setcountry,
     tenant,
+    setErrors,
   } = React.useContext(QueryParamContext);
   const {
     isLoading,
@@ -78,11 +81,13 @@ function Authentication(): ReactElement {
             city: profile.address.city ? profile.address.city : "",
             zipCode: profile.address.zipCode ? profile.address.zipCode : "",
             country: profile.address.country ? profile.address.country : "",
-            companyname: "",
+            companyname: profile.name || "",
+            tin: "",
           };
           setContactDetails(newContactDetails);
         }
       } catch (err) {
+        setErrors(handleError(err as APIError));
         const newContactDetails = {
           firstname: authUser?.nickname ? authUser.nickname : "",
           email: authUser?.email ? authUser.email : "",
@@ -92,7 +97,6 @@ function Authentication(): ReactElement {
         setContactDetails((contactDetails) => {
           return { ...contactDetails, ...newContactDetails };
         });
-        console.log(err);
       }
     } else {
       const newContactDetails = {
@@ -157,7 +161,7 @@ function Authentication(): ReactElement {
     <div>
       {isLoading ? (
         <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <Skeleton variant="rect" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
         </div>
       ) : !queryToken && !isLoading && !isAuthenticated ? (
         !hideLogin ? (
@@ -237,10 +241,7 @@ function VerifyEmailModal({
       open={openModal}
       onClose={handleModalClose}
       closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
+      slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={openModal}>
         <div className={"modal p-20"}>

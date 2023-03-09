@@ -76,7 +76,7 @@ function index({
   const {
     setdonationStep,
     loadselectedProjects,
-    setgiftDetails,
+    setGiftDetails,
     setisGift,
     setpaymentSetup,
     setcurrency,
@@ -147,7 +147,7 @@ function index({
   // If gift details are present, initialize gift in context
   React.useEffect(() => {
     if (giftDetails && isGift) {
-      setgiftDetails(giftDetails);
+      setGiftDetails(giftDetails);
       setisGift(true);
     }
   }, []);
@@ -447,6 +447,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           recipientEmail: "",
           message: "",
           type: "direct",
+          recipient: newProfile.data.id,
           recipientTreecounter: newProfile.data.slug,
         };
       }

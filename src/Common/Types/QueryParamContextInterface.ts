@@ -12,13 +12,14 @@ import { Project } from "./project";
 import { User } from "./user";
 import { Dispatch, SetStateAction } from "react";
 import { Donation } from "./donation";
+import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: Dispatch<SetStateAction<boolean>>;
   giftDetails: GiftDetails;
-  setgiftDetails: Dispatch<SetStateAction<GiftDetails>>;
+  setGiftDetails: Dispatch<SetStateAction<GiftDetails>>;
   contactDetails: ContactDetails;
   setContactDetails: Dispatch<SetStateAction<ContactDetails>>;
   country: string;
@@ -111,4 +112,6 @@ export default interface QueryParamContextInterface {
   setdonation: Dispatch<SetStateAction<Donation | null>>;
   paymentRequest: PaymentRequest | null;
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
+  errors: SerializedError[] | null;
+  setErrors: Dispatch<SetStateAction<SerializedError[] | null>>;
 }

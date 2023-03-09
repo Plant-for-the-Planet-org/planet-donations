@@ -27,6 +27,7 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
+import { APIError, handleError } from "@planet-sdk/common";
 import {
   PaypalApproveData,
   PaypalErrorData,
@@ -75,6 +76,7 @@ function PaymentsForm(): ReactElement {
     setTransferDetails,
     callbackUrl,
     callbackMethod,
+    setErrors,
     utmCampaign,
     utmMedium,
     utmSource,
@@ -193,8 +195,8 @@ function PaymentsForm(): ReactElement {
   const [canAskPublishPermission, setCanAskPublishPermission] =
     React.useState(false);
 
-  React.useEffect(() => {
-    if (donationID && isPublishPermitted !== null) {
+  const publish = async () => {
+    try {
       const requestParams = {
         url: `/app/donations/${donationID}/publish`,
         data: { publish: isPublishPermitted },
@@ -202,7 +204,15 @@ function PaymentsForm(): ReactElement {
         setshowErrorCard,
         tenant,
       };
-      apiRequest(requestParams);
+      await apiRequest(requestParams);
+    } catch (err) {
+      setErrors(handleError(err as APIError));
+    }
+  };
+
+  React.useEffect(() => {
+    if (donationID && isPublishPermitted !== null) {
+      publish();
     }
   }, [isPublishPermitted, donationID]);
 
@@ -355,7 +365,8 @@ function PaymentsForm(): ReactElement {
                 })}
                 showBankTransfer={
                   Object.keys(paymentSetup?.gateways).includes("offline") &&
-                  frequency === "once"
+                  (frequency === "once" ||
+                    paymentSetup?.recurrency.methods?.includes("offline"))
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&

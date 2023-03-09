@@ -35,6 +35,7 @@ function ContactsForm(): ReactElement {
       : {}
   );
   const {
+    profile,
     contactDetails,
     setContactDetails,
     country,
@@ -60,16 +61,15 @@ function ContactsForm(): ReactElement {
   }, [contactDetails]);
 
   const {
-    register,
-    errors,
     handleSubmit,
     control,
     reset,
     getValues,
     setValue,
+    formState: { errors },
   } = useForm<ContactDetails>({
     mode: "all",
-    defaultValues: {},
+    defaultValues: contactDetails,
   });
 
   React.useEffect(() => {
@@ -194,16 +194,19 @@ function ContactsForm(): ReactElement {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex row">
             <div className={"form-field mt-20 flex-1"}>
-              <MaterialTextField
-                inputRef={register({
-                  required: true,
-                  minLength: 1,
-                })}
-                label={t("firstName")}
-                variant="outlined"
+              <Controller
                 name="firstname"
-                defaultValue={contactDetails.firstname}
-                data-test-id="test-firstName"
+                control={control}
+                rules={{ required: true, minLength: 1 }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("firstName")}
+                    variant="outlined"
+                    data-test-id="test-firstName"
+                  />
+                )}
               />
               {errors.firstname && errors.firstname.type === "required" && (
                 <span className={"form-errors"}>{t("firstNameRequired")}</span>
@@ -216,13 +219,19 @@ function ContactsForm(): ReactElement {
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-20 flex-1"}>
-              <MaterialTextField
-                inputRef={register({ required: true, minLength: 1 })}
-                label={t("lastName")}
-                variant="outlined"
+              <Controller
                 name="lastname"
-                defaultValue={contactDetails.lastname}
-                data-test-id="test-lastName"
+                control={control}
+                rules={{ required: true, minLength: 1 }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("lastName")}
+                    variant="outlined"
+                    data-test-id="test-lastName"
+                  />
+                )}
               />
               {errors.lastname && errors.lastname.type === "required" && (
                 <span className={"form-errors"}>{t("lastNameRequired")}</span>
@@ -236,23 +245,24 @@ function ContactsForm(): ReactElement {
           </div>
 
           <div className={"form-field mt-30"}>
-            <MaterialTextField
-              inputRef={register({
+            <Controller
+              name="email"
+              control={control}
+              rules={{
                 required: true,
                 pattern:
                   /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
-                // validate: (input) => {
-                //   return isAuthenticated || isSignedUp
-                //     ? true
-                //     : user.email === input;
-                // },
-              })}
-              label={t("email")}
-              variant="outlined"
-              name="email"
-              defaultValue={contactDetails.email}
-              data-test-id="test-email"
-              disabled={isAuthenticated}
+              }}
+              render={({ field: { onChange, value } }) => (
+                <MaterialTextField
+                  onChange={onChange}
+                  value={value}
+                  label={t("email")}
+                  variant="outlined"
+                  data-test-id="test-email"
+                  disabled={isAuthenticated}
+                />
+              )}
             />
             {errors.email && errors.email.type !== "validate" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
@@ -263,17 +273,26 @@ function ContactsForm(): ReactElement {
           </div>
 
           <div className={"form-field mt-30"} style={{ position: "relative" }}>
-            <MaterialTextField
-              inputRef={register({ required: true })}
-              label={t("address")}
-              variant="outlined"
+            <Controller
               name="address"
-              defaultValue={contactDetails.address}
-              data-test-id="test-address"
-              onChange={(event) => {
-                suggestAddress(event.target.value);
-              }}
-              onBlur={() => setaddressSugggestions([])}
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <MaterialTextField
+                  onChange={(event) => {
+                    suggestAddress(event.target.value);
+                    onChange(event);
+                  }}
+                  value={value}
+                  label={t("address")}
+                  variant="outlined"
+                  data-test-id="test-address"
+                  onBlur={() => {
+                    setaddressSugggestions([]);
+                    onBlur();
+                  }}
+                />
+              )}
             />
             {addressSugggestions
               ? addressSugggestions.length > 0 && (
@@ -301,13 +320,21 @@ function ContactsForm(): ReactElement {
 
           <div className={"d-flex row"}>
             <div className={"form-field mt-30 flex-1"}>
-              <MaterialTextField
-                inputRef={register({ required: true })}
-                label={t("city")}
-                variant="outlined"
+              <Controller
                 name="city"
-                defaultValue={contactDetails.city}
-                data-test-id="test-city"
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("city")}
+                    variant="outlined"
+                    data-test-id="test-city"
+                  />
+                )}
               />
               {errors.city && (
                 <span className={"form-errors"}>{t("cityRequired")}</span>
@@ -316,16 +343,22 @@ function ContactsForm(): ReactElement {
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-30 flex-1"}>
               {true && (
-                <MaterialTextField
-                  inputRef={register({
+                <Controller
+                  name="zipCode"
+                  control={control}
+                  rules={{
                     required: true,
                     pattern: postalRegex,
-                  })}
-                  label={t("zipCode")}
-                  variant="outlined"
-                  name="zipCode"
-                  defaultValue={contactDetails.zipCode}
-                  data-test-id="test-zipCode"
+                  }}
+                  render={({ field: { onChange, value } }) => (
+                    <MaterialTextField
+                      onChange={onChange}
+                      value={value}
+                      label={t("zipCode")}
+                      variant="outlined"
+                      data-test-id="test-zipCode"
+                    />
+                  )}
                 />
               )}
               {errors.zipCode && (
@@ -349,7 +382,7 @@ function ContactsForm(): ReactElement {
               defaultValue={
                 contactDetails.country ? contactDetails.country : country
               }
-              render={({ value, ref }) => (
+              render={({ field: { value, ref } }) => (
                 <AutoCompleteCountry
                   inputRef={ref}
                   label={t("country")}
@@ -371,14 +404,18 @@ function ContactsForm(): ReactElement {
               data-test-id="taxIdentiication"
               id="taxIdentificationAvail"
             >
-              <MaterialTextField
-                inputRef={register({
-                  required: true,
-                })}
-                label={t("taxIdentificationNumber")}
-                variant="outlined"
+              <Controller
                 name="tin"
-                defaultValue={contactDetails.tin}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("taxIdentificationNumber")}
+                    variant="outlined"
+                  />
+                )}
               />
               {errors.tin && errors.tin.type !== "validate" && (
                 <span className={"form-errors"}>{t("tinRequired")}</span>
@@ -388,40 +425,51 @@ function ContactsForm(): ReactElement {
             <></>
           )}
 
-          <div className="contacts-isCompany-toggle mt-20">
-            <label htmlFor="isCompany-toggle">
-              {t("isACompanyDonation")}
-              {isCompany && (
-                <span
-                  className={"isCompanyText"}
-                  style={{ fontSize: "12px", fontStyle: "italic" }}
-                >
-                  {isTaxDeductible
-                    ? t("orgNamePublishedTax")
-                    : t("orgNamePublished")}
-                </span>
-              )}
-            </label>
-            <ToggleSwitch
-              name="isCompany-toggle"
-              checked={isCompany}
-              onChange={() => setIsCompany(!isCompany)}
-              id="isCompany-toggle"
-            />
-          </div>
+          {profile === null && (
+            <div className="contacts-isCompany-toggle mt-20">
+              <label htmlFor="isCompany-toggle">
+                {t("isACompanyDonation")}
+                {isCompany && (
+                  <span
+                    className={"isCompanyText"}
+                    style={{ fontSize: "12px", fontStyle: "italic" }}
+                  >
+                    {isTaxDeductible
+                      ? t("orgNamePublishedTax")
+                      : t("orgNamePublished")}
+                  </span>
+                )}
+              </label>
+              <ToggleSwitch
+                name="isCompany-toggle"
+                checked={isCompany}
+                onChange={() => setIsCompany(!isCompany)}
+                id="isCompany-toggle"
+              />
+            </div>
+          )}
 
-          {isCompany ? (
-            <div className={"form-field mt-20"}>
-              <MaterialTextField
-                label={t("companyName")}
+          {isCompany || (profile && profile.type !== "individual") ? (
+            <div
+              className={`form-field ${profile === null ? "mt-20" : "mt-30"}`}
+            >
+              <Controller
                 name="companyname"
-                variant="outlined"
-                inputRef={
-                  isCompany
-                    ? register({ required: true })
-                    : register({ required: false })
-                }
-                defaultValue={contactDetails.companyname}
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    value={value}
+                    label={t("companyName")}
+                    variant="outlined"
+                    data-test-id="test-companyname"
+                    disabled={profile !== null}
+                    helperText={
+                      profile !== null ? t("companyUneditableHelpText") : ""
+                    }
+                  />
+                )}
               />
               {errors.companyname && (
                 <span className={"form-errors"}>{t("companyRequired")}</span>
