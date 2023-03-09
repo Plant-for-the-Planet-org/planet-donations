@@ -290,12 +290,12 @@ function DonationInfo() {
                   rel="noreferrer"
                   target="_blank"
                   href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-                  className="title-text text-white d-flex align-items-center"
+                  className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
                   {isApproved && (
-                    <div>
+                    <div className="d-inline" style={{ marginLeft: "10px" }}>
                       <Typography
                         aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
