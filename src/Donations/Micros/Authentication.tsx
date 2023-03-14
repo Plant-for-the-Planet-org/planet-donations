@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { LogoutOptions, useAuth0, User as AuthUser } from "@auth0/auth0-react";
+import { useAuth0, User as AuthUser } from "@auth0/auth0-react";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
@@ -203,7 +203,7 @@ function Authentication(): ReactElement {
         </div>
       ) : (
         <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <Skeleton variant="rect" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
         </div>
       )}
       <VerifyEmailModal
