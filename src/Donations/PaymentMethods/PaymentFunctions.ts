@@ -266,7 +266,7 @@ export async function payDonationFunction({
   setTransferDetails,
 }: PayDonationProps): Promise<UpdateDonationData | undefined> {
   setIsPaymentProcessing(true);
-  if (method !== "offline") {
+  if (method !== "offline" && method !== "transfer") {
     if (!providerObject) {
       setIsPaymentProcessing(false);
       setPaymentError(t("donate:noPaymentMethodError"));

@@ -18,7 +18,7 @@ function BankTransfer({ onSubmitPayment }: Props): ReactElement {
 
       <button
         className="primary-button w-100 mt-30"
-        onClick={() => onSubmitPayment("offline", "offline")}
+        onClick={() => onSubmitPayment("offline", "transfer")}
         id="donateContinueButton"
         data-test-id="bankDonateContinue"
       >

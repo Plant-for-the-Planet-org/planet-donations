@@ -366,7 +366,8 @@ function PaymentsForm(): ReactElement {
                 showBankTransfer={
                   Object.keys(paymentSetup?.gateways).includes("offline") &&
                   (frequency === "once" ||
-                    paymentSetup?.recurrency.methods?.includes("offline"))
+                    paymentSetup?.recurrency.methods?.includes("offline") ||
+                    paymentSetup?.recurrency.methods?.includes("transfer"))
                 }
                 showPaypal={
                   paypalCurrencies.includes(currency) &&
