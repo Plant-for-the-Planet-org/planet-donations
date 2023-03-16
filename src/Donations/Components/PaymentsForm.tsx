@@ -176,6 +176,11 @@ function PaymentsForm(): ReactElement {
       tenant,
       locale: i18n.language,
     });
+    if (router.query.to) {
+      router.replace({
+        query: { ...router.query, step: PAYMENT },
+      });
+    }
     if (router.query.context) {
       router.replace({
         query: { context: donation?.id, step: PAYMENT },
