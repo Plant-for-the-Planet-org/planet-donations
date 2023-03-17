@@ -18,7 +18,7 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { APIError, handleError } from "@planet-sdk/common";
 import { ContactDetails } from "src/Common/Types";
-import { User } from "src/Common/Types/user";
+import { User } from "@planet-sdk/common/build/types/user";
 
 function Authentication(): ReactElement {
   const {

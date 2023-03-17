@@ -32,7 +32,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { Project } from "src/Common/Types/project";
-import { User } from "src/Common/Types/user";
+import { User } from "@planet-sdk/common/build/types/user";
 import { Donation } from "src/Common/Types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";

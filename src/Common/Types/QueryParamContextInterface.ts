@@ -9,7 +9,7 @@ import {
   PlanetCashSignupDetails,
 } from ".";
 import { Project } from "./project";
-import { User } from "./user";
+import { User } from "@planet-sdk/common/build/types/user";
 import { Dispatch, SetStateAction } from "react";
 import { Donation } from "./donation";
 import { SerializedError } from "@planet-sdk/common";
