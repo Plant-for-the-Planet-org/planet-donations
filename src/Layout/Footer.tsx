@@ -40,19 +40,21 @@ function Footer(): ReactElement {
         )}
         <div>
           <div className="footer-links">
-            <button
-              onClick={() => setlanguageModalOpen(!languageModalOpen)}
-              data-test-id="languageButton"
-            >
-              {`${getLanguageName(i18n.language)}`}
-              <DownArrowIcon
-                color={
-                  theme === "theme-light"
-                    ? themeProperties.light.primaryFontColor
-                    : themeProperties.dark.primaryFontColor
-                }
-              />
-            </button>
+            {donationStep !== 2 && donationStep !== 3 && (
+              <button
+                onClick={() => setlanguageModalOpen(!languageModalOpen)}
+                data-test-id="languageButton"
+              >
+                {`${getLanguageName(i18n.language)}`}
+                <DownArrowIcon
+                  color={
+                    theme === "theme-light"
+                      ? themeProperties.light.primaryFontColor
+                      : themeProperties.dark.primaryFontColor
+                  }
+                />
+              </button>
+            )}
             <a
               rel="noreferrer"
               target="_blank"
@@ -120,7 +122,9 @@ function Footer(): ReactElement {
         </div>
 
         <LanguageModal
-          languageModalOpen={languageModalOpen}
+          languageModalOpen={
+            languageModalOpen && donationStep !== 2 && donationStep !== 3
+          }
           setlanguageModalOpen={setlanguageModalOpen}
         />
       </div>
