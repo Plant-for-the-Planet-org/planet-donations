@@ -521,7 +521,7 @@ export async function handleStripeSCAPayment({
           payment_method: {
             billing_details: buildBillingDetails(contactDetails),
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}`,
+          return_url: `${window.location.origin}/${locale}?context=${donationID}&method=Giropay&tenant=${tenant}&country=${country}`,
         }
       );
       if (error) {
@@ -540,7 +540,7 @@ export async function handleStripeSCAPayment({
             },
             billing_details: buildBillingDetails(contactDetails),
           },
-          return_url: `${window.location.origin}/?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}`,
+          return_url: `${window.location.origin}/${locale}?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}`,
         }
       );
       if (error) {
