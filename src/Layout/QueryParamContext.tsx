@@ -31,7 +31,7 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
-import { Project } from "src/Common/Types/project";
+import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project/map";
 import { User } from "@planet-sdk/common/build/types/user";
 import { Donation } from "src/Common/Types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";

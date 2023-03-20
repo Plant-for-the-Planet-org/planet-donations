@@ -8,7 +8,7 @@ import {
   PaymentOptions,
   PlanetCashSignupDetails,
 } from ".";
-import { Project } from "./project";
+import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 import { User } from "@planet-sdk/common/build/types/user";
 import { Dispatch, SetStateAction } from "react";
 import { Donation } from "./donation";
