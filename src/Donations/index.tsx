@@ -322,6 +322,7 @@ function DonationInfo() {
                         }}
                         onClose={handlePopoverClose}
                         disableRestoreFocus
+                        style={{ maxWidth: 550 }}
                       >
                         <Typography className="verified-icon-popup">
                           {t("verifiedIconInfo")}
