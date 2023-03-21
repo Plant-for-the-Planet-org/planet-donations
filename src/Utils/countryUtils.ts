@@ -1,6 +1,6 @@
 import countriesData from "./countriesData.json";
 import { Country, CountryProperty, CurrencyList } from "src/Common/Types";
-import { TFunction } from "react-i18next";
+import { TFunction } from "next-i18next";
 
 const sortedCountries: { [key: string]: Country[] } = {};
 
