@@ -10,10 +10,10 @@ import {
 } from ".";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 import { User } from "@planet-sdk/common/build/types/user";
-import { Dispatch, SetStateAction } from "react";
-import { Donation } from "./donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { Dispatch, SetStateAction } from "react";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -109,7 +109,7 @@ export default interface QueryParamContextInterface {
   onBehalfDonor: OnBehalfDonor;
   setOnBehalfDonor: Dispatch<SetStateAction<OnBehalfDonor>>;
   donation: Donation | null;
-  setdonation: Dispatch<SetStateAction<Donation | null>>;
+  setDonation: Dispatch<SetStateAction<Donation | null>>;
   paymentRequest: PaymentRequest | null;
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
   errors: SerializedError[] | null;

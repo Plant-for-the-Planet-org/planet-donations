@@ -8,7 +8,7 @@ import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
 import { ContactDetails, FetchedProjectDetails } from "src/Common/Types";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface FailedDonationProps {
   donation: Donation;
@@ -85,17 +85,19 @@ function FailedDonation({
     }
 
     // TODO - Test this again after backend is updated
-    setfrequency(donation.isRecurrent ? donation.frequency : "once");
+    setfrequency(
+      donation.isRecurrent && donation.frequency ? donation.frequency : "once"
+    );
     await loadPaymentSetup({
       projectGUID: donation.destination.id,
       paymentSetupCountry: country,
       shouldSetPaymentDetails: true,
     });
-    setcallbackUrl(donation.metadata.callback_url);
-    setCallbackMethod(donation.metadata.callback_method);
-    setUtmCampaign(donation.metadata?.utm_campaign);
-    setUtmMedium(donation.metadata?.utm_medium);
-    setUtmSource(donation.metadata?.utm_source);
+    setcallbackUrl(donation.metadata?.callback_url || "");
+    setCallbackMethod(donation.metadata?.callback_method || "");
+    setUtmCampaign(donation.metadata?.utm_campaign || "");
+    setUtmMedium(donation.metadata?.utm_medium || "");
+    setUtmSource(donation.metadata?.utm_source || "");
     setredirectstatus("");
     setdonationStep(3);
   }

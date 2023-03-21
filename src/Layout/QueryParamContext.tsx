@@ -33,7 +33,7 @@ import { validateToken } from "../Utils/tokenActions";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project/map";
 import { User } from "@planet-sdk/common/build/types/user";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
@@ -144,7 +144,7 @@ const QueryParamProvider: FC = ({ children }) => {
     email: "",
   });
 
-  const [donation, setdonation] = useState<Donation | null>(null);
+  const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
     null
   );
@@ -607,7 +607,7 @@ const QueryParamProvider: FC = ({ children }) => {
         onBehalfDonor,
         setOnBehalfDonor,
         donation,
-        setdonation,
+        setDonation,
         paymentRequest,
         setPaymentRequest,
         errors,

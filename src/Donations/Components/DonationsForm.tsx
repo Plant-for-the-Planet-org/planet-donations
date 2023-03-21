@@ -28,7 +28,7 @@ import { apiRequest } from "../../Utils/api";
 import PlanetCashSelector from "../Micros/PlanetCashSelector";
 import cleanObject from "src/Utils/cleanObject";
 import { APIError, handleError } from "@planet-sdk/common";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
@@ -56,7 +56,7 @@ function DonationsForm(): ReactElement {
     isPlanetCashActive,
     onBehalf,
     onBehalfDonor,
-    setdonation,
+    setDonation,
     setcountry,
     setcurrency,
     donation,
@@ -298,7 +298,7 @@ function DonationsForm(): ReactElement {
         });
 
         if (status === 200) {
-          setdonation(data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+          setDonation(data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
           router.replace({
             query: { ...router.query, step: THANK_YOU },
           });
