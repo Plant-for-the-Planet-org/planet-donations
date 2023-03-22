@@ -1060,8 +1060,9 @@
 }
 
 .verified-icon-popup {
-  width: 15rem;
+  max-width: 25rem;
   padding: 0.5rem;
+  margin-right: 20px;
 }
 
 .MuiTypography-root {

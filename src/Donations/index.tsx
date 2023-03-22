@@ -306,7 +306,7 @@ function DonationInfo() {
                       </Typography>
                       <Popover
                         id="mouse-over-popover"
-                        className={classes.popover}
+                        className={`${classes.popover} verified-icon-popup`}
                         classes={{
                           paper: classes.paper,
                         }}
@@ -318,15 +318,13 @@ function DonationInfo() {
                         }}
                         transformOrigin={{
                           vertical: "top",
-                          horizontal: "left",
+                          horizontal: isMobile ? "center" : "left",
                         }}
                         onClose={handlePopoverClose}
                         disableRestoreFocus
                         style={{ maxWidth: 550 }}
                       >
-                        <Typography className="verified-icon-popup">
-                          {t("verifiedIconInfo")}
-                        </Typography>
+                        <Typography>{t("verifiedIconInfo")}</Typography>
                       </Popover>
                     </div>
                   )}
