@@ -31,6 +31,7 @@
   "isACompanyDonation": "Dar je učiněn firmou",
   "companyName": "Jméno firmy",
   "companyRequired": "Jméno firmy je vyžadováno",
+  "companyUneditableHelpText": "Upravte svůj profil, pokud potřebujete aktualizovat název společnosti",
   "askPublishName": "Zobrazit moje celé jméno v Plant-for-the-Planet žebríčcích",
   "nameAlreadyPublished": "Vaše celé jméno se ukáže v žebříčku, jelikož je Váš Plant-for-the-Planet profil aktuálně veřejný.",
   "orgNamePublishedTax": "Jméno firmy je viditelné na našem žebříčku. Daňové potvrzení se vystaví na stejné jméno.",
