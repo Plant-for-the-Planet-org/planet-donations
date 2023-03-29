@@ -35,7 +35,7 @@ const allowedCountries = ["DE", "ES", "US"];
 const PlanetCashSignup = (): ReactElement => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
-  const { setshowErrorCard, queryToken, setErrors } =
+  const { setshowErrorCard, queryToken, setErrors, tenant } =
     useContext(QueryParamContext);
   const { theme } = React.useContext(ThemeContext);
   const router = useRouter();
@@ -78,6 +78,8 @@ const PlanetCashSignup = (): ReactElement => {
         url: "/app/planetCash",
         token,
         setshowErrorCard,
+        tenant,
+        locale: i18n.language,
       };
       const { data } = await apiRequest(options);
       setPlanetCashAccounts(data);
@@ -120,6 +122,8 @@ const PlanetCashSignup = (): ReactElement => {
           method: "POST" as const,
           url: `/app/planetCash/${currentPlanetCashAccount.id}/activate`,
           token,
+          tenant,
+          locale: i18n.language,
           setshowErrorCard,
         };
         await apiRequest(options);
@@ -146,6 +150,8 @@ const PlanetCashSignup = (): ReactElement => {
           activate: true,
         },
         setshowErrorCard,
+        tenant,
+        locale: i18n.language,
       };
       await apiRequest(options);
       router.reload();

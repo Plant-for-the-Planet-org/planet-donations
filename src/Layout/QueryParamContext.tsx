@@ -30,7 +30,6 @@ import {
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
-import allLocales from "../../public/static/localeList.json";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { Project } from "src/Common/Types/project";
 import { User } from "src/Common/Types/user";
@@ -63,11 +62,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const [queryToken, setqueryToken] = useState<string | null>(null);
 
   const [donationStep, setdonationStep] = useState<null | number>(null);
-  const [language, setlanguage] = useState(
-    typeof window !== "undefined" && localStorage.getItem("language")
-      ? (localStorage.getItem("language") as string)
-      : "en"
-  );
+  // TODO - remove language if not needed
+  const [language, setlanguage] = useState(i18n.language);
 
   const [donationID, setdonationID] = useState<string | null>(null);
   const [tenant, settenant] = useState("ten_I9TW3ncG");
@@ -130,7 +126,6 @@ const QueryParamProvider: FC = ({ children }) => {
   const [profile, setprofile] = useState<User | null>(null);
   const [amount, setAmount] = useState<null | number>(null);
   const [retainQuantityValue, setRetainQuantityValue] = useState(false);
-  // Language = locale => Can be received from the URL, can also be set by the user, can be extracted from browser language
   const [isSignedUp, setIsSignedUp] = useState(false);
 
   const [hideLogin, setHideLogin] = useState(false);
@@ -161,6 +156,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const requestParams = {
         url: `/app/currencies`,
         setshowErrorCard,
+        shouldQueryParamAdd: false,
       };
       const response: { data: Record<string, string> } = await apiRequest(
         requestParams
@@ -195,32 +191,6 @@ const QueryParamProvider: FC = ({ children }) => {
       });
     }
   }, [paymentError]);
-  useEffect(() => {
-    if (allLocales.some((locale) => locale.key === router.query.locale)) {
-      setlanguage(router.query.locale as string);
-    } else {
-      //conditional operator to check if navigator.languages property is supported by browser.
-      if (localStorage.getItem("language") === null) {
-        const userLocale = navigator.languages ?? [navigator.language];
-        const newLocale = userLocale[0].trim().split(/-|_/)[0];
-        if (allLocales.some((locale) => locale.key === newLocale)) {
-          //if user locale is supported by us
-          setlanguage(newLocale);
-        } else {
-          setlanguage("en");
-        }
-      }
-    }
-  }, [router.query.locale]);
-
-  useEffect(() => {
-    if (i18n && i18n.isInitialized) {
-      i18n.changeLanguage(language);
-      localStorage.setItem("language", language);
-    }
-  }, [language, router]);
-
-  // Return URL = callbackUrl => This will be received from the URL params - this is where the user will be redirected after the donation is complete
 
   function testURL(url: string) {
     const pattern = new RegExp(
@@ -262,6 +232,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/projects?_scope=map`,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       const response = await apiRequest(requestParams);
       const projects = response.data as Project[];
@@ -293,6 +264,7 @@ const QueryParamProvider: FC = ({ children }) => {
         token: token,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       });
       setprofile(profile.data);
     } catch (err) {
@@ -512,6 +484,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       const paymentSetupData: { data: PaymentOptions } = await apiRequest(
         requestParams

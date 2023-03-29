@@ -1,6 +1,6 @@
 {
-  "fortreeCountTrees": "für {{treeCount}} Baum",
-  "fortreeCountTrees_plural": "für {{treeCount}} Bäume",
+  "fortreeCountTrees_one": "für {{treeCount}} Baum",
+  "fortreeCountTrees_other": "für {{treeCount}} Bäume",
   "forQuantitym2": "für {{quantity}} m²",
   "m2": "m²",
   "recipientName": "Name des Empfängers",

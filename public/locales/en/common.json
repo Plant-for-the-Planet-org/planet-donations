@@ -1,6 +1,6 @@
 {
-  "fortreeCountTrees": "for {{treeCount}} Tree",
-  "fortreeCountTrees_plural": "for {{treeCount}} Trees",
+  "fortreeCountTrees_one": "for {{treeCount}} Tree",
+  "fortreeCountTrees_other": "for {{treeCount}} Trees",
   "forQuantitym2": "for {{quantity}} m²",
   "m2": "m²",
   "recipientName": "Recipient Name",
@@ -202,5 +202,6 @@
   "planet_cash_insufficient_credit": "Insufficient Credit",
   "planet_cash_invalid_project": "Invalid Project",
   "active_account_exists": "Active PlanetCash account already exists",
-  "duplicate_account": "Account already exists"
+  "duplicate_account": "Account already exists",
+  "loading": "Loading..."
 }

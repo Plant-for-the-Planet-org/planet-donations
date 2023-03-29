@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { LogoutOptions, useAuth0, User as AuthUser } from "@auth0/auth0-react";
+import { useAuth0, User as AuthUser } from "@auth0/auth0-react";
 import { apiRequest } from "../../Utils/api";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { useTranslation } from "next-i18next";
@@ -117,11 +117,6 @@ function Authentication(): ReactElement {
     if (!isLoading && isAuthenticated) {
       // Fetch the profile data
       loadUserProfile();
-      const queryParams = localStorage.getItem("queryparams");
-      if (queryParams) {
-        router.push(queryParams);
-        localStorage.removeItem("queryparams");
-      }
       // If details present store in contact details
       // If details are not present show message and logout user
     } else if (queryToken) {
@@ -132,14 +127,21 @@ function Authentication(): ReactElement {
     router.replace({ query: queryParams });
   }, [isAuthenticated, isLoading, queryToken]);
 
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   const loginUser = () => {
-    localStorage.setItem("queryparams", router.asPath);
+    const redirectPath = `/${router.locale}${router.asPath}`;
+    localStorage.setItem("redirectPath", redirectPath);
     loginWithRedirect({
-      redirectUri: window?.location.href,
-      ui_locales: localStorage.getItem("language") || "en",
+      redirectUri: `${process.env.APP_URL}/auth`,
+      ui_locales: i18n.language || "en",
     });
+  };
+
+  const logoutUser = () => {
+    const redirectPath = `/${router.locale}${router.asPath}`;
+    localStorage.setItem("redirectPath", redirectPath);
+    logout({ returnTo: `${process.env.APP_URL}/auth` });
   };
 
   React.useEffect(() => {
@@ -151,7 +153,7 @@ function Authentication(): ReactElement {
       setqueryToken((router.query.token as string | null) || queryToken);
       // If user is logged in via auth0, log them out
       if (!isLoading && isAuthenticated) {
-        logout({ returnTo: window?.location.href });
+        logoutUser();
       }
     } else {
       setqueryToken("");
@@ -194,21 +196,18 @@ function Authentication(): ReactElement {
             <UserProfile profile={profile} authUser={authUser} />
           )}
           {authUser || profile ? (
-            <button
-              className="login-continue"
-              onClick={() => logout({ returnTo: window?.location.href })}
-            >
+            <button className="login-continue" onClick={() => logoutUser()}>
               {t("logout")}
             </button>
           ) : null}
         </div>
       ) : (
         <div className="w-100 d-flex" style={{ justifyContent: "flex-end" }}>
-          <Skeleton variant="rect" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} />
         </div>
       )}
       <VerifyEmailModal
-        logout={logout}
+        logoutUser={logoutUser}
         openModal={openVerifyEmailModal}
         handleModalClose={() => setopenVerifyEmailModal(false)}
       />
@@ -221,13 +220,13 @@ export default Authentication;
 interface VerifyEmailProps {
   openModal: boolean;
   handleModalClose: () => void;
-  logout: (options?: LogoutOptions | undefined) => void;
+  logoutUser: () => void;
 }
 
 function VerifyEmailModal({
   openModal,
   handleModalClose,
-  logout,
+  logoutUser,
 }: VerifyEmailProps) {
   const { t, ready } = useTranslation("common");
 
@@ -292,7 +291,7 @@ function VerifyEmailModal({
               id={"VerifyEmailModalCan"}
               className={"secondary-button mt-20"}
               style={{ minWidth: "130px" }}
-              onClick={() => logout({ returnTo: `${window?.location.href}` })}
+              onClick={() => logoutUser()}
             >
               <p>{t("skipLogout")}</p>
             </button>

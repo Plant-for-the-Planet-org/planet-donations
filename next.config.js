@@ -1,7 +1,8 @@
-const withPlugins = require("next-compose-plugins");
+/* eslint-disable @typescript-eslint/no-var-requires */
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
+
 const { i18n } = require("./next-i18next.config");
 
 // Use the SentryWebpack plugin to upload the source maps during build step
@@ -45,7 +46,8 @@ if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
 const hasAssetPrefix =
   process.env.ASSET_PREFIX !== "" && process.env.ASSET_PREFIX !== undefined;
 
-module.exports = withPlugins([[withBundleAnalyzer]], {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   productionBrowserSourceMaps: true,
   serverRuntimeConfig: {
     rootDir: __dirname,
@@ -100,9 +102,6 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
   },
   basePath,
   // your config for other plugins or the general next.js here...
-  devIndicators: {
-    autoPrerender: false,
-  },
   env: {
     AUTH0_CUSTOM_DOMAIN: process.env.AUTH0_CUSTOM_DOMAIN,
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
@@ -114,7 +113,7 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
     ESRI_CLIENT_ID: process.env.ESRI_CLIENT_ID,
     ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
     RECURRENCY: process.env.RECURRENCY,
-    TRACKING_KEY: process.env.TRACKING_KEY
+    TRACKING_KEY: process.env.TRACKING_KEY,
   },
   trailingSlash: false,
   reactStrictMode: true,
@@ -126,11 +125,18 @@ module.exports = withPlugins([[withBundleAnalyzer]], {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  assetPrefix: hasAssetPrefix ? `${scheme}://${process.env.ASSET_PREFIX}` : "",
+  assetPrefix: hasAssetPrefix
+    ? `${scheme}://${process.env.ASSET_PREFIX}`
+    : undefined,
   // Asset Prefix allows to use CDN for the generated js files
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
   i18n,
   images: {
     domains: ["cdn.plant-for-the-planet.org", "cdn.planetapp.workers.dev"],
   },
-});
+};
+
+module.exports = () => {
+  const plugins = [withBundleAnalyzer];
+  return plugins.reduce((config, plugin) => plugin(config), nextConfig);
+};
