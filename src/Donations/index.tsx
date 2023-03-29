@@ -171,7 +171,7 @@ function DonationInfo() {
         </button>
       )}
       <div className="background-image-overlay"></div>
-      {projectDetails && paymentSetup ? (
+      {projectDetails ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep &&
@@ -189,7 +189,8 @@ function DonationInfo() {
             ) : (
               <TPOImage />
             ))}
-          {(donationStep === 2 || donationStep === 3) &&
+          {paymentSetup &&
+            (donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && (
               <div className="contact-details-info">
@@ -227,7 +228,8 @@ function DonationInfo() {
               </div>
             )}
 
-          {(donationStep === 2 || donationStep === 3) &&
+          {paymentSetup &&
+            (donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "bouquet" ||
               projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
