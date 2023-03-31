@@ -23,7 +23,8 @@ import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
 
-  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep, projectDetails } =
+    React.useContext(QueryParamContext);
 
   const { t, i18n, ready } = useTranslation(["common"]);
 
@@ -40,19 +41,26 @@ function Footer(): ReactElement {
         )}
         <div>
           <div className="footer-links">
-            <button
-              onClick={() => setlanguageModalOpen(!languageModalOpen)}
-              data-test-id="languageButton"
-            >
-              {`${getLanguageName(i18n.language)}`}
-              <DownArrowIcon
-                color={
-                  theme === "theme-light"
-                    ? themeProperties.light.primaryFontColor
-                    : themeProperties.dark.primaryFontColor
-                }
-              />
-            </button>
+            {donationStep !== 2 &&
+              donationStep !== 3 &&
+              !(
+                donationStep === 4 &&
+                projectDetails?.purpose !== "planet-cash-signup"
+              ) && (
+                <button
+                  onClick={() => setlanguageModalOpen(!languageModalOpen)}
+                  data-test-id="languageButton"
+                >
+                  {`${getLanguageName(i18n.language)}`}
+                  <DownArrowIcon
+                    color={
+                      theme === "theme-light"
+                        ? themeProperties.light.primaryFontColor
+                        : themeProperties.dark.primaryFontColor
+                    }
+                  />
+                </button>
+              )}
             <a
               rel="noreferrer"
               target="_blank"
@@ -120,7 +128,15 @@ function Footer(): ReactElement {
         </div>
 
         <LanguageModal
-          languageModalOpen={languageModalOpen}
+          languageModalOpen={
+            languageModalOpen &&
+            donationStep !== 2 &&
+            donationStep !== 3 &&
+            !(
+              donationStep === 4 &&
+              projectDetails?.purpose !== "planet-cash-signup"
+            )
+          }
           setlanguageModalOpen={setlanguageModalOpen}
         />
       </div>

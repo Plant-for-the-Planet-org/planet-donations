@@ -15,7 +15,8 @@ export async function middleware(
   }
 
   const localeParam = req.nextUrl.searchParams.get("locale");
-  const queryString = req.nextUrl.search.replace(`locale=${localeParam}`, "");
+  const localeTestRegex = new RegExp("&?locale=" + localeParam); //looks for locale as a query param (optionally preceded by &)
+  const queryString = req.nextUrl.search.replace(localeTestRegex, "");
 
   // locale is removed from query parameters and user is redirected if the locale is supported
   if (localeParam) {

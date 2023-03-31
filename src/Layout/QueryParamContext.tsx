@@ -84,7 +84,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [frequency, setfrequency] = useState<string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setgiftDetails] = useState<GiftDetails>({
+  const [giftDetails, setGiftDetails] = useState<GiftDetails>({
     recipientName: "",
     recipientEmail: "",
     message: "",
@@ -523,7 +523,7 @@ const QueryParamProvider: FC = ({ children }) => {
         isGift,
         setisGift,
         giftDetails,
-        setgiftDetails,
+        setGiftDetails,
         contactDetails,
         setContactDetails,
         country,
