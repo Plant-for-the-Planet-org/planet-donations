@@ -74,11 +74,7 @@ function SuccessfulDonation({
 
       {donationID && isMobile && router.query.step === "thankyou" && (
         <a
-          href={`${
-            process.env.APP_URL
-          }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${localStorage.getItem(
-            "language"
-          )}`}
+          href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${i18n.language}`}
           className="donations-transaction-details donation-transaction-phone-view"
           data-test-id="referenceDonation"
         >

@@ -19,7 +19,7 @@ import { APIError, handleError } from "@planet-sdk/common";
 import { Donation } from "src/Common/Types/donation";
 
 function ThankYou(): ReactElement {
-  const { t, ready } = useTranslation(["common", "country", "donate"]);
+  const { t, ready, i18n } = useTranslation(["common", "country", "donate"]);
 
   const {
     donationID,
@@ -39,6 +39,7 @@ function ThankYou(): ReactElement {
         url: `/app/donations/${donationID}`,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       const donation = await apiRequest(requestParams);
       if (donation.status === 200) {
