@@ -7,7 +7,11 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
-import { ContactDetails, FetchedProjectDetails } from "src/Common/Types";
+import {
+  ContactDetails,
+  FetchedProjectDetails,
+  SentGift,
+} from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface FailedDonationProps {
@@ -69,16 +73,23 @@ function FailedDonation({
     localStorage.setItem("countryCode", country);
     setcurrency(donation.currency);
     if (donation.giftRequest) {
-      setisGift(donation.giftRequest.recipientName ? true : false);
+      const { giftRequest } = donation;
+      setisGift(giftRequest.recipientName ? true : false);
 
-      const _giftDetails = {
-        type: donation.giftRequest.type || null,
-        recipientName: donation.giftRequest.recipientName || "",
-        recipientEmail: donation.giftRequest.recipientEmail || "",
-        message: donation.giftRequest.message || "",
-        ...(donation.giftRequest.type === "direct"
-          ? { recipient: donation.giftRequest.recipient }
-          : {}),
+      const _giftDetails: SentGift = {
+        ...(giftRequest.type === "invitation"
+          ? {
+              type: giftRequest.type,
+              recipientName: giftRequest.recipientName || "",
+              recipientEmail: giftRequest.recipientEmail || "",
+              message: giftRequest.message || "",
+            }
+          : {
+              type: giftRequest.type,
+              recipient: giftRequest.recipient,
+              recipientName: "",
+              message: "",
+            }),
       };
       // TODO - Gift type invitation and direct will have different properties
       setGiftDetails(_giftDetails);

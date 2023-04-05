@@ -6,13 +6,20 @@ import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
-import { DefaultGift } from "src/Common/Types";
 import GiftIcon from "public/assets/icons/GiftIcon";
+import { NoGift } from "@planet-sdk/common/build/types/donation";
 
 type GiftFormData = {
   recipientName: string;
   recipientEmail: string;
   message: string;
+};
+
+const EMPTY_GIFT_DETAILS: Readonly<NoGift> = {
+  recipientName: "",
+  recipientEmail: "",
+  message: "",
+  type: null,
 };
 
 export default function GiftForm(): ReactElement {
@@ -40,14 +47,10 @@ export default function GiftForm(): ReactElement {
   React.useEffect(() => {
     if (isGift && giftDetails) {
       if (giftDetails.type !== "direct") {
-        setGiftDetails((giftDetails) => {
-          return { ...giftDetails, type: "invitation" };
-        });
+        setGiftDetails({ ...giftDetails, type: "invitation" });
       }
     } else {
-      setGiftDetails((giftDetails) => {
-        return { ...(giftDetails as DefaultGift), type: null };
-      });
+      setGiftDetails(EMPTY_GIFT_DETAILS);
     }
   }, [isGift]);
 
@@ -58,14 +61,8 @@ export default function GiftForm(): ReactElement {
   };
 
   const resetGiftForm = () => {
-    const _defaultDetails: Readonly<DefaultGift> = {
-      recipientName: "",
-      recipientEmail: "",
-      message: "",
-      type: null,
-    };
-    setGiftDetails(_defaultDetails);
-    reset(_defaultDetails);
+    setGiftDetails(EMPTY_GIFT_DETAILS);
+    reset(EMPTY_GIFT_DETAILS);
   };
 
   const router = useRouter();

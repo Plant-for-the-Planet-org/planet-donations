@@ -11,9 +11,9 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
+  SentGift,
   ContactDetails,
   FetchedProjectDetails,
-  GiftDetails,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from "src/Common/Types";
@@ -23,7 +23,7 @@ import { GetServerSideProps } from "next/types";
 interface Props {
   projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
   donationStep: number | null;
-  giftDetails: GiftDetails | null;
+  giftDetails: SentGift | null;
   isGift: boolean;
   resolvedUrl?: string;
   isDirectDonation: boolean;
@@ -218,7 +218,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails: GiftDetails | null = null;
+  let giftDetails: SentGift | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;

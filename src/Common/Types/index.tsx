@@ -3,31 +3,10 @@ import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { Dispatch, SetStateAction } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
+import { NoGift, SentDirectGift, SentInvitationGift } from "@planet-sdk/common";
 
-export interface DirectGift {
-  type: "direct";
-  recipientName?: string;
-  recipientTreecounter?: string;
-  recipient: string;
-  recipientEmail?: "";
-  message?: "";
-}
-
-export interface InvitationGift {
-  type: "invitation";
-  recipientName: string;
-  recipientEmail: string;
-  message: string;
-}
-
-export interface DefaultGift {
-  type: null;
-  recipientName: string;
-  recipientEmail: "";
-  message: "";
-}
-
-export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
+/** planet-donations only allows direct or invitation gifts */
+export type SentGift = SentDirectGift | SentInvitationGift;
 
 export interface ContactDetails {
   firstname: string;
@@ -64,7 +43,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: ContactDetails;
-  giftDetails: GiftDetails;
+  giftDetails: SentGift | NoGift;
   isGift: boolean;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
@@ -126,7 +105,7 @@ export interface CreateDonationDataProps {
   contactDetails: ContactDetails;
   taxDeductionCountry: string | null;
   isGift: boolean;
-  giftDetails: GiftDetails;
+  giftDetails: SentGift | NoGift;
   frequency: string;
   amount?: number | null;
   callbackUrl: string | undefined;

@@ -22,18 +22,18 @@ import {
   PaymentOptions,
   FetchedProjectDetails,
   PlanetCashSignupDetails,
-  GiftDetails,
   ContactDetails,
   BankTransferDetails,
   OnBehalfDonor,
   ConfigResponse,
+  SentGift,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project/map";
 import { User } from "@planet-sdk/common/build/types/user";
-import { Donation } from "@planet-sdk/common/build/types/donation";
+import { Donation, NoGift } from "@planet-sdk/common/build/types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
@@ -84,7 +84,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [frequency, setfrequency] = useState<string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setGiftDetails] = useState<GiftDetails>({
+  const [giftDetails, setGiftDetails] = useState<SentGift | NoGift>({
     recipientName: "",
     recipientEmail: "",
     message: "",
