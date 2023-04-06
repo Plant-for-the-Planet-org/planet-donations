@@ -22,7 +22,6 @@ import {
   PaymentOptions,
   FetchedProjectDetails,
   PlanetCashSignupDetails,
-  BankTransferDetails,
   OnBehalfDonor,
   ConfigResponse,
   SentGift,
@@ -36,6 +35,7 @@ import {
   Donation,
   NoGift,
   ContactDetails,
+  BankTransferDetails,
 } from "@planet-sdk/common/build/types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";

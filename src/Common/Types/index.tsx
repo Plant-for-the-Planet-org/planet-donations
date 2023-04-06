@@ -8,6 +8,7 @@ import {
   SentDirectGift,
   SentInvitationGift,
   ContactDetails,
+  BankTransferDetails,
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
@@ -216,13 +217,6 @@ export interface CurrencyList {
   [key: string]: string;
 }
 
-export interface BankTransferDetails {
-  beneficiary: string;
-  iban: string;
-  bic: string;
-  bankName: string;
-}
-
 export interface OnBehalfDonor {
   firstName: string;
   lastName: string;
@@ -287,12 +281,7 @@ type UpdateDonationSuccessData = {
   id: string;
   response?: {
     type: "transfer_required";
-    account: {
-      beneficiary: string;
-      iban: string;
-      bic: string;
-      bankName: string;
-    };
+    account: BankTransferDetails;
   };
 };
 

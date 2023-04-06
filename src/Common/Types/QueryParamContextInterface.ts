@@ -1,5 +1,4 @@
 import {
-  BankTransferDetails,
   CurrencyList,
   FetchedProjectDetails,
   OnBehalfDonor,
@@ -13,6 +12,7 @@ import {
   Donation,
   NoGift,
   ContactDetails,
+  BankTransferDetails,
 } from "@planet-sdk/common/build/types/donation";
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
