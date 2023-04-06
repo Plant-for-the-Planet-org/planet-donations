@@ -5,7 +5,6 @@ import {
   HandleStripeSCAPaymentProps,
   PaymentOptions,
   CreateDonationDataProps,
-  ContactDetails,
   PaypalErrorData,
   PaypalApproveData,
   PaymentProviderRequest,
@@ -13,7 +12,10 @@ import {
   UpdateDonationData,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
-import { Donation } from "@planet-sdk/common/build/types/donation";
+import {
+  Donation,
+  ContactDetails,
+} from "@planet-sdk/common/build/types/donation";
 import { DonationRequestData } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";

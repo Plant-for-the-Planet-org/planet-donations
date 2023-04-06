@@ -1,6 +1,5 @@
 import {
   BankTransferDetails,
-  ContactDetails,
   CurrencyList,
   FetchedProjectDetails,
   OnBehalfDonor,
@@ -10,7 +9,11 @@ import {
 } from ".";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 import { User } from "@planet-sdk/common/build/types/user";
-import { Donation, NoGift } from "@planet-sdk/common/build/types/donation";
+import {
+  Donation,
+  NoGift,
+  ContactDetails,
+} from "@planet-sdk/common/build/types/donation";
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { Dispatch, SetStateAction } from "react";

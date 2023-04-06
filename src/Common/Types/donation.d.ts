@@ -1,4 +1,6 @@
-import { ContactDetails, ProjectPurpose, SentGift } from ".";
+import { ProjectPurpose, SentGift } from ".";
+import { ContactDetails } from "@planet-sdk/common";
+
 export interface Metadata {
   callback_method?: string;
   callback_url?: string;

@@ -12,12 +12,14 @@ import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
   SentGift,
-  ContactDetails,
   FetchedProjectDetails,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from "src/Common/Types";
-import { Donation } from "@planet-sdk/common/build/types/donation";
+import {
+  Donation,
+  ContactDetails,
+} from "@planet-sdk/common/build/types/donation";
 import { GetServerSideProps } from "next/types";
 
 interface Props {
@@ -390,6 +392,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             zipCode: donorData.zipCode || "",
             country: donorData.country || "",
             companyname: donorData.companyname || "",
+            tin: donorData.tin || "",
           };
         }
 

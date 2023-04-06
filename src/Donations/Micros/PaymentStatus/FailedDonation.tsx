@@ -7,11 +7,7 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
-import {
-  ContactDetails,
-  FetchedProjectDetails,
-  SentGift,
-} from "src/Common/Types";
+import { FetchedProjectDetails, SentGift } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface FailedDonationProps {
@@ -60,7 +56,7 @@ function FailedDonation({
     });
     setPaymentError("");
     setquantity(donation?.quantity);
-    setContactDetails(donation.donor as ContactDetails);
+    if (donation.donor) setContactDetails(donation.donor);
     setAmount(donation.amount);
 
     let country: string;

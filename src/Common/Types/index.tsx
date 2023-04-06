@@ -3,23 +3,15 @@ import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { Dispatch, SetStateAction } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
-import { NoGift, SentDirectGift, SentInvitationGift } from "@planet-sdk/common";
+import {
+  NoGift,
+  SentDirectGift,
+  SentInvitationGift,
+  ContactDetails,
+} from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
 export type SentGift = SentDirectGift | SentInvitationGift;
-
-export interface ContactDetails {
-  firstname: string;
-  lastname: string;
-  tin?: string | null;
-  email: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  country: string;
-  companyname?: string | null;
-  name?: string; //Check if this is still there. Possible legacy.
-}
 
 export interface PaymentProviderRequest {
   account?: string;

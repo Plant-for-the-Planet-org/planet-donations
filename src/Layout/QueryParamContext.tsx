@@ -22,7 +22,6 @@ import {
   PaymentOptions,
   FetchedProjectDetails,
   PlanetCashSignupDetails,
-  ContactDetails,
   BankTransferDetails,
   OnBehalfDonor,
   ConfigResponse,
@@ -33,7 +32,11 @@ import { validateToken } from "../Utils/tokenActions";
 import QueryParamContextInterface from "src/Common/Types/QueryParamContextInterface";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project/map";
 import { User } from "@planet-sdk/common/build/types/user";
-import { Donation, NoGift } from "@planet-sdk/common/build/types/donation";
+import {
+  Donation,
+  NoGift,
+  ContactDetails,
+} from "@planet-sdk/common/build/types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
@@ -358,7 +361,7 @@ const QueryParamProvider: FC = ({ children }) => {
   async function loadConfig() {
     try {
       const requestParams = {
-        url: `/app/config`,
+        url: `https://app.plant-for-the-planet.org/app/config`,
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
