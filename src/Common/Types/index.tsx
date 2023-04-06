@@ -9,6 +9,7 @@ import {
   SentInvitationGift,
   ContactDetails,
   BankTransferDetails,
+  PaymentGateway,
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
@@ -16,7 +17,7 @@ export type SentGift = SentDirectGift | SentInvitationGift;
 
 export interface PaymentProviderRequest {
   account?: string;
-  gateway: string;
+  gateway: PaymentGateway;
   method?: string;
   source?:
     | {
@@ -55,7 +56,7 @@ export interface CreateDonationFunctionProps {
 }
 
 export interface PayDonationProps {
-  gateway: string;
+  gateway: PaymentGateway;
   method: string;
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;

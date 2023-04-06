@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
-import { ContactDetails } from "@planet-sdk/common";
+import { ContactDetails, PaymentGateway } from "@planet-sdk/common";
 import { StripeIbanElement } from "@stripe/stripe-js/types/stripe-js/elements/iban";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 
@@ -22,7 +22,7 @@ const FormControlNew = styled(FormControl)({
 interface SepaPaymentsProps {
   paymentType: string;
   onPaymentFunction: (
-    gateway: string,
+    gateway: PaymentGateway,
     method: string,
     providerObject?: PaymentMethod
   ) => Promise<void>;

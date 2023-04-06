@@ -15,6 +15,7 @@ import { THANK_YOU } from "src/Utils/donationStepConstants";
 import {
   Donation,
   ContactDetails,
+  PaymentGateway,
 } from "@planet-sdk/common/build/types/donation";
 import { DonationRequestData } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
@@ -22,7 +23,7 @@ import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
 import { Dispatch, SetStateAction } from "react";
 
 export function buildPaymentProviderRequest(
-  gateway: string,
+  gateway: PaymentGateway,
   method: string,
   paymentSetup: PaymentOptions,
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
@@ -467,7 +468,7 @@ export async function handleStripeSCAPayment({
             const payDonationData = {
               paymentProviderRequest: {
                 account: paymentSetup.gateways.stripe.account,
-                gateway: "stripe",
+                gateway: "stripe" as const,
                 source: {
                   id: stripeResponse.paymentIntent.id,
                   object: "payment_intent",

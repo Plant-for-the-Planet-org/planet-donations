@@ -1,9 +1,10 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
+import { PaymentGateway } from "@planet-sdk/common";
 
 interface Props {
   onSubmitPayment: (
-    gateway: string,
+    gateway: PaymentGateway,
     method: string,
     providerObject?: string
   ) => Promise<void>;
