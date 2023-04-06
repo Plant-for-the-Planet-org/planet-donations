@@ -344,11 +344,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           country = donorData.country;
         }
         if (donation.metadata) {
-          callbackMethod = donation.metadata.callback_method;
-          callbackUrl = donation.metadata.callback_url;
-          utmCampaign = donation.metadata.utm_campaign;
-          utmMedium = donation.metadata.utm_medium;
-          utmSource = donation.metadata.utm_source;
+          callbackMethod = donation.metadata.callback_method || "";
+          callbackUrl = donation.metadata.callback_url || "";
+          utmCampaign = donation.metadata.utm_campaign || "";
+          utmMedium = donation.metadata.utm_medium || "";
+          utmSource = donation.metadata.utm_source || "";
         }
         // This will fetch the payment options
         try {
