@@ -358,7 +358,7 @@ const QueryParamProvider: FC = ({ children }) => {
   async function loadConfig() {
     try {
       const requestParams = {
-        url: `/app/config`,
+        url: process.env.CONFIG_URL || `/app/config`,
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
