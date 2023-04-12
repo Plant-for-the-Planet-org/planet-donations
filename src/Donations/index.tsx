@@ -205,7 +205,7 @@ function DonationInfo() {
         <div className={"topProjectBadge theme-light"}>Top Project</div>
       )}
       <div className="background-image-overlay"></div>
-      {projectDetails && paymentSetup ? (
+      {projectDetails ? (
         <div className="donations-info text-white">
           {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep &&
@@ -223,7 +223,8 @@ function DonationInfo() {
             ) : (
               <TPOImage />
             ))}
-          {(donationStep === 2 || donationStep === 3) &&
+          {paymentSetup &&
+            (donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "trees" ||
               projectDetails.purpose === "conservation") && (
               <div className="contact-details-info">
@@ -261,7 +262,8 @@ function DonationInfo() {
               </div>
             )}
 
-          {(donationStep === 2 || donationStep === 3) &&
+          {paymentSetup &&
+            (donationStep === 2 || donationStep === 3) &&
             (projectDetails.purpose === "bouquet" ||
               projectDetails.purpose === "funds") && (
               <div className="contact-details-info">
@@ -432,13 +434,7 @@ function DonationInfo() {
 
           {donationID && !(isMobile && router.query.step === "thankyou") && (
             <a
-              href={`${
-                process.env.APP_URL
-              }/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${
-                localStorage.getItem("language")
-                  ? localStorage.getItem("language")
-                  : "en"
-              }`}
+              href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${i18n.language}`}
               className="donations-transaction-details mt-20"
               data-test-id="referenceDonation"
             >

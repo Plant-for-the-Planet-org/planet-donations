@@ -120,6 +120,7 @@ function PaymentsForm(): ReactElement {
       setshowErrorCard,
       router,
       tenant,
+      locale: i18n.language,
       setTransferDetails,
     });
   };
@@ -173,7 +174,13 @@ function PaymentsForm(): ReactElement {
       utmMedium,
       utmSource,
       tenant,
+      locale: i18n.language,
     });
+    if (router.query.to) {
+      router.replace({
+        query: { ...router.query, step: PAYMENT },
+      });
+    }
     if (router.query.context) {
       router.replace({
         query: { context: donation?.id, step: PAYMENT },
@@ -203,6 +210,7 @@ function PaymentsForm(): ReactElement {
         method: "PUT" as const,
         setshowErrorCard,
         tenant,
+        locale: i18n.language,
       };
       await apiRequest(requestParams);
     } catch (err) {
@@ -394,7 +402,7 @@ function PaymentsForm(): ReactElement {
                 id={`payment-methods-tabpanel-${"CARD"}`}
                 aria-labelledby={`scrollable-force-tab-${"CARD"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={getStripe(paymentSetup, i18n.language)}>
                   <CardPayments
                     donorDetails={contactDetails}
                     totalCost={getFormatedCurrency(
@@ -418,7 +426,7 @@ function PaymentsForm(): ReactElement {
                 id={`payment-methods-tabpanel-${"SEPA"}`}
                 aria-labelledby={`scrollable-force-tab-${"SEPA"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={getStripe(paymentSetup, i18n.language)}>
                   <SepaPayments
                     paymentType={paymentType}
                     onPaymentFunction={onSubmitPayment}
@@ -452,7 +460,7 @@ function PaymentsForm(): ReactElement {
                 id={`payment-methods-tabpanel-${"GiroPay"}`}
                 aria-labelledby={`scrollable-force-tab-${"GiroPay"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={getStripe(paymentSetup, i18n.language)}>
                   <GiroPayPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
               </div>
@@ -463,7 +471,7 @@ function PaymentsForm(): ReactElement {
                 id={`payment-methods-tabpanel-${"Sofort"}`}
                 aria-labelledby={`scrollable-force-tab-${"Sofort"}`}
               >
-                <Elements stripe={getStripe(paymentSetup)}>
+                <Elements stripe={getStripe(paymentSetup, i18n.language)}>
                   <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
               </div>
@@ -474,9 +482,7 @@ function PaymentsForm(): ReactElement {
                 id={`payment-methods-tabpanel-${"Bank"}`}
                 aria-labelledby={`scrollable-force-tab-${"Bank"}`}
               >
-                {/* <Elements stripe={getStripe(paymentSetup)}> */}
                 <BankTransfer onSubmitPayment={onSubmitPayment} />
-                {/* </Elements> */}
               </div>
             </div>
           ) : (
