@@ -361,7 +361,7 @@ const QueryParamProvider: FC = ({ children }) => {
   async function loadConfig() {
     try {
       const requestParams = {
-        url: `https://app.plant-for-the-planet.org/app/config`,
+        url: process.env.CONFIG_URL || `/app/config`,
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
