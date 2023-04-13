@@ -1,11 +1,15 @@
-import { Project } from "src/Common/Types/project";
+import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 
 export function getFilteredProjects(
   projects: Array<Project>,
   type: string
 ): Project[] | undefined {
   if (type === "featured") {
-    return projects.filter((project) => project.properties.isFeatured === true);
+    return projects.filter(
+      (project) =>
+        "isFeatured" in project.properties &&
+        project.properties.isFeatured === true
+    );
   } else if (type === "all") {
     return projects;
   }
@@ -28,12 +32,13 @@ export function getSearchProjects(
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .toLowerCase();
-        const projectLocation = project.properties.location
-          ? project.properties.location
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "")
-              .toLowerCase()
-          : "";
+        const projectLocation =
+          "location" in project.properties && project.properties.location
+            ? project.properties.location
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+            : "";
         const projectTpoName = project.properties.tpo.name
           ? project.properties.tpo.name
               .normalize("NFD")

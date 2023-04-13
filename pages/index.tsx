@@ -11,19 +11,21 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
-  ContactDetails,
+  SentGift,
   FetchedProjectDetails,
-  GiftDetails,
   PaymentOptions,
   PlanetCashSignupDetails,
 } from "src/Common/Types";
-import { Donation } from "src/Common/Types/donation";
+import {
+  Donation,
+  ContactDetails,
+} from "@planet-sdk/common/build/types/donation";
 import { GetServerSideProps } from "next/types";
 
 interface Props {
   projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
   donationStep: number | null;
-  giftDetails: GiftDetails | null;
+  giftDetails: SentGift | null;
   isGift: boolean;
   resolvedUrl?: string;
   isDirectDonation: boolean;
@@ -36,7 +38,7 @@ interface Props {
   allowTaxDeductionChange: boolean;
   currency: string;
   paymentSetup: PaymentOptions;
-  treecount?: number;
+  units?: number;
   amount: number;
   meta: { title: string; description: string; image: string; url: string };
   frequency: string;
@@ -218,7 +220,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails: GiftDetails | null = null;
+  let giftDetails: SentGift | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
@@ -228,7 +230,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let country = "";
   let isDirectDonation = false;
   let contactDetails: ContactDetails | null = null;
-  let treecount = 50;
+  let units: number | null = 50;
   let allowTaxDeductionChange = true;
   let currency = "EUR";
   let paymentSetup: PaymentOptions | null = null;
@@ -342,11 +344,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           country = donorData.country;
         }
         if (donation.metadata) {
-          callbackMethod = donation.metadata.callback_method;
-          callbackUrl = donation.metadata.callback_url;
-          utmCampaign = donation.metadata.utm_campaign;
-          utmMedium = donation.metadata.utm_medium;
-          utmSource = donation.metadata.utm_source;
+          callbackMethod = donation.metadata.callback_method || "";
+          callbackUrl = donation.metadata.callback_url || "";
+          utmCampaign = donation.metadata.utm_campaign || "";
+          utmMedium = donation.metadata.utm_medium || "";
+          utmSource = donation.metadata.utm_source || "";
         }
         // This will fetch the payment options
         try {
@@ -377,7 +379,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           // console.log(err);
         }
         allowTaxDeductionChange = false;
-        treecount = donation.treeCount;
+        units = donation.units;
         amount = donation.amount;
         // Setting contact details from donor details
         if (donorData) {
@@ -390,6 +392,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             zipCode: donorData.zipCode || "",
             country: donorData.country || "",
             companyname: donorData.companyname || "",
+            tin: donorData.tin || "",
           };
         }
 
@@ -420,9 +423,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  if (context.query.utm_campaign) utmCampaign = context.query.utm_campaign;
-  if (context.query.utm_medium) utmMedium = context.query.utm_medium;
-  if (context.query.utm_source) utmSource = context.query.utm_source;
+  if (typeof context.query.utm_campaign === "string")
+    utmCampaign = context.query.utm_campaign;
+  if (typeof context.query.utm_medium === "string")
+    utmMedium = context.query.utm_medium;
+  if (typeof context.query.utm_source === "string")
+    utmSource = context.query.utm_source;
 
   // Set gift details if there is s (support link) in the query params
   if (context.query.s) {
@@ -522,7 +528,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       shouldCreateDonation,
       country,
       contactDetails,
-      treecount,
+      units,
       allowTaxDeductionChange,
       currency,
       paymentSetup,

@@ -7,8 +7,8 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
-import { ContactDetails, FetchedProjectDetails } from "src/Common/Types";
-import { Donation } from "src/Common/Types/donation";
+import { FetchedProjectDetails, SentGift } from "src/Common/Types";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface FailedDonationProps {
   donation: Donation;
@@ -56,7 +56,7 @@ function FailedDonation({
     });
     setPaymentError("");
     setquantity(donation?.quantity);
-    setContactDetails(donation.donor as ContactDetails);
+    if (donation.donor) setContactDetails(donation.donor);
     setAmount(donation.amount);
 
     let country: string;
@@ -69,33 +69,42 @@ function FailedDonation({
     localStorage.setItem("countryCode", country);
     setcurrency(donation.currency);
     if (donation.giftRequest) {
-      setisGift(donation.giftRequest.recipientName ? true : false);
+      const { giftRequest } = donation;
+      setisGift(giftRequest.recipientName ? true : false);
 
-      const _giftDetails = {
-        type: donation.giftRequest.type || null,
-        recipientName: donation.giftRequest.recipientName || "",
-        recipientEmail: donation.giftRequest.recipientEmail || "",
-        message: donation.giftRequest.message || "",
-        ...(donation.giftRequest.type === "direct"
-          ? { recipient: donation.giftRequest.recipient }
-          : {}),
+      const _giftDetails: SentGift = {
+        ...(giftRequest.type === "invitation"
+          ? {
+              type: giftRequest.type,
+              recipientName: giftRequest.recipientName || "",
+              recipientEmail: giftRequest.recipientEmail || "",
+              message: giftRequest.message || "",
+            }
+          : {
+              type: giftRequest.type,
+              recipient: giftRequest.recipient,
+              recipientName: "",
+              message: "",
+            }),
       };
       // TODO - Gift type invitation and direct will have different properties
       setGiftDetails(_giftDetails);
     }
 
     // TODO - Test this again after backend is updated
-    setfrequency(donation.isRecurrent ? donation.frequency : "once");
+    setfrequency(
+      donation.isRecurrent && donation.frequency ? donation.frequency : "once"
+    );
     await loadPaymentSetup({
       projectGUID: donation.destination.id,
       paymentSetupCountry: country,
       shouldSetPaymentDetails: true,
     });
-    setcallbackUrl(donation.metadata.callback_url);
-    setCallbackMethod(donation.metadata.callback_method);
-    setUtmCampaign(donation.metadata?.utm_campaign);
-    setUtmMedium(donation.metadata?.utm_medium);
-    setUtmSource(donation.metadata?.utm_source);
+    setcallbackUrl(donation.metadata?.callback_url || "");
+    setCallbackMethod(donation.metadata?.callback_method || "");
+    setUtmCampaign(donation.metadata?.utm_campaign || "");
+    setUtmMedium(donation.metadata?.utm_medium || "");
+    setUtmSource(donation.metadata?.utm_source || "");
     setredirectstatus("");
     setdonationStep(3);
   }

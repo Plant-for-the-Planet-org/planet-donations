@@ -17,8 +17,8 @@ import CloseIcon from "public/assets/icons/CloseIcon";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { validateToken } from "src/Utils/tokenActions";
 import { APIError, handleError } from "@planet-sdk/common";
-import { ContactDetails } from "src/Common/Types";
-import { User } from "src/Common/Types/user";
+import { ContactDetails } from "@planet-sdk/common";
+import { User } from "@planet-sdk/common/build/types/user";
 
 function Authentication(): ReactElement {
   const {
@@ -81,7 +81,7 @@ function Authentication(): ReactElement {
             city: profile.address.city ? profile.address.city : "",
             zipCode: profile.address.zipCode ? profile.address.zipCode : "",
             country: profile.address.country ? profile.address.country : "",
-            companyname: profile.name || "",
+            companyname: (profile.type !== "individual" && profile.name) || "",
             tin: "",
           };
           setContactDetails(newContactDetails);

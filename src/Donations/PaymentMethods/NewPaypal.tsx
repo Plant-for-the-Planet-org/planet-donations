@@ -16,6 +16,7 @@ import {
   PaypalApproveData,
   PaypalErrorData,
 } from "src/Common/Types";
+import { PaymentGateway } from "@planet-sdk/common";
 
 interface Props {
   paymentSetup: PaymentOptions;
@@ -24,7 +25,7 @@ interface Props {
   currency: string;
   donationID: string;
   payDonationFunction: (
-    gateway: string,
+    gateway: PaymentGateway,
     method: string,
     providerObject?: PaypalApproveData | PaypalErrorData
   ) => Promise<void>;

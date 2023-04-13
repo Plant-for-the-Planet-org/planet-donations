@@ -3,48 +3,21 @@ import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
 import { Dispatch, SetStateAction } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
+import {
+  NoGift,
+  SentDirectGift,
+  SentInvitationGift,
+  ContactDetails,
+  BankTransferDetails,
+  PaymentGateway,
+} from "@planet-sdk/common";
 
-export interface DirectGift {
-  type: "direct";
-  recipientName?: string;
-  recipientTreecounter?: string;
-  recipient: string;
-  recipientEmail?: "";
-  message?: "";
-}
-
-export interface InvitationGift {
-  type: "invitation";
-  recipientName: string;
-  recipientEmail: string;
-  message: string;
-}
-
-export interface DefaultGift {
-  type: null;
-  recipientName: string;
-  recipientEmail: "";
-  message: "";
-}
-
-export type GiftDetails = InvitationGift | DirectGift | DefaultGift;
-
-export interface ContactDetails {
-  firstname: string;
-  lastname: string;
-  tin?: string | null;
-  email: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  country: string;
-  companyname?: string | null;
-  name?: string; //Check if this is still there. Possible legacy.
-}
+/** planet-donations only allows direct or invitation gifts */
+export type SentGift = SentDirectGift | SentInvitationGift;
 
 export interface PaymentProviderRequest {
   account?: string;
-  gateway: string;
+  gateway: PaymentGateway;
   method?: string;
   source?:
     | {
@@ -64,7 +37,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: ContactDetails;
-  giftDetails: GiftDetails;
+  giftDetails: SentGift | NoGift;
   isGift: boolean;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
@@ -83,7 +56,7 @@ export interface CreateDonationFunctionProps {
 }
 
 export interface PayDonationProps {
-  gateway: string;
+  gateway: PaymentGateway;
   method: string;
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
@@ -126,7 +99,7 @@ export interface CreateDonationDataProps {
   contactDetails: ContactDetails;
   taxDeductionCountry: string | null;
   isGift: boolean;
-  giftDetails: GiftDetails;
+  giftDetails: SentGift | NoGift;
   frequency: string;
   amount?: number | null;
   callbackUrl: string | undefined;
@@ -245,13 +218,6 @@ export interface CurrencyList {
   [key: string]: string;
 }
 
-export interface BankTransferDetails {
-  beneficiary: string;
-  iban: string;
-  bic: string;
-  bankName: string;
-}
-
 export interface OnBehalfDonor {
   firstName: string;
   lastName: string;
@@ -316,12 +282,7 @@ type UpdateDonationSuccessData = {
   id: string;
   response?: {
     type: "transfer_required";
-    account: {
-      beneficiary: string;
-      iban: string;
-      bic: string;
-      bankName: string;
-    };
+    account: BankTransferDetails;
   };
 };
 

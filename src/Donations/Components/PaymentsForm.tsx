@@ -27,7 +27,7 @@ import CheckBox from "../../Common/InputTypes/CheckBox";
 import { useRouter } from "next/router";
 import { CONTACT, PAYMENT } from "src/Utils/donationStepConstants";
 import BankTransfer from "../PaymentMethods/BankTransfer";
-import { APIError, handleError } from "@planet-sdk/common";
+import { APIError, PaymentGateway, handleError } from "@planet-sdk/common";
 import {
   PaypalApproveData,
   PaypalErrorData,
@@ -89,7 +89,7 @@ function PaymentsForm(): ReactElement {
   const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
-    gateway: string,
+    gateway: PaymentGateway,
     method: string,
     providerObject?:
       | string

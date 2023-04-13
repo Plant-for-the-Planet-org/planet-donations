@@ -16,7 +16,7 @@ import ReactDOM from "react-dom";
 import domtoimage from "dom-to-image";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { ContactDetails } from "src/Common/Types";
+import { ContactDetails } from "@planet-sdk/common";
 
 interface ShareOptionsProps {
   treeCount: string;
@@ -44,9 +44,11 @@ const ShareOptions = ({
   const linkToShare = "";
   let textToShare = "";
   // donor may be undefined or empty for legacy donations or redeem
-  if (donor && donor.name) {
+  if (donor && (donor.companyname || donor.firstname)) {
     textToShare = ready
-      ? t("donate:textToShareLinkedin", { name: `${donor.name}` })
+      ? t("donate:textToShareLinkedin", {
+          name: `${donor.companyname || donor.firstname}`,
+        })
       : "";
   } else {
     textToShare = ready ? t("donate:textToShareForMe") : "";

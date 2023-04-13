@@ -4,7 +4,7 @@ import { getPaymentType } from "../../../PaymentMethods/PaymentFunctions";
 import { QueryParamContext } from "../../../../Layout/QueryParamContext";
 import ThankyouMessage from "./../ThankyouMessage";
 import PaymentProgress from "src/Common/ContentLoaders/Donations/PaymentProgress";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface SuccessfulDonationJaneProps {
   donation: Donation;
