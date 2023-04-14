@@ -260,7 +260,7 @@ function ContactsForm(): ReactElement {
                   label={t("email")}
                   variant="outlined"
                   data-test-id="test-email"
-                  disabled={isAuthenticated}
+                  disabled={profile?.email.length !== 0}
                 />
               )}
             />
