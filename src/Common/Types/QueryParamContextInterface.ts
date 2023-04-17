@@ -1,25 +1,28 @@
 import {
-  BankTransferDetails,
-  ContactDetails,
   CurrencyList,
   FetchedProjectDetails,
-  GiftDetails,
   OnBehalfDonor,
   PaymentOptions,
   PlanetCashSignupDetails,
+  SentGift,
 } from ".";
-import { Project } from "./project";
-import { User } from "./user";
-import { Dispatch, SetStateAction } from "react";
-import { Donation } from "./donation";
+import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
+import { User } from "@planet-sdk/common/build/types/user";
+import {
+  Donation,
+  NoGift,
+  ContactDetails,
+  BankTransferDetails,
+} from "@planet-sdk/common/build/types/donation";
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { Dispatch, SetStateAction } from "react";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: Dispatch<SetStateAction<boolean>>;
-  giftDetails: GiftDetails;
-  setGiftDetails: Dispatch<SetStateAction<GiftDetails>>;
+  giftDetails: SentGift | NoGift;
+  setGiftDetails: Dispatch<SetStateAction<SentGift | NoGift>>;
   contactDetails: ContactDetails;
   setContactDetails: Dispatch<SetStateAction<ContactDetails>>;
   country: string;
@@ -109,7 +112,7 @@ export default interface QueryParamContextInterface {
   onBehalfDonor: OnBehalfDonor;
   setOnBehalfDonor: Dispatch<SetStateAction<OnBehalfDonor>>;
   donation: Donation | null;
-  setdonation: Dispatch<SetStateAction<Donation | null>>;
+  setDonation: Dispatch<SetStateAction<Donation | null>>;
   paymentRequest: PaymentRequest | null;
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
   errors: SerializedError[] | null;

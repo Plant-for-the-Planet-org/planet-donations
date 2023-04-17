@@ -16,7 +16,7 @@ import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 import styles from "./PaymentStatus.module.scss";
 import PlanetCashSignup from "../Micros/PlanetCashSignup";
 import { APIError, handleError } from "@planet-sdk/common";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 
 function ThankYou(): ReactElement {
   const { t, ready, i18n } = useTranslation(["common", "country", "donate"]);
@@ -28,7 +28,7 @@ function ThankYou(): ReactElement {
     tenant,
     transferDetails,
     donation,
-    setdonation,
+    setDonation,
     setTransferDetails,
     setErrors,
   } = React.useContext(QueryParamContext);
@@ -43,7 +43,7 @@ function ThankYou(): ReactElement {
       };
       const donation = await apiRequest(requestParams);
       if (donation.status === 200) {
-        setdonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+        setDonation(donation.data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
       }
     } catch (err) {
       setErrors(handleError(err as APIError));

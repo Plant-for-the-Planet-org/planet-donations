@@ -12,7 +12,7 @@ import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { ContactDetails } from "src/Common/Types";
+import { ContactDetails } from "@planet-sdk/common";
 import {
   PaymentMethod,
   StripeCardCvcElementChangeEvent,

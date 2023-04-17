@@ -8,7 +8,7 @@ import ImageComponent from "./ImageComponent";
 import ThankyouMessage from "./ThankyouMessage";
 import { useRouter } from "next/router";
 import ReturnToButton from "./Components/ReturnToButton";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 import { ReactElement } from "react";
 
 interface SuccessfulDonationProps {
