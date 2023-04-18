@@ -5,7 +5,7 @@ import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface Props {
   projectDetails: FetchedProjectDetails;

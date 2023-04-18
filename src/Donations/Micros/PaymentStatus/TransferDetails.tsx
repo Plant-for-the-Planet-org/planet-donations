@@ -5,9 +5,9 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import CopyIcon from "public/assets/icons/CopyIcon";
 import ReturnToButton from "./Components/ReturnToButton";
-import { Donation } from "src/Common/Types/donation";
+import { Donation } from "@planet-sdk/common/build/types/donation";
 import { ReactElement } from "react";
-import { TFunction } from "react-i18next";
+import { TFunction } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 
 interface TransferDetailsProps {

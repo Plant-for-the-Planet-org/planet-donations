@@ -1,9 +1,10 @@
 import React, { ReactElement } from "react";
 import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import { useTranslation } from "next-i18next";
+import { PaymentGateway } from "@planet-sdk/common";
 
 interface Props {
-  onSubmitPayment: (gateway: string, method: string) => Promise<void>;
+  onSubmitPayment: (gateway: PaymentGateway, method: string) => Promise<void>;
 }
 
 function BankTransfer({ onSubmitPayment }: Props): ReactElement {
