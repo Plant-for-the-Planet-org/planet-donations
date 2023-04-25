@@ -1058,3 +1058,17 @@
     text-align: left;
   }
 }
+
+.verified-icon-popup {
+  max-width: 800px;
+  padding: 0.5rem;
+  margin-right: 20px;
+  pointer-events: none,
+}
+
+.MuiTypography-root {
+  display: inline;
+}
+.MuiPaper-root {
+  padding: 10px;
+}

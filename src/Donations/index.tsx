@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import { Popover, Typography } from "@mui/material";
 
 function Donations(): ReactElement {
   const router = useRouter();
@@ -143,6 +144,19 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   return (
     <div
       style={{
@@ -270,7 +284,33 @@ function DonationInfo() {
                   {projectDetails.name}
                   {isApproved && (
                     <div className="d-inline" style={{ marginLeft: "10px" }}>
-                      <VerifiedIcon sx={{ color: "#fff" }} />
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon sx={{ color: "#fff" }} />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className="verified-icon-popup"
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: isMobile ? "center" : "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                        marginThreshold={0}
+                      >
+                        <Typography>{t("verifiedIconInfo")}</Typography>
+                      </Popover>
                     </div>
                   )}
                 </a>
