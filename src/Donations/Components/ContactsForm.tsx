@@ -425,7 +425,7 @@ function ContactsForm(): ReactElement {
             <></>
           )}
 
-          {profile === null && (
+          {(profile === null || profile.type === undefined) && (
             <div className="contacts-isCompany-toggle mt-20">
               <label htmlFor="isCompany-toggle">
                 {t("isACompanyDonation")}
@@ -449,7 +449,10 @@ function ContactsForm(): ReactElement {
             </div>
           )}
 
-          {isCompany || (profile && profile.type !== "individual") ? (
+          {isCompany ||
+          (profile &&
+            profile.type !== "individual" &&
+            profile.type !== undefined) ? (
             <div
               className={`form-field ${profile === null ? "mt-20" : "mt-30"}`}
             >
@@ -464,7 +467,7 @@ function ContactsForm(): ReactElement {
                     label={t("companyName")}
                     variant="outlined"
                     data-test-id="test-companyname"
-                    disabled={profile !== null}
+                    disabled={profile !== null && profile.type !== undefined}
                     helperText={
                       profile !== null ? t("companyUneditableHelpText") : ""
                     }
