@@ -20,9 +20,9 @@ import {
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { FetchedProjectDetails } from "src/Common/Types";
+import { Popover, Theme, Typography, createStyles } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-import { FetchedProjectDetails } from "src/Common/Types";
 
 function Donations(): ReactElement {
   const router = useRouter();
