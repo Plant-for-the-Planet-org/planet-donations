@@ -20,6 +20,7 @@ import {
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 function Donations(): ReactElement {
   const router = useRouter();
@@ -267,6 +268,11 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
+                  {isApproved && (
+                    <div className="d-inline" style={{ marginLeft: "10px" }}>
+                      <VerifiedIcon sx={{ color: "#fff" }} />
+                    </div>
+                  )}
                 </a>
               ) : (
                 <h1
@@ -274,6 +280,7 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name ? projectDetails.name : ""}
+                  {projectDetails.name && <VerifiedIcon />}
                 </h1>
               )}
 
