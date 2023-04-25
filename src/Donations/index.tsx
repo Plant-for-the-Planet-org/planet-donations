@@ -19,7 +19,21 @@ import {
 } from "src/Utils/donationStepConstants";
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { FetchedProjectDetails } from "src/Common/Types";
+import { Popover, Theme, Typography, createStyles } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    popover: {
+      pointerEvents: "none",
+    },
+    paper: {
+      padding: theme.spacing(1),
+    },
+  })
+);
 
 function Donations(): ReactElement {
   const router = useRouter();
@@ -96,6 +110,8 @@ function DonationInfo() {
     onBehalfDonor,
     isPlanetCashActive,
     country,
+    isApproved,
+    isTopProject,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -140,6 +156,20 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   return (
     <div
       style={{
@@ -169,6 +199,9 @@ function DonationInfo() {
         >
           <BackButton color={"#000"} />
         </button>
+      )}
+      {isApproved && isTopProject && router.query.to && (
+        <div className={"topProjectBadge theme-light"}>Top Project</div>
       )}
       <div className="background-image-overlay"></div>
       {projectDetails ? (
@@ -262,6 +295,40 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name}
+                  {isApproved && (
+                    <div className="d-inline" style={{ marginLeft: "10px" }}>
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon sx={{ color: "#fff" }} />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className={`${classes.popover} verified-icon-popup`}
+                        classes={{
+                          paper: classes.paper,
+                        }}
+                        open={open}
+                        anchorEl={anchorEl}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: isMobile ? "center" : "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                        marginThreshold={0}
+                      >
+                        <Typography>{t("verifiedIconInfo")}</Typography>
+                      </Popover>
+                    </div>
+                  )}
                 </a>
               ) : (
                 <h1
