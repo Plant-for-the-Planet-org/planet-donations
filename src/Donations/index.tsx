@@ -324,7 +324,35 @@ function DonationInfo() {
                 >
                   {projectDetails.name ? projectDetails.name : ""}
                   {projectDetails.name && projectDetails?.isApproved && (
-                    <VerifiedIcon />
+                    <div className="d-inline" style={{ marginLeft: "10px" }}>
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon sx={{ color: "#fff" }} />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className="verified-icon-popup"
+                        open={open}
+                        anchorEl={anchorelement}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: isMobile ? "center" : "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                        marginThreshold={0}
+                      >
+                        <Typography>{t("verifiedIconInfo")}</Typography>
+                      </Popover>
+                    </div>
                   )}
                 </h1>
               )}
