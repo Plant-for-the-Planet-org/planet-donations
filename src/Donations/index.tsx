@@ -98,8 +98,6 @@ function DonationInfo() {
     onBehalfDonor,
     isPlanetCashActive,
     country,
-    isApproved,
-    isTopProject,
   } = React.useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = React.useState(false);
@@ -144,19 +142,21 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [anchorelement, setAnchorelement] = React.useState<HTMLElement | null>(
+    null
+  );
 
   const handlePopoverOpen = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorelement(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
-    setAnchorEl(null);
+    setAnchorelement(null);
   };
 
-  const open = Boolean(anchorEl);
+  const open = Boolean(anchorelement);
   return (
     <div
       style={{
@@ -177,19 +177,20 @@ function DonationInfo() {
         className="background-image"
         alt="Background image with trees"
       /> */}
-
-      {isMobile && (
-        <button
-          id={"backButtonSingleP"}
-          className={"callbackButton"}
-          onClick={goBack}
-        >
-          <BackButton color={"#000"} />
-        </button>
-      )}
-      {isApproved && isTopProject && router.query.to && (
-        <div className={"topProjectBadge theme-light"}>Top Project</div>
-      )}
+      <div className="back-button-project-badge-container">
+        {isMobile && (
+          <button
+            id={"backButtonSingleP"}
+            className={"callbackButton"}
+            onClick={goBack}
+          >
+            <BackButton color={"#000"} />
+          </button>
+        )}
+        {projectDetails?.isApproved && projectDetails?.isTopProject && (
+          <div className={"topProjectBadge theme-light"}>Top Project</div>
+        )}
+      </div>
       <div className="background-image-overlay"></div>
       {projectDetails ? (
         <div className="donations-info text-white">
@@ -279,10 +280,12 @@ function DonationInfo() {
                   target="_blank"
                   href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
                   className="title-text text-white"
-                  style={{ marginTop: "10px" }}
+                  style={{
+                    marginTop: "10px",
+                  }}
                 >
                   {projectDetails.name}
-                  {isApproved && (
+                  {projectDetails?.isApproved && (
                     <div className="d-inline" style={{ marginLeft: "10px" }}>
                       <Typography
                         aria-owns={open ? "mouse-over-popover" : undefined}
@@ -296,7 +299,7 @@ function DonationInfo() {
                         id="mouse-over-popover"
                         className="verified-icon-popup"
                         open={open}
-                        anchorEl={anchorEl}
+                        anchorEl={anchorelement}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
@@ -320,7 +323,9 @@ function DonationInfo() {
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name ? projectDetails.name : ""}
-                  {projectDetails.name && <VerifiedIcon />}
+                  {projectDetails.name && projectDetails?.isApproved && (
+                    <VerifiedIcon />
+                  )}
                 </h1>
               )}
 

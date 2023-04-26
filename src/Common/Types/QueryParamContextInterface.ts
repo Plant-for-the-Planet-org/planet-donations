@@ -117,6 +117,4 @@ export default interface QueryParamContextInterface {
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
   errors: SerializedError[] | null;
   setErrors: Dispatch<SetStateAction<SerializedError[] | null>>;
-  isApproved: boolean;
-  isTopProject: boolean;
 }

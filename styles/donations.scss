@@ -146,15 +146,20 @@
     }
   }
 }
+
+.back-button-project-badge-container {
+  display: flex;
+}
 .topProjectBadge{
-  position: absolute;
-  top: 30px;
-  right: 34px;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
   background-color: rgba(0, 0, 0, 0.7);
   padding: 4px 12px;
   color: #fff;
   font-weight: 700;
   font-size: 12px;
+  margin-right: 20px;
 }
 
 .donations-transaction-details {
