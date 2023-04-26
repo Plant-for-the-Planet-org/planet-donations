@@ -275,18 +275,20 @@ function DonationInfo() {
           {donationStep && donationStep > 0 ? (
             <>
               {projectDetails.purpose === "trees" ? (
-                <a
-                  rel="noreferrer"
-                  target="_blank"
-                  href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-                  className="title-text text-white"
-                  style={{
-                    marginTop: "10px",
-                  }}
-                >
-                  {projectDetails.name}
+                <div className="project-title-container">
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
+                    className="title-text text-white"
+                    style={{
+                      marginTop: "10px",
+                    }}
+                  >
+                    {projectDetails.name}
+                  </a>
                   {projectDetails?.isApproved && (
-                    <div className="d-inline" style={{ marginLeft: "10px" }}>
+                    <div style={{ marginLeft: "10px", marginTop: "auto" }}>
                       <Typography
                         aria-owns={open ? "mouse-over-popover" : undefined}
                         aria-haspopup="true"
@@ -316,7 +318,7 @@ function DonationInfo() {
                       </Popover>
                     </div>
                   )}
-                </a>
+                </div>
               ) : (
                 <h1
                   className="title-text text-white"
