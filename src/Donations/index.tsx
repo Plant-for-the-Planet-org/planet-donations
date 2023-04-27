@@ -20,6 +20,8 @@ import {
 import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import { Popover, Typography } from "@mui/material";
 
 function Donations(): ReactElement {
   const router = useRouter();
@@ -140,6 +142,21 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
+  const [anchorElement, setAnchorElement] = React.useState<HTMLElement | null>(
+    null
+  );
+
+  const handlePopoverOpen = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    setAnchorElement(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorElement(null);
+  };
+
+  const open = Boolean(anchorElement);
   return (
     <div
       style={{
@@ -160,16 +177,20 @@ function DonationInfo() {
         className="background-image"
         alt="Background image with trees"
       /> */}
-
-      {isMobile && (
-        <button
-          id={"backButtonSingleP"}
-          className={"callbackButton"}
-          onClick={goBack}
-        >
-          <BackButton color={"#000"} />
-        </button>
-      )}
+      <div className="back-button-project-badge-container">
+        {isMobile && (
+          <button
+            id={"backButtonSingleP"}
+            className={"callbackButton"}
+            onClick={goBack}
+          >
+            <BackButton color={"#000"} />
+          </button>
+        )}
+        {projectDetails?.isApproved && projectDetails?.isTopProject && (
+          <div className={"topProjectBadge theme-light"}>Top Project</div>
+        )}
+      </div>
       <div className="background-image-overlay"></div>
       {projectDetails ? (
         <div className="donations-info text-white">
@@ -253,22 +274,89 @@ function DonationInfo() {
 
           {donationStep && donationStep > 0 ? (
             <>
-              {projectDetails.purpose === "trees" ? (
-                <a
-                  rel="noreferrer"
-                  target="_blank"
-                  href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-                  className="title-text text-white"
-                  style={{ marginTop: "10px" }}
-                >
-                  {projectDetails.name}
-                </a>
+              {projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation" ? (
+                <div className="project-title-container">
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
+                    className="title-text text-white"
+                    style={{
+                      marginTop: "10px",
+                    }}
+                  >
+                    {projectDetails.name}
+                  </a>
+                  {projectDetails?.isApproved && (
+                    <div style={{ marginLeft: "10px", marginTop: "auto" }}>
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon sx={{ color: "#fff" }} />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className="verified-icon-popup"
+                        open={open}
+                        anchorEl={anchorElement}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: isMobile ? "center" : "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                        marginThreshold={0}
+                      >
+                        <Typography>{t("verifiedIconInfo")}</Typography>
+                      </Popover>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <h1
                   className="title-text text-white"
                   style={{ marginTop: "10px" }}
                 >
                   {projectDetails.name ? projectDetails.name : ""}
+                  {projectDetails.name && projectDetails?.isApproved && (
+                    <div className="d-inline" style={{ marginLeft: "10px" }}>
+                      <Typography
+                        aria-owns={open ? "mouse-over-popover" : undefined}
+                        aria-haspopup="true"
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        <VerifiedIcon sx={{ color: "#fff" }} />
+                      </Typography>
+                      <Popover
+                        id="mouse-over-popover"
+                        className="verified-icon-popup"
+                        open={open}
+                        anchorEl={anchorElement}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                        transformOrigin={{
+                          vertical: "top",
+                          horizontal: isMobile ? "center" : "left",
+                        }}
+                        onClose={handlePopoverClose}
+                        disableRestoreFocus
+                        marginThreshold={0}
+                      >
+                        <Typography>{t("verifiedIconInfo")}</Typography>
+                      </Popover>
+                    </div>
+                  )}
                 </h1>
               )}
 
