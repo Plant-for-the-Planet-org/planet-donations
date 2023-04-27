@@ -142,21 +142,21 @@ function DonationInfo() {
     const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
-  const [anchorelement, setAnchorelement] = React.useState<HTMLElement | null>(
+  const [anchorElement, setAnchorElement] = React.useState<HTMLElement | null>(
     null
   );
 
   const handlePopoverOpen = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    setAnchorelement(event.currentTarget);
+    setAnchorElement(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
-    setAnchorelement(null);
+    setAnchorElement(null);
   };
 
-  const open = Boolean(anchorelement);
+  const open = Boolean(anchorElement);
   return (
     <div
       style={{
@@ -301,7 +301,7 @@ function DonationInfo() {
                         id="mouse-over-popover"
                         className="verified-icon-popup"
                         open={open}
-                        anchorEl={anchorelement}
+                        anchorEl={anchorElement}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
@@ -339,7 +339,7 @@ function DonationInfo() {
                         id="mouse-over-popover"
                         className="verified-icon-popup"
                         open={open}
-                        anchorEl={anchorelement}
+                        anchorEl={anchorElement}
                         anchorOrigin={{
                           vertical: "bottom",
                           horizontal: "left",
