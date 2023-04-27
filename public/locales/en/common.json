@@ -177,7 +177,7 @@
   "planetCashIUnderstand": "I understand that PlanetCash donation/payments are non-refundable, and unallocated payments will be auto allocated to projects on the Platform after six months of Payment.",
   "createPlanetCashAccount": "Create PlanetCash Account",
   "myContributionIsPartOfThat": "And my contribution is a part of that.",
-  "verifiedIconInfo": "This project has been verified by a multi day field review. Click to visit the project details and learn more.",
+  "verifiedIconInfo": "This project has been verified by a multi day field review. Click on the name to visit the project details and learn more.",
   "notFound": "Resource not found",
   "unauthorized": "Not Authorized",
   "validationError": "Validation Error",
