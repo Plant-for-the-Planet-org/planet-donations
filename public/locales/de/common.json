@@ -203,5 +203,6 @@
   "planet_cash_insufficient_credit": "Unzureichender Kredit",
   "planet_cash_invalid_project": "Ungültiges Projekt",
   "active_account_exists": "Aktives PlanetCash-Konto existiert bereits.",
-  "duplicate_account": "Das Konto existiert bereits."
+  "duplicate_account": "Das Konto existiert bereits.",
+  "loading": "Laden ..."
 }
