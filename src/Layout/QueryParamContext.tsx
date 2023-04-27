@@ -512,6 +512,8 @@ const QueryParamProvider: FC = ({ children }) => {
           taxDeductionCountries: paymentSetup.taxDeductionCountries,
           image: paymentSetup.image,
           ownerAvatar: paymentSetup.ownerAvatar,
+          isApproved: paymentSetup.isApproved ? true : false,
+          isTopProject: paymentSetup.isTopProject ? true : false,
         });
       }
       setIsPaymentOptionsLoading(false);

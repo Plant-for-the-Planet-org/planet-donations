@@ -290,6 +290,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             taxDeductionCountries: paymentOptionsData.taxDeductionCountries,
             image: paymentOptionsData.image,
             ownerAvatar: paymentOptionsData.ownerAvatar,
+            isApproved: paymentOptionsData.isApproved ? true : false,
+            isTopProject: paymentOptionsData.isTopProject ? true : false,
           };
           donationStep = 1;
         }
@@ -372,6 +374,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
               taxDeductionCountries: paymentSetupData.taxDeductionCountries,
               image: paymentSetupData.image,
               ownerAvatar: paymentSetupData.ownerAvatar,
+              isApproved: paymentSetupData.isApproved ? true : false,
+              isTopProject: paymentSetupData.isTopProject ? true : false,
             };
             donationStep = 3;
           }

@@ -177,6 +177,7 @@
   "planetCashIUnderstand": "Ich verstehe, dass PlanetCash Spenden/Zahlungen nicht zurückerstattet werden können, und dass nicht zugewiesene Zahlungen nach sechs Monaten automatisch Projekten auf der Plattform zugewiesen werden.",
   "createPlanetCashAccount": "PlanetCash Konto erstellen",
   "myContributionIsPartOfThat": "Und meine Spende ist Teil davon.",
+  "verifiedIconInfo": "Dieses Projekt wurde in einer mehrtägigen Feldstudie überprüft. Klicken Sie auf den Projektnamen um die Details zu sehen und mehr zu erfahren.",
   "notFound": "Ressource nicht gefunden",
   "unauthorized": "Nicht autorisiert",
   "validationError": "Validierungsfehler",
@@ -202,5 +203,6 @@
   "planet_cash_insufficient_credit": "Unzureichender Kredit",
   "planet_cash_invalid_project": "Ungültiges Projekt",
   "active_account_exists": "Aktives PlanetCash-Konto existiert bereits.",
-  "duplicate_account": "Das Konto existiert bereits."
+  "duplicate_account": "Das Konto existiert bereits.",
+  "loading": "Laden ..."
 }
