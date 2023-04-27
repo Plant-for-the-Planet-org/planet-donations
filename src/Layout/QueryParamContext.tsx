@@ -151,8 +151,6 @@ const QueryParamProvider: FC = ({ children }) => {
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
     null
   );
-  const [isApproved, setIsApproved] = React.useState(false);
-  const [isTopProject, setIsTopProject] = React.useState(false);
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
 
@@ -619,8 +617,6 @@ const QueryParamProvider: FC = ({ children }) => {
         setPaymentRequest,
         errors,
         setErrors,
-        isTopProject,
-        isApproved,
       }}
     >
       {children}
