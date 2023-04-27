@@ -274,7 +274,8 @@ function DonationInfo() {
 
           {donationStep && donationStep > 0 ? (
             <>
-              {projectDetails.purpose === "trees" ? (
+              {projectDetails.purpose === "trees" ||
+              projectDetails.purpose === "conservation" ? (
                 <div className="project-title-container">
                   <a
                     rel="noreferrer"
