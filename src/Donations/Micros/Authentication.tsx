@@ -91,9 +91,12 @@ function Authentication(): ReactElement {
         const newContactDetails = {
           firstname: authUser?.nickname ? authUser.nickname : "",
           email: authUser?.email ? authUser.email : "",
+        };
+        const newProfile = {
+          ...newContactDetails,
           displayName: authUser?.nickname ? authUser.nickname : "",
         };
-        setprofile(newContactDetails); //TODOO - resolve TS warning
+        setprofile(newProfile); //TODOO - resolve TS warning
         setContactDetails((contactDetails) => {
           return { ...contactDetails, ...newContactDetails };
         });
@@ -102,9 +105,12 @@ function Authentication(): ReactElement {
       const newContactDetails = {
         firstname: authUser?.nickname ? authUser.nickname : "",
         email: authUser?.email ? authUser.email : "",
+      };
+      const newProfile = {
+        ...newContactDetails,
         displayName: authUser?.nickname ? authUser.nickname : "",
       };
-      setprofile(newContactDetails); //TODOO - resolve TS warning
+      setprofile(newProfile); //TODOO - resolve TS warning
       setContactDetails((contactDetails) => {
         return { ...contactDetails, ...newContactDetails };
       });
