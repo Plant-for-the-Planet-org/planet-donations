@@ -274,9 +274,9 @@ function DonationInfo() {
 
           {donationStep && donationStep > 0 ? (
             <>
-              {projectDetails.purpose === "trees" ||
-              projectDetails.purpose === "conservation" ? (
-                <div className="project-title-container">
+              <div className="project-title-container">
+                {projectDetails.purpose === "trees" ||
+                projectDetails.purpose === "conservation" ? (
                   <a
                     rel="noreferrer"
                     target="_blank"
@@ -288,78 +288,46 @@ function DonationInfo() {
                   >
                     {projectDetails.name}
                   </a>
-                  {projectDetails?.isApproved && (
-                    <div style={{ marginLeft: "10px", marginTop: "auto" }}>
-                      <Typography
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      >
-                        <VerifiedIcon sx={{ color: "#fff" }} />
-                      </Typography>
-                      <Popover
-                        id="mouse-over-popover"
-                        className="verified-icon-popup"
-                        open={open}
-                        anchorEl={anchorElement}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: isMobile ? "center" : "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                        marginThreshold={0}
-                      >
-                        <Typography>{t("verifiedIconInfo")}</Typography>
-                      </Popover>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <h1
-                  className="title-text text-white"
-                  style={{ marginTop: "10px" }}
-                >
-                  {projectDetails.name ? projectDetails.name : ""}
-                  {projectDetails.name && projectDetails?.isApproved && (
-                    <div className="d-inline" style={{ marginLeft: "10px" }}>
-                      <Typography
-                        aria-owns={open ? "mouse-over-popover" : undefined}
-                        aria-haspopup="true"
-                        onMouseEnter={handlePopoverOpen}
-                        onMouseLeave={handlePopoverClose}
-                      >
-                        <VerifiedIcon sx={{ color: "#fff" }} />
-                      </Typography>
-                      <Popover
-                        id="mouse-over-popover"
-                        className="verified-icon-popup"
-                        open={open}
-                        anchorEl={anchorElement}
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "left",
-                        }}
-                        transformOrigin={{
-                          vertical: "top",
-                          horizontal: isMobile ? "center" : "left",
-                        }}
-                        onClose={handlePopoverClose}
-                        disableRestoreFocus
-                        marginThreshold={0}
-                      >
-                        <Typography>{t("verifiedIconInfo")}</Typography>
-                      </Popover>
-                    </div>
-                  )}
-                </h1>
-              )}
-
+                ) : (
+                  <h1
+                    className="title-text text-white"
+                    style={{ marginTop: "10px" }}
+                  >
+                    {projectDetails.name ? projectDetails.name : ""}
+                  </h1>
+                )}
+                {projectDetails.name && projectDetails?.isApproved && (
+                  <div className="d-flex" style={{ marginLeft: "10px" }}>
+                    <Typography
+                      aria-owns={open ? "mouse-over-popover" : undefined}
+                      aria-haspopup="true"
+                      onMouseEnter={handlePopoverOpen}
+                      onMouseLeave={handlePopoverClose}
+                    >
+                      <VerifiedIcon sx={{ color: "#fff" }} />
+                    </Typography>
+                    <Popover
+                      id="mouse-over-popover"
+                      className="verified-icon-popup"
+                      open={open}
+                      anchorEl={anchorElement}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: isMobile ? "center" : "left",
+                      }}
+                      onClose={handlePopoverClose}
+                      disableRestoreFocus
+                      marginThreshold={0}
+                    >
+                      <Typography>{t("verifiedIconInfo")}</Typography>
+                    </Popover>
+                  </div>
+                )}
+              </div>
               {projectDetails.purpose === "funds" ||
               projectDetails.purpose === "bouquet" ? (
                 <p className="text-white mt-10">
