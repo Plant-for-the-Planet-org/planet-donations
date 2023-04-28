@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 import BackButton from "public/assets/icons/BackButton";
 import { FetchedProjectDetails } from "src/Common/Types";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import { Popover, Typography } from "@mui/material";
+import { Box, Popover, Typography } from "@mui/material";
 
 function Donations(): ReactElement {
   const router = useRouter();
@@ -322,6 +322,11 @@ function DonationInfo() {
                       onClose={handlePopoverClose}
                       disableRestoreFocus
                       marginThreshold={0}
+                      PaperProps={{
+                        style: {
+                          maxWidth: isMobile ? "600px" : "20%",
+                        },
+                      }}
                     >
                       <Typography>{t("verifiedIconInfo")}</Typography>
                     </Popover>
