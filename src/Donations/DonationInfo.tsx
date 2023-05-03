@@ -19,6 +19,7 @@ import { QueryParamContext } from "../Layout/QueryParamContext";
 
 function DonationInfo(): ReactElement {
   const { t, i18n } = useTranslation("common");
+  const router = useRouter();
   const {
     projectDetails,
     donationID,
@@ -39,6 +40,8 @@ function DonationInfo(): ReactElement {
   } = useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
@@ -75,13 +78,10 @@ function DonationInfo(): ReactElement {
       </div>
     );
   };
-  const router = useRouter();
 
   const goBack = () => {
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
-
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
@@ -92,6 +92,7 @@ function DonationInfo(): ReactElement {
   };
 
   const open = Boolean(anchorElement);
+
   return (
     <div
       style={{
@@ -107,11 +108,6 @@ function DonationInfo(): ReactElement {
       }}
       className="donations-info-container"
     >
-      {/* <img
-        src={getTenantBackground(tenant, projectDetails)}
-        className="background-image"
-        alt="Background image with trees"
-      /> */}
       <div className="back-button-project-badge-container">
         {isMobile && (
           <button
@@ -129,7 +125,6 @@ function DonationInfo(): ReactElement {
       <div className="background-image-overlay"></div>
       {projectDetails ? (
         <div className="donations-info text-white">
-          {/* <img src={getImageUrl('profile', 'avatar', userInfo.profilePic)} /> */}
           {donationStep &&
             donationStep > 0 &&
             projectDetails.ownerName &&
