@@ -35,6 +35,7 @@ function DonationInfo(): ReactElement {
     onBehalfDonor,
     isPlanetCashActive,
     country,
+    callbackUrl,
   } = useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -75,10 +76,11 @@ function DonationInfo(): ReactElement {
     );
   };
   const router = useRouter();
+
   const goBack = () => {
-    const callbackUrl = router.query.callback_url;
     router.push(`${callbackUrl ? callbackUrl : "/"}`);
   };
+
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
