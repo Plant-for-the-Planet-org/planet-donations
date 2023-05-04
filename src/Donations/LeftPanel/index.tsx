@@ -10,11 +10,10 @@ import { useRouter } from "next/router";
 import { Typography, Popover } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import BackButton from "public/assets/icons/BackButton";
-import { FetchedProjectDetails } from "../../Common/Types";
+import LeftPanelContainer from "./LeftPanelContainer";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getImageUrl from "../../Utils/getImageURL";
-import { getTenantBackground } from "../../Utils/getTenantBackground";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 
 function LeftPanel(): ReactElement {
@@ -94,19 +93,10 @@ function LeftPanel(): ReactElement {
   const open = Boolean(anchorElement);
 
   return (
-    <div
-      style={{
-        backgroundImage:
-          projectDetails || donationStep === 0
-            ? `url(${getTenantBackground(
-                tenant,
-                projectDetails as FetchedProjectDetails | null
-              )})`
-            : "none",
-        backgroundSize: "cover",
-        backgroundPosition: "center center",
-      }}
-      className="donations-info-container"
+    <LeftPanelContainer
+      projectDetails={projectDetails}
+      donationStep={donationStep}
+      tenant={tenant}
     >
       <div className="back-button-project-badge-container">
         {isMobile && (
@@ -122,7 +112,6 @@ function LeftPanel(): ReactElement {
           <div className={"topProjectBadge theme-light"}>Top Project</div>
         )}
       </div>
-      <div className="background-image-overlay"></div>
       {projectDetails ? (
         <div className="donations-info text-white">
           {donationStep &&
@@ -392,7 +381,7 @@ function LeftPanel(): ReactElement {
           )}
         </div>
       ) : null}
-    </div>
+    </LeftPanelContainer>
   );
 }
 

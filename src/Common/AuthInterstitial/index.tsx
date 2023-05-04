@@ -2,7 +2,7 @@ import { ReactElement, useContext } from "react";
 import { useTranslation } from "next-i18next";
 import CircularProgress from "@mui/material/CircularProgress";
 import styles from "./AuthInterstitial.module.scss";
-import { getTenantBackground } from "src/Utils/getTenantBackground";
+import LeftPanelContainer from "src/Donations/LeftPanel/LeftPanelContainer";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 
 const AuthInterstitial = (): ReactElement => {
@@ -17,17 +17,8 @@ const AuthInterstitial = (): ReactElement => {
     >
       <div className="donations-container">
         <div className="donations-card-container">
-          {/* Left Panel */}
-          <div
-            style={{
-              backgroundImage: `url(${getTenantBackground(tenant, null)})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center center",
-            }}
-            className="donations-info-container"
-          >
-            <div className="background-image-overlay"></div>
-          </div>
+          {/* Left Panel (empty in this case) */}
+          <LeftPanelContainer tenant={tenant} />
           {/* Right Panel */}
           <div
             className="donations-forms-container"
