@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect } from "react";
 import { useRouter } from "next/router";
-import DonationInfo from "./DonationInfo";
+import LeftPanel from "./LeftPanel";
 import ContactsForm from "./Components/ContactsForm";
 import { QueryParamContext } from "../Layout/QueryParamContext";
 import PaymentsForm from "./Components/PaymentsForm";
@@ -59,7 +59,7 @@ function Donations(): ReactElement {
     <div className="donations-container">
       <div className="donations-card-container">
         {/* Left panel */}
-        <DonationInfo />
+        <LeftPanel />
 
         {/* Right panel */}
         {donationStep === 0 && <SelectProject />}
