@@ -9,8 +9,8 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { Typography, Popover } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import BackButton from "public/assets/icons/BackButton";
 import LeftPanelContainer from "./LeftPanelContainer";
+import BackButton from "../../Common/BackButton";
 import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getImageUrl from "../../Utils/getImageURL";
@@ -79,10 +79,6 @@ function LeftPanel(): ReactElement {
     );
   };
 
-  const goBack = () => {
-    router.push(`${callbackUrl ? callbackUrl : "/"}`);
-  };
-
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
   };
@@ -100,15 +96,7 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {isMobile && (
-          <button
-            id={"backButtonSingleP"}
-            className={"callbackButton"}
-            onClick={goBack}
-          >
-            <BackButton color={"#000"} />
-          </button>
-        )}
+        {isMobile && <BackButton backUrl={callbackUrl || "/"} />}
         {projectDetails &&
           projectDetails.purpose !== "planet-cash-signup" &&
           projectDetails.isApproved &&

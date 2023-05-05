@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import COUNTRY_ADDRESS_POSTALS from "./../../Utils/countryZipCode";
-import BackButton from "../../../public/assets/icons/BackButton";
+import BackButtonIcon from "../../../public/assets/icons/BackButtonIcon";
 import GeocoderArcGIS from "geocoder-arcgis";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
@@ -180,7 +180,7 @@ function ContactsForm(): ReactElement {
             }}
             style={{ marginRight: "12px" }}
           >
-            <BackButton
+            <BackButtonIcon
               color={
                 theme === "theme-light"
                   ? themeProperties.light.primaryFontColor
