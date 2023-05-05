@@ -96,7 +96,9 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {isMobile && <BackButton backUrl={callbackUrl || "/"} />}
+        {isMobile && (callbackUrl || donationStep !== 0) && (
+          <BackButton backUrl={callbackUrl || "/"} />
+        )}
         {projectDetails &&
           projectDetails.purpose !== "planet-cash-signup" &&
           projectDetails.isApproved &&
