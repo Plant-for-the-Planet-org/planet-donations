@@ -15,6 +15,7 @@ import getFormatedCurrency from "../../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getImageUrl from "../../Utils/getImageURL";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
+import LeftPanelHeader from "./LeftPanelHeader";
 
 function LeftPanel(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -98,7 +99,7 @@ function LeftPanel(): ReactElement {
       donationStep={donationStep}
       tenant={tenant}
     >
-      <div className="back-button-project-badge-container">
+      <LeftPanelHeader>
         {isMobile && (
           <button
             id={"backButtonSingleP"}
@@ -108,10 +109,13 @@ function LeftPanel(): ReactElement {
             <BackButton color={"#000"} />
           </button>
         )}
-        {projectDetails?.isApproved && projectDetails?.isTopProject && (
-          <div className={"topProjectBadge theme-light"}>Top Project</div>
-        )}
-      </div>
+        {projectDetails &&
+          projectDetails.purpose !== "planet-cash-signup" &&
+          projectDetails.isApproved &&
+          projectDetails.isTopProject && (
+            <div className={"topProjectBadge theme-light"}>Top Project</div>
+          )}
+      </LeftPanelHeader>
       {projectDetails ? (
         <div className="donations-info text-white">
           {donationStep &&

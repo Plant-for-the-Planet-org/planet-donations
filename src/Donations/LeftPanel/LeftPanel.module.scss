@@ -38,6 +38,10 @@
   }
 }
 
+.left-panel-header {
+  display: flex;
+}
+
 @include smTabletView {
   .left-panel-container {
     padding: 30px;
