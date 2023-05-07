@@ -126,6 +126,12 @@ function index({
     utmMedium && setUtmMedium(utmMedium);
     utmSource && setUtmSource(utmSource);
     setCountryCode({ setcountry, setcurrency, country });
+    settenant(tenant);
+    // If gift details are present, initialize gift in context
+    if (giftDetails && isGift) {
+        setGiftDetails(giftDetails);
+        setisGift(true);
+      }
   }, []);
 
   // If project details are present set project details
@@ -137,16 +143,6 @@ function index({
     }
   }, [projectDetails]);
 
-  settenant(tenant);
-
-  // If gift details are present, initialize gift in context
-  React.useEffect(() => {
-    if (giftDetails && isGift) {
-      setGiftDetails(giftDetails);
-      setisGift(true);
-    }
-  }, []);
-
   React.useEffect(() => {
     setdonationStep(donationStep);
     if (!donationStep) {
@@ -155,9 +151,9 @@ function index({
     }
   }, [donationStep, defaultLanguage]);
 
-  if (router.query.context) {
+  React.useEffect(() => {
     setfrequency(frequency);
-  }
+  }, [router.query.context]);
 
   return (
     <>
