@@ -383,7 +383,7 @@ function DonationsForm(): ReactElement {
               projectDetails.purpose === "conservation") && <DonationAmount />}
 
             {/* Hide NativePay if PlanetCash is active */}
-
+            {/* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
                 minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
@@ -391,6 +391,8 @@ function DonationsForm(): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency ? (
                     <NativePay
+                      isApplePayEnabled={false}
+                      isGooglePayEnabled={false}
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
