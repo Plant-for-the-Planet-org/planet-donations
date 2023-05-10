@@ -16,6 +16,7 @@ import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import getImageUrl from "../../Utils/getImageURL";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import LeftPanelHeader from "./LeftPanelHeader";
+import TopProjectBadge from "./TopProjectBadge";
 
 function LeftPanel(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -105,9 +106,7 @@ function LeftPanel(): ReactElement {
     >
       <LeftPanelHeader>
         {canShowBackButton && <BackButton backUrl={callbackUrl || "/"} />}
-        {canShowTopProjectBadge && (
-          <div className={"topProjectBadge theme-light"}>Top Project</div>
-        )}
+        {canShowTopProjectBadge && <TopProjectBadge />}
       </LeftPanelHeader>
       {projectDetails ? (
         <div className="donations-info text-white">

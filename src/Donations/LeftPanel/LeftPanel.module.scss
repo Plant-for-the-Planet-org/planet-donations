@@ -40,6 +40,17 @@
 
 .left-panel-header {
   display: flex;
+
+  .top-project-badge {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 4px 12px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+  }
 }
 
 @include smTabletView {
@@ -59,5 +70,6 @@
     align-self: auto;
     min-height: 560px;
     margin-right: -10px;
+    padding-right: 40px;
   }
 }
