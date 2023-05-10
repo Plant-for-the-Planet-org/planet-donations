@@ -42,6 +42,14 @@ function LeftPanel(): ReactElement {
   const [isMobile, setIsMobile] = useState(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
+  const canShowBackButton =
+    isMobile && (callbackUrl.length > 0 || donationStep !== 0);
+  const canShowTopProjectBadge =
+    projectDetails !== null &&
+    projectDetails.purpose !== "planet-cash-signup" &&
+    projectDetails.isApproved &&
+    projectDetails.isTopProject;
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (window.innerWidth > 767) {
@@ -96,15 +104,10 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {isMobile && (callbackUrl || donationStep !== 0) && (
-          <BackButton backUrl={callbackUrl || "/"} />
+        {canShowBackButton && <BackButton backUrl={callbackUrl || "/"} />}
+        {canShowTopProjectBadge && (
+          <div className={"topProjectBadge theme-light"}>Top Project</div>
         )}
-        {projectDetails &&
-          projectDetails.purpose !== "planet-cash-signup" &&
-          projectDetails.isApproved &&
-          projectDetails.isTopProject && (
-            <div className={"topProjectBadge theme-light"}>Top Project</div>
-          )}
       </LeftPanelHeader>
       {projectDetails ? (
         <div className="donations-info text-white">
