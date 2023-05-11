@@ -42,14 +42,36 @@
   display: flex;
 
   .top-project-badge {
-    display: flex;
-    align-items: center;
     margin-left: auto;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 4px 12px;
+  }
+}
+
+.top-project-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: $primaryColor;
+  border: 0.2px solid #fafaff;
+  border-radius: 14px;
+  padding: 2px 8px 2px 2px;
+  font-weight: 700;
+  font-size: 12px;
+
+  * {
     color: #fff;
-    font-weight: 700;
-    font-size: 12px;
+  }
+
+  .top-project-icon {
+    background-color: white;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      height: 14px;
+    }
   }
 }
 
