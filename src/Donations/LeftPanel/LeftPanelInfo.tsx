@@ -11,9 +11,9 @@ import {
   OnBehalfDonor,
   SentGift,
 } from "src/Common/Types";
-import getImageUrl from "src/Utils/getImageURL";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
+import Avatar from "./Avatar";
 
 interface Props {
   isMobile: boolean;
@@ -58,32 +58,7 @@ const LeftPanelInfo = ({
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const TPOImage = () => {
-    return projectDetails?.ownerAvatar ? (
-      <img
-        className="project-organisation-image"
-        src={getImageUrl("profile", "thumb", projectDetails.ownerAvatar)}
-        style={{
-          width: "48px",
-          height: "48px",
-          borderRadius: "48px",
-          border: "1px solid #fff",
-        }}
-      />
-    ) : (
-      <div
-        style={{
-          width: "48px",
-          height: "48px",
-          borderRadius: "48px",
-          border: "1px solid #fff",
-        }}
-        className="project-organisation-image no-project-organisation-image mb-10"
-      >
-        {projectDetails?.ownerName?.charAt(0)}
-      </div>
-    );
-  };
+  const canShowAvatar = Boolean(donationStep !== null && donationStep > 0);
 
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
@@ -95,21 +70,7 @@ const LeftPanelInfo = ({
 
   return projectDetails ? (
     <div className="donations-info text-white">
-      {donationStep &&
-        donationStep > 0 &&
-        projectDetails.ownerName &&
-        (projectDetails.purpose === "trees" ? (
-          <a
-            rel="noreferrer"
-            target="_blank"
-            href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-            style={{ width: "fit-content" }}
-          >
-            <TPOImage />
-          </a>
-        ) : (
-          <TPOImage />
-        ))}
+      {canShowAvatar && <Avatar projectDetails={projectDetails} />}
       {paymentSetup &&
         (donationStep === 2 || donationStep === 3) &&
         (projectDetails.purpose === "trees" ||

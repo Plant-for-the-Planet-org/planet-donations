@@ -111,7 +111,7 @@ export interface CreateDonationDataProps {
 
 export interface PlanetCashSignupDetails {
   name: string;
-  ownerName: string | null;
+  ownerName: string;
   ownerAvatar: string | null;
   purpose: "planet-cash-signup";
 }
@@ -120,8 +120,8 @@ export interface FetchedProjectDetails {
   id: string;
   name: string;
   description?: string | null;
-  ownerAvatar?: string | null;
-  ownerName?: string;
+  ownerAvatar: string | null;
+  ownerName: string | null;
   image?: string | null;
   purpose: ProjectPurpose;
   taxDeductionCountries?: Array<string>;

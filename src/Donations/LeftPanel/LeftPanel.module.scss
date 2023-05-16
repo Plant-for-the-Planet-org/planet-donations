@@ -75,6 +75,29 @@
   }
 }
 
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+  border: 1px solid $light;
+  box-shadow: 0px 3px 6px -3px rgba($color: $dark, $alpha: 0.16);
+  background-color: $light;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.avatar--text {
+    background-color: $primaryDarkColor;
+    color: $light;
+    font-weight: bold;
+    display: flex;
+  }
+
+  &-link {
+    width: fit-content;
+  }
+}
+
 @include smTabletView {
   .left-panel-container {
     padding: 30px;
