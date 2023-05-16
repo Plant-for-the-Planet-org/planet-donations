@@ -164,7 +164,10 @@ function DonationInfo() {
       return;
     storage.setItem(
       "showBackButton",
-      `${storage.getItem("prevPath") === window.origin}`
+      `${
+        storage.getItem("prevPath") === window.origin &&
+        router.query["callback_url"]
+      }`
     );
     const isShow = storage.getItem("showBackButton") === "true";
 
