@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import BackButton from "../../../public/assets/icons/BackButton";
+import BackButtonIcon from "../../../public/assets/icons/BackButtonIcon";
 import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
@@ -283,7 +283,7 @@ function PaymentsForm(): ReactElement {
                 className="d-flex"
                 style={{ marginRight: "12px" }}
               >
-                <BackButton
+                <BackButtonIcon
                   color={
                     theme === "theme-light"
                       ? themeProperties.light.primaryFontColor
