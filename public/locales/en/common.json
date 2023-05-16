@@ -204,5 +204,6 @@
   "planet_cash_invalid_project": "Invalid Project",
   "active_account_exists": "Active PlanetCash account already exists",
   "duplicate_account": "Account already exists",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "topProject": "Top Project"
 }

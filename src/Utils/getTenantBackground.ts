@@ -3,14 +3,17 @@ const klumforest = "/tenants/leniklum/leniklum.jpg";
 const treesforjane = "/tenants/treesforjane/treesforjane.jpg";
 const bahlsen = "/tenants/bahlsen/bahlsen.png";
 
-import { FetchedProjectDetails } from "src/Common/Types";
+import {
+  FetchedProjectDetails,
+  PlanetCashSignupDetails,
+} from "src/Common/Types";
 import getImageUrl from "./getImageURL";
 
 // Set tenant image -> set tenant image where needed, except for default
 // Default -> Check for tenant image if not found, use project image, if not found, use base
 export function getTenantBackground(
   tenant: string,
-  projectDetails: FetchedProjectDetails | null
+  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null
 ): string {
   let tenantImage = null;
   let imageUrl = defaultForest;
@@ -32,7 +35,11 @@ export function getTenantBackground(
   if (tenantImage) {
     imageUrl = tenantImage;
   } else {
-    if (projectDetails && projectDetails.image) {
+    if (
+      projectDetails &&
+      projectDetails.purpose !== "planet-cash-signup" &&
+      projectDetails.image
+    ) {
       imageUrl = getImageUrl("project", "large", projectDetails.image);
     } else {
       imageUrl = defaultForest;

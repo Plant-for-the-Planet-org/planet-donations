@@ -125,8 +125,8 @@ export interface FetchedProjectDetails {
   image?: string | null;
   purpose: ProjectPurpose;
   taxDeductionCountries?: Array<string>;
-  isApproved?: boolean;
-  isTopProject?: boolean;
+  isApproved: boolean;
+  isTopProject: boolean;
 }
 
 export type ProjectPurpose =
