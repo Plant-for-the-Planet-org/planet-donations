@@ -11,9 +11,8 @@ import {
   OnBehalfDonor,
   SentGift,
 } from "src/Common/Types";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
-import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import Avatar from "./Avatar";
+import TransactionSummary from "./TransactionSummary";
 
 interface Props {
   isMobile: boolean;
@@ -58,7 +57,9 @@ const LeftPanelInfo = ({
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const canShowAvatar = Boolean(donationStep !== null && donationStep > 0);
+  const canShowAvatar = donationStep !== null && donationStep > 0;
+  const canShowTransactionSummary =
+    paymentSetup !== null && (donationStep === 2 || donationStep === 3);
 
   const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorElement(event.currentTarget);
@@ -71,68 +72,14 @@ const LeftPanelInfo = ({
   return projectDetails ? (
     <div className="donations-info text-white">
       {canShowAvatar && <Avatar projectDetails={projectDetails} />}
-      {paymentSetup &&
-        (donationStep === 2 || donationStep === 3) &&
-        (projectDetails.purpose === "trees" ||
-          projectDetails.purpose === "conservation") && (
-          <div className="contact-details-info">
-            <div className={"w-100 mt-10 text-white"}>
-              {t("donating")}{" "}
-              <span className="text-bold" style={{ marginRight: "4px" }}>
-                {getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.unitCost * quantity
-                )}
-              </span>
-              {paymentSetup.purpose === "trees"
-                ? t("fortreeCountTrees", {
-                    count: Number(quantity),
-                    treeCount: getFormattedNumber(
-                      i18n.language,
-                      Number(quantity)
-                    ),
-                  })
-                : paymentSetup.purpose === "conservation"
-                ? t("forQuantitym2", {
-                    quantity: getFormattedNumber(
-                      i18n.language,
-                      Number(quantity)
-                    ),
-                  })
-                : []}{" "}
-              {frequency === "monthly"
-                ? t("everyMonth")
-                : frequency === "yearly"
-                ? t("everyYear")
-                : ""}
-            </div>
-          </div>
-        )}
-
-      {paymentSetup &&
-        (donationStep === 2 || donationStep === 3) &&
-        (projectDetails.purpose === "bouquet" ||
-          projectDetails.purpose === "funds") && (
-          <div className="contact-details-info">
-            <div className={"w-100 mt-10 text-white"}>
-              {t("donating")}{" "}
-              <span className="text-bold" style={{ marginRight: "4px" }}>
-                {getFormatedCurrency(
-                  i18n.language,
-                  currency,
-                  paymentSetup.unitCost * quantity
-                )}
-              </span>
-              {frequency === "monthly"
-                ? t("everyMonth")
-                : frequency === "yearly"
-                ? t("everyYear")
-                : ""}
-            </div>
-          </div>
-        )}
-
+      {canShowTransactionSummary && (
+        <TransactionSummary
+          currency={currency}
+          quantity={quantity}
+          frequency={frequency}
+          paymentSetup={paymentSetup}
+        />
+      )}
       {donationStep && donationStep > 0 ? (
         <>
           {projectDetails.purpose === "trees" ||

@@ -98,6 +98,11 @@
   }
 }
 
+.transaction-summary {
+  margin-top: 10px;
+  color: $light;
+}
+
 @include smTabletView {
   .left-panel-container {
     padding: 30px;
