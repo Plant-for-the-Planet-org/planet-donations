@@ -147,8 +147,8 @@ export interface PaymentOptions extends FetchedProjectDetails {
   unitCost: number;
   currency: string;
   destination: string;
-  isApproved?: boolean;
-  isTopProject?: boolean;
+  isApproved: boolean;
+  isTopProject: boolean;
 }
 
 interface Frequencies {
