@@ -103,6 +103,33 @@
   color: $light;
 }
 
+.project-title {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  margin-top: 10px;
+
+  a,
+  h1 {
+    color: $light;
+  }
+}
+
+.verified-badge {
+  display: flex;
+  align-items: center;
+  height: 1.43em; //hack to match line height of h1 tag
+}
+
+.verified-badge-popup {
+  max-width: 800px;
+  padding: 0.5rem;
+  margin-right: 20px;
+  margin-left: 10px;
+  pointer-events: none;
+}
+
 @include smTabletView {
   .left-panel-container {
     padding: 30px;

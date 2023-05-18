@@ -1,8 +1,6 @@
-import { ReactElement, useState, MouseEvent } from "react";
-import { Typography, Popover } from "@mui/material";
+import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import VerifiedIcon from "@mui/icons-material/Verified";
 import { ContactDetails, NoGift } from "@planet-sdk/common";
 import {
   FetchedProjectDetails,
@@ -13,6 +11,7 @@ import {
 } from "src/Common/Types";
 import Avatar from "./Avatar";
 import TransactionSummary from "./TransactionSummary";
+import ProjectTitle from "./ProjectTitle";
 
 interface Props {
   isMobile: boolean;
@@ -51,23 +50,13 @@ const LeftPanelInfo = ({
   tenant,
   country,
 }: Props): ReactElement | null => {
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorElement);
-
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
   const canShowAvatar = donationStep !== null && donationStep > 0;
   const canShowTransactionSummary =
     paymentSetup !== null && (donationStep === 2 || donationStep === 3);
-
-  const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElement(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorElement(null);
-  };
+  const canShowProject = donationStep !== null && donationStep > 0;
 
   return projectDetails ? (
     <div className="donations-info text-white">
@@ -80,90 +69,9 @@ const LeftPanelInfo = ({
           paymentSetup={paymentSetup}
         />
       )}
-      {donationStep && donationStep > 0 ? (
+      {canShowProject ? (
         <>
-          {projectDetails.purpose === "trees" ||
-          projectDetails.purpose === "conservation" ? (
-            <div className="project-title-container">
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
-                className="title-text text-white"
-                style={{
-                  marginTop: "10px",
-                }}
-              >
-                {projectDetails.name}
-              </a>
-              {projectDetails?.isApproved && (
-                <div style={{ marginLeft: "10px", marginTop: "auto" }}>
-                  <Typography
-                    aria-owns={open ? "mouse-over-popover" : undefined}
-                    aria-haspopup="true"
-                    onMouseEnter={handlePopoverOpen}
-                    onMouseLeave={handlePopoverClose}
-                  >
-                    <VerifiedIcon sx={{ color: "#fff" }} />
-                  </Typography>
-                  <Popover
-                    id="mouse-over-popover"
-                    className="verified-icon-popup"
-                    open={open}
-                    anchorEl={anchorElement}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: isMobile ? "center" : "left",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                    marginThreshold={0}
-                  >
-                    <Typography>{t("verifiedIconInfo")}</Typography>
-                  </Popover>
-                </div>
-              )}
-            </div>
-          ) : (
-            <h1 className="title-text text-white" style={{ marginTop: "10px" }}>
-              {projectDetails.name ? projectDetails.name : ""}
-              {projectDetails.name && projectDetails?.isApproved && (
-                <div className="d-inline" style={{ marginLeft: "10px" }}>
-                  <Typography
-                    aria-owns={open ? "mouse-over-popover" : undefined}
-                    aria-haspopup="true"
-                    onMouseEnter={handlePopoverOpen}
-                    onMouseLeave={handlePopoverClose}
-                  >
-                    <VerifiedIcon sx={{ color: "#fff" }} />
-                  </Typography>
-                  <Popover
-                    id="mouse-over-popover"
-                    className="verified-icon-popup"
-                    open={open}
-                    anchorEl={anchorElement}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: isMobile ? "center" : "left",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                    marginThreshold={0}
-                  >
-                    <Typography>{t("verifiedIconInfo")}</Typography>
-                  </Popover>
-                </div>
-              )}
-            </h1>
-          )}
+          <ProjectTitle projectDetails={projectDetails} isMobile={isMobile} />
 
           {projectDetails.purpose === "funds" ||
           projectDetails.purpose === "bouquet" ? (
