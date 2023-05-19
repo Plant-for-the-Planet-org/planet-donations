@@ -12,6 +12,7 @@ import {
 import Avatar from "./Avatar";
 import TransactionSummary from "./TransactionSummary";
 import ProjectTitle from "./ProjectTitle";
+import ProjectInfo from "./ProjectInfo";
 import styles from "./LeftPanel.module.scss";
 
 interface Props {
@@ -70,30 +71,13 @@ const LeftPanelInfo = ({
           paymentSetup={paymentSetup}
         />
       )}
-      {canShowProject ? (
+      {canShowProject && (
         <>
           <ProjectTitle projectDetails={projectDetails} isMobile={isMobile} />
-
-          {projectDetails.purpose === "funds" ||
-          projectDetails.purpose === "bouquet" ? (
-            <p className="text-white mt-10">
-              {projectDetails.description ? projectDetails.description : ""}
-            </p>
-          ) : (
-            []
+          {projectDetails.purpose !== "planet-cash-signup" && (
+            <ProjectInfo projectDetails={projectDetails} />
           )}
-          {(projectDetails.purpose === "trees" ||
-            projectDetails.purpose === "conservation") &&
-            projectDetails.ownerName && (
-              <div className="text-white">
-                {t("byOrganization", {
-                  organizationName: projectDetails.ownerName,
-                })}
-              </div>
-            )}
         </>
-      ) : (
-        <></>
       )}
 
       {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
