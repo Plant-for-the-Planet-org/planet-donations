@@ -12,6 +12,7 @@ import {
 import Avatar from "./Avatar";
 import TransactionSummary from "./TransactionSummary";
 import ProjectTitle from "./ProjectTitle";
+import styles from "./LeftPanel.module.scss";
 
 interface Props {
   isMobile: boolean;
@@ -59,7 +60,7 @@ const LeftPanelInfo = ({
   const canShowProject = donationStep !== null && donationStep > 0;
 
   return projectDetails ? (
-    <div className="donations-info text-white">
+    <div className={styles["left-panel-info"]}>
       {canShowAvatar && <Avatar projectDetails={projectDetails} />}
       {canShowTransactionSummary && (
         <TransactionSummary
