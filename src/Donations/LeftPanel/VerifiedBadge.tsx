@@ -1,8 +1,14 @@
 import { ReactElement, useState, MouseEvent } from "react";
 import { useTranslation } from "next-i18next";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import { Typography, Popover } from "@mui/material";
+import { Typography } from "@mui/material";
 import styles from "./LeftPanel.module.scss";
+import HoverPopover from "material-ui-popup-state/HoverPopover";
+import {
+  usePopupState,
+  bindHover,
+  bindPopover,
+} from "material-ui-popup-state/hooks";
 
 interface Props {
   isMobile: boolean;
@@ -22,6 +28,11 @@ const VerifiedBadge = ({ isMobile }: Props): ReactElement => {
     setAnchorElement(null);
   };
 
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: "demoPopover",
+  });
+
   return (
     <>
       <div
@@ -31,27 +42,26 @@ const VerifiedBadge = ({ isMobile }: Props): ReactElement => {
         onMouseLeave={handlePopoverClose}
         className={styles["verified-badge"]}
       >
-        <VerifiedIcon sx={{ color: "#fff" }} />
+        <VerifiedIcon sx={{ color: "#fff" }} {...bindHover(popupState)} />
       </div>
-      <Popover
-        id="mouse-over-popover"
-        className={styles["verified-badge-popup"]}
-        open={isPopoverOpen}
-        anchorEl={anchorElement}
+      <HoverPopover
+        {...bindPopover(popupState)}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left",
+          horizontal: "center",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: isMobile ? "center" : "left",
+          horizontal: "left",
         }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-        marginThreshold={0}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
-        <Typography>{t("verifiedIconInfo")}</Typography>
-      </Popover>
+        <Typography style={{ margin: 10, width: 300 }}>
+          {t("verifiedIconInfo")}
+        </Typography>
+      </HoverPopover>
     </>
   );
 };
