@@ -16,6 +16,7 @@ import ProjectInfo from "./ProjectInfo";
 import styles from "./LeftPanel.module.scss";
 import GiftInfo from "./GiftInfo";
 import OnBehalfInfo from "./OnBehalfInfo";
+import ContactDetailsInfo from "./ContactDetailsInfo";
 
 interface Props {
   isMobile: boolean;
@@ -54,7 +55,7 @@ const LeftPanelInfo = ({
   tenant,
   country,
 }: Props): ReactElement | null => {
-  const { t, i18n } = useTranslation("common");
+  const { i18n } = useTranslation("common");
   const router = useRouter();
 
   const canShowAvatar = donationStep !== null && donationStep > 0;
@@ -71,6 +72,8 @@ const LeftPanelInfo = ({
     isPlanetCashActive &&
     onBehalf &&
     onBehalfDonor.firstName.length > 0;
+  const canShowContactDetails =
+    donationStep === 3 && contactDetails.firstname.length > 0;
 
   return projectDetails ? (
     <div className={styles["left-panel-info"]}>
@@ -93,34 +96,8 @@ const LeftPanelInfo = ({
       )}
       {canShowGift && <GiftInfo giftDetails={giftDetails} />}
       {canShowOnBehalf && <OnBehalfInfo onBehalfDonor={onBehalfDonor} />}
-
-      {donationStep === 3 && contactDetails.firstname && (
-        <div className={"contact-details-info w-100 mt-10"}>
-          <p>{t("billingAddress")}</p>
-          <p className={`text-bold`}>
-            {contactDetails.firstname && contactDetails.firstname}{" "}
-            {contactDetails.lastname && contactDetails.lastname}{" "}
-          </p>
-          <p>{contactDetails.email && contactDetails.email}</p>
-          <p>
-            {contactDetails.address && contactDetails.address}
-            {", "}
-            {contactDetails.city && contactDetails.city}
-            {", "}
-            {contactDetails.zipCode && contactDetails.zipCode}
-          </p>
-          <p>
-            {contactDetails.country &&
-              t(`country:${contactDetails.country.toLowerCase()}`)}
-          </p>
-          <p>
-            {contactDetails.tin
-              ? `${t("common:tinText")} ${" "}${
-                  contactDetails.tin && contactDetails.tin
-                }`
-              : null}
-          </p>
-        </div>
+      {canShowContactDetails && (
+        <ContactDetailsInfo contactDetails={contactDetails} />
       )}
 
       {donationID && !(isMobile && router.query.step === "thankyou") && (

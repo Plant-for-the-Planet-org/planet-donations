@@ -720,29 +720,6 @@
   }
 }
 
-.contact-details-info {
-  p {
-    color: white !important;
-  }
-  button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-weight: bold;
-    svg {
-      margin-left: 6px;
-    }
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  p {
-    font-size: 12px;
-    margin-top: 4px;
-  }
-}
-
 @include smTabletView {
   .donations-forms-container {
     max-width: 420px;
