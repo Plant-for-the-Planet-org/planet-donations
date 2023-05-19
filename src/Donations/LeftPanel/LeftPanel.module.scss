@@ -130,10 +130,6 @@
   column-gap: 10px;
 }
 
-.project-description {
-  margin-top: 10px;
-}
-
 .verified-badge {
   display: flex;
   align-items: center;
@@ -146,6 +142,26 @@
   margin-right: 20px;
   margin-left: 10px;
   pointer-events: none;
+}
+
+.project-description,
+.gift-info {
+  margin-top: 10px;
+}
+
+.gift-info {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .gift-recipient {
+    font-weight: bold;
+  }
+
+  a.gift-recipient {
+    font-size: 14px;
+  }
 }
 
 @include smTabletView {

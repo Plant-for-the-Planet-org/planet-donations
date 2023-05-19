@@ -14,6 +14,7 @@ import TransactionSummary from "./TransactionSummary";
 import ProjectTitle from "./ProjectTitle";
 import ProjectInfo from "./ProjectInfo";
 import styles from "./LeftPanel.module.scss";
+import GiftInfo from "./GiftInfo";
 
 interface Props {
   isMobile: boolean;
@@ -59,6 +60,11 @@ const LeftPanelInfo = ({
   const canShowTransactionSummary =
     paymentSetup !== null && (donationStep === 2 || donationStep === 3);
   const canShowProject = donationStep !== null && donationStep > 0;
+  const canShowGift =
+    (donationStep === 1 || donationStep === 2 || donationStep === 3) &&
+    giftDetails.type !== null &&
+    isGift &&
+    giftDetails.recipientName !== undefined;
 
   return projectDetails ? (
     <div className={styles["left-panel-info"]}>
@@ -79,34 +85,7 @@ const LeftPanelInfo = ({
           )}
         </div>
       )}
-
-      {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
-        giftDetails &&
-        isGift &&
-        giftDetails.recipientName && (
-          <div className="contact-details-info  mt-10 donation-supports-info">
-            <p>{t("dedicatedTo")}</p>
-            {giftDetails.type === "direct" &&
-            giftDetails.recipientTreecounter ? (
-              <a
-                rel="noreferrer"
-                target="_blank"
-                href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
-                className="text-white text-bold"
-              >
-                {giftDetails.recipientName}
-              </a>
-            ) : (
-              <p className="text-bold">{giftDetails.recipientName}</p>
-            )}
-
-            {giftDetails.message && (
-              <p>
-                {t("message")}: {giftDetails.message}
-              </p>
-            )}
-          </div>
-        )}
+      {canShowGift && <GiftInfo giftDetails={giftDetails} />}
 
       {donationStep === 1 &&
         isPlanetCashActive &&
