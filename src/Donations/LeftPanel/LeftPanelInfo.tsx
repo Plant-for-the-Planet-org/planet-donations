@@ -72,19 +72,19 @@ const LeftPanelInfo = ({
         />
       )}
       {canShowProject && (
-        <>
+        <div className={styles["project-info-container"]}>
           <ProjectTitle projectDetails={projectDetails} isMobile={isMobile} />
           {projectDetails.purpose !== "planet-cash-signup" && (
             <ProjectInfo projectDetails={projectDetails} />
           )}
-        </>
+        </div>
       )}
 
       {(donationStep === 1 || donationStep === 2 || donationStep === 3) &&
         giftDetails &&
         isGift &&
         giftDetails.recipientName && (
-          <div className="contact-details-info  mt-20 donation-supports-info">
+          <div className="contact-details-info  mt-10 donation-supports-info">
             <p>{t("dedicatedTo")}</p>
             {giftDetails.type === "direct" &&
             giftDetails.recipientTreecounter ? (
@@ -112,7 +112,7 @@ const LeftPanelInfo = ({
         isPlanetCashActive &&
         onBehalf &&
         onBehalfDonor.firstName && (
-          <div className="contact-details-info  mt-10 on-behalf-info">
+          <div className="contact-details-info on-behalf-info">
             <p>{t("onBehalfOf")}</p>
             <p className="text-bold">
               {onBehalfDonor.firstName + " " + onBehalfDonor.lastName}
@@ -121,7 +121,7 @@ const LeftPanelInfo = ({
         )}
 
       {donationStep === 3 && contactDetails.firstname && (
-        <div className={"contact-details-info w-100 mt-20"}>
+        <div className={"contact-details-info w-100 mt-10"}>
           <p>{t("billingAddress")}</p>
           <p className={`text-bold`}>
             {contactDetails.firstname && contactDetails.firstname}{" "}
@@ -152,7 +152,7 @@ const LeftPanelInfo = ({
       {donationID && !(isMobile && router.query.step === "thankyou") && (
         <a
           href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${i18n.language}`}
-          className="donations-transaction-details mt-20"
+          className="donations-transaction-details mt-10"
           data-test-id="referenceDonation"
         >
           {`Ref - ${donationID}`}

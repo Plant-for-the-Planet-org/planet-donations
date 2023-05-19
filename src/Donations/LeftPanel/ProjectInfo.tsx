@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import { FetchedProjectDetails } from "src/Common/Types";
+import styles from "./LeftPanel.module.scss";
 
 interface Props {
   projectDetails: FetchedProjectDetails;
@@ -17,7 +18,9 @@ const ProjectInfo = ({ projectDetails }: Props): ReactElement => {
 
   return (
     <>
-      {canShowDescription && <p className="mt-10">{description}</p>}
+      {canShowDescription && (
+        <p className={styles["project-description"]}>{description}</p>
+      )}
       {canShowOwner && (
         <div>
           {t("byOrganization", {

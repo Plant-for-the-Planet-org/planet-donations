@@ -78,6 +78,7 @@
 .left-panel-info {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   flex: inherit;
   height: 100%;
   z-index: 3;
@@ -119,7 +120,6 @@
 }
 
 .transaction-summary {
-  margin-top: 10px;
   color: $light;
 }
 
@@ -128,12 +128,10 @@
   align-items: stretch;
   flex-wrap: wrap;
   column-gap: 10px;
-  margin-top: 10px;
+}
 
-  a,
-  h1 {
-    color: $light;
-  }
+.project-description {
+  margin-top: 10px;
 }
 
 .verified-badge {
