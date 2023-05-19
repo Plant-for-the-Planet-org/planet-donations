@@ -145,17 +145,20 @@
 }
 
 .project-description,
-.gift-info {
+.gift-info,
+.on-behalf-info {
   margin-top: 10px;
 }
 
-.gift-info {
+.gift-info,
+.on-behalf-info {
   font-size: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 
-  .gift-recipient {
+  .gift-recipient,
+  .donor-name {
     font-weight: bold;
   }
 

@@ -15,6 +15,7 @@ import ProjectTitle from "./ProjectTitle";
 import ProjectInfo from "./ProjectInfo";
 import styles from "./LeftPanel.module.scss";
 import GiftInfo from "./GiftInfo";
+import OnBehalfInfo from "./OnBehalfInfo";
 
 interface Props {
   isMobile: boolean;
@@ -65,6 +66,11 @@ const LeftPanelInfo = ({
     giftDetails.type !== null &&
     isGift &&
     giftDetails.recipientName !== undefined;
+  const canShowOnBehalf =
+    donationStep === 1 &&
+    isPlanetCashActive &&
+    onBehalf &&
+    onBehalfDonor.firstName.length > 0;
 
   return projectDetails ? (
     <div className={styles["left-panel-info"]}>
@@ -86,18 +92,7 @@ const LeftPanelInfo = ({
         </div>
       )}
       {canShowGift && <GiftInfo giftDetails={giftDetails} />}
-
-      {donationStep === 1 &&
-        isPlanetCashActive &&
-        onBehalf &&
-        onBehalfDonor.firstName && (
-          <div className="contact-details-info on-behalf-info">
-            <p>{t("onBehalfOf")}</p>
-            <p className="text-bold">
-              {onBehalfDonor.firstName + " " + onBehalfDonor.lastName}
-            </p>
-          </div>
-        )}
+      {canShowOnBehalf && <OnBehalfInfo onBehalfDonor={onBehalfDonor} />}
 
       {donationStep === 3 && contactDetails.firstname && (
         <div className={"contact-details-info w-100 mt-10"}>
