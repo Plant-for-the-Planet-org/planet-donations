@@ -205,5 +205,7 @@
   "active_account_exists": "Active PlanetCash account already exists",
   "duplicate_account": "Account already exists",
   "loading": "Loading...",
-  "topProject": "Top Project"
+  "topProject": "Top Project",
+  "top_project_standards_fulfilled": "The project inspection revealed that this project fulfilled at least 12 of the 19 Top Project <2>standards.</2>",
+  "standardsLink": "https://www.plant-for-the-planet.org/standards/"
 }
