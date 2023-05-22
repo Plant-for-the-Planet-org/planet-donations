@@ -74,6 +74,8 @@ const LeftPanelInfo = ({
     onBehalfDonor.firstName.length > 0;
   const canShowContactDetails =
     donationStep === 3 && contactDetails.firstname.length > 0;
+  const canShowDonationLink =
+    donationID !== null && !(isMobile && router.query.step === "thankyou");
 
   return projectDetails ? (
     <div className={styles["left-panel-info"]}>
@@ -100,10 +102,10 @@ const LeftPanelInfo = ({
         <ContactDetailsInfo contactDetails={contactDetails} />
       )}
 
-      {donationID && !(isMobile && router.query.step === "thankyou") && (
+      {canShowDonationLink && (
         <a
-          href={`${process.env.APP_URL}/?context=${donationID}&tenant=${tenant}&country=${country}&locale=${i18n.language}`}
-          className="donations-transaction-details mt-10"
+          href={`${process.env.APP_URL}/${i18n.language}?context=${donationID}&tenant=${tenant}&country=${country}`}
+          className={styles["donation-link"]}
           data-test-id="referenceDonation"
         >
           {`Ref - ${donationID}`}

@@ -147,7 +147,8 @@
 .project-description,
 .gift-info,
 .on-behalf-info,
-.contact-info {
+.contact-info,
+.donation-link {
   margin-top: 10px;
 }
 
@@ -167,6 +168,10 @@
   a.gift-recipient {
     font-size: 14px;
   }
+}
+
+.donation-link {
+  font-size: 12px;
 }
 
 @include smTabletView {
