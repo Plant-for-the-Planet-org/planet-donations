@@ -17,22 +17,22 @@ const ProjectTitle = ({ projectDetails, isMobile }: Props): ReactElement => {
     projectDetails.purpose === "conservation";
 
   return (
-    <div className={`${styles["project-title"]} title-text`}>
+    <p className={`${styles["project-title"]} title-text`}>
       {isLinked ? (
         <a
           rel="noreferrer"
           target="_blank"
           href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
         >
-          <h1>{projectDetails.name}</h1>
+          {projectDetails.name + "    "}
         </a>
       ) : (
-        <h1>{projectDetails.name}</h1>
+        <>{projectDetails.name + "    "}</>
       )}
       {projectDetails.name !== null && projectDetails?.isApproved && (
-        <VerifiedBadge isMobile={isMobile} />
+        <VerifiedBadge />
       )}
-    </div>
+    </p>
   );
 };
 

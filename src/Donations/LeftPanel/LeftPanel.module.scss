@@ -124,16 +124,16 @@
 }
 
 .project-title {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  column-gap: 10px;
+  a {
+    display: inline;
+  }
 }
 
 .verified-badge {
   display: flex;
   align-items: center;
   height: 1.43em; //hack to match line height of h1 tag
+  margin-bottom: -4px;
 }
 
 .verified-badge-popup {

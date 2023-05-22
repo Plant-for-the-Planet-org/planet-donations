@@ -1,4 +1,4 @@
-import { ReactElement, useState, MouseEvent } from "react";
+import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { Typography } from "@mui/material";
@@ -10,23 +10,8 @@ import {
   bindPopover,
 } from "material-ui-popup-state/hooks";
 
-interface Props {
-  isMobile: boolean;
-}
-
-const VerifiedBadge = ({ isMobile }: Props): ReactElement => {
+const VerifiedBadge = (): ReactElement => {
   const { t } = useTranslation("common");
-
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
-  const isPopoverOpen = anchorElement !== null;
-
-  const handlePopoverOpen = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElement(event.currentTarget);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorElement(null);
-  };
 
   const popupState = usePopupState({
     variant: "popover",
@@ -35,15 +20,10 @@ const VerifiedBadge = ({ isMobile }: Props): ReactElement => {
 
   return (
     <>
-      <div
-        aria-owns={isPopoverOpen ? "mouse-over-popover" : undefined}
-        aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
+      <VerifiedIcon
         className={styles["verified-badge"]}
-      >
-        <VerifiedIcon sx={{ color: "#fff" }} {...bindHover(popupState)} />
-      </div>
+        {...bindHover(popupState)}
+      />
       <HoverPopover
         {...bindPopover(popupState)}
         anchorOrigin={{
@@ -57,8 +37,10 @@ const VerifiedBadge = ({ isMobile }: Props): ReactElement => {
         onClick={(e) => {
           e.stopPropagation();
         }}
+        className={styles["verified-badge-popup"]}
       >
         <Typography style={{ margin: 10, width: 300 }}>
+          {" "}
           {t("verifiedIconInfo")}
         </Typography>
       </HoverPopover>
