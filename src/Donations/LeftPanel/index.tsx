@@ -1,10 +1,12 @@
 import { ReactElement, useContext, useState, useEffect } from "react";
 import LeftPanelContainer from "./LeftPanelContainer";
-import BackButton from "../../Common/BackButton";
+import BackButton from "../../Common/CancelButton";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import LeftPanelHeader from "./LeftPanelHeader";
 import TopProjectBadge from "./TopProjectBadge";
 import LeftPanelInfo from "./LeftPanelInfo";
+import CancelButton from "../../Common/CancelButton";
+import { useRouter } from "next/router";
 
 function LeftPanel(): ReactElement {
   const {
@@ -27,6 +29,10 @@ function LeftPanel(): ReactElement {
   } = useContext(QueryParamContext);
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isPathStored, setIsPathStored] = useState(false);
+  const [canShowCanceDonationButton, setCanShowCanceDonationButton] =
+    useState(false);
+  const router = useRouter();
 
   const canShowBackButton =
     isMobile && (callbackUrl.length > 0 || donationStep !== 0);
@@ -46,6 +52,37 @@ function LeftPanel(): ReactElement {
     }
   });
 
+  function storePathValues() {
+    const storage = globalThis?.sessionStorage;
+    // console.log("executed");
+    if (!storage) return;
+    // Set the previous path as the value of the current path.
+    const prevPath = storage.getItem("currentPath");
+    storage.setItem("prevPath", prevPath);
+    // Set the current path value by looking at the window object.
+    storage.setItem("currentPath", window.origin);
+    setIsPathStored(true);
+  }
+  useEffect(() => {
+    storePathValues();
+  }, []);
+
+  useEffect(() => {
+    const storage = globalThis?.sessionStorage;
+    console.log(donationStep);
+    setIsPathStored(false);
+    if (!storage || donationStep !== 1) return;
+    storage.setItem(
+      "showCancelDonationButton",
+      `${
+        storage.getItem("prevPath") !== "null" || router.query["callback_url"]
+      }`
+    );
+    const isShow = storage.getItem("showCancelDonationButton") === "true";
+
+    setCanShowCanceDonationButton(isShow);
+  }, [router.query.step]);
+
   return (
     <LeftPanelContainer
       projectDetails={projectDetails}
@@ -53,7 +90,9 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {canShowBackButton && <BackButton backUrl={callbackUrl || "/"} />}
+        {canShowCanceDonationButton && (
+          <CancelButton returnUrl={callbackUrl || "/"} />
+        )}
         {canShowTopProjectBadge && <TopProjectBadge />}
       </LeftPanelHeader>
       {/* TODO - evaluate whether to send this info to LeftPanelInfo, or use context instead */}

@@ -55,6 +55,7 @@ function Donations(): ReactElement {
     }
     return () => {};
   }, [router.query.step]);
+
   return (
     <div className="donations-container">
       <div className="donations-card-container">
