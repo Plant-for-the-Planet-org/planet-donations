@@ -1,10 +1,10 @@
 import { ReactElement, useContext, useState, useEffect } from "react";
 import LeftPanelContainer from "./LeftPanelContainer";
-import BackButton from "../../Common/BackButton";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import LeftPanelHeader from "./LeftPanelHeader";
 import TopProjectBadge from "./TopProjectBadge";
 import LeftPanelInfo from "./LeftPanelInfo";
+import CancelButton from "../../Common/CancelButton";
 
 function LeftPanel(): ReactElement {
   const {
@@ -53,7 +53,7 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {canShowBackButton && <BackButton backUrl={callbackUrl || "/"} />}
+        {canShowBackButton && <CancelButton returnUrl={callbackUrl || "/"} />}
         {canShowTopProjectBadge && <TopProjectBadge />}
       </LeftPanelHeader>
       {/* TODO - evaluate whether to send this info to LeftPanelInfo, or use context instead */}
