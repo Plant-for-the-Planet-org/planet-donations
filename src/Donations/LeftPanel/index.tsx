@@ -28,8 +28,8 @@ function LeftPanel(): ReactElement {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  const canShowBackButton =
-    isMobile && (callbackUrl.length > 0 || donationStep !== 0);
+  const canShowCancelPaymentButton =
+    isMobile && donationStep !== 0 ? true : callbackUrl.length > 0;
   const canShowTopProjectBadge =
     projectDetails !== null &&
     projectDetails.purpose !== "planet-cash-signup" &&
@@ -53,7 +53,9 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {canShowBackButton && <CancelButton returnUrl={callbackUrl || "/"} />}
+        {canShowCancelPaymentButton && (
+          <CancelButton returnUrl={callbackUrl || "/"} />
+        )}
         {canShowTopProjectBadge && <TopProjectBadge />}
       </LeftPanelHeader>
       {/* TODO - evaluate whether to send this info to LeftPanelInfo, or use context instead */}
