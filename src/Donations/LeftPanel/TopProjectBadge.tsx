@@ -2,7 +2,6 @@ import { ReactElement } from "react";
 import { Trans, useTranslation } from "next-i18next";
 import styles from "./LeftPanel.module.scss";
 import TopProjectIcon from "public/assets/icons/TopProjectIcon";
-import { Typography } from "@mui/material";
 import HoverPopover from "material-ui-popup-state/HoverPopover";
 import {
   usePopupState,
@@ -12,20 +11,23 @@ import {
 
 const TopProjectBadge = (): ReactElement => {
   const { t } = useTranslation("common");
-  const popupState = usePopupState({
+  const topProjectPopupState = usePopupState({
     variant: "popover",
-    popupId: "demoPopover",
+    popupId: "topProjectPopover",
   });
   return (
     <>
-      <div className={styles["top-project-badge"]} {...bindHover(popupState)}>
+      <div
+        className={styles["top-project-badge"]}
+        {...bindHover(topProjectPopupState)}
+      >
         <div className={styles["top-project-icon"]}>
           <TopProjectIcon />
         </div>
         <div>{t("topProject")}</div>
       </div>
       <HoverPopover
-        {...bindPopover(popupState)}
+        {...bindPopover(topProjectPopupState)}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "center",
@@ -39,7 +41,7 @@ const TopProjectBadge = (): ReactElement => {
         }}
         className={styles["verified-badge-popup"]}
       >
-        <Typography style={{ margin: 10, width: 300 }}>
+        <div className={styles["top-project-popup-container"]}>
           <Trans i18nKey="common:top_project_standards_fulfilled">
             The project inspection revealed that this project fulfilled at least
             12 of the 19 Top Project{" "}
@@ -53,7 +55,7 @@ const TopProjectBadge = (): ReactElement => {
               standards.
             </a>
           </Trans>
-        </Typography>
+        </div>
       </HoverPopover>
     </>
   );

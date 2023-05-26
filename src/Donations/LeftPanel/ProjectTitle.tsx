@@ -17,7 +17,7 @@ const ProjectTitle = ({ projectDetails, isMobile }: Props): ReactElement => {
     projectDetails.purpose === "conservation";
 
   return (
-    <p className={`${styles["project-title"]} title-text`}>
+    <h1 className={`${styles["project-title"]} title-text`}>
       {isLinked ? (
         <a
           rel="noreferrer"
@@ -32,7 +32,7 @@ const ProjectTitle = ({ projectDetails, isMobile }: Props): ReactElement => {
       {projectDetails.name !== null && projectDetails?.isApproved && (
         <VerifiedBadge />
       )}
-    </p>
+    </h1>
   );
 };
 

@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import VerifiedIcon from "@mui/icons-material/Verified";
-import { Typography } from "@mui/material";
 import styles from "./LeftPanel.module.scss";
 import HoverPopover from "material-ui-popup-state/HoverPopover";
 import {
@@ -13,19 +12,21 @@ import {
 const VerifiedBadge = (): ReactElement => {
   const { t } = useTranslation("common");
 
-  const popupState = usePopupState({
+  const verifiedPopupState = usePopupState({
     variant: "popover",
-    popupId: "demoPopover",
+    popupId: "verifiedPopover",
   });
 
   return (
     <>
-      <VerifiedIcon
-        className={styles["verified-badge"]}
-        {...bindHover(popupState)}
-      />
+      <span className={styles["verified-badge"]}>
+        <VerifiedIcon
+          sx={{ width: "100%" }}
+          {...bindHover(verifiedPopupState)}
+        />
+      </span>
       <HoverPopover
-        {...bindPopover(popupState)}
+        {...bindPopover(verifiedPopupState)}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "center",
@@ -39,10 +40,10 @@ const VerifiedBadge = (): ReactElement => {
         }}
         className={styles["verified-badge-popup"]}
       >
-        <Typography style={{ margin: 10, width: 300 }}>
+        <div className={styles["verified-popup-container"]}>
           {" "}
           {t("verifiedIconInfo")}
-        </Typography>
+        </div>
       </HoverPopover>
     </>
   );
