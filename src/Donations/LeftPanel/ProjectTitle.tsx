@@ -8,10 +8,9 @@ import styles from "./LeftPanel.module.scss";
 
 interface Props {
   projectDetails: FetchedProjectDetails | PlanetCashSignupDetails;
-  isMobile: boolean;
 }
 
-const ProjectTitle = ({ projectDetails, isMobile }: Props): ReactElement => {
+const ProjectTitle = ({ projectDetails }: Props): ReactElement => {
   const isLinked =
     projectDetails.purpose === "trees" ||
     projectDetails.purpose === "conservation";

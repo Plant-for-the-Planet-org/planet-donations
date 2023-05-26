@@ -90,7 +90,7 @@ const LeftPanelInfo = ({
       )}
       {canShowProject && (
         <div className={styles["project-info-container"]}>
-          <ProjectTitle projectDetails={projectDetails} isMobile={isMobile} />
+          <ProjectTitle projectDetails={projectDetails} />
           {projectDetails.purpose !== "planet-cash-signup" && (
             <ProjectInfo projectDetails={projectDetails} />
           )}
