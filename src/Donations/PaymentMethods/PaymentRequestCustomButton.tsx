@@ -251,13 +251,12 @@ export const NativePay = ({
 
   useEffect(() => {
     const fetchStripeObject = async () => {
-      if (paymentSetup) {
+      if (!stripePromise && paymentSetup) {
         const res = () => getStripe(paymentSetup, i18n.language);
         // When we have got the Stripe object, pass it into our useState.
         setStripePromise(res);
       }
     };
-    setStripePromise(null);
     fetchStripeObject();
   }, [paymentSetup]);
 
