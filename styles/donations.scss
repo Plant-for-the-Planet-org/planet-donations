@@ -68,25 +68,6 @@
   }
 }
 
-.donations-info {
-  display: flex;
-  flex-direction: column;
-  flex: inherit;
-  height: 100%;
-  z-index: 3;
-  justify-content: flex-end;
-  min-height: 236px;
-  a {
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.project-title-container {
-  display: flex;
-}
-
 .donations-transaction-details {
   font-size: 12px;
   color: $light;
@@ -739,29 +720,6 @@
   }
 }
 
-.contact-details-info {
-  p {
-    color: white !important;
-  }
-  button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-weight: bold;
-    svg {
-      margin-left: 6px;
-    }
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  p {
-    font-size: 12px;
-    margin-top: 4px;
-  }
-}
-
 @include smTabletView {
   .donations-forms-container {
     max-width: 420px;
@@ -973,18 +931,4 @@
   .thank-you-purpose {
     text-align: left;
   }
-}
-
-.verified-icon-popup {
-  max-width: 800px;
-  padding: 0.5rem;
-  margin-right: 20px;
-  pointer-events: none;
-}
-
-.MuiTypography-root {
-  display: inline;
-}
-.MuiPaper-root {
-  padding: 10px;
 }

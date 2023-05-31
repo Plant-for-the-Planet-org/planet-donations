@@ -24,6 +24,20 @@ const MuiTheme = createTheme({
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          padding: "10px",
+        },
+      },
+    },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          minWidth: "240px",
+        },
+      },
+    },
   },
 });
 
