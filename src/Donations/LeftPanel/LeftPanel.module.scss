@@ -24,7 +24,7 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 2;
+    z-index: -2;
     // background-color: rgba($color: #000000, $alpha: 0.3);
     background-image: linear-gradient(
       to top,
@@ -51,7 +51,6 @@
   align-items: center;
   gap: 4px;
   background-color: $primaryColor;
-  border: 0.2px solid #fafaff;
   border-radius: 14px;
   padding: 2px 8px 2px 2px;
   font-weight: 700;
@@ -73,6 +72,11 @@
       height: 14px;
     }
   }
+}
+
+.verified-popup-container, .top-project-popup-container {
+  margin: 10px;
+  width: 300px;
 }
 
 .left-panel-info {
@@ -124,16 +128,17 @@
 }
 
 .project-title {
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  column-gap: 10px;
+  a {
+    display: inline;
+  }
 }
 
 .verified-badge {
-  display: flex;
-  align-items: center;
-  height: 1.43em; //hack to match line height of h1 tag
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 0.95em;
+  min-width: 0.95em;
+  line-height: 0.95em;
 }
 
 .verified-badge-popup {

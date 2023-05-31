@@ -8,31 +8,30 @@ import styles from "./LeftPanel.module.scss";
 
 interface Props {
   projectDetails: FetchedProjectDetails | PlanetCashSignupDetails;
-  isMobile: boolean;
 }
 
-const ProjectTitle = ({ projectDetails, isMobile }: Props): ReactElement => {
+const ProjectTitle = ({ projectDetails }: Props): ReactElement => {
   const isLinked =
     projectDetails.purpose === "trees" ||
     projectDetails.purpose === "conservation";
 
   return (
-    <div className={`${styles["project-title"]} title-text`}>
+    <h1 className={`${styles["project-title"]} title-text`}>
       {isLinked ? (
         <a
           rel="noreferrer"
           target="_blank"
           href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
         >
-          <h1>{projectDetails.name}</h1>
+          {projectDetails.name + "    "}
         </a>
       ) : (
-        <h1>{projectDetails.name}</h1>
+        <>{projectDetails.name + "    "}</>
       )}
       {projectDetails.name !== null && projectDetails?.isApproved && (
-        <VerifiedBadge isMobile={isMobile} />
+        <VerifiedBadge />
       )}
-    </div>
+    </h1>
   );
 };
 
