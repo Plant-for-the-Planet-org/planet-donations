@@ -1,10 +1,10 @@
 import { ReactElement, useContext, useState, useEffect } from "react";
 import LeftPanelContainer from "./LeftPanelContainer";
-import BackButton from "../../Common/BackButton";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import LeftPanelHeader from "./LeftPanelHeader";
 import TopProjectBadge from "./TopProjectBadge";
 import LeftPanelInfo from "./LeftPanelInfo";
+import CancelButton from "../../Common/CancelButton";
 
 function LeftPanel(): ReactElement {
   const {
@@ -28,8 +28,8 @@ function LeftPanel(): ReactElement {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  const canShowBackButton =
-    isMobile && (callbackUrl.length > 0 || donationStep !== 0);
+  const canShowCancelPaymentButton =
+    isMobile && donationStep !== 0 ? true : callbackUrl.length > 0;
   const canShowTopProjectBadge =
     projectDetails !== null &&
     projectDetails.purpose !== "planet-cash-signup" &&
@@ -53,7 +53,9 @@ function LeftPanel(): ReactElement {
       tenant={tenant}
     >
       <LeftPanelHeader>
-        {canShowBackButton && <BackButton backUrl={callbackUrl || "/"} />}
+        {canShowCancelPaymentButton && (
+          <CancelButton returnUrl={callbackUrl || "/"} />
+        )}
         {canShowTopProjectBadge && <TopProjectBadge />}
       </LeftPanelHeader>
       {/* TODO - evaluate whether to send this info to LeftPanelInfo, or use context instead */}

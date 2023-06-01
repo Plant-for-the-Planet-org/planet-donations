@@ -24,7 +24,7 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 2;
+    z-index: -2;
     // background-color: rgba($color: #000000, $alpha: 0.3);
     background-image: linear-gradient(
       to top,
@@ -51,7 +51,6 @@
   align-items: center;
   gap: 4px;
   background-color: $primaryColor;
-  border: 0.2px solid #fafaff;
   border-radius: 14px;
   padding: 2px 8px 2px 2px;
   font-weight: 700;
@@ -73,6 +72,111 @@
       height: 14px;
     }
   }
+}
+
+.verified-popup-container, .top-project-popup-container {
+  margin: 10px;
+  width: 300px;
+}
+
+.left-panel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: inherit;
+  height: 100%;
+  z-index: 3;
+  justify-content: flex-end;
+  min-height: 236px;
+
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  * {
+    color: $light;
+  }
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+  border: 1px solid $light;
+  box-shadow: 0px 3px 6px -3px rgba($color: $dark, $alpha: 0.16);
+  background-color: $light;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.avatar--text {
+    background-color: $primaryDarkColor;
+    color: $light;
+    font-weight: bold;
+    display: flex;
+  }
+
+  &-link {
+    width: fit-content;
+  }
+}
+
+.transaction-summary {
+  color: $light;
+}
+
+.project-title {
+  a {
+    display: inline;
+  }
+}
+
+.verified-badge {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 0.95em;
+  min-width: 0.95em;
+  line-height: 0.95em;
+}
+
+.verified-badge-popup {
+  max-width: 800px;
+  padding: 0.5rem;
+  margin-right: 20px;
+  margin-left: 10px;
+  pointer-events: none;
+}
+
+.project-description,
+.gift-info,
+.on-behalf-info,
+.contact-info,
+.donation-link {
+  margin-top: 10px;
+}
+
+.gift-info,
+.on-behalf-info,
+.contact-details-info {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .gift-recipient,
+  .donor-name {
+    font-weight: bold;
+  }
+
+  a.gift-recipient {
+    font-size: 14px;
+  }
+}
+
+.donation-link {
+  font-size: 12px;
 }
 
 @include smTabletView {

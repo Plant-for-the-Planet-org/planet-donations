@@ -210,7 +210,7 @@ export default function PaymentMethodTabs({
               data-test-id="bankTransfer"
             >
               <BankIcon />
-              <text>{t("bankTransfer")}</text>
+              <span>&nbsp;{t("bankTransfer")}</span>
             </div>
             <CheckMark />
           </button>
