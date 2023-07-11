@@ -204,5 +204,8 @@
   "planet_cash_invalid_project": "Ungültiges Projekt",
   "active_account_exists": "Aktives PlanetCash-Konto existiert bereits.",
   "duplicate_account": "Das Konto existiert bereits.",
-  "loading": "Laden ..."
+  "loading": "Laden ...",
+  "topProject": "Top-Projekt",
+  "top_project_standards_fulfilled": "Die Projektinspektion ergab, dass dieses Projekt mindestens 12 der 19 wichtigsten <2>Projektstandards</2> erfüllte.",
+  "standardsLink": "https://www.plant-for-the-planet.org/standards/"
 }
