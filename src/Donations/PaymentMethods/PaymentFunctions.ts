@@ -466,6 +466,7 @@ export async function handleStripeSCAPayment({
           }
           try {
             const payDonationData = {
+              // method not sent here as it was already captured in the 1st request.
               paymentProviderRequest: {
                 account: paymentSetup.gateways.stripe.account,
                 gateway: "stripe" as const,
