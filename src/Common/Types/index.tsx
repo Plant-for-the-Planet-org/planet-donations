@@ -143,12 +143,12 @@ export interface PaymentOptions extends FetchedProjectDetails {
   frequencies: Frequencies;
   gateways: Gateways;
   recurrency: Recurrency;
+  /** @deprecated - use unitType instead */
   unit: string;
+  unitType: string;
   unitCost: number;
   currency: string;
   destination: string;
-  isApproved: boolean;
-  isTopProject: boolean;
 }
 
 interface Frequencies {

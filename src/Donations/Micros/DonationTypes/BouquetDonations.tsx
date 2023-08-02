@@ -108,7 +108,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
         setCustomInputValue(
           getFormattedNumber(
             i18n.language,
-            paymentSetup.unit !== "currency"
+            paymentSetup.unitType !== "currency"
               ? newQuantity
               : newQuantity * paymentSetup.unitCost
           )
@@ -227,7 +227,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                         }}
                       >
                         {paymentSetup.purpose === "conservation"
-                          ? t(paymentSetup.unit)
+                          ? t(paymentSetup.unitType)
                           : []}
                       </p>
                     </div>
@@ -238,7 +238,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                     >
                       <p style={{ margin: "5px" }}>
                         {" "}
-                        {paymentSetup.unit === "currency"
+                        {paymentSetup.unitType === "currency"
                           ? t("customAmount")
                           : t("custom")}
                       </p>
