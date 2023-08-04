@@ -3,6 +3,8 @@
   "fortreeCountTrees_other": "for {{treeCount}} Trees",
   "forQuantitym2": "for {{quantity}} m²",
   "m2": "m²",
+  "tree_one": "tree",
+  "tree_other": "trees",
   "recipientName": "Recipient Name",
   "recipientNameRequired": "Recipient Name is required",
   "email": "Email",
@@ -37,6 +39,10 @@
   "orgNamePublishedTax": "Company name is visible on our leaderboard and app. Tax-deduction receipts will be issued for the same name.",
   "orgNamePublished": "Company name is visible on our leaderboard and app.",
   "paymentDetails": "Payment Details",
+  "perUnit": {
+    "tree": "per tree",
+    "m2": "per m²"
+  },
   "perTree": "per tree",
   "perm2": "per m²",
   "youWillReceiveTaxDeduction": "You will receive a tax deduction receipt for ",

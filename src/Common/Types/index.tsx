@@ -10,6 +10,7 @@ import {
   ContactDetails,
   BankTransferDetails,
   PaymentGateway,
+  CurrencyCode,
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
@@ -145,7 +146,7 @@ export interface PaymentOptions extends FetchedProjectDetails {
   recurrency: Recurrency;
   /** @deprecated - use unitType instead */
   unit: string;
-  unitType: string;
+  unitType: "tree" | "m2" | "currency" | CurrencyCode;
   unitCost: number;
   currency: string;
   destination: string;

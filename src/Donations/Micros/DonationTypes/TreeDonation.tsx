@@ -74,7 +74,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
   }, [quantity]);
 
   const customInputRef = React.useRef<HTMLInputElement>(null);
-  return (
+  return paymentSetup !== null ? (
     <div
       className={`donations-tree-selection ${
         isGift && giftDetails.recipientName === "" ? "display-none" : ""
@@ -99,7 +99,9 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
               {option.iconFile}
               <div className="tree-selection-option-text">
                 <p>{option.quantity}</p>
-                <span>{t("trees")}</span>
+                <span>
+                  {t(paymentSetup.unitType, { count: option.quantity })}
+                </span>
               </div>
             </div>
           );
@@ -136,7 +138,11 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
               }}
               ref={customInputRef}
             />
-            <span>{t("trees")}</span>
+            <span>
+              {t(paymentSetup.unitType, {
+                count: parseInt(customTreeInputValue),
+              })}
+            </span>
           </div>
         </div>
       </div>
@@ -165,7 +171,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
               Number(paymentSetup.unitCost)
             )}{" "}
           </button>
-          {t("perTree")}
+          {t(`perUnit.${paymentSetup.unitType}`)}
         </p>
       ) : (
         <div className={"mt-20"}>
@@ -173,6 +179,8 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
         </div>
       )}
     </div>
+  ) : (
+    <div>Payment Setup Failed</div>
   );
 }
 
