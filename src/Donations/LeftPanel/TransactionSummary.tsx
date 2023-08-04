@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
-import { PaymentOptions, ProjectPurpose } from "src/Common/Types";
+import { PaymentOptions, ProjectPurpose, UnitType } from "src/Common/Types";
 import styles from "./LeftPanel.module.scss";
 
 interface Props {
@@ -22,26 +22,28 @@ const TransactionSummary = ({
 
   /** Generates unit/frequency info when needed */
   const getAdditionalInfo = (
-    purpose: ProjectPurpose,
-    frequency: string
+    unitType: UnitType,
+    frequency: string,
+    language: string,
+    quantity: number
   ): string => {
     let info = "";
-    switch (purpose) {
-      case "trees":
+    switch (unitType) {
+      case "tree":
         info =
           info +
           " " +
           t("fortreeCountTrees", {
             count: Number(quantity),
-            treeCount: getFormattedNumber(i18n.language, Number(quantity)),
+            treeCount: getFormattedNumber(language, Number(quantity)),
           });
         break;
-      case "conservation":
+      case "m2":
         info =
           info +
           " " +
           t("forQuantitym2", {
-            quantity: getFormattedNumber(i18n.language, Number(quantity)),
+            quantity: getFormattedNumber(language, Number(quantity)),
           });
         break;
       default:
@@ -72,7 +74,12 @@ const TransactionSummary = ({
           paymentSetup.unitCost * quantity
         )}
       </strong>
-      {getAdditionalInfo(paymentSetup.purpose, frequency)}
+      {getAdditionalInfo(
+        paymentSetup.unitType,
+        frequency,
+        i18n.language,
+        quantity
+      )}
     </div>
   );
 };

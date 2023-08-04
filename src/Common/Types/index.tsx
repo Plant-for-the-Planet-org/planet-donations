@@ -146,11 +146,13 @@ export interface PaymentOptions extends FetchedProjectDetails {
   recurrency: Recurrency;
   /** @deprecated - use unitType instead */
   unit: string;
-  unitType: "tree" | "m2" | "currency" | CurrencyCode;
+  unitType: UnitType;
   unitCost: number;
   currency: string;
   destination: string;
 }
+
+export type UnitType = "tree" | "m2" | "currency" | CurrencyCode;
 
 interface Frequencies {
   [key: string]: Frequency;
