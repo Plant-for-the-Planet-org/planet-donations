@@ -215,32 +215,6 @@ export function createDonationData({
     };
   }
 
-  if (isGift) {
-    if (giftDetails.type === "invitation") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          },
-        },
-      };
-    } else if (giftDetails.type === "direct") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "direct",
-            recipient: giftDetails.recipient,
-          },
-        },
-      };
-    }
-  }
-
   if (projectDetails?.purpose === "planet-cash") {
     // For PlanetCash Top-up
 
