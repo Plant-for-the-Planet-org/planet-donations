@@ -96,7 +96,10 @@ const LeftPanelInfo = ({
           )}
         </div>
       )}
-      {canShowGift && <GiftInfo giftDetails={giftDetails} />}
+      {canShowGift &&
+        router.query.to?.toString().toLowerCase() !== "planetcash" && (
+          <GiftInfo giftDetails={giftDetails} />
+        )}
       {canShowOnBehalf && <OnBehalfInfo onBehalfDonor={onBehalfDonor} />}
       {canShowContactDetails && (
         <ContactDetailsInfo contactDetails={contactDetails} />
