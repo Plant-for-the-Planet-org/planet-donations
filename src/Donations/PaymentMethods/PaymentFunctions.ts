@@ -177,8 +177,6 @@ export function createDonationData({
   currency,
   contactDetails,
   taxDeductionCountry,
-  isGift,
-  giftDetails,
   frequency,
   amount,
   callbackUrl,
