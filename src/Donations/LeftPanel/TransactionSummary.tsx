@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
-import { PaymentOptions, ProjectPurpose, UnitType } from "src/Common/Types";
+import { PaymentOptions, UnitType } from "src/Common/Types";
 import styles from "./LeftPanel.module.scss";
 
 interface Props {
