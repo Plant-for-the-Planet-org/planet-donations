@@ -180,7 +180,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
       )}
     </div>
   ) : (
-    <div>Payment Setup Failed</div>
+    <></>
   );
 }
 

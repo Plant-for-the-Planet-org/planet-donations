@@ -326,7 +326,8 @@ function DonationsForm(): ReactElement {
             <p className="title-text">{t("donate")}</p>
           )}
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {projectDetails.purpose !== "funds" &&
+          {paymentSetup?.unitType === "tree" &&
+            projectDetails.purpose !== "funds" &&
             projectDetails.purpose !== "planet-cash" &&
             !(isGift && giftDetails.recipientName === "") &&
             !(onBehalf && onBehalfDonor.firstName === "") &&
