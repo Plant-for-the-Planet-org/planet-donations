@@ -16,6 +16,8 @@ import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
+import GiftIcon from "public/assets/icons/GiftIcon";
+import { euCountries } from "src/Utils/countryUtils";
 
 function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -26,13 +28,15 @@ function ContactsForm(): ReactElement {
 
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
+  const [isEligibleForPackage, setIsEligibleForPackage] = React.useState(false);
+  const [isPackageWanted, setIsPackageWanted] = React.useState(false);
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {}
+      : {},
   );
   const {
     profile,
@@ -74,7 +78,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
+      (country) => country.abbrev === contactDetails.country,
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
@@ -85,7 +89,7 @@ function ContactsForm(): ReactElement {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setContactDetails({
       ...data,
@@ -95,8 +99,8 @@ function ContactsForm(): ReactElement {
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
-    )[0]?.postal
+      (country) => country.abbrev === contactDetails.country,
+    )[0]?.postal,
   );
 
   const changeCountry = (country: string) => {
@@ -107,6 +111,20 @@ function ContactsForm(): ReactElement {
     };
     setContactDetails(data);
   };
+
+  React.useEffect(() => {
+    if (
+      projectDetails?.purpose === "funds" &&
+      projectDetails.id === "proj_rLYELl1JpkT9sskba0sLPeKi" &&
+      euCountries.includes(contactDetails.country)
+    ) {
+      setIsEligibleForPackage(true);
+      setIsPackageWanted(true);
+    } else {
+      setIsEligibleForPackage(false);
+      setIsPackageWanted(false);
+    }
+  }, [projectDetails, contactDetails.country]);
 
   const [addressSugggestions, setaddressSugggestions] = React.useState<
     GeocodeSuggestion[]
@@ -175,7 +193,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true }
+                { shallow: true },
               );
             }}
             style={{ marginRight: "12px" }}
@@ -425,6 +443,21 @@ function ContactsForm(): ReactElement {
             <></>
           )}
 
+          {isEligibleForPackage && (
+            <div className="welcome-package-toggle mt-20">
+              <label htmlFor="welcomePackage-toggle">
+                <GiftIcon color={themeProperties.light.secondaryColor} />
+                {t("welcomePackageConsent")}
+              </label>
+              <ToggleSwitch
+                name="shouldSendWelcomePackage"
+                checked={isPackageWanted}
+                onChange={() => setIsPackageWanted(!isPackageWanted)}
+                id="welcomePackage-toggle"
+              />
+            </div>
+          )}
+
           {(profile === null || profile.type === undefined) && (
             <div className="contacts-isCompany-toggle mt-20">
               <label htmlFor="isCompany-toggle">
@@ -504,7 +537,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity
+                    paymentSetup.unitCost * quantity,
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),
