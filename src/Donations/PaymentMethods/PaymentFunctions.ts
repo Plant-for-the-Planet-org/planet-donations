@@ -177,6 +177,8 @@ export function createDonationData({
   currency,
   contactDetails,
   taxDeductionCountry,
+  isGift,
+  giftDetails,
   frequency,
   amount,
   callbackUrl,
@@ -213,6 +215,32 @@ export function createDonationData({
     };
   }
 
+  if (isGift) {
+    if (giftDetails.type === "invitation") {
+      donationData = {
+        ...donationData,
+        ...{
+          gift: {
+            type: "invitation",
+            recipientName: giftDetails.recipientName,
+            recipientEmail: giftDetails.recipientEmail,
+            message: giftDetails.message,
+          },
+        },
+      };
+    } else if (giftDetails.type === "direct") {
+      donationData = {
+        ...donationData,
+        ...{
+          gift: {
+            type: "direct",
+            recipient: giftDetails.recipient,
+          },
+        },
+      };
+    }
+  }
+
   if (projectDetails?.purpose === "planet-cash") {
     // For PlanetCash Top-up
 
@@ -221,6 +249,9 @@ export function createDonationData({
 
     // Since a user account can have only one planetCash account no need to send project (i.e planetCash account ID).
     delete donationData.project;
+
+    //should not send gift details
+    delete donationData.gift;
   }
 
   return donationData;
