@@ -19,6 +19,10 @@ import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
 
+interface FormData extends ContactDetails {
+  isPackageWanted: boolean;
+}
+
 function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
 
@@ -29,7 +33,6 @@ function ContactsForm(): ReactElement {
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
   const [isEligibleForPackage, setIsEligibleForPackage] = React.useState(false);
-  const [isPackageWanted, setIsPackageWanted] = React.useState(false);
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
@@ -51,6 +54,7 @@ function ContactsForm(): ReactElement {
     projectDetails,
     taxIdentificationAvail,
     setTaxIdentificationAvail,
+    setIsPackageWanted,
   } = React.useContext(QueryParamContext);
 
   const { isAuthenticated } = useAuth0();
@@ -71,7 +75,7 @@ function ContactsForm(): ReactElement {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<ContactDetails>({
+  } = useForm<FormData>({
     mode: "all",
     defaultValues: contactDetails,
   });
@@ -83,7 +87,8 @@ function ContactsForm(): ReactElement {
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: ContactDetails) => {
+  const onSubmit = (data: FormData) => {
+    const { isPackageWanted, ...enteredContactDetails } = data;
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
@@ -92,9 +97,12 @@ function ContactsForm(): ReactElement {
       { shallow: true },
     );
     setContactDetails({
-      ...data,
-      email: isAuthenticated ? contactDetails.email : data.email,
+      ...enteredContactDetails,
+      email: isAuthenticated
+        ? contactDetails.email
+        : enteredContactDetails.email,
     });
+    setIsPackageWanted(isPackageWanted);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -119,10 +127,10 @@ function ContactsForm(): ReactElement {
       euCountries.includes(contactDetails.country)
     ) {
       setIsEligibleForPackage(true);
-      setIsPackageWanted(true);
+      setValue("isPackageWanted", true);
     } else {
       setIsEligibleForPackage(false);
-      setIsPackageWanted(false);
+      setValue("isPackageWanted", false);
     }
   }, [projectDetails, contactDetails.country]);
 
@@ -449,11 +457,16 @@ function ContactsForm(): ReactElement {
                 <GiftIcon color={themeProperties.light.secondaryColor} />
                 {t("welcomePackageConsent")}
               </label>
-              <ToggleSwitch
-                name="shouldSendWelcomePackage"
-                checked={isPackageWanted}
-                onChange={() => setIsPackageWanted(!isPackageWanted)}
-                id="welcomePackage-toggle"
+              <Controller
+                name="isPackageWanted"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <ToggleSwitch
+                    checked={value}
+                    onChange={onChange}
+                    id="welcomePackage-toggle"
+                  />
+                )}
               />
             </div>
           )}

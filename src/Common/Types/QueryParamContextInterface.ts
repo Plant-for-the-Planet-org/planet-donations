@@ -65,6 +65,8 @@ export default interface QueryParamContextInterface {
   setUtmMedium: Dispatch<SetStateAction<string>>;
   utmSource: string;
   setUtmSource: Dispatch<SetStateAction<string>>;
+  isPackageWanted: boolean;
+  setIsPackageWanted: Dispatch<SetStateAction<boolean>>;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
   tenant: string;
