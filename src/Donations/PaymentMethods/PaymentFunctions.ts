@@ -118,6 +118,7 @@ export async function createDonationFunction({
   utmCampaign,
   utmMedium,
   utmSource,
+  isPackageWanted = false,
   tenant,
   locale,
 }: CreateDonationFunctionProps): Promise<Donation | undefined> {
@@ -138,6 +139,7 @@ export async function createDonationFunction({
     utmCampaign,
     utmMedium,
     utmSource,
+    isPackageWanted,
   });
   try {
     const requestParams = {
@@ -186,6 +188,7 @@ export function createDonationData({
   utmCampaign,
   utmMedium,
   utmSource,
+  isPackageWanted,
 }: CreateDonationDataProps): DonationRequestData {
   let donationData: DonationRequestData = {
     purpose: projectDetails?.purpose,
@@ -203,6 +206,7 @@ export function createDonationData({
       utm_campaign: utmCampaign,
       utm_medium: utmMedium,
       utm_source: utmSource,
+      ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
     },
     quantity,
   };
