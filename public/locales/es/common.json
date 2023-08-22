@@ -104,5 +104,11 @@
   "errorOccurred": "Algo salió mal",
   "dedicatedTo": "Dedicado a",
   "message": "Mensaje",
-  "contributedToTpo": "He aportado {{amount}} a {{organization}}"
+  "contributedToTpo": "He aportado {{amount}} a {{organization}}",
+  "once": "Puntual",
+  "monthly": "Mensual",
+  "yearly": "Anual",
+  "monthlySuccess": "mensual",
+  "yearlySuccess": "anual",
+  "customAmount": "Otro importe"
 }

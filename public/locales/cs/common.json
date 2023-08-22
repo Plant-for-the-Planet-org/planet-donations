@@ -1,6 +1,6 @@
 {
   "fortreeCountTrees_one": "za {{treeCount}} strom",
-  "fortreeCountTrees_other": "za {{treeCount}} stromy/ů",
+  "fortreeCountTrees_other": "za {{treeCount}} stromů",
   "forQuantitym2": "pro {{quantity}} m²",
   "m2": "m²",
   "recipientName": "Jméno příjemce",
@@ -100,7 +100,7 @@
   "contact": "Kontakt",
   "faqs": "FAQ",
   "selectLanguage": "Zvolit jazyk",
-  "trees": "stromy/ů",
+  "trees": "stromů",
   "logout": "Odhlásit se",
   "directGiftRecipient": "Tento dar podporuje Les od {{name}}",
   "saveGiftDetails": "Uloži darovací údaje",
