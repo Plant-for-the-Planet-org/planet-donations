@@ -446,7 +446,7 @@
 
 .welcome-package-toggle {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
 
   > label {
@@ -456,6 +456,10 @@
     gap: 10px;
     &:hover {
       cursor: pointer;
+    }
+    svg {
+      width: 40px;
+      height: auto;
     }
   }
 }
