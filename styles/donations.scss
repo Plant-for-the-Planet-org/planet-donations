@@ -448,7 +448,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  border: 1px solid $primaryColor;
+  border-radius: 10px;
+  padding: 10px;
   > label {
     display: flex;
     align-items: center;
