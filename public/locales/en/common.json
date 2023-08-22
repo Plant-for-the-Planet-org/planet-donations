@@ -28,7 +28,7 @@
   "zipCodeAlphaNumValidation": "ZipCode is invalid",
   "country": "Country",
   "countryRequired": "Country is required",
-  "welcomePackageConsent": "Please mail me the Membership Welcome Package (for EU countries)",
+  "welcomePackageConsent": "Yes, please send me the Welcome Package (only EU countries).",
   "isACompanyDonation": "This donation is made by a company",
   "companyName": "Company Name",
   "companyRequired": "Company Name is required",
