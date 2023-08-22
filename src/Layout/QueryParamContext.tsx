@@ -116,7 +116,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [utmCampaign, setUtmCampaign] = useState("");
   const [utmMedium, setUtmMedium] = useState("");
   const [utmSource, setUtmSource] = useState("");
-  const [isPackageWanted, setIsPackageWanted] = useState(false);
+  const [isPackageWanted, setIsPackageWanted] = useState<boolean | null>(null);
 
   const [redirectstatus, setredirectstatus] = useState<string | null>(null);
 
@@ -454,6 +454,7 @@ const QueryParamProvider: FC = ({ children }) => {
     contactDetails.zipCode,
     contactDetails.country,
     contactDetails.companyname,
+    isPackageWanted,
     isTaxDeductible,
   ]);
 

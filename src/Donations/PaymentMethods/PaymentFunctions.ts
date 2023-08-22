@@ -206,7 +206,7 @@ export function createDonationData({
       utm_campaign: utmCampaign,
       utm_medium: utmMedium,
       utm_source: utmSource,
-      ...(isPackageWanted && { welcomePackageStatus: "draft" }),
+      ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
     },
     quantity,
   };

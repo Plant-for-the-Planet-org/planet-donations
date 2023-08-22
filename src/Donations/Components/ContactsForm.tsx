@@ -54,6 +54,7 @@ function ContactsForm(): ReactElement {
     projectDetails,
     taxIdentificationAvail,
     setTaxIdentificationAvail,
+    isPackageWanted,
     setIsPackageWanted,
   } = React.useContext(QueryParamContext);
 
@@ -61,12 +62,12 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (contactDetails) {
-      reset(contactDetails);
+      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false });
       if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
-  }, [contactDetails]);
+  }, [contactDetails, isPackageWanted]);
 
   const {
     handleSubmit,
