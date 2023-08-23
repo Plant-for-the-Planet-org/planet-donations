@@ -66,7 +66,8 @@ const LeftPanelInfo = ({
     (donationStep === 1 || donationStep === 2 || donationStep === 3) &&
     giftDetails.type !== null &&
     isGift &&
-    giftDetails.recipientName !== undefined;
+    giftDetails.recipientName !== undefined &&
+    projectDetails?.purpose !== "planet-cash";
   const canShowOnBehalf =
     donationStep === 1 &&
     isPlanetCashActive &&
@@ -96,10 +97,7 @@ const LeftPanelInfo = ({
           )}
         </div>
       )}
-      {canShowGift &&
-        router.query.to?.toString().toLowerCase() !== "planetcash" && (
-          <GiftInfo giftDetails={giftDetails} />
-        )}
+      {canShowGift && <GiftInfo giftDetails={giftDetails} />}
       {canShowOnBehalf && <OnBehalfInfo onBehalfDonor={onBehalfDonor} />}
       {canShowContactDetails && (
         <ContactDetailsInfo contactDetails={contactDetails} />
