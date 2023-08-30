@@ -280,7 +280,7 @@ function PaymentsForm(): ReactElement {
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
     ) : (
-      <div className={"donations-forms-container"}>
+      <div className="right-panel-container">
         <div
           className="donations-form"
           style={{ display: "flex", flexDirection: "column", width: "100%" }}
