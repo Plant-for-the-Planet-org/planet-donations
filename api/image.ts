@@ -58,17 +58,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    const url = req.query.path as string
+    const url = req.query.path as string;
 
     // Navigate to a URL (you can replace this with your desired URL)
     await page.goto(url, {
-        timeout: 30 * 1000,
-        waitUntil: "networkidle"
+      timeout: 30 * 1000,
+      waitUntil: "networkidle",
     });
 
     // Take a screenshot
     const screenshotBuffer = await page.screenshot({
-        type: "png"
+      type: "png",
     });
 
     // Close the browser
@@ -90,6 +90,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     screenshotStream.pipe(res);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send(JSON.stringify(error));
   }
 };
