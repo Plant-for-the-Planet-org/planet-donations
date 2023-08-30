@@ -21,7 +21,7 @@ const AuthInterstitial = (): ReactElement => {
           <LeftPanelContainer tenant={tenant} />
           {/* Right Panel */}
           <div
-            className="donations-forms-container"
+            className="right-panel-container"
             style={{ paddingBottom: "0px" }}
           >
             <div className="donations-form w-100">

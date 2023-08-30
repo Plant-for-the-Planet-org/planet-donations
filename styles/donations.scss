@@ -29,7 +29,7 @@
   flex-direction: column;
 }
 
-.donations-forms-container {
+.right-panel-container {
   display: flex;
   padding: 20px;
   width: 100%;
@@ -743,7 +743,7 @@
 }
 
 @include smTabletView {
-  .donations-forms-container {
+  .right-panel-container {
     max-width: 420px;
     padding: 30px;
   }
@@ -807,7 +807,7 @@
     align-items: center;
     max-width: 840px;
   }
-  .donations-forms-container {
+  .right-panel-container {
     width: 420px;
     padding-bottom: 30px;
     margin-top: 0px;

@@ -118,63 +118,61 @@ function ThankYou(): ReactElement {
     }
   };
 
-  return (
-    <div className="donations-forms-container" style={{ paddingBottom: "0px" }}>
-      {projectDetails?.purpose === "planet-cash-signup" ? (
-        <PlanetCashSignup />
-      ) : (
-        <div className="donations-form w-100">
-          {!ready && !donation ? (
-            <PaymentProgress isPaymentProcessing={true} />
-          ) : (
-            <div>
-              {donation && donation.paymentStatus ? (
-                status === "success" ||
-                status === "paid" ||
-                status === "succeeded" ? (
-                  <SuccessComponent />
-                ) : status === "failed" || paymentError ? (
-                  <FailedDonation
-                    sendToReturn={sendToReturn}
-                    donation={donation}
-                  />
-                ) : transferDetails ? (
-                  <TransferDetails
-                    donationID={donationID as string}
-                    donation={donation}
-                    sendToReturn={sendToReturn}
-                  />
-                ) : (
-                  <PendingDonation
-                    donationID={donationID as string}
-                    sendToReturn={sendToReturn}
-                  />
-                )
+  return projectDetails?.purpose === "planet-cash-signup" ? (
+    <PlanetCashSignup />
+  ) : (
+    <div className="right-panel-container" style={{ paddingBottom: "0px" }}>
+      <div className="donations-form w-100">
+        {!ready && !donation ? (
+          <PaymentProgress isPaymentProcessing={true} />
+        ) : (
+          <div>
+            {donation && donation.paymentStatus ? (
+              status === "success" ||
+              status === "paid" ||
+              status === "succeeded" ? (
+                <SuccessComponent />
+              ) : status === "failed" || paymentError ? (
+                <FailedDonation
+                  sendToReturn={sendToReturn}
+                  donation={donation}
+                />
+              ) : transferDetails ? (
+                <TransferDetails
+                  donationID={donationID as string}
+                  donation={donation}
+                  sendToReturn={sendToReturn}
+                />
               ) : (
-                <div className={styles.loaderContainer}>
-                  <CircularProgress color="inherit" />
-                </div>
-              )}
-            </div>
-          )}
+                <PendingDonation
+                  donationID={donationID as string}
+                  sendToReturn={sendToReturn}
+                />
+              )
+            ) : (
+              <div className={styles.loaderContainer}>
+                <CircularProgress color="inherit" />
+              </div>
+            )}
+          </div>
+        )}
 
-          <Snackbar
-            open={textCopiedsnackbarOpen}
-            autoHideDuration={4000}
+        <Snackbar
+          open={textCopiedsnackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleTextCopiedSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
             onClose={handleTextCopiedSnackbarClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            severity="success"
           >
-            <MuiAlert
-              elevation={6}
-              variant="filled"
-              onClose={handleTextCopiedSnackbarClose}
-              severity="success"
-            >
-              {t("donate:copiedToClipboard")}
-            </MuiAlert>
-          </Snackbar>
-        </div>
-      )}
+            {t("donate:copiedToClipboard")}
+          </MuiAlert>
+        </Snackbar>
+      </div>
     </div>
   );
 }
