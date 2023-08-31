@@ -42,34 +42,29 @@
 // }
 
 import { chromium } from "playwright-core";
-import chromiumLambda from "chrome-aws-lambda";
+// import chromiumLambda from "chrome-aws-lambda";
 import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    // Launch a headless browser instance using AWS Lambda-compatible Chromium
-    const browser = await chromium.launch({
-      args: chromiumLambda.args,
-      executablePath: await chromiumLambda.executablePath,
-    });
+    // Launch a local browser instance
+    const browser = await chromium.launch();
 
     // Create a new browser context and page
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      viewport: {
+        width: 1200,
+        height: 720,
+      },
+    });
     const page = await context.newPage();
 
-    const url = req.query.path as string;
-
     // Navigate to a URL (you can replace this with your desired URL)
-    await page.goto(url, {
-      timeout: 30 * 1000,
-      waitUntil: "networkidle",
-    });
+    await page.goto("https://www.example.com");
 
     // Take a screenshot
-    const screenshotBuffer = await page.screenshot({
-      type: "png",
-    });
+    const screenshotBuffer = await page.screenshot();
 
     // Close the browser
     await context.close();
@@ -90,6 +85,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     screenshotStream.pipe(res);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send(error);
+    res.status(500).send("Internal Server Error");
   }
 };
