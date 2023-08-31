@@ -40,9 +40,7 @@ function SuccessfulDonation({
 
   const sendRef = () => imageRef;
 
-  return donation &&
-    projectDetails &&
-    projectDetails.purpose !== "planet-cash-signup" ? (
+  return donation && projectDetails ? (
     <div>
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}
@@ -64,7 +62,7 @@ function SuccessfulDonation({
           <ShareOptions
             treeCount={getFormattedNumber(
               i18n.language,
-              Number(donation.treeCount)
+              Number(donation.treeCount),
             )}
             sendRef={sendRef}
             donor={donation.donor}

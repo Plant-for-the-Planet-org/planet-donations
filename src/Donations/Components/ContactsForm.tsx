@@ -177,7 +177,6 @@ function ContactsForm(): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"

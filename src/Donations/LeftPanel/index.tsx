@@ -33,7 +33,6 @@ function LeftPanel(): ReactElement {
     isMobile && donationStep !== 0 ? true : callbackUrl.length > 0;
   const canShowTopProjectBadge =
     projectDetails !== null &&
-    projectDetails.purpose !== "planet-cash-signup" &&
     projectDetails.isApproved &&
     projectDetails.isTopProject;
 
