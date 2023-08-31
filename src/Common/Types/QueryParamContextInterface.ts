@@ -35,9 +35,11 @@ export default interface QueryParamContextInterface {
   setEnabledCurrencies: Dispatch<SetStateAction<CurrencyList | null>>;
   donationStep: number | null;
   setdonationStep: Dispatch<SetStateAction<number | null>>;
-  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null;
-  setprojectDetails: Dispatch<
-    SetStateAction<FetchedProjectDetails | PlanetCashSignupDetails | null>
+  projectDetails: FetchedProjectDetails | null;
+  setprojectDetails: Dispatch<SetStateAction<FetchedProjectDetails | null>>;
+  pCashSignupDetails: PlanetCashSignupDetails | null;
+  setPCashSignupDetails: Dispatch<
+    SetStateAction<PlanetCashSignupDetails | null>
   >;
   quantity: number;
   setquantity: Dispatch<SetStateAction<number>>;
