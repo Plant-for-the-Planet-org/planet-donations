@@ -90,6 +90,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     screenshotStream.pipe(res);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: error });
+    res.status(200).json({ error });
   }
 };
