@@ -140,11 +140,7 @@ function DonationsForm(): ReactElement {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
-    if (
-      projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
-      paymentSetup
-    ) {
+    if (projectDetails && paymentSetup) {
       await createDonationFunction({
         isTaxDeductible,
         country,
@@ -250,7 +246,7 @@ function DonationsForm(): ReactElement {
   }
 
   const handlePlanetCashDonate = async () => {
-    if (projectDetails && projectDetails.purpose !== "planet-cash-signup") {
+    if (projectDetails) {
       setShowDisablePlanetCashButton(true);
       const _onBehalfDonor = {
         firstname: onBehalfDonor.firstName,

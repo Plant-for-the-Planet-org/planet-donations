@@ -152,12 +152,7 @@ function PaymentsForm(): ReactElement {
   };
 
   async function getDonation() {
-    if (
-      !projectDetails ||
-      projectDetails.purpose === "planet-cash-signup" ||
-      !paymentSetup
-    )
-      return;
+    if (!projectDetails || !paymentSetup) return;
 
     let token = null;
     if (
