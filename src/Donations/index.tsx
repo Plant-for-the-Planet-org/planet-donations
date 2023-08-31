@@ -14,11 +14,13 @@ import {
   SELECT_PROJECT,
   THANK_YOU,
 } from "src/Utils/donationStepConstants";
+import PlanetCashSignup from "./Micros/PlanetCashSignup";
 
 function Donations(): ReactElement {
   const router = useRouter();
 
-  const { donationStep, setdonationStep } = React.useContext(QueryParamContext);
+  const { donationStep, setdonationStep, pCashSignupDetails } =
+    React.useContext(QueryParamContext);
 
   useEffect(() => {
     if (router.query?.step) {
@@ -55,6 +57,24 @@ function Donations(): ReactElement {
     }
     return () => {};
   }, [router.query.step]);
+
+  const renderDonationStep = (step: number | null) => {
+    switch (step) {
+      case 0:
+        return <SelectProject />;
+      case 1:
+        return <DonationsForm />;
+      case 2:
+        return <ContactsForm />;
+      case 3:
+        return <PaymentsForm />;
+      case 4:
+        return <PaymentStatus />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="donations-container">
       <div className="donations-card-container">
@@ -62,11 +82,11 @@ function Donations(): ReactElement {
         <LeftPanel />
 
         {/* Right panel */}
-        {donationStep === 0 && <SelectProject />}
-        {donationStep === 1 && <DonationsForm />}
-        {donationStep === 2 && <ContactsForm />}
-        {donationStep === 3 && <PaymentsForm />}
-        {donationStep === 4 && <PaymentStatus />}
+        {pCashSignupDetails !== null ? (
+          <PlanetCashSignup />
+        ) : (
+          renderDonationStep(donationStep)
+        )}
       </div>
     </div>
   );

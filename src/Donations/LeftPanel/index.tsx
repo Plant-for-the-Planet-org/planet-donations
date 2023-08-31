@@ -9,6 +9,7 @@ import CancelButton from "../../Common/CancelButton";
 function LeftPanel(): ReactElement {
   const {
     projectDetails,
+    pCashSignupDetails,
     donationID,
     donationStep,
     quantity,
@@ -48,7 +49,7 @@ function LeftPanel(): ReactElement {
 
   return (
     <LeftPanelContainer
-      projectDetails={projectDetails}
+      info={pCashSignupDetails || projectDetails}
       donationStep={donationStep}
       tenant={tenant}
     >
@@ -61,6 +62,7 @@ function LeftPanel(): ReactElement {
       {/* TODO - evaluate whether to send this info to LeftPanelInfo, or use context instead */}
       <LeftPanelInfo
         projectDetails={projectDetails}
+        pCashSignupDetails={pCashSignupDetails}
         donationStep={donationStep}
         donationID={donationID}
         paymentSetup={paymentSetup}
