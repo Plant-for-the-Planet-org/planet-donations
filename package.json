@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npx playwright install",
+    "build": "npx playwright install chromium && next build",
     "start": "next start",
     "lint": "eslint pages src",
     "lint:errors": "eslint pages src --quiet",
