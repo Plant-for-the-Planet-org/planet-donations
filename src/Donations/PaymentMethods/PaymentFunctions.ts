@@ -253,6 +253,9 @@ export function createDonationData({
 
     // Since a user account can have only one planetCash account no need to send project (i.e planetCash account ID).
     delete donationData.project;
+
+    //should not send gift details
+    delete donationData.gift;
   }
 
   return donationData;
