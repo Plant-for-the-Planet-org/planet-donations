@@ -60,8 +60,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
     const page = await context.newPage();
 
+    const url = req.query.path as string;
     // Navigate to a URL (you can replace this with your desired URL)
-    await page.goto("https://www.example.com");
+    await page.goto(url, {
+      timeout: 30 * 1000,
+      waitUntil: "networkidle",
+    });
 
     // Take a screenshot
     const screenshotBuffer = await page.screenshot();
