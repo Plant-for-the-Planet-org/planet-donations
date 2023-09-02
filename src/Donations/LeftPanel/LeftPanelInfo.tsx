@@ -20,7 +20,7 @@ import ContactDetailsInfo from "./ContactDetailsInfo";
 
 interface Props {
   isMobile: boolean;
-  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null;
+  projectDetails: FetchedProjectDetails | null;
   pCashSignupDetails: PlanetCashSignupDetails | null;
   donationStep: number | null;
   donationID: string | null;
