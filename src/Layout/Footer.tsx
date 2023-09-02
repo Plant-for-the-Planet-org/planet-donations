@@ -172,7 +172,7 @@ function DarkModeSwitch() {
 }
 
 function CookiePolicy() {
-  const { t, ready } = useTranslation(["common"]);
+  const { t, i18n, ready } = useTranslation(["common"]);
   const [showCookieNotice, setShowCookieNotice] = React.useState(false);
 
   const { isLoading, isAuthenticated } = useAuth0();
@@ -200,7 +200,7 @@ function CookiePolicy() {
     <div className={"cookie-policy"}>
       <div>
         {t("privacyPolicyNotice")}{" "}
-        <a href="https://www.plant-for-the-planet.org/en/footermenu/privacy-policy">
+        <a href={`https://pp.eco/legal/${i18n.language}/privacy`}>
           {t("privacyPolicy")}
         </a>
       </div>
