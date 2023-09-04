@@ -49,7 +49,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Launch a local browser instance
-    const browser = await chromium.launch();
+    const browser = await chromium.launch({
+      executablePath: "/usr/lib/playwright",
+    });
 
     // Create a new browser context and page
     const context = await browser.newContext({
