@@ -41,7 +41,7 @@
 //   res.end(data)
 // }
 
-import { chromium } from "playwright-core";
+import { chromium } from "playwright";
 // import chromiumLambda from "chrome-aws-lambda";
 import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
