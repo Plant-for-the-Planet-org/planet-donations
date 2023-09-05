@@ -42,7 +42,6 @@
 // }
 
 import { chromium } from "playwright";
-// import chromiumLambda from "chrome-aws-lambda";
 import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -50,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Launch a local browser instance
     const browser = await chromium.launch({
-      executablePath: await chromium.executablePath(),
+      executablePath: "/vercel/.cache/ms-playwright/chromium-1076",
     });
 
     // Create a new browser context and page
@@ -90,7 +89,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Pipe the screenshot stream to the response
     screenshotStream.pipe(res);
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:", error, chromium.executablePath());
     res.status(500).send("Internal Server Error");
   }
 };
