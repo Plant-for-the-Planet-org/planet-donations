@@ -49,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Launch a local browser instance
     const browser = await chromium.launch({
-      executablePath: "/vercel/.cache/ms-playwright/chromium-1076",
+      executablePath: "/usr/lib/playwright/chromium-1076",
     });
 
     // Create a new browser context and page
