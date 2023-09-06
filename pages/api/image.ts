@@ -103,6 +103,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Launch a local browser instance
     const browser = await puppeteer.launch({
+      ignoreDefaultArgs: ["--disable-extensions"],
       args: chromium.args,
       executablePath: await chromium.executablePath,
       headless: chromium.headless,
