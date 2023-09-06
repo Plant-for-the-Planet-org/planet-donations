@@ -109,9 +109,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     //   executablePath = await chromium.executablePath;
     // }
 
+    console.log("Executable Path", await chromium.executablePath);
+
     // Launch a local browser instance
     const browser = await puppeteer.launch({
-      // ignoreDefaultArgs: ["--disable-extensions"],
+      ignoreDefaultArgs: ["--disable-extensions"],
       args: chromium.args,
       executablePath: await chromium.executablePath,
       headless: true,
