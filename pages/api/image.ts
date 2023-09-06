@@ -94,7 +94,7 @@
 //   }
 // };
 
-import chromium from "chrome-aws-lambda";
+import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -102,18 +102,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   let executablePath;
   try {
-    if (process.env.NODE_ENV === "development") {
-      executablePath =
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-    } else {
-      executablePath = await chromium.executablePath;
-    }
+    // if (process.env.NODE_ENV === "development") {
+    //   executablePath =
+    //     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+    // } else {
+    //   executablePath = await chromium.executablePath;
+    // }
 
     // Launch a local browser instance
     const browser = await puppeteer.launch({
-      ignoreDefaultArgs: ["--disable-extensions"],
+      // ignoreDefaultArgs: ["--disable-extensions"],
       args: chromium.args,
-      executablePath: executablePath,
+      executablePath: await chromium.executablePath,
       headless: true,
     });
 
@@ -155,7 +155,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Pipe the screenshot stream to the response
     screenshotStream.pipe(res);
   } catch (error) {
-    console.error("Error:", error, executablePath);
+    console.error("Error:", error, await chromium.executablePath);
     res.status(500).send("Internal Server Error");
   }
 };
