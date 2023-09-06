@@ -41,38 +41,94 @@
 //   res.end(data)
 // }
 
-import { chromium } from "playwright";
+// import { chromium } from "playwright";
+// import { Readable } from "stream";
+// import { NextApiRequest, NextApiResponse } from "next";
+
+// export default async (req: NextApiRequest, res: NextApiResponse) => {
+//   try {
+//     // Launch a local browser instance
+//     const browser = await chromium.launch({
+//       executablePath: "/usr/lib/playwright/chromium-1076",
+//     });
+
+//     // Create a new browser context and page
+//     const context = await browser.newContext({
+//       viewport: {
+//         width: 1200,
+//         height: 720,
+//       },
+//     });
+//     const page = await context.newPage();
+
+//     const url = req.query.path as string;
+//     // Navigate to a URL (you can replace this with your desired URL)
+//     await page.goto(url, {
+//       timeout: 30 * 1000,
+//       waitUntil: "networkidle",
+//     });
+
+//     // Take a screenshot
+//     const screenshotBuffer = await page.screenshot();
+
+//     // Close the browser
+//     await context.close();
+//     await browser.close();
+
+//     // Convert the screenshot buffer to a Readable stream
+//     const screenshotStream = new Readable();
+//     screenshotStream.push(screenshotBuffer);
+//     screenshotStream.push(null);
+
+//     // Set the response headers
+//     res.setHeader("Content-Type", "image/png");
+//     res.setHeader("Cache-Control", "no-cache");
+//     res.setHeader("Pragma", "no-cache");
+//     res.setHeader("Expires", "0");
+
+//     // Pipe the screenshot stream to the response
+//     screenshotStream.pipe(res);
+//   } catch (error) {
+//     console.error("Error:", error, chromium.executablePath());
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer-core";
 import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Launch a local browser instance
-    const browser = await chromium.launch({
-      executablePath: "/usr/lib/playwright/chromium-1076",
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
     });
 
     // Create a new browser context and page
-    const context = await browser.newContext({
-      viewport: {
-        width: 1200,
-        height: 720,
-      },
-    });
-    const page = await context.newPage();
+    // const context = await browser.newContext({
+    //   viewport: {
+    //     width: 1200,
+    //     height: 720,
+    //   },
+    // });
+    const page = await browser.newPage();
 
     const url = req.query.path as string;
     // Navigate to a URL (you can replace this with your desired URL)
     await page.goto(url, {
       timeout: 30 * 1000,
-      waitUntil: "networkidle",
+      waitUntil: ["domcontentloaded", "networkidle0"],
     });
 
     // Take a screenshot
     const screenshotBuffer = await page.screenshot();
 
     // Close the browser
-    await context.close();
+    // await context.close();
     await browser.close();
 
     // Convert the screenshot buffer to a Readable stream
@@ -89,7 +145,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Pipe the screenshot stream to the response
     screenshotStream.pipe(res);
   } catch (error) {
-    console.error("Error:", error, chromium.executablePath());
+    console.error("Error:", error, await chromium.executablePath);
     res.status(500).send("Internal Server Error");
   }
 };
