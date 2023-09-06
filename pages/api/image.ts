@@ -100,13 +100,21 @@ import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  let executablePath;
   try {
+    if (process.env.NODE_ENV === "development") {
+      executablePath =
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+    } else {
+      executablePath = await chromium.executablePath;
+    }
+
     // Launch a local browser instance
     const browser = await puppeteer.launch({
       ignoreDefaultArgs: ["--disable-extensions"],
       args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+      executablePath: executablePath,
+      headless: true,
     });
 
     // Create a new browser context and page
@@ -119,6 +127,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const page = await browser.newPage();
 
     const url = req.query.path as string;
+    await page.setViewport({ width: 1200, height: 720 });
     // Navigate to a URL (you can replace this with your desired URL)
     await page.goto(url, {
       timeout: 30 * 1000,
@@ -146,7 +155,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Pipe the screenshot stream to the response
     screenshotStream.pipe(res);
   } catch (error) {
-    console.error("Error:", error, await chromium.executablePath);
+    console.error("Error:", error, executablePath);
     res.status(500).send("Internal Server Error");
   }
 };
