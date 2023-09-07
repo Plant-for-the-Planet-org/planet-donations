@@ -100,7 +100,20 @@ import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  let executablePath;
+  console.log(
+    "Executable Path",
+    await chromium.executablePath,
+    req.query.path as string
+  );
+
+  // Launch a local browser instance
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: true,
+  });
+
+  console.log("Reached browser");
   try {
     // if (process.env.NODE_ENV === "development") {
     //   executablePath =
@@ -109,16 +122,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     //   executablePath = await chromium.executablePath;
     // }
 
-    console.log("Executable Path", await chromium.executablePath);
-
-    // Launch a local browser instance
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
-    console.log("Reached browser");
     // Create a new browser context and page
     // const context = await browser.newContext({
     //   viewport: {
@@ -141,8 +144,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Took Screenshot");
     // Close the browser
     // await context.close();
-    await Promise.race([browser.close(), browser.close(), browser.close()]);
-    console.log("Closed Browser");
+    // await Promise.race([browser.close(), browser.close(), browser.close()]);
+    // console.log("Closed Browser Internally");
 
     // Convert the screenshot buffer to a Readable stream
     const screenshotStream = new Readable();
@@ -160,5 +163,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (error) {
     console.error("Error:", error, await chromium.executablePath);
     res.status(500).send("Internal Server Error");
+  } finally {
+    await browser.close();
+    console.log("Closed Browser in finally");
   }
 };
