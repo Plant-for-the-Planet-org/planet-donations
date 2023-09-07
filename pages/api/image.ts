@@ -141,7 +141,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Took Screenshot");
     // Close the browser
     // await context.close();
-    await browser.close();
+    await Promise.race([browser.close(), browser.close(), browser.close()]);
     console.log("Closed Browser");
 
     // Convert the screenshot buffer to a Readable stream
