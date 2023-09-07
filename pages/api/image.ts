@@ -133,7 +133,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Navigate to a URL (you can replace this with your desired URL)
     await page.goto(url, {
       timeout: 30 * 1000,
-      waitUntil: "networkidle0",
+      waitUntil: "load",
     });
 
     // Take a screenshot
