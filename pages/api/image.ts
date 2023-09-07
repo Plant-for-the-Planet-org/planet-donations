@@ -96,7 +96,7 @@
 
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
-import { Readable } from "stream";
+// import { Readable } from "stream";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -140,26 +140,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Reached goto");
 
     // Take a screenshot
-    const screenshotBuffer = await page.screenshot();
+    const screenshot = await page.screenshot({
+      type: "png",
+    });
     console.log("Took Screenshot");
     // Close the browser
     // await context.close();
     // await Promise.race([browser.close(), browser.close(), browser.close()]);
     // console.log("Closed Browser Internally");
 
-    // Convert the screenshot buffer to a Readable stream
-    const screenshotStream = new Readable();
-    screenshotStream.push(screenshotBuffer);
-    screenshotStream.push(null);
+    // ---
 
-    // Set the response headers
+    // // Convert the screenshot buffer to a Readable stream
+    // const screenshotStream = new Readable();
+    // screenshotStream.push(screenshotBuffer);
+    // screenshotStream.push(null);
+
+    // // Set the response headers
+    // res.setHeader("Content-Type", "image/png");
+    // res.setHeader("Cache-Control", "no-cache");
+    // res.setHeader("Pragma", "no-cache");
+    // res.setHeader("Expires", "0");
+
+    // // Pipe the screenshot stream to the response
+    // screenshotStream.pipe(res);
+
+    // ---
+
+    res.setHeader("Cache-Control", "s-maxage=31536000, stale-while-revalidate");
     res.setHeader("Content-Type", "image/png");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Pragma", "no-cache");
-    res.setHeader("Expires", "0");
-
-    // Pipe the screenshot stream to the response
-    screenshotStream.pipe(res);
+    res.end(screenshot);
   } catch (error) {
     console.error("Error:", error, await chromium.executablePath);
     res.status(500).send("Internal Server Error");
