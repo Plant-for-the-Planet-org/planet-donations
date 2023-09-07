@@ -8,7 +8,7 @@ export async function middleware(
 ): Promise<NextResponse | undefined> {
   if (
     req.nextUrl.pathname.startsWith("/_next") ||
-    // req.nextUrl.pathname.includes("/api/") ||
+    req.nextUrl.pathname.includes("/api/") ||
     PUBLIC_FILE.test(req.nextUrl.pathname)
   ) {
     return;
