@@ -132,7 +132,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await page.setViewport({ width: 1200, height: 720 });
     // Navigate to a URL (you can replace this with your desired URL)
     await page.goto(url, {
-      timeout: 10 * 1000,
+      timeout: 30 * 1000,
       waitUntil: "networkidle0",
     });
 
