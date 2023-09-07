@@ -16,6 +16,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const url = req.query.path as string;
 
+    console.log("Path", url);
+
     await page.setViewport({ width: 1200, height: 720 });
 
     // Navigate to a URL
