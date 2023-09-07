@@ -131,10 +131,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const url = req.query.path as string;
     await page.setViewport({ width: 1200, height: 720 });
     // Navigate to a URL (you can replace this with your desired URL)
-    await page.goto(url, {
-      timeout: 30 * 1000,
-      waitUntil: "load",
-    });
+    await page.goto(url, { waitUntil: "load", timeout: 0 });
+    await page.waitForNavigation({ waitUntil: "load" });
 
     // Take a screenshot
     const screenshotBuffer = await page.screenshot();
