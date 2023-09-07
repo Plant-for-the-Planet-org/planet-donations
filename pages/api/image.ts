@@ -113,12 +113,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Launch a local browser instance
     const browser = await puppeteer.launch({
-      ignoreDefaultArgs: ["--disable-extensions"],
       args: chromium.args,
       executablePath: await chromium.executablePath,
       headless: true,
     });
 
+    console.log("Reached browser");
     // Create a new browser context and page
     // const context = await browser.newContext({
     //   viewport: {
@@ -127,19 +127,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     //   },
     // });
     const page = await browser.newPage();
+    console.log("Reached newPage");
 
     const url = req.query.path as string;
     await page.setViewport({ width: 1200, height: 720 });
+    console.log("Reached setViewport");
     // Navigate to a URL (you can replace this with your desired URL)
-    await page.goto(url, { waitUntil: "load", timeout: 0 });
-    await page.waitForNavigation({ waitUntil: "load" });
+    await page.goto(url, { waitUntil: "load", timeout: 30 * 1000 });
+    console.log("Reached goto");
 
     // Take a screenshot
     const screenshotBuffer = await page.screenshot();
-
+    console.log("Took Screenshot");
     // Close the browser
     // await context.close();
     await browser.close();
+    console.log("Closed Browser");
 
     // Convert the screenshot buffer to a Readable stream
     const screenshotStream = new Readable();
