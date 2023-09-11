@@ -14,7 +14,6 @@ import SuccessfulDonationJane from "../Micros/PaymentStatus/Tenants/SuccessfulDo
 import TransferDetails from "../Micros/PaymentStatus/TransferDetails";
 
 import styles from "./PaymentStatus.module.scss";
-import PlanetCashSignup from "../Micros/PlanetCashSignup";
 import { APIError, handleError } from "@planet-sdk/common";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 
@@ -85,7 +84,7 @@ function ThankYou(): ReactElement {
 
   const handleTextCopiedSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
+    reason?: SnackbarCloseReason,
   ) => {
     if (reason === "clickaway") {
       return;
@@ -93,8 +92,7 @@ function ThankYou(): ReactElement {
     setTextCopiedSnackbarOpen(false);
   };
 
-  const { callbackUrl, paymentError, projectDetails } =
-    React.useContext(QueryParamContext);
+  const { callbackUrl, paymentError } = React.useContext(QueryParamContext);
 
   const router = useRouter();
 
@@ -119,62 +117,58 @@ function ThankYou(): ReactElement {
   };
 
   return (
-    <div className="donations-forms-container" style={{ paddingBottom: "0px" }}>
-      {projectDetails?.purpose === "planet-cash-signup" ? (
-        <PlanetCashSignup />
-      ) : (
-        <div className="donations-form w-100">
-          {!ready && !donation ? (
-            <PaymentProgress isPaymentProcessing={true} />
-          ) : (
-            <div>
-              {donation && donation.paymentStatus ? (
-                status === "success" ||
-                status === "paid" ||
-                status === "succeeded" ? (
-                  <SuccessComponent />
-                ) : status === "failed" || paymentError ? (
-                  <FailedDonation
-                    sendToReturn={sendToReturn}
-                    donation={donation}
-                  />
-                ) : transferDetails ? (
-                  <TransferDetails
-                    donationID={donationID as string}
-                    donation={donation}
-                    sendToReturn={sendToReturn}
-                  />
-                ) : (
-                  <PendingDonation
-                    donationID={donationID as string}
-                    sendToReturn={sendToReturn}
-                  />
-                )
+    <div className="right-panel-container" style={{ paddingBottom: "0px" }}>
+      <div className="donations-form w-100">
+        {!ready && !donation ? (
+          <PaymentProgress isPaymentProcessing={true} />
+        ) : (
+          <div>
+            {donation && donation.paymentStatus ? (
+              status === "success" ||
+              status === "paid" ||
+              status === "succeeded" ? (
+                <SuccessComponent />
+              ) : status === "failed" || paymentError ? (
+                <FailedDonation
+                  sendToReturn={sendToReturn}
+                  donation={donation}
+                />
+              ) : transferDetails ? (
+                <TransferDetails
+                  donationID={donationID as string}
+                  donation={donation}
+                  sendToReturn={sendToReturn}
+                />
               ) : (
-                <div className={styles.loaderContainer}>
-                  <CircularProgress color="inherit" />
-                </div>
-              )}
-            </div>
-          )}
+                <PendingDonation
+                  donationID={donationID as string}
+                  sendToReturn={sendToReturn}
+                />
+              )
+            ) : (
+              <div className={styles.loaderContainer}>
+                <CircularProgress color="inherit" />
+              </div>
+            )}
+          </div>
+        )}
 
-          <Snackbar
-            open={textCopiedsnackbarOpen}
-            autoHideDuration={4000}
+        <Snackbar
+          open={textCopiedsnackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleTextCopiedSnackbarClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
             onClose={handleTextCopiedSnackbarClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            severity="success"
           >
-            <MuiAlert
-              elevation={6}
-              variant="filled"
-              onClose={handleTextCopiedSnackbarClose}
-              severity="success"
-            >
-              {t("donate:copiedToClipboard")}
-            </MuiAlert>
-          </Snackbar>
-        </div>
-      )}
+            {t("donate:copiedToClipboard")}
+          </MuiAlert>
+        </Snackbar>
+      </div>
     </div>
   );
 }

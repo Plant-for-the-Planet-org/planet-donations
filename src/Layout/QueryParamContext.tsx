@@ -57,9 +57,10 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
 
-  const [projectDetails, setprojectDetails] = useState<
-    FetchedProjectDetails | PlanetCashSignupDetails | null
-  >(null);
+  const [projectDetails, setprojectDetails] =
+    useState<FetchedProjectDetails | null>(null);
+  const [pCashSignupDetails, setPCashSignupDetails] =
+    useState<PlanetCashSignupDetails | null>(null);
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -276,13 +277,14 @@ const QueryParamProvider: FC = ({ children }) => {
   }, []);
 
   const showPlanetCashSignUpScreen = () => {
-    setprojectDetails({
+    setprojectDetails(null);
+    setPCashSignupDetails({
       name: `PlanetCash - ${profile?.displayName}`,
       ownerName: profile?.displayName || "",
       ownerAvatar: profile?.image || "",
       purpose: "planet-cash-signup",
     });
-    setdonationStep(4);
+    setdonationStep(null);
   };
 
   useEffect(() => {
@@ -543,6 +545,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setdonationStep,
         projectDetails,
         setprojectDetails,
+        pCashSignupDetails,
+        setPCashSignupDetails,
         quantity,
         setquantity,
         language,

@@ -67,7 +67,7 @@ function SelectProject(): ReactElement {
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
     <div
-      className={`donations-forms-container column ${
+      className={`right-panel-container column ${
         selectedProjects.length > 8 ? "scroll-donation-forms" : ""
       }`}
     >

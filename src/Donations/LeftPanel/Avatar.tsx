@@ -5,16 +5,17 @@ import {
 } from "src/Common/Types";
 import getImageUrl from "src/Utils/getImageURL";
 import styles from "./LeftPanel.module.scss";
-
 interface Props {
-  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails;
+  info: FetchedProjectDetails | PlanetCashSignupDetails;
 }
 
-const Avatar = ({ projectDetails }: Props): ReactElement => {
+const Avatar = ({ info }: Props): ReactElement => {
+  const { ownerName, ownerAvatar } = info;
+
   const renderAvatarImage = (
     ownerName: string | null,
-    ownerAvatar: string | null
-  ) => {
+    ownerAvatar: string | null,
+  ): JSX.Element => {
     return ownerAvatar ? (
       <img
         className={styles.avatar}
@@ -27,17 +28,17 @@ const Avatar = ({ projectDetails }: Props): ReactElement => {
     );
   };
 
-  return projectDetails.purpose === "trees" ? (
+  return info.purpose === "trees" ? (
     <a
       rel="noreferrer"
       target="_blank"
-      href={`https://www.trilliontreecampaign.org/${projectDetails.id}`}
+      href={`https://www.trilliontreecampaign.org/${info.id}`}
       className={styles["avatar-link"]}
     >
-      {renderAvatarImage(projectDetails.ownerName, projectDetails.ownerAvatar)}
+      {renderAvatarImage(ownerName, ownerAvatar)}
     </a>
   ) : (
-    renderAvatarImage(projectDetails.ownerName, projectDetails.ownerAvatar)
+    renderAvatarImage(ownerName, ownerAvatar)
   );
 };
 

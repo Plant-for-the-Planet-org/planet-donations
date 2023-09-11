@@ -177,7 +177,6 @@ function ContactsForm(): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
@@ -191,7 +190,7 @@ function ContactsForm(): ReactElement {
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
   return (
-    <div className={"donations-forms-container"}>
+    <div className="right-panel-container">
       <div className="donations-form">
         <div className="d-flex w-100 align-items-center">
           <button

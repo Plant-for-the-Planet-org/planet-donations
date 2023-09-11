@@ -152,12 +152,7 @@ function PaymentsForm(): ReactElement {
   };
 
   async function getDonation() {
-    if (
-      !projectDetails ||
-      projectDetails.purpose === "planet-cash-signup" ||
-      !paymentSetup
-    )
-      return;
+    if (!projectDetails || !paymentSetup) return;
 
     let token = null;
     if (
@@ -280,7 +275,7 @@ function PaymentsForm(): ReactElement {
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
     ) : (
-      <div className={"donations-forms-container"}>
+      <div className="right-panel-container">
         <div
           className="donations-form"
           style={{ display: "flex", flexDirection: "column", width: "100%" }}
