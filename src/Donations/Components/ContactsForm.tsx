@@ -62,12 +62,12 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (contactDetails) {
-      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false });
+      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false && isEligibleForPackage });
       if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
-  }, [contactDetails, isPackageWanted]);
+  }, [contactDetails, isPackageWanted, isEligibleForPackage]);
 
   const {
     handleSubmit,
@@ -103,7 +103,7 @@ function ContactsForm(): ReactElement {
         ? contactDetails.email
         : enteredContactDetails.email,
     });
-    setIsPackageWanted(isPackageWanted);
+    setIsPackageWanted(isEligibleForPackage ? isPackageWanted : null);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
