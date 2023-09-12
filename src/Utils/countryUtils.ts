@@ -17,7 +17,7 @@ const sortedCountries: { [key: string]: Country[] } = {};
 // eslint-disable-next-line consistent-return
 export function getCountryDataBy(
   key: CountryProperty,
-  value: string
+  value: string,
 ): Country | undefined {
   // Finds required country data from the country data array and returns the
   // matched country result
@@ -54,7 +54,7 @@ export function sortCountriesData(sortBy: CountryProperty): Country[] {
  */
 function filterByEnabledCurrencies(
   countriesData: Country[],
-  enabledCurrencies: CurrencyList
+  enabledCurrencies: CurrencyList,
 ) {
   return countriesData.filter((country) => {
     return enabledCurrencies[country.currencyCode] !== undefined;
@@ -72,7 +72,7 @@ export function sortCountriesByTranslation(
   t: TFunction,
   language: string,
   priorityCountryCodes: string[],
-  enabledCurrencies: CurrencyList | null
+  enabledCurrencies: CurrencyList | null,
 ): Country[] {
   const key = `${language}.${priorityCountryCodes}`;
   if (!sortedCountries[key]) {
@@ -87,7 +87,7 @@ export function sortCountriesByTranslation(
             } else {
               return true;
             }
-          }
+          },
         )
       : countriesData;
     // sort array of countries
@@ -102,7 +102,7 @@ export function sortCountriesByTranslation(
           return -1;
         }
         return 0;
-      })
+      }),
     );
   }
   return sortedCountries[key];
@@ -161,4 +161,34 @@ export const stripeAllowedCountries = [
   "TT",
   "US",
   "UY",
+];
+
+export const euCountries = [
+  "AT",
+  "BE",
+  "BG",
+  "HR",
+  "CY",
+  "CZ",
+  "DK",
+  "EE",
+  "FI",
+  "FR",
+  "DE",
+  "GR",
+  "HU",
+  "IE",
+  "IT",
+  "LV",
+  "LT",
+  "LU",
+  "MT",
+  "NL",
+  "PL",
+  "PT",
+  "RO",
+  "SK",
+  "SI",
+  "ES",
+  "SE",
 ];

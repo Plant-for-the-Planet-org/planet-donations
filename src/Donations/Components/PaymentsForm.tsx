@@ -81,9 +81,11 @@ function PaymentsForm(): ReactElement {
     utmCampaign,
     utmMedium,
     utmSource,
+    isPackageWanted,
   } = React.useContext(QueryParamContext);
 
-  const [stripePromise, setStripePromise] = React.useState<null | Promise<Stripe | null>>(() => null);
+  const [stripePromise, setStripePromise] =
+    React.useState<null | Promise<Stripe | null>>(() => null);
 
   React.useEffect(() => {
     const fetchStripeObject = async () => {
@@ -109,7 +111,7 @@ function PaymentsForm(): ReactElement {
       | string
       | PaymentMethod
       | PaypalApproveData
-      | PaypalErrorData
+      | PaypalErrorData,
   ) => {
     if (!paymentSetup || !donationID) {
       console.log("Missing payment options"); //TODOO - better error handling
@@ -142,7 +144,7 @@ function PaymentsForm(): ReactElement {
   // Seems to work only for native pay. Should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO --_activeBackingLibraryName is a private variable?
     const gateway = "stripe";
@@ -150,12 +152,7 @@ function PaymentsForm(): ReactElement {
   };
 
   async function getDonation() {
-    if (
-      !projectDetails ||
-      projectDetails.purpose === "planet-cash-signup" ||
-      !paymentSetup
-    )
-      return;
+    if (!projectDetails || !paymentSetup) return;
 
     let token = null;
     if (
@@ -187,6 +184,7 @@ function PaymentsForm(): ReactElement {
       utmCampaign,
       utmMedium,
       utmSource,
+      isPackageWanted,
       tenant,
       locale: i18n.language,
     });
@@ -277,7 +275,7 @@ function PaymentsForm(): ReactElement {
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
     ) : (
-      <div className={"donations-forms-container"}>
+      <div className="right-panel-container">
         <div
           className="donations-form"
           style={{ display: "flex", flexDirection: "column", width: "100%" }}
@@ -291,7 +289,7 @@ function PaymentsForm(): ReactElement {
                       query: { ...router.query, step: CONTACT },
                     },
                     undefined,
-                    { shallow: true }
+                    { shallow: true },
                   );
                 }}
                 className="d-flex"
@@ -422,7 +420,7 @@ function PaymentsForm(): ReactElement {
                     totalCost={getFormatedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup?.unitCost * quantity
+                      paymentSetup?.unitCost * quantity,
                     )}
                     onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)

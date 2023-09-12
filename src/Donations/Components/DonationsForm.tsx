@@ -67,6 +67,7 @@ function DonationsForm(): ReactElement {
     utmCampaign,
     utmMedium,
     utmSource,
+    isPackageWanted,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -107,7 +108,7 @@ function DonationsForm(): ReactElement {
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
@@ -139,11 +140,7 @@ function DonationsForm(): ReactElement {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
-    if (
-      projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
-      paymentSetup
-    ) {
+    if (projectDetails && paymentSetup) {
       await createDonationFunction({
         isTaxDeductible,
         country,
@@ -165,6 +162,7 @@ function DonationsForm(): ReactElement {
         utmCampaign,
         utmMedium,
         utmSource,
+        isPackageWanted,
       }).then(async (res) => {
         if (res) {
           let token = null;
@@ -225,7 +223,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -235,7 +233,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -248,7 +246,7 @@ function DonationsForm(): ReactElement {
   }
 
   const handlePlanetCashDonate = async () => {
-    if (projectDetails && projectDetails.purpose !== "planet-cash-signup") {
+    if (projectDetails) {
       setShowDisablePlanetCashButton(true);
       const _onBehalfDonor = {
         firstname: onBehalfDonor.firstName,
@@ -318,7 +316,7 @@ function DonationsForm(): ReactElement {
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : projectDetails ? (
-    <div className="donations-forms-container">
+    <div className="right-panel-container">
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
@@ -397,7 +395,7 @@ function DonationsForm(): ReactElement {
                       currency={currency}
                       amount={formatAmountForStripe(
                         paymentSetup?.unitCost * quantity,
-                        currency.toLowerCase()
+                        currency.toLowerCase(),
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -407,7 +405,7 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true }
+                          { shallow: true },
                         );
                         setRetainQuantityValue(true);
                       }}

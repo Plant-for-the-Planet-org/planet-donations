@@ -51,6 +51,7 @@ export interface CreateDonationFunctionProps {
   utmCampaign?: string | undefined;
   utmMedium?: string | undefined;
   utmSource?: string | undefined;
+  isPackageWanted: boolean | null;
   tenant: string;
   locale: string;
 }
@@ -107,6 +108,7 @@ export interface CreateDonationDataProps {
   utmCampaign: string | undefined;
   utmMedium: string | undefined;
   utmSource: string | undefined;
+  isPackageWanted: boolean | null;
 }
 
 export interface PlanetCashSignupDetails {

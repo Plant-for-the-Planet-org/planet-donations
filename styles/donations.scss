@@ -29,7 +29,7 @@
   flex-direction: column;
 }
 
-.donations-forms-container {
+.right-panel-container {
   display: flex;
   padding: 20px;
   width: 100%;
@@ -444,6 +444,28 @@
   }
 }
 
+.welcome-package-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid $primaryColor;
+  border-radius: 10px;
+  padding: 10px;
+  > label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    &:hover {
+      cursor: pointer;
+    }
+    svg {
+      width: 40px;
+      height: auto;
+    }
+  }
+}
+
 .custom-tree-input {
   border: 0px;
   border-bottom: 2px solid $greyColor;
@@ -721,7 +743,7 @@
 }
 
 @include smTabletView {
-  .donations-forms-container {
+  .right-panel-container {
     max-width: 420px;
     padding: 30px;
   }
@@ -785,7 +807,7 @@
     align-items: center;
     max-width: 840px;
   }
-  .donations-forms-container {
+  .right-panel-container {
     width: 420px;
     padding-bottom: 30px;
     margin-top: 0px;

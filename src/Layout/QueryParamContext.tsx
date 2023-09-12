@@ -57,9 +57,10 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
 
-  const [projectDetails, setprojectDetails] = useState<
-    FetchedProjectDetails | PlanetCashSignupDetails | null
-  >(null);
+  const [projectDetails, setprojectDetails] =
+    useState<FetchedProjectDetails | null>(null);
+  const [pCashSignupDetails, setPCashSignupDetails] =
+    useState<PlanetCashSignupDetails | null>(null);
 
   // Query token is the access token which is passed in the query params
   const [queryToken, setqueryToken] = useState<string | null>(null);
@@ -116,6 +117,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [utmCampaign, setUtmCampaign] = useState("");
   const [utmMedium, setUtmMedium] = useState("");
   const [utmSource, setUtmSource] = useState("");
+  const [isPackageWanted, setIsPackageWanted] = useState<boolean | null>(null);
 
   const [redirectstatus, setredirectstatus] = useState<string | null>(null);
 
@@ -149,7 +151,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
-    null
+    null,
   );
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
@@ -161,9 +163,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const response: { data: Record<string, string> } = await apiRequest(
-        requestParams
-      );
+      const response: { data: Record<string, string> } =
+        await apiRequest(requestParams);
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -197,7 +198,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
     );
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
@@ -241,7 +242,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const projects = response.data as Project[];
       if (projects) {
         const allowedDonationsProjects = projects.filter(
-          (project) => project.properties.allowDonations === true
+          (project) => project.properties.allowDonations === true,
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -276,13 +277,14 @@ const QueryParamProvider: FC = ({ children }) => {
   }, []);
 
   const showPlanetCashSignUpScreen = () => {
-    setprojectDetails({
+    setprojectDetails(null);
+    setPCashSignupDetails({
       name: `PlanetCash - ${profile?.displayName}`,
       ownerName: profile?.displayName || "",
       ownerAvatar: profile?.image || "",
       purpose: "planet-cash-signup",
     });
-    setdonationStep(4);
+    setdonationStep(null);
   };
 
   useEffect(() => {
@@ -371,7 +373,7 @@ const QueryParamProvider: FC = ({ children }) => {
           const found = countriesData.some(
             (arrayCountry) =>
               arrayCountry.countryCode?.toUpperCase() ===
-              config.data.country?.toUpperCase()
+              config.data.country?.toUpperCase(),
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
@@ -454,6 +456,7 @@ const QueryParamProvider: FC = ({ children }) => {
     contactDetails.zipCode,
     contactDetails.country,
     contactDetails.companyname,
+    isPackageWanted,
     isTaxDeductible,
   ]);
 
@@ -489,9 +492,8 @@ const QueryParamProvider: FC = ({ children }) => {
         tenant,
         locale: i18n.language,
       };
-      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
-        requestParams
-      );
+      const paymentSetupData: { data: PaymentOptions } =
+        await apiRequest(requestParams);
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -543,6 +545,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setdonationStep,
         projectDetails,
         setprojectDetails,
+        pCashSignupDetails,
+        setPCashSignupDetails,
         quantity,
         setquantity,
         language,
@@ -569,6 +573,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setUtmMedium,
         utmSource,
         setUtmSource,
+        isPackageWanted,
+        setIsPackageWanted,
         isDirectDonation,
         setisDirectDonation,
         tenant,

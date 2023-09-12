@@ -16,6 +16,12 @@ import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
+import GiftIcon from "public/assets/icons/GiftIcon";
+import { euCountries } from "src/Utils/countryUtils";
+
+interface FormData extends ContactDetails {
+  isPackageWanted: boolean;
+}
 
 function ContactsForm(): ReactElement {
   const { t, i18n } = useTranslation("common");
@@ -26,13 +32,14 @@ function ContactsForm(): ReactElement {
 
   const router = useRouter();
   const [isCompany, setIsCompany] = React.useState(false);
+  const [isEligibleForPackage, setIsEligibleForPackage] = React.useState(false);
   const geocoder = new GeocoderArcGIS(
     process.env.ESRI_CLIENT_SECRET
       ? {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {}
+      : {},
   );
   const {
     profile,
@@ -47,18 +54,20 @@ function ContactsForm(): ReactElement {
     projectDetails,
     taxIdentificationAvail,
     setTaxIdentificationAvail,
+    isPackageWanted,
+    setIsPackageWanted,
   } = React.useContext(QueryParamContext);
 
   const { isAuthenticated } = useAuth0();
 
   React.useEffect(() => {
     if (contactDetails) {
-      reset(contactDetails);
+      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false });
       if (contactDetails.companyname) {
         setIsCompany(true);
       }
     }
-  }, [contactDetails]);
+  }, [contactDetails, isPackageWanted]);
 
   const {
     handleSubmit,
@@ -67,36 +76,40 @@ function ContactsForm(): ReactElement {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm<ContactDetails>({
+  } = useForm<FormData>({
     mode: "all",
     defaultValues: contactDetails,
   });
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
+      (country) => country.abbrev === contactDetails.country,
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
 
-  const onSubmit = (data: ContactDetails) => {
+  const onSubmit = (data: FormData) => {
+    const { isPackageWanted, ...enteredContactDetails } = data;
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setContactDetails({
-      ...data,
-      email: isAuthenticated ? contactDetails.email : data.email,
+      ...enteredContactDetails,
+      email: isAuthenticated
+        ? contactDetails.email
+        : enteredContactDetails.email,
     });
+    setIsPackageWanted(isPackageWanted);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
-    )[0]?.postal
+      (country) => country.abbrev === contactDetails.country,
+    )[0]?.postal,
   );
 
   const changeCountry = (country: string) => {
@@ -107,6 +120,20 @@ function ContactsForm(): ReactElement {
     };
     setContactDetails(data);
   };
+
+  React.useEffect(() => {
+    if (
+      projectDetails?.purpose === "funds" &&
+      projectDetails.id === "proj_rLYELl1JpkT9sskba0sLPeKi" &&
+      euCountries.includes(contactDetails.country)
+    ) {
+      setIsEligibleForPackage(true);
+      setValue("isPackageWanted", true);
+    } else {
+      setIsEligibleForPackage(false);
+      setValue("isPackageWanted", false);
+    }
+  }, [projectDetails, contactDetails.country]);
 
   const [addressSugggestions, setaddressSugggestions] = React.useState<
     GeocodeSuggestion[]
@@ -150,7 +177,6 @@ function ContactsForm(): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries &&
       projectDetails.taxDeductionCountries?.includes("ES") &&
       country == "ES"
@@ -164,7 +190,7 @@ function ContactsForm(): ReactElement {
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
   return (
-    <div className={"donations-forms-container"}>
+    <div className="right-panel-container">
       <div className="donations-form">
         <div className="d-flex w-100 align-items-center">
           <button
@@ -175,7 +201,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true }
+                { shallow: true },
               );
             }}
             style={{ marginRight: "12px" }}
@@ -425,6 +451,26 @@ function ContactsForm(): ReactElement {
             <></>
           )}
 
+          {isEligibleForPackage && (
+            <div className="welcome-package-toggle mt-20">
+              <label htmlFor="welcomePackage-toggle">
+                <GiftIcon color={themeProperties.light.secondaryColor} />
+                {t("welcomePackageConsent")}
+              </label>
+              <Controller
+                name="isPackageWanted"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <ToggleSwitch
+                    checked={value}
+                    onChange={onChange}
+                    id="welcomePackage-toggle"
+                  />
+                )}
+              />
+            </div>
+          )}
+
           {(profile === null || profile.type === undefined) && (
             <div className="contacts-isCompany-toggle mt-20">
               <label htmlFor="isCompany-toggle">
@@ -504,7 +550,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity
+                    paymentSetup.unitCost * quantity,
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),

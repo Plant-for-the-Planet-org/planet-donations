@@ -7,23 +7,20 @@ import { getTenantBackground } from "../../Utils/getTenantBackground";
 import styles from "./LeftPanel.module.scss";
 
 interface Props {
-  projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails | null;
+  info?: FetchedProjectDetails | PlanetCashSignupDetails | null;
   donationStep?: number | null;
   tenant: string;
 }
 
 const LeftPanelContainer: FC<Props> = ({
-  projectDetails,
+  info = null,
   donationStep,
   tenant,
   children,
 }) => {
   const getBackgroundImage = () => {
-    if (projectDetails || donationStep === 0) {
-      return `url(${getTenantBackground(
-        tenant,
-        projectDetails as FetchedProjectDetails | null
-      )})`;
+    if (info || donationStep === 0) {
+      return `url(${getTenantBackground(tenant, info)})`;
     }
     return "none";
   };

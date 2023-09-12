@@ -21,7 +21,6 @@ function TaxDeductionOption(): ReactElement {
   React.useEffect(() => {
     if (
       projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
       projectDetails.taxDeductionCountries?.includes(country)
     ) {
       setIsTaxDeductible(true);
@@ -30,7 +29,7 @@ function TaxDeductionOption(): ReactElement {
     }
   }, [projectDetails, country]);
 
-  return projectDetails && projectDetails.purpose !== "planet-cash-signup" ? (
+  return projectDetails ? (
     <div className="mt-20">
       {projectDetails.taxDeductionCountries?.length ? (
         allowTaxDeductionChange ? (
