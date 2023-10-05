@@ -61,10 +61,12 @@ const LeftPanelInfo = ({
   const router = useRouter();
 
   const info = projectDetails || pCashSignupDetails;
-  const canShowAvatar = donationStep !== null && donationStep > 0;
+  const canShowAvatar =
+    pCashSignupDetails !== null || (donationStep !== null && donationStep > 0);
   const canShowTransactionSummary =
     paymentSetup !== null && (donationStep === 2 || donationStep === 3);
-  const canShowSummary = donationStep !== null && donationStep > 0;
+  const canShowSummary =
+    pCashSignupDetails !== null || (donationStep !== null && donationStep > 0);
   const canShowGift =
     (donationStep === 1 || donationStep === 2 || donationStep === 3) &&
     giftDetails.type !== null &&
