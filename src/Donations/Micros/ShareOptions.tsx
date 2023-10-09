@@ -161,8 +161,8 @@ const ShareOptions = ({
         }
       >
         <TwitterIcon
-          backGroundColor={currentHover === 4 ? "#688816" : "#fff"}
-          fontColor={currentHover === 4 ? "#fff" : "#688816"}
+          backGroundColor={currentHover === 4 ? "backgroundColorDark" : "#fff"}
+          fontColor={currentHover === 4 ? "#fff" : "backgroundColorDark"}
         />
       </button>
 
