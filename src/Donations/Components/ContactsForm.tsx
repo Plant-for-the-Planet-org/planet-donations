@@ -18,6 +18,7 @@ import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
+import { z } from "zod";
 
 interface FormData extends ContactDetails {
   isPackageWanted: boolean;
@@ -39,7 +40,7 @@ function ContactsForm(): ReactElement {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {},
+      : {}
   );
   const {
     profile,
@@ -62,7 +63,10 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (contactDetails) {
-      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false && isEligibleForPackage });
+      reset({
+        ...contactDetails,
+        isPackageWanted: isPackageWanted !== false && isEligibleForPackage,
+      });
       if (contactDetails.companyname) {
         setIsCompany(true);
       }
@@ -83,7 +87,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country,
+      (country) => country.abbrev === contactDetails.country
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
@@ -95,7 +99,7 @@ function ContactsForm(): ReactElement {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true },
+      { shallow: true }
     );
     setContactDetails({
       ...enteredContactDetails,
@@ -108,8 +112,8 @@ function ContactsForm(): ReactElement {
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country,
-    )[0]?.postal,
+      (country) => country.abbrev === contactDetails.country
+    )[0]?.postal
   );
 
   const changeCountry = (country: string) => {
@@ -187,6 +191,16 @@ function ContactsForm(): ReactElement {
     }
   }, [projectDetails, country]);
 
+  const isEmailValid = (value: string): boolean => {
+    try {
+      const emailSchema = z.string().email();
+      emailSchema.parse(value);
+    } catch (err) {
+      return false;
+    }
+    return true;
+  };
+
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
   return (
@@ -201,7 +215,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true },
+                { shallow: true }
               );
             }}
             style={{ marginRight: "12px" }}
@@ -275,9 +289,14 @@ function ContactsForm(): ReactElement {
               name="email"
               control={control}
               rules={{
-                required: true,
-                pattern:
-                  /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                required: {
+                  value: true,
+                  message: t("emailRequired"),
+                },
+                validate: {
+                  emailInvalid: (value) =>
+                    value.length === 0 || isEmailValid(value),
+                },
               }}
               render={({ field: { onChange, value } }) => (
                 <MaterialTextField
@@ -550,7 +569,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity,
+                    paymentSetup.unitCost * quantity
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),
