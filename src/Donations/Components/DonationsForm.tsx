@@ -105,10 +105,23 @@ function DonationsForm(): ReactElement {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
+  const canPayWithPlanetCash =
+    projectDetails !== null &&
+    projectDetails.purpose !== "funds" &&
+    projectDetails.purpose !== "planet-cash" &&
+    profile !== null &&
+    isSignedUp &&
+    profile.planetCash !== null &&
+    projectDetails.taxDeductionCountries?.includes(
+      profile.planetCash.country
+    ) &&
+    !(isGift && giftDetails.recipientName === "") &&
+    !(onBehalf && onBehalfDonor.firstName === "");
+
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest,
+    paymentRequest: PaymentRequest
   ) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
@@ -223,7 +236,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity,
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -233,7 +246,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity,
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -324,12 +337,7 @@ function DonationsForm(): ReactElement {
             <p className="title-text">{t("donate")}</p>
           )}
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {projectDetails.purpose !== "funds" &&
-            projectDetails.purpose !== "planet-cash" &&
-            !(isGift && giftDetails.recipientName === "") &&
-            !(onBehalf && onBehalfDonor.firstName === "") &&
-            isSignedUp &&
-            profile?.planetCash && <PlanetCashSelector />}
+          {canPayWithPlanetCash && <PlanetCashSelector />}
           {!(onBehalf && onBehalfDonor.firstName === "") &&
             (projectDetails.purpose === "trees" ? (
               <div className="donations-gift-container mt-10">
@@ -395,7 +403,7 @@ function DonationsForm(): ReactElement {
                       currency={currency}
                       amount={formatAmountForStripe(
                         paymentSetup?.unitCost * quantity,
-                        currency.toLowerCase(),
+                        currency.toLowerCase()
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -405,7 +413,7 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true },
+                          { shallow: true }
                         );
                         setRetainQuantityValue(true);
                       }}
