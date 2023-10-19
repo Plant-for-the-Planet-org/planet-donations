@@ -19,6 +19,7 @@ import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
 import { z } from "zod";
+import { isEmailValid } from "src/Utils/isEmailValid";
 
 interface FormData extends ContactDetails {
   isPackageWanted: boolean;
@@ -190,16 +191,6 @@ function ContactsForm(): ReactElement {
       setTaxIdentificationAvail(false);
     }
   }, [projectDetails, country]);
-
-  const isEmailValid = (value: string): boolean => {
-    try {
-      const emailSchema = z.string().email();
-      emailSchema.parse(value);
-    } catch (err) {
-      return false;
-    }
-    return true;
-  };
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
