@@ -309,8 +309,11 @@ function ContactsForm(): ReactElement {
                 />
               )}
             />
-            {errors.email && errors.email.type !== "validate" && (
+            {errors.email && errors.email.type === "required" && (
               <span className={"form-errors"}>{t("emailRequired")}</span>
+            )}
+            {errors.email && errors.email.type === "emailInvalid" && (
+              <span className={"form-errors"}>{t("wrongEmailEntered")}</span>
             )}
             {/* {errors.email && errors.email.type === "validate" && (
               <span className={"form-errors"}>{t("useSameEmail")}</span>
