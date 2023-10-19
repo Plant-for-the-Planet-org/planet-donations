@@ -6,6 +6,7 @@ import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { OnBehalfDonor } from "src/Common/Types";
+import { isEmailValid } from "src/Utils/isEmailValid";
 
 const OnBehalf: FC = () => {
   const { t } = useTranslation("common");
@@ -108,8 +109,14 @@ const OnBehalf: FC = () => {
                   name="email"
                   control={control}
                   rules={{
-                    pattern:
-                      /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                    required: {
+                      value: true,
+                      message: t("emailRequired"),
+                    },
+                    validate: {
+                      emailInvalid: (value) =>
+                        value.length === 0 || isEmailValid(value),
+                    },
                   }}
                   render={({ field: { onChange, value } }) => (
                     <MaterialTextField
@@ -120,7 +127,10 @@ const OnBehalf: FC = () => {
                     />
                   )}
                 />
-                {errors.email && (
+                {errors.email && errors.email.type === "required" && (
+                  <span className={"form-errors"}>{t("emailRequired")}</span>
+                )}
+                {errors.email && errors.email.type === "emailInvalid" && (
                   <span className={"form-errors"}>
                     {t("inValidField", {
                       fieldName: "Email",
