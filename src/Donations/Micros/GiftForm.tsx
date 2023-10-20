@@ -150,18 +150,13 @@ export default function GiftForm(): ReactElement {
                       />
                     )}
                   />
-                  {errors.recipientEmail &&
-                    errors.recipientEmail.type === "required" && (
-                      <span className={"form-errors"}>
-                        {t("emailRequired")}
-                      </span>
-                    )}
-                  {errors.recipientEmail &&
-                    errors.recipientEmail.type === "emailInvalid" && (
-                      <span className={"form-errors"}>
-                        {t("wrongEmailEntered")}
-                      </span>
-                    )}
+                  {errors.recipientEmail && (
+                    <span className={"form-errors"}>
+                      {errors.recipientEmail.type === "required"
+                        ? t("emailRequired")
+                        : t("enterValidEmail")}
+                    </span>
+                  )}
                 </div>
                 <div className={"form-field mt-30"}>
                   <Controller

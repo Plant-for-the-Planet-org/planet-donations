@@ -18,7 +18,6 @@ import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
-import { z } from "zod";
 import { isEmailValid } from "src/Utils/isEmailValid";
 
 interface FormData extends ContactDetails {
@@ -300,11 +299,12 @@ function ContactsForm(): ReactElement {
                 />
               )}
             />
-            {errors.email && errors.email.type === "required" && (
-              <span className={"form-errors"}>{t("emailRequired")}</span>
-            )}
-            {errors.email && errors.email.type === "emailInvalid" && (
-              <span className={"form-errors"}>{t("wrongEmailEntered")}</span>
+            {errors.email && (
+              <span className={"form-errors"}>
+                {errors.email.type === "required"
+                  ? t("emailRequired")
+                  : t("enterValidEmail")}
+              </span>
             )}
             {/* {errors.email && errors.email.type === "validate" && (
               <span className={"form-errors"}>{t("useSameEmail")}</span>

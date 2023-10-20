@@ -128,13 +128,12 @@ const OnBehalf: FC = () => {
                   )}
                 />
                 {errors.email && errors.email.type === "required" && (
-                  <span className={"form-errors"}>{t("emailRequired")}</span>
-                )}
-                {errors.email && errors.email.type === "emailInvalid" && (
                   <span className={"form-errors"}>
-                    {t("inValidField", {
-                      fieldName: "Email",
-                    })}
+                    {errors.email.type === "required"
+                      ? t("emailRequired")
+                      : t("inValidField", {
+                          fieldName: "Email",
+                        })}
                   </span>
                 )}
               </Grid>
