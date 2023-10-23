@@ -8,6 +8,7 @@ import ToggleSwitch from "../../Common/InputTypes/ToggleSwitch";
 import { useRouter } from "next/router";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { NoGift } from "@planet-sdk/common/build/types/donation";
+import { isEmailValid } from "src/Utils/isEmailValid";
 
 type GiftFormData = {
   recipientName: string;
@@ -130,9 +131,14 @@ export default function GiftForm(): ReactElement {
                     name="recipientEmail"
                     control={control}
                     rules={{
-                      required: true,
-                      pattern:
-                        /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                      required: {
+                        value: true,
+                        message: t("emailRequired"),
+                      },
+                      validate: {
+                        emailInvalid: (value) =>
+                          value.length === 0 || isEmailValid(value),
+                      },
                     }}
                     render={({ field: { onChange, value } }) => (
                       <MaterialTextField
@@ -144,9 +150,12 @@ export default function GiftForm(): ReactElement {
                       />
                     )}
                   />
-
                   {errors.recipientEmail && (
-                    <span className={"form-errors"}>{t("emailRequired")}</span>
+                    <span className={"form-errors"}>
+                      {errors.recipientEmail.type === "required"
+                        ? t("emailRequired")
+                        : t("enterValidEmail")}
+                    </span>
                   )}
                 </div>
                 <div className={"form-field mt-30"}>
