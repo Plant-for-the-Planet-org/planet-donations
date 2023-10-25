@@ -60,15 +60,26 @@ const ImageComponent = ({
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&
-          t("common:myTreesPlantedByOnLocation", {
-            treeCount: getFormattedNumber(
-              i18n.language,
-              Number(donation.treeCount)
-            ),
-            location: t(
-              "country:" + donation.destination.country.toLowerCase()
-            ),
-          })}
+          (donation.unitType === "tree"
+            ? t("common:myTreesPlantedByOnLocation", {
+                treeCount: getFormattedNumber(
+                  i18n.language,
+                  Number(donation.treeCount)
+                ),
+                location: t(
+                  "country:" + donation.destination.country.toLowerCase()
+                ),
+              })
+            : t("common:restorationDonationShareDetails", {
+                amount: getFormattedCurrency(
+                  i18n.language,
+                  donation.currency,
+                  Number(donation.amount)
+                ),
+                location: t(
+                  "country:" + donation.destination.country.toLowerCase()
+                ),
+              }))}
         {projectDetails?.purpose === "conservation" &&
           t(
             `common:${
