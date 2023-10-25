@@ -11,7 +11,7 @@ import {
 } from "src/Common/Types";
 import Avatar from "./Avatar";
 import TransactionSummary from "./TransactionSummary";
-import ProjectTitle from "./ProjectTitle";
+import SummaryTitle from "./SummaryTitle";
 import ProjectInfo from "./ProjectInfo";
 import styles from "./LeftPanel.module.scss";
 import GiftInfo from "./GiftInfo";
@@ -20,7 +20,8 @@ import ContactDetailsInfo from "./ContactDetailsInfo";
 
 interface Props {
   isMobile: boolean;
-  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null;
+  projectDetails: FetchedProjectDetails | null;
+  pCashSignupDetails: PlanetCashSignupDetails | null;
   donationStep: number | null;
   donationID: string | null;
   paymentSetup: PaymentOptions | null;
@@ -40,6 +41,7 @@ interface Props {
 const LeftPanelInfo = ({
   isMobile,
   projectDetails,
+  pCashSignupDetails,
   donationStep,
   donationID,
   paymentSetup,
@@ -58,15 +60,19 @@ const LeftPanelInfo = ({
   const { i18n } = useTranslation("common");
   const router = useRouter();
 
-  const canShowAvatar = donationStep !== null && donationStep > 0;
+  const info = projectDetails || pCashSignupDetails;
+  const canShowAvatar =
+    pCashSignupDetails !== null || (donationStep !== null && donationStep > 0);
   const canShowTransactionSummary =
     paymentSetup !== null && (donationStep === 2 || donationStep === 3);
-  const canShowProject = donationStep !== null && donationStep > 0;
+  const canShowSummary =
+    pCashSignupDetails !== null || (donationStep !== null && donationStep > 0);
   const canShowGift =
     (donationStep === 1 || donationStep === 2 || donationStep === 3) &&
     giftDetails.type !== null &&
     isGift &&
-    giftDetails.recipientName !== undefined;
+    giftDetails.recipientName !== undefined &&
+    projectDetails?.purpose !== "planet-cash";
   const canShowOnBehalf =
     donationStep === 1 &&
     isPlanetCashActive &&
@@ -77,9 +83,9 @@ const LeftPanelInfo = ({
   const canShowDonationLink =
     donationID !== null && !(isMobile && router.query.step === "thankyou");
 
-  return projectDetails ? (
+  return info !== null ? (
     <div className={styles["left-panel-info"]}>
-      {canShowAvatar && <Avatar projectDetails={projectDetails} />}
+      {canShowAvatar && <Avatar info={info} />}
       {canShowTransactionSummary && (
         <TransactionSummary
           currency={currency}
@@ -88,11 +94,11 @@ const LeftPanelInfo = ({
           paymentSetup={paymentSetup}
         />
       )}
-      {canShowProject && (
-        <div className={styles["project-info-container"]}>
-          <ProjectTitle projectDetails={projectDetails} />
-          {projectDetails.purpose !== "planet-cash-signup" && (
-            <ProjectInfo projectDetails={projectDetails} />
+      {canShowSummary && (
+        <div className={styles["summary-container"]}>
+          <SummaryTitle info={info} />
+          {info.purpose !== "planet-cash-signup" && (
+            <ProjectInfo projectDetails={info} />
           )}
         </div>
       )}

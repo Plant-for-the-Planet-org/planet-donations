@@ -13,7 +13,7 @@ import getImageUrl from "./getImageURL";
 // Default -> Check for tenant image if not found, use project image, if not found, use base
 export function getTenantBackground(
   tenant: string,
-  projectDetails: FetchedProjectDetails | PlanetCashSignupDetails | null
+  info: FetchedProjectDetails | PlanetCashSignupDetails | null,
 ): string {
   let tenantImage = null;
   let imageUrl = defaultForest;
@@ -35,12 +35,8 @@ export function getTenantBackground(
   if (tenantImage) {
     imageUrl = tenantImage;
   } else {
-    if (
-      projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
-      projectDetails.image
-    ) {
-      imageUrl = getImageUrl("project", "large", projectDetails.image);
+    if (info && info.purpose !== "planet-cash-signup" && info.image) {
+      imageUrl = getImageUrl("project", "large", info.image);
     } else {
       imageUrl = defaultForest;
     }

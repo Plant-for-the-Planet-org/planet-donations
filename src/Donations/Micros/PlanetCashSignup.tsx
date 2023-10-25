@@ -161,43 +161,45 @@ const PlanetCashSignup = (): ReactElement => {
   };
 
   return (
-    <RootContainer>
-      <div>
-        <p className="title-text mb-20">{t("planetCashSignup")}</p>
+    <div className="right-panel-container" style={{ paddingBottom: "0px" }}>
+      <RootContainer>
+        <div>
+          <p className="title-text mb-20">{t("planetCashSignup")}</p>
 
-        <p className="mb-20">{t("noPlanetCashAccount")}</p>
+          <p className="mb-20">{t("noPlanetCashAccount")}</p>
 
-        <div className={"form-field mb-20"}>
-          <CountrySelect
-            allowedCountries={allowedCountries}
-            label={t("country")}
-            name="country"
-            onValueChange={onChangeCountry}
-            defaultValue={country}
-          />
+          <div className={"form-field mb-20"}>
+            <CountrySelect
+              allowedCountries={allowedCountries}
+              label={t("country")}
+              name="country"
+              onValueChange={onChangeCountry}
+              defaultValue={country}
+            />
+          </div>
+          <div className="mb-20">
+            <Trans i18nKey={"common:planetCashTC"}>
+              <TCLink
+                rel="noopener noreferrer"
+                href={`https://pp.eco/legal/${i18n.language}/terms`}
+                target={"_blank"}
+              ></TCLink>
+            </Trans>
+          </div>
+          <p>{t("planetCashIUnderstand")}</p>
         </div>
-        <div className="mb-20">
-          <Trans i18nKey={"common:planetCashTC"}>
-            <TCLink
-              rel="noopener noreferrer"
-              href={`https://pp.eco/legal/${i18n.language}/terms`}
-              target={"_blank"}
-            ></TCLink>
-          </Trans>
-        </div>
-        <p>{t("planetCashIUnderstand")}</p>
-      </div>
-      <button
-        onClick={
-          !loading && currentPlanetCashAccount
-            ? handleActivatePlanetCashAccount
-            : handleCreatePlanetCashAccount
-        }
-        className="primary-button w-100 mt-30"
-      >
-        {t("createPlanetCashAccount")}
-      </button>
-    </RootContainer>
+        <button
+          onClick={
+            !loading && currentPlanetCashAccount
+              ? handleActivatePlanetCashAccount
+              : handleCreatePlanetCashAccount
+          }
+          className="primary-button w-100 mt-30"
+        >
+          {t("createPlanetCashAccount")}
+        </button>
+      </RootContainer>
+    </div>
   );
 };
 

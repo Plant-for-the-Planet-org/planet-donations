@@ -67,6 +67,7 @@ function DonationsForm(): ReactElement {
     utmCampaign,
     utmMedium,
     utmSource,
+    isPackageWanted,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -104,6 +105,19 @@ function DonationsForm(): ReactElement {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
+  const canPayWithPlanetCash =
+    projectDetails !== null &&
+    projectDetails.purpose !== "funds" &&
+    projectDetails.purpose !== "planet-cash" &&
+    profile !== null &&
+    isSignedUp &&
+    profile.planetCash !== null &&
+    projectDetails.taxDeductionCountries?.includes(
+      profile.planetCash.country
+    ) &&
+    !(isGift && giftDetails.recipientName === "") &&
+    !(onBehalf && onBehalfDonor.firstName === "");
+
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
@@ -139,11 +153,7 @@ function DonationsForm(): ReactElement {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
 
-    if (
-      projectDetails &&
-      projectDetails.purpose !== "planet-cash-signup" &&
-      paymentSetup
-    ) {
+    if (projectDetails && paymentSetup) {
       await createDonationFunction({
         isTaxDeductible,
         country,
@@ -165,6 +175,7 @@ function DonationsForm(): ReactElement {
         utmCampaign,
         utmMedium,
         utmSource,
+        isPackageWanted,
       }).then(async (res) => {
         if (res) {
           let token = null;
@@ -248,7 +259,7 @@ function DonationsForm(): ReactElement {
   }
 
   const handlePlanetCashDonate = async () => {
-    if (projectDetails && projectDetails.purpose !== "planet-cash-signup") {
+    if (projectDetails) {
       setShowDisablePlanetCashButton(true);
       const _onBehalfDonor = {
         firstname: onBehalfDonor.firstName,
@@ -318,7 +329,7 @@ function DonationsForm(): ReactElement {
   return isPaymentProcessing ? (
     <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
   ) : projectDetails ? (
-    <div className="donations-forms-container">
+    <div className="right-panel-container">
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
@@ -326,13 +337,7 @@ function DonationsForm(): ReactElement {
             <p className="title-text">{t("donate")}</p>
           )}
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
-          {paymentSetup?.unitType === "tree" &&
-            projectDetails.purpose !== "funds" &&
-            projectDetails.purpose !== "planet-cash" &&
-            !(isGift && giftDetails.recipientName === "") &&
-            !(onBehalf && onBehalfDonor.firstName === "") &&
-            isSignedUp &&
-            profile?.planetCash && <PlanetCashSelector />}
+          {canPayWithPlanetCash && <PlanetCashSelector />}
           {!(onBehalf && onBehalfDonor.firstName === "") &&
             (projectDetails.purpose === "trees" ? (
               <div className="donations-gift-container mt-10">

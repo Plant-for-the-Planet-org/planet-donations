@@ -14,7 +14,6 @@ import {
   SentGift,
   FetchedProjectDetails,
   PaymentOptions,
-  PlanetCashSignupDetails,
 } from "src/Common/Types";
 import {
   Donation,
@@ -23,7 +22,7 @@ import {
 import { GetServerSideProps } from "next/types";
 
 interface Props {
-  projectDetails?: FetchedProjectDetails | PlanetCashSignupDetails;
+  projectDetails?: FetchedProjectDetails;
   donationStep: number | null;
   giftDetails: SentGift | null;
   isGift: boolean;
@@ -129,9 +128,9 @@ function index({
     settenant(tenant);
     // If gift details are present, initialize gift in context
     if (giftDetails && isGift) {
-        setGiftDetails(giftDetails);
-        setisGift(true);
-      }
+      setGiftDetails(giftDetails);
+      setisGift(true);
+    }
   }, []);
 
   // If project details are present set project details
@@ -251,7 +250,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase(),
     );
     if (found) {
       country = queryCountry.toUpperCase();
