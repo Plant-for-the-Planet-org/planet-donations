@@ -324,7 +324,7 @@ function ContactsForm(): ReactElement {
               rules={{
                 required: t("addressRequired"),
                 pattern: {
-                  value: /^[\p{L}\p{N}\sß.,#-/]+$/u,
+                  value: /^[\p{L}\p{N}\sß.,#/-]+$/u,
                   message: t("addressInvalid"),
                 },
               }}
