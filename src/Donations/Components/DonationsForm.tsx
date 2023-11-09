@@ -108,7 +108,7 @@ function DonationsForm(): ReactElement {
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest,
+    paymentRequest: PaymentRequest
   ) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
@@ -223,7 +223,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity,
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -233,7 +233,7 @@ function DonationsForm(): ReactElement {
           amount: getFormatedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity,
+            paymentSetup.unitCost * quantity
           ),
         });
         break;
@@ -389,13 +389,13 @@ function DonationsForm(): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency ? (
                     <NativePay
-                      isApplePayEnabled={false}
-                      isGooglePayEnabled={false}
+                      // isApplePayEnabled={true}
+                      // isGooglePayEnabled={true}
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
                         paymentSetup?.unitCost * quantity,
-                        currency.toLowerCase(),
+                        currency.toLowerCase()
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -405,7 +405,7 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true },
+                          { shallow: true }
                         );
                         setRetainQuantityValue(true);
                       }}
