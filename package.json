@@ -53,6 +53,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@babel/plugin-transform-unicode-regex": "^7.22.5",
+    "@hookform/devtools": "^4.3.1",
     "@types/dom-to-image": "^2.6.2",
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.3",
