@@ -109,9 +109,9 @@ export default function GiftForm(): ReactElement {
                 )}
               />
               {errors.recipientName && (
-                <span className={"form-errors"}>
+                <div className={"form-errors"}>
                   {t("recipientNameRequired")}
-                </span>
+                </div>
               )}
             </div>
 
@@ -151,11 +151,11 @@ export default function GiftForm(): ReactElement {
                     )}
                   />
                   {errors.recipientEmail && (
-                    <span className={"form-errors"}>
+                    <div className={"form-errors"}>
                       {errors.recipientEmail.type === "required"
                         ? t("emailRequired")
                         : t("enterValidEmail")}
-                    </span>
+                    </div>
                   )}
                 </div>
                 <div className={"form-field mt-30"}>

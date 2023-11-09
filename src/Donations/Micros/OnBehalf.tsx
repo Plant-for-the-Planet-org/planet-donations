@@ -73,7 +73,7 @@ const OnBehalf: FC = () => {
                 )}
               />
               {errors.firstName && (
-                <span className={"form-errors"}>{t("firstNameRequired")}</span>
+                <div className={"form-errors"}>{t("firstNameRequired")}</div>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -91,7 +91,7 @@ const OnBehalf: FC = () => {
                 )}
               />
               {errors.lastName && (
-                <span className={"form-errors"}>{t("lastNameRequired")}</span>
+                <div className={"form-errors"}>{t("lastNameRequired")}</div>
               )}
             </Grid>
             {shouldNotify ? (
@@ -128,13 +128,13 @@ const OnBehalf: FC = () => {
                   )}
                 />
                 {errors.email && errors.email.type === "required" && (
-                  <span className={"form-errors"}>
+                  <div className={"form-errors"}>
                     {errors.email.type === "required"
                       ? t("emailRequired")
                       : t("inValidField", {
                           fieldName: "Email",
                         })}
-                  </span>
+                  </div>
                 )}
               </Grid>
             ) : (
