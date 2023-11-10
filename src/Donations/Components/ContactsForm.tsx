@@ -541,7 +541,7 @@ function ContactsForm(): ReactElement {
                   required: t("companyRequired"),
                   pattern: {
                     value: /^[\p{L}\p{N}\sß.,'&()!-]+$/u,
-                    message: t("firstNameInvalid"),
+                    message: t("companyNameInvalid"),
                   },
                 }}
                 render={({ field: { onChange, value, onBlur } }) => (
