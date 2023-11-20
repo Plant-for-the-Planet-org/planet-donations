@@ -235,7 +235,7 @@ function ContactsForm(): ReactElement {
                     message: t("max50Chars"),
                   },
                   pattern: {
-                    value: /^[\p{L}\p{N}\sß.'-]+$/u,
+                    value: /^[\p{L}\p{N}ß][\p{L}\p{N}\sß.'-]*$/u,
                     message: t("firstNameInvalid"),
                   },
                 }}
@@ -266,7 +266,7 @@ function ContactsForm(): ReactElement {
                     message: t("max50Chars"),
                   },
                   pattern: {
-                    value: /^[\p{L}\p{N}\sß'-]+$/u,
+                    value: /^[\p{L}\p{N}ß][\p{L}\p{N}\sß'-]*$/u,
                     message: t("lastNameInvalid"),
                   },
                 }}
