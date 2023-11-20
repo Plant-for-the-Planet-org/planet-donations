@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
@@ -47,12 +48,13 @@ function ThankyouMessage({
         })
       : null;
 
-  // EXAMPLE: Your 50 trees will be planted by AMU EcoVillage Project, Ethiopia in Ethiopia.
+  // EXAMPLE: Your donation will be used to restore 1,000 trees by Yucatán Restoration in Mexico.
+  // EXAMPLE: Your donation will be used to restore 2,000 m² by Saving Sumatra’s Last Refuge in Indonesia.
   const donationProjectMessage =
     donation.destination && donation.units
       ? " " +
         t("common:restorationDonationUsage", {
-          units: donation.units,
+          units: getFormattedNumber(i18n.language, donation.units),
           unitType: t(`common:${donation.unitType}`, { count: donation.units }),
           projectName: donation.destination.name,
           location: t("country:" + donation.destination.country.toLowerCase()),
