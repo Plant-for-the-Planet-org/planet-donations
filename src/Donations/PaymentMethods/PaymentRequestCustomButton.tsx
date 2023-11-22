@@ -69,12 +69,12 @@ PaymentButtonProps): ReactElement | null => {
         requestPayerName: true,
         requestPayerEmail: true,
       });
+      console.log(pr);
       // Check the availability of the Payment Request API.
       pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
         }
-        console.log(result);
       });
     }
   }, [stripe, paymentRequest, country, currency, amount]);
@@ -88,6 +88,7 @@ PaymentButtonProps): ReactElement | null => {
   }, [country, currency, amount]);
 
   useEffect(() => {
+    console.log(paymentRequest);
     let subscribed = true;
     if (paymentRequest) {
       paymentRequest
