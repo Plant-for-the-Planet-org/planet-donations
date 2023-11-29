@@ -48,18 +48,18 @@ function ThankyouMessage({
         })
       : null;
 
-  // EXAMPLE: Your 50 trees will be planted by AMU EcoVillage Project, Ethiopia in Ethiopia.
-  const donationProjectMessage = donation.destination
-    ? " " +
-      t("common:yourTreesPlantedByOnLocation", {
-        treeCount: getFormattedNumber(
-          i18n.language,
-          Number(donation.treeCount)
-        ),
-        projectName: donation.destination.name,
-        location: t("country:" + donation.destination.country.toLowerCase()),
-      })
-    : null;
+  // EXAMPLE: Your donation will be used to restore 1,000 trees by Yucatán Restoration in Mexico.
+  // EXAMPLE: Your donation will be used to restore 2,000 m² by Saving Sumatra’s Last Refuge in Indonesia.
+  const donationProjectMessage =
+    donation.destination && donation.units
+      ? " " +
+        t("common:restorationDonationUsage", {
+          units: getFormattedNumber(i18n.language, donation.units),
+          unitType: t(`common:${donation.unitType}`, { count: donation.units }),
+          projectName: donation.destination.name,
+          location: t("country:" + donation.destination.country.toLowerCase()),
+        })
+      : null;
 
   const Message = () => {
     return (

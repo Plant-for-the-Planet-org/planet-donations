@@ -21,12 +21,12 @@ function DonationAmount(): ReactElement {
               paymentSetup.unitCost * quantity
             )}
           </span>
-          {paymentSetup.purpose === "trees"
+          {paymentSetup.unitType === "tree"
             ? t("fortreeCountTrees", {
                 count: Number(quantity),
                 treeCount: getFormattedNumber(i18n.language, Number(quantity)),
               })
-            : paymentSetup.purpose === "conservation"
+            : paymentSetup.unitType === "m2"
             ? t("forQuantitym2", {
                 quantity: getFormattedNumber(i18n.language, Number(quantity)),
               })
