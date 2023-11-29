@@ -67,7 +67,6 @@
   "contributionMessage": "Talvez você vai visitá-los um dia destes? Nesse meio tempo, que tal contar aos seus amigos sobre suas árvores, para incentivá-los a plantar as árvores deles?",
   "fundingDonationSuccess": "Obrigado pela sua contribuição! Você receberá uma confirmação de sua contribuição no seu e-mail.",
   "fundingContributionMessage": "Vamos mantê-lo informado sobre as nossas ações, enquanto isso, compartilhe com os seus amigos sobre a sua contribuição.",
-  "yourTreesPlantedByOnLocation": "As suas árvores {{treeCount}} serão plantadas por {{projectName}} em {{location}} .",
   "m2conservedByOnLocation": "{{quantity}} m² de floresta será conservada por {{projectName}} em {{location}}.",
   "myTreesPlantedByOnLocation": "As minhas {{treeCount}} árvores estão sendo plantadas em {{location}} .",
   "iDonatedForestOnLocation": "Eu doei {{amount}} para a conservação da floresta em {{location}}.",

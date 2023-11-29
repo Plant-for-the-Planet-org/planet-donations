@@ -57,7 +57,6 @@
   "contributionMessage": "¿Quizás los visites algún día? Mientras tanto, ¿podrías convencer a tus amigos de que tengan sus propios árboles hablándoles de los tuyos?",
   "fundingDonationSuccess": "Gracias por su contribución",
   "fundingContributionMessage": "Les mantendremos informados de nuestras acciones, mientras tanto, quizás compartan con sus amigos su contribución.",
-  "yourTreesPlantedByOnLocation": "Tus árboles de {{treeCount}} serán plantados por {{projectName}} en {{location}} .",
   "myTreesPlantedByOnLocation": "Mis árboles de {{treeCount}} se están plantando en {{location}} .",
   "plantTreesAtURL": "Plantar árboles en {{url}}",
   "thankYou": "Gracias",
