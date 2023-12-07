@@ -29,8 +29,6 @@ interface PaymentButtonProps {
   paymentLabel: string;
   frequency: string | null;
   paymentSetup: PaymentOptions;
-  // isApplePayEnabled: boolean;
-  // isGooglePayEnabled: boolean;
 }
 
 export const PaymentRequestCustomButton = ({
@@ -43,9 +41,7 @@ export const PaymentRequestCustomButton = ({
   paymentLabel,
   frequency,
   paymentSetup,
-}: // isApplePayEnabled,
-// isGooglePayEnabled,
-PaymentButtonProps): ReactElement | null => {
+}: PaymentButtonProps): ReactElement | null => {
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
@@ -216,8 +212,6 @@ PaymentButtonProps): ReactElement | null => {
 /* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/
 
 interface NativePayProps {
-  // isApplePayEnabled: boolean;
-  // isGooglePayEnabled: boolean;
   country: string;
   currency: string;
   amount: number;
@@ -232,8 +226,6 @@ interface NativePayProps {
   frequency: string | null;
 }
 export const NativePay = ({
-  // isApplePayEnabled = true,
-  // isGooglePayEnabled = true,
   country,
   currency,
   amount,
@@ -280,8 +272,6 @@ export const NativePay = ({
         paymentLabel={paymentLabel}
         frequency={frequency}
         paymentSetup={paymentSetup}
-        // isApplePayEnabled={true}
-        // isGooglePayEnabled={true}
       />
     </Elements>
   );

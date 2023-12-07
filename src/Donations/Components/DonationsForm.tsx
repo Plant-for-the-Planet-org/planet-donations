@@ -389,8 +389,6 @@ function DonationsForm(): ReactElement {
                   paymentSetup?.gateways?.stripe?.account &&
                   currency ? (
                     <NativePay
-                      // isApplePayEnabled={true}
-                      // isGooglePayEnabled={true}
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
