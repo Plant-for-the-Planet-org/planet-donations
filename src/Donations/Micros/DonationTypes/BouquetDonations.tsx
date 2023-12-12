@@ -108,7 +108,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
         setCustomInputValue(
           getFormattedNumber(
             i18n.language,
-            paymentSetup.unit !== "currency"
+            paymentSetup.unitType !== "currency"
               ? newQuantity
               : newQuantity * paymentSetup.unitCost
           )
@@ -165,7 +165,11 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                             currency,
                             option.quantity * paymentSetup.unitCost
                           )}{" "}
-                      {paymentSetup.purpose === "conservation" ? t("m2") : []}
+                      {/* Below condition is redundant currently, but is left here as a reminder while refactoring */}
+                      {paymentSetup.purpose === "conservation" &&
+                      paymentSetup.unitType === "m2"
+                        ? t(paymentSetup.unitType)
+                        : []}
                     </span>
                   </div>
                 </div>
@@ -226,8 +230,10 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                           fontWeight: "800",
                         }}
                       >
-                        {paymentSetup.purpose === "conservation"
-                          ? t(paymentSetup.unit)
+                        {/* Below condition is redundant currently, but is left here as a reminder while refactoring */}
+                        {paymentSetup.purpose === "conservation" &&
+                        paymentSetup.unitType === "m2"
+                          ? t(paymentSetup.unitType)
                           : []}
                       </p>
                     </div>
@@ -238,7 +244,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                     >
                       <p style={{ margin: "5px" }}>
                         {" "}
-                        {paymentSetup.unit === "currency"
+                        {paymentSetup.unitType === "currency"
                           ? t("customAmount")
                           : t("custom")}
                       </p>
@@ -282,7 +288,11 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                 )
               : []}{" "}
           </button>
-          {paymentSetup.purpose === "conservation" ? t("perm2") : []}
+          {/* Below condition is redundant currently, but is left here as a reminder while refactoring */}
+          {paymentSetup.purpose === "conservation" &&
+          paymentSetup.unitType === "m2"
+            ? t("perUnit.m2")
+            : []}
         </p>
       ) : (
         <div className={"mt-20"}>

@@ -6,6 +6,7 @@ import MaterialTextField from "src/Common/InputTypes/MaterialTextField";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { OnBehalfDonor } from "src/Common/Types";
+import { isEmailValid } from "src/Utils/isEmailValid";
 
 const OnBehalf: FC = () => {
   const { t } = useTranslation("common");
@@ -72,7 +73,7 @@ const OnBehalf: FC = () => {
                 )}
               />
               {errors.firstName && (
-                <span className={"form-errors"}>{t("firstNameRequired")}</span>
+                <div className={"form-errors"}>{t("firstNameRequired")}</div>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -90,7 +91,7 @@ const OnBehalf: FC = () => {
                 )}
               />
               {errors.lastName && (
-                <span className={"form-errors"}>{t("lastNameRequired")}</span>
+                <div className={"form-errors"}>{t("lastNameRequired")}</div>
               )}
             </Grid>
             {shouldNotify ? (
@@ -108,8 +109,14 @@ const OnBehalf: FC = () => {
                   name="email"
                   control={control}
                   rules={{
-                    pattern:
-                      /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                    required: {
+                      value: true,
+                      message: t("emailRequired"),
+                    },
+                    validate: {
+                      emailInvalid: (value) =>
+                        value.length === 0 || isEmailValid(value),
+                    },
                   }}
                   render={({ field: { onChange, value } }) => (
                     <MaterialTextField
@@ -120,12 +127,14 @@ const OnBehalf: FC = () => {
                     />
                   )}
                 />
-                {errors.email && (
-                  <span className={"form-errors"}>
-                    {t("inValidField", {
-                      fieldName: "Email",
-                    })}
-                  </span>
+                {errors.email && errors.email.type === "required" && (
+                  <div className={"form-errors"}>
+                    {errors.email.type === "required"
+                      ? t("emailRequired")
+                      : t("inValidField", {
+                          fieldName: "Email",
+                        })}
+                  </div>
                 )}
               </Grid>
             ) : (

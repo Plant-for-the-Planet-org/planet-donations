@@ -109,6 +109,7 @@ function DonationsForm(): ReactElement {
     projectDetails !== null &&
     projectDetails.purpose !== "funds" &&
     projectDetails.purpose !== "planet-cash" &&
+    paymentSetup?.unitType === "tree" && //Enables planetcash for restoration projects with unitType tree only (TEMP)
     profile !== null &&
     isSignedUp &&
     profile.planetCash !== null &&
@@ -339,7 +340,9 @@ function DonationsForm(): ReactElement {
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {canPayWithPlanetCash && <PlanetCashSelector />}
           {!(onBehalf && onBehalfDonor.firstName === "") &&
-            (projectDetails.purpose === "trees" ? (
+            (projectDetails.purpose === "trees" &&
+            (paymentSetup?.unitType !== "m2" ||
+              giftDetails.type === "direct") ? (
               <div className="donations-gift-container mt-10">
                 <GiftForm />
               </div>

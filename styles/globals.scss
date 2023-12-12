@@ -165,13 +165,11 @@ button {
 .form-field {
   position: relative;
   .form-errors {
-    position: absolute;
-    bottom: -20px;
-    left: 0px;
     font-family: $primaryFontFamily;
     font-size: 12px;
     color: $dangerColor;
     margin-left: 6px;
+    margin-bottom: -1.43em;
   }
 }
 

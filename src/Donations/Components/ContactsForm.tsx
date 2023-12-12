@@ -18,6 +18,8 @@ import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
+import { isEmailValid } from "src/Utils/isEmailValid";
+// import { DevTool } from "@hookform/devtools";
 
 interface FormData extends ContactDetails {
   isPackageWanted: boolean;
@@ -39,7 +41,7 @@ function ContactsForm(): ReactElement {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {},
+      : {}
   );
   const {
     profile,
@@ -62,7 +64,10 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (contactDetails) {
-      reset({ ...contactDetails, isPackageWanted: isPackageWanted !== false && isEligibleForPackage });
+      reset({
+        ...contactDetails,
+        isPackageWanted: isPackageWanted !== false && isEligibleForPackage,
+      });
       if (contactDetails.companyname) {
         setIsCompany(true);
       }
@@ -77,13 +82,13 @@ function ContactsForm(): ReactElement {
     setValue,
     formState: { errors },
   } = useForm<FormData>({
-    mode: "all",
+    mode: "onTouched",
     defaultValues: contactDetails,
   });
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country,
+      (country) => country.abbrev === contactDetails.country
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
@@ -95,7 +100,7 @@ function ContactsForm(): ReactElement {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true },
+      { shallow: true }
     );
     setContactDetails({
       ...enteredContactDetails,
@@ -108,8 +113,8 @@ function ContactsForm(): ReactElement {
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country,
-    )[0]?.postal,
+      (country) => country.abbrev === contactDetails.country
+    )[0]?.postal
   );
 
   const changeCountry = (country: string) => {
@@ -201,7 +206,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true },
+                { shallow: true }
               );
             }}
             style={{ marginRight: "12px" }}
@@ -223,10 +228,21 @@ function ContactsForm(): ReactElement {
               <Controller
                 name="firstname"
                 control={control}
-                rules={{ required: true, minLength: 1 }}
-                render={({ field: { onChange, value } }) => (
+                rules={{
+                  required: t("firstNameRequired"),
+                  maxLength: {
+                    value: 50,
+                    message: t("max50Chars"),
+                  },
+                  pattern: {
+                    value: /^[\p{L}\p{N}ß][\p{L}\p{N}\sß.'-]*$/u,
+                    message: t("firstNameInvalid"),
+                  },
+                }}
+                render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                     label={t("firstName")}
                     variant="outlined"
@@ -234,13 +250,8 @@ function ContactsForm(): ReactElement {
                   />
                 )}
               />
-              {errors.firstname && errors.firstname.type === "required" && (
-                <span className={"form-errors"}>{t("firstNameRequired")}</span>
-              )}
-              {errors.firstname && errors.firstname.type === "minLength" && (
-                <span className={"form-errors"}>
-                  {t("atLeast3LettersRequired")}
-                </span>
+              {errors.firstname !== undefined && (
+                <div className={"form-errors"}>{errors.firstname.message}</div>
               )}
             </div>
             <div style={{ width: "20px" }} />
@@ -248,10 +259,21 @@ function ContactsForm(): ReactElement {
               <Controller
                 name="lastname"
                 control={control}
-                rules={{ required: true, minLength: 1 }}
-                render={({ field: { onChange, value } }) => (
+                rules={{
+                  required: t("lastNameRequired"),
+                  maxLength: {
+                    value: 50,
+                    message: t("max50Chars"),
+                  },
+                  pattern: {
+                    value: /^[\p{L}\p{N}ß][\p{L}\p{N}\sß'-]*$/u,
+                    message: t("lastNameInvalid"),
+                  },
+                }}
+                render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                     label={t("lastName")}
                     variant="outlined"
@@ -259,13 +281,8 @@ function ContactsForm(): ReactElement {
                   />
                 )}
               />
-              {errors.lastname && errors.lastname.type === "required" && (
-                <span className={"form-errors"}>{t("lastNameRequired")}</span>
-              )}
-              {errors.lastname && errors.lastname.type === "minLength" && (
-                <span className={"form-errors"}>
-                  {t("atLeast3LettersRequired")}
-                </span>
+              {errors.lastname !== undefined && (
+                <div className={"form-errors"}>{errors.lastname.message}</div>
               )}
             </div>
           </div>
@@ -275,13 +292,18 @@ function ContactsForm(): ReactElement {
               name="email"
               control={control}
               rules={{
-                required: true,
-                pattern:
-                  /^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$/i,
+                required: t("emailRequired"),
+                validate: {
+                  emailInvalid: (value) =>
+                    value.length === 0 ||
+                    isEmailValid(value) ||
+                    t("enterValidEmail"),
+                },
               }}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value, onBlur } }) => (
                 <MaterialTextField
                   onChange={onChange}
+                  onBlur={onBlur}
                   value={value}
                   label={t("email")}
                   variant="outlined"
@@ -290,19 +312,22 @@ function ContactsForm(): ReactElement {
                 />
               )}
             />
-            {errors.email && errors.email.type !== "validate" && (
-              <span className={"form-errors"}>{t("emailRequired")}</span>
+            {errors.email !== undefined && (
+              <div className={"form-errors"}>{errors.email.message}</div>
             )}
-            {/* {errors.email && errors.email.type === "validate" && (
-              <span className={"form-errors"}>{t("useSameEmail")}</span>
-            )} */}
           </div>
 
           <div className={"form-field mt-30"} style={{ position: "relative" }}>
             <Controller
               name="address"
               control={control}
-              rules={{ required: true }}
+              rules={{
+                required: t("addressRequired"),
+                pattern: {
+                  value: /^[\p{L}\p{N}\sß.,#/-]+$/u,
+                  message: t("addressInvalid"),
+                },
+              }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <MaterialTextField
                   onChange={(event) => {
@@ -339,8 +364,8 @@ function ContactsForm(): ReactElement {
                   </div>
                 )
               : null}
-            {errors.address && (
-              <span className={"form-errors"}>{t("addressRequired")}</span>
+            {errors.address !== undefined && (
+              <div className={"form-errors"}>{errors.address.message}</div>
             )}
           </div>
 
@@ -350,11 +375,19 @@ function ContactsForm(): ReactElement {
                 name="city"
                 control={control}
                 rules={{
-                  required: true,
+                  required: {
+                    value: true,
+                    message: t("cityRequired"),
+                  },
+                  pattern: {
+                    value: /^[\p{L}\sß.,()-]+$/u,
+                    message: t("cityInvalid"),
+                  },
                 }}
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                     label={t("city")}
                     variant="outlined"
@@ -362,8 +395,8 @@ function ContactsForm(): ReactElement {
                   />
                 )}
               />
-              {errors.city && (
-                <span className={"form-errors"}>{t("cityRequired")}</span>
+              {errors.city !== undefined && (
+                <div className={"form-errors"}>{errors.city.message}</div>
               )}
             </div>
             <div style={{ width: "20px" }} />
@@ -373,12 +406,16 @@ function ContactsForm(): ReactElement {
                   name="zipCode"
                   control={control}
                   rules={{
-                    required: true,
-                    pattern: postalRegex,
+                    required: t("zipCodeRequired"),
+                    pattern: {
+                      value: postalRegex as RegExp,
+                      message: t("zipCodeInvalid"),
+                    },
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({ field: { onChange, value, onBlur } }) => (
                     <MaterialTextField
                       onChange={onChange}
+                      onBlur={onBlur}
                       value={value}
                       label={t("zipCode")}
                       variant="outlined"
@@ -387,24 +424,19 @@ function ContactsForm(): ReactElement {
                   )}
                 />
               )}
-              {errors.zipCode && (
-                <span className={"form-errors"}>
-                  {t("zipCodeAlphaNumValidation")}
-                </span>
+              {errors.zipCode !== undefined && (
+                <div className={"form-errors"}>{errors.zipCode.message}</div>
               )}
             </div>
           </div>
 
           <div className={"form-field mt-30"}>
             <Controller
+              name="country"
               control={control}
               rules={{
-                required: {
-                  value: true,
-                  message: t("countryRequired"),
-                },
+                required: t("countryRequired"),
               }}
-              name="country"
               defaultValue={
                 contactDetails.country ? contactDetails.country : country
               }
@@ -418,9 +450,8 @@ function ContactsForm(): ReactElement {
                 />
               )}
             />
-
             {errors.country && (
-              <span className={"form-errors"}>{t("countryRequired")}</span>
+              <div className={"form-errors"}>{errors.country.message}</div>
             )}
           </div>
 
@@ -433,18 +464,19 @@ function ContactsForm(): ReactElement {
               <Controller
                 name="tin"
                 control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
+                rules={{ required: t("tinRequired") }}
+                render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                     label={t("taxIdentificationNumber")}
                     variant="outlined"
                   />
                 )}
               />
-              {errors.tin && errors.tin.type !== "validate" && (
-                <span className={"form-errors"}>{t("tinRequired")}</span>
+              {errors.tin !== undefined && (
+                <div className={"form-errors"}>{errors.tin.message}</div>
               )}
             </div>
           ) : (
@@ -505,10 +537,17 @@ function ContactsForm(): ReactElement {
               <Controller
                 name="companyname"
                 control={control}
-                rules={{ required: true }}
-                render={({ field: { onChange, value } }) => (
+                rules={{
+                  required: t("companyRequired"),
+                  pattern: {
+                    value: /^[\p{L}\p{N}\sß.,'&()!-]+$/u,
+                    message: t("companyNameInvalid"),
+                  },
+                }}
+                render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
                     onChange={onChange}
+                    onBlur={onBlur}
                     value={value}
                     label={t("companyName")}
                     variant="outlined"
@@ -520,8 +559,10 @@ function ContactsForm(): ReactElement {
                   />
                 )}
               />
-              {errors.companyname && (
-                <span className={"form-errors"}>{t("companyRequired")}</span>
+              {errors.companyname !== undefined && (
+                <div className={"form-errors"}>
+                  {errors.companyname.message}
+                </div>
               )}
             </div>
           ) : null}
@@ -550,7 +591,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormatedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity,
+                    paymentSetup.unitCost * quantity
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),
@@ -558,6 +599,7 @@ function ContactsForm(): ReactElement {
             </button>
           )}
         </form>
+        {/* <DevTool control={control} /> */}
       </div>
     </div>
   );
