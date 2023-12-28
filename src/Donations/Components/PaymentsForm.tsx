@@ -354,7 +354,8 @@ function PaymentsForm(): ReactElement {
               }
             >
               <InfoIcon />
-              {paymentError}
+              {/* TODO - better error handling */}
+              {t(paymentError)}
             </div>
           )}
           {!isCreatingDonation &&

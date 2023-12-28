@@ -21,6 +21,7 @@ import { DonationRequestData } from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
 import { Dispatch, SetStateAction } from "react";
+import { APIError, handleError } from "@planet-sdk/common";
 
 export function buildPaymentProviderRequest(
   gateway: PaymentGateway,
@@ -157,7 +158,11 @@ export async function createDonationFunction({
       return donation.data as Donation;
     }
   } catch (error) {
-    if (error.status === 400) {
+    // hack to address errors when donation was not created. Previous incorrect error handling logic is commented below for reference.
+    // TODO - better error handling
+    const serializedErrors = handleError(error as APIError);
+    setPaymentError(serializedErrors[0]?.message || error.message);
+    /* if (error.status === 400) {
       setPaymentError(error.data.message);
     } else if (error.status === 500) {
       setPaymentError("Something went wrong please try again soon!");
@@ -167,7 +172,7 @@ export async function createDonationFunction({
       );
     } else {
       setPaymentError(error.message);
-    }
+    } */
     setIsPaymentProcessing(false);
   }
 }
