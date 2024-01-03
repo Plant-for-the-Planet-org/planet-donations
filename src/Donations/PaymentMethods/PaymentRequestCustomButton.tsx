@@ -42,6 +42,8 @@ export const PaymentRequestCustomButton = ({
   frequency,
   paymentSetup,
 }: PaymentButtonProps): ReactElement | null => {
+  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || false;
+  const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || true;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
@@ -140,7 +142,8 @@ export const PaymentRequestCustomButton = ({
       (frequency !== "once"
         ? paymentSetup?.recurrency?.methods?.includes("card")
         : true) ? (
-        paymentRequest._canMakePaymentAvailability.APPLE_PAY ? ( //TODOO - is _canMakePaymentAvailability a private variable?
+        paymentRequest._canMakePaymentAvailability.APPLE_PAY &&
+        isApplePayEnabled ? ( //TODOO - is _canMakePaymentAvailability a private variable?
           <div className="w-100">
             <button
               onClick={() => paymentRequest.show()}
@@ -163,7 +166,8 @@ export const PaymentRequestCustomButton = ({
               <div className="separator-text mb-10">{t("or")}</div>
             )}
           </div>
-        ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY ? ( //TODOO - is _canMakePaymentAvailability a private variable?
+        ) : paymentRequest._canMakePaymentAvailability.GOOGLE_PAY &&
+          isGooglePayEnabled ? ( //TODOO - is _canMakePaymentAvailability a private variable?
           <div className="w-100">
             <button
               onClick={() => {

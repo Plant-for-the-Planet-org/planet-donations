@@ -95,7 +95,7 @@ const nextConfig = {
           stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~${basePath}/_next`,
           release: COMMIT_SHA,
-        })
+        }),
       );
     }
     return config;
@@ -115,6 +115,8 @@ const nextConfig = {
     ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
     RECURRENCY: process.env.RECURRENCY,
     TRACKING_KEY: process.env.TRACKING_KEY,
+    ENABLE_GOOGLE_PAY: process.env.ENABLE_GOOGLE_PAY,
+    ENABLE_APPLE_PAY: process.env.ENABLE_APPLE_PAY,
   },
   trailingSlash: false,
   reactStrictMode: true,
