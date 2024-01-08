@@ -51,6 +51,10 @@ export const PaymentRequestCustomButton = ({
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
+	useEffect(()=> {
+		setPaymentRequest(null);
+	},[])
+
   useEffect(() => {
     if (
       stripe &&
