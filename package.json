@@ -34,7 +34,7 @@
     "@sparticuz/chromium": "^106.0.2",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.13.2",
-    "axios": "^0.21.1",
+    "axios": "^1.6.0",
     "dom-to-image": "^2.6.0",
     "geocoder-arcgis": "^2.0.5",
     "i18next": "^22.4.10",
