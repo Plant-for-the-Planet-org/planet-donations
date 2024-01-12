@@ -95,7 +95,7 @@ const nextConfig = {
           stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~${basePath}/_next`,
           release: COMMIT_SHA,
-        }),
+        })
       );
     }
     return config;
@@ -117,6 +117,7 @@ const nextConfig = {
     TRACKING_KEY: process.env.TRACKING_KEY,
     ENABLE_GOOGLE_PAY: process.env.ENABLE_GOOGLE_PAY,
     ENABLE_APPLE_PAY: process.env.ENABLE_APPLE_PAY,
+    DISABLE_VERCEL_REDIRECT: process.env.DISABLE_VERCEL_REDIRECT,
   },
   trailingSlash: false,
   reactStrictMode: true,
