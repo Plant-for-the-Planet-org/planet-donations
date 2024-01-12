@@ -205,7 +205,7 @@ export const PaymentRequestCustomButton = ({
           onClick={() => continueNext()}
           className="primary-button"
         >
-          {canMakePayment ? t("payPalCard") : t("continue")}
+          {t("continue")}
         </button>
       )}
     </div>
