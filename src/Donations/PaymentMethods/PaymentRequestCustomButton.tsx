@@ -42,7 +42,7 @@ export const PaymentRequestCustomButton = ({
   frequency,
   paymentSetup,
 }: PaymentButtonProps): ReactElement | null => {
-  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || false;
+  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || true;
   const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || true;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
