@@ -22,7 +22,7 @@ interface PaymentButtonProps {
   amount: number;
   onPaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest,
+    paymentRequest: PaymentRequest
   ) => Promise<void>;
   continueNext: () => void;
   isPaymentPage: boolean;
@@ -42,8 +42,8 @@ export const PaymentRequestCustomButton = ({
   frequency,
   paymentSetup,
 }: PaymentButtonProps): ReactElement | null => {
-  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || true;
-  const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || true;
+  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || false;
+  const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || false;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
@@ -51,9 +51,9 @@ export const PaymentRequestCustomButton = ({
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
-	useEffect(()=> {
-		setPaymentRequest(null);
-	},[])
+  useEffect(() => {
+    setPaymentRequest(null);
+  }, []);
 
   useEffect(() => {
     if (
@@ -71,7 +71,6 @@ export const PaymentRequestCustomButton = ({
         requestPayerName: true,
         requestPayerEmail: true,
       });
-      console.log("Stripe PR: ", pr);
       // Check the availability of the Payment Request API.
       pr.canMakePayment().then((result) => {
         if (result) {
@@ -90,7 +89,6 @@ export const PaymentRequestCustomButton = ({
   }, [country, currency, amount]);
 
   useEffect(() => {
-    console.log("Context PR: ", paymentRequest);
     let subscribed = true;
     if (paymentRequest) {
       paymentRequest
@@ -119,7 +117,7 @@ export const PaymentRequestCustomButton = ({
           onPaymentFunction(paymentMethod, paymentRequest);
           complete("success");
           setPaymentLoading(false);
-        },
+        }
       );
     }
     return () => {
@@ -220,7 +218,7 @@ interface NativePayProps {
   amount: number;
   onPaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest,
+    paymentRequest: PaymentRequest
   ) => Promise<void>;
   paymentSetup: PaymentOptions;
   continueNext: () => void;
@@ -242,7 +240,7 @@ export const NativePay = ({
   const { i18n } = useTranslation();
   const [stripePromise, setStripePromise] =
     useState<null | Promise<Stripe | null>>(() =>
-      getStripe(paymentSetup, i18n.language),
+      getStripe(paymentSetup, i18n.language)
     );
 
   useEffect(() => {
