@@ -29,8 +29,6 @@ interface PaymentButtonProps {
   paymentLabel: string;
   frequency: string | null;
   paymentSetup: PaymentOptions;
-  isApplePayEnabled: boolean;
-  isGooglePayEnabled: boolean;
 }
 
 export const PaymentRequestCustomButton = ({
@@ -43,15 +41,19 @@ export const PaymentRequestCustomButton = ({
   paymentLabel,
   frequency,
   paymentSetup,
-  isApplePayEnabled,
-  isGooglePayEnabled,
 }: PaymentButtonProps): ReactElement | null => {
+  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || false;
+  const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || false;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
   const stripe = useStripe();
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+
+  useEffect(() => {
+    setPaymentRequest(null);
+  }, []);
 
   useEffect(() => {
     if (
@@ -108,6 +110,7 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     if (paymentRequest && !paymentLoading) {
       setPaymentLoading(true);
+      paymentRequest.off("paymentmethod");
       paymentRequest.on(
         "paymentmethod",
         ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
@@ -119,14 +122,9 @@ export const PaymentRequestCustomButton = ({
     }
     return () => {
       if (paymentRequest && !paymentLoading) {
-        paymentRequest.off(
-          "paymentmethod",
-          ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
-            onPaymentFunction(paymentMethod, paymentRequest);
-            complete("success");
-            setPaymentLoading(false);
-          }
-        );
+        paymentRequest.off("paymentmethod", () => {
+          setPaymentLoading(false);
+        });
       }
     };
   }, [paymentRequest, onPaymentFunction]);
@@ -215,8 +213,6 @@ export const PaymentRequestCustomButton = ({
 /* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/
 
 interface NativePayProps {
-  isApplePayEnabled: boolean;
-  isGooglePayEnabled: boolean;
   country: string;
   currency: string;
   amount: number;
@@ -231,8 +227,6 @@ interface NativePayProps {
   frequency: string | null;
 }
 export const NativePay = ({
-  isApplePayEnabled = false,
-  isGooglePayEnabled = false,
   country,
   currency,
   amount,
@@ -279,8 +273,6 @@ export const NativePay = ({
         paymentLabel={paymentLabel}
         frequency={frequency}
         paymentSetup={paymentSetup}
-        isApplePayEnabled={isApplePayEnabled}
-        isGooglePayEnabled={isGooglePayEnabled}
       />
     </Elements>
   );

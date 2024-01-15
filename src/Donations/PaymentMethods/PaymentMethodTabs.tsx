@@ -218,8 +218,6 @@ export default function PaymentMethodTabs({
         {/*9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
         {showNativePay && (
           <NativePay
-            isApplePayEnabled={false}
-            isGooglePayEnabled={false}
             country={country}
             currency={currency}
             amount={formatAmountForStripe(

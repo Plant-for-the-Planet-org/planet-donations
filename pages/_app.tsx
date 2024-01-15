@@ -87,7 +87,10 @@ function MyApp({
     process.env.VERCEL_URL &&
     typeof window !== "undefined"
   ) {
-    if (process.env.VERCEL_URL !== window.location.hostname) {
+    if (
+      process.env.VERCEL_URL !== window.location.hostname &&
+      process.env.DISABLE_VERCEL_REDIRECT !== "true"
+    ) {
       router.replace(`https://${process.env.VERCEL_URL}`);
     }
   }
