@@ -15,6 +15,7 @@ import {
 } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { Stripe } from "@stripe/stripe-js/types/stripe-js/stripe";
+import Skeleton from "@mui/material/Skeleton";
 
 interface PaymentButtonProps {
   country: string;
@@ -50,6 +51,8 @@ export const PaymentRequestCustomButton = ({
   const stripe = useStripe();
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  // Tracks if native pay buttons were shown at least once to prevent layout jerks
+  const [wasNativePayInit, setWasNativePayInit] = useState(false);
 
   useEffect(() => {
     setPaymentRequest(null);
@@ -75,6 +78,7 @@ export const PaymentRequestCustomButton = ({
       pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
+          setWasNativePayInit(true);
         }
       });
     }
@@ -194,8 +198,25 @@ export const PaymentRequestCustomButton = ({
               <div className="separator-text mb-10">{t("or")}</div>
             )}
           </div>
-        ) : null
-      ) : null}
+        ) : (
+          <></>
+        )
+      ) : wasNativePayInit ? (
+        //Loader shown if native pay was initiated at least once to avoid a jerky effect when payment details change
+        <div className="w-100">
+          <Skeleton
+            className="mb-10"
+            variant="rectangular"
+            width={"100%"}
+            height={40}
+          />
+          {!isPaymentPage && (
+            <div className="separator-text mb-10">{t("or")}</div>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
 
       {!isPaymentPage && (
         <button
