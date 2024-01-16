@@ -138,7 +138,9 @@ const QueryParamProvider: FC = ({ children }) => {
   const [transferDetails, setTransferDetails] =
     useState<BankTransferDetails | null>(null);
 
-  const [isPlanetCashActive, setIsPlanetCashActive] = useState(false);
+  const [isPlanetCashActive, setIsPlanetCashActive] = useState<boolean | null>(
+    null
+  );
 
   // Only used when planetCash is active
   const [onBehalf, setOnBehalf] = useState(false);
@@ -151,7 +153,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
-    null,
+    null
   );
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
@@ -163,8 +165,9 @@ const QueryParamProvider: FC = ({ children }) => {
         setshowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const response: { data: Record<string, string> } =
-        await apiRequest(requestParams);
+      const response: { data: Record<string, string> } = await apiRequest(
+        requestParams
+      );
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -198,7 +201,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
     );
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
@@ -242,7 +245,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const projects = response.data as Project[];
       if (projects) {
         const allowedDonationsProjects = projects.filter(
-          (project) => project.properties.allowDonations === true,
+          (project) => project.properties.allowDonations === true
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -373,7 +376,7 @@ const QueryParamProvider: FC = ({ children }) => {
           const found = countriesData.some(
             (arrayCountry) =>
               arrayCountry.countryCode?.toUpperCase() ===
-              config.data.country?.toUpperCase(),
+              config.data.country?.toUpperCase()
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
@@ -492,8 +495,9 @@ const QueryParamProvider: FC = ({ children }) => {
         tenant,
         locale: i18n.language,
       };
-      const paymentSetupData: { data: PaymentOptions } =
-        await apiRequest(requestParams);
+      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
+        requestParams
+      );
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
