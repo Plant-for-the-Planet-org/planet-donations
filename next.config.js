@@ -37,7 +37,10 @@ const scheme =
     : "https";
 
 let APPUrl;
-if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
+if (
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" &&
+  process.env.DISABLE_VERCEL_REDIRECT !== "true"
+) {
   APPUrl = `${scheme}://${process.env.VERCEL_URL}`;
 } else {
   APPUrl = process.env.APP_URL;
