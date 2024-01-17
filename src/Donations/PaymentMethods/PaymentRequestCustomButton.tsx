@@ -55,10 +55,6 @@ export const PaymentRequestCustomButton = ({
   const [wasNativePayInit, setWasNativePayInit] = useState(false);
 
   useEffect(() => {
-    setPaymentRequest(null);
-  }, []);
-
-  useEffect(() => {
     if (
       stripe &&
       !paymentRequest &&
@@ -85,11 +81,9 @@ export const PaymentRequestCustomButton = ({
   }, [stripe, paymentRequest, country, currency, amount]);
 
   useEffect(() => {
-    if (stripe && paymentRequest) {
-      setPaymentRequest(null);
-      setCanMakePayment(false);
-      setPaymentLoading(false);
-    }
+    setPaymentRequest(null);
+    setCanMakePayment(false);
+    setPaymentLoading(false);
   }, [country, currency, amount]);
 
   useEffect(() => {
@@ -125,7 +119,10 @@ export const PaymentRequestCustomButton = ({
       );
     }
     return () => {
-      if (paymentRequest && !paymentLoading) {
+      if (
+        paymentRequest &&
+        paymentRequest.hasRegisteredListener("paymentmethod")
+      ) {
         paymentRequest.off("paymentmethod", () => {
           setPaymentLoading(false);
         });

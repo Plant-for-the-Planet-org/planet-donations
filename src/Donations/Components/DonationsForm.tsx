@@ -68,6 +68,7 @@ function DonationsForm(): ReactElement {
     utmMedium,
     utmSource,
     isPackageWanted,
+    setPaymentRequest,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -77,6 +78,16 @@ function DonationsForm(): ReactElement {
   const [showDisablePlanetCashButton, setShowDisablePlanetCashButton] =
     React.useState(false);
   const router = useRouter();
+
+  React.useEffect(() => {
+    setPaymentRequest(null);
+  }, []);
+
+  React.useEffect(() => {
+    if (isPlanetCashActive) {
+      setPaymentRequest(null);
+    }
+  }, [isPlanetCashActive]);
 
   React.useEffect(() => {
     setMinAmt(getMinimumAmountForCurrency(currency));
