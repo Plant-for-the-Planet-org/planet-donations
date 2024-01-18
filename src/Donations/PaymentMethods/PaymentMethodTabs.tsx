@@ -111,6 +111,15 @@ export default function PaymentMethodTabs({
           ),
         });
         break;
+      case "planet-cash":
+        paymentLabel = t("pcashPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
