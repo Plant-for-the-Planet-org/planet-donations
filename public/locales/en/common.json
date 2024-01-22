@@ -134,6 +134,7 @@
   "billingAddress": "Contact Details",
   "treesInCountry": "{{treeCount}} trees, Plant-for-the-Planet",
   "fundingPaymentLabel": "Donate {{amount}}, Plant-for-the-Planet",
+  "pcashPaymentLabel": "Load {{amount}} PlanetCash, Plant-for-the-Planet",
   "bouquetPaymentLabel": "Donate {{amount}}, Plant-for-the-Planet",
   "errorOccurred": "Something went wrong. Please feel free to take a screenshot and email us at support@plant-for-the-planet.org.",
   "dedicatedTo": "Dedicated to",

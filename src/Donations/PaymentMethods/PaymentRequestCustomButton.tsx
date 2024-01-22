@@ -15,6 +15,7 @@ import {
 } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { Stripe } from "@stripe/stripe-js/types/stripe-js/stripe";
+import Skeleton from "@mui/material/Skeleton";
 
 interface PaymentButtonProps {
   country: string;
@@ -29,8 +30,6 @@ interface PaymentButtonProps {
   paymentLabel: string;
   frequency: string | null;
   paymentSetup: PaymentOptions;
-  isApplePayEnabled: boolean;
-  isGooglePayEnabled: boolean;
 }
 
 export const PaymentRequestCustomButton = ({
@@ -43,15 +42,17 @@ export const PaymentRequestCustomButton = ({
   paymentLabel,
   frequency,
   paymentSetup,
-  isApplePayEnabled,
-  isGooglePayEnabled,
 }: PaymentButtonProps): ReactElement | null => {
+  const isApplePayEnabled = process.env.ENABLE_APPLE_PAY === "true" || false;
+  const isGooglePayEnabled = process.env.ENABLE_GOOGLE_PAY === "true" || false;
   const { t, ready } = useTranslation(["common"]);
   const { paymentRequest, setPaymentRequest } = useContext(QueryParamContext);
 
   const stripe = useStripe();
   const [canMakePayment, setCanMakePayment] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  // Tracks if native pay buttons were shown at least once to prevent layout jerks
+  const [wasNativePayInit, setWasNativePayInit] = useState(false);
 
   useEffect(() => {
     if (
@@ -73,17 +74,16 @@ export const PaymentRequestCustomButton = ({
       pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
+          setWasNativePayInit(true);
         }
       });
     }
   }, [stripe, paymentRequest, country, currency, amount]);
 
   useEffect(() => {
-    if (stripe && paymentRequest) {
-      setPaymentRequest(null);
-      setCanMakePayment(false);
-      setPaymentLoading(false);
-    }
+    setPaymentRequest(null);
+    setCanMakePayment(false);
+    setPaymentLoading(false);
   }, [country, currency, amount]);
 
   useEffect(() => {
@@ -108,6 +108,7 @@ export const PaymentRequestCustomButton = ({
   useEffect(() => {
     if (paymentRequest && !paymentLoading) {
       setPaymentLoading(true);
+      paymentRequest.off("paymentmethod");
       paymentRequest.on(
         "paymentmethod",
         ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
@@ -118,15 +119,13 @@ export const PaymentRequestCustomButton = ({
       );
     }
     return () => {
-      if (paymentRequest && !paymentLoading) {
-        paymentRequest.off(
-          "paymentmethod",
-          ({ complete, paymentMethod }: PaymentRequestPaymentMethodEvent) => {
-            onPaymentFunction(paymentMethod, paymentRequest);
-            complete("success");
-            setPaymentLoading(false);
-          }
-        );
+      if (
+        paymentRequest &&
+        paymentRequest.hasRegisteredListener("paymentmethod")
+      ) {
+        paymentRequest.off("paymentmethod", () => {
+          setPaymentLoading(false);
+        });
       }
     };
   }, [paymentRequest, onPaymentFunction]);
@@ -196,8 +195,25 @@ export const PaymentRequestCustomButton = ({
               <div className="separator-text mb-10">{t("or")}</div>
             )}
           </div>
-        ) : null
-      ) : null}
+        ) : (
+          <></>
+        )
+      ) : wasNativePayInit ? (
+        //Loader shown if native pay was initiated at least once to avoid a jerky effect when payment details change
+        <div className="w-100">
+          <Skeleton
+            className="mb-10"
+            variant="rectangular"
+            width={"100%"}
+            height={40}
+          />
+          {!isPaymentPage && (
+            <div className="separator-text mb-10">{t("or")}</div>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
 
       {!isPaymentPage && (
         <button
@@ -215,8 +231,6 @@ export const PaymentRequestCustomButton = ({
 /* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/
 
 interface NativePayProps {
-  isApplePayEnabled: boolean;
-  isGooglePayEnabled: boolean;
   country: string;
   currency: string;
   amount: number;
@@ -231,8 +245,6 @@ interface NativePayProps {
   frequency: string | null;
 }
 export const NativePay = ({
-  isApplePayEnabled = false,
-  isGooglePayEnabled = false,
   country,
   currency,
   amount,
@@ -279,8 +291,6 @@ export const NativePay = ({
         paymentLabel={paymentLabel}
         frequency={frequency}
         paymentSetup={paymentSetup}
-        isApplePayEnabled={isApplePayEnabled}
-        isGooglePayEnabled={isGooglePayEnabled}
       />
     </Elements>
   );

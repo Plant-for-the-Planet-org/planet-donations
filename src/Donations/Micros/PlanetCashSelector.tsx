@@ -19,7 +19,6 @@ const PlanetCashSelector: FC = () => {
     country,
     setcountry,
     frequency,
-    paymentRequest,
   } = useContext(QueryParamContext);
   const router = useRouter();
 
@@ -37,20 +36,28 @@ const PlanetCashSelector: FC = () => {
   }, [paymentSetup?.unitCost, quantity, setIsPlanetCashActive]);
 
   useEffect(() => {
-    // On Load If selected country is planetCash Country and balance is sufficient activate planetCash.
-
-    if (
-      country === profile?.planetCash?.country &&
-      paymentSetup &&
-      paymentSetup.unitCost * quantity <=
-        profile.planetCash.balance / 100 + profile.planetCash.creditLimit / 100
-    ) {
-      setIsPlanetCashActive(true);
-    }
-    if (frequency !== "once") {
+    if (frequency !== "once" && isPlanetCashActive !== null) {
       setIsPlanetCashActive(false);
+    } else {
+      if (
+        isPlanetCashActive === null &&
+        country === profile?.planetCash?.country &&
+        paymentSetup &&
+        paymentSetup.unitCost * quantity <=
+          (profile.planetCash.balance + profile.planetCash.creditLimit) / 100
+      ) {
+        setIsPlanetCashActive(true);
+      }
     }
-  }, [paymentRequest, frequency]);
+  }, [
+    country,
+    profile,
+    paymentSetup,
+    quantity,
+    frequency,
+    isPlanetCashActive,
+    frequency,
+  ]);
 
   useEffect(() => {
     // This is done to lock the transaction with PlanetCash in a single currency.
@@ -208,11 +215,13 @@ const PlanetCashSelector: FC = () => {
         </div>
         <div title={disabledReason() ? disabledReason() : ""}>
           <ToggleSwitch
-            checked={isPlanetCashActive}
+            checked={isPlanetCashActive === true}
             disabled={shouldPlanetCashDisable()}
-            onChange={() =>
-              setIsPlanetCashActive((isPlanetCashActive) => !isPlanetCashActive)
-            }
+            onChange={() => {
+              setIsPlanetCashActive(
+                (isPlanetCashActive) => !isPlanetCashActive
+              );
+            }}
           />
         </div>
       </div>

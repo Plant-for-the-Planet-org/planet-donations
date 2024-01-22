@@ -37,7 +37,10 @@ const scheme =
     : "https";
 
 let APPUrl;
-if (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview") {
+if (
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" &&
+  process.env.DISABLE_VERCEL_REDIRECT !== "true"
+) {
   APPUrl = `${scheme}://${process.env.VERCEL_URL}`;
 } else {
   APPUrl = process.env.APP_URL;
@@ -115,6 +118,9 @@ const nextConfig = {
     ESRI_CLIENT_SECRET: process.env.ESRI_CLIENT_SECRET,
     RECURRENCY: process.env.RECURRENCY,
     TRACKING_KEY: process.env.TRACKING_KEY,
+    ENABLE_GOOGLE_PAY: process.env.ENABLE_GOOGLE_PAY,
+    ENABLE_APPLE_PAY: process.env.ENABLE_APPLE_PAY,
+    DISABLE_VERCEL_REDIRECT: process.env.DISABLE_VERCEL_REDIRECT,
   },
   trailingSlash: false,
   reactStrictMode: true,

@@ -111,6 +111,15 @@ export default function PaymentMethodTabs({
           ),
         });
         break;
+      case "planet-cash":
+        paymentLabel = t("pcashPaymentLabel", {
+          amount: getFormatedCurrency(
+            i18n.language,
+            currency,
+            paymentSetup.unitCost * quantity
+          ),
+        });
+        break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
@@ -218,8 +227,6 @@ export default function PaymentMethodTabs({
         {/*9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
         {showNativePay && (
           <NativePay
-            isApplePayEnabled={false}
-            isGooglePayEnabled={false}
             country={country}
             currency={currency}
             amount={formatAmountForStripe(
