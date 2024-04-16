@@ -506,7 +506,7 @@ function PaymentsForm(): ReactElement {
           )}
           <br />
           <a
-            href="https://a.plant-for-the-planet.org/"
+            href="https://www.plant-for-the-planet.org/"
             target="_blank"
             rel="noreferrer"
             className="text-center nolink"
