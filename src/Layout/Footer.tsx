@@ -86,7 +86,7 @@ function Footer(): ReactElement {
             <a
               target="_blank"
               rel="noreferrer"
-              href={`https://a.plant-for-the-planet.org/${i18n.language}/faq`}
+              href={`https://www.plant-for-the-planet.org/${i18n.language}/faq`}
             >
               {t("faqs")}
             </a>
@@ -95,7 +95,7 @@ function Footer(): ReactElement {
                 <a
                   target="_blank"
                   rel="noreferrer"
-                  href="https://a.plant-for-the-planet.org/"
+                  href="https://www.plant-for-the-planet.org/"
                 >
                   <img
                     src="https://cdn.plant-for-the-planet.org/logo/svg/planet.svg"
