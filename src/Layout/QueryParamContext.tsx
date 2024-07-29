@@ -361,7 +361,7 @@ const QueryParamProvider: FC = ({ children }) => {
         shouldSetPaymentDetails: true,
       });
     }
-  }, [router.query.to, country]);
+  }, [router.query.to, country, profile]);
 
   async function loadConfig() {
     try {
@@ -490,7 +490,9 @@ const QueryParamProvider: FC = ({ children }) => {
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
-        url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
+        url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}${
+          profile !== null ? `&profile=${profile?.id}` : ""
+        }`,
         setshowErrorCard,
         tenant,
         locale: i18n.language,
