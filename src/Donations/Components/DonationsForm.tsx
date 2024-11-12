@@ -130,12 +130,14 @@ function DonationsForm(): ReactElement {
     !(isGift && giftDetails.recipientName === "") &&
     !(onBehalf && onBehalfDonor.firstName === "");
 
-  const canSendInvitationGift =
-    (projectDetails?.classification !== "membership" && frequency === "once") ||
-    (projectDetails?.classification === "membership" && frequency !== "once");
-
   const canSendDirectGift = projectDetails?.classification !== "membership";
   const hasDirectGift = giftDetails.type === "direct";
+  const canSendInvitationGift =
+    !hasDirectGift &&
+    ((projectDetails?.classification !== "membership" &&
+      frequency === "once") ||
+      (projectDetails?.classification === "membership" &&
+        frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
@@ -301,14 +303,28 @@ function DonationsForm(): ReactElement {
         utm_source: utmSource,
       };
 
-      const _gift = {
-        ...giftDetails,
-      };
+      // Determine if gift info is complete
+      const isDirectGiftComplete =
+        giftDetails.type === "direct" && giftDetails.recipient.length > 0;
 
-      if (giftDetails.type === "direct") {
-        delete _gift.message;
-        delete _gift.recipientName;
-      }
+      const isInvitationGiftComplete =
+        giftDetails.type === "invitation" &&
+        giftDetails.recipientName.length > 0;
+
+      // Set _gift to null if incomplete, otherwise construct gift object
+      const _gift = isDirectGiftComplete
+        ? {
+            type: "direct",
+            recipient: giftDetails.recipient,
+          }
+        : isInvitationGiftComplete
+        ? {
+            type: "invitation",
+            recipientName: giftDetails.recipientName,
+            recipientEmail: giftDetails.recipientEmail,
+            message: giftDetails.message,
+          }
+        : null;
 
       // create Donation data
       const donationData = {
