@@ -25,8 +25,8 @@ const EMPTY_GIFT_DETAILS: Readonly<NoGift> = {
 
 export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
-  const [showEmail, setshowEmail] = React.useState(false);
-  const { giftDetails, setGiftDetails, isGift, setisGift } =
+  const [showEmail, setShowEmail] = React.useState(false);
+  const { giftDetails, setGiftDetails, isGift, setisGift, projectDetails } =
     React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
@@ -115,78 +115,82 @@ export default function GiftForm(): ReactElement {
               )}
             </div>
 
-            {showEmail ? (
-              <div>
-                <div className={"form-field mt-30"}>
-                  <div className="d-flex row justify-content-between mb-10">
-                    <p>{t("giftNotification")}</p>
+            {projectDetails?.classification !== "membership" && (
+              <>
+                {showEmail ? (
+                  <div>
+                    <div className={"form-field mt-30"}>
+                      <div className="d-flex row justify-content-between mb-10">
+                        <p>{t("giftNotification")}</p>
+                        <button
+                          onClick={() => setShowEmail(false)}
+                          className={"singleGiftRemove"}
+                        >
+                          {t("removeRecipient")}
+                        </button>
+                      </div>
+                      <Controller
+                        name="recipientEmail"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: true,
+                            message: t("emailRequired"),
+                          },
+                          validate: {
+                            emailInvalid: (value) =>
+                              value.length === 0 || isEmailValid(value),
+                          },
+                        }}
+                        render={({ field: { onChange, value } }) => (
+                          <MaterialTextField
+                            onChange={onChange}
+                            value={value}
+                            label={t("recipientEmail")}
+                            variant="outlined"
+                            data-test-id="giftRecipient"
+                          />
+                        )}
+                      />
+                      {errors.recipientEmail && (
+                        <div className={"form-errors"}>
+                          {errors.recipientEmail.type === "required"
+                            ? t("emailRequired")
+                            : t("enterValidEmail")}
+                        </div>
+                      )}
+                    </div>
+                    <div className={"form-field mt-30"}>
+                      <Controller
+                        name="message"
+                        control={control}
+                        render={({ field: { onChange, value } }) => (
+                          <MaterialTextField
+                            onChange={onChange}
+                            value={value}
+                            multiline
+                            minRows={3}
+                            maxRows={4}
+                            label={t("giftMessage")}
+                            variant="outlined"
+                            data-test-id="giftMessage"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className={"form-field mt-30"}>
                     <button
-                      onClick={() => setshowEmail(false)}
-                      className={"singleGiftRemove"}
+                      onClick={() => setShowEmail(true)}
+                      className={"addEmailButton"}
+                      data-test-id="addEmailButton"
                     >
-                      {t("removeRecipient")}
+                      {t("addEmail")}
                     </button>
                   </div>
-                  <Controller
-                    name="recipientEmail"
-                    control={control}
-                    rules={{
-                      required: {
-                        value: true,
-                        message: t("emailRequired"),
-                      },
-                      validate: {
-                        emailInvalid: (value) =>
-                          value.length === 0 || isEmailValid(value),
-                      },
-                    }}
-                    render={({ field: { onChange, value } }) => (
-                      <MaterialTextField
-                        onChange={onChange}
-                        value={value}
-                        label={t("recipientEmail")}
-                        variant="outlined"
-                        data-test-id="giftRecipient"
-                      />
-                    )}
-                  />
-                  {errors.recipientEmail && (
-                    <div className={"form-errors"}>
-                      {errors.recipientEmail.type === "required"
-                        ? t("emailRequired")
-                        : t("enterValidEmail")}
-                    </div>
-                  )}
-                </div>
-                <div className={"form-field mt-30"}>
-                  <Controller
-                    name="message"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <MaterialTextField
-                        onChange={onChange}
-                        value={value}
-                        multiline
-                        minRows={3}
-                        maxRows={4}
-                        label={t("giftMessage")}
-                        variant="outlined"
-                        data-test-id="giftMessage"
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className={"form-field mt-30"}>
-                <button
-                  onClick={() => setshowEmail(true)}
-                  className={"addEmailButton"}
-                  data-test-id="addEmailButton"
-                >
-                  {t("addEmail")}
-                </button>
-              </div>
+                )}
+              </>
             )}
             <button
               onClick={handleSubmit(onSubmit)}
