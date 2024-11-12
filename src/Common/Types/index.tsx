@@ -119,7 +119,7 @@ export interface PlanetCashSignupDetails {
   purpose: "planet-cash-signup";
 }
 
-export interface FetchedProjectDetails {
+export interface FetchedBaseProjectDetails {
   id: string;
   name: string;
   description?: string | null;
@@ -127,10 +127,31 @@ export interface FetchedProjectDetails {
   ownerName: string | null;
   image?: string | null;
   purpose: ProjectPurpose;
+  classification: Nullable<ProjectClassification>;
   taxDeductionCountries?: Array<string>;
   isApproved: boolean;
   isTopProject: boolean;
 }
+
+export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "trees";
+  classification: TreeProjectClassification;
+}
+
+export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "funds";
+  classification: FundsProjectClassification;
+}
+
+export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "conservation" | "reforestation" | "bouquet" | "planet-cash";
+  classification: null;
+}
+
+export type FetchedProjectDetails =
+  | FetchedTreeProjectDetails
+  | FetchedFundsProjectDetails
+  | FetchedOtherProjectDetails;
 
 export type ProjectPurpose =
   | "trees"
@@ -140,7 +161,36 @@ export type ProjectPurpose =
   | "bouquet"
   | "planet-cash";
 
-export interface PaymentOptions extends FetchedProjectDetails {
+export type TreeProjectClassification =
+  | "agroforestry"
+  | "managed-regeneration"
+  | "large-scale-planting"
+  | "mangroves"
+  | "natural-regeneration"
+  | "other-planting"
+  | "urban-planting";
+
+export type FundsProjectClassification =
+  | "academy"
+  | "endowment"
+  | "forest-protection"
+  | "funding"
+  | "membership"
+  | "mixed"
+  | "neutral"
+  | "neutral-event"
+  | "penalty"
+  | "public-funds"
+  | "research"
+  | "sponsorship"
+  | "subscription"
+  | "subsidy";
+
+export type ProjectClassification =
+  | TreeProjectClassification
+  | FundsProjectClassification;
+
+export type PaymentOptions = FetchedProjectDetails & {
   requestedCountry: string;
   effectiveCountry: string;
   frequencies: Frequencies;
@@ -152,7 +202,7 @@ export interface PaymentOptions extends FetchedProjectDetails {
   unitCost: number;
   currency: string;
   destination: string;
-}
+};
 
 export type UnitType = "tree" | "m2" | "currency" | CurrencyCode;
 
