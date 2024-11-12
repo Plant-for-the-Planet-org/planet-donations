@@ -20,6 +20,7 @@ import {
   ContactDetails,
 } from "@planet-sdk/common/build/types/donation";
 import { GetServerSideProps } from "next/types";
+import { createProjectDetails } from "src/Utils/createProjectDetails";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -250,7 +251,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() === queryCountry.toUpperCase(),
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
     );
     if (found) {
       country = queryCountry.toUpperCase();
@@ -276,18 +277,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const paymentOptionsResponse = await apiRequest(requestParams);
         const paymentOptionsData: PaymentOptions = paymentOptionsResponse?.data;
         if (paymentOptionsData) {
-          projectDetails = {
-            id: paymentOptionsData.id,
-            name: paymentOptionsData.name,
-            description: paymentOptionsData.description,
-            purpose: paymentOptionsData.purpose,
-            ownerName: paymentOptionsData.ownerName,
-            taxDeductionCountries: paymentOptionsData.taxDeductionCountries,
-            image: paymentOptionsData.image,
-            ownerAvatar: paymentOptionsData.ownerAvatar,
-            isApproved: paymentOptionsData.isApproved ? true : false,
-            isTopProject: paymentOptionsData.isTopProject ? true : false,
-          };
+          projectDetails = createProjectDetails(paymentOptionsData);
           donationStep = 1;
         }
       } catch (err) {
@@ -360,18 +350,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           if (paymentSetupData) {
             currency = paymentSetupData.currency;
             paymentSetup = paymentSetupData;
-            projectDetails = {
-              id: paymentSetupData.id,
-              name: paymentSetupData.name,
-              description: paymentSetupData.description,
-              purpose: paymentSetupData.purpose,
-              ownerName: paymentSetupData.ownerName,
-              taxDeductionCountries: paymentSetupData.taxDeductionCountries,
-              image: paymentSetupData.image,
-              ownerAvatar: paymentSetupData.ownerAvatar,
-              isApproved: paymentSetupData.isApproved ? true : false,
-              isTopProject: paymentSetupData.isTopProject ? true : false,
-            };
+            projectDetails = createProjectDetails(paymentSetupData);
             donationStep = 3;
           }
         } catch (err) {

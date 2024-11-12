@@ -40,6 +40,7 @@ import {
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { createProjectDetails } from "src/Utils/createProjectDetails";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -509,18 +510,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
           setpaymentSetup(paymentSetup);
         }
-        setprojectDetails({
-          id: paymentSetup.id,
-          name: paymentSetup.name,
-          description: paymentSetup.description,
-          purpose: paymentSetup.purpose,
-          ownerName: paymentSetup.ownerName,
-          taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          image: paymentSetup.image,
-          ownerAvatar: paymentSetup.ownerAvatar,
-          isApproved: paymentSetup.isApproved ? true : false,
-          isTopProject: paymentSetup.isTopProject ? true : false,
-        });
+        setprojectDetails(createProjectDetails(paymentSetup));
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
