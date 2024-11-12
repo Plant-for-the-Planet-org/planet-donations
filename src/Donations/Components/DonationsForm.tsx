@@ -130,6 +130,13 @@ function DonationsForm(): ReactElement {
     !(isGift && giftDetails.recipientName === "") &&
     !(onBehalf && onBehalfDonor.firstName === "");
 
+  const canSendInvitationGift =
+    (projectDetails?.classification !== "membership" && frequency === "once") ||
+    (projectDetails?.classification === "membership" && frequency !== "once");
+
+  const canSendDirectGift = projectDetails?.classification !== "membership";
+  const hasDirectGift = giftDetails.type === "direct";
+
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
@@ -359,16 +366,13 @@ function DonationsForm(): ReactElement {
           )}
           {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {canPayWithPlanetCash && <PlanetCashSelector />}
-          {!(onBehalf && onBehalfDonor.firstName === "") &&
-            (projectDetails.purpose === "trees" &&
-            (paymentSetup?.unitType !== "m2" ||
-              giftDetails.type === "direct") ? (
-              <div className="donations-gift-container mt-10">
-                <GiftForm />
-              </div>
-            ) : (
-              <></>
-            ))}
+          {(canSendDirectGift && hasDirectGift) || canSendInvitationGift ? (
+            <div className="donations-gift-container mt-10">
+              <GiftForm />
+            </div>
+          ) : (
+            <></>
+          )}
           {process.env.RECURRENCY &&
             showFrequencyOptions &&
             paymentSetup &&
