@@ -130,14 +130,12 @@ function DonationsForm(): ReactElement {
     !(isGift && giftDetails.recipientName === "") &&
     !(onBehalf && onBehalfDonor.firstName === "");
 
-  const canSendDirectGift = projectDetails?.classification !== "membership";
+  const canSendDirectGift = projectDetails?.category !== "membership";
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     !hasDirectGift &&
-    ((projectDetails?.classification !== "membership" &&
-      frequency === "once") ||
-      (projectDetails?.classification === "membership" &&
-        frequency !== "once"));
+    ((projectDetails?.category !== "membership" && frequency === "once") ||
+      (projectDetails?.category === "membership" && frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (

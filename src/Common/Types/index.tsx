@@ -127,7 +127,7 @@ export interface FetchedBaseProjectDetails {
   ownerName: string | null;
   image?: string | null;
   purpose: ProjectPurpose;
-  classification: Nullable<ProjectClassification>;
+  category: Nullable<ProjectClassification>;
   taxDeductionCountries?: Array<string>;
   isApproved: boolean;
   isTopProject: boolean;
@@ -135,17 +135,17 @@ export interface FetchedBaseProjectDetails {
 
 export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
   purpose: "trees";
-  classification: TreeProjectClassification;
+  category: TreeProjectClassification;
 }
 
 export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
   purpose: "funds";
-  classification: FundsProjectClassification;
+  category: FundsProjectClassification;
 }
 
 export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
   purpose: "conservation" | "reforestation" | "bouquet" | "planet-cash";
-  classification: null;
+  category: null;
 }
 
 export type FetchedProjectDetails =
