@@ -335,7 +335,6 @@ function DonationsForm(): ReactElement {
         project: projectDetails.id,
         units: quantity,
         prePaid: true,
-        onBehalf: onBehalf,
         metadata: _metadata,
         ...(onBehalf && { donor: _onBehalfDonor }),
         ...(isGift && { gift: _gift }),
