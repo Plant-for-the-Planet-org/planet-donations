@@ -204,7 +204,7 @@ export default function GiftForm(): ReactElement {
       ) : (
         <div className="donation-supports-info mt-10">
           <p onClick={() => resetGiftForm()}>
-            {t("directGiftRecipient", {
+            {t("giftDedicatedTo", {
               name: giftDetails.recipientName,
             })}
           </p>
