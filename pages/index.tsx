@@ -21,6 +21,7 @@ import {
 } from "@planet-sdk/common/build/types/donation";
 import { GetServerSideProps } from "next/types";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
+import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -411,8 +412,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Set gift details if there is s (support link) in the query params
   if (
     projectDetails !== null &&
-    projectDetails?.category !== "membership" &&
-    projectDetails.purpose !== "planet-cash" &&
+    projectDetails.category !== "membership" &&
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     context.query.s
   ) {
     try {

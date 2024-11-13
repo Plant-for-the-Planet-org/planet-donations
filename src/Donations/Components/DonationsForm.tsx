@@ -34,6 +34,7 @@ import {
 } from "@planet-sdk/common/build/types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 
 function DonationsForm(): ReactElement {
   const {
@@ -133,11 +134,12 @@ function DonationsForm(): ReactElement {
   const canSendDirectGift =
     projectDetails !== null &&
     projectDetails.category !== "membership" &&
-    projectDetails.purpose !== "planet-cash";
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
+
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
-    projectDetails.purpose !== "planet-cash" &&
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
     ((projectDetails?.category !== "membership" && frequency === "once") ||
       (projectDetails?.category === "membership" && frequency !== "once"));
