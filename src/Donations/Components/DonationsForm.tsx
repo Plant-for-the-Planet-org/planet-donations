@@ -130,9 +130,14 @@ function DonationsForm(): ReactElement {
     !(isGift && giftDetails.recipientName === "") &&
     !(onBehalf && onBehalfDonor.firstName === "");
 
-  const canSendDirectGift = projectDetails?.category !== "membership";
+  const canSendDirectGift =
+    projectDetails !== null &&
+    projectDetails.category !== "membership" &&
+    projectDetails.purpose !== "planet-cash";
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
+    projectDetails !== null &&
+    projectDetails.purpose !== "planet-cash" &&
     !hasDirectGift &&
     ((projectDetails?.category !== "membership" && frequency === "once") ||
       (projectDetails?.category === "membership" && frequency !== "once"));

@@ -409,7 +409,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     utmSource = context.query.utm_source;
 
   // Set gift details if there is s (support link) in the query params
-  if (projectDetails?.category !== "membership" && context.query.s) {
+  if (
+    projectDetails !== null &&
+    projectDetails?.category !== "membership" &&
+    projectDetails.purpose !== "planet-cash" &&
+    context.query.s
+  ) {
     try {
       const requestParams = {
         url: `/app/profiles/${context.query.s}`,
