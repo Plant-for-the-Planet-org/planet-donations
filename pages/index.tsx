@@ -11,7 +11,7 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
-  SentGift,
+  GiftDetails,
   FetchedProjectDetails,
   PaymentOptions,
 } from "src/Common/Types";
@@ -26,7 +26,7 @@ import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 interface Props {
   projectDetails?: FetchedProjectDetails;
   donationStep: number | null;
-  giftDetails: SentGift | null;
+  giftDetails: GiftDetails | null;
   isGift: boolean;
   resolvedUrl?: string;
   isDirectDonation: boolean;
@@ -217,7 +217,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails: SentGift | null = null;
+  let giftDetails: GiftDetails | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
@@ -444,11 +444,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           isGift = true;
           giftDetails = {
             recipientName: newProfile.data.displayName,
-            recipientEmail: "",
-            message: "",
             type: "direct",
             recipient: newProfile.data.id,
-            recipientTreecounter: newProfile.data.slug,
+            recipientProfile: newProfile.data.slug,
           };
         }
       } catch (err) {

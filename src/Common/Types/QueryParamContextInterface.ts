@@ -1,10 +1,10 @@
 import {
   CurrencyList,
   FetchedProjectDetails,
+  GiftDetails,
   OnBehalfDonor,
   PaymentOptions,
   PlanetCashSignupDetails,
-  SentGift,
 } from ".";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 import { User } from "@planet-sdk/common/build/types/user";
@@ -21,8 +21,8 @@ import { Dispatch, SetStateAction } from "react";
 export default interface QueryParamContextInterface {
   isGift: boolean;
   setisGift: Dispatch<SetStateAction<boolean>>;
-  giftDetails: SentGift | NoGift;
-  setGiftDetails: Dispatch<SetStateAction<SentGift | NoGift>>;
+  giftDetails: GiftDetails | NoGift;
+  setGiftDetails: Dispatch<SetStateAction<GiftDetails | NoGift>>;
   contactDetails: ContactDetails;
   setContactDetails: Dispatch<SetStateAction<ContactDetails>>;
   country: string;

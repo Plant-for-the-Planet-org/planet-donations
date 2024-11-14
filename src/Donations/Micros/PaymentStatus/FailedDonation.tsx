@@ -7,7 +7,7 @@ import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
 import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
-import { FetchedProjectDetails, SentGift } from "src/Common/Types";
+import { FetchedProjectDetails, GiftDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface FailedDonationProps {
@@ -72,7 +72,7 @@ function FailedDonation({
       const { giftRequest } = donation;
       setisGift(giftRequest.recipientName ? true : false);
 
-      const _giftDetails: SentGift = {
+      const _giftDetails: GiftDetails = {
         ...(giftRequest.type === "invitation"
           ? {
               type: giftRequest.type,
@@ -83,8 +83,7 @@ function FailedDonation({
           : {
               type: giftRequest.type,
               recipient: giftRequest.recipient,
-              recipientName: "",
-              message: "",
+              recipientName: giftRequest.recipientName || "",
             }),
       };
       // TODO - Gift type invitation and direct will have different properties

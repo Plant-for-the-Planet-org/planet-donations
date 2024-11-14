@@ -24,7 +24,7 @@ import {
   PlanetCashSignupDetails,
   OnBehalfDonor,
   ConfigResponse,
-  SentGift,
+  GiftDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -89,7 +89,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [frequency, setfrequency] = useState<string>("once");
 
   const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setGiftDetails] = useState<SentGift | NoGift>({
+  const [giftDetails, setGiftDetails] = useState<GiftDetails | NoGift>({
     recipientName: "",
     recipientEmail: "",
     message: "",

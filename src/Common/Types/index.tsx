@@ -14,7 +14,15 @@ import {
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
+export type DirectGiftDetails = SentDirectGift & {
+  recipientName?: string;
+  recipientProfile?: string;
+};
+export type InvitationGiftDetails = SentInvitationGift;
+
 export type SentGift = SentDirectGift | SentInvitationGift;
+
+export type GiftDetails = DirectGiftDetails | InvitationGiftDetails;
 
 export interface PaymentProviderRequest {
   account?: string;
@@ -38,7 +46,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: ContactDetails;
-  giftDetails: SentGift | NoGift;
+  giftDetails: GiftDetails | NoGift;
   isGift: boolean;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
@@ -101,7 +109,7 @@ export interface CreateDonationDataProps {
   contactDetails: ContactDetails;
   taxDeductionCountry: string | null;
   isGift: boolean;
-  giftDetails: SentGift | NoGift;
+  giftDetails: GiftDetails | NoGift;
   frequency: string;
   amount?: number | null;
   callbackUrl: string | undefined;
