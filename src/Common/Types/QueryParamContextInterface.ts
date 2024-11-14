@@ -20,7 +20,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
-  setisGift: Dispatch<SetStateAction<boolean>>;
+  setIsGift: Dispatch<SetStateAction<boolean>>;
   giftDetails: GiftDetails | NoGift;
   setGiftDetails: Dispatch<SetStateAction<GiftDetails | NoGift>>;
   contactDetails: ContactDetails;

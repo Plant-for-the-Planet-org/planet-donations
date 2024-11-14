@@ -29,7 +29,7 @@ function FailedDonation({
     setprojectDetails,
     setquantity,
     setContactDetails,
-    setisGift,
+    setIsGift,
     setGiftDetails,
     setfrequency,
     setdonationStep,
@@ -70,7 +70,7 @@ function FailedDonation({
     setcurrency(donation.currency);
     if (donation.giftRequest) {
       const { giftRequest } = donation;
-      setisGift(giftRequest.recipientName ? true : false);
+      setIsGift(giftRequest.recipientName ? true : false);
 
       const _giftDetails: GiftDetails = {
         ...(giftRequest.type === "invitation"

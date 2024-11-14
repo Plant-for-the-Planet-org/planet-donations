@@ -81,7 +81,7 @@ function index({
     setSelectedProjects,
     loadselectedProjects,
     setGiftDetails,
-    setisGift,
+    setIsGift,
     setpaymentSetup,
     setcurrency,
     setContactDetails,
@@ -131,7 +131,7 @@ function index({
     // If gift details are present, initialize gift in context
     if (giftDetails && isGift) {
       setGiftDetails(giftDetails);
-      setisGift(true);
+      setIsGift(true);
     }
   }, []);
 

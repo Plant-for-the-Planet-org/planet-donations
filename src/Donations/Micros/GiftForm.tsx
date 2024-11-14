@@ -26,7 +26,7 @@ const EMPTY_GIFT_DETAILS: Readonly<NoGift> = {
 export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setShowEmail] = React.useState(false);
-  const { giftDetails, setGiftDetails, isGift, setisGift, projectDetails } =
+  const { giftDetails, setGiftDetails, isGift, setIsGift, projectDetails } =
     React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
@@ -80,7 +80,7 @@ export default function GiftForm(): ReactElement {
               name="show-gift-form-toggle"
               checked={isGift}
               onChange={() => {
-                setisGift((isGift) => !isGift);
+                setIsGift((isGift) => !isGift);
               }}
               id="show-gift-form-toggle"
             />
