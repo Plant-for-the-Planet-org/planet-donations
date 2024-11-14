@@ -409,34 +409,51 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
 
-  // Set gift details if there is s (support link) in the query params
-  if (
-    projectDetails !== null &&
-    projectDetails.category !== "membership" &&
-    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
-    context.query.s
-  ) {
-    try {
-      const requestParams = {
-        url: `/app/profiles/${context.query.s}`,
-        setshowErrorCard,
-        tenant,
-        locale,
+  // Handle s (support link) in the query params
+  if (typeof context.query.s === "string" && context.query.s.length > 0) {
+    if (
+      projectDetails === null ||
+      projectDetails.category === "membership" ||
+      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
+    ) {
+      // If project cannot have direct gift, remove 's' parameter by redirecting
+      const pathname = context.resolvedUrl.split("?")[0];
+      const query = { ...context.query };
+      delete query.s;
+      const queryString = new URLSearchParams(
+        query as Record<string, string>
+      ).toString();
+
+      return {
+        redirect: {
+          destination: `${pathname}${queryString ? `?${queryString}` : ""}`,
+          permanent: true,
+        },
       };
-      const newProfile = await apiRequest(requestParams);
-      if (newProfile.data.type !== "tpo") {
-        isGift = true;
-        giftDetails = {
-          recipientName: newProfile.data.displayName,
-          recipientEmail: "",
-          message: "",
-          type: "direct",
-          recipient: newProfile.data.id,
-          recipientTreecounter: newProfile.data.slug,
+    } else {
+      // Set gift details if there is s (support link) in the query params for an eligible project
+      try {
+        const requestParams = {
+          url: `/app/profiles/${context.query.s}`,
+          setshowErrorCard,
+          tenant,
+          locale,
         };
+        const newProfile = await apiRequest(requestParams);
+        if (newProfile.data.type !== "tpo") {
+          isGift = true;
+          giftDetails = {
+            recipientName: newProfile.data.displayName,
+            recipientEmail: "",
+            message: "",
+            type: "direct",
+            recipient: newProfile.data.id,
+            recipientTreecounter: newProfile.data.slug,
+          };
+        }
+      } catch (err) {
+        console.log("Error", err);
       }
-    } catch (err) {
-      console.log("Error", err);
     }
   }
 
