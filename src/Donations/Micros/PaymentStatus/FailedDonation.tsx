@@ -57,7 +57,7 @@ function FailedDonation({
     setPaymentError("");
     setquantity(donation?.quantity);
     if (donation.donor) setContactDetails(donation.donor);
-    setAmount(donation.amount);
+    setAmount(Number(donation.amount));
 
     let country: string;
     if (donation.taxDeductionCountry) {

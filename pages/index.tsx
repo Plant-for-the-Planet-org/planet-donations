@@ -359,7 +359,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
         allowTaxDeductionChange = false;
         units = donation.units;
-        amount = donation.amount;
+        amount = Number(donation.amount);
         // Setting contact details from donor details
         if (donorData) {
           contactDetails = {

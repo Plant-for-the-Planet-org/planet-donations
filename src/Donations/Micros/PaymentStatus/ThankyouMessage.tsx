@@ -25,7 +25,7 @@ function ThankyouMessage({
       getFormatedCurrency(
         i18n.language,
         donation.currency,
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
+        Number(donation.amount)
       );
   }
 
