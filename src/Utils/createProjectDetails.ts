@@ -20,19 +20,19 @@ export const createProjectDetails = (
       return {
         ...baseDetails,
         purpose: "trees",
-        category: paymentOptions.category,
+        classification: paymentOptions.classification,
       };
     case "funds":
       return {
         ...baseDetails,
         purpose: "funds",
-        category: paymentOptions.category,
+        classification: paymentOptions.classification,
       };
     default:
       return {
         ...baseDetails,
         purpose: paymentOptions.purpose,
-        category: null,
+        classification: null,
       };
   }
 };

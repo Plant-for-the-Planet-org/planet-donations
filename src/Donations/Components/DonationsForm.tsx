@@ -133,7 +133,7 @@ function DonationsForm(): ReactElement {
 
   const canSendDirectGift =
     projectDetails !== null &&
-    projectDetails.category !== "membership" &&
+    projectDetails.classification !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
 
   const hasDirectGift = giftDetails.type === "direct";
@@ -141,8 +141,10 @@ function DonationsForm(): ReactElement {
     projectDetails !== null &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
-    ((projectDetails?.category !== "membership" && frequency === "once") ||
-      (projectDetails?.category === "membership" && frequency !== "once"));
+    ((projectDetails?.classification !== "membership" &&
+      frequency === "once") ||
+      (projectDetails?.classification === "membership" &&
+        frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (

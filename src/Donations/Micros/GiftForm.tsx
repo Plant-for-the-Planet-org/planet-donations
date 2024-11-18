@@ -117,7 +117,7 @@ export default function GiftForm(): ReactElement {
               )}
             </div>
 
-            {projectDetails?.category !== "membership" && (
+            {projectDetails?.classification !== "membership" && (
               <>
                 {showEmail ? (
                   <div>
