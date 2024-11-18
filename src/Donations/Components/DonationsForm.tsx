@@ -340,7 +340,6 @@ function DonationsForm(): ReactElement {
         units: quantity,
         prePaid: true,
         metadata: _metadata,
-        ...(onBehalf && { donor: _onBehalfDonor }),
         ...(isGift && { gift: _gift }),
       };
 
