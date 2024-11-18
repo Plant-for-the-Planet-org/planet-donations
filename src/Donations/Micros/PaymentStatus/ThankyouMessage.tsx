@@ -45,10 +45,7 @@ function ThankyouMessage({
   // EXAMPLE: We've sent an email to Sagar Aryal about the gift.
   // TO DO - if recipientEmail is not present, then show message - You will receive the Gift certificate for {{recipientName}} on your email
   const donationGiftMessage =
-    donation &&
-    donation.gift &&
-    donation.gift.type === "invitation" &&
-    donation.gift.recipientEmail //TODOO - address TS warnings after /donations is updated to send gift data
+    donation?.gift?.type === "invitation" && donation.gift.recipientEmail //TODOO - address TS warnings after /donations is updated to send gift data
       ? " " +
         t("common:giftSentMessage", {
           recipientName: donation.gift.recipientName,

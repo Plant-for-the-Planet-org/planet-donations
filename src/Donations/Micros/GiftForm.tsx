@@ -33,8 +33,7 @@ export default function GiftForm(): ReactElement {
     recipientName: giftDetails.recipientName || "",
     recipientEmail:
       (giftDetails.type === "invitation" && giftDetails.recipientEmail) || "",
-    message:
-      (giftDetails.type === "invitation" && giftDetails.recipientName) || "",
+    message: (giftDetails.type === "invitation" && giftDetails.message) || "",
   };
 
   const {
