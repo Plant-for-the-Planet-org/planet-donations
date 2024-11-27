@@ -296,13 +296,15 @@
     width: 0px;
   }
 }
-.funding-selection-options-container {
+.funding-selection-options-container,
+.bouquet-selection-options-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 10px;
-  .funding-selection-option {
+  .funding-selection-option,
+  .bouquet-selection-option {
     width: 130px;
     margin: 10px;
     // height: 80px;
@@ -325,12 +327,14 @@
       flex: calc(50% - 20px);
     }
     &.funding-selection-option-selected,
+    &.bouquet-selection-option-selected,
     &:hover,
     &:focus {
       cursor: pointer;
       background-color: $primaryColor;
       border: 1px solid $primaryColor;
-      .funding-selection-option-text {
+      .funding-selection-option-text,
+      .bouquet-selection-option-text {
         color: $primaryFontColor;
         p,
         span {
@@ -349,7 +353,8 @@
     &:active {
       transform: scale(0.98);
     }
-    .funding-selection-option-text {
+    .funding-selection-option-text,
+    .bouquet-selection-option-text {
       text-align: left;
       line-height: 1;
       // margin-left: 12px;
@@ -479,7 +484,8 @@
   outline: 0px;
   font-size: 16px;
 }
-.funding-custom-tree-input {
+.funding-custom-tree-input,
+.bouquet-custom-tree-input {
   border: 0px;
   border-bottom: 2px solid $activeGreenBgTextColor;
   width: 100%;
@@ -751,9 +757,11 @@
     width: 100px;
     padding: 12px;
   }
-  .funding-selection-options-container {
+  .funding-selection-options-container,
+  .bouquet-selection-options-container {
     margin-top: 10px;
-    .funding-selection-option {
+    .funding-selection-option,
+    .bouquet-selection-option {
       width: 160px;
       &.monthly-option {
         width: 100px;

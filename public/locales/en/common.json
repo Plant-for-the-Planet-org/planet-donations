@@ -118,7 +118,7 @@
   "selectLanguage": "Select Language",
   "trees": "trees",
   "logout": "Logout",
-  "directGiftRecipient": "This donation supports {{name}}'s Forest",
+  "giftDedicatedTo": "This donation is dedicated to {{name}}",
   "saveGiftDetails": "Save Gift Details",
   "giftSomeone": "My donation is dedicated to someone",
   "or": "OR",

@@ -103,12 +103,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   const customInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <>
-      <div
-        className={`funding-selection-options-container ${
-          isGift && giftDetails.recipientName === "" ? "display-none" : ""
-        }`}
-      >
+    <div
+      className={`funding-selection ${
+        isGift && giftDetails.recipientName === "" ? "display-none" : ""
+      }`}
+    >
+      <div className="funding-selection-options-container">
         {paymentSetup &&
           paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`] &&
@@ -280,7 +280,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           <TreeCostLoader width={150} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 function getPaymentOptionIcons(logoName: string) {

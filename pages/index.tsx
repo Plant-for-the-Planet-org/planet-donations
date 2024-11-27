@@ -11,7 +11,7 @@ import countriesData from "./../src/Utils/countriesData.json";
 import { setCountryCode } from "src/Utils/setCountryCode";
 import { DONATE } from "src/Utils/donationStepConstants";
 import {
-  SentGift,
+  GiftDetails,
   FetchedProjectDetails,
   PaymentOptions,
 } from "src/Common/Types";
@@ -20,11 +20,13 @@ import {
   ContactDetails,
 } from "@planet-sdk/common/build/types/donation";
 import { GetServerSideProps } from "next/types";
+import { createProjectDetails } from "src/Utils/createProjectDetails";
+import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
   donationStep: number | null;
-  giftDetails: SentGift | null;
+  giftDetails: GiftDetails | null;
   isGift: boolean;
   resolvedUrl?: string;
   isDirectDonation: boolean;
@@ -79,7 +81,7 @@ function index({
     setSelectedProjects,
     loadselectedProjects,
     setGiftDetails,
-    setisGift,
+    setIsGift,
     setpaymentSetup,
     setcurrency,
     setContactDetails,
@@ -129,7 +131,7 @@ function index({
     // If gift details are present, initialize gift in context
     if (giftDetails && isGift) {
       setGiftDetails(giftDetails);
-      setisGift(true);
+      setIsGift(true);
     }
   }, []);
 
@@ -215,7 +217,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Variables that will be affected with Gift details
   let isGift = false;
-  let giftDetails: SentGift | null = null;
+  let giftDetails: GiftDetails | null = null;
   let frequency = "once";
   // Variables that will be affected with context
   let hideTaxDeduction = false;
@@ -250,7 +252,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() === queryCountry.toUpperCase(),
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
     );
     if (found) {
       country = queryCountry.toUpperCase();
@@ -276,18 +278,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const paymentOptionsResponse = await apiRequest(requestParams);
         const paymentOptionsData: PaymentOptions = paymentOptionsResponse?.data;
         if (paymentOptionsData) {
-          projectDetails = {
-            id: paymentOptionsData.id,
-            name: paymentOptionsData.name,
-            description: paymentOptionsData.description,
-            purpose: paymentOptionsData.purpose,
-            ownerName: paymentOptionsData.ownerName,
-            taxDeductionCountries: paymentOptionsData.taxDeductionCountries,
-            image: paymentOptionsData.image,
-            ownerAvatar: paymentOptionsData.ownerAvatar,
-            isApproved: paymentOptionsData.isApproved ? true : false,
-            isTopProject: paymentOptionsData.isTopProject ? true : false,
-          };
+          projectDetails = createProjectDetails(paymentOptionsData);
           donationStep = 1;
         }
       } catch (err) {
@@ -360,18 +351,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           if (paymentSetupData) {
             currency = paymentSetupData.currency;
             paymentSetup = paymentSetupData;
-            projectDetails = {
-              id: paymentSetupData.id,
-              name: paymentSetupData.name,
-              description: paymentSetupData.description,
-              purpose: paymentSetupData.purpose,
-              ownerName: paymentSetupData.ownerName,
-              taxDeductionCountries: paymentSetupData.taxDeductionCountries,
-              image: paymentSetupData.image,
-              ownerAvatar: paymentSetupData.ownerAvatar,
-              isApproved: paymentSetupData.isApproved ? true : false,
-              isTopProject: paymentSetupData.isTopProject ? true : false,
-            };
+            projectDetails = createProjectDetails(paymentSetupData);
             donationStep = 3;
           }
         } catch (err) {
@@ -379,7 +359,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
         allowTaxDeductionChange = false;
         units = donation.units;
-        amount = donation.amount;
+        amount = Number(donation.amount);
         // Setting contact details from donor details
         if (donorData) {
           contactDetails = {
@@ -429,29 +409,49 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
 
-  // Set gift details if there is s (support link) in the query params
-  if (context.query.s) {
-    try {
-      const requestParams = {
-        url: `/app/profiles/${context.query.s}`,
-        setshowErrorCard,
-        tenant,
-        locale,
+  // Handle s (support link) in the query params
+  if (typeof context.query.s === "string" && context.query.s.length > 0) {
+    if (
+      projectDetails === null ||
+      projectDetails.classification === "membership" ||
+      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
+    ) {
+      // If project cannot have direct gift, remove 's' parameter by redirecting
+      const pathname = context.resolvedUrl.split("?")[0];
+      const query = { ...context.query };
+      delete query.s;
+      const queryString = new URLSearchParams(
+        query as Record<string, string>
+      ).toString();
+
+      return {
+        redirect: {
+          destination: `${pathname}${queryString ? `?${queryString}` : ""}`,
+          permanent: true,
+        },
       };
-      const newProfile = await apiRequest(requestParams);
-      if (newProfile.data.type !== "tpo") {
-        isGift = true;
-        giftDetails = {
-          recipientName: newProfile.data.displayName,
-          recipientEmail: "",
-          message: "",
-          type: "direct",
-          recipient: newProfile.data.id,
-          recipientTreecounter: newProfile.data.slug,
+    } else {
+      // Set gift details if there is s (support link) in the query params for an eligible project
+      try {
+        const requestParams = {
+          url: `/app/profiles/${context.query.s}`,
+          setshowErrorCard,
+          tenant,
+          locale,
         };
+        const newProfile = await apiRequest(requestParams);
+        if (newProfile.data.type !== "tpo") {
+          isGift = true;
+          giftDetails = {
+            recipientName: newProfile.data.displayName,
+            type: "direct",
+            recipient: newProfile.data.id,
+            recipientProfile: newProfile.data.slug,
+          };
+        }
+      } catch (err) {
+        console.log("Error", err);
       }
-    } catch (err) {
-      console.log("Error", err);
     }
   }
 

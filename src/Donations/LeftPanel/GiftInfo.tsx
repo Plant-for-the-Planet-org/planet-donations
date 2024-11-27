@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { SentGift } from "src/Common/Types";
+import { GiftDetails } from "src/Common/Types";
 import styles from "./LeftPanel.module.scss";
 
 interface Props {
-  giftDetails: SentGift;
+  giftDetails: GiftDetails;
 }
 
 const GiftInfo = ({ giftDetails }: Props): ReactElement => {
@@ -13,11 +13,11 @@ const GiftInfo = ({ giftDetails }: Props): ReactElement => {
   return (
     <div className={styles["gift-info"]}>
       <p>{t("dedicatedTo")}</p>
-      {giftDetails.type === "direct" && giftDetails.recipientTreecounter ? (
+      {giftDetails.type === "direct" && giftDetails.recipientProfile ? (
         <a
           rel="noreferrer"
           target="_blank"
-          href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientTreecounter}`}
+          href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientProfile}`}
           className={styles["gift-recipient"]}
         >
           {giftDetails.recipientName}
@@ -26,7 +26,7 @@ const GiftInfo = ({ giftDetails }: Props): ReactElement => {
         <p className={styles["gift-recipient"]}>{giftDetails.recipientName}</p>
       )}
 
-      {giftDetails.message && (
+      {giftDetails.type === "invitation" && giftDetails.message && (
         <p>
           {t("message")}: {giftDetails.message}
         </p>

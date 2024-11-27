@@ -24,7 +24,7 @@ import {
   PlanetCashSignupDetails,
   OnBehalfDonor,
   ConfigResponse,
-  SentGift,
+  GiftDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -40,6 +40,7 @@ import {
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { createProjectDetails } from "src/Utils/createProjectDetails";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -87,8 +88,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const [quantity, setquantity] = useState(50);
   const [frequency, setfrequency] = useState<string>("once");
 
-  const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setGiftDetails] = useState<SentGift | NoGift>({
+  const [isGift, setIsGift] = useState<boolean>(false);
+  const [giftDetails, setGiftDetails] = useState<GiftDetails | NoGift>({
     recipientName: "",
     recipientEmail: "",
     message: "",
@@ -509,18 +510,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
           setpaymentSetup(paymentSetup);
         }
-        setprojectDetails({
-          id: paymentSetup.id,
-          name: paymentSetup.name,
-          description: paymentSetup.description,
-          purpose: paymentSetup.purpose,
-          ownerName: paymentSetup.ownerName,
-          taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          image: paymentSetup.image,
-          ownerAvatar: paymentSetup.ownerAvatar,
-          isApproved: paymentSetup.isApproved ? true : false,
-          isTopProject: paymentSetup.isTopProject ? true : false,
-        });
+        setprojectDetails(createProjectDetails(paymentSetup));
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -532,7 +522,7 @@ const QueryParamProvider: FC = ({ children }) => {
     <QueryParamContext.Provider
       value={{
         isGift,
-        setisGift,
+        setIsGift,
         giftDetails,
         setGiftDetails,
         contactDetails,
