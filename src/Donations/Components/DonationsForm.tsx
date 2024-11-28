@@ -293,11 +293,6 @@ function DonationsForm(): ReactElement {
   const handlePlanetCashDonate = async () => {
     if (projectDetails) {
       setShowDisablePlanetCashButton(true);
-      const _onBehalfDonor = {
-        firstname: onBehalfDonor.firstName,
-        lastname: onBehalfDonor.lastName,
-        email: onBehalfDonor.email,
-      };
 
       const _metadata = {
         utm_campaign: utmCampaign,
