@@ -401,29 +401,27 @@ function ContactsForm(): ReactElement {
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-30 flex-1"}>
-              {true && (
-                <Controller
-                  name="zipCode"
-                  control={control}
-                  rules={{
-                    required: t("zipCodeRequired"),
-                    pattern: {
-                      value: postalRegex as RegExp,
-                      message: t("zipCodeInvalid"),
-                    },
-                  }}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <MaterialTextField
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      label={t("zipCode")}
-                      variant="outlined"
-                      data-test-id="test-zipCode"
-                    />
-                  )}
-                />
-              )}
+              <Controller
+                name="zipCode"
+                control={control}
+                rules={{
+                  required: t("zipCodeRequired"),
+                  pattern: {
+                    value: postalRegex as RegExp,
+                    message: t("zipCodeInvalid"),
+                  },
+                }}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    label={t("zipCode")}
+                    variant="outlined"
+                    data-test-id="test-zipCode"
+                  />
+                )}
+              />
               {errors.zipCode !== undefined && (
                 <div className={"form-errors"}>{errors.zipCode.message}</div>
               )}

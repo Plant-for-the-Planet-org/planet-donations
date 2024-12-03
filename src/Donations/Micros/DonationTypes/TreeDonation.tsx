@@ -152,7 +152,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
           <button
             onClick={() => {
               // Lock the currency/country change if planetCash is active
-              !isPlanetCashActive && setopenCurrencyModal(true);
+              if (!isPlanetCashActive) setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
             style={{
