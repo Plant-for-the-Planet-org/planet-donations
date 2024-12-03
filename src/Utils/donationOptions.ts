@@ -11,6 +11,7 @@ interface PlanetCashAllowedParams {
   projectDetails: FetchedProjectDetails | null;
   isGift: boolean;
   giftDetails: GiftDetails | NoGift;
+  hasPlanetCashGateway: boolean;
 }
 
 /**
@@ -22,11 +23,13 @@ export const isPlanetCashAllowed = ({
   projectDetails,
   isGift,
   giftDetails,
+  hasPlanetCashGateway,
 }: PlanetCashAllowedParams): boolean => {
   return (
     profile !== null &&
     isSignedUp &&
     profile.planetCash !== null &&
+    hasPlanetCashGateway &&
     projectDetails !== null &&
     PLANETCASH_ALLOWED_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     (projectDetails.classification === null ||

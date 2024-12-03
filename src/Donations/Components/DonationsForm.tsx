@@ -124,6 +124,7 @@ function DonationsForm(): ReactElement {
     projectDetails,
     isGift,
     giftDetails,
+    hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
   });
 
   const canSendDirectGift =
