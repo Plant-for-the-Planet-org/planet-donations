@@ -7,7 +7,7 @@ import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
 import getStripe from "../../Utils/stripe/getStripe";
-import getFormatedCurrency from "../../Utils/getFormattedCurrency";
+import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import {
   createDonationFunction,
   payDonationFunction,
@@ -419,7 +419,7 @@ function PaymentsForm(): ReactElement {
                 <Elements stripe={stripePromise}>
                   <CardPayments
                     donorDetails={contactDetails}
-                    totalCost={getFormatedCurrency(
+                    totalCost={getFormattedCurrency(
                       i18n.language,
                       currency,
                       paymentSetup?.unitCost * quantity

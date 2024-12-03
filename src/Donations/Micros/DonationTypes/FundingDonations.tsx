@@ -7,8 +7,8 @@ import React, {
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency, {
-  getFormatedCurrencySymbol,
+import getFormattedCurrency, {
+  getFormattedCurrencySymbol,
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
@@ -103,12 +103,12 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
   const customInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <>
-      <div
-        className={`funding-selection-options-container ${
-          isGift && giftDetails.recipientName === "" ? "display-none" : ""
-        }`}
-      >
+    <div
+      className={`funding-selection ${
+        isGift && giftDetails.recipientName === "" ? "display-none" : ""
+      }`}
+    >
+      <div className="funding-selection-options-container">
         {paymentSetup &&
           paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`] &&
@@ -164,7 +164,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         fontSize: option.caption ? "14px" : "18px",
                       }}
                     >
-                      {getFormatedCurrency(
+                      {getFormattedCurrency(
                         i18n.language,
                         currency,
                         option.quantity * paymentSetup.unitCost
@@ -195,7 +195,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           marginTop: "3px",
                         }}
                       >
-                        {getFormatedCurrencySymbol(currency)}
+                        {getFormattedCurrencySymbol(currency)}
                       </p>
                       <input
                         className={"funding-custom-tree-input"}
@@ -280,7 +280,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
           <TreeCostLoader width={150} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 function getPaymentOptionIcons(logoName: string) {

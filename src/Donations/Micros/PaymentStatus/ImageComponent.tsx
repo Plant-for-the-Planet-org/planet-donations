@@ -1,7 +1,6 @@
 import React, { ReactElement, RefObject } from "react";
 import { useTranslation } from "next-i18next";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
 import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
@@ -24,7 +23,7 @@ const ImageComponent = ({
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
+      getFormattedCurrency(i18n.language, donation.currency, donation.amount);
   }
 
   const pluralProfileTypes = [

@@ -14,7 +14,15 @@ import {
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
+export type DirectGiftDetails = SentDirectGift & {
+  recipientName?: string;
+  recipientProfile?: string;
+};
+export type InvitationGiftDetails = SentInvitationGift;
+
 export type SentGift = SentDirectGift | SentInvitationGift;
+
+export type GiftDetails = DirectGiftDetails | InvitationGiftDetails;
 
 export interface PaymentProviderRequest {
   account?: string;
@@ -38,7 +46,7 @@ export interface CreateDonationFunctionProps {
   paymentSetup: PaymentOptions;
   currency: string;
   contactDetails: ContactDetails;
-  giftDetails: SentGift | NoGift;
+  giftDetails: GiftDetails | NoGift;
   isGift: boolean;
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>;
   setPaymentError: Dispatch<SetStateAction<string>>;
@@ -101,7 +109,7 @@ export interface CreateDonationDataProps {
   contactDetails: ContactDetails;
   taxDeductionCountry: string | null;
   isGift: boolean;
-  giftDetails: SentGift | NoGift;
+  giftDetails: GiftDetails | NoGift;
   frequency: string;
   amount?: number | null;
   callbackUrl: string | undefined;
@@ -119,7 +127,7 @@ export interface PlanetCashSignupDetails {
   purpose: "planet-cash-signup";
 }
 
-export interface FetchedProjectDetails {
+export interface FetchedBaseProjectDetails {
   id: string;
   name: string;
   description?: string | null;
@@ -127,10 +135,31 @@ export interface FetchedProjectDetails {
   ownerName: string | null;
   image?: string | null;
   purpose: ProjectPurpose;
+  classification: Nullable<ProjectClassification>;
   taxDeductionCountries?: Array<string>;
   isApproved: boolean;
   isTopProject: boolean;
 }
+
+export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "trees";
+  classification: TreeProjectClassification;
+}
+
+export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "funds";
+  classification: FundsProjectClassification;
+}
+
+export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
+  purpose: "conservation" | "reforestation" | "bouquet" | "planet-cash";
+  classification: null;
+}
+
+export type FetchedProjectDetails =
+  | FetchedTreeProjectDetails
+  | FetchedFundsProjectDetails
+  | FetchedOtherProjectDetails;
 
 export type ProjectPurpose =
   | "trees"
@@ -140,7 +169,36 @@ export type ProjectPurpose =
   | "bouquet"
   | "planet-cash";
 
-export interface PaymentOptions extends FetchedProjectDetails {
+export type TreeProjectClassification =
+  | "agroforestry"
+  | "managed-regeneration"
+  | "large-scale-planting"
+  | "mangroves"
+  | "natural-regeneration"
+  | "other-planting"
+  | "urban-planting";
+
+export type FundsProjectClassification =
+  | "academy"
+  | "endowment"
+  | "forest-protection"
+  | "funding"
+  | "membership"
+  | "mixed"
+  | "neutral"
+  | "neutral-event"
+  | "penalty"
+  | "public-funds"
+  | "research"
+  | "sponsorship"
+  | "subscription"
+  | "subsidy";
+
+export type ProjectClassification =
+  | TreeProjectClassification
+  | FundsProjectClassification;
+
+export type PaymentOptions = FetchedProjectDetails & {
   requestedCountry: string;
   effectiveCountry: string;
   frequencies: Frequencies;
@@ -152,7 +210,7 @@ export interface PaymentOptions extends FetchedProjectDetails {
   unitCost: number;
   currency: string;
   destination: string;
-}
+};
 
 export type UnitType = "tree" | "m2" | "currency" | CurrencyCode;
 
@@ -169,6 +227,7 @@ export interface Gateways {
   paypal: Paypal;
   stripe: Stripe;
   offline?: Offline;
+  "planet-cash"?: PlanetCashGateway;
 }
 export interface Paypal {
   methods?: string[] | null;
@@ -194,6 +253,13 @@ export interface AuthorizationStripe {
 export interface Offline {
   methods?: string[] | null;
   account: string;
+}
+
+export interface PlanetCashGateway {
+  account: string;
+  balance: number;
+  creditLimit: number;
+  available: number;
 }
 
 export interface OptionsEntity {

@@ -7,7 +7,7 @@ import React, {
 import CustomIcon from "../../../../public/assets/icons/CustomIcon";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
-import getFormatedCurrency from "../../../Utils/getFormattedCurrency";
+import getFormattedCurrency from "../../../Utils/getFormattedCurrency";
 import themeProperties from "../../../../styles/themeProperties";
 import { useTranslation } from "next-i18next";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
@@ -152,7 +152,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
           <button
             onClick={() => {
               // Lock the currency/country change if planetCash is active
-              !isPlanetCashActive && setopenCurrencyModal(true);
+              if (!isPlanetCashActive) setopenCurrencyModal(true);
             }}
             className="text-bold text-primary"
             style={{
@@ -165,7 +165,7 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
             {!isPlanetCashActive && (
               <DownArrowIcon color={themeProperties.primaryColor} />
             )}
-            {getFormatedCurrency(
+            {getFormattedCurrency(
               i18n.language,
               "",
               Number(paymentSetup.unitCost)

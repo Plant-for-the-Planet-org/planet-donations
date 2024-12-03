@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
@@ -22,7 +22,11 @@ function ThankyouMessage({
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
-      getFormatedCurrency(i18n.language, donation.currency, donation.amount);
+      getFormattedCurrency(
+        i18n.language,
+        donation.currency,
+        Number(donation.amount)
+      );
   }
 
   // EXAMPLE: Your ₹21,713.64 donation was successful {with Google Pay}
@@ -41,7 +45,7 @@ function ThankyouMessage({
   // EXAMPLE: We've sent an email to Sagar Aryal about the gift.
   // TO DO - if recipientEmail is not present, then show message - You will receive the Gift certificate for {{recipientName}} on your email
   const donationGiftMessage =
-    donation && donation.gift && donation.gift.recipientEmail //TODOO - address TS warnings after /donations is updated to send gift data
+    donation?.gift?.type === "invitation" && donation.gift.recipientEmail //TODOO - address TS warnings after /donations is updated to send gift data
       ? " " +
         t("common:giftSentMessage", {
           recipientName: donation.gift.recipientName,

@@ -24,7 +24,7 @@ import {
   PlanetCashSignupDetails,
   OnBehalfDonor,
   ConfigResponse,
-  SentGift,
+  GiftDetails,
 } from "src/Common/Types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { validateToken } from "../Utils/tokenActions";
@@ -40,6 +40,8 @@ import {
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { createProjectDetails } from "src/Utils/createProjectDetails";
+import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -87,8 +89,8 @@ const QueryParamProvider: FC = ({ children }) => {
   const [quantity, setquantity] = useState(50);
   const [frequency, setfrequency] = useState<string>("once");
 
-  const [isGift, setisGift] = useState<boolean>(false);
-  const [giftDetails, setGiftDetails] = useState<SentGift | NoGift>({
+  const [isGift, setIsGift] = useState<boolean>(false);
+  const [giftDetails, setGiftDetails] = useState<GiftDetails | NoGift>({
     recipientName: "",
     recipientEmail: "",
     message: "",
@@ -345,23 +347,27 @@ const QueryParamProvider: FC = ({ children }) => {
     router.query.token,
   ]);
 
-  useEffect(() => {
-    const regex = /^pcash_/;
-    if (
-      router.query.to &&
-      !regex.test(router.query.to as string) &&
-      country !== undefined &&
-      country !== "" &&
-      router.query.to?.toString().toLowerCase() !== "planetcash"
-    ) {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup({
-        projectGUID: to,
-        paymentSetupCountry: country,
-        shouldSetPaymentDetails: true,
-      });
-    }
-  }, [router.query.to, country]);
+  useDebouncedEffect(
+    () => {
+      const regex = /^pcash_/;
+      if (
+        router.query.to &&
+        !regex.test(router.query.to as string) &&
+        country !== undefined &&
+        country !== "" &&
+        router.query.to?.toString().toLowerCase() !== "planetcash"
+      ) {
+        const to = String(router.query.to).replace(/\//g, "");
+        loadPaymentSetup({
+          projectGUID: to,
+          paymentSetupCountry: country,
+          shouldSetPaymentDetails: true,
+        });
+      }
+    },
+    1000,
+    [router.query.to, country, profile?.slug]
+  );
 
   async function loadConfig() {
     try {
@@ -487,11 +493,19 @@ const QueryParamProvider: FC = ({ children }) => {
     paymentSetupCountry: string;
     shouldSetPaymentDetails?: boolean;
   }) => {
+    const token =
+      profile === null
+        ? null
+        : queryToken ||
+          (router.query.token as string) ||
+          (await getAccessTokenSilently());
+
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        token,
         tenant,
         locale: i18n.language,
       };
@@ -509,18 +523,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
           setpaymentSetup(paymentSetup);
         }
-        setprojectDetails({
-          id: paymentSetup.id,
-          name: paymentSetup.name,
-          description: paymentSetup.description,
-          purpose: paymentSetup.purpose,
-          ownerName: paymentSetup.ownerName,
-          taxDeductionCountries: paymentSetup.taxDeductionCountries,
-          image: paymentSetup.image,
-          ownerAvatar: paymentSetup.ownerAvatar,
-          isApproved: paymentSetup.isApproved ? true : false,
-          isTopProject: paymentSetup.isTopProject ? true : false,
-        });
+        setprojectDetails(createProjectDetails(paymentSetup));
       }
       setIsPaymentOptionsLoading(false);
     } catch (err) {
@@ -532,7 +535,7 @@ const QueryParamProvider: FC = ({ children }) => {
     <QueryParamContext.Provider
       value={{
         isGift,
-        setisGift,
+        setIsGift,
         giftDetails,
         setGiftDetails,
         contactDetails,

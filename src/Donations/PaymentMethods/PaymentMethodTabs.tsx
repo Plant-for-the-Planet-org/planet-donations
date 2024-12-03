@@ -9,7 +9,7 @@ import BankIcon from "../../../public/assets/icons/donation/BankIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "./PaymentRequestCustomButton";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 
@@ -104,7 +104,7 @@ export default function PaymentMethodTabs({
         break;
       case "funds":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity
@@ -113,7 +113,7 @@ export default function PaymentMethodTabs({
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity
@@ -123,7 +123,7 @@ export default function PaymentMethodTabs({
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity

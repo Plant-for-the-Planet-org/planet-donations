@@ -8,7 +8,7 @@ import ReturnToButton from "./Components/ReturnToButton";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 import { ReactElement } from "react";
 import { TFunction } from "next-i18next";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 
 interface TransferDetailsProps {
   donationID: string;
@@ -51,7 +51,7 @@ function TransferDetails({
           ? t("common:transferDetailsMessage")
           : t("common:recurrentTransferDetailsMsg", {
               frequency,
-              amount: getFormatedCurrency(
+              amount: getFormattedCurrency(
                 i18n.language,
                 donation.currency,
                 donation.amount

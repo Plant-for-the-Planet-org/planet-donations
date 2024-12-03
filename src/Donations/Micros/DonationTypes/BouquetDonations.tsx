@@ -8,8 +8,8 @@ import React, {
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency, {
-  getFormatedCurrencySymbol,
+import getFormattedCurrency, {
+  getFormattedCurrencySymbol,
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
@@ -131,12 +131,12 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
   //   return Math.trunc(Math.ceil(cost/5)*5);
   // }
   return (
-    <>
-      <div
-        className={`funding-selection-options-container ${
-          isGift && giftDetails.recipientName === "" ? "display-none" : ""
-        }`}
-      >
+    <div
+      className={`bouquet-selection ${
+        isGift && giftDetails.recipientName === "" ? "display-none" : ""
+      }`}
+    >
+      <div className="bouquet-selection-options-container">
         {paymentSetup &&
           paymentSetup.frequencies &&
           paymentSetup.frequencies[`${frequency}`].options.map(
@@ -149,18 +149,18 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                     setisCustomDonation(false);
                     setCustomInputValue("");
                   }}
-                  className={`funding-selection-option ${
+                  className={`bouquet-selection-option ${
                     approximatelyEqual(option.quantity, quantity) &&
                     !isCustomDonation
-                      ? "funding-selection-option-selected"
+                      ? "bouquet-selection-option-selected"
                       : ""
                   }`}
                 >
-                  <div className="funding-selection-option-text m-10">
+                  <div className="bouquet-selection-option-text m-10">
                     <span style={{ fontSize: "18px" }}>
                       {paymentSetup.purpose === "conservation"
                         ? option.quantity
-                        : getFormatedCurrency(
+                        : getFormattedCurrency(
                             i18n.language,
                             currency,
                             option.quantity * paymentSetup.unitCost
@@ -175,8 +175,8 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                 </div>
               ) : (
                 <div
-                  className={`funding-selection-option custom ${
-                    isCustomDonation ? "funding-selection-option-selected" : ""
+                  className={`bouquet-selection-option custom ${
+                    isCustomDonation ? "bouquet-selection-option-selected" : ""
                   }`}
                   onClick={() => {
                     setisCustomDonation(true);
@@ -193,11 +193,11 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                         }}
                       >
                         {paymentSetup.purpose === "bouquet"
-                          ? getFormatedCurrencySymbol(currency)
+                          ? getFormattedCurrencySymbol(currency)
                           : []}
                       </p>
                       <input
-                        className={"funding-custom-tree-input"}
+                        className={"bouquet-custom-tree-input"}
                         style={{ fontSize: "18px" }}
                         onInput={(e: ChangeEvent<HTMLInputElement>) => {
                           // replaces any character other than number to blank
@@ -239,7 +239,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                     </div>
                   ) : (
                     <div
-                      className="funding-selection-option-text"
+                      className="bouquet-selection-option-text"
                       style={{ fontSize: "18px" }}
                     >
                       <p style={{ margin: "5px" }}>
@@ -281,7 +281,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
               <DownArrowIcon color={themeProperties.primaryColor} />
             )}
             {paymentSetup.purpose === "conservation"
-              ? getFormatedCurrency(
+              ? getFormattedCurrency(
                   i18n.language,
                   "",
                   Number(paymentSetup.unitCost)
@@ -299,7 +299,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
           <TreeCostLoader width={150} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 
