@@ -4,7 +4,7 @@ import { FC, useContext, useEffect } from "react";
 import ToggleSwitch from "src/Common/InputTypes/ToggleSwitch";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { getCountryDataBy } from "src/Utils/countryUtils";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 
 // TODO - Sentry captureException;
 
@@ -144,7 +144,7 @@ const PlanetCashSelector: FC = () => {
                       : "-negative")
                   }
                 >
-                  {getFormatedCurrency(
+                  {getFormattedCurrency(
                     i18n.language,
                     profile.planetCash.currency,
                     profile.planetCash.balance / 100
@@ -163,7 +163,7 @@ const PlanetCashSelector: FC = () => {
                           : "-negative")
                       }
                     >
-                      {getFormatedCurrency(
+                      {getFormattedCurrency(
                         i18n.language,
                         profile.planetCash.currency,
                         profile.planetCash.creditLimit / 100
@@ -186,7 +186,7 @@ const PlanetCashSelector: FC = () => {
                     : "-negative")
                 }
               >
-                {getFormatedCurrency(
+                {getFormattedCurrency(
                   i18n.language,
                   profile.planetCash.currency,
                   profile.planetCash.balance / 100 +

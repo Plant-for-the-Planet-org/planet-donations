@@ -7,8 +7,8 @@ import React, {
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency, {
-  getFormatedCurrencySymbol,
+import getFormattedCurrency, {
+  getFormattedCurrencySymbol,
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
@@ -164,7 +164,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                         fontSize: option.caption ? "14px" : "18px",
                       }}
                     >
-                      {getFormatedCurrency(
+                      {getFormattedCurrency(
                         i18n.language,
                         currency,
                         option.quantity * paymentSetup.unitCost
@@ -195,7 +195,7 @@ function FundingDonations({ setopenCurrencyModal }: Props): ReactElement {
                           marginTop: "3px",
                         }}
                       >
-                        {getFormatedCurrencySymbol(currency)}
+                        {getFormattedCurrencySymbol(currency)}
                       </p>
                       <input
                         className={"funding-custom-tree-input"}

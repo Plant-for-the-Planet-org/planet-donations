@@ -1,4 +1,4 @@
-export default function getFormatedCurrency(
+export default function getFormattedCurrency(
   langCode: string,
   currency: string,
   number: number
@@ -19,7 +19,7 @@ export default function getFormatedCurrency(
   return formatter.format(number);
 }
 
-export function getFormatedCurrencySymbol(
+export function getFormattedCurrencySymbol(
   currency: string
 ): string | undefined {
   let options: Intl.NumberFormatOptions = {

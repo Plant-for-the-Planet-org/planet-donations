@@ -12,7 +12,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
@@ -401,29 +401,27 @@ function ContactsForm(): ReactElement {
             </div>
             <div style={{ width: "20px" }} />
             <div className={"form-field mt-30 flex-1"}>
-              {true && (
-                <Controller
-                  name="zipCode"
-                  control={control}
-                  rules={{
-                    required: t("zipCodeRequired"),
-                    pattern: {
-                      value: postalRegex as RegExp,
-                      message: t("zipCodeInvalid"),
-                    },
-                  }}
-                  render={({ field: { onChange, value, onBlur } }) => (
-                    <MaterialTextField
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      label={t("zipCode")}
-                      variant="outlined"
-                      data-test-id="test-zipCode"
-                    />
-                  )}
-                />
-              )}
+              <Controller
+                name="zipCode"
+                control={control}
+                rules={{
+                  required: t("zipCodeRequired"),
+                  pattern: {
+                    value: postalRegex as RegExp,
+                    message: t("zipCodeInvalid"),
+                  },
+                }}
+                render={({ field: { onChange, value, onBlur } }) => (
+                  <MaterialTextField
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    label={t("zipCode")}
+                    variant="outlined"
+                    data-test-id="test-zipCode"
+                  />
+                )}
+              />
               {errors.zipCode !== undefined && (
                 <div className={"form-errors"}>{errors.zipCode.message}</div>
               )}
@@ -588,7 +586,7 @@ function ContactsForm(): ReactElement {
             >
               {paymentSetup &&
                 t("donate_button", {
-                  totalCost: getFormatedCurrency(
+                  totalCost: getFormattedCurrency(
                     i18n.language,
                     currency,
                     paymentSetup.unitCost * quantity
