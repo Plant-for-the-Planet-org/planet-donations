@@ -7,7 +7,7 @@ import {
   PaymentOptions,
   PlanetCashSignupDetails,
   OnBehalfDonor,
-  SentGift,
+  GiftDetails,
 } from "src/Common/Types";
 import Avatar from "./Avatar";
 import TransactionSummary from "./TransactionSummary";
@@ -28,7 +28,7 @@ interface Props {
   quantity: number;
   currency: string;
   frequency: string;
-  giftDetails: SentGift | NoGift;
+  giftDetails: GiftDetails | NoGift;
   contactDetails: ContactDetails;
   isPlanetCashActive: boolean;
   isGift: boolean;

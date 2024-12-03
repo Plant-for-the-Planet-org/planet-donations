@@ -34,6 +34,8 @@ import {
 } from "@planet-sdk/common/build/types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
+import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
+import { isPlanetCashAllowed } from "src/Utils/donationOptions";
 
 function DonationsForm(): ReactElement {
   const {
@@ -116,19 +118,29 @@ function DonationsForm(): ReactElement {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
-  const canPayWithPlanetCash =
+  const canPayWithPlanetCash = isPlanetCashAllowed({
+    profile,
+    isSignedUp,
+    projectDetails,
+    isGift,
+    giftDetails,
+    hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
+  });
+
+  const canSendDirectGift =
     projectDetails !== null &&
-    projectDetails.purpose !== "funds" &&
-    projectDetails.purpose !== "planet-cash" &&
-    paymentSetup?.unitType === "tree" && //Enables planetcash for restoration projects with unitType tree only (TEMP)
-    profile !== null &&
-    isSignedUp &&
-    profile.planetCash !== null &&
-    projectDetails.taxDeductionCountries?.includes(
-      profile.planetCash.country
-    ) &&
-    !(isGift && giftDetails.recipientName === "") &&
-    !(onBehalf && onBehalfDonor.firstName === "");
+    projectDetails.classification !== "membership" &&
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
+
+  const hasDirectGift = giftDetails.type === "direct";
+  const canSendInvitationGift =
+    projectDetails !== null &&
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
+    !hasDirectGift &&
+    ((projectDetails?.classification !== "membership" &&
+      frequency === "once") ||
+      (projectDetails?.classification === "membership" &&
+        frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
@@ -282,11 +294,6 @@ function DonationsForm(): ReactElement {
   const handlePlanetCashDonate = async () => {
     if (projectDetails) {
       setShowDisablePlanetCashButton(true);
-      const _onBehalfDonor = {
-        firstname: onBehalfDonor.firstName,
-        lastname: onBehalfDonor.lastName,
-        email: onBehalfDonor.email,
-      };
 
       const _metadata = {
         utm_campaign: utmCampaign,
@@ -294,14 +301,28 @@ function DonationsForm(): ReactElement {
         utm_source: utmSource,
       };
 
-      const _gift = {
-        ...giftDetails,
-      };
+      // Determine if gift info is complete
+      const isDirectGiftComplete =
+        giftDetails.type === "direct" && giftDetails.recipient.length > 0;
 
-      if (giftDetails.type === "direct") {
-        delete _gift.message;
-        delete _gift.recipientName;
-      }
+      const isInvitationGiftComplete =
+        giftDetails.type === "invitation" &&
+        giftDetails.recipientName.length > 0;
+
+      // Set _gift to null if incomplete, otherwise construct gift object
+      const _gift = isDirectGiftComplete
+        ? {
+            type: "direct",
+            recipient: giftDetails.recipient,
+          }
+        : isInvitationGiftComplete
+        ? {
+            type: "invitation",
+            recipientName: giftDetails.recipientName,
+            recipientEmail: giftDetails.recipientEmail,
+            message: giftDetails.message,
+          }
+        : null;
 
       // create Donation data
       const donationData = {
@@ -309,9 +330,7 @@ function DonationsForm(): ReactElement {
         project: projectDetails.id,
         units: quantity,
         prePaid: true,
-        onBehalf: onBehalf,
         metadata: _metadata,
-        ...(onBehalf && { donor: _onBehalfDonor }),
         ...(isGift && { gift: _gift }),
       };
 
@@ -357,18 +376,14 @@ function DonationsForm(): ReactElement {
           {projectDetails.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
-          {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {canPayWithPlanetCash && <PlanetCashSelector />}
-          {!(onBehalf && onBehalfDonor.firstName === "") &&
-            (projectDetails.purpose === "trees" &&
-            (paymentSetup?.unitType !== "m2" ||
-              giftDetails.type === "direct") ? (
-              <div className="donations-gift-container mt-10">
-                <GiftForm />
-              </div>
-            ) : (
-              <></>
-            ))}
+          {(canSendDirectGift && hasDirectGift) || canSendInvitationGift ? (
+            <div className="donations-gift-container mt-10">
+              <GiftForm />
+            </div>
+          ) : (
+            <></>
+          )}
           {process.env.RECURRENCY &&
             showFrequencyOptions &&
             paymentSetup &&
