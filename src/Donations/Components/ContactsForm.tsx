@@ -12,7 +12,7 @@ import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { DONATE, PAYMENT } from "src/Utils/donationStepConstants";
 import { ContactDetails } from "@planet-sdk/common";
 import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
@@ -588,7 +588,7 @@ function ContactsForm(): ReactElement {
             >
               {paymentSetup &&
                 t("donate_button", {
-                  totalCost: getFormatedCurrency(
+                  totalCost: getFormattedCurrency(
                     i18n.language,
                     currency,
                     paymentSetup.unitCost * quantity

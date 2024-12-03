@@ -8,8 +8,8 @@ import React, {
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "../../../Layout/QueryParamContext";
 import themeProperties from "../../../../styles/themeProperties";
-import getFormatedCurrency, {
-  getFormatedCurrencySymbol,
+import getFormattedCurrency, {
+  getFormattedCurrencySymbol,
 } from "../../../Utils/getFormattedCurrency";
 import DownArrowIcon from "../../../../public/assets/icons/DownArrowIcon";
 import TreeCostLoader from "../../../Common/ContentLoaders/TreeCostLoader";
@@ -160,7 +160,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                     <span style={{ fontSize: "18px" }}>
                       {paymentSetup.purpose === "conservation"
                         ? option.quantity
-                        : getFormatedCurrency(
+                        : getFormattedCurrency(
                             i18n.language,
                             currency,
                             option.quantity * paymentSetup.unitCost
@@ -193,7 +193,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
                         }}
                       >
                         {paymentSetup.purpose === "bouquet"
-                          ? getFormatedCurrencySymbol(currency)
+                          ? getFormattedCurrencySymbol(currency)
                           : []}
                       </p>
                       <input
@@ -281,7 +281,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
               <DownArrowIcon color={themeProperties.primaryColor} />
             )}
             {paymentSetup.purpose === "conservation"
-              ? getFormatedCurrency(
+              ? getFormattedCurrency(
                   i18n.language,
                   "",
                   Number(paymentSetup.unitCost)

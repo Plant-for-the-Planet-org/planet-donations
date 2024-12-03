@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import getFormatedCurrency from "src/Utils/getFormattedCurrency";
+import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
@@ -22,7 +22,7 @@ function ThankyouMessage({
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
-      getFormatedCurrency(
+      getFormattedCurrency(
         i18n.language,
         donation.currency,
         Number(donation.amount)

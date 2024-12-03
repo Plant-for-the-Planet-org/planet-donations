@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
-import getFormatedCurrency from "../../Utils/getFormattedCurrency";
+import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import { useTranslation } from "next-i18next";
@@ -15,7 +15,7 @@ function DonationAmount(): ReactElement {
       {paymentSetup && paymentSetup.unitCost ? (
         <div className={"w-100 text-center text-bold mt-20"}>
           <span className={"text-primary"} style={{ marginRight: "4px" }}>
-            {getFormatedCurrency(
+            {getFormattedCurrency(
               i18n.language,
               currency,
               paymentSetup.unitCost * quantity

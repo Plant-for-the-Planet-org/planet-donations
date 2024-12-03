@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
-import getFormatedCurrency from "../../Utils/getFormattedCurrency";
+import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import { getMinimumAmountForCurrency } from "../../Utils/getExchange";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
 import { NativePay } from "../PaymentMethods/PaymentRequestCustomButton";
@@ -257,7 +257,7 @@ function DonationsForm(): ReactElement {
         break;
       case "funds":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity
@@ -266,7 +266,7 @@ function DonationsForm(): ReactElement {
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity
@@ -276,7 +276,7 @@ function DonationsForm(): ReactElement {
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormatedCurrency(
+          amount: getFormattedCurrency(
             i18n.language,
             currency,
             paymentSetup.unitCost * quantity
@@ -466,7 +466,7 @@ function DonationsForm(): ReactElement {
                   <p className={"text-danger mt-20 text-center"}>
                     {t("minDonate")}{" "}
                     <span>
-                      {getFormatedCurrency(i18n.language, currency, minAmt)}
+                      {getFormattedCurrency(i18n.language, currency, minAmt)}
                     </span>
                   </p>
                 ) : (
