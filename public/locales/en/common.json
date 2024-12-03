@@ -7,6 +7,7 @@
   "tree_other": "trees",
   "recipientName": "Recipient Name",
   "recipientNameRequired": "Recipient Name is required",
+  "recipientNameTooLong": "Recipient Name must be 35 characters or less",
   "email": "Email",
   "recipientEmail": "Recipient Email",
   "emailRequired": "Email is required",

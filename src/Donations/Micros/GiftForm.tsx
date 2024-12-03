@@ -91,7 +91,16 @@ export default function GiftForm(): ReactElement {
               <Controller
                 name="recipientName"
                 control={control}
-                rules={{ required: true }}
+                rules={{
+                  required: {
+                    value: true,
+                    message: t("recipientNameRequired"),
+                  },
+                  maxLength: {
+                    value: 35,
+                    message: t("recipientNameTooLong"),
+                  },
+                }}
                 render={({ field: { onChange, value } }) => (
                   <MaterialTextField
                     onChange={onChange}
@@ -109,9 +118,9 @@ export default function GiftForm(): ReactElement {
                   />
                 )}
               />
-              {errors.recipientName && (
+              {errors.recipientName !== undefined && (
                 <div className={"form-errors"}>
-                  {t("recipientNameRequired")}
+                  {errors.recipientName.message}
                 </div>
               )}
             </div>
