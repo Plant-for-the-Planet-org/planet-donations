@@ -227,6 +227,7 @@ export interface Gateways {
   paypal: Paypal;
   stripe: Stripe;
   offline?: Offline;
+  "planet-cash"?: PlanetCashGateway;
 }
 export interface Paypal {
   methods?: string[] | null;
@@ -252,6 +253,13 @@ export interface AuthorizationStripe {
 export interface Offline {
   methods?: string[] | null;
   account: string;
+}
+
+export interface PlanetCashGateway {
+  account: string;
+  balance: number;
+  creditLimit: number;
+  available: number;
 }
 
 export interface OptionsEntity {

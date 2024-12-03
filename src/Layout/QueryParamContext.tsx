@@ -41,6 +41,7 @@ import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
+import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -346,23 +347,27 @@ const QueryParamProvider: FC = ({ children }) => {
     router.query.token,
   ]);
 
-  useEffect(() => {
-    const regex = /^pcash_/;
-    if (
-      router.query.to &&
-      !regex.test(router.query.to as string) &&
-      country !== undefined &&
-      country !== "" &&
-      router.query.to?.toString().toLowerCase() !== "planetcash"
-    ) {
-      const to = String(router.query.to).replace(/\//g, "");
-      loadPaymentSetup({
-        projectGUID: to,
-        paymentSetupCountry: country,
-        shouldSetPaymentDetails: true,
-      });
-    }
-  }, [router.query.to, country]);
+  useDebouncedEffect(
+    () => {
+      const regex = /^pcash_/;
+      if (
+        router.query.to &&
+        !regex.test(router.query.to as string) &&
+        country !== undefined &&
+        country !== "" &&
+        router.query.to?.toString().toLowerCase() !== "planetcash"
+      ) {
+        const to = String(router.query.to).replace(/\//g, "");
+        loadPaymentSetup({
+          projectGUID: to,
+          paymentSetupCountry: country,
+          shouldSetPaymentDetails: true,
+        });
+      }
+    },
+    1000,
+    [router.query.to, country, profile?.slug]
+  );
 
   async function loadConfig() {
     try {
@@ -488,11 +493,19 @@ const QueryParamProvider: FC = ({ children }) => {
     paymentSetupCountry: string;
     shouldSetPaymentDetails?: boolean;
   }) => {
+    const token =
+      profile === null
+        ? null
+        : queryToken ||
+          (router.query.token as string) ||
+          (await getAccessTokenSilently());
+
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setshowErrorCard,
+        token,
         tenant,
         locale: i18n.language,
       };

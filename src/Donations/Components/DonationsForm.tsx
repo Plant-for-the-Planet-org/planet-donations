@@ -35,6 +35,7 @@ import {
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
+import { isPlanetCashAllowed } from "src/Utils/donationOptions";
 
 function DonationsForm(): ReactElement {
   const {
@@ -117,19 +118,14 @@ function DonationsForm(): ReactElement {
   const [isPaymentProcessing, setIsPaymentProcessing] = React.useState(false);
   const [paymentError, setPaymentError] = React.useState(""); //TODOO - confirm and remove
 
-  const canPayWithPlanetCash =
-    projectDetails !== null &&
-    projectDetails.purpose !== "funds" &&
-    projectDetails.purpose !== "planet-cash" &&
-    paymentSetup?.unitType === "tree" && //Enables planetcash for restoration projects with unitType tree only (TEMP)
-    profile !== null &&
-    isSignedUp &&
-    profile.planetCash !== null &&
-    projectDetails.taxDeductionCountries?.includes(
-      profile.planetCash.country
-    ) &&
-    !(isGift && giftDetails.recipientName === "") &&
-    !(onBehalf && onBehalfDonor.firstName === "");
+  const canPayWithPlanetCash = isPlanetCashAllowed({
+    profile,
+    isSignedUp,
+    projectDetails,
+    isGift,
+    giftDetails,
+    hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
+  });
 
   const canSendDirectGift =
     projectDetails !== null &&
@@ -298,11 +294,6 @@ function DonationsForm(): ReactElement {
   const handlePlanetCashDonate = async () => {
     if (projectDetails) {
       setShowDisablePlanetCashButton(true);
-      const _onBehalfDonor = {
-        firstname: onBehalfDonor.firstName,
-        lastname: onBehalfDonor.lastName,
-        email: onBehalfDonor.email,
-      };
 
       const _metadata = {
         utm_campaign: utmCampaign,
@@ -385,7 +376,6 @@ function DonationsForm(): ReactElement {
           {projectDetails.purpose !== "funds" && (
             <p className="title-text">{t("donate")}</p>
           )}
-          {/* show PlanetCashSelector only if user is signed up and have a planetCash account */}
           {canPayWithPlanetCash && <PlanetCashSelector />}
           {(canSendDirectGift && hasDirectGift) || canSendInvitationGift ? (
             <div className="donations-gift-container mt-10">
