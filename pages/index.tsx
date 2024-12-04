@@ -455,8 +455,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  // Set gift details if gift = true in the query params (only for tree projects)
+  // Set gift details if gift = true in the query params
   if (
+    giftDetails?.type !== "direct" &&
     context.query.gift === "true" &&
     projectDetails !== null &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
