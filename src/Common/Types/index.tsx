@@ -14,11 +14,11 @@ import {
 } from "@planet-sdk/common";
 
 /** planet-donations only allows direct or invitation gifts */
-export type DirectGiftDetails = SentDirectGift & {
+export interface DirectGiftDetails extends SentDirectGift {
   recipientName?: string;
   recipientProfile?: string;
-};
-export type InvitationGiftDetails = SentInvitationGift;
+}
+export interface InvitationGiftDetails extends SentInvitationGift {}
 
 export type SentGift = SentDirectGift | SentInvitationGift;
 
