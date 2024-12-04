@@ -456,7 +456,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   // Set gift details if gift = true in the query params (only for tree projects)
-  if (context.query.gift === "true" && projectDetails?.purpose === "trees") {
+  if (
+    context.query.gift === "true" &&
+    projectDetails !== null &&
+    !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
+  ) {
     isGift = true;
     giftDetails = {
       type: "invitation",
