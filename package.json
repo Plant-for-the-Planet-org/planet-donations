@@ -29,7 +29,7 @@
     "@planet-sdk/common": "^0.1.47",
     "@sentry/browser": "^6.2.5",
     "@sentry/integrations": "^6.2.5",
-    "@sentry/node": "^6.2.5",
+    "@sentry/node": "^8.47.0",
     "@sentry/webpack-plugin": "^1.14.2",
     "@sparticuz/chromium": "^106.0.2",
     "@stripe/react-stripe-js": "^1.4.0",
