@@ -238,7 +238,7 @@ const QueryParamProvider: FC = ({ children }) => {
   async function loadselectedProjects() {
     try {
       const requestParams = {
-        url: `/app/projects?_scope=map`,
+        url: `/app/projects?_scope=map&filter[purpose]=trees,restoration,conservation`,
         setshowErrorCard,
         tenant,
         locale: i18n.language,
