@@ -410,6 +410,10 @@ function ContactsForm(): ReactElement {
                     value: postalRegex as RegExp,
                     message: t("zipCodeInvalid"),
                   },
+                  maxLength: {
+                    value: 15,
+                    message: t("zipCodeInvalid"),
+                  },
                 }}
                 render={({ field: { onChange, value, onBlur } }) => (
                   <MaterialTextField
