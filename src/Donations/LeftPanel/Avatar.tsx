@@ -14,7 +14,7 @@ const Avatar = ({ info }: Props): ReactElement => {
 
   const renderAvatarImage = (
     ownerName: string | null,
-    ownerAvatar: string | null,
+    ownerAvatar: string | null
   ): JSX.Element => {
     return ownerAvatar ? (
       <img
@@ -32,7 +32,7 @@ const Avatar = ({ info }: Props): ReactElement => {
     <a
       rel="noreferrer"
       target="_blank"
-      href={`https://www.trilliontreecampaign.org/${info.id}`}
+      href={`https://web.plant-for-the-planet.org/${info.id}`}
       className={styles["avatar-link"]}
     >
       {renderAvatarImage(ownerName, ownerAvatar)}

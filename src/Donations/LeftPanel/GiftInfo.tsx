@@ -17,7 +17,7 @@ const GiftInfo = ({ giftDetails }: Props): ReactElement => {
         <a
           rel="noreferrer"
           target="_blank"
-          href={`https://www.trilliontreecampaign.org/t/${giftDetails.recipientProfile}`}
+          href={`https://web.plant-for-the-planet.org/t/${giftDetails.recipientProfile}`}
           className={styles["gift-recipient"]}
         >
           {giftDetails.recipientName}
