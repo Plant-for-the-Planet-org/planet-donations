@@ -19,7 +19,7 @@ const ProjectTitle = ({ info }: Props): ReactElement => {
         <a
           rel="noreferrer"
           target="_blank"
-          href={`https://www.trilliontreecampaign.org/${info.id}`}
+          href={`https://web.plant-for-the-planet.org/${info.id}`}
         >
           {info.name + "    "}
         </a>
