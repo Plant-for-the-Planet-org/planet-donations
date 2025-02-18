@@ -192,7 +192,7 @@ function Authentication(): ReactElement {
         <div className="d-flex row justify-content-between w-100 mb-20">
           {!profile?.isPrivate ? (
             <a
-              href={`https://www1.plant-for-the-planet.org/t/${profile?.slug}`}
+              href={`https://web.plant-for-the-planet.org/t/${profile?.slug}`}
               target={"_blank"}
               rel="noreferrer"
             >
