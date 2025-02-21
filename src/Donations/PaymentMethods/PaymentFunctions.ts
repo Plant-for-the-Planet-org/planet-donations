@@ -150,6 +150,9 @@ export async function createDonationFunction({
       tenant,
       locale,
       token: token ? token : null,
+      headers: {
+        "X-Locale": locale,
+      },
     };
     const donation = await apiRequest(requestParams);
     if (donation && donation.data) {
