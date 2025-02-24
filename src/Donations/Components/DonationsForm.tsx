@@ -351,6 +351,9 @@ function DonationsForm(): ReactElement {
           addIdempotencyKeyHeader: true,
           tenant,
           locale: i18n.language,
+          headers: {
+            "X-Locale": i18n.language,
+          },
         });
 
         if (status === 200) {
