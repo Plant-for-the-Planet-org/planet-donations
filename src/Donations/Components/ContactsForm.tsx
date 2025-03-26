@@ -66,7 +66,11 @@ function ContactsForm(): ReactElement {
     if (contactDetails) {
       reset({
         ...contactDetails,
-        isPackageWanted: isPackageWanted !== false && isEligibleForPackage,
+        isPackageWanted: isEligibleForPackage
+          ? isPackageWanted === null
+            ? true
+            : isPackageWanted
+          : false,
       });
       if (contactDetails.companyname) {
         setIsCompany(true);
