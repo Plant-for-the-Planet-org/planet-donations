@@ -84,7 +84,7 @@ function index({
     setIsGift,
     setpaymentSetup,
     setcurrency,
-    setContactDetails,
+    updateContactDetails,
     setcountry,
     setIsTaxDeductible,
     setshouldCreateDonation,
@@ -113,7 +113,7 @@ function index({
       sethideTaxDeduction(hideTaxDeduction);
       setIsTaxDeductible(isTaxDeductible);
       setshouldCreateDonation(shouldCreateDonation);
-      if (contactDetails) setContactDetails(contactDetails);
+      if (contactDetails) updateContactDetails(contactDetails);
       setallowTaxDeductionChange(allowTaxDeductionChange);
       setcurrency(currency);
       setpaymentSetup(paymentSetup);

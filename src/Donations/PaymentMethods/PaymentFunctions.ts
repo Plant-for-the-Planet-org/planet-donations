@@ -193,6 +193,13 @@ export function createDonationData({
   utmSource,
   isPackageWanted,
 }: CreateDonationDataProps): DonationRequestData {
+  const sanitizedDonor = {
+    ...contactDetails,
+  };
+  if ("isPackageWanted" in sanitizedDonor) {
+    delete sanitizedDonor.isPackageWanted;
+  }
+
   let donationData: DonationRequestData = {
     purpose: projectDetails?.purpose,
     project: projectDetails.id,
@@ -201,7 +208,7 @@ export function createDonationData({
         ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
         : (amount as number), //amount is null when quantity has a value
     currency,
-    donor: { ...contactDetails },
+    donor: sanitizedDonor,
     frequency: frequency,
     metadata: {
       callback_url: callbackUrl,

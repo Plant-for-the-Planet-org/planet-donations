@@ -531,6 +531,16 @@ const QueryParamProvider: FC = ({ children }) => {
     }
   };
 
+  const updateContactDetails = (details: ContactDetails) => {
+    const cleanDetails = { ...details };
+    // Check if isPackageWanted somehow exists on the object
+    if ("isPackageWanted" in cleanDetails) {
+      delete cleanDetails.isPackageWanted;
+    }
+    // Update the state with the sanitized object
+    setContactDetails(cleanDetails);
+  };
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -539,7 +549,7 @@ const QueryParamProvider: FC = ({ children }) => {
         giftDetails,
         setGiftDetails,
         contactDetails,
-        setContactDetails,
+        updateContactDetails,
         country,
         setcountry,
         paymentSetup,
