@@ -22,7 +22,8 @@ import { User } from "@planet-sdk/common/build/types/user";
 
 function Authentication(): ReactElement {
   const {
-    setContactDetails,
+    contactDetails,
+    updateContactDetails,
     setshowErrorCard,
     setqueryToken,
     queryToken,
@@ -84,7 +85,7 @@ function Authentication(): ReactElement {
             companyname: (profile.type !== "individual" && profile.name) || "",
             tin: "",
           };
-          setContactDetails(newContactDetails);
+          updateContactDetails(newContactDetails);
         }
       } catch (err) {
         setErrors(handleError(err as APIError));
@@ -97,8 +98,9 @@ function Authentication(): ReactElement {
           displayName: authUser?.nickname ? authUser.nickname : "",
         };
         setprofile(newProfile); //TODOO - resolve TS warning
-        setContactDetails((contactDetails) => {
-          return { ...contactDetails, ...newContactDetails };
+        updateContactDetails({
+          ...contactDetails,
+          ...newContactDetails,
         });
       }
     } else {
@@ -111,8 +113,9 @@ function Authentication(): ReactElement {
         displayName: authUser?.nickname ? authUser.nickname : "",
       };
       setprofile(newProfile); //TODOO - resolve TS warning
-      setContactDetails((contactDetails) => {
-        return { ...contactDetails, ...newContactDetails };
+      updateContactDetails({
+        ...contactDetails,
+        ...newContactDetails,
       });
       // setopenVerifyEmailModal(true);
     }

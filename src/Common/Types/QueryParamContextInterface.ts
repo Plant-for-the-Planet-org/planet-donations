@@ -24,7 +24,7 @@ export default interface QueryParamContextInterface {
   giftDetails: GiftDetails | NoGift;
   setGiftDetails: Dispatch<SetStateAction<GiftDetails | NoGift>>;
   contactDetails: ContactDetails;
-  setContactDetails: Dispatch<SetStateAction<ContactDetails>>;
+  updateContactDetails: (details: ContactDetails) => void;
   country: string;
   setcountry: Dispatch<SetStateAction<string>>;
   paymentSetup: PaymentOptions | null;
