@@ -46,7 +46,7 @@ function ContactsForm(): ReactElement {
   const {
     profile,
     contactDetails,
-    setContactDetails,
+    updateContactDetails,
     country,
     isTaxDeductible,
     currency,
@@ -66,7 +66,11 @@ function ContactsForm(): ReactElement {
     if (contactDetails) {
       reset({
         ...contactDetails,
-        isPackageWanted: isPackageWanted !== false && isEligibleForPackage,
+        isPackageWanted: isEligibleForPackage
+          ? isPackageWanted === null
+            ? true
+            : isPackageWanted
+          : false,
       });
       if (contactDetails.companyname) {
         setIsCompany(true);
@@ -95,6 +99,13 @@ function ContactsForm(): ReactElement {
 
   const onSubmit = (data: FormData) => {
     const { isPackageWanted, ...enteredContactDetails } = data;
+    updateContactDetails({
+      ...enteredContactDetails,
+      email: isAuthenticated
+        ? contactDetails.email
+        : enteredContactDetails.email,
+    });
+    setIsPackageWanted(isEligibleForPackage ? isPackageWanted : null);
     router.push(
       {
         query: { ...router.query, step: PAYMENT },
@@ -102,13 +113,6 @@ function ContactsForm(): ReactElement {
       undefined,
       { shallow: true }
     );
-    setContactDetails({
-      ...enteredContactDetails,
-      email: isAuthenticated
-        ? contactDetails.email
-        : enteredContactDetails.email,
-    });
-    setIsPackageWanted(isEligibleForPackage ? isPackageWanted : null);
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
@@ -123,7 +127,7 @@ function ContactsForm(): ReactElement {
       ...data,
       country,
     };
-    setContactDetails(data);
+    updateContactDetails(data);
   };
 
   React.useEffect(() => {

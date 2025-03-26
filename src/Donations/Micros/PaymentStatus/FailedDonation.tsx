@@ -28,7 +28,7 @@ function FailedDonation({
     setIsTaxDeductible,
     setprojectDetails,
     setquantity,
-    setContactDetails,
+    updateContactDetails,
     setIsGift,
     setGiftDetails,
     setfrequency,
@@ -56,7 +56,7 @@ function FailedDonation({
     });
     setPaymentError("");
     setquantity(donation?.quantity);
-    if (donation.donor) setContactDetails(donation.donor);
+    if (donation.donor) updateContactDetails(donation.donor);
     setAmount(Number(donation.amount));
 
     let country: string;
