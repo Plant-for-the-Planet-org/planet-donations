@@ -27,6 +27,7 @@ export function formatAmountForStripe(
     style: "currency",
     currency,
     currencyDisplay: "symbol",
+    maximumSignificantDigits: 21,
   });
   const parts = numberFormat.formatToParts(amount);
   let zeroDecimalCurrency = true;
