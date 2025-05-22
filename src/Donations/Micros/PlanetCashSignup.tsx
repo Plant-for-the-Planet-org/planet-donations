@@ -30,7 +30,7 @@ interface PlanetCashAccount {
   fee: number;
 }
 
-const allowedCountries = ["DE", "ES", "US"];
+const allowedCountries = ["DE", "ES"];
 
 const PlanetCashSignup = (): ReactElement => {
   const { t, i18n } = useTranslation(["common"]);
