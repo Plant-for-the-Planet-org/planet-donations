@@ -6,7 +6,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const { i18n } = require("./next-i18next.config");
 
 // Use the SentryWebpack plugin to upload the source maps during build step
-const SentryWebpackPlugin = require("@sentry/webpack-plugin");
+const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 
 const {
   NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
@@ -92,7 +92,7 @@ const nextConfig = {
       NODE_ENV === "production"
     ) {
       config.plugins.push(
-        new SentryWebpackPlugin({
+        sentryWebpackPlugin({
           include: ".next",
           ignore: ["node_modules"],
           stripPrefix: ["webpack://_N_E/"],
