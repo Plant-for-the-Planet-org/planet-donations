@@ -98,6 +98,7 @@ const nextConfig = {
           stripPrefix: ["webpack://_N_E/"],
           urlPrefix: `~${basePath}/_next`,
           release: COMMIT_SHA,
+          validate: true,
         })
       );
     }

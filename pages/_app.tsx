@@ -3,7 +3,6 @@ import Layout from "../src/Layout";
 import ThemeProvider from "../styles/themeContext";
 import getConfig from "next/config";
 import * as Sentry from "@sentry/node";
-import { RewriteFrames } from "@sentry/integrations";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
 import "./../styles/footer.scss";
@@ -31,7 +30,7 @@ if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
     enabled: process.env.NODE_ENV === "production",
     integrations: [
-      new RewriteFrames({
+      Sentry.rewriteFramesIntegration({
         iteratee: (frame) => {
           frame.filename = frame.filename?.replace(distDir, "app:///_next");
           return frame;
