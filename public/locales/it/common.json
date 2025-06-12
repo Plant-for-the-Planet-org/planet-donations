@@ -40,8 +40,6 @@
   "expDate": "Scadenza. Data (MM/AA)",
   "donate": "Donare",
   "noPaymentMethodError": "Impossibile elaborare il pagamento, si prega di riprovare.",
-  "sofortDisclaimer": "I pagamenti SOFORT richiedono 2-14 giorni lavorativi (di solito 2-3 giorni). Appena arriva ti mandiamo una mail di conferma con il tuo certificato dell'albero e alziamo il contatore dell'albero.",
-  "payWithSofort": "Donare con Sofort",
   "payWithGiroPay": "Dona con GiroPay",
   "sepaDisclaimer": "I pagamenti SEPA richiedono 2-14 giorni lavorativi (di solito 3-5 giorni). Non appena arriva ti mandiamo una mail di conferma con il tuo certificato dell'albero e alziamo il contatore dell'albero.",
   "sepaMessage": "Fornendo il tuo IBAN e confermando questo pagamento, autorizzi Plant-for-the-Planet e Stripe, il nostro fornitore di servizi di pagamento, a inviare istruzioni alla tua banca per addebitare il tuo conto. Hai diritto a un rimborso dalla tua banca secondo i termini e le condizioni del tuo accordo con la tua banca. Se hai qualche problema con la tua donazione, inviaci una mail a support@plant-for-the-planet.org",

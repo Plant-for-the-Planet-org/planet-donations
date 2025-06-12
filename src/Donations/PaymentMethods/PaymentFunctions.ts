@@ -43,8 +43,6 @@ export function buildPaymentProviderRequest(
             object: "payment_method",
           };
           break;
-        case "stripe_sofort":
-        case "sofort":
         case "stripe_giropay":
         case "giropay":
           source = { object: providerObject };
@@ -551,24 +549,6 @@ export async function handleStripeSCAPayment({
       break;
     }
 
-    case "sofort": {
-      const { error } = await stripe.confirmSofortPayment(
-        paymentResponse.response.payment_intent_client_secret,
-        {
-          payment_method: {
-            sofort: {
-              country: country,
-            },
-            billing_details: buildBillingDetails(contactDetails),
-          },
-          return_url: `${window.location.origin}/${locale}?context=${donationID}&method=Sofort&tenant=${tenant}&country=${country}`,
-        }
-      );
-      if (error) {
-        handlePaymentError(error, setIsPaymentProcessing, setPaymentError);
-      }
-      break;
-    }
     case "sepa_debit": {
       const { error } = await stripe.confirmSepaDebitPayment(clientSecret);
       if (error) {

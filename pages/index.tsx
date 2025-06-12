@@ -306,7 +306,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];
-      const queryMethodForStep4 = ["Sofort", "Giropay"];
+      const queryMethodForStep4 = ["Giropay"];
       const queryRedirectStatus = ["succeeded", "failed"];
 
       if (donationResponse.status === 200) {

@@ -4,7 +4,6 @@ import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
-import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 import BankIcon from "../../../public/assets/icons/donation/BankIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
@@ -26,7 +25,6 @@ interface PaymentMethodTabsProps {
   showPaypal?: boolean;
   showGiroPay?: boolean;
   showSepa?: boolean;
-  showSofort?: boolean;
   showCC?: boolean;
   showNativePay?: boolean;
   onNativePaymentFunction: (
@@ -42,7 +40,6 @@ export default function PaymentMethodTabs({
   showPaypal,
   showGiroPay,
   showSepa,
-  showSofort,
   showCC,
   showNativePay,
   onNativePaymentFunction,
@@ -150,20 +147,6 @@ export default function PaymentMethodTabs({
             {...a11yProps("CARD")}
           >
             <CreditCard />
-            <CheckMark />
-          </button>
-        )}
-
-        {showSofort && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "Sofort" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "Sofort")}
-            {...a11yProps("Sofort")}
-            data-test-id="sofortPayment"
-          >
-            <SofortIcon />
             <CheckMark />
           </button>
         )}

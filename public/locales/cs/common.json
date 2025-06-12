@@ -61,8 +61,6 @@
   "expDate": "Datum expirace (MM/RR)",
   "donate": "Darovat",
   "noPaymentMethodError": "Nemohli jsme zprocesovat platbu, zkuste to znovu.",
-  "sofortDisclaimer": "SOFORT platby trvají 2-14 pracovních dní (většinou 2-3). Jakmile dorazí, pošleme vám potvrzovací e-mail se Stromovým certifikátem a navýšíme Váš Tree Counter",
-  "payWithSofort": "Darovat se SOFORT",
   "payWithGiroPay": "Darovat s GiroPay",
   "sepaDisclaimer": "SEPA platba trvá 2-14 pracovních dní (většinou 3-5 dní). Jakmile dorazí, pošleme vám potvrzovací e-mail se Stromovým certifikátem a zvýšíme vám Tree Counter.",
   "sepaMessage": "Poskytnutím vašich IBAN údajů a potvrzením platby stvrzujete Plant-for-the-Planet a Stripe, našeho poskytovatele platebních služeb, aby poslali instrukce vaší bance či zaúčtovali váš účet. Máte nárok na vrácení peněz z vaší banky pod podmínkami vaší dohody s bankou. Máte-li problém s vaším darem, napište prosím na e-mail support@plant-for-the-planet.org",

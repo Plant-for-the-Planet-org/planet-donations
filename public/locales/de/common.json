@@ -62,8 +62,6 @@
   "expDate": "Gültigkeitsdatum (MM/JJJJ)",
   "donate": "Spenden",
   "noPaymentMethodError": "Deine Zahlung konnte nicht verarbeitet werden, bitte versuche es erneut.",
-  "sofortDisclaimer": "SOFORT Zahlungen dauern in der Regel 1-3 Werktage. Sobald wir den Zahlungseingang verbucht haben, vervollständigen wir die Spende und schicken dir eine Bestätigungs-Mail.",
-  "payWithSofort": "Spende mit SOFORT",
   "payWithGiroPay": "Spende mit GiroPay",
   "sepaDisclaimer": "SEPA-Bankeinzüge dauern in der Regel 1-4 Werktage. Sobald der Zahlungseingang verarbeitet wurde, vervollständigen wir die Spende und schicken wir dir eine Bestätigungs-E-Mail.",
   "sepaMessage": "Indem du deine IBAN angibst und diese Zahlung bestätigst, ermächtigst du Plant-for-the-Planet und Stripe, unseren Zahlungsdienstleister, Anweisungen an deine Bank zu senden, um dein Konto zu belasten. Du hast Anspruch auf eine Rückerstattung durch deine Bank gemäß ihrer allgemeinen Geschäftsbedingungen. Wenn du irgendwelche Probleme mit deiner Spende hast, sende uns bitte eine E-Mail an support@plant-for-the-planet.org.",
