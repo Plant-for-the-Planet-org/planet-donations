@@ -15,7 +15,6 @@ import {
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
 import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
-import SofortPayments from "../PaymentMethods/SofortPayment";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -103,8 +102,6 @@ function PaymentsForm(): ReactElement {
     setPaymentType("CARD");
     setPaymentRequest(null);
   }, []);
-
-  const sofortCountries = ["AT", "BE", "DE", "IT", "NL", "ES"];
 
   const onSubmitPayment = async (
     gateway: PaymentGateway,
@@ -380,11 +377,6 @@ function PaymentsForm(): ReactElement {
                       ? false
                       : true,
                 })}
-                showSofort={showPaymentMethod({
-                  paymentMethod: "sofort",
-                  currencies: ["EUR"],
-                  countries: sofortCountries,
-                })}
                 showBankTransfer={
                   Object.keys(paymentSetup?.gateways).includes("offline") &&
                   (frequency === "once" ||
@@ -476,17 +468,6 @@ function PaymentsForm(): ReactElement {
               >
                 <Elements stripe={stripePromise}>
                   <GiroPayPayments onSubmitPayment={onSubmitPayment} />
-                </Elements>
-              </div>
-
-              <div
-                role="tabpanel"
-                hidden={paymentType !== "Sofort"}
-                id={`payment-methods-tabpanel-${"Sofort"}`}
-                aria-labelledby={`scrollable-force-tab-${"Sofort"}`}
-              >
-                <Elements stripe={stripePromise}>
-                  <SofortPayments onSubmitPayment={onSubmitPayment} />
                 </Elements>
               </div>
 
