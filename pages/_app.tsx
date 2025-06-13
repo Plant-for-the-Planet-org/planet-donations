@@ -50,10 +50,6 @@ function MyApp({
     }
   }
 
-  React.useEffect(() => {
-    Sentry.captureException(new Error("Test local error"));
-  }, []);
-
   const [browserIncompatible, setBrowserIncompatible] = React.useState(false);
   React.useEffect(() => {
     setBrowserIncompatible(browserNotCompatible());
