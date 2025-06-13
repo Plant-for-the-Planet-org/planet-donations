@@ -1,7 +1,6 @@
 import type { AppProps } from "next/app";
 import Layout from "../src/Layout";
 import ThemeProvider from "../styles/themeContext";
-import getConfig from "next/config";
 import * as Sentry from "@sentry/nextjs";
 import theme from "./../styles/theme";
 import "./../styles/globals.scss";
