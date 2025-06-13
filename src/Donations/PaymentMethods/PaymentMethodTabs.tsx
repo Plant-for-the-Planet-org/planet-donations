@@ -1,7 +1,6 @@
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
-import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
 import BankIcon from "../../../public/assets/icons/donation/BankIcon";
@@ -23,7 +22,6 @@ interface PaymentMethodTabsProps {
   paymentType: string;
   setPaymentType: Dispatch<SetStateAction<string>>;
   showPaypal?: boolean;
-  showGiroPay?: boolean;
   showSepa?: boolean;
   showCC?: boolean;
   showNativePay?: boolean;
@@ -38,7 +36,6 @@ export default function PaymentMethodTabs({
   paymentType,
   setPaymentType,
   showPaypal,
-  showGiroPay,
   showSepa,
   showCC,
   showNativePay,
@@ -163,19 +160,6 @@ export default function PaymentMethodTabs({
             <CheckMark />
           </button>
         ) : null}
-
-        {showGiroPay && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "GiroPay" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "GiroPay")}
-            {...a11yProps("GiroPay")}
-          >
-            <GiroPayIcon />
-            <CheckMark />
-          </button>
-        )}
 
         {showSepa && (
           <button
