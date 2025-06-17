@@ -40,7 +40,6 @@
   "expDate": "Exp. Fecha (MM/AA)",
   "donate": "Donar",
   "noPaymentMethodError": "No pude procesar su pago, por favor, inténtelo de nuevo.",
-  "payWithGiroPay": "Donar con GiroPay",
   "sepaDisclaimer": "Los pagos SEPA tardan entre 2 y 14 días laborables (normalmente entre 3 y 5 días). En cuanto llega le enviamos un correo electrónico de confirmación con su certificado de árbol y levantamos el contador de árboles.",
   "sepaMessage": "Al proporcionar su IBAN y confirmar este pago, usted autoriza a Plant-for-the-Planet y a Stripe, nuestro proveedor de servicios de pago, a enviar instrucciones a su banco para que realice el cargo en su cuenta. Tiene derecho a un reembolso por parte de su banco según los términos y condiciones de su acuerdo con su banco. Si tiene algún problema relacionado con su donación, envíenos un correo electrónico a support@plant-for-the-planet.org",
   "byOrganization": "por {{organizationName}}",
