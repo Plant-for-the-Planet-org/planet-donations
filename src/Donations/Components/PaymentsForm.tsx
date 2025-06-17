@@ -14,7 +14,6 @@ import {
 } from "../PaymentMethods/PaymentFunctions";
 import CardPayments from "../PaymentMethods/CardPayments";
 import SepaPayments from "../PaymentMethods/SepaPayments";
-import GiroPayPayments from "../PaymentMethods/GiroPayPayments";
 import TaxDeductionOption from "../Micros/TaxDeductionOption";
 import ButtonLoader from "../../Common/ContentLoaders/ButtonLoader";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -364,11 +363,6 @@ function PaymentsForm(): ReactElement {
                 paymentType={paymentType}
                 setPaymentType={setPaymentType}
                 showCC={showPaymentMethod({ paymentMethod: "card" })}
-                showGiroPay={showPaymentMethod({
-                  paymentMethod: "giropay",
-                  countries: ["DE"],
-                  currencies: ["EUR"],
-                })}
                 showSepa={showPaymentMethod({
                   paymentMethod: "sepa_debit",
                   currencies: ["EUR"],
@@ -460,17 +454,6 @@ function PaymentsForm(): ReactElement {
                   />
                 )}
               </div>
-              <div
-                role="tabpanel"
-                hidden={paymentType !== "GiroPay"}
-                id={`payment-methods-tabpanel-${"GiroPay"}`}
-                aria-labelledby={`scrollable-force-tab-${"GiroPay"}`}
-              >
-                <Elements stripe={stripePromise}>
-                  <GiroPayPayments onSubmitPayment={onSubmitPayment} />
-                </Elements>
-              </div>
-
               <div
                 role="tabpanel"
                 hidden={paymentType !== "Bank"}
