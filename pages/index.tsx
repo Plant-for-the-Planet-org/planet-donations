@@ -306,7 +306,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       const paymentStatusForStep4 = ["success", "paid", "failed", "pending"];
       const paymentStatusForStep3 = ["initiated", "draft"];
-      const queryMethodForStep4 = ["Sofort", "Giropay"];
+      // Used for payment methods where redirect handling is needed e.g. sofort, giropay which are now obsolete. Leaving the array empty so we can add in similar methods in the future
+      const queryMethodForStep4: string[] = [];
       const queryRedirectStatus = ["succeeded", "failed"];
 
       if (donationResponse.status === 200) {
@@ -384,6 +385,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           queryRedirectStatus.includes(context.query.redirect_status) &&
           context.query.payment_intent
         ) {
+          // This is for payment methods that require redirect handling. Currently, no such methods are used, but this condition left for potential future use.
           donationStep = 4;
         } else if (paymentStatusForStep4.includes(donation.paymentStatus)) {
           donationStep = 4;

@@ -298,7 +298,7 @@ export interface OnBehalfDonor {
 }
 
 export interface ShowPaymentMethodParams {
-  paymentMethod: "card" | "giropay" | "sofort" | "sepa_debit";
+  paymentMethod: "card" | "sepa_debit";
   countries?: string[];
   currencies?: string[];
   authenticatedMethod?: boolean;

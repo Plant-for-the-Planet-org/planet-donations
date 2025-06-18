@@ -1,10 +1,8 @@
 import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
-import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
-import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 import BankIcon from "../../../public/assets/icons/donation/BankIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
@@ -24,9 +22,7 @@ interface PaymentMethodTabsProps {
   paymentType: string;
   setPaymentType: Dispatch<SetStateAction<string>>;
   showPaypal?: boolean;
-  showGiroPay?: boolean;
   showSepa?: boolean;
-  showSofort?: boolean;
   showCC?: boolean;
   showNativePay?: boolean;
   onNativePaymentFunction: (
@@ -40,9 +36,7 @@ export default function PaymentMethodTabs({
   paymentType,
   setPaymentType,
   showPaypal,
-  showGiroPay,
   showSepa,
-  showSofort,
   showCC,
   showNativePay,
   onNativePaymentFunction,
@@ -154,20 +148,6 @@ export default function PaymentMethodTabs({
           </button>
         )}
 
-        {showSofort && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "Sofort" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "Sofort")}
-            {...a11yProps("Sofort")}
-            data-test-id="sofortPayment"
-          >
-            <SofortIcon />
-            <CheckMark />
-          </button>
-        )}
-
         {showPaypal ? (
           <button
             className={`${"payment-method"} ${
@@ -180,19 +160,6 @@ export default function PaymentMethodTabs({
             <CheckMark />
           </button>
         ) : null}
-
-        {showGiroPay && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "GiroPay" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "GiroPay")}
-            {...a11yProps("GiroPay")}
-          >
-            <GiroPayIcon />
-            <CheckMark />
-          </button>
-        )}
 
         {showSepa && (
           <button
