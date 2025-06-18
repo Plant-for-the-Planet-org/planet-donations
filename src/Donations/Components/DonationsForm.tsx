@@ -357,7 +357,7 @@ function DonationsForm(): ReactElement {
         });
 
         if (status === 200) {
-          setDonation(data as Donation); //TODOO - remove annotation by specifying type returned by apiRequest
+          setDonation(data as Donation); //TODO - remove annotation by specifying type returned by apiRequest
           router.replace({
             query: { ...router.query, step: THANK_YOU },
           });
