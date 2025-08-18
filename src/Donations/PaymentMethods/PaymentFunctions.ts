@@ -457,9 +457,11 @@ export async function handleStripeSCAPayment({
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
 
   if (!window.Stripe) return;
-  const stripe: Stripe = window.Stripe(key, {
+  // Commented out use of stripeAccount from paymentOptions
+  /* const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
-  });
+  }); */
+  const stripe: Stripe = window.Stripe(key);
   switch (method) {
     case "card": {
       let successData: UpdateDonationData | undefined;
