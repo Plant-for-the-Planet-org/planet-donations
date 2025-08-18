@@ -9,9 +9,10 @@ const getStripe = (
 ): Promise<Stripe | null> => {
   const key =
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
-  const account = paymentSetup?.gateways?.stripe?.authorization.accountId;
+  // Commented out use of stripeAccount from paymentOptions
+  // const account = paymentSetup?.gateways?.stripe?.authorization.accountId;
   stripePromise = loadStripe(key, {
-    stripeAccount: account,
+    // stripeAccount: account,
     locale: lang as StripeElementLocale,
   });
   return stripePromise;
