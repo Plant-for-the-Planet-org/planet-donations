@@ -19,6 +19,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
+import { getHostnameFromUrl } from "src/Utils/getHostnameFromUrl";
 
 function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
@@ -29,16 +30,24 @@ function Footer(): ReactElement {
 
   const { theme } = React.useContext(ThemeContext);
 
+  const showCancelAndReturn = Boolean(callbackUrl && donationStep !== 4);
+
   return ready ? (
     <div className="footer">
       <div className="footer-container">
         <DarkModeSwitch />
-        {callbackUrl && donationStep !== 4 ? (
-          <a href={callbackUrl}>{t("cancelReturn")}</a>
+        {showCancelAndReturn ? (
+          <a href={callbackUrl}>
+            {t("cancelReturn", { domain: getHostnameFromUrl(callbackUrl) })}
+          </a>
         ) : (
           <p></p>
         )}
-        <div>
+        <div
+          className={`footer-content ${
+            showCancelAndReturn ? "centered-footer-content" : ""
+          }`}
+        >
           <div className="footer-links">
             {donationStep !== 2 && donationStep !== 3 && donationStep !== 4 && (
               <button

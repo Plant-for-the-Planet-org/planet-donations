@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
+import { getHostnameFromUrl } from "src/Utils/getHostnameFromUrl";
 
 interface Props {
   donationContext: string;
@@ -24,8 +25,7 @@ export default function ReturnToButton({
     }
   }, [callbackMethod]);
 
-  const x = callbackUrl.slice(8);
-  const returnDisplay = x.split("/", 2);
+  const displayedReturnDomain = getHostnameFromUrl(callbackUrl);
 
   const sendToReturn = () => {
     if (callbackMethod === "api") {
@@ -44,7 +44,7 @@ export default function ReturnToButton({
         className="primary-button"
         style={{ marginBottom: 20 }}
       >
-        {t("common:returnTo")} {returnDisplay[0]}
+        {t("common:returnTo")} {displayedReturnDomain}
       </button>
     </>
   );

@@ -106,7 +106,7 @@
   "verifyEmailInfo": "If you didn’t receive an email please try logging in again and we’ll send you another email.",
   "skipLogout": "Continue as a Guest",
   "donationProcessedBy": "This donation is handled by Plant-for-the-Planet.",
-  "cancelReturn": "Cancel and Return",
+  "cancelReturn": "Cancel and Return to {{domain}}",
   "aboutUs": "About Us",
   "imprint": "Imprint",
   "privacy": "Privacy Policy",
