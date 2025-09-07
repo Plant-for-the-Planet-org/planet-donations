@@ -17,9 +17,13 @@ import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
 interface Props {
   setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
+  isSupportedDonation?: boolean;
 }
 
-function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
+function TreeDonation({
+  setopenCurrencyModal,
+  isSupportedDonation = false,
+}: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const treeSelectionOptions = [
@@ -147,37 +151,38 @@ function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
         </div>
       </div>
 
-      {paymentSetup && paymentSetup.unitCost ? (
-        <p className="currency-selection mt-30">
-          <button
-            onClick={() => {
-              // Lock the currency/country change if planetCash is active
-              if (!isPlanetCashActive) setopenCurrencyModal(true);
-            }}
-            className="text-bold text-primary"
-            style={{
-              marginRight: "4px",
-              ...(isPlanetCashActive && { cursor: "text" }),
-            }}
-            data-test-id="selectCurrency"
-          >
-            {currency}{" "}
-            {!isPlanetCashActive && (
-              <DownArrowIcon color={themeProperties.primaryColor} />
-            )}
-            {getFormattedCurrency(
-              i18n.language,
-              "",
-              Number(paymentSetup.unitCost)
-            )}{" "}
-          </button>
-          {t(`perUnit.${paymentSetup.unitType}`)}
-        </p>
-      ) : (
-        <div className={"mt-20"}>
-          <TreeCostLoader width={150} />
-        </div>
-      )}
+      {!isSupportedDonation &&
+        (paymentSetup && paymentSetup.unitCost ? (
+          <p className="currency-selection mt-30">
+            <button
+              onClick={() => {
+                // Lock the currency/country change if planetCash is active
+                if (!isPlanetCashActive) setopenCurrencyModal(true);
+              }}
+              className="text-bold text-primary"
+              style={{
+                marginRight: "4px",
+                ...(isPlanetCashActive && { cursor: "text" }),
+              }}
+              data-test-id="selectCurrency"
+            >
+              {currency}{" "}
+              {!isPlanetCashActive && (
+                <DownArrowIcon color={themeProperties.primaryColor} />
+              )}
+              {getFormattedCurrency(
+                i18n.language,
+                "",
+                Number(paymentSetup.unitCost)
+              )}{" "}
+            </button>
+            {t(`perUnit.${paymentSetup.unitType}`)}
+          </p>
+        ) : (
+          <div className={"mt-20"}>
+            <TreeCostLoader width={150} />
+          </div>
+        ))}
     </div>
   ) : (
     <></>

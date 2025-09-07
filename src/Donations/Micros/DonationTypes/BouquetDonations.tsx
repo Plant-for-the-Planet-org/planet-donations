@@ -19,9 +19,13 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 
 interface Props {
   setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
+  isSupportedDonation?: boolean;
 }
 
-function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
+function BouquetDonations({
+  setopenCurrencyModal,
+  isSupportedDonation = false,
+}: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [customInputValue, setCustomInputValue] = React.useState("");
@@ -255,7 +259,7 @@ function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
             }
           )}
       </div>
-      {paymentSetup && paymentSetup.unitCost ? (
+      {paymentSetup && paymentSetup.unitCost && !isSupportedDonation ? (
         <p className="currency-selection mt-30">
           <button
             onClick={() => {

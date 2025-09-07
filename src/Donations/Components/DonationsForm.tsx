@@ -36,6 +36,7 @@ import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 import { isPlanetCashAllowed } from "src/Utils/donationOptions";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 
 function DonationsForm(): ReactElement {
   const {
@@ -142,6 +143,13 @@ function DonationsForm(): ReactElement {
       (projectDetails?.classification === "membership" &&
         frequency !== "once"));
 
+  const isSupportedDonation =
+    projectDetails !== null &&
+    (projectDetails.purpose === "trees" ||
+      projectDetails.purpose === "conservation") &&
+    supportedDonationConfig[tenant] !== undefined &&
+    supportedDonationConfig[tenant].supportedProjects.length > 0;
+
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
@@ -239,10 +247,20 @@ function DonationsForm(): ReactElement {
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "conservation":
       case "bouquet":
-        return <BouquetDonations setopenCurrencyModal={setopenCurrencyModal} />;
+        return (
+          <BouquetDonations
+            setopenCurrencyModal={setopenCurrencyModal}
+            isSupportedDonation={isSupportedDonation}
+          />
+        );
       case "trees":
       default:
-        return <TreeDonation setopenCurrencyModal={setopenCurrencyModal} />;
+        return (
+          <TreeDonation
+            setopenCurrencyModal={setopenCurrencyModal}
+            isSupportedDonation={isSupportedDonation}
+          />
+        );
     }
   };
 
@@ -427,7 +445,9 @@ function DonationsForm(): ReactElement {
             <div className={"horizontal-line"} />
 
             {(projectDetails.purpose === "trees" ||
-              projectDetails.purpose === "conservation") && <DonationAmount />}
+              projectDetails.purpose === "conservation") && (
+              <DonationAmount isSupportedDonation={isSupportedDonation} />
+            )}
 
             {/* Hide NativePay if PlanetCash is active */}
             {/* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
