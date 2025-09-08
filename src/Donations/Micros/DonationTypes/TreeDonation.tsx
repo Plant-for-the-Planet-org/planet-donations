@@ -15,15 +15,12 @@ import LeafIcon from "../../../../public/assets/icons/LeafIcon";
 import PlantPotIcon from "../../../../public/assets/icons/PlantPotIcon";
 import TreeIcon from "../../../../public/assets/icons/TreeIcon";
 import TwoLeafIcon from "../../../../public/assets/icons/TwoLeafIcon";
+
 interface Props {
   setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
-  isSupportedDonation?: boolean;
 }
 
-function TreeDonation({
-  setopenCurrencyModal,
-  isSupportedDonation = false,
-}: Props): ReactElement {
+function TreeDonation({ setopenCurrencyModal }: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const treeSelectionOptions = [
@@ -53,6 +50,7 @@ function TreeDonation({
     paymentSetup,
     giftDetails,
     isPlanetCashActive,
+    isSupportedDonation,
   } = React.useContext(QueryParamContext);
 
   const [customTreeInputValue, setCustomTreeInputValue] = React.useState("");

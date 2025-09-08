@@ -19,13 +19,9 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 
 interface Props {
   setopenCurrencyModal: Dispatch<SetStateAction<boolean>>;
-  isSupportedDonation?: boolean;
 }
 
-function BouquetDonations({
-  setopenCurrencyModal,
-  isSupportedDonation = false,
-}: Props): ReactElement {
+function BouquetDonations({ setopenCurrencyModal }: Props): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
 
   const [customInputValue, setCustomInputValue] = React.useState("");
@@ -41,6 +37,7 @@ function BouquetDonations({
     frequency,
     retainQuantityValue,
     isPlanetCashActive,
+    isSupportedDonation,
   } = React.useContext(QueryParamContext);
 
   const router = useRouter();
@@ -259,50 +256,51 @@ function BouquetDonations({
             }
           )}
       </div>
-      {paymentSetup && paymentSetup.unitCost && !isSupportedDonation ? (
-        <p className="currency-selection mt-30">
-          <button
-            onClick={() => {
-              // Lock the currency/country change if planetCash is active
-              !isPlanetCashActive && setopenCurrencyModal(true);
-            }}
-            className="text-bold text-primary"
-            style={{
-              marginRight: "4px",
-              ...(isPlanetCashActive && { cursor: "text" }),
-            }}
-            data-test-id="currency"
-          >
-            {paymentSetup.purpose !== "conservation" ? (
-              <span style={{ marginRight: "4px" }} className={"text-normal"}>
-                {t("selectCurrency")}
-              </span>
-            ) : (
-              []
-            )}
-            {currency}
-            {!isPlanetCashActive && (
-              <DownArrowIcon color={themeProperties.primaryColor} />
-            )}
-            {paymentSetup.purpose === "conservation"
-              ? getFormattedCurrency(
-                  i18n.language,
-                  "",
-                  Number(paymentSetup.unitCost)
-                )
-              : []}{" "}
-          </button>
-          {/* Below condition is redundant currently, but is left here as a reminder while refactoring */}
-          {paymentSetup.purpose === "conservation" &&
-          paymentSetup.unitType === "m2"
-            ? t("perUnit.m2")
-            : []}
-        </p>
-      ) : (
-        <div className={"mt-20"}>
-          <TreeCostLoader width={150} />
-        </div>
-      )}
+      {!isSupportedDonation &&
+        (paymentSetup && paymentSetup.unitCost ? (
+          <p className="currency-selection mt-30">
+            <button
+              onClick={() => {
+                // Lock the currency/country change if planetCash is active
+                !isPlanetCashActive && setopenCurrencyModal(true);
+              }}
+              className="text-bold text-primary"
+              style={{
+                marginRight: "4px",
+                ...(isPlanetCashActive && { cursor: "text" }),
+              }}
+              data-test-id="currency"
+            >
+              {paymentSetup.purpose !== "conservation" ? (
+                <span style={{ marginRight: "4px" }} className={"text-normal"}>
+                  {t("selectCurrency")}
+                </span>
+              ) : (
+                []
+              )}
+              {currency}
+              {!isPlanetCashActive && (
+                <DownArrowIcon color={themeProperties.primaryColor} />
+              )}
+              {paymentSetup.purpose === "conservation"
+                ? getFormattedCurrency(
+                    i18n.language,
+                    "",
+                    Number(paymentSetup.unitCost)
+                  )
+                : []}{" "}
+            </button>
+            {/* Below condition is redundant currently, but is left here as a reminder while refactoring */}
+            {paymentSetup.purpose === "conservation" &&
+            paymentSetup.unitType === "m2"
+              ? t("perUnit.m2")
+              : []}
+          </p>
+        ) : (
+          <div className={"mt-20"}>
+            <TreeCostLoader width={150} />
+          </div>
+        ))}
     </div>
   );
 }

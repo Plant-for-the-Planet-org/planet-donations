@@ -42,6 +42,7 @@ import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -155,6 +156,11 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
+    null
+  );
+
+  const [isSupportedDonation, setIsSupportedDonation] = useState(false);
+  const [supportedProjectId, setSupportedProjectId] = useState<string | null>(
     null
   );
 
@@ -541,6 +547,59 @@ const QueryParamProvider: FC = ({ children }) => {
     setContactDetails(cleanDetails);
   };
 
+  const getSupportProjectId = useCallback((): string | null => {
+    if (!tenant || !country || !supportedDonationConfig[tenant]) {
+      return null;
+    }
+
+    const config = supportedDonationConfig[tenant];
+    return (
+      config.supportedProjects[country] || config.supportedProjects.default
+    );
+  }, [tenant, country]);
+
+  const getDonationBreakdown = useCallback(() => {
+    if (!paymentSetup || !isSupportedDonation) {
+      const totalAmount = paymentSetup ? paymentSetup.unitCost * quantity : 0;
+      return {
+        mainProjectAmount: totalAmount,
+        supportAmount: 0,
+        totalAmount: totalAmount,
+        mainProjectQuantity: quantity,
+        supportProjectQuantity: 0,
+      };
+    }
+
+    const config = supportedDonationConfig[tenant];
+    const mainProjectAmount = paymentSetup.unitCost * quantity;
+    const supportAmount = mainProjectAmount * config.supportPercentage;
+    const totalAmount = mainProjectAmount + supportAmount;
+
+    return {
+      mainProjectAmount,
+      supportAmount,
+      totalAmount,
+      mainProjectQuantity: quantity,
+      supportProjectQuantity: supportAmount, // This is in currency amount
+    };
+  }, [paymentSetup, quantity, isSupportedDonation, tenant]);
+
+  useEffect(() => {
+    if (
+      tenant &&
+      projectDetails &&
+      supportedDonationConfig[tenant] &&
+      (projectDetails.purpose === "trees" ||
+        projectDetails.purpose === "conservation")
+    ) {
+      setIsSupportedDonation(true);
+      setSupportedProjectId(getSupportProjectId());
+    } else {
+      setIsSupportedDonation(false);
+      setSupportedProjectId(null);
+    }
+  }, [tenant, projectDetails, getSupportProjectId]);
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -638,6 +697,9 @@ const QueryParamProvider: FC = ({ children }) => {
         setDonation,
         paymentRequest,
         setPaymentRequest,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
         errors,
         setErrors,
       }}
