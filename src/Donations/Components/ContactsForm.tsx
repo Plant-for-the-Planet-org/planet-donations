@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import AutoCompleteCountry from "../../Common/InputTypes/AutoCompleteCountry";
 import { useTranslation } from "next-i18next";
@@ -58,6 +58,8 @@ function ContactsForm(): ReactElement {
     setTaxIdentificationAvail,
     isPackageWanted,
     setIsPackageWanted,
+    isSupportedDonation,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
 
   const { isAuthenticated } = useAuth0();
@@ -195,6 +197,16 @@ function ContactsForm(): ReactElement {
       setTaxIdentificationAvail(false);
     }
   }, [projectDetails, country]);
+
+  const displayAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
 
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
@@ -597,7 +609,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormattedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity
+                    displayAmount
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),
