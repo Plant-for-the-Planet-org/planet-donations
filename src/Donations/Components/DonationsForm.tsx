@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
@@ -71,6 +71,8 @@ function DonationsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -246,6 +248,16 @@ function DonationsForm(): ReactElement {
     }
   };
 
+  const paymentAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   let paymentLabel = "";
 
   if (paymentSetup && currency && projectDetails) {
@@ -257,30 +269,18 @@ function DonationsForm(): ReactElement {
         break;
       case "funds":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       default:
@@ -433,7 +433,7 @@ function DonationsForm(): ReactElement {
             {/* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
-                minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+                minAmt && paymentAmount >= minAmt ? (
                   !isPaymentOptionsLoading &&
                   paymentSetup?.gateways?.stripe?.account &&
                   currency ? (
@@ -441,7 +441,7 @@ function DonationsForm(): ReactElement {
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
-                        paymentSetup?.unitCost * quantity,
+                        paymentAmount,
                         currency.toLowerCase()
                       )}
                       onPaymentFunction={onPaymentFunction}

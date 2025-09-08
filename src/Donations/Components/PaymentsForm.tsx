@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
@@ -81,6 +81,8 @@ function PaymentsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
 
   const [stripePromise, setStripePromise] =
@@ -269,6 +271,16 @@ function PaymentsForm(): ReactElement {
     );
   };
 
+  const displayAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -408,7 +420,7 @@ function PaymentsForm(): ReactElement {
                     totalCost={getFormattedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup?.unitCost * quantity
+                      displayAmount
                     )}
                     onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)
@@ -445,8 +457,7 @@ function PaymentsForm(): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    quantity={quantity}
-                    unitCost={paymentSetup.unitCost}
+                    totalAmount={displayAmount}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

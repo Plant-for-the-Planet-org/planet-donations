@@ -20,8 +20,7 @@ import { PaymentGateway } from "@planet-sdk/common";
 
 interface Props {
   paymentSetup: PaymentOptions;
-  quantity: number;
-  unitCost: number;
+  totalAmount: number;
   currency: string;
   donationID: string;
   payDonationFunction: (
@@ -34,8 +33,7 @@ interface Props {
 
 function NewPaypal({
   paymentSetup,
-  quantity,
-  unitCost,
+  totalAmount,
   currency,
   donationID,
   payDonationFunction,
@@ -55,7 +53,7 @@ function NewPaypal({
     _data: Record<string, unknown>,
     actions: CreateOrderActions
   ): Promise<string> {
-    const amount = (quantity * unitCost).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
+    const amount = totalAmount.toFixed(2);
     return actions.order.create({
       purchase_units: [
         {
