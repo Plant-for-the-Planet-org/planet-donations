@@ -72,6 +72,7 @@ function DonationsForm(): ReactElement {
     isPackageWanted,
     setPaymentRequest,
     isSupportedDonation,
+    supportedProjectId,
     getDonationBreakdown,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
@@ -149,8 +150,7 @@ function DonationsForm(): ReactElement {
     paymentMethod: PaymentMethod,
     paymentRequest: PaymentRequest
   ) => {
-    // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
+    setPaymentType(paymentRequest._activeBackingLibraryName);
 
     const fullName = String(paymentMethod.billing_details.name).split(" ");
     const firstName = fullName[0];
@@ -202,6 +202,9 @@ function DonationsForm(): ReactElement {
         utmMedium,
         utmSource,
         isPackageWanted,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
       }).then(async (res) => {
         if (res) {
           let token = null;

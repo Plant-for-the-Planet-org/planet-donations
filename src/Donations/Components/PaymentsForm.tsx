@@ -82,6 +82,7 @@ function PaymentsForm(): ReactElement {
     isPackageWanted,
     setPaymentRequest,
     isSupportedDonation,
+    supportedProjectId,
     getDonationBreakdown,
   } = React.useContext(QueryParamContext);
 
@@ -161,11 +162,11 @@ function PaymentsForm(): ReactElement {
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
+
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
       projectDetails,
-      // unitCost: paymentSetup.unitCost,
       quantity,
       currency,
       contactDetails,
@@ -187,7 +188,12 @@ function PaymentsForm(): ReactElement {
       isPackageWanted,
       tenant,
       locale: i18n.language,
+      // Add supported donation parameters
+      isSupportedDonation,
+      supportedProjectId,
+      getDonationBreakdown,
     });
+
     if (router.query.to) {
       router.replace({
         query: { ...router.query, step: PAYMENT },
