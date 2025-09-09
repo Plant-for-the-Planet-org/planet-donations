@@ -547,19 +547,8 @@ const QueryParamProvider: FC = ({ children }) => {
     setContactDetails(cleanDetails);
   };
 
-  const getSupportProjectId = useCallback((): string | null => {
-    if (!tenant || !country || !supportedDonationConfig[tenant]) {
-      return null;
-    }
-
-    const config = supportedDonationConfig[tenant];
-    return (
-      config.supportedProjects[country] || config.supportedProjects.default
-    );
-  }, [tenant, country]);
-
   const getDonationBreakdown = useCallback(() => {
-    if (!paymentSetup || !isSupportedDonation) {
+    if (!paymentSetup || !isSupportedDonation || !tenant) {
       const totalAmount = paymentSetup ? paymentSetup.unitCost * quantity : 0;
       return {
         mainProjectAmount: totalAmount,
@@ -580,7 +569,7 @@ const QueryParamProvider: FC = ({ children }) => {
       supportAmount,
       totalAmount,
       mainProjectQuantity: quantity,
-      supportProjectQuantity: supportAmount, // This is in currency amount
+      supportProjectQuantity: supportAmount,
     };
   }, [paymentSetup, quantity, isSupportedDonation, tenant]);
 
@@ -592,13 +581,23 @@ const QueryParamProvider: FC = ({ children }) => {
       (projectDetails.purpose === "trees" ||
         projectDetails.purpose === "conservation")
     ) {
+      const config = supportedDonationConfig[tenant];
       setIsSupportedDonation(true);
-      setSupportedProjectId(getSupportProjectId());
+      setSupportedProjectId(config.supportedProject);
+      setcountry(config.country);
+      localStorage.setItem("countryCode", config.country);
+      setEnabledCurrencies((prev) => {
+        if (prev && prev[config.currency]) {
+          return { [config.currency]: prev[config.currency] };
+        } else {
+          return null;
+        }
+      });
     } else {
       setIsSupportedDonation(false);
       setSupportedProjectId(null);
     }
-  }, [tenant, projectDetails, getSupportProjectId]);
+  }, [tenant, projectDetails]);
 
   return (
     <QueryParamContext.Provider
