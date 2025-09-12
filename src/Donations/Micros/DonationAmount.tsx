@@ -4,7 +4,7 @@ import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import { getFormattedNumber } from "../../Utils/getFormattedNumber";
 import TreeCostLoader from "../../Common/ContentLoaders/TreeCostLoader";
 import { useTranslation } from "next-i18next";
-import InfoIcon from "public/assets/icons/InfoIcon";
+import DonationInfoTooltip from "./DonationInfoTooltip";
 
 function DonationAmount(): ReactElement {
   const { t, i18n } = useTranslation(["common", "country"]);
@@ -60,21 +60,10 @@ function DonationAmount(): ReactElement {
           <span className="text-primary">{formatCurrency(supportAmount)}</span>
           <span style={{ marginLeft: "4px" }}>{t("forEmpowerment")}</span>
         </div>
-        <div className="mt-10 d-flex align-items-center">
+        <div className="donation-total">
           <span className="text-primary">{formatCurrency(totalAmount)}</span>
-          <span style={{ marginLeft: "4px" }}>{t("forClimateJustice")}</span>
-          <span
-            style={{
-              marginLeft: "8px",
-              width: "16px",
-              height: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <InfoIcon />
-          </span>
+          <span>{t("forClimateJustice")}</span>
+          <DonationInfoTooltip />
         </div>
       </div>
     );

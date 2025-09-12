@@ -222,5 +222,6 @@
   "topProject": "Top Project",
   "top_project_standards_fulfilled": "The project inspection revealed that this project fulfilled at least 12 of the 19 Top Project <2>standards.</2>",
   "standardsLink": "https://www.plant-for-the-planet.org/standards/",
-  "enterValidEmail": "Please enter a valid email"
+  "enterValidEmail": "Please enter a valid email",
+  "donationBreakdownInfo": "Your donation will support the restoration of trees and Plant-for-the-Planet's work to empower both young people and restoration organizations around the world."
 }
