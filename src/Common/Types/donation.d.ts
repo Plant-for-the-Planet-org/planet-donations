@@ -12,8 +12,7 @@ export interface Metadata {
 
 export interface LineItem {
   project: string;
-  quantity: number;
-  amount?: number; // Optional, used for support projects with currency amounts
+  units: number;
 }
 
 export type BaseDonationRequest = {
@@ -29,7 +28,7 @@ export type RegularDonationRequest = BaseDonationRequest & {
   purpose: ProjectPurpose;
   project: string;
   amount: number;
-  quantity?: number;
+  units?: number;
 };
 
 export type CompositeDonationRequest = BaseDonationRequest & {

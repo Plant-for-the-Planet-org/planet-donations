@@ -255,12 +255,11 @@ export function createDonationData({
       lineItems: [
         {
           project: projectDetails.id,
-          quantity: mainProjectQuantity,
+          units: mainProjectQuantity,
         },
         {
           project: supportedProjectId,
-          quantity: supportProjectQuantity,
-          amount: supportProjectQuantity, // Support project uses currency amount
+          units: supportProjectQuantity,
         },
       ],
     } satisfies CompositeDonationRequest;
@@ -274,7 +273,7 @@ export function createDonationData({
         paymentSetup.unitCost * quantity
           ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
           : (amount as number),
-      quantity,
+      units: quantity,
     } satisfies RegularDonationRequest;
   }
 
