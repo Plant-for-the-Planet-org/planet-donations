@@ -57,6 +57,7 @@
   "perm2": "per m²",
   "youWillReceiveTaxDeduction": "You will receive a tax deduction receipt for ",
   "taxDeductionNotYetAvailable": "Tax deduction is not yet available for ",
+  "supportedDonationTaxDeduction": "You will receive a tax deduction receipt from Plant-for-the-Planet Foundation in time for tax returns.",
   "taxDeductionNotAvailableForProject": "Tax deduction is not yet available for this project",
   "inTimeOfTaxReturns": "in time for tax returns.",
   "minDonate": "Minimum donation amount is",

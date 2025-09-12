@@ -14,6 +14,7 @@ function TaxDeductionOption(): ReactElement {
     setIsTaxDeductible,
     allowTaxDeductionChange,
     isTaxDeductible,
+    isSupportedDonation,
   } = React.useContext(QueryParamContext);
   const [openTaxDeductionModal, setopenTaxDeductionModal] =
     React.useState(false);
@@ -29,7 +30,15 @@ function TaxDeductionOption(): ReactElement {
     }
   }, [projectDetails, country]);
 
-  return projectDetails ? (
+  if (!projectDetails) {
+    return <></>;
+  }
+
+  if (isSupportedDonation) {
+    return <div className="mt-20">{t("supportedDonationTaxDeduction")}</div>;
+  }
+
+  return (
     <div className="mt-20">
       {projectDetails.taxDeductionCountries?.length ? (
         allowTaxDeductionChange ? (
@@ -84,8 +93,6 @@ function TaxDeductionOption(): ReactElement {
         taxDeductionCountries={projectDetails.taxDeductionCountries}
       />
     </div>
-  ) : (
-    <></>
   );
 }
 
