@@ -284,8 +284,8 @@ export function createDonationData({
   if (projectDetails?.purpose === "planet-cash") {
     // For PlanetCash Top-up, we need to modify the regular donation
     if (donationData.purpose !== "composite") {
-      // Remove quantity and project for PlanetCash
-      delete (donationData as any).quantity;
+      // Remove units and project for PlanetCash
+      delete (donationData as any).units;
       delete (donationData as any).project;
       // Remove gift details for PlanetCash
       delete donationData.gift;
