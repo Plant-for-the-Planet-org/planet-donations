@@ -21,7 +21,6 @@ export type BaseDonationRequest = {
   frequency: string;
   metadata: Metadata;
   taxDeductionCountry?: string;
-  gift?: SentGift;
 };
 
 export type RegularDonationRequest = BaseDonationRequest & {
@@ -29,6 +28,7 @@ export type RegularDonationRequest = BaseDonationRequest & {
   project: string;
   amount: number;
   units?: number;
+  gift?: SentGift;
 };
 
 export type CompositeDonationRequest = BaseDonationRequest & {

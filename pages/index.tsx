@@ -22,6 +22,7 @@ import {
 import { GetServerSideProps } from "next/types";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -252,7 +253,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase(),
     );
     if (found) {
       country = queryCountry.toUpperCase();
@@ -411,8 +412,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
 
+  const isSupportedDonation =
+    typeof context.query.tenant === "string" &&
+    supportedDonationConfig[context.query.tenant] !== undefined;
+
   // Handle s (support link) in the query params
-  if (typeof context.query.s === "string" && context.query.s.length > 0) {
+  if (
+    typeof context.query.s === "string" &&
+    context.query.s.length > 0 &&
+    !isSupportedDonation
+  ) {
     if (
       projectDetails === null ||
       projectDetails.classification === "membership" ||
@@ -423,7 +432,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const query = { ...context.query };
       delete query.s;
       const queryString = new URLSearchParams(
-        query as Record<string, string>
+        query as Record<string, string>,
       ).toString();
 
       return {
@@ -459,6 +468,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Set gift details if gift = true in the query params
   if (
+    !isSupportedDonation &&
     giftDetails?.type !== "direct" &&
     context.query.gift === "true" &&
     projectDetails !== null &&

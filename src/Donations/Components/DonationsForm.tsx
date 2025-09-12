@@ -132,12 +132,14 @@ function DonationsForm(): ReactElement {
 
   const canSendDirectGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     projectDetails.classification !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
 
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
     ((projectDetails?.classification !== "membership" &&
@@ -347,7 +349,6 @@ function DonationsForm(): ReactElement {
           ],
           prePaid: true,
           metadata: _metadata,
-          // ...(isGift && { gift: _gift }),
         };
       } else {
         // Handle regular donations (existing logic)
