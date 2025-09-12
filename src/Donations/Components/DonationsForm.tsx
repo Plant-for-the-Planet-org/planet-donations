@@ -148,7 +148,7 @@ function DonationsForm(): ReactElement {
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     setPaymentType(paymentRequest._activeBackingLibraryName);
 
@@ -319,23 +319,47 @@ function DonationsForm(): ReactElement {
             recipient: giftDetails.recipient,
           }
         : isInvitationGiftComplete
-        ? {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          }
-        : null;
+          ? {
+              type: "invitation",
+              recipientName: giftDetails.recipientName,
+              recipientEmail: giftDetails.recipientEmail,
+              message: giftDetails.message,
+            }
+          : null;
 
-      // create Donation data
-      const donationData = {
-        purpose: projectDetails.purpose,
-        project: projectDetails.id,
-        units: quantity,
-        prePaid: true,
-        metadata: _metadata,
-        ...(isGift && { gift: _gift }),
-      };
+      let donationData;
+
+      if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
+        const { mainProjectQuantity, supportProjectQuantity } =
+          getDonationBreakdown();
+
+        donationData = {
+          purpose: "composite",
+          lineItems: [
+            {
+              project: projectDetails.id,
+              units: mainProjectQuantity,
+            },
+            {
+              project: supportedProjectId,
+              units: supportProjectQuantity, // In currency units
+            },
+          ],
+          prePaid: true,
+          metadata: _metadata,
+          // ...(isGift && { gift: _gift }),
+        };
+      } else {
+        // Handle regular donations (existing logic)
+        donationData = {
+          purpose: projectDetails.purpose,
+          project: projectDetails.id,
+          units: quantity,
+          prePaid: true,
+          metadata: _metadata,
+          ...(isGift && { gift: _gift }),
+        };
+      }
 
       const cleanedDonationData = cleanObject(donationData);
 
@@ -445,7 +469,7 @@ function DonationsForm(): ReactElement {
                       currency={currency}
                       amount={formatAmountForStripe(
                         paymentAmount,
-                        currency.toLowerCase()
+                        currency.toLowerCase(),
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -455,7 +479,7 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true }
+                          { shallow: true },
                         );
                         setRetainQuantityValue(true);
                       }}
