@@ -49,15 +49,13 @@ function DonationAmount(): ReactElement {
   // Render supported donation breakdown
   if (isSupportedDonation) {
     return (
-      <div className="w-100 mt-20 text-bold">
+      <div className="w-100 mt-20">
         <div>
-          <span className="text-primary">
-            {formatCurrency(mainProjectAmount)}
-          </span>
+          <span>{formatCurrency(mainProjectAmount)}</span>
           <span style={{ marginLeft: "4px" }}>{getUnitDescription()}</span>
         </div>
         <div>
-          <span className="text-primary">{formatCurrency(supportAmount)}</span>
+          <span>{formatCurrency(supportAmount)}</span>
           <span style={{ marginLeft: "4px" }}>{t("forEmpowerment")}</span>
         </div>
         <div className="donation-total">
