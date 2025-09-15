@@ -1,4 +1,12 @@
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import SunIcon from "../../public/assets/icons/SunIcon";
 import MoonIcon from "../../public/assets/icons/MoonIcon";
@@ -21,24 +29,51 @@ import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 
 function Footer(): ReactElement {
-  const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
+  const [languageModalOpen, setlanguageModalOpen] = useState(false);
 
-  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep } = useContext(QueryParamContext);
 
   const { t, i18n, ready } = useTranslation(["common"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+
+  const parsedCallbackUrl = useMemo(() => {
+    try {
+      return new URL(callbackUrl);
+    } catch {
+      return null;
+    }
+  }, [callbackUrl]);
+
+  const domain = useMemo(
+    () => (parsedCallbackUrl ? parsedCallbackUrl.hostname : ""),
+    [parsedCallbackUrl]
+  );
+
+  const showCancelAndReturn = useMemo(
+    () =>
+      !!parsedCallbackUrl &&
+      (parsedCallbackUrl.protocol === "https:" ||
+        parsedCallbackUrl.protocol === "http:") &&
+      domain !== "" &&
+      donationStep !== 4,
+    [parsedCallbackUrl, domain, donationStep]
+  );
 
   return ready ? (
     <div className="footer">
       <div className="footer-container">
         <DarkModeSwitch />
-        {callbackUrl && donationStep !== 4 ? (
-          <a href={callbackUrl}>{t("cancelReturn")}</a>
+        {showCancelAndReturn ? (
+          <a href={callbackUrl}>{t("cancelReturn", { domain })}</a>
         ) : (
           <p></p>
         )}
-        <div>
+        <div
+          className={`footer-content ${
+            showCancelAndReturn ? "centered-footer-content" : ""
+          }`}
+        >
           <div className="footer-links">
             {donationStep !== 2 && donationStep !== 3 && donationStep !== 4 && (
               <button
@@ -140,7 +175,7 @@ function Footer(): ReactElement {
 }
 
 function DarkModeSwitch() {
-  const { theme, setTheme } = React.useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
 
   return (
     <button style={{ position: "relative" }}>
@@ -164,17 +199,17 @@ function DarkModeSwitch() {
 
 function CookiePolicy() {
   const { t, i18n, ready } = useTranslation(["common"]);
-  const [showCookieNotice, setShowCookieNotice] = React.useState(false);
+  const [showCookieNotice, setShowCookieNotice] = useState(false);
 
   const { isLoading, isAuthenticated } = useAuth0();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoading && isAuthenticated) {
       setShowCookieNotice(false);
     }
   }, [isAuthenticated, isLoading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const prev = localStorage.getItem("cookieNotice");
     if (!prev) {
       setShowCookieNotice(true);
@@ -183,7 +218,7 @@ function CookiePolicy() {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("cookieNotice", showCookieNotice.toString());
   }, [showCookieNotice]);
 
@@ -218,7 +253,7 @@ function LanguageModal({
   languageModalOpen,
   setlanguageModalOpen,
 }: ModalProps): ReactElement {
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const router = useRouter();
   const { t, ready, i18n } = useTranslation(["common"]);
