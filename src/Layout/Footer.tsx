@@ -27,7 +27,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
-import { getHostnameFromUrl } from "src/Utils/getHostnameFromUrl";
 
 function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = useState(false);
@@ -38,20 +37,28 @@ function Footer(): ReactElement {
 
   const { theme } = useContext(ThemeContext);
 
-  const domain = useMemo(() => getHostnameFromUrl(callbackUrl), [callbackUrl]);
-
-  const showCancelAndReturn = useMemo(() => {
+  const parsedCallbackUrl = useMemo(() => {
     try {
-      const url = new URL(callbackUrl);
-      return (
-        (url.protocol === "https:" || url.protocol === "http:") &&
-        domain !== "" &&
-        donationStep !== 4
-      );
+      return new URL(callbackUrl);
     } catch {
-      return false;
+      return null;
     }
-  }, [callbackUrl, domain, donationStep]);
+  }, [callbackUrl]);
+
+  const domain = useMemo(
+    () => (parsedCallbackUrl ? parsedCallbackUrl.hostname : ""),
+    [parsedCallbackUrl]
+  );
+
+  const showCancelAndReturn = useMemo(
+    () =>
+      !!parsedCallbackUrl &&
+      (parsedCallbackUrl.protocol === "https:" ||
+        parsedCallbackUrl.protocol === "http:") &&
+      domain !== "" &&
+      donationStep !== 4,
+    [parsedCallbackUrl, domain, donationStep]
+  );
 
   return ready ? (
     <div className="footer">
