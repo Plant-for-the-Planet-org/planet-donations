@@ -1,4 +1,12 @@
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import DownArrowIcon from "../../public/assets/icons/DownArrowIcon";
 import SunIcon from "../../public/assets/icons/SunIcon";
 import MoonIcon from "../../public/assets/icons/MoonIcon";
@@ -22,13 +30,13 @@ import UNEPLogo from "../../public/assets/icons/UNEPLogo";
 import { getHostnameFromUrl } from "src/Utils/getHostnameFromUrl";
 
 function Footer(): ReactElement {
-  const [languageModalOpen, setlanguageModalOpen] = React.useState(false);
+  const [languageModalOpen, setlanguageModalOpen] = useState(false);
 
-  const { callbackUrl, donationStep } = React.useContext(QueryParamContext);
+  const { callbackUrl, donationStep } = useContext(QueryParamContext);
 
   const { t, i18n, ready } = useTranslation(["common"]);
 
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const showCancelAndReturn = Boolean(callbackUrl && donationStep !== 4);
 
@@ -149,7 +157,7 @@ function Footer(): ReactElement {
 }
 
 function DarkModeSwitch() {
-  const { theme, setTheme } = React.useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
 
   return (
     <button style={{ position: "relative" }}>
@@ -173,17 +181,17 @@ function DarkModeSwitch() {
 
 function CookiePolicy() {
   const { t, i18n, ready } = useTranslation(["common"]);
-  const [showCookieNotice, setShowCookieNotice] = React.useState(false);
+  const [showCookieNotice, setShowCookieNotice] = useState(false);
 
   const { isLoading, isAuthenticated } = useAuth0();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isLoading && isAuthenticated) {
       setShowCookieNotice(false);
     }
   }, [isAuthenticated, isLoading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const prev = localStorage.getItem("cookieNotice");
     if (!prev) {
       setShowCookieNotice(true);
@@ -192,7 +200,7 @@ function CookiePolicy() {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("cookieNotice", showCookieNotice.toString());
   }, [showCookieNotice]);
 
@@ -227,7 +235,7 @@ function LanguageModal({
   languageModalOpen,
   setlanguageModalOpen,
 }: ModalProps): ReactElement {
-  const { theme } = React.useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const router = useRouter();
   const { t, ready, i18n } = useTranslation(["common"]);
