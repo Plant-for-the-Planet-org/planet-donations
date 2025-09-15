@@ -104,5 +104,6 @@
   "message": "Message",
   "contributedToTpo": "J'ai contribué à {{amount}} à {{organization}}",
   "janeSuccessMessage": "En attendant, nous vous invitions à passer le mot sur les réseaux sociaux avec le hashtag #TreesForJane, et à écouter le message de Jane ci-dessous.",
-  "backToTreesForJane": "Retourner à Trees for Jane"
+  "backToTreesForJane": "Retourner à Trees for Jane",
+  "returnTo": "Retourner à {{domain}}"
 }

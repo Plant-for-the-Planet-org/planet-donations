@@ -102,5 +102,6 @@
   "yearly": "Anual",
   "monthlySuccess": "mensual",
   "yearlySuccess": "anual",
-  "customAmount": "Otro importe"
+  "customAmount": "Otro importe",
+  "returnTo": "Volver a {{domain}}"
 }

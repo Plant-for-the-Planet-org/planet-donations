@@ -158,7 +158,7 @@
   "taxIdentificationNumber": "DIČ",
   "tinRequired": "DIČ je vyžadováno",
   "tinText": "TIN:",
-  "returnTo": "Vrátit na",
+  "returnTo": "Vrátit na {{domain}}",
   "donateWithPlanetCash": "Darovat s PlanetCash",
   "donationOnBehalfText": "Tento dar je jménem někoho",
   "donationOnBehalfOf": "Tento dar je jménem {{firstName}} {{lastName}}",

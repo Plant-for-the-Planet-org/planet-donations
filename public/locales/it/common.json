@@ -95,5 +95,6 @@
   "errorOccurred": "Qualcosa è andato storto",
   "dedicatedTo": "Dedicato a",
   "message": "Messaggio",
-  "contributedToTpo": "Ho contribuito {{amount}} a {{organization}}"
+  "contributedToTpo": "Ho contribuito {{amount}} a {{organization}}",
+  "returnTo": "Torna a {{domain}}"
 }

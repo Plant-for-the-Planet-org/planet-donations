@@ -160,7 +160,7 @@
   "taxIdentificationNumber": "Steueridentifikationsnummer",
   "tinRequired": "Steueridentifikationsnummer ist erforderlich",
   "tinText": "TIN:",
-  "returnTo": "Zurück zu",
+  "returnTo": "Zurück zu {{domain}}",
   "donateWithPlanetCash": "Bezahle mit PlanetCash",
   "donationOnBehalfText": "Diese Spende erfolgt im Namen einer Person",
   "donationOnBehalfOf": "Diese Spende erfolgt im Namen von {{firstName}} {{lastName}}",

@@ -137,7 +137,7 @@
   "taxIdentificationNumber": "Número de identificação fiscal",
   "tinRequired": "Número de Identificação Fiscal é Necessário",
   "tinText": "TIN:",
-  "returnTo": "Voltar a",
+  "returnTo": "Voltar a {{domain}}",
   "donateWithPlanetCash": "Pagar com PlanetCash",
   "donationOnBehalfText": "Esta doação é em nome de alguém",
   "donationOnBehalfOf": "Esta doação é em nome de {{firstName}} {{lastName}}",
