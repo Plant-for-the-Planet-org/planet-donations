@@ -38,7 +38,17 @@ function Footer(): ReactElement {
 
   const { theme } = useContext(ThemeContext);
 
-  const showCancelAndReturn = Boolean(callbackUrl && donationStep !== 4);
+  const showCancelAndReturn = useMemo(() => {
+    try {
+      const url = new URL(callbackUrl);
+      return (
+        (url.protocol === "https:" || url.protocol === "http:") &&
+        donationStep !== 4
+      );
+    } catch {
+      return false;
+    }
+  }, [callbackUrl, donationStep]);
 
   return ready ? (
     <div className="footer">
