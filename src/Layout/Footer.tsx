@@ -38,26 +38,27 @@ function Footer(): ReactElement {
 
   const { theme } = useContext(ThemeContext);
 
+  const domain = useMemo(() => getHostnameFromUrl(callbackUrl), [callbackUrl]);
+
   const showCancelAndReturn = useMemo(() => {
     try {
       const url = new URL(callbackUrl);
       return (
         (url.protocol === "https:" || url.protocol === "http:") &&
+        domain !== "" &&
         donationStep !== 4
       );
     } catch {
       return false;
     }
-  }, [callbackUrl, donationStep]);
+  }, [callbackUrl, domain, donationStep]);
 
   return ready ? (
     <div className="footer">
       <div className="footer-container">
         <DarkModeSwitch />
         {showCancelAndReturn ? (
-          <a href={callbackUrl}>
-            {t("cancelReturn", { domain: getHostnameFromUrl(callbackUrl) })}
-          </a>
+          <a href={callbackUrl}>{t("cancelReturn", { domain })}</a>
         ) : (
           <p></p>
         )}
