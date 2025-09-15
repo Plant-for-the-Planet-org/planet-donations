@@ -85,7 +85,7 @@
   "verifyEmailInfo": "Se você não recebeu um e-mail, por favor tente entrar novamente e nós te enviaremos outro e-mail.",
   "skipLogout": "Continue como convidado(a)",
   "donationProcessedBy": "Esta doação é processada por Plant-for-the-Planet",
-  "cancelReturn": "Cancelar e voltar",
+  "cancelReturn": "Cancelar e voltar para {{domain}}",
   "aboutUs": "Sobre nós",
   "imprint": "Impresso",
   "privacy": "Política de Privacidade",

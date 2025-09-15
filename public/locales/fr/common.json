@@ -75,7 +75,7 @@
   "verifyEmailInfo": "Si vous n'avez pas reçu d'e-mail, veuillez vous reconnecter et nous vous enverrons un autre e-mail.",
   "skipLogout": "Continuer en tant qu'invité",
   "donationProcessedBy": "Ce don est traité par Plant-for-the-Planet",
-  "cancelReturn": "Annuler et revenir à l'organisation",
+  "cancelReturn": "Annuler et revenir à {{domain}}",
   "aboutUs": "À propos de nous",
   "imprint": "Impression",
   "privacy": "Politique de confidentialité",
