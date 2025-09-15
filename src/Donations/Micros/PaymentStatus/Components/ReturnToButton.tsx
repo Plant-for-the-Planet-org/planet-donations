@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo } from "react";
+import { ReactElement, useMemo, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
@@ -12,7 +12,7 @@ export default function ReturnToButton({
   donationContext,
   donationStatus,
 }: Props): ReactElement {
-  const { callbackUrl, callbackMethod } = React.useContext(QueryParamContext);
+  const { callbackUrl, callbackMethod } = useContext(QueryParamContext);
   const router = useRouter();
   const { t } = useTranslation("common");
 
@@ -38,25 +38,26 @@ export default function ReturnToButton({
     [parsedCallbackUrl, domain]
   );
 
-  React.useEffect(() => {
-    if (callbackMethod === "api" && shouldShowButton) {
-      router.push(
-        `${callbackUrl}?context=${donationContext}&don_status=${donationStatus}`
-      );
+  useEffect(() => {
+    if (callbackMethod === "api" && shouldShowButton && parsedCallbackUrl) {
+      const url = new URL(parsedCallbackUrl);
+      url.searchParams.set("context", donationContext);
+      url.searchParams.set("don_status", donationStatus);
+      router.push(url.toString());
     }
   }, [callbackMethod, shouldShowButton]);
 
   const sendToReturn = () => {
-    if (callbackMethod === "api") {
-      router.push(
-        `${callbackUrl}?context=${donationContext}&don_status=${donationStatus}`
-      );
+    if (callbackMethod === "api" && parsedCallbackUrl) {
+      const url = new URL(parsedCallbackUrl);
+      url.searchParams.set("context", donationContext);
+      url.searchParams.set("don_status", donationStatus);
+      router.push(url.toString());
     } else {
       router.push(`${callbackUrl}`);
     }
   };
 
-  // Don't render button if no valid return destination
   if (!shouldShowButton) {
     return <></>;
   }
