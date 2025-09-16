@@ -75,7 +75,7 @@
   "verifyEmailInfo": "Si vous n'avez pas reçu d'e-mail, veuillez vous reconnecter et nous vous enverrons un autre e-mail.",
   "skipLogout": "Continuer en tant qu'invité",
   "donationProcessedBy": "Ce don est traité par Plant-for-the-Planet",
-  "cancelReturn": "Annuler et revenir à l'organisation",
+  "cancelReturn": "Annuler et revenir à {{domain}}",
   "aboutUs": "À propos de nous",
   "imprint": "Impression",
   "privacy": "Politique de confidentialité",
@@ -104,5 +104,6 @@
   "message": "Message",
   "contributedToTpo": "J'ai contribué à {{amount}} à {{organization}}",
   "janeSuccessMessage": "En attendant, nous vous invitions à passer le mot sur les réseaux sociaux avec le hashtag #TreesForJane, et à écouter le message de Jane ci-dessous.",
-  "backToTreesForJane": "Retourner à Trees for Jane"
+  "backToTreesForJane": "Retourner à Trees for Jane",
+  "returnTo": "Retourner à {{domain}}"
 }

@@ -72,7 +72,7 @@
   "verifyEmailInfo": "Se non hai ricevuto un'e-mail, prova ad effettuare nuovamente il login e ti invieremo un'altra e-mail.",
   "skipLogout": "Continua come ospite",
   "donationProcessedBy": "Questa donazione è trattata da Plant-for-the-Planet",
-  "cancelReturn": "Annullare e ritornare all'organizzazione",
+  "cancelReturn": "Annulla e torna a {{domain}}",
   "aboutUs": "Chi siamo",
   "imprint": "Impronta",
   "contact": "Contatta",
@@ -95,5 +95,6 @@
   "errorOccurred": "Qualcosa è andato storto",
   "dedicatedTo": "Dedicato a",
   "message": "Messaggio",
-  "contributedToTpo": "Ho contribuito {{amount}} a {{organization}}"
+  "contributedToTpo": "Ho contribuito {{amount}} a {{organization}}",
+  "returnTo": "Torna a {{domain}}"
 }
