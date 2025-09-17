@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
@@ -71,6 +71,9 @@ function DonationsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -129,12 +132,14 @@ function DonationsForm(): ReactElement {
 
   const canSendDirectGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     projectDetails.classification !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
 
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
     ((projectDetails?.classification !== "membership" &&
@@ -145,10 +150,9 @@ function DonationsForm(): ReactElement {
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
-    // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
+    setPaymentType(paymentRequest._activeBackingLibraryName);
 
     const fullName = String(paymentMethod.billing_details.name).split(" ");
     const firstName = fullName[0];
@@ -200,6 +204,9 @@ function DonationsForm(): ReactElement {
         utmMedium,
         utmSource,
         isPackageWanted,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
       }).then(async (res) => {
         if (res) {
           let token = null;
@@ -246,6 +253,16 @@ function DonationsForm(): ReactElement {
     }
   };
 
+  const paymentAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   let paymentLabel = "";
 
   if (paymentSetup && currency && projectDetails) {
@@ -257,30 +274,18 @@ function DonationsForm(): ReactElement {
         break;
       case "funds":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       default:
@@ -316,23 +321,46 @@ function DonationsForm(): ReactElement {
             recipient: giftDetails.recipient,
           }
         : isInvitationGiftComplete
-        ? {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          }
-        : null;
+          ? {
+              type: "invitation",
+              recipientName: giftDetails.recipientName,
+              recipientEmail: giftDetails.recipientEmail,
+              message: giftDetails.message,
+            }
+          : null;
 
-      // create Donation data
-      const donationData = {
-        purpose: projectDetails.purpose,
-        project: projectDetails.id,
-        units: quantity,
-        prePaid: true,
-        metadata: _metadata,
-        ...(isGift && { gift: _gift }),
-      };
+      let donationData;
+
+      if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
+        const { mainProjectQuantity, supportProjectQuantity } =
+          getDonationBreakdown();
+
+        donationData = {
+          purpose: "composite",
+          lineItems: [
+            {
+              project: projectDetails.id,
+              units: mainProjectQuantity,
+            },
+            {
+              project: supportedProjectId,
+              units: supportProjectQuantity, // In currency units
+            },
+          ],
+          prePaid: true,
+          metadata: _metadata,
+        };
+      } else {
+        // Handle regular donations (existing logic)
+        donationData = {
+          purpose: projectDetails.purpose,
+          project: projectDetails.id,
+          units: quantity,
+          prePaid: true,
+          metadata: _metadata,
+          ...(isGift && { gift: _gift }),
+        };
+      }
 
       const cleanedDonationData = cleanObject(donationData);
 
@@ -433,7 +461,7 @@ function DonationsForm(): ReactElement {
             {/* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
-                minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+                minAmt && paymentAmount >= minAmt ? (
                   !isPaymentOptionsLoading &&
                   paymentSetup?.gateways?.stripe?.account &&
                   currency ? (
@@ -441,8 +469,8 @@ function DonationsForm(): ReactElement {
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
-                        paymentSetup?.unitCost * quantity,
-                        currency.toLowerCase()
+                        paymentAmount,
+                        currency.toLowerCase(),
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -452,7 +480,7 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true }
+                          { shallow: true },
                         );
                         setRetainQuantityValue(true);
                       }}

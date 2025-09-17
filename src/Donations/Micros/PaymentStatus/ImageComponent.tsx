@@ -66,7 +66,7 @@ const ImageComponent = ({
                   Number(donation.treeCount)
                 ),
                 location: t(
-                  "country:" + donation.destination.country.toLowerCase()
+                  "country:" + donation.destination?.country.toLowerCase()
                 ),
               })
             : t("common:restorationDonationShareDetails", {
@@ -76,7 +76,7 @@ const ImageComponent = ({
                   Number(donation.amount)
                 ),
                 location: t(
-                  "country:" + donation.destination.country.toLowerCase()
+                  "country:" + donation.destination?.country.toLowerCase()
                 ),
               }))}
         {projectDetails?.purpose === "conservation" &&

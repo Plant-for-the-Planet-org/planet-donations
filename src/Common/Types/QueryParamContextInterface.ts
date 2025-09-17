@@ -18,6 +18,14 @@ import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { Dispatch, SetStateAction } from "react";
 
+export interface DonationBreakdown {
+  mainProjectAmount: number;
+  supportAmount: number;
+  totalAmount: number;
+  mainProjectQuantity: number;
+  supportProjectQuantity: number;
+}
+
 export default interface QueryParamContextInterface {
   isGift: boolean;
   setIsGift: Dispatch<SetStateAction<boolean>>;
@@ -119,6 +127,10 @@ export default interface QueryParamContextInterface {
   setDonation: Dispatch<SetStateAction<Donation | null>>;
   paymentRequest: PaymentRequest | null;
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
+  // New supported donation properties
+  isSupportedDonation: boolean;
+  supportedProjectId: string | null;
+  getDonationBreakdown: () => DonationBreakdown;
   errors: SerializedError[] | null;
   setErrors: Dispatch<SetStateAction<SerializedError[] | null>>;
 }
