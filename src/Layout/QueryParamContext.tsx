@@ -561,7 +561,9 @@ const QueryParamProvider: FC = ({ children }) => {
 
     const config = supportedDonationConfig[tenant];
     const mainProjectAmount = paymentSetup.unitCost * quantity;
-    const supportAmount = mainProjectAmount * config.supportPercentage;
+    const supportAmount =
+      (mainProjectAmount * config.supportPercentage) /
+      (1 - config.supportPercentage);
     const totalAmount = mainProjectAmount + supportAmount;
 
     return {
