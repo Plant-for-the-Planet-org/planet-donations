@@ -415,8 +415,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (typeof context.query.s === "string" && context.query.s.length > 0) {
     if (
       projectDetails === null ||
-      projectDetails.classification === "membership" ||
-      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
+      projectDetails.purpose === "membership" ||
+      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) ||
+      !projectDetails.isGiftable
     ) {
       // If project cannot have direct gift, remove 's' parameter by redirecting
       const pathname = context.resolvedUrl.split("?")[0];
@@ -462,6 +463,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     giftDetails?.type !== "direct" &&
     context.query.gift === "true" &&
     projectDetails !== null &&
+    projectDetails.isGiftable &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
   ) {
     isGift = true;

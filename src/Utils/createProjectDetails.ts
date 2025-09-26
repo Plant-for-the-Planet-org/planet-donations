@@ -1,7 +1,7 @@
 import { FetchedProjectDetails, PaymentOptions } from "src/Common/Types";
 
 export const createProjectDetails = (
-  paymentOptions: PaymentOptions
+  paymentOptions: PaymentOptions,
 ): FetchedProjectDetails => {
   const baseDetails = {
     id: paymentOptions.id,
@@ -13,6 +13,7 @@ export const createProjectDetails = (
     ownerAvatar: paymentOptions.ownerAvatar,
     isApproved: !!paymentOptions.isApproved,
     isTopProject: !!paymentOptions.isTopProject,
+    isGiftable: paymentOptions.isGiftable,
   };
 
   switch (paymentOptions.purpose) {
