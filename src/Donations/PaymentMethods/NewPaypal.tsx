@@ -27,7 +27,7 @@ interface Props {
   payDonationFunction: (
     gateway: PaymentGateway,
     method: string,
-    providerObject?: PaypalApproveData | PaypalErrorData
+    providerObject?: PaypalApproveData | PaypalErrorData,
   ) => Promise<void>;
   setPaymentError: Dispatch<SetStateAction<string>>;
 }
@@ -53,7 +53,7 @@ function NewPaypal({
 
   function createOrder(
     _data: Record<string, unknown>,
-    actions: CreateOrderActions
+    actions: CreateOrderActions,
   ): Promise<string> {
     const amount = (quantity * unitCost).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
@@ -63,7 +63,8 @@ function NewPaypal({
             value: amount,
             currency_code: currency,
           },
-          invoice_id: `planet-${donationID}`,
+          // invoice_id: `planet-${donationID}`,
+          invoice_id: process.env.API_ENDPOINT,
           custom_id: donationUid,
         },
       ],
@@ -75,7 +76,7 @@ function NewPaypal({
 
   function onApprove(
     data: OnApproveData,
-    actions: OnApproveActions
+    actions: OnApproveActions,
   ): Promise<void> {
     return actions.order.capture().then(function () {
       // This function shows a transaction success message to your buyer.
