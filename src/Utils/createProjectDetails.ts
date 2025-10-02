@@ -13,7 +13,7 @@ export const createProjectDetails = (
     ownerAvatar: paymentOptions.ownerAvatar,
     isApproved: !!paymentOptions.isApproved,
     isTopProject: !!paymentOptions.isTopProject,
-    isGiftable: paymentOptions.isGiftable,
+    isGiftable: paymentOptions.isGiftable ?? false,
   };
 
   switch (paymentOptions.purpose) {
