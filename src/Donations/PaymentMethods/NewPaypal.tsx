@@ -57,14 +57,16 @@ function NewPaypal({
   ): Promise<string> {
     const amount = (quantity * unitCost).toFixed(2); // quick & dirty fix to be sure toFixed() is called on a number value
     return actions.order.create({
+			intent: "CAPTURE",
+			// invoice_number is used to identify the system on which the donation was created
+			invoice_number: process.env.API_ENDPOINT,
       purchase_units: [
         {
           amount: {
             value: amount,
             currency_code: currency,
           },
-          // invoice_id: `planet-${donationID}`,
-          invoice_id: process.env.API_ENDPOINT,
+					// PayPal allows to set only 2 custom properties on capture requests: custom_id and invoice_number.We use custom_id to identify the donation
           custom_id: donationUid,
         },
       ],
