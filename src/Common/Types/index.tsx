@@ -52,7 +52,7 @@ export interface CreateDonationFunctionProps {
   setPaymentError: Dispatch<SetStateAction<string>>;
   setdonationID: Dispatch<SetStateAction<string | null>>;
   token: string | null;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   frequency: string;
   amount?: number | null;
   callbackUrl?: string | undefined;
@@ -77,7 +77,7 @@ export interface PayDonationProps {
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
   locale: string;
@@ -95,7 +95,7 @@ export interface HandleStripeSCAPaymentProps {
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
   locale: string;

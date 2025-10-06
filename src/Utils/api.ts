@@ -80,7 +80,7 @@ interface RequestParams {
   url: string;
   token?: string | null;
   data?: Record<string, unknown>;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   shouldQueryParamAdd?: boolean;
   tenant?: string;
   headers?: { [k: string]: string }; // additional headers
@@ -99,7 +99,7 @@ export const apiRequest = async (
     url,
     data = undefined,
     token = false,
-    setshowErrorCard,
+    setShowErrorCard,
     shouldQueryParamAdd = true,
     tenant,
     headers = {},
@@ -156,7 +156,7 @@ export const apiRequest = async (
             JSON.parse(JSON.stringify(err)).message !==
             "Request failed with status code 303"
           ) {
-            setshowErrorCard(true);
+            setShowErrorCard(true);
           }
 
           reject(new APIError(err.response.status, err.response.data));
