@@ -80,7 +80,7 @@ export default interface QueryParamContextInterface {
   setallowTaxDeductionChange: Dispatch<SetStateAction<boolean>>;
   donationUid: string;
   setDonationUid: Dispatch<SetStateAction<string>>;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   transferDetails: BankTransferDetails | null;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
   loadselectedProjects: () => Promise<void>;
