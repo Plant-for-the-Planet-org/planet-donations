@@ -31,7 +31,7 @@ axiosInstance.interceptors.request.use(
       ) {
         config.headers["TRACKING-ID"] = await hmacSha256Hex(
           process.env.TRACKING_KEY || "",
-          JSON.stringify(config.data)
+          JSON.stringify(config.data),
         );
       }
     }
@@ -40,7 +40,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     console.error("Error while setting up axios request interceptor,", error);
-  }
+  },
 );
 
 // Add a response interceptor which checks for error code for all the requests
@@ -53,7 +53,7 @@ axiosInstance.interceptors.response.use(undefined, async (err) => {
 
 async function hmacSha256Hex(
   trackingKey: string,
-  message: string
+  message: string,
 ): Promise<string> {
   const enc = new TextEncoder();
   const algorithm = { name: "HMAC", hash: "SHA-256" };
@@ -62,12 +62,12 @@ async function hmacSha256Hex(
     enc.encode(trackingKey),
     algorithm,
     false,
-    ["sign", "verify"]
+    ["sign", "verify"],
   );
   const hashBuffer = await crypto.subtle.sign(
     algorithm.name,
     key,
-    enc.encode(message)
+    enc.encode(message),
   );
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   const hashHex = hashArray
@@ -76,7 +76,7 @@ async function hmacSha256Hex(
   return hashHex;
 }
 
-interface RequestParams {
+export interface RequestParams {
   url: string;
   token?: string | null;
   data?: Record<string, unknown>;
@@ -87,12 +87,12 @@ interface RequestParams {
   addIdempotencyKeyHeader?: boolean;
   locale?: string;
 }
-interface ExtendedRequestParams extends RequestParams {
+export interface ExtendedRequestParams extends RequestParams {
   method?: Method | undefined;
 }
 
 export const apiRequest = async (
-  extendedRequestParams: ExtendedRequestParams
+  extendedRequestParams: ExtendedRequestParams,
 ): Promise<any> => {
   const {
     method = "GET",
@@ -168,7 +168,7 @@ export const apiRequest = async (
         url,
         token,
         err,
-      })}`
+      })}`,
     );
   }
 };
