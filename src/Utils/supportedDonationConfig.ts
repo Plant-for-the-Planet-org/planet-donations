@@ -8,7 +8,7 @@ export interface SupportedDonationConfig {
 }
 
 export const supportedDonationConfig: SupportedDonationConfig = {
-  ten_670y1ZHn: {
+  ten_qBbv2i8m: {
     supportPercentage: 0.25,
     country: "DE",
     currency: "EUR",
