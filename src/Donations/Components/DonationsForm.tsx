@@ -50,7 +50,7 @@ function DonationsForm(): ReactElement {
     setPaymentType,
     setdonationID,
     isTaxDeductible,
-    setshowErrorCard,
+    setShowErrorCard,
     queryToken,
     profile,
     frequency,
@@ -133,19 +133,19 @@ function DonationsForm(): ReactElement {
   const canSendDirectGift =
     projectDetails !== null &&
     !isSupportedDonation &&
-    projectDetails.classification !== "membership" &&
+    projectDetails.isGiftable &&
+    projectDetails.purpose !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
 
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
     !isSupportedDonation &&
+    projectDetails.isGiftable &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
-    ((projectDetails?.classification !== "membership" &&
-      frequency === "once") ||
-      (projectDetails?.classification === "membership" &&
-        frequency !== "once"));
+    ((projectDetails?.purpose !== "membership" && frequency === "once") ||
+      (projectDetails?.purpose === "membership" && frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
@@ -196,7 +196,7 @@ function DonationsForm(): ReactElement {
         setPaymentError,
         setdonationID,
         token,
-        setshowErrorCard,
+        setShowErrorCard,
         frequency,
         tenant,
         locale: i18n.language,
@@ -226,7 +226,7 @@ function DonationsForm(): ReactElement {
             contactDetails,
             token,
             country,
-            setshowErrorCard,
+            setShowErrorCard,
             router,
             tenant,
             locale: i18n.language,
@@ -373,7 +373,7 @@ function DonationsForm(): ReactElement {
         const { data, status } = await apiRequest({
           url: "/app/donations",
           method: "POST",
-          setshowErrorCard,
+          setShowErrorCard,
           data: cleanedDonationData,
           token,
           addIdempotencyKeyHeader: true,

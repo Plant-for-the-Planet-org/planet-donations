@@ -170,7 +170,7 @@ const QueryParamProvider: FC = ({ children }) => {
     try {
       const requestParams = {
         url: `/app/currencies`,
-        setshowErrorCard,
+        setShowErrorCard,
         shouldQueryParamAdd: false,
       };
       const response: { data: Record<string, string> } = await apiRequest(
@@ -245,7 +245,7 @@ const QueryParamProvider: FC = ({ children }) => {
     try {
       const requestParams = {
         url: `/app/projects?_scope=map&filter[purpose]=trees,restoration,conservation`,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       };
@@ -277,7 +277,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const profile = await apiRequest({
         url: "/app/profile",
         token: token,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       });
@@ -379,7 +379,7 @@ const QueryParamProvider: FC = ({ children }) => {
     try {
       const requestParams = {
         url: process.env.CONFIG_URL || `/app/config`,
-        setshowErrorCard,
+        setShowErrorCard,
         shouldQueryParamAdd: false,
       };
       const config: { data: ConfigResponse } = await apiRequest(requestParams);
@@ -475,7 +475,7 @@ const QueryParamProvider: FC = ({ children }) => {
     isTaxDeductible,
   ]);
 
-  const [showErrorCard, setshowErrorCard] = useState(false);
+  const [showErrorCard, setShowErrorCard] = useState(false);
   useEffect(() => {
     if (router.query.error) {
       if (
@@ -510,7 +510,7 @@ const QueryParamProvider: FC = ({ children }) => {
     try {
       const requestParams = {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
-        setshowErrorCard,
+        setShowErrorCard,
         token,
         tenant,
         locale: i18n.language,
@@ -663,7 +663,7 @@ const QueryParamProvider: FC = ({ children }) => {
         setallowTaxDeductionChange,
         donationUid,
         setDonationUid,
-        setshowErrorCard,
+        setShowErrorCard,
         loadselectedProjects,
         transferDetails,
         setTransferDetails,
@@ -709,7 +709,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
       <ErrorCard
         showErrorCard={showErrorCard}
-        setShowErrorCard={setshowErrorCard}
+        setShowErrorCard={setShowErrorCard}
       />
       <ErrorPopup />
     </QueryParamContext.Provider>

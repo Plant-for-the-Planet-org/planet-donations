@@ -33,7 +33,7 @@ export function buildPaymentProviderRequest(
   method: string,
   paymentSetup: PaymentOptions,
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData,
-): { paymentProviderRequest: PaymentProviderRequest } {
+): { paymentRequest: PaymentProviderRequest } {
   let account;
   let source;
   switch (gateway) {
@@ -63,7 +63,7 @@ export function buildPaymentProviderRequest(
   }
 
   return {
-    paymentProviderRequest: {
+    paymentRequest: {
       account,
       gateway,
       method,
@@ -110,7 +110,7 @@ export async function createDonationFunction({
   setPaymentError,
   setdonationID,
   token,
-  setshowErrorCard,
+  setShowErrorCard,
   frequency,
   amount,
   callbackUrl,
@@ -152,7 +152,7 @@ export async function createDonationFunction({
       url: `/app/donations`,
       data: donationData,
       method: "POST" as const,
-      setshowErrorCard,
+      setShowErrorCard,
       tenant,
       locale,
       token: token ? token : null,
@@ -307,7 +307,7 @@ export async function payDonationFunction({
   contactDetails,
   token,
   country,
-  setshowErrorCard,
+  setShowErrorCard,
   router,
   tenant,
   locale,
@@ -334,7 +334,7 @@ export async function payDonationFunction({
       donationID,
       payDonationData,
       token,
-      setshowErrorCard,
+      setShowErrorCard,
       setPaymentError,
       tenant,
       locale,
@@ -377,7 +377,7 @@ export async function payDonationFunction({
           contactDetails,
           token,
           country,
-          setshowErrorCard,
+          setShowErrorCard,
           router,
           tenant,
           locale,
@@ -405,9 +405,9 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  payDonationData: { paymentProviderRequest: PaymentProviderRequest },
+  payDonationData: { paymentRequest: PaymentProviderRequest },
   token: string | null,
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>,
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>,
   setPaymentError: Dispatch<SetStateAction<string>>,
   tenant: string,
   locale: string,
@@ -416,7 +416,7 @@ export async function confirmPaymentIntent(
     url: `/app/donations/${donationId}`,
     data: payDonationData,
     method: "PUT" as const,
-    setshowErrorCard,
+    setShowErrorCard,
     token: token ? token : null,
     tenant,
     locale,
@@ -476,7 +476,7 @@ export async function handleStripeSCAPayment({
   contactDetails,
   token,
   country,
-  setshowErrorCard,
+  setShowErrorCard,
   router,
   tenant,
   locale,
@@ -486,9 +486,11 @@ export async function handleStripeSCAPayment({
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
 
   if (!window.Stripe) return;
-  const stripe: Stripe = window.Stripe(key, {
+  // Commented out use of stripeAccount from paymentOptions
+  /* const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
-  });
+  }); */
+  const stripe: Stripe = window.Stripe(key);
   switch (method) {
     case "card": {
       let successData: UpdateDonationData | undefined;
@@ -507,7 +509,7 @@ export async function handleStripeSCAPayment({
           try {
             const payDonationData = {
               // method not sent here as it was already captured in the 1st request.
-              paymentProviderRequest: {
+              paymentRequest: {
                 account: paymentSetup.gateways.stripe.account,
                 gateway: "stripe" as const,
                 source: {
@@ -520,7 +522,7 @@ export async function handleStripeSCAPayment({
               donationID,
               payDonationData,
               token,
-              setshowErrorCard,
+              setShowErrorCard,
               setPaymentError,
               tenant,
               locale,

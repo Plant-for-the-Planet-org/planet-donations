@@ -241,7 +241,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let utmSource = "";
   const locale = context.locale || "en";
 
-  function setshowErrorCard() {
+  function setShowErrorCard() {
     showErrorCard = true;
   }
   if (typeof context.query.tenant === "string") {
@@ -272,7 +272,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       try {
         const requestParams = {
           url: `/app/paymentOptions/${to}?country=${country}`,
-          setshowErrorCard,
+          setShowErrorCard,
           tenant,
           locale,
         };
@@ -299,7 +299,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     try {
       const requestParams = {
         url: `/app/donations/${context.query.context}`,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale,
       };
@@ -344,7 +344,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         try {
           const requestParams = {
             url: `/app/paymentOptions/${donation.destination.id}?country=${country}`,
-            setshowErrorCard,
+            setShowErrorCard,
             tenant,
             locale,
           };
@@ -424,8 +424,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   ) {
     if (
       projectDetails === null ||
-      projectDetails.classification === "membership" ||
-      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
+      projectDetails.purpose === "membership" ||
+      NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) ||
+      !projectDetails.isGiftable
     ) {
       // If project cannot have direct gift, remove 's' parameter by redirecting
       const pathname = context.resolvedUrl.split("?")[0];
@@ -446,7 +447,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       try {
         const requestParams = {
           url: `/app/profiles/${context.query.s}`,
-          setshowErrorCard,
+          setShowErrorCard,
           tenant,
           locale,
         };
@@ -472,6 +473,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     giftDetails?.type !== "direct" &&
     context.query.gift === "true" &&
     projectDetails !== null &&
+    projectDetails.isGiftable &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose)
   ) {
     isGift = true;
