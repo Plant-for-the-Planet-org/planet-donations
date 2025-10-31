@@ -27,7 +27,7 @@ export function buildPaymentProviderRequest(
   method: string,
   paymentSetup: PaymentOptions,
   providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
-): { paymentProviderRequest: PaymentProviderRequest } {
+): { paymentRequest: PaymentProviderRequest } {
   let account;
   let source;
   switch (gateway) {
@@ -57,7 +57,7 @@ export function buildPaymentProviderRequest(
   }
 
   return {
-    paymentProviderRequest: {
+    paymentRequest: {
       account,
       gateway,
       method,
@@ -375,7 +375,7 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  payDonationData: { paymentProviderRequest: PaymentProviderRequest },
+  payDonationData: { paymentRequest: PaymentProviderRequest },
   token: string | null,
   setShowErrorCard: Dispatch<SetStateAction<boolean>>,
   setPaymentError: Dispatch<SetStateAction<string>>,
@@ -457,9 +457,11 @@ export async function handleStripeSCAPayment({
     paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
 
   if (!window.Stripe) return;
-  const stripe: Stripe = window.Stripe(key, {
+  // Commented out use of stripeAccount from paymentOptions
+  /* const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
-  });
+  }); */
+  const stripe: Stripe = window.Stripe(key);
   switch (method) {
     case "card": {
       let successData: UpdateDonationData | undefined;
@@ -478,7 +480,7 @@ export async function handleStripeSCAPayment({
           try {
             const payDonationData = {
               // method not sent here as it was already captured in the 1st request.
-              paymentProviderRequest: {
+              paymentRequest: {
                 account: paymentSetup.gateways.stripe.account,
                 gateway: "stripe" as const,
                 source: {

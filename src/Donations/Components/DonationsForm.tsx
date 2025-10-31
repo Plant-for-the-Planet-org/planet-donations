@@ -129,23 +129,23 @@ function DonationsForm(): ReactElement {
 
   const canSendDirectGift =
     projectDetails !== null &&
-    projectDetails.classification !== "membership" &&
+    projectDetails.isGiftable &&
+    projectDetails.purpose !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
 
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
+    projectDetails.isGiftable &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
-    ((projectDetails?.classification !== "membership" &&
-      frequency === "once") ||
-      (projectDetails?.classification === "membership" &&
-        frequency !== "once"));
+    ((projectDetails?.purpose !== "membership" && frequency === "once") ||
+      (projectDetails?.purpose === "membership" && frequency !== "once"));
 
   //Only used for native pay. Is this still applicable, or should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     // eslint-disable-next-line no-underscore-dangle
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?

@@ -139,6 +139,7 @@ export interface FetchedBaseProjectDetails {
   taxDeductionCountries?: Array<string>;
   isApproved: boolean;
   isTopProject: boolean;
+  isGiftable: boolean;
 }
 
 export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
@@ -152,7 +153,12 @@ export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
 }
 
 export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
-  purpose: "conservation" | "reforestation" | "bouquet" | "planet-cash";
+  purpose:
+    | "conservation"
+    | "reforestation"
+    | "bouquet"
+    | "planet-cash"
+    | "membership";
   classification: null;
 }
 
@@ -167,7 +173,8 @@ export type ProjectPurpose =
   | "funds"
   | "reforestation"
   | "bouquet"
-  | "planet-cash";
+  | "planet-cash"
+  | "membership";
 
 export type TreeProjectClassification =
   | "agroforestry"
@@ -183,7 +190,6 @@ export type FundsProjectClassification =
   | "endowment"
   | "forest-protection"
   | "funding"
-  | "membership"
   | "mixed"
   | "neutral"
   | "neutral-event"
