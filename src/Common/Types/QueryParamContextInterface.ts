@@ -79,8 +79,8 @@ export default interface QueryParamContextInterface {
   setIsPackageWanted: Dispatch<SetStateAction<boolean | null>>;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
-  tenant: string;
-  settenant: Dispatch<SetStateAction<string>>;
+  tenant: string | null;
+  setTenant: Dispatch<SetStateAction<string | null>>;
   selectedProjects: Array<Project>;
   setSelectedProjects: (selectedProjects: Array<Project>) => void;
   allProjects: Array<Project>;
@@ -91,7 +91,7 @@ export default interface QueryParamContextInterface {
   setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   transferDetails: BankTransferDetails | null;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
-  loadselectedProjects: () => Promise<void>;
+  loadSelectedProjects: () => Promise<void>;
   hideTaxDeduction: boolean;
   sethideTaxDeduction: Dispatch<SetStateAction<boolean>>;
   queryToken: string | null;
