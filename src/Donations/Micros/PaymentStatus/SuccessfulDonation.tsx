@@ -62,7 +62,7 @@ function SuccessfulDonation({
           <ShareOptions
             treeCount={getFormattedNumber(
               i18n.language,
-              Number(donation.treeCount),
+              Number(donation.units),
             )}
             sendRef={sendRef}
             donor={donation.donor}
