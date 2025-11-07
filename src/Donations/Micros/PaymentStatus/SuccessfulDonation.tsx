@@ -60,10 +60,12 @@ function SuccessfulDonation({
           />
 
           <ShareOptions
-            treeCount={getFormattedNumber(
-              i18n.language,
-              Number(donation.treeCount),
-            )}
+            unitsAsString={
+              donation.units
+                ? getFormattedNumber(i18n.language, Number(donation.units))
+                : undefined
+            }
+            unitType={donation.unitType}
             sendRef={sendRef}
             donor={donation.donor}
           />

@@ -23,7 +23,11 @@ const ImageComponent = ({
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
-      getFormattedCurrency(i18n.language, donation.currency, donation.amount);
+      getFormattedCurrency(
+        i18n.language,
+        donation.currency,
+        Number(donation.amount),
+      );
   }
 
   const pluralProfileTypes = [
@@ -59,24 +63,24 @@ const ImageComponent = ({
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&
-          (donation.unitType === "tree"
+          (donation.unitType === "tree" && donation.units
             ? t("common:myTreesPlantedByOnLocation", {
                 treeCount: getFormattedNumber(
                   i18n.language,
-                  Number(donation.treeCount)
+                  Number(donation.units),
                 ),
                 location: t(
-                  "country:" + donation.destination.country.toLowerCase()
+                  "country:" + donation.destination.country.toLowerCase(),
                 ),
               })
             : t("common:restorationDonationShareDetails", {
                 amount: getFormattedCurrency(
                   i18n.language,
                   donation.currency,
-                  Number(donation.amount)
+                  Number(donation.amount),
                 ),
                 location: t(
-                  "country:" + donation.destination.country.toLowerCase()
+                  "country:" + donation.destination.country.toLowerCase(),
                 ),
               }))}
         {projectDetails?.purpose === "conservation" &&
@@ -90,12 +94,12 @@ const ImageComponent = ({
               amount: getFormattedCurrency(
                 i18n.language,
                 donation.currency,
-                Number(donation.amount)
+                Number(donation.amount),
               ),
               location: t(
-                "country:" + donation.destination.country.toLowerCase()
+                "country:" + donation.destination.country.toLowerCase(),
               ),
-            }
+            },
           )}
         {projectDetails?.purpose === "funds" &&
           t("common:contributedToTpo", {
