@@ -23,7 +23,11 @@ const ImageComponent = ({
   let currencyFormat = () => {};
   if (donation) {
     currencyFormat = () =>
-      getFormattedCurrency(i18n.language, donation.currency, donation.amount);
+      getFormattedCurrency(
+        i18n.language,
+        donation.currency,
+        Number(donation.amount),
+      );
   }
 
   const pluralProfileTypes = [
@@ -59,7 +63,7 @@ const ImageComponent = ({
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&
-          (donation.unitType === "tree"
+          (donation.unitType === "tree" && donation.units
             ? t("common:myTreesPlantedByOnLocation", {
                 treeCount: getFormattedNumber(
                   i18n.language,
