@@ -1,18 +1,9 @@
 import { Stripe, loadStripe, StripeElementLocale } from "@stripe/stripe-js";
-import { PaymentOptions } from "src/Common/Types";
 
 let stripePromise: Promise<Stripe | null>;
 
-const getStripe = (
-  paymentSetup: PaymentOptions,
-  lang = "en"
-): Promise<Stripe | null> => {
-  const key =
-    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
-  // Commented out use of stripeAccount from paymentOptions
-  // const account = paymentSetup?.gateways?.stripe?.authorization.accountId;
-  stripePromise = loadStripe(key, {
-    // stripeAccount: account,
+const getStripe = (stripeKey: string, lang = "en"): Promise<Stripe | null> => {
+  stripePromise = loadStripe(stripeKey, {
     locale: lang as StripeElementLocale,
   });
   return stripePromise;

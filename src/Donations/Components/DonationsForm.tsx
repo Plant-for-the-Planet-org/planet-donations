@@ -43,6 +43,7 @@ function DonationsForm(): ReactElement {
     quantity,
     currency,
     paymentSetup,
+    stripePromise,
     projectDetails,
     country,
     giftDetails,
@@ -260,7 +261,7 @@ function DonationsForm(): ReactElement {
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -269,7 +270,7 @@ function DonationsForm(): ReactElement {
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -279,7 +280,7 @@ function DonationsForm(): ReactElement {
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -316,13 +317,13 @@ function DonationsForm(): ReactElement {
             recipient: giftDetails.recipient,
           }
         : isInvitationGiftComplete
-        ? {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          }
-        : null;
+          ? {
+              type: "invitation",
+              recipientName: giftDetails.recipientName,
+              recipientEmail: giftDetails.recipientEmail,
+              message: giftDetails.message,
+            }
+          : null;
 
       // create Donation data
       const donationData = {
@@ -435,14 +436,16 @@ function DonationsForm(): ReactElement {
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
                 minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                   !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
+                  paymentSetup?.gateways?.stripe?.authorization
+                    .stripePublishableKey &&
+                  stripePromise &&
                   currency ? (
                     <NativePay
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
                         paymentSetup?.unitCost * quantity,
-                        currency.toLowerCase()
+                        currency.toLowerCase(),
                       )}
                       onPaymentFunction={onPaymentFunction}
                       paymentSetup={paymentSetup}
@@ -452,13 +455,14 @@ function DonationsForm(): ReactElement {
                             query: { ...router.query, step: CONTACT },
                           },
                           undefined,
-                          { shallow: true }
+                          { shallow: true },
                         );
                         setRetainQuantityValue(true);
                       }}
                       isPaymentPage={false}
                       paymentLabel={paymentLabel}
                       frequency={frequency}
+                      stripePromise={stripePromise}
                     />
                   ) : (
                     <div className="mt-20 w-100">
