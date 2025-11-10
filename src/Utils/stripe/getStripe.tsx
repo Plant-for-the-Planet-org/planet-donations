@@ -1,12 +1,20 @@
 import { Stripe, loadStripe, StripeElementLocale } from "@stripe/stripe-js";
 
-let stripePromise: Promise<Stripe | null>;
+const stripePromiseCache = new Map<string, Promise<Stripe | null>>();
 
 const getStripe = (stripeKey: string, lang = "en"): Promise<Stripe | null> => {
-  stripePromise = loadStripe(stripeKey, {
+  const cacheKey = `${stripeKey}-${lang}`;
+
+  const cachedPromise = stripePromiseCache.get(cacheKey);
+  if (cachedPromise) {
+    return cachedPromise;
+  }
+
+  const promise = loadStripe(stripeKey, {
     locale: lang as StripeElementLocale,
   });
-  return stripePromise;
+  stripePromiseCache.set(cacheKey, promise);
+  return promise;
 };
 
 export default getStripe;
