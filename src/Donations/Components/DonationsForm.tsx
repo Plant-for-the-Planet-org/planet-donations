@@ -437,7 +437,7 @@ function DonationsForm(): ReactElement {
                 minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
                   !isPaymentOptionsLoading &&
                   paymentSetup?.gateways?.stripe?.authorization
-                    .stripePublishableKey &&
+                    ?.stripePublishableKey &&
                   stripePromise &&
                   currency ? (
                     <NativePay

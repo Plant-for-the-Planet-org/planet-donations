@@ -240,13 +240,13 @@ const QueryParamProvider: FC = ({ children }) => {
 
   useEffect(() => {
     const stripeKey =
-      paymentSetup?.gateways.stripe?.authorization.stripePublishableKey;
+      paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
     if (stripeKey) {
       const res = getStripe(stripeKey, i18n.language);
       setStripePromise(res);
     }
   }, [
-    paymentSetup?.gateways.stripe?.authorization.stripePublishableKey,
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey,
     i18n.language,
   ]);
 
