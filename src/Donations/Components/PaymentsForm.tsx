@@ -6,7 +6,6 @@ import BackButtonIcon from "../../../public/assets/icons/BackButtonIcon";
 import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
-import getStripe from "../../Utils/stripe/getStripe";
 import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import {
   createDonationFunction,
@@ -33,7 +32,6 @@ import {
 } from "src/Common/Types";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
-import { Stripe } from "@stripe/stripe-js/types/stripe-js/stripe";
 
 function PaymentsForm(): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
@@ -84,21 +82,8 @@ function PaymentsForm(): ReactElement {
     isSupportedDonation,
     supportedProjectId,
     getDonationBreakdown,
+    stripePromise,
   } = React.useContext(QueryParamContext);
-
-  const [stripePromise, setStripePromise] =
-    React.useState<null | Promise<Stripe | null>>(() => null);
-
-  React.useEffect(() => {
-    const fetchStripeObject = async () => {
-      if (!stripePromise && paymentSetup) {
-        const res = () => getStripe(paymentSetup, i18n.language);
-        // When we have got the Stripe object, pass it into our useState.
-        setStripePromise(res);
-      }
-    };
-    fetchStripeObject();
-  }, [paymentSetup]);
 
   React.useEffect(() => {
     setPaymentType("CARD");
@@ -112,7 +97,7 @@ function PaymentsForm(): ReactElement {
       | string
       | PaymentMethod
       | PaypalApproveData
-      | PaypalErrorData
+      | PaypalErrorData,
   ) => {
     if (!paymentSetup || !donationID) {
       console.log("Missing payment options"); //TODOO - better error handling
@@ -145,7 +130,7 @@ function PaymentsForm(): ReactElement {
   // Seems to work only for native pay. Should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO --_activeBackingLibraryName is a private variable?
     const gateway = "stripe";
@@ -305,7 +290,7 @@ function PaymentsForm(): ReactElement {
                       query: { ...router.query, step: CONTACT },
                     },
                     undefined,
-                    { shallow: true }
+                    { shallow: true },
                   );
                 }}
                 className="d-flex"
@@ -426,7 +411,7 @@ function PaymentsForm(): ReactElement {
                     totalCost={getFormattedCurrency(
                       i18n.language,
                       currency,
-                      displayAmount
+                      displayAmount,
                     )}
                     onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)

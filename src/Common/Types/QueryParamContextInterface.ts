@@ -17,6 +17,7 @@ import {
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { Dispatch, SetStateAction } from "react";
+import { Stripe as StripeJS } from "@stripe/stripe-js";
 
 export interface DonationBreakdown {
   mainProjectAmount: number;
@@ -37,6 +38,8 @@ export default interface QueryParamContextInterface {
   setcountry: Dispatch<SetStateAction<string>>;
   paymentSetup: PaymentOptions | null;
   setpaymentSetup: Dispatch<SetStateAction<PaymentOptions | null>>;
+  stripePromise: Promise<StripeJS | null> | null;
+  setStripePromise: Dispatch<SetStateAction<Promise<StripeJS | null> | null>>;
   currency: string;
   setcurrency: Dispatch<SetStateAction<string>>;
   enabledCurrencies: CurrencyList | null;

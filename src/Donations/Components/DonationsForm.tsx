@@ -43,6 +43,7 @@ function DonationsForm(): ReactElement {
     quantity,
     currency,
     paymentSetup,
+    stripePromise,
     projectDetails,
     country,
     giftDetails,
@@ -463,7 +464,9 @@ function DonationsForm(): ReactElement {
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
                 minAmt && paymentAmount >= minAmt ? (
                   !isPaymentOptionsLoading &&
-                  paymentSetup?.gateways?.stripe?.account &&
+                  paymentSetup?.gateways?.stripe?.authorization
+                    ?.stripePublishableKey &&
+                  stripePromise &&
                   currency ? (
                     <NativePay
                       country={country}
@@ -487,6 +490,7 @@ function DonationsForm(): ReactElement {
                       isPaymentPage={false}
                       paymentLabel={paymentLabel}
                       frequency={frequency}
+                      stripePromise={stripePromise}
                     />
                   ) : (
                     <div className="mt-20 w-100">

@@ -483,7 +483,7 @@ export async function handleStripeSCAPayment({
 }: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key =
-    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
 
   if (!window.Stripe) return;
   // Commented out use of stripeAccount from paymentOptions

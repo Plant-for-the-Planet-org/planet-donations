@@ -44,6 +44,8 @@ import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
 import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
+import { Stripe as StripeJS } from "@stripe/stripe-js";
+import getStripe from "src/Utils/stripe/getStripe";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -64,6 +66,8 @@ const QueryParamProvider = ({
   } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
+  const [stripePromise, setStripePromise] =
+    useState<Promise<StripeJS | null> | null>(null);
 
   const [projectDetails, setprojectDetails] =
     useState<FetchedProjectDetails | null>(null);
@@ -245,6 +249,25 @@ const QueryParamProvider = ({
     }
     setRetainQuantityValue(false);
   }, [paymentSetup]);
+
+  useEffect(() => {
+    const stripeKey =
+      paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
+    if (stripeKey) {
+      const stripePromise = getStripe(stripeKey, i18n.language);
+
+      // Handle the error at the promise level
+      stripePromise.catch((e) => {
+        console.error("Failed to initialize Stripe", e);
+        setStripePromise(Promise.resolve(null));
+      });
+
+      setStripePromise(stripePromise);
+    }
+  }, [
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey,
+    i18n.language,
+  ]);
 
   const loadSelectedProjects = useCallback(async () => {
     try {
@@ -617,6 +640,8 @@ const QueryParamProvider = ({
         setcountry,
         paymentSetup,
         setpaymentSetup,
+        stripePromise,
+        setStripePromise,
         currency,
         setcurrency,
         enabledCurrencies,
