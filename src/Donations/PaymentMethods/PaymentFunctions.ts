@@ -26,7 +26,7 @@ export function buildPaymentProviderRequest(
   gateway: PaymentGateway,
   method: string,
   paymentSetup: PaymentOptions,
-  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData,
 ): { paymentRequest: PaymentProviderRequest } {
   let account;
   let source;
@@ -160,7 +160,7 @@ export async function createDonationFunction({
       setPaymentError("Something went wrong please try again soon!");
     } else if (error.status === 503) {
       setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
+        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
       );
     } else {
       setPaymentError(error.message);
@@ -296,7 +296,7 @@ export async function payDonationFunction({
     gateway,
     method,
     paymentSetup,
-    providerObject
+    providerObject,
   );
 
   try {
@@ -307,13 +307,13 @@ export async function payDonationFunction({
       setShowErrorCard,
       setPaymentError,
       tenant,
-      locale
+      locale,
     );
     if (paymentResponse) {
       if (
         (paymentResponse.paymentStatus &&
           ["success", "pending", "paid"].includes(
-            paymentResponse.paymentStatus
+            paymentResponse.paymentStatus,
           )) ||
         ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
@@ -363,7 +363,7 @@ export async function payDonationFunction({
       return;
     } else if (error.status === 503) {
       setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
+        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
       );
       return;
     } else {
@@ -380,7 +380,7 @@ export async function confirmPaymentIntent(
   setShowErrorCard: Dispatch<SetStateAction<boolean>>,
   setPaymentError: Dispatch<SetStateAction<string>>,
   tenant: string,
-  locale: string
+  locale: string,
 ): Promise<UpdateDonationData | undefined> {
   const requestParams = {
     url: `/app/donations/${donationId}`,
@@ -391,9 +391,8 @@ export async function confirmPaymentIntent(
     tenant,
     locale,
   };
-  const confirmationResponse: UpdateDonationResponse = await apiRequest(
-    requestParams
-  );
+  const confirmationResponse: UpdateDonationResponse =
+    await apiRequest(requestParams);
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
@@ -421,7 +420,7 @@ const buildBillingDetails = (contactDetails: ContactDetails) => {
 const handlePaymentError = (
   paymentError: StripeError | string | undefined, //TODOO - identify and set better error types
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>,
-  setPaymentError: Dispatch<SetStateAction<string>>
+  setPaymentError: Dispatch<SetStateAction<string>>,
 ): void => {
   setIsPaymentProcessing(false);
   if (
@@ -429,7 +428,7 @@ const handlePaymentError = (
     paymentError?.data?.message
   ) {
     setPaymentError(
-      (paymentError as StripeError).message ?? paymentError.data.message
+      (paymentError as StripeError).message ?? paymentError.data.message,
     );
   } else {
     setPaymentError(paymentError as string);
@@ -454,7 +453,7 @@ export async function handleStripeSCAPayment({
 }: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key =
-    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
 
   if (!window.Stripe) return;
   // Commented out use of stripeAccount from paymentOptions
@@ -473,7 +472,7 @@ export async function handleStripeSCAPayment({
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(
-              stripeResponse.error.message || "Something went wrong"
+              stripeResponse.error.message || "Something went wrong",
             );
             return;
           }
@@ -496,7 +495,7 @@ export async function handleStripeSCAPayment({
               setShowErrorCard,
               setPaymentError,
               tenant,
-              locale
+              locale,
             );
             successData = successResponse;
           } catch (error) {
@@ -511,7 +510,7 @@ export async function handleStripeSCAPayment({
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(
-              stripeResponse.error.message || "Something went wrong."
+              stripeResponse.error.message || "Something went wrong.",
             );
             return;
           }
@@ -526,7 +525,7 @@ export async function handleStripeSCAPayment({
           query: { ...router.query, step: THANK_YOU },
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       );
       setIsPaymentProcessing(false);
       return successData;

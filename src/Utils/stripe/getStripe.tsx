@@ -1,21 +1,28 @@
 import { Stripe, loadStripe, StripeElementLocale } from "@stripe/stripe-js";
-import { PaymentOptions } from "src/Common/Types";
 
-let stripePromise: Promise<Stripe | null>;
+// Cache is unbounded, but practically this can have a maximum of 35 entries (5 Stripe keys × 7 locales).
+// This will happen only in testing cases.
+// For most users, the cache size will be a maximum of 10 entries (loading payment setups containing 5 different Stripe keys in 2 languages).
+// No cache eviction needed given the small, fixed size.
+const stripePromiseCache = new Map<string, Promise<Stripe | null>>();
 
-const getStripe = (
-  paymentSetup: PaymentOptions,
-  lang = "en"
-): Promise<Stripe | null> => {
-  const key =
-    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
-  // Commented out use of stripeAccount from paymentOptions
-  // const account = paymentSetup?.gateways?.stripe?.authorization.accountId;
-  stripePromise = loadStripe(key, {
-    // stripeAccount: account,
+const getStripe = (stripeKey: string, lang = "en"): Promise<Stripe | null> => {
+  const cacheKey = `${stripeKey}-${lang}`;
+
+  const cachedPromise = stripePromiseCache.get(cacheKey);
+  if (cachedPromise) {
+    return cachedPromise;
+  }
+
+  const promise = loadStripe(stripeKey, {
     locale: lang as StripeElementLocale,
+  }).catch((error) => {
+    stripePromiseCache.delete(cacheKey);
+    throw error;
   });
-  return stripePromise;
+
+  stripePromiseCache.set(cacheKey, promise);
+  return promise;
 };
 
 export default getStripe;

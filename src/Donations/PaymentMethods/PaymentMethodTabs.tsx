@@ -27,7 +27,7 @@ interface PaymentMethodTabsProps {
   showNativePay?: boolean;
   onNativePaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => Promise<void>;
   showBankTransfer?: boolean;
 }
@@ -46,7 +46,7 @@ export default function PaymentMethodTabs({
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newValue: string
+    newValue: string,
   ) => {
     setPaymentType(newValue);
   };
@@ -85,6 +85,7 @@ export default function PaymentMethodTabs({
     paymentSetup,
     quantity,
     frequency,
+    stripePromise,
   } = React.useContext(QueryParamContext);
 
   let paymentLabel = "";
@@ -101,7 +102,7 @@ export default function PaymentMethodTabs({
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -110,7 +111,7 @@ export default function PaymentMethodTabs({
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -120,7 +121,7 @@ export default function PaymentMethodTabs({
           amount: getFormattedCurrency(
             i18n.language,
             currency,
-            paymentSetup.unitCost * quantity
+            paymentSetup.unitCost * quantity,
           ),
         });
         break;
@@ -192,13 +193,13 @@ export default function PaymentMethodTabs({
           </button>
         )}
         {/*9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
-        {showNativePay && (
+        {showNativePay && stripePromise !== null && (
           <NativePay
             country={country}
             currency={currency}
             amount={formatAmountForStripe(
               paymentSetup.unitCost * quantity,
-              currency.toLowerCase()
+              currency.toLowerCase(),
             )}
             onPaymentFunction={onNativePaymentFunction}
             paymentSetup={paymentSetup}
@@ -206,6 +207,7 @@ export default function PaymentMethodTabs({
             isPaymentPage
             paymentLabel={paymentLabel}
             frequency={frequency}
+            stripePromise={stripePromise}
           />
         )}
       </div>

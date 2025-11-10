@@ -42,6 +42,8 @@ import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
+import { Stripe as StripeJS } from "@stripe/stripe-js";
+import getStripe from "src/Utils/stripe/getStripe";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -58,6 +60,8 @@ const QueryParamProvider: FC = ({ children }) => {
   } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
+  const [stripePromise, setStripePromise] =
+    useState<Promise<StripeJS | null> | null>(null);
 
   const [projectDetails, setprojectDetails] =
     useState<FetchedProjectDetails | null>(null);
@@ -141,7 +145,7 @@ const QueryParamProvider: FC = ({ children }) => {
     useState<BankTransferDetails | null>(null);
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState<boolean | null>(
-    null
+    null,
   );
 
   // Only used when planetCash is active
@@ -155,7 +159,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
-    null
+    null,
   );
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
@@ -167,9 +171,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setShowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const response: { data: Record<string, string> } = await apiRequest(
-        requestParams
-      );
+      const response: { data: Record<string, string> } =
+        await apiRequest(requestParams);
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -203,7 +206,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
     );
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
@@ -235,6 +238,25 @@ const QueryParamProvider: FC = ({ children }) => {
     setRetainQuantityValue(false);
   }, [paymentSetup]);
 
+  useEffect(() => {
+    const stripeKey =
+      paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
+    if (stripeKey) {
+      const stripePromise = getStripe(stripeKey, i18n.language);
+
+      // Handle the error at the promise level
+      stripePromise.catch((e) => {
+        console.error("Failed to initialize Stripe", e);
+        setStripePromise(Promise.resolve(null));
+      });
+
+      setStripePromise(stripePromise);
+    }
+  }, [
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey,
+    i18n.language,
+  ]);
+
   async function loadselectedProjects() {
     try {
       const requestParams = {
@@ -247,7 +269,7 @@ const QueryParamProvider: FC = ({ children }) => {
       const projects = response.data as Project[];
       if (projects) {
         const allowedDonationsProjects = projects.filter(
-          (project) => project.properties.allowDonations === true
+          (project) => project.properties.allowDonations === true,
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -366,7 +388,7 @@ const QueryParamProvider: FC = ({ children }) => {
       }
     },
     1000,
-    [router.query.to, country, profile?.slug]
+    [router.query.to, country, profile?.slug],
   );
 
   async function loadConfig() {
@@ -382,7 +404,7 @@ const QueryParamProvider: FC = ({ children }) => {
           const found = countriesData.some(
             (arrayCountry) =>
               arrayCountry.countryCode?.toUpperCase() ===
-              config.data.country?.toUpperCase()
+              config.data.country?.toUpperCase(),
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
@@ -509,9 +531,8 @@ const QueryParamProvider: FC = ({ children }) => {
         tenant,
         locale: i18n.language,
       };
-      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
-        requestParams
-      );
+      const paymentSetupData: { data: PaymentOptions } =
+        await apiRequest(requestParams);
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -554,6 +575,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setcountry,
         paymentSetup,
         setpaymentSetup,
+        stripePromise,
+        setStripePromise,
         currency,
         setcurrency,
         enabledCurrencies,
