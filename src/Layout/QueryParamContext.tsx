@@ -242,13 +242,15 @@ const QueryParamProvider: FC = ({ children }) => {
     const stripeKey =
       paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
     if (stripeKey) {
-      try {
-        const res = getStripe(stripeKey, i18n.language);
-        setStripePromise(res);
-      } catch (e) {
-        console.log("Failed to initialize Stripe", e);
+      const stripePromise = getStripe(stripeKey, i18n.language);
+
+      // Handle the error at the promise level
+      stripePromise.catch((e) => {
+        console.error("Failed to initialize Stripe", e);
         setStripePromise(Promise.resolve(null));
-      }
+      });
+
+      setStripePromise(stripePromise);
     }
   }, [
     paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey,
