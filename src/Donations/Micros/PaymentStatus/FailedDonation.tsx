@@ -55,7 +55,7 @@ function FailedDonation({
       };
     });
     setPaymentError("");
-    setquantity(donation?.quantity);
+    setquantity(donation?.units);
     if (donation.donor) updateContactDetails(donation.donor);
     setAmount(Number(donation.amount));
 
@@ -92,7 +92,7 @@ function FailedDonation({
 
     // TODO - Test this again after backend is updated
     setfrequency(
-      donation.isRecurrent && donation.frequency ? donation.frequency : "once"
+      donation.isRecurrent && donation.frequency ? donation.frequency : "once",
     );
     await loadPaymentSetup({
       projectGUID: donation.destination.id,
