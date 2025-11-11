@@ -12,7 +12,8 @@ export interface Metadata {
 
 export interface LineItem {
   project: string;
-  units: number;
+  units?: number;
+  amount: number;
 }
 
 export type BaseDonationRequest = {

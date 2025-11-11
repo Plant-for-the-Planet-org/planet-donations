@@ -230,7 +230,7 @@ export function createDonationData({
 
   // Handle supported donations with lineItems
   if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
-    const { mainProjectQuantity, supportProjectQuantity } =
+    const { mainProjectQuantity, supportAmount, mainProjectAmount } =
       getDonationBreakdown();
 
     donationData = {
@@ -240,10 +240,11 @@ export function createDonationData({
         {
           project: projectDetails.id,
           units: mainProjectQuantity,
+          amount: mainProjectAmount,
         },
         {
           project: supportedProjectId,
-          units: supportProjectQuantity,
+          amount: supportAmount,
         },
       ],
     } satisfies CompositeDonationRequest;
