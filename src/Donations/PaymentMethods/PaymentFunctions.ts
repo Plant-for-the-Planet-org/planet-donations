@@ -272,7 +272,7 @@ export function createDonationData({
       purpose: projectDetails?.purpose,
       project: projectDetails.id,
       amount:
-        paymentSetup.unitCost * quantity
+        Number.isFinite(paymentSetup.unitCost) && Number.isFinite(quantity)
           ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
           : (amount as number),
       units: quantity,
