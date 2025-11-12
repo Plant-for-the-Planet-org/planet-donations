@@ -333,7 +333,7 @@ function DonationsForm(): ReactElement {
       let donationData;
 
       if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
-        const { mainProjectQuantity, supportProjectQuantity } =
+        const { mainProjectQuantity, supportAmount, mainProjectAmount } =
           getDonationBreakdown();
 
         donationData = {
@@ -342,14 +342,17 @@ function DonationsForm(): ReactElement {
             {
               project: projectDetails.id,
               units: mainProjectQuantity,
+              amount: mainProjectAmount,
             },
             {
               project: supportedProjectId,
-              units: supportProjectQuantity, // In currency units
+              amount: supportAmount,
             },
           ],
           prePaid: true,
           metadata: _metadata,
+          // Note: Gifts are not supported for composite/supported donations.
+          // The UI prevents gift setup via the canSendDirectGift condition.
         };
       } else {
         // Handle regular donations (existing logic)
