@@ -10,12 +10,14 @@ interface Props {
   projectDetails: FetchedProjectDetails;
   donation: Donation;
   imageRef: RefObject<HTMLDivElement>;
+  isSupportedDonation: boolean;
 }
 
 const ImageComponent = ({
   projectDetails,
   donation,
   imageRef,
+  isSupportedDonation,
 }: Props): ReactElement => {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -60,6 +62,19 @@ const ImageComponent = ({
   };
 
   const ImageDonationText = () => {
+    if (isSupportedDonation) {
+      return (
+        <div className={"donation-count p-20"}>
+          {t("common:supportedDonationSuccessImageText", {
+            amount: getFormattedCurrency(
+              i18n.language,
+              donation.currency,
+              Number(donation.amount),
+            ),
+          })}
+        </div>
+      );
+    }
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&

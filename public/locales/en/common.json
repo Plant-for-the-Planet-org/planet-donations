@@ -94,6 +94,7 @@
   "fundingContributionMessage": "We will keep you posted about our actions, in the mean time maybe share with your friends about your contribution.",
   "restorationDonationUsage": "Your donation will be used to restore {{units}} {{unitType}} by {{projectName}} in {{location}}.",
   "m2conservedByOnLocation": "{{quantity}} m² forest will be conserved by {{projectName}} in {{location}}.",
+  "supportedDonationSuccessImageText": "I contributed {{amount}} for climate justice.",
   "myTreesPlantedByOnLocation": "My {{treeCount}} trees are being planted in {{location}}.",
   "restorationDonationShareDetails": "I donated {{amount}} for forest restoration in {{location}}.",
   "iDonatedForestOnLocation": "I donated {{amount}} for forest conservation in {{location}}.",

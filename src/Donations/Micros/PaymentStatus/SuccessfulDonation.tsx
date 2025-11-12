@@ -31,7 +31,7 @@ function SuccessfulDonation({
       }
     }
   });
-  const { paymentType, callbackUrl, projectDetails } =
+  const { paymentType, callbackUrl, projectDetails, isSupportedDonation } =
     React.useContext(QueryParamContext);
 
   const imageRef = useRef<HTMLDivElement>(null);
@@ -53,6 +53,7 @@ function SuccessfulDonation({
             projectDetails={projectDetails}
             donation={donation}
             imageRef={imageRef}
+            isSupportedDonation={isSupportedDonation}
           />
 
           <ShareOptions
