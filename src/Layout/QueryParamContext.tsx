@@ -614,9 +614,6 @@ const QueryParamProvider = ({
       setSupportedProjectId(config.supportedProject);
       setcountry(config.country);
       localStorage.setItem("countryCode", config.country);
-      if (enabledCurrencies && enabledCurrencies[config.currency]) {
-        setcurrency(config.currency);
-      }
       setEnabledCurrencies((prev) => {
         if (prev && prev[config.currency]) {
           return { [config.currency]: prev[config.currency] };
@@ -628,7 +625,7 @@ const QueryParamProvider = ({
       setIsSupportedDonation(false);
       setSupportedProjectId(null);
     }
-  }, [tenant, projectDetails, enabledCurrencies]);
+  }, [tenant, projectDetails]);
 
   return (
     <QueryParamContext.Provider
