@@ -46,11 +46,7 @@ function SuccessfulDonation({
         {t("common:thankYou")}
       </div>
 
-      <ThankyouMessage
-        paymentTypeUsed={paymentTypeUsed}
-        projectDetails={projectDetails}
-        donation={donation}
-      />
+      <ThankyouMessage paymentTypeUsed={paymentTypeUsed} donation={donation} />
       {projectDetails?.purpose !== "planet-cash" && (
         <>
           <ImageComponent
