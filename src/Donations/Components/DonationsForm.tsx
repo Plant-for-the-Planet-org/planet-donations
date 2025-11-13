@@ -237,6 +237,11 @@ function DonationsForm(): ReactElement {
     switch (projectDetails?.purpose) {
       case "funds":
       case "planet-cash":
+      case "membership":
+      case "academy":
+      case "endowment":
+      case "forest-protection":
+      case "sponsorship":
         return <FundingDonations setopenCurrencyModal={setopenCurrencyModal} />;
       case "conservation":
       case "bouquet":
@@ -257,6 +262,11 @@ function DonationsForm(): ReactElement {
         });
         break;
       case "funds":
+      case "membership":
+      case "academy":
+      case "endowment":
+      case "forest-protection":
+      case "sponsorship":
         paymentLabel = t("fundingPaymentLabel", {
           amount: getFormattedCurrency(
             i18n.language,
@@ -377,9 +387,7 @@ function DonationsForm(): ReactElement {
       <div className="w-100">
         <Authentication />
         <div className="donations-tree-selection-step">
-          {projectDetails.purpose !== "funds" && (
-            <p className="title-text">{t("donate")}</p>
-          )}
+          <p className="title-text">{t("donate")}</p>
           {canPayWithPlanetCash && <PlanetCashSelector />}
           {(canSendDirectGift && hasDirectGift) || canSendInvitationGift ? (
             <div className="donations-gift-container mt-10">
