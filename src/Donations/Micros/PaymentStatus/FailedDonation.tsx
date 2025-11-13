@@ -102,6 +102,11 @@ function FailedDonation({
         paymentSetupCountry: country,
         shouldSetPaymentDetails: true,
       });
+    } else {
+      setPaymentError(
+        "Unable to retry donation. Please try a fresh donation, or contact support@plant-for-the-planet.org",
+      );
+      return;
     }
     setcallbackUrl(donation.metadata?.callback_url || "");
     setCallbackMethod(donation.metadata?.callback_method || "");
