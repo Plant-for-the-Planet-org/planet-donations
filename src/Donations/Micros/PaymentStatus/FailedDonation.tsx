@@ -26,6 +26,7 @@ function FailedDonation({
     donationID,
     setcountry,
     setIsTaxDeductible,
+    projectDetails,
     setprojectDetails,
     setquantity,
     updateContactDetails,
@@ -51,11 +52,11 @@ function FailedDonation({
     setprojectDetails((projectDetails) => {
       return {
         ...(projectDetails as FetchedProjectDetails),
-        id: donation.destination.id as string,
+        ...(donation.destination ? { id: donation.destination.id } : {}),
       };
     });
     setPaymentError("");
-    setquantity(donation?.units);
+    setquantity(donation.units || donation.lineItems[0]?.units);
     if (donation.donor) updateContactDetails(donation.donor);
     setAmount(Number(donation.amount));
 
@@ -94,11 +95,14 @@ function FailedDonation({
     setfrequency(
       donation.isRecurrent && donation.frequency ? donation.frequency : "once",
     );
-    await loadPaymentSetup({
-      projectGUID: donation.destination.id,
-      paymentSetupCountry: country,
-      shouldSetPaymentDetails: true,
-    });
+    const projectGuid = donation.destination?.id || projectDetails?.id;
+    if (projectGuid) {
+      await loadPaymentSetup({
+        projectGUID: projectGuid,
+        paymentSetupCountry: country,
+        shouldSetPaymentDetails: true,
+      });
+    }
     setcallbackUrl(donation.metadata?.callback_url || "");
     setCallbackMethod(donation.metadata?.callback_method || "");
     setUtmCampaign(donation.metadata?.utm_campaign || "");
