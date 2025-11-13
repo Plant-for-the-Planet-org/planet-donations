@@ -252,7 +252,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const queryCountry = context.query.country;
     const found = countriesData.some(
       (country) =>
-        country.countryCode?.toUpperCase() === queryCountry.toUpperCase()
+        country.countryCode?.toUpperCase() === queryCountry.toUpperCase(),
     );
     if (found) {
       country = queryCountry.toUpperCase();
@@ -424,7 +424,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       const query = { ...context.query };
       delete query.s;
       const queryString = new URLSearchParams(
-        query as Record<string, string>
+        query as Record<string, string>,
       ).toString();
 
       return {
@@ -504,9 +504,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ) {
       description = `Conserve forests with  ${projectDetails.ownerName}. Your journey to a trillion trees starts here.`;
     } else if (
-      (projectDetails.purpose === "bouquet" ||
-        projectDetails.purpose === "funds" ||
-        projectDetails.purpose === "conservation") &&
+      projectDetails.purpose !== "planet-cash" &&
+      projectDetails.purpose !== "reforestation" &&
       projectDetails.description
     ) {
       description = projectDetails.description;
