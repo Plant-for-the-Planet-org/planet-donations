@@ -24,6 +24,12 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
       );
   }
 
+  // destination can be null. Planet-sdk type definition needs to be updated.
+  const destinationPurpose = donation.destination?.purpose;
+  const donationPurpose = destinationPurpose
+    ? t(`common:${destinationPurpose}Purpose`)
+    : t("common:generalDonationPurpose");
+
   // EXAMPLE: Your ₹21,713.64 donation was successful {with Google Pay}
   const donationSuccessfulMessage = t(
     isSupportedDonation
@@ -34,10 +40,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      purpose:
-        donation.destination === null
-          ? t("common:generalDonationPurpose")
-          : t(`common:${donation.destination.purpose}Purpose`),
+      purpose: donationPurpose,
       frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
     },
   );
