@@ -147,34 +147,37 @@ export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
   classification: TreeProjectClassification;
 }
 
-export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
-  purpose: "funds";
-  classification: FundsProjectClassification;
-}
-
 export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
   purpose:
     | "conservation"
-    | "reforestation"
-    | "bouquet"
+    | "funds"
+    | "academy"
+    | "endowment"
+    | "forest-protection"
+    | "sponsorship"
+    | "membership"
     | "planet-cash"
-    | "membership";
+    | "reforestation"
+    | "bouquet";
   classification: null;
 }
 
 export type FetchedProjectDetails =
   | FetchedTreeProjectDetails
-  | FetchedFundsProjectDetails
   | FetchedOtherProjectDetails;
 
 export type ProjectPurpose =
   | "trees"
   | "conservation"
   | "funds"
-  | "reforestation"
-  | "bouquet"
+  | "academy"
+  | "endowment"
+  | "forest-protection"
+  | "sponsorship"
+  | "membership"
   | "planet-cash"
-  | "membership";
+  | "reforestation"
+  | "bouquet";
 
 export type TreeProjectClassification =
   | "agroforestry"
@@ -185,24 +188,7 @@ export type TreeProjectClassification =
   | "other-planting"
   | "urban-planting";
 
-export type FundsProjectClassification =
-  | "academy"
-  | "endowment"
-  | "forest-protection"
-  | "funding"
-  | "mixed"
-  | "neutral"
-  | "neutral-event"
-  | "penalty"
-  | "public-funds"
-  | "research"
-  | "sponsorship"
-  | "subscription"
-  | "subsidy";
-
-export type ProjectClassification =
-  | TreeProjectClassification
-  | FundsProjectClassification;
+export type ProjectClassification = TreeProjectClassification;
 
 export type PaymentOptions = FetchedProjectDetails & {
   requestedCountry: string;
