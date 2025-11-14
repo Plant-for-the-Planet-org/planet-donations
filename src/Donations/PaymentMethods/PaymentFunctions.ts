@@ -10,6 +10,7 @@ import {
   PaymentProviderRequest,
   UpdateDonationResponse,
   UpdateDonationData,
+  SentGift,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import {
@@ -17,7 +18,12 @@ import {
   ContactDetails,
   PaymentGateway,
 } from "@planet-sdk/common/build/types/donation";
-import { DonationRequestData } from "src/Common/Types/donation";
+import {
+  BaseDonationRequest,
+  CompositeDonationRequest,
+  DonationRequestData,
+  RegularDonationRequest,
+} from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
 import { Dispatch, SetStateAction } from "react";
@@ -115,6 +121,9 @@ export async function createDonationFunction({
   isPackageWanted = false,
   tenant,
   locale,
+  isSupportedDonation = false,
+  supportedProjectId = null,
+  getDonationBreakdown,
 }: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -134,6 +143,9 @@ export async function createDonationFunction({
     utmMedium,
     utmSource,
     isPackageWanted,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
   });
   try {
     const requestParams = {
@@ -186,6 +198,10 @@ export function createDonationData({
   utmMedium,
   utmSource,
   isPackageWanted,
+  // Add new parameters for supported donations
+  isSupportedDonation,
+  supportedProjectId,
+  getDonationBreakdown,
 }: CreateDonationDataProps): DonationRequestData {
   const sanitizedDonor = {
     ...contactDetails,
@@ -194,13 +210,8 @@ export function createDonationData({
     delete sanitizedDonor.isPackageWanted;
   }
 
-  let donationData: DonationRequestData = {
-    purpose: projectDetails?.purpose,
-    project: projectDetails.id,
-    amount:
-      paymentSetup.unitCost * quantity
-        ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
-        : (amount as number), //amount is null when quantity has a value
+  // Build base donation fields common to all donation types
+  const baseDonationFields: BaseDonationRequest = {
     currency,
     donor: sanitizedDonor,
     frequency: frequency,
@@ -212,54 +223,74 @@ export function createDonationData({
       utm_source: utmSource,
       ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
     },
-    quantity,
+    ...(taxDeductionCountry && { taxDeductionCountry }),
   };
 
-  // }
-  if (taxDeductionCountry) {
+  let donationData: DonationRequestData;
+
+  // Handle supported donations with lineItems
+  if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
+    const { mainProjectQuantity, supportAmount, mainProjectAmount } =
+      getDonationBreakdown();
+
     donationData = {
-      ...donationData,
-      taxDeductionCountry,
-    };
-  }
-
-  if (isGift) {
-    if (giftDetails.type === "invitation") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          },
+      ...baseDonationFields,
+      purpose: "composite",
+      lineItems: [
+        {
+          project: projectDetails.id,
+          units: mainProjectQuantity,
+          amount: mainProjectAmount,
         },
-      };
-    } else if (giftDetails.type === "direct") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "direct",
-            recipient: giftDetails.recipient,
-          },
+        {
+          project: supportedProjectId,
+          amount: supportAmount,
         },
-      };
+      ],
+    } satisfies CompositeDonationRequest;
+  } else {
+    // Add gift details if applicable
+    let _giftDetails: SentGift | undefined = undefined;
+    if (isGift) {
+      if (giftDetails.type === "invitation") {
+        _giftDetails = {
+          type: "invitation",
+          recipientName: giftDetails.recipientName,
+          recipientEmail: giftDetails.recipientEmail,
+          message: giftDetails.message,
+        };
+      } else if (giftDetails.type === "direct") {
+        _giftDetails = {
+          type: "direct",
+          recipient: giftDetails.recipient,
+        };
+      }
     }
+
+    // Handle regular donations
+    donationData = {
+      ...baseDonationFields,
+      purpose: projectDetails?.purpose,
+      project: projectDetails.id,
+      amount:
+        Number.isFinite(paymentSetup.unitCost) && Number.isFinite(quantity)
+          ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
+          : (amount as number),
+      units: quantity,
+      ...(isGift && { gift: _giftDetails }),
+    } satisfies RegularDonationRequest;
   }
 
+  // Handle PlanetCash top-up special case
   if (projectDetails?.purpose === "planet-cash") {
-    // For PlanetCash Top-up
-
-    // No need to send quantity.
-    delete donationData.quantity;
-
-    // Since a user account can have only one planetCash account no need to send project (i.e planetCash account ID).
-    delete donationData.project;
-
-    //should not send gift details
-    delete donationData.gift;
+    // For PlanetCash Top-up, we need to modify the regular donation
+    if (donationData.purpose !== "composite") {
+      // Remove units and project for PlanetCash
+      delete (donationData as any).units;
+      delete (donationData as any).project;
+      // Remove gift details for PlanetCash
+      delete donationData.gift;
+    }
   }
 
   return donationData;

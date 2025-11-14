@@ -3,21 +3,16 @@ import { useTranslation } from "next-i18next";
 import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
-import { FetchedProjectDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
 
 interface Props {
-  projectDetails: FetchedProjectDetails;
   donation: Donation;
   paymentTypeUsed: string;
 }
 
-function ThankyouMessage({
-  projectDetails,
-  donation,
-  paymentTypeUsed,
-}: Props): ReactElement {
-  const { tenant, frequency } = React.useContext(QueryParamContext);
+function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
+  const { tenant, frequency, isSupportedDonation } =
+    React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country"]);
   let currencyFormat = () => {};
   if (donation) {
@@ -25,21 +20,29 @@ function ThankyouMessage({
       getFormattedCurrency(
         i18n.language,
         donation.currency,
-        Number(donation.amount)
+        Number(donation.amount),
       );
   }
 
+  // destination can be null. Planet-sdk type definition needs to be updated.
+  const destinationPurpose = donation.destination?.purpose;
+  const donationPurpose = destinationPurpose
+    ? t(`common:${destinationPurpose}Purpose`)
+    : t("common:generalDonationPurpose");
+
   // EXAMPLE: Your ₹21,713.64 donation was successful {with Google Pay}
   const donationSuccessfulMessage = t(
-    paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
-      ? "common:donationSuccessfulWith"
-      : "common:donationSuccessful",
+    isSupportedDonation
+      ? "common:supportedDonationSuccessful"
+      : paymentTypeUsed === "GOOGLE_PAY" || paymentTypeUsed === "APPLE_PAY"
+        ? "common:donationSuccessfulWith"
+        : "common:donationSuccessful",
     {
       totalAmount: currencyFormat(),
       paymentTypeUsed,
-      purpose: t(`common:${projectDetails?.purpose}Purpose`),
+      purpose: donationPurpose,
       frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
-    }
+    },
   );
 
   // EXAMPLE: We've sent an email to Sagar Aryal about the gift.
@@ -66,9 +69,17 @@ function ThankyouMessage({
       : null;
 
   const Message = () => {
+    if (!donation.destination) {
+      return (
+        <div className={"mt-20 thankyouText"}>{donationSuccessfulMessage}</div>
+      );
+    }
+
+    const donatedProjectPurpose = donation.destination.purpose;
+
     return (
       <div>
-        {projectDetails?.purpose === "trees" && (
+        {donatedProjectPurpose === "trees" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -81,7 +92,7 @@ function ThankyouMessage({
           </>
         )}
 
-        {projectDetails?.purpose === "funds" && (
+        {donatedProjectPurpose === "funds" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -94,7 +105,7 @@ function ThankyouMessage({
           </>
         )}
 
-        {projectDetails?.purpose === "planet-cash" && (
+        {donatedProjectPurpose === "planet-cash" && (
           <div className="thank-you-purpose">
             <div className="mt-20">{donationSuccessfulMessage}</div>
             <div className="mt-10 go-back">
@@ -103,7 +114,7 @@ function ThankyouMessage({
           </div>
         )}
 
-        {projectDetails?.purpose === "bouquet" && (
+        {donatedProjectPurpose === "bouquet" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -116,7 +127,7 @@ function ThankyouMessage({
             )}
           </>
         )}
-        {projectDetails?.purpose === "conservation" && (
+        {donatedProjectPurpose === "conservation" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}

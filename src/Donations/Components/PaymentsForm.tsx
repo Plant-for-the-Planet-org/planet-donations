@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
@@ -79,6 +79,9 @@ function PaymentsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
     stripePromise,
   } = React.useContext(QueryParamContext);
 
@@ -144,11 +147,11 @@ function PaymentsForm(): ReactElement {
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
+
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
       projectDetails,
-      // unitCost: paymentSetup.unitCost,
       quantity,
       currency,
       contactDetails,
@@ -170,7 +173,12 @@ function PaymentsForm(): ReactElement {
       isPackageWanted,
       tenant,
       locale: i18n.language,
+      // Add supported donation parameters
+      isSupportedDonation,
+      supportedProjectId,
+      getDonationBreakdown,
     });
+
     if (router.query.to) {
       router.replace({
         query: { ...router.query, step: PAYMENT },
@@ -253,6 +261,16 @@ function PaymentsForm(): ReactElement {
         : true)
     );
   };
+
+  const displayAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
 
   return ready ? (
     isPaymentProcessing ? (
@@ -393,7 +411,7 @@ function PaymentsForm(): ReactElement {
                     totalCost={getFormattedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup?.unitCost * quantity,
+                      displayAmount,
                     )}
                     onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)
@@ -430,8 +448,7 @@ function PaymentsForm(): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    quantity={quantity}
-                    unitCost={paymentSetup.unitCost}
+                    totalAmount={displayAmount}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}
