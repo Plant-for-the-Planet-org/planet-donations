@@ -76,7 +76,7 @@ const ImageComponent = ({
       );
     }
 
-    const donationCountry = donation.destination?.country.toLowerCase();
+    const donationCountry = donation.destination?.country?.toLowerCase();
 
     return (
       <div className={"donation-count p-20"}>
