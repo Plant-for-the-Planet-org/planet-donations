@@ -60,6 +60,11 @@
   "selectCurrency": "Selecione a moeda",
   "donationSuccessfulWith": "A sua doação de {{frequency}} {{purpose}}vezes com o valor de {{totalAmount}} foi paga com sucesso com {{paymentTypeUsed}}.",
   "donationSuccessful": "A sua doação de {{frequency}} {{purpose}}vezes com o valor de {{totalAmount}} foi um sucesso.",
+  "treesPurpose": "Doação de Árvores",
+  "conservationPurpose": "doação de conservação",
+  "fundsPurpose": "Doação",
+  "planet-cashPurpose": "Doação PlanetCash",
+  "bouquetPurpose": "Doação",
   "giftSentMessage": "Enviamos um e-mail para {{recipientName}} sobre o presente.",
   "contributionMessage": "Talvez você vai visitá-los um dia destes? Nesse meio tempo, que tal contar aos seus amigos sobre suas árvores, para incentivá-los a plantar as árvores deles?",
   "fundingDonationSuccess": "Obrigado pela sua contribuição! Você receberá uma confirmação de sua contribuição no seu e-mail.",
@@ -153,10 +158,5 @@
   "lowBalanceAndOneTimePay": "O saldo está baixo | A doação com PlanetCash é um pagamento único",
   "lowBalance": "Saldo está baixo",
   "oneTimePay": "Doação com PlanetCash é um pagamento único",
-  "currency": "Moeda",
-  "treesPurpose": "Doação de Árvores",
-  "fundsPurpose": "Doação",
-  "bouquetPurpose": "Doação",
-  "conservationPurpose": "doação de conservação",
-  "planet-cashPurpose": "Doação PlanetCash"
+  "currency": "Moeda"
 }
