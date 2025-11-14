@@ -57,7 +57,6 @@ type PaypalOrderData = {
 
 interface Props {
   paymentSetup: PaymentOptions;
-  totalAmount: number;
   currency: string;
   payDonationFunction: (
     gateway: PaymentGateway,
@@ -69,7 +68,6 @@ interface Props {
 
 function NewPaypal({
   paymentSetup,
-  totalAmount,
   currency,
   payDonationFunction,
   setPaymentError,

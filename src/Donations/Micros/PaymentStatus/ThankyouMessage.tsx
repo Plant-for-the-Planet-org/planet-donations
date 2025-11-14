@@ -75,9 +75,11 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
       );
     }
 
+    const donatedProjectPurpose = donation.destination.purpose;
+
     return (
       <div>
-        {donation.destination.purpose === "trees" && (
+        {donatedProjectPurpose === "trees" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -90,7 +92,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
           </>
         )}
 
-        {donation.destination.purpose === "funds" && (
+        {donatedProjectPurpose === "funds" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -103,7 +105,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
           </>
         )}
 
-        {donation.destination.purpose === "planet-cash" && (
+        {donatedProjectPurpose === "planet-cash" && (
           <div className="thank-you-purpose">
             <div className="mt-20">{donationSuccessfulMessage}</div>
             <div className="mt-10 go-back">
@@ -112,7 +114,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
           </div>
         )}
 
-        {donation.destination.purpose === "bouquet" && (
+        {donatedProjectPurpose === "bouquet" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}
@@ -125,7 +127,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
             )}
           </>
         )}
-        {donation.destination.purpose === "conservation" && (
+        {donatedProjectPurpose === "conservation" && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}

@@ -75,6 +75,9 @@ const ImageComponent = ({
         </div>
       );
     }
+
+    const donationCountry = donation.destination?.country.toLowerCase();
+
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&
@@ -84,9 +87,7 @@ const ImageComponent = ({
                   i18n.language,
                   Number(donation.units),
                 ),
-                location: t(
-                  "country:" + donation.destination?.country.toLowerCase(),
-                ),
+                location: t("country:" + donationCountry),
               })
             : t("common:restorationDonationShareDetails", {
                 amount: getFormattedCurrency(
@@ -94,9 +95,7 @@ const ImageComponent = ({
                   donation.currency,
                   Number(donation.amount),
                 ),
-                location: t(
-                  "country:" + donation.destination?.country.toLowerCase(),
-                ),
+                location: t("country:" + donationCountry),
               }))}
         {projectDetails?.purpose === "conservation" &&
           t(
@@ -111,9 +110,7 @@ const ImageComponent = ({
                 donation.currency,
                 Number(donation.amount),
               ),
-              location: t(
-                "country:" + donation.destination.country.toLowerCase(),
-              ),
+              location: t("country:" + donationCountry),
             },
           )}
         {projectDetails?.purpose === "funds" &&
@@ -127,6 +124,7 @@ const ImageComponent = ({
       </div>
     );
   };
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       {/* hidden div for image download */}

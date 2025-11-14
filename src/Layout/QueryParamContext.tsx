@@ -579,7 +579,7 @@ const QueryParamProvider = ({
       return {
         mainProjectAmount: totalAmount,
         supportAmount: 0,
-        totalAmount: totalAmount,
+        totalAmount,
         mainProjectQuantity: quantity,
         supportProjectQuantity: 0,
       };
