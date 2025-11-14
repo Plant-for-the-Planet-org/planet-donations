@@ -9,6 +9,7 @@ interface PlanetCashAllowedParams {
   isGift: boolean;
   giftDetails: GiftDetails | NoGift;
   hasPlanetCashGateway: boolean;
+  hasRecurringFrequenciesOnly: boolean;
 }
 
 /**
@@ -21,12 +22,14 @@ export const isPlanetCashAllowed = ({
   isGift,
   giftDetails,
   hasPlanetCashGateway,
+  hasRecurringFrequenciesOnly,
 }: PlanetCashAllowedParams): boolean => {
   return (
     profile !== null &&
     isSignedUp &&
     profile.planetCash !== null &&
     hasPlanetCashGateway &&
+    !hasRecurringFrequenciesOnly &&
     projectDetails !== null &&
     PLANETCASH_ALLOWED_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     projectDetails.taxDeductionCountries !== undefined &&

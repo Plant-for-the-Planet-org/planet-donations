@@ -129,6 +129,8 @@ function DonationsForm(): ReactElement {
     isGift,
     giftDetails,
     hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
+    hasRecurringFrequenciesOnly:
+      paymentSetup !== null && paymentSetup.frequencies["once"] === undefined,
   });
 
   const canSendDirectGift =
@@ -308,7 +310,7 @@ function DonationsForm(): ReactElement {
   }
 
   const handlePlanetCashDonate = async () => {
-    if (projectDetails) {
+    if (projectDetails && paymentSetup) {
       setShowDisablePlanetCashButton(true);
 
       const _metadata = {
@@ -362,16 +364,19 @@ function DonationsForm(): ReactElement {
           prePaid: true,
           metadata: _metadata,
           // Note: Gifts are not supported for composite/supported donations.
-          // The UI prevents gift setup via the canSendDirectGift condition.
         };
       } else {
         // Handle regular donations (existing logic)
         donationData = {
           purpose: projectDetails.purpose,
           project: projectDetails.id,
-          units: quantity,
           prePaid: true,
           metadata: _metadata,
+          ...(projectDetails.purpose === "trees" ||
+          projectDetails.purpose === "conservation"
+            ? { units: quantity }
+            : {}),
+          amount: quantity * paymentSetup.unitCost,
           ...(isGift && { gift: _gift }),
         };
       }
