@@ -129,6 +129,8 @@ function DonationsForm(): ReactElement {
     isGift,
     giftDetails,
     hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
+    hasRecurringFrequenciesOnly:
+      paymentSetup !== null && paymentSetup.frequencies["once"] === undefined,
   });
 
   const canSendDirectGift =
