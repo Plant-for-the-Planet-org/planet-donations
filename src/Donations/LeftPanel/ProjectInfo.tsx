@@ -11,8 +11,18 @@ const ProjectInfo = ({ projectDetails }: Props): ReactElement => {
   const { t } = useTranslation("common");
 
   const { purpose, description, ownerName } = projectDetails;
+  const PURPOSES_WITH_DESCRIPTION = [
+    "funds",
+    "bouquet",
+    "membership",
+    "academy",
+    "endowment",
+    "forest-protection",
+    "sponsorship",
+  ];
+
   const canShowDescription =
-    (purpose === "funds" || purpose === "bouquet") && description !== null;
+    PURPOSES_WITH_DESCRIPTION.includes(purpose) && description !== null;
   const canShowOwner =
     (purpose === "trees" || purpose === "conservation") && ownerName !== null;
 

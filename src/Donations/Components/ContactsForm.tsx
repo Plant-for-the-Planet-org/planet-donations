@@ -41,7 +41,7 @@ function ContactsForm(): ReactElement {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {}
+      : {},
   );
   const {
     profile,
@@ -94,7 +94,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
+      (country) => country.abbrev === contactDetails.country,
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
@@ -113,14 +113,14 @@ function ContactsForm(): ReactElement {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
-    )[0]?.postal
+      (country) => country.abbrev === contactDetails.country,
+    )[0]?.postal,
   );
 
   const changeCountry = (country: string) => {
@@ -134,7 +134,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (
-      projectDetails?.purpose === "funds" &&
+      projectDetails?.purpose === "membership" &&
       projectDetails.id === "proj_rLYELl1JpkT9sskba0sLPeKi" &&
       euCountries.includes(contactDetails.country)
     ) {
@@ -222,7 +222,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true }
+                { shallow: true },
               );
             }}
             style={{ marginRight: "12px" }}
@@ -609,7 +609,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormattedCurrency(
                     i18n.language,
                     currency,
-                    displayAmount
+                    displayAmount,
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),

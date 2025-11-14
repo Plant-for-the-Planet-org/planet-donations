@@ -4,6 +4,7 @@ import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { Donation } from "@planet-sdk/common/build/types/donation";
+import { PROJECTS_WITH_CURRENCY_UNIT_TYPE } from "src/Utils/projects/constants";
 
 interface Props {
   donation: Donation;
@@ -92,7 +93,7 @@ function ThankyouMessage({ donation, paymentTypeUsed }: Props): ReactElement {
           </>
         )}
 
-        {donatedProjectPurpose === "funds" && (
+        {PROJECTS_WITH_CURRENCY_UNIT_TYPE.includes(donatedProjectPurpose) && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}

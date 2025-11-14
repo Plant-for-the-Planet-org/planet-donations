@@ -112,6 +112,11 @@ export default function PaymentMethodTabs({
         });
         break;
       case "funds":
+      case "academy":
+      case "forest-protection":
+      case "sponsorship":
+      case "membership":
+      case "endowment":
         paymentLabel = t("fundingPaymentLabel", {
           amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });

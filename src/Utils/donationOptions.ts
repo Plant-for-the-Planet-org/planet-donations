@@ -1,8 +1,5 @@
 import { NoGift, User } from "@planet-sdk/common";
-import {
-  PLANETCASH_ALLOWED_PROJECT_PURPOSES,
-  PLANETCASH_DISALLOWED_PROJECT_CLASSIFICATIONS,
-} from "./projects/constants";
+import { PLANETCASH_ALLOWED_PROJECT_PURPOSES } from "./projects/constants";
 import { FetchedProjectDetails, GiftDetails } from "src/Common/Types";
 
 interface PlanetCashAllowedParams {
@@ -32,10 +29,6 @@ export const isPlanetCashAllowed = ({
     hasPlanetCashGateway &&
     projectDetails !== null &&
     PLANETCASH_ALLOWED_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
-    (projectDetails.classification === null ||
-      !PLANETCASH_DISALLOWED_PROJECT_CLASSIFICATIONS.includes(
-        projectDetails.classification
-      )) &&
     projectDetails.taxDeductionCountries !== undefined &&
     projectDetails.taxDeductionCountries.includes(profile.planetCash.country) &&
     !(isGift && giftDetails.recipientName === "")
