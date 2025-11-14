@@ -5,6 +5,7 @@ import getFormattedCurrency from "src/Utils/getFormattedCurrency";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
+import { PROJECTS_WITH_CURRENCY_UNIT_TYPE } from "src/Utils/projects/constants";
 
 interface Props {
   projectDetails: FetchedProjectDetails;
@@ -101,7 +102,7 @@ const ImageComponent = ({
               ),
             },
           )}
-        {projectDetails?.purpose === "funds" &&
+        {PROJECTS_WITH_CURRENCY_UNIT_TYPE.includes(projectDetails?.purpose) &&
           t("common:contributedToTpo", {
             amount: currencyFormat(),
             organization: projectDetails.ownerName,

@@ -5,6 +5,7 @@ import { getFormattedNumber } from "src/Utils/getFormattedNumber";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { FetchedProjectDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
+import { PROJECTS_WITH_CURRENCY_UNIT_TYPE } from "src/Utils/projects/constants";
 
 interface Props {
   projectDetails: FetchedProjectDetails;
@@ -25,7 +26,7 @@ function ThankyouMessage({
       getFormattedCurrency(
         i18n.language,
         donation.currency,
-        Number(donation.amount)
+        Number(donation.amount),
       );
   }
 
@@ -39,7 +40,7 @@ function ThankyouMessage({
       paymentTypeUsed,
       purpose: t(`common:${projectDetails?.purpose}Purpose`),
       frequency: donation.isRecurrent ? t(`common:${frequency}Success`) : "",
-    }
+    },
   );
 
   // EXAMPLE: We've sent an email to Sagar Aryal about the gift.
@@ -81,7 +82,7 @@ function ThankyouMessage({
           </>
         )}
 
-        {projectDetails?.purpose === "funds" && (
+        {PROJECTS_WITH_CURRENCY_UNIT_TYPE.includes(projectDetails?.purpose) && (
           <>
             <div className={"mt-20 thankyouText"}>
               {donationSuccessfulMessage}

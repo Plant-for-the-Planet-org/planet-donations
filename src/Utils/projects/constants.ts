@@ -17,4 +17,13 @@ export const PLANETCASH_ALLOWED_PROJECT_PURPOSES: Array<ProjectPurpose> = [
   "bouquet",
 ];
 
+export const PROJECTS_WITH_CURRENCY_UNIT_TYPE: Array<ProjectPurpose> = [
+  "funds",
+  "academy",
+  "forest-protection",
+  "sponsorship",
+  "membership",
+  "endowment",
+];
+
 // TODO - update types in planet-sdk to include "isGiftable" and "purpose=membership" in Project type
