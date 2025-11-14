@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
@@ -85,13 +85,27 @@ export default function PaymentMethodTabs({
     paymentSetup,
     quantity,
     frequency,
+    isSupportedDonation,
+    getDonationBreakdown,
     stripePromise,
   } = React.useContext(QueryParamContext);
+
+  // Calculate the correct amount for payment processing
+  const paymentAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
 
   let paymentLabel = "";
 
   if (paymentSetup && currency) {
     switch (projectDetails && projectDetails.purpose) {
+      // TODO: confirm labels for tree projects in supported donations
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
@@ -104,30 +118,18 @@ export default function PaymentMethodTabs({
       case "membership":
       case "endowment":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       default:
@@ -203,7 +205,7 @@ export default function PaymentMethodTabs({
             country={country}
             currency={currency}
             amount={formatAmountForStripe(
-              paymentSetup.unitCost * quantity,
+              paymentAmount,
               currency.toLowerCase(),
             )}
             onPaymentFunction={onNativePaymentFunction}

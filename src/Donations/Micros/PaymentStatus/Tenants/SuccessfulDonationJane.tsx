@@ -43,11 +43,7 @@ function SuccessfulDonationJane({
       <div className={"title-text thankyouText"} data-test-id="test-thankYou">
         {t("common:thankYou")}
       </div>
-      <ThankyouMessage
-        paymentTypeUsed={paymentTypeUsed}
-        projectDetails={projectDetails}
-        donation={donation}
-      />
+      <ThankyouMessage paymentTypeUsed={paymentTypeUsed} donation={donation} />
       <div className={"mt-20 thankyouText"}>
         {t("common:janeSuccessMessage")}
       </div>

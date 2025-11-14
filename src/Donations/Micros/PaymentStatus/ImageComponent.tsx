@@ -11,12 +11,14 @@ interface Props {
   projectDetails: FetchedProjectDetails;
   donation: Donation;
   imageRef: RefObject<HTMLDivElement>;
+  isSupportedDonation: boolean;
 }
 
 const ImageComponent = ({
   projectDetails,
   donation,
   imageRef,
+  isSupportedDonation,
 }: Props): ReactElement => {
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -61,6 +63,22 @@ const ImageComponent = ({
   };
 
   const ImageDonationText = () => {
+    if (isSupportedDonation) {
+      return (
+        <div className={"donation-count p-20"}>
+          {t("common:supportedDonationSuccessImageText", {
+            amount: getFormattedCurrency(
+              i18n.language,
+              donation.currency,
+              Number(donation.amount),
+            ),
+          })}
+        </div>
+      );
+    }
+
+    const donationCountry = donation.destination?.country?.toLowerCase();
+
     return (
       <div className={"donation-count p-20"}>
         {projectDetails?.purpose === "trees" &&
@@ -70,9 +88,7 @@ const ImageComponent = ({
                   i18n.language,
                   Number(donation.units),
                 ),
-                location: t(
-                  "country:" + donation.destination.country.toLowerCase(),
-                ),
+                location: t("country:" + donationCountry),
               })
             : t("common:restorationDonationShareDetails", {
                 amount: getFormattedCurrency(
@@ -80,9 +96,7 @@ const ImageComponent = ({
                   donation.currency,
                   Number(donation.amount),
                 ),
-                location: t(
-                  "country:" + donation.destination.country.toLowerCase(),
-                ),
+                location: t("country:" + donationCountry),
               }))}
         {projectDetails?.purpose === "conservation" &&
           t(
@@ -97,9 +111,7 @@ const ImageComponent = ({
                 donation.currency,
                 Number(donation.amount),
               ),
-              location: t(
-                "country:" + donation.destination.country.toLowerCase(),
-              ),
+              location: t("country:" + donationCountry),
             },
           )}
         {PROJECTS_WITH_CURRENCY_UNIT_TYPE.includes(projectDetails?.purpose) &&
@@ -113,6 +125,7 @@ const ImageComponent = ({
       </div>
     );
   };
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       {/* hidden div for image download */}

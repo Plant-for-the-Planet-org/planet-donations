@@ -2,11 +2,11 @@ import { useRouter } from "next/dist/client/router";
 import React, {
   useState,
   ReactElement,
+  ReactNode,
   createContext,
   useEffect,
   useContext,
   useCallback,
-  FC,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -42,13 +42,19 @@ import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
+import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 import { Stripe as StripeJS } from "@stripe/stripe-js";
 import getStripe from "src/Utils/stripe/getStripe";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
 
-const QueryParamProvider: FC = ({ children }) => {
+const QueryParamProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactElement => {
   const router = useRouter();
 
   const { i18n } = useTranslation();
@@ -76,7 +82,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [language, setlanguage] = useState(i18n.language);
 
   const [donationID, setdonationID] = useState<string | null>(null);
-  const [tenant, settenant] = useState("ten_I9TW3ncG");
+  const [tenant, setTenant] = useState<string | null>(null);
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = useState(false);
@@ -162,7 +168,13 @@ const QueryParamProvider: FC = ({ children }) => {
     null,
   );
 
+  const [isSupportedDonation, setIsSupportedDonation] = useState(false);
+  const [supportedProjectId, setSupportedProjectId] = useState<string | null>(
+    null,
+  );
+
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
+  const [showErrorCard, setShowErrorCard] = useState(false);
 
   const loadEnabledCurrencies = async () => {
     try {
@@ -257,12 +269,12 @@ const QueryParamProvider: FC = ({ children }) => {
     i18n.language,
   ]);
 
-  async function loadselectedProjects() {
+  const loadSelectedProjects = useCallback(async () => {
     try {
       const requestParams = {
         url: `/app/projects?_scope=map&filter[purpose]=trees,restoration,conservation`,
         setShowErrorCard,
-        tenant,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
       const response = await apiRequest(requestParams);
@@ -282,7 +294,7 @@ const QueryParamProvider: FC = ({ children }) => {
     } catch (err) {
       setErrors(handleError(err as APIError));
     }
-  }
+  }, [tenant, i18n.language]);
 
   const loadProfile = useCallback(async () => {
     const token =
@@ -294,7 +306,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: "/app/profile",
         token: token,
         setShowErrorCard,
-        tenant,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       });
       setprofile(profile.data);
@@ -491,7 +503,6 @@ const QueryParamProvider: FC = ({ children }) => {
     isTaxDeductible,
   ]);
 
-  const [showErrorCard, setShowErrorCard] = useState(false);
   useEffect(() => {
     if (router.query.error) {
       if (
@@ -528,7 +539,7 @@ const QueryParamProvider: FC = ({ children }) => {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
         setShowErrorCard,
         token,
-        tenant,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
       const paymentSetupData: { data: PaymentOptions } =
@@ -561,6 +572,60 @@ const QueryParamProvider: FC = ({ children }) => {
     // Update the state with the sanitized object
     setContactDetails(cleanDetails);
   };
+
+  const getDonationBreakdown = useCallback(() => {
+    if (!paymentSetup || !isSupportedDonation || !tenant) {
+      const totalAmount = paymentSetup ? paymentSetup.unitCost * quantity : 0;
+      return {
+        mainProjectAmount: totalAmount,
+        supportAmount: 0,
+        totalAmount,
+        mainProjectQuantity: quantity,
+        supportProjectQuantity: 0,
+      };
+    }
+
+    const config = supportedDonationConfig[tenant];
+    const mainProjectAmount = paymentSetup.unitCost * quantity;
+    const supportAmount =
+      (mainProjectAmount * config.supportPercentage) /
+      (1 - config.supportPercentage);
+    const totalAmount = mainProjectAmount + supportAmount;
+
+    return {
+      mainProjectAmount,
+      supportAmount,
+      totalAmount,
+      mainProjectQuantity: quantity,
+      supportProjectQuantity: supportAmount,
+    };
+  }, [paymentSetup, quantity, isSupportedDonation, tenant]);
+
+  useEffect(() => {
+    if (
+      tenant &&
+      projectDetails &&
+      supportedDonationConfig[tenant] &&
+      (projectDetails.purpose === "trees" ||
+        projectDetails.purpose === "conservation")
+    ) {
+      const config = supportedDonationConfig[tenant];
+      setIsSupportedDonation(true);
+      setSupportedProjectId(config.supportedProject);
+      setcountry(config.country);
+      localStorage.setItem("countryCode", config.country);
+      setEnabledCurrencies((prev) => {
+        if (prev && prev[config.currency]) {
+          return { [config.currency]: prev[config.currency] };
+        } else {
+          return null;
+        }
+      });
+    } else {
+      setIsSupportedDonation(false);
+      setSupportedProjectId(null);
+    }
+  }, [tenant, projectDetails]);
 
   return (
     <QueryParamContext.Provider
@@ -618,7 +683,7 @@ const QueryParamProvider: FC = ({ children }) => {
         isDirectDonation,
         setisDirectDonation,
         tenant,
-        settenant,
+        setTenant,
         selectedProjects,
         setSelectedProjects,
         allProjects,
@@ -627,7 +692,7 @@ const QueryParamProvider: FC = ({ children }) => {
         donationUid,
         setDonationUid,
         setShowErrorCard,
-        loadselectedProjects,
+        loadSelectedProjects,
         transferDetails,
         setTransferDetails,
         hideTaxDeduction,
@@ -661,6 +726,9 @@ const QueryParamProvider: FC = ({ children }) => {
         setDonation,
         paymentRequest,
         setPaymentRequest,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
         errors,
         setErrors,
       }}

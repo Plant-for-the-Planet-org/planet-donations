@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import GiftForm from "../Micros/GiftForm";
 import { useTranslation } from "next-i18next";
@@ -72,6 +72,9 @@ function DonationsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
   const { t, i18n } = useTranslation(["common", "country", "donate"]);
 
@@ -130,6 +133,7 @@ function DonationsForm(): ReactElement {
 
   const canSendDirectGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     projectDetails.isGiftable &&
     projectDetails.purpose !== "membership" &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose);
@@ -137,6 +141,7 @@ function DonationsForm(): ReactElement {
   const hasDirectGift = giftDetails.type === "direct";
   const canSendInvitationGift =
     projectDetails !== null &&
+    !isSupportedDonation &&
     projectDetails.isGiftable &&
     !NON_GIFTABLE_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
     !hasDirectGift &&
@@ -148,8 +153,7 @@ function DonationsForm(): ReactElement {
     paymentMethod: PaymentMethod,
     paymentRequest: PaymentRequest,
   ) => {
-    // eslint-disable-next-line no-underscore-dangle
-    setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO - is _activeBackingLibraryName a private variable?
+    setPaymentType(paymentRequest._activeBackingLibraryName);
 
     const fullName = String(paymentMethod.billing_details.name).split(" ");
     const firstName = fullName[0];
@@ -201,6 +205,9 @@ function DonationsForm(): ReactElement {
         utmMedium,
         utmSource,
         isPackageWanted,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
       }).then(async (res) => {
         if (res) {
           let token = null;
@@ -252,6 +259,16 @@ function DonationsForm(): ReactElement {
     }
   };
 
+  const paymentAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   let paymentLabel = "";
 
   if (paymentSetup && currency && projectDetails) {
@@ -268,30 +285,18 @@ function DonationsForm(): ReactElement {
       case "forest-protection":
       case "sponsorship":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity,
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       default:
@@ -335,15 +340,41 @@ function DonationsForm(): ReactElement {
             }
           : null;
 
-      // create Donation data
-      const donationData = {
-        purpose: projectDetails.purpose,
-        project: projectDetails.id,
-        units: quantity,
-        prePaid: true,
-        metadata: _metadata,
-        ...(isGift && { gift: _gift }),
-      };
+      let donationData;
+
+      if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
+        const { mainProjectQuantity, supportAmount, mainProjectAmount } =
+          getDonationBreakdown();
+
+        donationData = {
+          purpose: "composite",
+          lineItems: [
+            {
+              project: projectDetails.id,
+              units: mainProjectQuantity,
+              amount: mainProjectAmount,
+            },
+            {
+              project: supportedProjectId,
+              amount: supportAmount,
+            },
+          ],
+          prePaid: true,
+          metadata: _metadata,
+          // Note: Gifts are not supported for composite/supported donations.
+          // The UI prevents gift setup via the canSendDirectGift condition.
+        };
+      } else {
+        // Handle regular donations (existing logic)
+        donationData = {
+          purpose: projectDetails.purpose,
+          project: projectDetails.id,
+          units: quantity,
+          prePaid: true,
+          metadata: _metadata,
+          ...(isGift && { gift: _gift }),
+        };
+      }
 
       const cleanedDonationData = cleanObject(donationData);
 
@@ -442,7 +473,7 @@ function DonationsForm(): ReactElement {
             {/* 9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
             {!isPlanetCashActive ? (
               paymentSetup && paymentSetup?.unitCost && projectDetails ? (
-                minAmt && paymentSetup?.unitCost * quantity >= minAmt ? (
+                minAmt && paymentAmount >= minAmt ? (
                   !isPaymentOptionsLoading &&
                   paymentSetup?.gateways?.stripe?.authorization
                     ?.stripePublishableKey &&
@@ -452,7 +483,7 @@ function DonationsForm(): ReactElement {
                       country={country}
                       currency={currency}
                       amount={formatAmountForStripe(
-                        paymentSetup?.unitCost * quantity,
+                        paymentAmount,
                         currency.toLowerCase(),
                       )}
                       onPaymentFunction={onPaymentFunction}

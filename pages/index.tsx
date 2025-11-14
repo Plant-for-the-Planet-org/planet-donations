@@ -22,6 +22,8 @@ import {
 import { GetServerSideProps } from "next/types";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
+import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -79,7 +81,7 @@ function index({
   const {
     setdonationStep,
     setSelectedProjects,
-    loadselectedProjects,
+    loadSelectedProjects,
     setGiftDetails,
     setIsGift,
     setpaymentSetup,
@@ -94,7 +96,8 @@ function index({
     setisDirectDonation,
     setquantity,
     setfrequency,
-    settenant,
+    tenant: tenantFromContext,
+    setTenant,
     setcallbackUrl,
     setCallbackMethod,
     setUtmCampaign,
@@ -127,7 +130,7 @@ function index({
     utmMedium && setUtmMedium(utmMedium);
     utmSource && setUtmSource(utmSource);
     setCountryCode({ setcountry, setcurrency, country });
-    settenant(tenant);
+    setTenant(tenant);
     // If gift details are present, initialize gift in context
     if (giftDetails && isGift) {
       setGiftDetails(giftDetails);
@@ -146,11 +149,11 @@ function index({
 
   React.useEffect(() => {
     setdonationStep(donationStep);
-    if (!donationStep) {
+    if (!donationStep && tenantFromContext) {
       setSelectedProjects([]);
-      loadselectedProjects();
+      loadSelectedProjects();
     }
-  }, [donationStep, defaultLanguage]);
+  }, [tenantFromContext, donationStep, defaultLanguage]);
 
   React.useEffect(() => {
     setfrequency(frequency);
@@ -232,7 +235,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let currency = "EUR";
   let paymentSetup: PaymentOptions | null = null;
   let amount = 0;
-  let tenant = "ten_I9TW3ncG";
+  let tenant = DEFAULT_TENANT;
   let callbackUrl = "";
   let callbackMethod = "";
   let utmCampaign = "";
@@ -411,8 +414,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
 
+  const isSupportedDonation =
+    typeof context.query.tenant === "string" &&
+    supportedDonationConfig[context.query.tenant] !== undefined;
+
   // Handle s (support link) in the query params
-  if (typeof context.query.s === "string" && context.query.s.length > 0) {
+  if (
+    typeof context.query.s === "string" &&
+    context.query.s.length > 0 &&
+    !isSupportedDonation
+  ) {
     if (
       projectDetails === null ||
       projectDetails.purpose === "membership" ||
@@ -460,6 +471,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   // Set gift details if gift = true in the query params
   if (
+    !isSupportedDonation &&
     giftDetails?.type !== "direct" &&
     context.query.gift === "true" &&
     projectDetails !== null &&

@@ -12,6 +12,7 @@ import {
   PaymentGateway,
   CurrencyCode,
 } from "@planet-sdk/common";
+import { DonationBreakdown } from "./QueryParamContextInterface";
 
 /** planet-donations only allows direct or invitation gifts */
 export interface DirectGiftDetails extends SentDirectGift {
@@ -63,6 +64,10 @@ export interface CreateDonationFunctionProps {
   isPackageWanted: boolean | null;
   tenant: string;
   locale: string;
+  // Add supported donation parameters
+  isSupportedDonation?: boolean;
+  supportedProjectId?: string | null;
+  getDonationBreakdown?: () => DonationBreakdown;
 }
 
 export interface PayDonationProps {
@@ -118,6 +123,9 @@ export interface CreateDonationDataProps {
   utmMedium: string | undefined;
   utmSource: string | undefined;
   isPackageWanted: boolean | null;
+  isSupportedDonation?: boolean;
+  supportedProjectId?: string | null;
+  getDonationBreakdown?: () => DonationBreakdown;
 }
 
 export interface PlanetCashSignupDetails {
