@@ -23,12 +23,6 @@ export const createProjectDetails = (
         purpose: "trees",
         classification: paymentOptions.classification,
       };
-    case "funds":
-      return {
-        ...baseDetails,
-        purpose: "funds",
-        classification: paymentOptions.classification,
-      };
     default:
       return {
         ...baseDetails,
