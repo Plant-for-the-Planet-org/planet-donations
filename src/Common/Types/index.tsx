@@ -12,6 +12,7 @@ import {
   PaymentGateway,
   CurrencyCode,
 } from "@planet-sdk/common";
+import { DonationBreakdown } from "./QueryParamContextInterface";
 
 /** planet-donations only allows direct or invitation gifts */
 export interface DirectGiftDetails extends SentDirectGift {
@@ -52,7 +53,7 @@ export interface CreateDonationFunctionProps {
   setPaymentError: Dispatch<SetStateAction<string>>;
   setdonationID: Dispatch<SetStateAction<string | null>>;
   token: string | null;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   frequency: string;
   amount?: number | null;
   callbackUrl?: string | undefined;
@@ -63,6 +64,10 @@ export interface CreateDonationFunctionProps {
   isPackageWanted: boolean | null;
   tenant: string;
   locale: string;
+  // Add supported donation parameters
+  isSupportedDonation?: boolean;
+  supportedProjectId?: string | null;
+  getDonationBreakdown?: () => DonationBreakdown;
 }
 
 export interface PayDonationProps {
@@ -77,7 +82,7 @@ export interface PayDonationProps {
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
   locale: string;
@@ -95,7 +100,7 @@ export interface HandleStripeSCAPaymentProps {
   contactDetails: ContactDetails;
   token: string | null;
   country: string;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   router: NextRouter;
   tenant: string;
   locale: string;
@@ -118,6 +123,9 @@ export interface CreateDonationDataProps {
   utmMedium: string | undefined;
   utmSource: string | undefined;
   isPackageWanted: boolean | null;
+  isSupportedDonation?: boolean;
+  supportedProjectId?: string | null;
+  getDonationBreakdown?: () => DonationBreakdown;
 }
 
 export interface PlanetCashSignupDetails {
@@ -139,6 +147,7 @@ export interface FetchedBaseProjectDetails {
   taxDeductionCountries?: Array<string>;
   isApproved: boolean;
   isTopProject: boolean;
+  isGiftable: boolean;
 }
 
 export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
@@ -146,28 +155,37 @@ export interface FetchedTreeProjectDetails extends FetchedBaseProjectDetails {
   classification: TreeProjectClassification;
 }
 
-export interface FetchedFundsProjectDetails extends FetchedBaseProjectDetails {
-  purpose: "funds";
-  classification: FundsProjectClassification;
-}
-
 export interface FetchedOtherProjectDetails extends FetchedBaseProjectDetails {
-  purpose: "conservation" | "reforestation" | "bouquet" | "planet-cash";
+  purpose:
+    | "conservation"
+    | "funds"
+    | "academy"
+    | "endowment"
+    | "forest-protection"
+    | "sponsorship"
+    | "membership"
+    | "planet-cash"
+    | "reforestation"
+    | "bouquet";
   classification: null;
 }
 
 export type FetchedProjectDetails =
   | FetchedTreeProjectDetails
-  | FetchedFundsProjectDetails
   | FetchedOtherProjectDetails;
 
 export type ProjectPurpose =
   | "trees"
   | "conservation"
   | "funds"
+  | "academy"
+  | "endowment"
+  | "forest-protection"
+  | "sponsorship"
+  | "membership"
+  | "planet-cash"
   | "reforestation"
-  | "bouquet"
-  | "planet-cash";
+  | "bouquet";
 
 export type TreeProjectClassification =
   | "agroforestry"
@@ -178,25 +196,7 @@ export type TreeProjectClassification =
   | "other-planting"
   | "urban-planting";
 
-export type FundsProjectClassification =
-  | "academy"
-  | "endowment"
-  | "forest-protection"
-  | "funding"
-  | "membership"
-  | "mixed"
-  | "neutral"
-  | "neutral-event"
-  | "penalty"
-  | "public-funds"
-  | "research"
-  | "sponsorship"
-  | "subscription"
-  | "subsidy";
-
-export type ProjectClassification =
-  | TreeProjectClassification
-  | FundsProjectClassification;
+export type ProjectClassification = TreeProjectClassification;
 
 export type PaymentOptions = FetchedProjectDetails & {
   requestedCountry: string;

@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import PaymentMethodTabs from "../PaymentMethods/PaymentMethodTabs";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
@@ -6,7 +6,6 @@ import BackButtonIcon from "../../../public/assets/icons/BackButtonIcon";
 import { apiRequest } from "../../Utils/api";
 import PaymentProgress from "../../Common/ContentLoaders/Donations/PaymentProgress";
 import { Elements } from "@stripe/react-stripe-js";
-import getStripe from "../../Utils/stripe/getStripe";
 import getFormattedCurrency from "../../Utils/getFormattedCurrency";
 import {
   createDonationFunction,
@@ -33,7 +32,6 @@ import {
 } from "src/Common/Types";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
-import { Stripe } from "@stripe/stripe-js/types/stripe-js/stripe";
 
 function PaymentsForm(): ReactElement {
   const { t, ready, i18n } = useTranslation("common");
@@ -63,7 +61,7 @@ function PaymentsForm(): ReactElement {
     isTaxDeductible,
     isDirectDonation,
     setDonationUid,
-    setshowErrorCard,
+    setShowErrorCard,
     hideTaxDeduction,
     queryToken,
     profile,
@@ -81,21 +79,11 @@ function PaymentsForm(): ReactElement {
     utmSource,
     isPackageWanted,
     setPaymentRequest,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
+    stripePromise,
   } = React.useContext(QueryParamContext);
-
-  const [stripePromise, setStripePromise] =
-    React.useState<null | Promise<Stripe | null>>(() => null);
-
-  React.useEffect(() => {
-    const fetchStripeObject = async () => {
-      if (!stripePromise && paymentSetup) {
-        const res = () => getStripe(paymentSetup, i18n.language);
-        // When we have got the Stripe object, pass it into our useState.
-        setStripePromise(res);
-      }
-    };
-    fetchStripeObject();
-  }, [paymentSetup]);
 
   React.useEffect(() => {
     setPaymentType("CARD");
@@ -109,7 +97,7 @@ function PaymentsForm(): ReactElement {
       | string
       | PaymentMethod
       | PaypalApproveData
-      | PaypalErrorData
+      | PaypalErrorData,
   ) => {
     if (!paymentSetup || !donationID) {
       console.log("Missing payment options"); //TODOO - better error handling
@@ -131,7 +119,7 @@ function PaymentsForm(): ReactElement {
       contactDetails,
       token,
       country,
-      setshowErrorCard,
+      setShowErrorCard,
       router,
       tenant,
       locale: i18n.language,
@@ -142,7 +130,7 @@ function PaymentsForm(): ReactElement {
   // Seems to work only for native pay. Should this be removed?
   const onPaymentFunction = async (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => {
     setPaymentType(paymentRequest._activeBackingLibraryName); //TODOO --_activeBackingLibraryName is a private variable?
     const gateway = "stripe";
@@ -159,11 +147,11 @@ function PaymentsForm(): ReactElement {
     ) {
       token = queryToken ? queryToken : await getAccessTokenSilently();
     }
+
     const donation = await createDonationFunction({
       isTaxDeductible,
       country,
       projectDetails,
-      // unitCost: paymentSetup.unitCost,
       quantity,
       currency,
       contactDetails,
@@ -173,7 +161,7 @@ function PaymentsForm(): ReactElement {
       setPaymentError,
       setdonationID,
       token,
-      setshowErrorCard,
+      setShowErrorCard,
       frequency,
       amount,
       paymentSetup,
@@ -185,7 +173,12 @@ function PaymentsForm(): ReactElement {
       isPackageWanted,
       tenant,
       locale: i18n.language,
+      // Add supported donation parameters
+      isSupportedDonation,
+      supportedProjectId,
+      getDonationBreakdown,
     });
+
     if (router.query.to) {
       router.replace({
         query: { ...router.query, step: PAYMENT },
@@ -218,7 +211,7 @@ function PaymentsForm(): ReactElement {
         url: `/app/donations/${donationID}/publish`,
         data: { publish: isPublishPermitted },
         method: "PUT" as const,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       };
@@ -269,6 +262,16 @@ function PaymentsForm(): ReactElement {
     );
   };
 
+  const displayAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   return ready ? (
     isPaymentProcessing ? (
       <PaymentProgress isPaymentProcessing={isPaymentProcessing} />
@@ -287,7 +290,7 @@ function PaymentsForm(): ReactElement {
                       query: { ...router.query, step: CONTACT },
                     },
                     undefined,
-                    { shallow: true }
+                    { shallow: true },
                   );
                 }}
                 className="d-flex"
@@ -408,7 +411,7 @@ function PaymentsForm(): ReactElement {
                     totalCost={getFormattedCurrency(
                       i18n.language,
                       currency,
-                      paymentSetup?.unitCost * quantity
+                      displayAmount,
                     )}
                     onPaymentFunction={(providerObject: PaymentMethod) =>
                       onSubmitPayment("stripe", "card", providerObject)
@@ -445,8 +448,7 @@ function PaymentsForm(): ReactElement {
                 {paymentType === "Paypal" && (
                   <NewPaypal
                     paymentSetup={paymentSetup}
-                    quantity={quantity}
-                    unitCost={paymentSetup.unitCost}
+                    totalAmount={displayAmount}
                     currency={currency}
                     donationID={donationID}
                     payDonationFunction={onSubmitPayment}

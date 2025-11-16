@@ -10,6 +10,7 @@ import {
   PaymentProviderRequest,
   UpdateDonationResponse,
   UpdateDonationData,
+  SentGift,
 } from "../../Common/Types";
 import { THANK_YOU } from "src/Utils/donationStepConstants";
 import {
@@ -17,7 +18,12 @@ import {
   ContactDetails,
   PaymentGateway,
 } from "@planet-sdk/common/build/types/donation";
-import { DonationRequestData } from "src/Common/Types/donation";
+import {
+  BaseDonationRequest,
+  CompositeDonationRequest,
+  DonationRequestData,
+  RegularDonationRequest,
+} from "src/Common/Types/donation";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
 import { Dispatch, SetStateAction } from "react";
@@ -26,8 +32,8 @@ export function buildPaymentProviderRequest(
   gateway: PaymentGateway,
   method: string,
   paymentSetup: PaymentOptions,
-  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData
-): { paymentProviderRequest: PaymentProviderRequest } {
+  providerObject?: string | PaymentMethod | PaypalApproveData | PaypalErrorData,
+): { paymentRequest: PaymentProviderRequest } {
   let account;
   let source;
   switch (gateway) {
@@ -57,7 +63,7 @@ export function buildPaymentProviderRequest(
   }
 
   return {
-    paymentProviderRequest: {
+    paymentRequest: {
       account,
       gateway,
       method,
@@ -104,7 +110,7 @@ export async function createDonationFunction({
   setPaymentError,
   setdonationID,
   token,
-  setshowErrorCard,
+  setShowErrorCard,
   frequency,
   amount,
   callbackUrl,
@@ -115,6 +121,9 @@ export async function createDonationFunction({
   isPackageWanted = false,
   tenant,
   locale,
+  isSupportedDonation = false,
+  supportedProjectId = null,
+  getDonationBreakdown,
 }: CreateDonationFunctionProps): Promise<Donation | undefined> {
   const taxDeductionCountry = isTaxDeductible ? country : null;
   const donationData = createDonationData({
@@ -134,13 +143,16 @@ export async function createDonationFunction({
     utmMedium,
     utmSource,
     isPackageWanted,
+    isSupportedDonation,
+    supportedProjectId,
+    getDonationBreakdown,
   });
   try {
     const requestParams = {
       url: `/app/donations`,
       data: donationData,
       method: "POST" as const,
-      setshowErrorCard,
+      setShowErrorCard,
       tenant,
       locale,
       token: token ? token : null,
@@ -160,7 +172,7 @@ export async function createDonationFunction({
       setPaymentError("Something went wrong please try again soon!");
     } else if (error.status === 503) {
       setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
+        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
       );
     } else {
       setPaymentError(error.message);
@@ -186,6 +198,10 @@ export function createDonationData({
   utmMedium,
   utmSource,
   isPackageWanted,
+  // Add new parameters for supported donations
+  isSupportedDonation,
+  supportedProjectId,
+  getDonationBreakdown,
 }: CreateDonationDataProps): DonationRequestData {
   const sanitizedDonor = {
     ...contactDetails,
@@ -194,13 +210,8 @@ export function createDonationData({
     delete sanitizedDonor.isPackageWanted;
   }
 
-  let donationData: DonationRequestData = {
-    purpose: projectDetails?.purpose,
-    project: projectDetails.id,
-    amount:
-      paymentSetup.unitCost * quantity
-        ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
-        : (amount as number), //amount is null when quantity has a value
+  // Build base donation fields common to all donation types
+  const baseDonationFields: BaseDonationRequest = {
     currency,
     donor: sanitizedDonor,
     frequency: frequency,
@@ -212,54 +223,74 @@ export function createDonationData({
       utm_source: utmSource,
       ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
     },
-    quantity,
+    ...(taxDeductionCountry && { taxDeductionCountry }),
   };
 
-  // }
-  if (taxDeductionCountry) {
+  let donationData: DonationRequestData;
+
+  // Handle supported donations with lineItems
+  if (isSupportedDonation && supportedProjectId && getDonationBreakdown) {
+    const { mainProjectQuantity, supportAmount, mainProjectAmount } =
+      getDonationBreakdown();
+
     donationData = {
-      ...donationData,
-      taxDeductionCountry,
-    };
-  }
-
-  if (isGift) {
-    if (giftDetails.type === "invitation") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "invitation",
-            recipientName: giftDetails.recipientName,
-            recipientEmail: giftDetails.recipientEmail,
-            message: giftDetails.message,
-          },
+      ...baseDonationFields,
+      purpose: "composite",
+      lineItems: [
+        {
+          project: projectDetails.id,
+          units: mainProjectQuantity,
+          amount: mainProjectAmount,
         },
-      };
-    } else if (giftDetails.type === "direct") {
-      donationData = {
-        ...donationData,
-        ...{
-          gift: {
-            type: "direct",
-            recipient: giftDetails.recipient,
-          },
+        {
+          project: supportedProjectId,
+          amount: supportAmount,
         },
-      };
+      ],
+    } satisfies CompositeDonationRequest;
+  } else {
+    // Add gift details if applicable
+    let _giftDetails: SentGift | undefined = undefined;
+    if (isGift) {
+      if (giftDetails.type === "invitation") {
+        _giftDetails = {
+          type: "invitation",
+          recipientName: giftDetails.recipientName,
+          recipientEmail: giftDetails.recipientEmail,
+          message: giftDetails.message,
+        };
+      } else if (giftDetails.type === "direct") {
+        _giftDetails = {
+          type: "direct",
+          recipient: giftDetails.recipient,
+        };
+      }
     }
+
+    // Handle regular donations
+    donationData = {
+      ...baseDonationFields,
+      purpose: projectDetails?.purpose,
+      project: projectDetails.id,
+      amount:
+        Number.isFinite(paymentSetup.unitCost) && Number.isFinite(quantity)
+          ? Math.round(paymentSetup.unitCost * quantity * 100) / 100
+          : (amount as number),
+      units: quantity,
+      ...(isGift && { gift: _giftDetails }),
+    } satisfies RegularDonationRequest;
   }
 
+  // Handle PlanetCash top-up special case
   if (projectDetails?.purpose === "planet-cash") {
-    // For PlanetCash Top-up
-
-    // No need to send quantity.
-    delete donationData.quantity;
-
-    // Since a user account can have only one planetCash account no need to send project (i.e planetCash account ID).
-    delete donationData.project;
-
-    //should not send gift details
-    delete donationData.gift;
+    // For PlanetCash Top-up, we need to modify the regular donation
+    if (donationData.purpose !== "composite") {
+      // Remove units and project for PlanetCash
+      delete (donationData as any).units;
+      delete (donationData as any).project;
+      // Remove gift details for PlanetCash
+      delete donationData.gift;
+    }
   }
 
   return donationData;
@@ -277,7 +308,7 @@ export async function payDonationFunction({
   contactDetails,
   token,
   country,
-  setshowErrorCard,
+  setShowErrorCard,
   router,
   tenant,
   locale,
@@ -296,7 +327,7 @@ export async function payDonationFunction({
     gateway,
     method,
     paymentSetup,
-    providerObject
+    providerObject,
   );
 
   try {
@@ -304,16 +335,16 @@ export async function payDonationFunction({
       donationID,
       payDonationData,
       token,
-      setshowErrorCard,
+      setShowErrorCard,
       setPaymentError,
       tenant,
-      locale
+      locale,
     );
     if (paymentResponse) {
       if (
         (paymentResponse.paymentStatus &&
           ["success", "pending", "paid"].includes(
-            paymentResponse.paymentStatus
+            paymentResponse.paymentStatus,
           )) ||
         ["success", "paid", "failed"].includes(paymentResponse.status)
       ) {
@@ -347,7 +378,7 @@ export async function payDonationFunction({
           contactDetails,
           token,
           country,
-          setshowErrorCard,
+          setShowErrorCard,
           router,
           tenant,
           locale,
@@ -363,7 +394,7 @@ export async function payDonationFunction({
       return;
     } else if (error.status === 503) {
       setPaymentError(
-        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details"
+        "App is undergoing maintenance, please check status.plant-for-the-planet.org for details",
       );
       return;
     } else {
@@ -375,25 +406,24 @@ export async function payDonationFunction({
 
 export async function confirmPaymentIntent(
   donationId: string,
-  payDonationData: { paymentProviderRequest: PaymentProviderRequest },
+  payDonationData: { paymentRequest: PaymentProviderRequest },
   token: string | null,
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>,
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>,
   setPaymentError: Dispatch<SetStateAction<string>>,
   tenant: string,
-  locale: string
+  locale: string,
 ): Promise<UpdateDonationData | undefined> {
   const requestParams = {
     url: `/app/donations/${donationId}`,
     data: payDonationData,
     method: "PUT" as const,
-    setshowErrorCard,
+    setShowErrorCard,
     token: token ? token : null,
     tenant,
     locale,
   };
-  const confirmationResponse: UpdateDonationResponse = await apiRequest(
-    requestParams
-  );
+  const confirmationResponse: UpdateDonationResponse =
+    await apiRequest(requestParams);
   if (
     confirmationResponse.data.paymentStatus ||
     confirmationResponse.data.status
@@ -421,7 +451,7 @@ const buildBillingDetails = (contactDetails: ContactDetails) => {
 const handlePaymentError = (
   paymentError: StripeError | string | undefined, //TODOO - identify and set better error types
   setIsPaymentProcessing: Dispatch<SetStateAction<boolean>>,
-  setPaymentError: Dispatch<SetStateAction<string>>
+  setPaymentError: Dispatch<SetStateAction<string>>,
 ): void => {
   setIsPaymentProcessing(false);
   if (
@@ -429,7 +459,7 @@ const handlePaymentError = (
     paymentError?.data?.message
   ) {
     setPaymentError(
-      (paymentError as StripeError).message ?? paymentError.data.message
+      (paymentError as StripeError).message ?? paymentError.data.message,
     );
   } else {
     setPaymentError(paymentError as string);
@@ -447,19 +477,21 @@ export async function handleStripeSCAPayment({
   contactDetails,
   token,
   country,
-  setshowErrorCard,
+  setShowErrorCard,
   router,
   tenant,
   locale,
 }: HandleStripeSCAPaymentProps): Promise<UpdateDonationData | undefined> {
   const clientSecret = paymentResponse.response.payment_intent_client_secret;
   const key =
-    paymentSetup?.gateways?.stripe?.authorization.stripePublishableKey;
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
 
   if (!window.Stripe) return;
-  const stripe: Stripe = window.Stripe(key, {
+  // Commented out use of stripeAccount from paymentOptions
+  /* const stripe: Stripe = window.Stripe(key, {
     stripeAccount: paymentResponse.response.account,
-  });
+  }); */
+  const stripe: Stripe = window.Stripe(key);
   switch (method) {
     case "card": {
       let successData: UpdateDonationData | undefined;
@@ -471,14 +503,14 @@ export async function handleStripeSCAPayment({
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(
-              stripeResponse.error.message || "Something went wrong"
+              stripeResponse.error.message || "Something went wrong",
             );
             return;
           }
           try {
             const payDonationData = {
               // method not sent here as it was already captured in the 1st request.
-              paymentProviderRequest: {
+              paymentRequest: {
                 account: paymentSetup.gateways.stripe.account,
                 gateway: "stripe" as const,
                 source: {
@@ -491,10 +523,10 @@ export async function handleStripeSCAPayment({
               donationID,
               payDonationData,
               token,
-              setshowErrorCard,
+              setShowErrorCard,
               setPaymentError,
               tenant,
-              locale
+              locale,
             );
             successData = successResponse;
           } catch (error) {
@@ -509,7 +541,7 @@ export async function handleStripeSCAPayment({
           if (stripeResponse.error) {
             setIsPaymentProcessing(false);
             setPaymentError(
-              stripeResponse.error.message || "Something went wrong."
+              stripeResponse.error.message || "Something went wrong.",
             );
             return;
           }
@@ -524,7 +556,7 @@ export async function handleStripeSCAPayment({
           query: { ...router.query, step: THANK_YOU },
         },
         undefined,
-        { shallow: true }
+        { shallow: true },
       );
       setIsPaymentProcessing(false);
       return successData;

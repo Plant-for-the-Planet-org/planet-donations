@@ -2,11 +2,11 @@ import { useRouter } from "next/dist/client/router";
 import React, {
   useState,
   ReactElement,
+  ReactNode,
   createContext,
   useEffect,
   useContext,
   useCallback,
-  FC,
   Dispatch,
   SetStateAction,
 } from "react";
@@ -42,11 +42,19 @@ import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
+import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
+import { Stripe as StripeJS } from "@stripe/stripe-js";
+import getStripe from "src/Utils/stripe/getStripe";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
 
-const QueryParamProvider: FC = ({ children }) => {
+const QueryParamProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactElement => {
   const router = useRouter();
 
   const { i18n } = useTranslation();
@@ -58,6 +66,8 @@ const QueryParamProvider: FC = ({ children }) => {
   } = useAuth0();
 
   const [paymentSetup, setpaymentSetup] = useState<PaymentOptions | null>(null);
+  const [stripePromise, setStripePromise] =
+    useState<Promise<StripeJS | null> | null>(null);
 
   const [projectDetails, setprojectDetails] =
     useState<FetchedProjectDetails | null>(null);
@@ -72,7 +82,7 @@ const QueryParamProvider: FC = ({ children }) => {
   const [language, setlanguage] = useState(i18n.language);
 
   const [donationID, setdonationID] = useState<string | null>(null);
-  const [tenant, settenant] = useState("ten_I9TW3ncG");
+  const [tenant, setTenant] = useState<string | null>(null);
 
   // for tax deduction part
   const [isTaxDeductible, setIsTaxDeductible] = useState(false);
@@ -141,7 +151,7 @@ const QueryParamProvider: FC = ({ children }) => {
     useState<BankTransferDetails | null>(null);
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState<boolean | null>(
-    null
+    null,
   );
 
   // Only used when planetCash is active
@@ -155,21 +165,26 @@ const QueryParamProvider: FC = ({ children }) => {
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
-    null
+    null,
+  );
+
+  const [isSupportedDonation, setIsSupportedDonation] = useState(false);
+  const [supportedProjectId, setSupportedProjectId] = useState<string | null>(
+    null,
   );
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
+  const [showErrorCard, setShowErrorCard] = useState(false);
 
   const loadEnabledCurrencies = async () => {
     try {
       const requestParams = {
         url: `/app/currencies`,
-        setshowErrorCard,
+        setShowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const response: { data: Record<string, string> } = await apiRequest(
-        requestParams
-      );
+      const response: { data: Record<string, string> } =
+        await apiRequest(requestParams);
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -203,7 +218,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
     );
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
@@ -235,19 +250,38 @@ const QueryParamProvider: FC = ({ children }) => {
     setRetainQuantityValue(false);
   }, [paymentSetup]);
 
-  async function loadselectedProjects() {
+  useEffect(() => {
+    const stripeKey =
+      paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey;
+    if (stripeKey) {
+      const stripePromise = getStripe(stripeKey, i18n.language);
+
+      // Handle the error at the promise level
+      stripePromise.catch((e) => {
+        console.error("Failed to initialize Stripe", e);
+        setStripePromise(Promise.resolve(null));
+      });
+
+      setStripePromise(stripePromise);
+    }
+  }, [
+    paymentSetup?.gateways?.stripe?.authorization?.stripePublishableKey,
+    i18n.language,
+  ]);
+
+  const loadSelectedProjects = useCallback(async () => {
     try {
       const requestParams = {
         url: `/app/projects?_scope=map&filter[purpose]=trees,restoration,conservation`,
-        setshowErrorCard,
-        tenant,
+        setShowErrorCard,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
       const response = await apiRequest(requestParams);
       const projects = response.data as Project[];
       if (projects) {
         const allowedDonationsProjects = projects.filter(
-          (project) => project.properties.allowDonations === true
+          (project) => project.properties.allowDonations === true,
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -260,7 +294,7 @@ const QueryParamProvider: FC = ({ children }) => {
     } catch (err) {
       setErrors(handleError(err as APIError));
     }
-  }
+  }, [tenant, i18n.language]);
 
   const loadProfile = useCallback(async () => {
     const token =
@@ -271,8 +305,8 @@ const QueryParamProvider: FC = ({ children }) => {
       const profile = await apiRequest({
         url: "/app/profile",
         token: token,
-        setshowErrorCard,
-        tenant,
+        setShowErrorCard,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       });
       setprofile(profile.data);
@@ -366,14 +400,14 @@ const QueryParamProvider: FC = ({ children }) => {
       }
     },
     1000,
-    [router.query.to, country, profile?.slug]
+    [router.query.to, country, profile?.slug],
   );
 
   async function loadConfig() {
     try {
       const requestParams = {
         url: process.env.CONFIG_URL || `/app/config`,
-        setshowErrorCard,
+        setShowErrorCard,
         shouldQueryParamAdd: false,
       };
       const config: { data: ConfigResponse } = await apiRequest(requestParams);
@@ -382,7 +416,7 @@ const QueryParamProvider: FC = ({ children }) => {
           const found = countriesData.some(
             (arrayCountry) =>
               arrayCountry.countryCode?.toUpperCase() ===
-              config.data.country?.toUpperCase()
+              config.data.country?.toUpperCase(),
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
@@ -469,7 +503,6 @@ const QueryParamProvider: FC = ({ children }) => {
     isTaxDeductible,
   ]);
 
-  const [showErrorCard, setshowErrorCard] = useState(false);
   useEffect(() => {
     if (router.query.error) {
       if (
@@ -504,14 +537,13 @@ const QueryParamProvider: FC = ({ children }) => {
     try {
       const requestParams = {
         url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
-        setshowErrorCard,
+        setShowErrorCard,
         token,
-        tenant,
+        tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
-      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
-        requestParams
-      );
+      const paymentSetupData: { data: PaymentOptions } =
+        await apiRequest(requestParams);
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -541,6 +573,60 @@ const QueryParamProvider: FC = ({ children }) => {
     setContactDetails(cleanDetails);
   };
 
+  const getDonationBreakdown = useCallback(() => {
+    if (!paymentSetup || !isSupportedDonation || !tenant) {
+      const totalAmount = paymentSetup ? paymentSetup.unitCost * quantity : 0;
+      return {
+        mainProjectAmount: totalAmount,
+        supportAmount: 0,
+        totalAmount,
+        mainProjectQuantity: quantity,
+        supportProjectQuantity: 0,
+      };
+    }
+
+    const config = supportedDonationConfig[tenant];
+    const mainProjectAmount = paymentSetup.unitCost * quantity;
+    const supportAmount =
+      (mainProjectAmount * config.supportPercentage) /
+      (1 - config.supportPercentage);
+    const totalAmount = mainProjectAmount + supportAmount;
+
+    return {
+      mainProjectAmount,
+      supportAmount,
+      totalAmount,
+      mainProjectQuantity: quantity,
+      supportProjectQuantity: supportAmount,
+    };
+  }, [paymentSetup, quantity, isSupportedDonation, tenant]);
+
+  useEffect(() => {
+    if (
+      tenant &&
+      projectDetails &&
+      supportedDonationConfig[tenant] &&
+      (projectDetails.purpose === "trees" ||
+        projectDetails.purpose === "conservation")
+    ) {
+      const config = supportedDonationConfig[tenant];
+      setIsSupportedDonation(true);
+      setSupportedProjectId(config.supportedProject);
+      setcountry(config.country);
+      localStorage.setItem("countryCode", config.country);
+      setEnabledCurrencies((prev) => {
+        if (prev && prev[config.currency]) {
+          return { [config.currency]: prev[config.currency] };
+        } else {
+          return null;
+        }
+      });
+    } else {
+      setIsSupportedDonation(false);
+      setSupportedProjectId(null);
+    }
+  }, [tenant, projectDetails]);
+
   return (
     <QueryParamContext.Provider
       value={{
@@ -554,6 +640,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setcountry,
         paymentSetup,
         setpaymentSetup,
+        stripePromise,
+        setStripePromise,
         currency,
         setcurrency,
         enabledCurrencies,
@@ -595,7 +683,7 @@ const QueryParamProvider: FC = ({ children }) => {
         isDirectDonation,
         setisDirectDonation,
         tenant,
-        settenant,
+        setTenant,
         selectedProjects,
         setSelectedProjects,
         allProjects,
@@ -603,8 +691,8 @@ const QueryParamProvider: FC = ({ children }) => {
         setallowTaxDeductionChange,
         donationUid,
         setDonationUid,
-        setshowErrorCard,
-        loadselectedProjects,
+        setShowErrorCard,
+        loadSelectedProjects,
         transferDetails,
         setTransferDetails,
         hideTaxDeduction,
@@ -638,6 +726,9 @@ const QueryParamProvider: FC = ({ children }) => {
         setDonation,
         paymentRequest,
         setPaymentRequest,
+        isSupportedDonation,
+        supportedProjectId,
+        getDonationBreakdown,
         errors,
         setErrors,
       }}
@@ -646,7 +737,7 @@ const QueryParamProvider: FC = ({ children }) => {
 
       <ErrorCard
         showErrorCard={showErrorCard}
-        setShowErrorCard={setshowErrorCard}
+        setShowErrorCard={setShowErrorCard}
       />
       <ErrorPopup />
     </QueryParamContext.Provider>

@@ -1,8 +1,5 @@
 import { NoGift, User } from "@planet-sdk/common";
-import {
-  PLANETCASH_ALLOWED_PROJECT_PURPOSES,
-  PLANETCASH_DISALLOWED_PROJECT_CLASSIFICATIONS,
-} from "./projects/constants";
+import { PLANETCASH_ALLOWED_PROJECT_PURPOSES } from "./projects/constants";
 import { FetchedProjectDetails, GiftDetails } from "src/Common/Types";
 
 interface PlanetCashAllowedParams {
@@ -12,6 +9,7 @@ interface PlanetCashAllowedParams {
   isGift: boolean;
   giftDetails: GiftDetails | NoGift;
   hasPlanetCashGateway: boolean;
+  hasRecurringFrequenciesOnly: boolean;
 }
 
 /**
@@ -24,18 +22,16 @@ export const isPlanetCashAllowed = ({
   isGift,
   giftDetails,
   hasPlanetCashGateway,
+  hasRecurringFrequenciesOnly,
 }: PlanetCashAllowedParams): boolean => {
   return (
     profile !== null &&
     isSignedUp &&
     profile.planetCash !== null &&
     hasPlanetCashGateway &&
+    !hasRecurringFrequenciesOnly &&
     projectDetails !== null &&
     PLANETCASH_ALLOWED_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
-    (projectDetails.classification === null ||
-      !PLANETCASH_DISALLOWED_PROJECT_CLASSIFICATIONS.includes(
-        projectDetails.classification
-      )) &&
     projectDetails.taxDeductionCountries !== undefined &&
     projectDetails.taxDeductionCountries.includes(profile.planetCash.country) &&
     !(isGift && giftDetails.recipientName === "")

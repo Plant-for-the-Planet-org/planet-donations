@@ -31,7 +31,7 @@ function SuccessfulDonation({
       }
     }
   });
-  const { paymentType, callbackUrl, projectDetails } =
+  const { paymentType, callbackUrl, projectDetails, isSupportedDonation } =
     React.useContext(QueryParamContext);
 
   const imageRef = useRef<HTMLDivElement>(null);
@@ -46,24 +46,23 @@ function SuccessfulDonation({
         {t("common:thankYou")}
       </div>
 
-      <ThankyouMessage
-        paymentTypeUsed={paymentTypeUsed}
-        projectDetails={projectDetails}
-        donation={donation}
-      />
+      <ThankyouMessage paymentTypeUsed={paymentTypeUsed} donation={donation} />
       {projectDetails?.purpose !== "planet-cash" && (
         <>
           <ImageComponent
             projectDetails={projectDetails}
             donation={donation}
             imageRef={imageRef}
+            isSupportedDonation={isSupportedDonation}
           />
 
           <ShareOptions
-            treeCount={getFormattedNumber(
-              i18n.language,
-              Number(donation.treeCount),
-            )}
+            unitsAsString={
+              donation.units
+                ? getFormattedNumber(i18n.language, Number(donation.units))
+                : undefined
+            }
+            unitType={donation.unitType}
             sendRef={sendRef}
             donor={donation.donor}
           />

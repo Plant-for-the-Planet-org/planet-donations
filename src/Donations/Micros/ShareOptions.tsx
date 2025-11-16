@@ -19,12 +19,14 @@ import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { ContactDetails } from "@planet-sdk/common";
 
 interface ShareOptionsProps {
-  treeCount: string;
+  unitsAsString: string | undefined;
+  unitType: "tree" | "m2" | "currency" | undefined;
   sendRef: () => RefObject<HTMLDivElement>;
   donor?: ContactDetails;
 }
 const ShareOptions = ({
-  treeCount,
+  unitsAsString,
+  unitType,
   sendRef,
   donor,
 }: ShareOptionsProps): ReactElement | null => {
@@ -35,7 +37,7 @@ const ShareOptions = ({
   useEffect(() => {
     if (donation) {
       setUrlToShare(
-        encodeURIComponent(`${window.location.origin}?context=${donation.id}`)
+        encodeURIComponent(`${window.location.origin}?context=${donation.id}`),
       );
     }
   }, [donation]);
@@ -56,7 +58,7 @@ const ShareOptions = ({
 
   const exportComponent = (
     node: RefObject<HTMLDivElement>,
-    fileName: string
+    fileName: string,
     // backgroundColor: string | null,
     // type: string
   ) => {
@@ -81,9 +83,7 @@ const ShareOptions = ({
 
   const exportComponentAsJPEG = (
     node: RefObject<HTMLDivElement>,
-    fileName = `My_${treeCount}_tree_donation.jpeg`
-    /* backgroundColor: string | null = null,
-    type = "image/jpeg" */
+    fileName: string,
   ) => {
     const modifiedFileName = fileName.replace(".", "");
     return exportComponent(node, modifiedFileName);
@@ -108,11 +108,12 @@ const ShareOptions = ({
       <button
         id={"shareButton"}
         onClick={() => {
+          const fileName =
+            unitsAsString && unitType && unitType !== "currency"
+              ? `My_${unitsAsString}_${unitType}_donation`
+              : "My_donation";
           if (sendRef) {
-            exportComponentAsJPEG(
-              sendRef(),
-              `My_${treeCount}_tree_donation.jpeg`
-            );
+            exportComponentAsJPEG(sendRef(), fileName);
           }
         }}
         onMouseOver={() => setCurrentHover(1)}
@@ -129,7 +130,7 @@ const ShareOptions = ({
         onClick={() =>
           donation &&
           shareClicked(
-            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`
+            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`,
           )
         }
         onMouseOver={() => donation && setCurrentHover(2)}
@@ -156,7 +157,7 @@ const ShareOptions = ({
         onMouseOver={() => setCurrentHover(4)}
         onClick={() =>
           shareClicked(
-            `https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&url=${linkToShare}&text=${textToShare}`
+            `https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&url=${linkToShare}&text=${textToShare}`,
           )
         }
       >
