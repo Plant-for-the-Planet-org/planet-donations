@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { NoGift } from "@planet-sdk/common/build/types/donation";
 import { isEmailValid } from "src/Utils/isEmailValid";
+import { isBlacklistedEmail } from "src/Utils/isBlacklistedEmail";
+import { GiftDetails } from "src/Common/Types";
 
 type GiftFormData = {
   recipientName: string;
@@ -26,8 +28,14 @@ const EMPTY_GIFT_DETAILS: Readonly<NoGift> = {
 export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setShowEmail] = React.useState(false);
-  const { giftDetails, setGiftDetails, isGift, setIsGift, projectDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    giftDetails,
+    setGiftDetails,
+    isGift,
+    setIsGift,
+    projectDetails,
+    profile,
+  } = React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
     recipientName: giftDetails.recipientName || "",
@@ -41,10 +49,36 @@ export default function GiftForm(): ReactElement {
     reset,
     control,
     formState: { errors },
+    watch,
+    getValues,
   } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
+
+  const isDonorEmailBlacklisted = isBlacklistedEmail(profile?.email);
+  const giftMessage =
+    giftDetails?.type === "invitation" ? giftDetails.message : "";
+  const isRecipientEmailBlacklisted =
+    giftDetails?.type === "invitation" &&
+    isBlacklistedEmail(watch("recipientEmail"));
+
+  const isGiftMessageBlocked =
+    isDonorEmailBlacklisted || isRecipientEmailBlacklisted;
+
+  // Clear the gift message if either donor or recipient email is blacklisted
+  React.useEffect(() => {
+    if (isGiftMessageBlocked && giftMessage !== "") {
+      setGiftDetails(
+        (prev) =>
+          ({
+            ...prev,
+            message: "",
+          } as GiftDetails)
+      );
+      reset({ ...getValues(), message: "" });
+    }
+  }, [isGiftMessageBlocked, giftMessage, giftDetails?.type, reset, getValues]);
 
   React.useEffect(() => {
     if (isGift && giftDetails) {
@@ -57,8 +91,13 @@ export default function GiftForm(): ReactElement {
   }, [isGift]);
 
   const onSubmit = (data: GiftFormData) => {
+    const cleanedData = { ...data };
+
+    if (isGiftMessageBlocked) {
+      cleanedData.message = "";
+    }
     setGiftDetails((giftDetails) => {
-      return { ...giftDetails, ...data, type: "invitation" };
+      return { ...giftDetails, ...cleanedData, type: "invitation" };
     });
   };
 
@@ -170,24 +209,37 @@ export default function GiftForm(): ReactElement {
                         </div>
                       )}
                     </div>
-                    <div className={"form-field mt-30"}>
-                      <Controller
-                        name="message"
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <MaterialTextField
-                            onChange={onChange}
-                            value={value}
-                            multiline
-                            minRows={3}
-                            maxRows={4}
-                            label={t("giftMessage")}
-                            variant="outlined"
-                            data-test-id="giftMessage"
-                          />
+                    {!isGiftMessageBlocked && (
+                      <div className={"form-field mt-30"}>
+                        <Controller
+                          name="message"
+                          control={control}
+                          rules={{
+                            maxLength: {
+                              value: 250,
+                              message: t("giftMessageMaxError"),
+                            },
+                          }}
+                          render={({ field: { onChange, value } }) => (
+                            <MaterialTextField
+                              onChange={onChange}
+                              value={value}
+                              multiline
+                              minRows={3}
+                              maxRows={4}
+                              label={t("giftMessage")}
+                              variant="outlined"
+                              data-test-id="giftMessage"
+                            />
+                          )}
+                        />
+                        {errors.message && (
+                          <div className={"form-errors"}>
+                            {errors.message.message}
+                          </div>
                         )}
-                      />
-                    </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className={"form-field mt-30"}>
