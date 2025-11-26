@@ -3,7 +3,7 @@
   "fortreeCountTrees_other": "für {{treeCount}} Bäume",
   "forQuantitym2": "für {{quantity}} m²",
   "forEmpowerment": "für Empowerment",
-  "forClimateJustice": "für Climate Justice",
+  "totalAmount": "{{formattedAmountWithCurrency}} Spendensumme",
   "m2": "m²",
   "tree_one": "Baum",
   "tree_other": "Bäume",
@@ -237,5 +237,5 @@
   "top_project_standards_fulfilled": "Die Projektinspektion ergab, dass dieses Projekt mindestens 12 der 19 wichtigsten <2>Projektstandards</2> erfüllte.",
   "standardsLink": "https://www.plant-for-the-planet.org/standards/",
   "enterValidEmail": "Bitte gibt eine gültige E-Mail-Adresse ein",
-  "donationBreakdownInfo": "Mit Ihrer Spende unterstützen Sie die Wiederaufforstung von Bäumen und die Arbeit von Plant-for-the-Planet, die sowohl junge Menschen empowert als auch Wiederaufforstungsorganisationen in aller Welt unterstützt."
+  "donationBreakdownInfo": "Mit diesem Anteil unterstützen Sie neben der Wiederaufforstung von Bäumen auch die Arbeit von Plant-for-the-Planet, die sowohl junge Menschen empowert als auch Pflanzorganisationen in aller Welt unterstützt."
 }
