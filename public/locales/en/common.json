@@ -15,6 +15,7 @@
   "emailRequired": "Email is required",
   "useSameEmail": "Use same Email as Login Email",
   "giftMessage": "Gift Message",
+  "giftMessageMaxError": "Gift message cannot exceed 250 characters",
   "giftNotification": "Gift Notification",
   "continue": "Continue",
   "loginContinue": "Login & Continue",
