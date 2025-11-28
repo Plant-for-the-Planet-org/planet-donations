@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { ReactElement, useMemo } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useTranslation } from "next-i18next";
@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { NoGift } from "@planet-sdk/common/build/types/donation";
 import { isEmailValid } from "src/Utils/isEmailValid";
-import { isBlacklistedEmail } from "src/Utils/isBlacklistedEmail";
+import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
 import { GiftDetails } from "src/Common/Types";
 
 type GiftFormData = {
@@ -49,22 +49,28 @@ export default function GiftForm(): ReactElement {
     reset,
     control,
     formState: { errors },
-    watch,
     getValues,
   } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
 
-  const isDonorEmailBlacklisted = isBlacklistedEmail(profile?.email);
+  const recipientEmail = useWatch({ name: "recipientEmail", control });
+
+  const isDonorMessagingBlocked = useMemo(() => {
+    return isGiftMessageBlacklisted(profile?.email);
+  }, [profile?.email]);
+
+  const isRecipientMessagingBlocked = useMemo(() => {
+    if (giftDetails?.type !== "invitation") return false;
+    return isGiftMessageBlacklisted(recipientEmail);
+  }, [recipientEmail, giftDetails?.type]);
+
   const giftMessage =
     giftDetails?.type === "invitation" ? giftDetails.message : "";
-  const isRecipientEmailBlacklisted =
-    giftDetails?.type === "invitation" &&
-    isBlacklistedEmail(watch("recipientEmail"));
 
   const isGiftMessageBlocked =
-    isDonorEmailBlacklisted || isRecipientEmailBlacklisted;
+    isDonorMessagingBlocked || isRecipientMessagingBlocked;
 
   // Clear the gift message if either donor or recipient email is blacklisted
   React.useEffect(() => {

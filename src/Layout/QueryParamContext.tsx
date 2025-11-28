@@ -46,7 +46,7 @@ import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 import { Stripe as StripeJS } from "@stripe/stripe-js";
 import getStripe from "src/Utils/stripe/getStripe";
-import { isBlacklistedEmail } from "src/Utils/isBlacklistedEmail";
+import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -636,7 +636,7 @@ const QueryParamProvider = ({
 
     if (!userEmail) return;
 
-    if (isBlacklistedEmail(userEmail)) {
+    if (isGiftMessageBlacklisted(userEmail)) {
       setGiftDetails(
         (prev) =>
           ({
