@@ -2,8 +2,8 @@
   "fortreeCountTrees_one": "for {{treeCount}} Tree",
   "fortreeCountTrees_other": "for {{treeCount}} Trees",
   "forQuantitym2": "for {{quantity}} m²",
-  "forEmpowerment": "for empowerment",
-  "forClimateJustice": "for climate justice",
+  "forEmpowerment": "for Empowerment",
+  "totalAmount": "{{formattedAmountWithCurrency}} Total",
   "m2": "m²",
   "tree_one": "tree",
   "tree_other": "trees",
@@ -238,5 +238,5 @@
   "top_project_standards_fulfilled": "The project inspection revealed that this project fulfilled at least 12 of the 19 Top Project <2>standards.</2>",
   "standardsLink": "https://www.plant-for-the-planet.org/standards/",
   "enterValidEmail": "Please enter a valid email",
-  "donationBreakdownInfo": "Your donation will support the restoration of trees and Plant-for-the-Planet's work to empower both young people and restoration organizations around the world."
+  "donationBreakdownInfo": "With this contribution, you not only support the restoration of trees but also the work of Plant-for-the-Planet, which empowers young people and supports planting organizations around the world."
 }

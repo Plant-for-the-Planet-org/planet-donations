@@ -963,6 +963,12 @@
   }
 }
 
+.donation-breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .donation-total {
   display: flex;
   align-items: center;
