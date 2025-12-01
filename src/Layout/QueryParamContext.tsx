@@ -46,6 +46,7 @@ import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 import { Stripe as StripeJS } from "@stripe/stripe-js";
 import getStripe from "src/Utils/stripe/getStripe";
+import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
 
 export const QueryParamContext =
   createContext<QueryParamContextInterface>(null);
@@ -151,7 +152,7 @@ const QueryParamProvider = ({
     useState<BankTransferDetails | null>(null);
 
   const [isPlanetCashActive, setIsPlanetCashActive] = useState<boolean | null>(
-    null,
+    null
   );
 
   // Only used when planetCash is active
@@ -165,12 +166,12 @@ const QueryParamProvider = ({
 
   const [donation, setDonation] = useState<Donation | null>(null);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
-    null,
+    null
   );
 
   const [isSupportedDonation, setIsSupportedDonation] = useState(false);
   const [supportedProjectId, setSupportedProjectId] = useState<string | null>(
-    null,
+    null
   );
 
   const [errors, setErrors] = React.useState<SerializedError[] | null>(null);
@@ -183,8 +184,9 @@ const QueryParamProvider = ({
         setShowErrorCard,
         shouldQueryParamAdd: false,
       };
-      const response: { data: Record<string, string> } =
-        await apiRequest(requestParams);
+      const response: { data: Record<string, string> } = await apiRequest(
+        requestParams
+      );
       setEnabledCurrencies(response.data);
     } catch (err) {
       console.log(err);
@@ -218,7 +220,7 @@ const QueryParamProvider = ({
 
   function testURL(url: string) {
     const pattern = new RegExp(
-      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
     );
     // regex source https://tutorial.eyehunts.com/js/url-regex-validation-javascript-example-code/
     return !!pattern.test(url);
@@ -281,7 +283,7 @@ const QueryParamProvider = ({
       const projects = response.data as Project[];
       if (projects) {
         const allowedDonationsProjects = projects.filter(
-          (project) => project.properties.allowDonations === true,
+          (project) => project.properties.allowDonations === true
         );
         setAllProjects(allowedDonationsProjects);
         if (allowedDonationsProjects?.length < 6) {
@@ -400,7 +402,7 @@ const QueryParamProvider = ({
       }
     },
     1000,
-    [router.query.to, country, profile?.slug],
+    [router.query.to, country, profile?.slug]
   );
 
   async function loadConfig() {
@@ -416,7 +418,7 @@ const QueryParamProvider = ({
           const found = countriesData.some(
             (arrayCountry) =>
               arrayCountry.countryCode?.toUpperCase() ===
-              config.data.country?.toUpperCase(),
+              config.data.country?.toUpperCase()
           );
           if (found) {
             // This is to make sure donations which are already created with some country do not get affected by country from user config
@@ -542,8 +544,9 @@ const QueryParamProvider = ({
         tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
-      const paymentSetupData: { data: PaymentOptions } =
-        await apiRequest(requestParams);
+      const paymentSetupData: { data: PaymentOptions } = await apiRequest(
+        requestParams
+      );
       if (paymentSetupData.data) {
         const paymentSetup = paymentSetupData.data;
         if (shouldSetPaymentDetails) {
@@ -626,6 +629,23 @@ const QueryParamProvider = ({
       setSupportedProjectId(null);
     }
   }, [tenant, projectDetails]);
+
+  // Reset the message field if the user's email belongs to a blacklisted domain
+  useEffect(() => {
+    const userEmail = profile?.email || contactDetails.email;
+
+    if (!userEmail) return;
+
+    if (isGiftMessageBlacklisted(userEmail)) {
+      setGiftDetails(
+        (prev) =>
+          ({
+            ...prev,
+            message: "",
+          } as GiftDetails)
+      );
+    }
+  }, [profile?.email, contactDetails.email]);
 
   return (
     <QueryParamContext.Provider

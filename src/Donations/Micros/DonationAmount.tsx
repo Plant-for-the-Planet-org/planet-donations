@@ -50,18 +50,21 @@ function DonationAmount(): ReactElement {
   if (isSupportedDonation) {
     return (
       <div className="w-100 mt-20">
-        <div>
+        <div className="donation-breakdown-item">
           <span>{formatCurrency(mainProjectAmount)}</span>
-          <span style={{ marginLeft: "4px" }}>{getUnitDescription()}</span>
+          <span>{getUnitDescription()}</span>
         </div>
-        <div>
+        <div className="donation-breakdown-item">
           <span>{formatCurrency(supportAmount)}</span>
-          <span style={{ marginLeft: "4px" }}>{t("forEmpowerment")}</span>
+          <span>{t("forEmpowerment")}</span>
+          <DonationInfoTooltip />
         </div>
         <div className="donation-total">
-          <span className="text-primary">{formatCurrency(totalAmount)}</span>
-          <span>{t("forClimateJustice")}</span>
-          <DonationInfoTooltip />
+          <span className="text-primary">
+            {t("totalAmount", {
+              formattedAmountWithCurrency: formatCurrency(totalAmount),
+            })}
+          </span>
         </div>
       </div>
     );
