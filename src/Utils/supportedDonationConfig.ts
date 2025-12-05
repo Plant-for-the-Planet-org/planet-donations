@@ -4,6 +4,7 @@ export interface SupportedDonationConfig {
     country: string;
     currency: string;
     supportedProject: string;
+    languages: string[];
   };
 }
 
@@ -13,5 +14,6 @@ export const supportedDonationConfig: SupportedDonationConfig = {
     country: "DE",
     currency: "EUR",
     supportedProject: "proj_bFH0BU0Qw02RuetpQlLOMVYX",
+    languages: ["en"],
   },
 };
