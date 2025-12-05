@@ -44,8 +44,11 @@ export async function middleware(
 
   // Handle ?locale= query parameter (existing logic)
   if (localeParam) {
-    const localeTestRegex = new RegExp("&?locale=" + localeParam);
-    const queryString = req.nextUrl.search.replace(localeTestRegex, "");
+    const searchParams = new URLSearchParams(req.nextUrl.searchParams);
+    searchParams.delete("locale");
+    const queryString = searchParams.toString()
+      ? `?${searchParams.toString()}`
+      : "";
 
     if (ALLOWED_LOCALES.includes(localeParam)) {
       // Check if tenant restricts this locale
