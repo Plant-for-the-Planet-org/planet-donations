@@ -27,6 +27,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import themeProperties from "../../styles/themeProperties";
 import { useRouter } from "next/router";
 import UNEPLogo from "../../public/assets/icons/UNEPLogo";
+import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 
 function Footer(): ReactElement {
   const [languageModalOpen, setlanguageModalOpen] = useState(false);
@@ -47,7 +48,7 @@ function Footer(): ReactElement {
 
   const domain = useMemo(
     () => (parsedCallbackUrl ? parsedCallbackUrl.hostname : ""),
-    [parsedCallbackUrl]
+    [parsedCallbackUrl],
   );
 
   const showCancelAndReturn = useMemo(
@@ -57,7 +58,7 @@ function Footer(): ReactElement {
         parsedCallbackUrl.protocol === "http:") &&
       domain !== "" &&
       donationStep !== 4,
-    [parsedCallbackUrl, domain, donationStep]
+    [parsedCallbackUrl, domain, donationStep],
   );
 
   return ready ? (
@@ -257,6 +258,17 @@ function LanguageModal({
 
   const router = useRouter();
   const { t, ready, i18n } = useTranslation(["common"]);
+  const { tenant } = useContext(QueryParamContext);
+
+  const tenantSupportedLanguages = supportedLanguages.filter((language) => {
+    if (tenant && supportedDonationConfig[tenant] !== undefined) {
+      return supportedDonationConfig[tenant].languages.includes(
+        language.langCode,
+      );
+    } else {
+      return true;
+    }
+  });
 
   return (
     <Modal
@@ -288,7 +300,7 @@ function LanguageModal({
                 setlanguageModalOpen(false);
               }}
             >
-              {supportedLanguages.map((lang) => (
+              {tenantSupportedLanguages.map((lang) => (
                 <FormControlLabel
                   key={lang.langCode}
                   value={lang.langCode}
