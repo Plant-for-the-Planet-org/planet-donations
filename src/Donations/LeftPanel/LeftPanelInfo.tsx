@@ -72,6 +72,7 @@ const LeftPanelInfo = ({
     giftDetails.type !== null &&
     isGift &&
     giftDetails.recipientName !== undefined &&
+    giftDetails.recipientName.length > 0 &&
     projectDetails?.purpose !== "planet-cash";
   const canShowOnBehalf =
     donationStep === 1 &&
