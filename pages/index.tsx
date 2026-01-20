@@ -191,11 +191,15 @@ function index({
         <meta name="description" content={meta.description} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={meta.image} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="720" />
         <meta property="og:url" content={meta.url} />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content={meta.title} />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:image" content={meta.image}></meta>
+        <meta property="twitter:image:width" content="1200" />
+        <meta property="twitter:image:height" content="720" />
         <meta property="twitter:url" content={meta.url} />
         <meta name="twitter:description" content={meta.description} />
 
@@ -490,7 +494,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let title = `Donate with Plant-for-the-Planet`;
   let description = `Make tax deductible donations to over 160+ restoration and conservation projects. Your journey to a trillion trees starts here.`;
 
-  let url =
+  let pageUrl = process.env.APP_URL + resolvedUrl;
+
+  const imageUrl =
     process.env.APP_URL +
     "/api/image?path=" +
     process.env.APP_URL +
@@ -501,10 +507,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.query.to &&
     !context.query.step
   ) {
-    url = url + "&step=donate";
+    pageUrl = pageUrl + "&step=donate";
   }
-
-  const image = url;
 
   if (projectDetails) {
     title = `${projectDetails.name} - Donate with Plant-for-the-Planet`;
@@ -552,7 +556,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       currency,
       paymentSetup,
       amount,
-      meta: { title, description, image, url },
+      meta: { title, description, image: imageUrl, url: pageUrl },
       frequency,
       tenant,
       callbackMethod,
