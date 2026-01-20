@@ -8,7 +8,6 @@ import React, {
 import EmailIcon from "../../../public/assets/icons/share/Email";
 import EmailSolid from "../../../public/assets/icons/share/EmailSolid";
 import FacebookIcon from "../../../public/assets/icons/share/Facebook";
-import TwitterIcon from "../../../public/assets/icons/share/Twitter";
 import DownloadIcon from "../../../public/assets/icons/share/Download";
 import DownloadSolid from "../../../public/assets/icons/share/DownloadSolid";
 import InstagramIcon from "../../../public/assets/icons/share/Instagram";
@@ -43,7 +42,6 @@ const ShareOptions = ({
   }, [donation]);
 
   const titleToShare = ready ? t("donate:titleToShare") : "";
-  const linkToShare = "";
   let textToShare = "";
   // donor may be undefined or empty for legacy donations or redeem
   if (donor && (donor.companyname || donor.firstname)) {
@@ -149,21 +147,6 @@ const ShareOptions = ({
       >
         <InstagramIcon
           color={currentHover === 3 ? "#dd217b" : "backgroundColorDark"}
-        />
-      </button>
-
-      <button
-        id={"shareTwitter"}
-        onMouseOver={() => setCurrentHover(4)}
-        onClick={() =>
-          shareClicked(
-            `https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&url=${linkToShare}&text=${textToShare}`,
-          )
-        }
-      >
-        <TwitterIcon
-          backGroundColor={currentHover === 4 ? "backgroundColorDark" : "#fff"}
-          fontColor={currentHover === 4 ? "#fff" : "backgroundColorDark"}
         />
       </button>
 
