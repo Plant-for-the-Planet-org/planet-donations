@@ -108,6 +108,20 @@ export default function GiftForm(): ReactElement {
   };
 
   const resetGiftForm = () => {
+    if (giftDetails.type === "direct") {
+      setIsGift(false);
+      const query = { ...router.query };
+      delete query.s;
+
+      router.replace(
+        {
+          pathname: router.pathname,
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
     setGiftDetails(EMPTY_GIFT_DETAILS);
     reset(EMPTY_GIFT_DETAILS);
   };
@@ -276,16 +290,12 @@ export default function GiftForm(): ReactElement {
               name: giftDetails.recipientName,
             })}
           </p>
-          {router && router.query.s ? (
-            <></>
-          ) : (
-            <button
-              onClick={() => resetGiftForm()}
-              className={"singleGiftRemove"}
-            >
-              {t("removeRecipient")}
-            </button>
-          )}
+          <button
+            onClick={() => resetGiftForm()}
+            className={"singleGiftRemove"}
+          >
+            {t("removeRecipient")}
+          </button>
         </div>
       )}
     </div>
