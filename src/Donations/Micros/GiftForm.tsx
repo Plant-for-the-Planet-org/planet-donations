@@ -43,7 +43,7 @@ export default function GiftForm(): ReactElement {
       (giftDetails.type === "invitation" && giftDetails.recipientEmail) || "",
     message: (giftDetails.type === "invitation" && giftDetails.message) || "",
   };
-
+  const isDirectGift = giftDetails.type === "direct";
   const {
     handleSubmit,
     reset,
@@ -108,7 +108,7 @@ export default function GiftForm(): ReactElement {
   };
 
   const resetGiftForm = () => {
-    if (giftDetails.type === "direct") {
+    if (isDirectGift) {
       setIsGift(false);
       const query = { ...router.query };
       delete query.s;
@@ -284,8 +284,12 @@ export default function GiftForm(): ReactElement {
           </div>
         </div>
       ) : (
-        <div className="donation-supports-info mt-10">
-          <p onClick={() => resetGiftForm()}>
+        <div
+          className={`donation-supports-info mt-10 ${
+            isDirectGift ? "non-clickable" : ""
+          }`}
+        >
+          <p onClick={isDirectGift ? undefined : () => resetGiftForm()}>
             {t("giftDedicatedTo", {
               name: giftDetails.recipientName,
             })}
