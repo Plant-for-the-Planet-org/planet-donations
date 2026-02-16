@@ -194,6 +194,12 @@
         fill: $dangerColor;
       }
     }
+
+    &.non-clickable {
+      p {
+        cursor: default;
+      }
+    }
   }
 }
 
