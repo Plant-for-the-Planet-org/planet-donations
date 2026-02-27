@@ -31,14 +31,19 @@ export async function middleware(
     if (!tenantSupportedLanguages.includes(currentLocale)) {
       const fallbackLocale = tenantSupportedLanguages[0] || "en";
 
-      // Build redirect URL with correct locale
-      // Uses req.nextUrl.pathname (already normalized, no locale) and prepends new locale
-      return NextResponse.redirect(
+      const response = NextResponse.redirect(
         new URL(
           `/${fallbackLocale}${req.nextUrl.pathname}${req.nextUrl.search}`,
           req.url,
         ),
       );
+      // Overwrite the cookie so Next.js doesn't redirect back to the unsupported locale on the next request
+      response.cookies.set("NEXT_LOCALE", fallbackLocale, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
     }
   }
 
@@ -57,30 +62,50 @@ export async function middleware(
         if (!tenantConfig.languages.includes(localeParam)) {
           // Redirect to tenant's first supported language
           const fallbackLocale = tenantConfig.languages[0] || "en";
-          return NextResponse.redirect(
+          const response = NextResponse.redirect(
             new URL(
               `/${fallbackLocale}${req.nextUrl.pathname}${queryString}`,
               req.url,
             ),
           );
+          // Overwrite cookie to match the tenant fallback locale
+          response.cookies.set("NEXT_LOCALE", fallbackLocale, {
+            path: "/",
+            maxAge: 31536000,
+            sameSite: "lax",
+          });
+          return response;
         }
       }
 
-      // Convert ?locale=de to /de/
-      return NextResponse.redirect(
+      // ?locale=en is an explicit instruction from the referring app and must take precedence over the user's NEXT_LOCALE cookie.
+      // Without setting the cookie here, Next.js reads the existing NEXT_LOCALE cookie (e.g. "de") on the redirected /en path and immediately overrides back to /de, creating an infinite loop.
+      const response = NextResponse.redirect(
         new URL(
           `/${localeParam}${req.nextUrl.pathname}${queryString}`,
           req.url,
         ),
       );
+      response.cookies.set("NEXT_LOCALE", localeParam, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
     } else {
-      // Invalid locale param, use current locale
-      return NextResponse.redirect(
+      // Invalid locale param — fall back to current locale
+      const response = NextResponse.redirect(
         new URL(
           `/${currentLocale}${req.nextUrl.pathname}${queryString}`,
           req.url,
         ),
       );
+      response.cookies.set("NEXT_LOCALE", currentLocale, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
     }
   }
 }
