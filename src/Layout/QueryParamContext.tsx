@@ -507,10 +507,14 @@ const QueryParamProvider = ({
 
   useEffect(() => {
     if (router.query.error) {
-      if (
-        router.query.error_description === "401" &&
-        router.query.error === "unauthorized"
-      ) {
+      // Unverified email: the old platform deny was unauthorized/401; the
+      // current PostLogin Action denies with access_denied/email_not_verified.
+      const isEmailNotVerified =
+        (router.query.error_description === "401" &&
+          router.query.error === "unauthorized") ||
+        (router.query.error === "access_denied" &&
+          router.query.error_description === "email_not_verified");
+      if (isEmailNotVerified) {
         router.replace({
           query: { to: router.query.to, step: router.query.step },
         });
