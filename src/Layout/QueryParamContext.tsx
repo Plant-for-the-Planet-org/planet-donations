@@ -509,6 +509,7 @@ const QueryParamProvider = ({
     if (router.query.error) {
       // Unverified email: the old platform deny was unauthorized/401; the
       // current PostLogin Action denies with access_denied/email_not_verified.
+			// TODO: Remove unauthorized/401 case after July 31, 2026. Confirm whether safe to remove.
       const isEmailNotVerified =
         (router.query.error_description === "401" &&
           router.query.error === "unauthorized") ||
