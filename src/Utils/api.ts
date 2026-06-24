@@ -1,6 +1,6 @@
 import getsessionId from "./getSessionId";
 import axios, { AxiosRequestConfig, Method } from "axios";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidV4 } from "uuid";
 import { APIError } from "@planet-sdk/common";
 import { Dispatch, SetStateAction } from "react";
 
@@ -134,7 +134,7 @@ export const apiRequest = async (
     // append all the additional headers to the request
     options.headers = {
       ...options.headers,
-      ...(addIdempotencyKeyHeader && { "IDEMPOTENCY-KEY": uuidv4() }),
+      ...(addIdempotencyKeyHeader && { "IDEMPOTENCY-KEY": uuidV4() }),
       ...headers,
     };
 
