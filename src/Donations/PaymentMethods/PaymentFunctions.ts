@@ -136,6 +136,7 @@ export async function createDonationFunction({
     isGift,
     giftDetails,
     frequency,
+    locale,
     amount,
     callbackUrl,
     callbackMethod,
@@ -191,6 +192,7 @@ export function createDonationData({
   isGift,
   giftDetails,
   frequency,
+  locale,
   amount,
   callbackUrl,
   callbackMethod,
@@ -221,7 +223,10 @@ export function createDonationData({
       utm_campaign: utmCampaign,
       utm_medium: utmMedium,
       utm_source: utmSource,
-      ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
+      ...(isPackageWanted === true && {
+        welcomePackageStatus: "draft",
+        welcomePackageLanguage: locale === "en" ? "en" : "de",
+      }),
     },
     ...(taxDeductionCountry && { taxDeductionCountry }),
   };

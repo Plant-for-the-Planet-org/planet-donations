@@ -116,6 +116,7 @@ export interface CreateDonationDataProps {
   isGift: boolean;
   giftDetails: GiftDetails | NoGift;
   frequency: string;
+  locale: string;
   amount?: number | null;
   callbackUrl: string | undefined;
   callbackMethod: string | undefined;
