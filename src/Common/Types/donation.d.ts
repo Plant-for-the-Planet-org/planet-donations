@@ -8,6 +8,7 @@ export interface Metadata {
   utm_medium?: string;
   utm_source?: string;
   welcomePackageStatus?: "draft";
+  welcomePackageLanguage?: "en" | "de";
 }
 
 export interface LineItem {
