@@ -86,6 +86,7 @@ export interface RequestParams {
   headers?: { [k: string]: string }; // additional headers
   addIdempotencyKeyHeader?: boolean;
   locale?: string;
+  queryParams?: Record<string, string>; // merged into the request query, so callers never concatenate a query string by hand
 }
 export interface ExtendedRequestParams extends RequestParams {
   method?: Method | undefined;
@@ -105,6 +106,7 @@ export const apiRequest = async (
     headers = {},
     addIdempotencyKeyHeader = false,
     locale,
+    queryParams,
   } = extendedRequestParams;
 
   try {
@@ -142,7 +144,10 @@ export const apiRequest = async (
       options.params = {
         tenant: tenant || "ten_I9TW3ncG",
         locale: locale || "en",
+        ...queryParams,
       };
+    } else if (queryParams) {
+      options.params = { ...queryParams };
     }
 
     // returns a promise with axios instance
