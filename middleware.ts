@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supportedDonationConfig } from "./src/Utils/supportedDonationConfig";
+import {
+  parseProjectParam,
+  trimProjectIdentifier,
+} from "./src/Utils/projectIdentifier";
 
 const PUBLIC_FILE = /\.(.*)$/;
 const ALLOWED_LOCALES = ["en", "cs", "de", "it", "es", "fr", "pt-BR"];
@@ -14,6 +18,30 @@ export async function middleware(
     PUBLIC_FILE.test(req.nextUrl.pathname)
   ) {
     return;
+  }
+
+  // Some link builders escape the `&` separators, so the rest of the query string arrives inside `to` (e.g. `?to=yucatan%26step=donate`).
+  // Split it back out before anything reads `tenant` or `locale`, otherwise those values stay trapped and the API gets a slug that cannot match.
+  const toParam = req.nextUrl.searchParams.get("to");
+  if (toParam) {
+    const parsedToParam = parseProjectParam(toParam);
+    const repairedIdentifier = trimProjectIdentifier(
+      parsedToParam ? parsedToParam.identifier : toParam,
+    );
+    if (repairedIdentifier !== toParam) {
+      const repairedParams = new URLSearchParams(req.nextUrl.searchParams);
+      repairedParams.set("to", repairedIdentifier);
+      // A parameter the link already states outright wins over one recovered from inside `to`
+      parsedToParam?.recovered.forEach((value, key) => {
+        if (!repairedParams.has(key)) {
+          repairedParams.append(key, value);
+        }
+      });
+      // Built from req.url so the locale prefix in the path is kept as it is
+      const repairedUrl = new URL(req.url);
+      repairedUrl.search = repairedParams.toString();
+      return NextResponse.redirect(repairedUrl);
+    }
   }
 
   const localeParam = req.nextUrl.searchParams.get("locale");
