@@ -44,6 +44,7 @@ import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { useDebouncedEffect } from "src/Utils/useDebouncedEffect";
 import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
+import { isValidProjectIdentifier } from "src/Utils/projectIdentifier";
 import { Stripe as StripeJS } from "@stripe/stripe-js";
 import getStripe from "src/Utils/stripe/getStripe";
 import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
@@ -394,6 +395,8 @@ const QueryParamProvider = ({
         router.query.to?.toString().toLowerCase() !== "planetcash"
       ) {
         const to = String(router.query.to).replace(/\//g, "");
+        // A value of this shape can never match a project, so do not spend an API call on it
+        if (!isValidProjectIdentifier(to)) return;
         loadPaymentSetup({
           projectGUID: to,
           paymentSetupCountry: country,
@@ -543,8 +546,9 @@ const QueryParamProvider = ({
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
-        url: `/app/paymentOptions/${projectGUID}?country=${paymentSetupCountry}`,
+        url: `/app/paymentOptions/${encodeURIComponent(projectGUID)}`,
         setShowErrorCard,
+        queryParams: { country: paymentSetupCountry },
         token,
         tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,

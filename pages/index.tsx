@@ -24,6 +24,7 @@ import { createProjectDetails } from "src/Utils/createProjectDetails";
 import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
+import { isValidProjectIdentifier } from "src/Utils/projectIdentifier";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -275,22 +276,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const to = context.query?.to?.replace(/\//g, "") || "";
     donationStep = 1;
     if (to?.toString().toLowerCase() !== "planetcash") {
-      try {
-        const requestParams = {
-          url: `/app/paymentOptions/${to}?country=${country}`,
-          setShowErrorCard,
-          tenant,
-          locale,
-        };
-        const paymentOptionsResponse = await apiRequest(requestParams);
-        const paymentOptionsData: PaymentOptions = paymentOptionsResponse?.data;
-        if (paymentOptionsData) {
-          projectDetails = createProjectDetails(paymentOptionsData);
-          donationStep = 1;
-        }
-      } catch (err) {
+      // A value of this shape can never match a project, so do not spend an API call on it
+      if (!isValidProjectIdentifier(to)) {
         donationStep = 0;
-        console.log("err", err);
+      } else {
+        try {
+          const requestParams = {
+            url: `/app/paymentOptions/${encodeURIComponent(to)}`,
+            setShowErrorCard,
+            tenant,
+            locale,
+            queryParams: { country },
+          };
+          const paymentOptionsResponse = await apiRequest(requestParams);
+          const paymentOptionsData: PaymentOptions =
+            paymentOptionsResponse?.data;
+          if (paymentOptionsData) {
+            projectDetails = createProjectDetails(paymentOptionsData);
+            donationStep = 1;
+          }
+        } catch (err) {
+          donationStep = 0;
+          console.log("err", err);
+        }
       }
     }
   } else {
@@ -349,10 +357,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         // This will fetch the payment options
         try {
           const requestParams = {
-            url: `/app/paymentOptions/${donation.destination.id}?country=${country}`,
+            url: `/app/paymentOptions/${encodeURIComponent(
+              donation.destination.id,
+            )}`,
             setShowErrorCard,
             tenant,
             locale,
+            queryParams: { country },
           };
           const paymentSetupResponse: any = await apiRequest(requestParams);
           const paymentSetupData: PaymentOptions = paymentSetupResponse?.data;
