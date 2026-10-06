@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { ReactElement, useMemo } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useTranslation } from "next-i18next";
@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { NoGift } from "@planet-sdk/common/build/types/donation";
 import { isEmailValid } from "src/Utils/isEmailValid";
+import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
+import { GiftDetails } from "src/Common/Types";
 
 type GiftFormData = {
   recipientName: string;
@@ -26,8 +28,14 @@ const EMPTY_GIFT_DETAILS: Readonly<NoGift> = {
 export default function GiftForm(): ReactElement {
   const { t } = useTranslation("common");
   const [showEmail, setShowEmail] = React.useState(false);
-  const { giftDetails, setGiftDetails, isGift, setIsGift, projectDetails } =
-    React.useContext(QueryParamContext);
+  const {
+    giftDetails,
+    setGiftDetails,
+    isGift,
+    setIsGift,
+    projectDetails,
+    profile,
+  } = React.useContext(QueryParamContext);
 
   const defaultDetails: GiftFormData = {
     recipientName: giftDetails.recipientName || "",
@@ -35,16 +43,48 @@ export default function GiftForm(): ReactElement {
       (giftDetails.type === "invitation" && giftDetails.recipientEmail) || "",
     message: (giftDetails.type === "invitation" && giftDetails.message) || "",
   };
-
+  const isDirectGift = giftDetails.type === "direct";
   const {
     handleSubmit,
     reset,
     control,
     formState: { errors },
+    getValues,
   } = useForm<GiftFormData>({
     mode: "all",
     defaultValues: defaultDetails,
   });
+
+  const recipientEmail = useWatch({ name: "recipientEmail", control });
+
+  const isDonorMessagingBlocked = useMemo(() => {
+    return isGiftMessageBlacklisted(profile?.email);
+  }, [profile?.email]);
+
+  const isRecipientMessagingBlocked = useMemo(() => {
+    if (giftDetails?.type !== "invitation") return false;
+    return isGiftMessageBlacklisted(recipientEmail);
+  }, [recipientEmail, giftDetails?.type]);
+
+  const giftMessage =
+    giftDetails?.type === "invitation" ? giftDetails.message : "";
+
+  const isGiftMessageBlocked =
+    isDonorMessagingBlocked || isRecipientMessagingBlocked;
+
+  // Clear the gift message if either donor or recipient email is blacklisted
+  React.useEffect(() => {
+    if (isGiftMessageBlocked && giftMessage !== "") {
+      setGiftDetails(
+        (prev) =>
+          ({
+            ...prev,
+            message: "",
+          } as GiftDetails)
+      );
+      reset({ ...getValues(), message: "" });
+    }
+  }, [isGiftMessageBlocked, giftMessage, giftDetails?.type, reset, getValues]);
 
   React.useEffect(() => {
     if (isGift && giftDetails) {
@@ -57,12 +97,31 @@ export default function GiftForm(): ReactElement {
   }, [isGift]);
 
   const onSubmit = (data: GiftFormData) => {
+    const cleanedData = { ...data };
+
+    if (isGiftMessageBlocked) {
+      cleanedData.message = "";
+    }
     setGiftDetails((giftDetails) => {
-      return { ...giftDetails, ...data, type: "invitation" };
+      return { ...giftDetails, ...cleanedData, type: "invitation" };
     });
   };
 
   const resetGiftForm = () => {
+    if (isDirectGift) {
+      setIsGift(false);
+      const query = { ...router.query };
+      delete query.s;
+
+      router.replace(
+        {
+          pathname: router.pathname,
+          query,
+        },
+        undefined,
+        { shallow: true }
+      );
+    }
     setGiftDetails(EMPTY_GIFT_DETAILS);
     reset(EMPTY_GIFT_DETAILS);
   };
@@ -170,24 +229,37 @@ export default function GiftForm(): ReactElement {
                         </div>
                       )}
                     </div>
-                    <div className={"form-field mt-30"}>
-                      <Controller
-                        name="message"
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <MaterialTextField
-                            onChange={onChange}
-                            value={value}
-                            multiline
-                            minRows={3}
-                            maxRows={4}
-                            label={t("giftMessage")}
-                            variant="outlined"
-                            data-test-id="giftMessage"
-                          />
+                    {!isGiftMessageBlocked && (
+                      <div className={"form-field mt-30"}>
+                        <Controller
+                          name="message"
+                          control={control}
+                          rules={{
+                            maxLength: {
+                              value: 250,
+                              message: t("giftMessageMaxError"),
+                            },
+                          }}
+                          render={({ field: { onChange, value } }) => (
+                            <MaterialTextField
+                              onChange={onChange}
+                              value={value}
+                              multiline
+                              minRows={3}
+                              maxRows={4}
+                              label={t("giftMessage")}
+                              variant="outlined"
+                              data-test-id="giftMessage"
+                            />
+                          )}
+                        />
+                        {errors.message && (
+                          <div className={"form-errors"}>
+                            {errors.message.message}
+                          </div>
                         )}
-                      />
-                    </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className={"form-field mt-30"}>
@@ -212,22 +284,22 @@ export default function GiftForm(): ReactElement {
           </div>
         </div>
       ) : (
-        <div className="donation-supports-info mt-10">
-          <p onClick={() => resetGiftForm()}>
+        <div
+          className={`donation-supports-info mt-10 ${
+            isDirectGift ? "non-clickable" : ""
+          }`}
+        >
+          <p onClick={isDirectGift ? undefined : () => resetGiftForm()}>
             {t("giftDedicatedTo", {
               name: giftDetails.recipientName,
             })}
           </p>
-          {router && router.query.s ? (
-            <></>
-          ) : (
-            <button
-              onClick={() => resetGiftForm()}
-              className={"singleGiftRemove"}
-            >
-              {t("removeRecipient")}
-            </button>
-          )}
+          <button
+            onClick={() => resetGiftForm()}
+            className={"singleGiftRemove"}
+          >
+            {t("removeRecipient")}
+          </button>
         </div>
       )}
     </div>

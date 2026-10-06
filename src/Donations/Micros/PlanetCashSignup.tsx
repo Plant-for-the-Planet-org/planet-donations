@@ -35,7 +35,7 @@ const allowedCountries = ["DE", "ES"];
 const PlanetCashSignup = (): ReactElement => {
   const { t, i18n } = useTranslation(["common"]);
   const { getAccessTokenSilently } = useAuth0();
-  const { setshowErrorCard, queryToken, setErrors, tenant } =
+  const { setShowErrorCard, queryToken, setErrors, tenant } =
     useContext(QueryParamContext);
   const { theme } = React.useContext(ThemeContext);
   const router = useRouter();
@@ -77,7 +77,7 @@ const PlanetCashSignup = (): ReactElement => {
       const options = {
         url: "/app/planetCash",
         token,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       };
@@ -124,7 +124,7 @@ const PlanetCashSignup = (): ReactElement => {
           token,
           tenant,
           locale: i18n.language,
-          setshowErrorCard,
+          setShowErrorCard,
         };
         await apiRequest(options);
         router.reload();
@@ -149,7 +149,7 @@ const PlanetCashSignup = (): ReactElement => {
           country,
           activate: true,
         },
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       };

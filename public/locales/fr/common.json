@@ -43,9 +43,6 @@
   "expDate": "Exp. Date (MM/YY)",
   "donate": "Faire un don",
   "noPaymentMethodError": "Impossible de traiter votre paiement, veuillez réessayer.",
-  "sofortDisclaimer": "Les paiements SOFORT prennent de 2 à 14 jours ouvrables (généralement 2 à 3 jours). Dès qu'il arrive, nous vous enverrons un courriel de confirmation avec votre certificat d'arbre et nous relevons le compteur d'arbres.",
-  "payWithSofort": "Faire un don avec SOFORT",
-  "payWithGiroPay": "Faire un don avec GiroPay",
   "sepaDisclaimer": "Les paiements SEPA prennent de 2 à 14 jours ouvrables (généralement 3 à 5 jours). Dès qu'il arrive, nous vous enverrons un courriel de confirmation avec votre certificat d'arbre et nous relevons le compteur d'arbre.",
   "sepaMessage": "En fournissant votre IBAN et en confirmant ce paiement, vous autorisez Plant-for-the-Planet and Stripe, notre fournisseur de services de paiement, à envoyer des instructions à votre banque pour débiter votre compte. Vous avez droit à un remboursement de votre banque selon les termes et conditions de votre accord avec votre banque. Si vous avez des problèmes concernant votre don, veuillez nous envoyer un courriel à support@plant-for-the-planet.org",
   "byOrganization": "par {{organizationName}}",
@@ -78,7 +75,7 @@
   "verifyEmailInfo": "Si vous n'avez pas reçu d'e-mail, veuillez vous reconnecter et nous vous enverrons un autre e-mail.",
   "skipLogout": "Continuer en tant qu'invité",
   "donationProcessedBy": "Ce don est traité par Plant-for-the-Planet",
-  "cancelReturn": "Annuler et revenir à l'organisation",
+  "cancelReturn": "Annuler et revenir à {{domain}}",
   "aboutUs": "À propos de nous",
   "imprint": "Impression",
   "privacy": "Politique de confidentialité",
@@ -107,5 +104,6 @@
   "message": "Message",
   "contributedToTpo": "J'ai contribué à {{amount}} à {{organization}}",
   "janeSuccessMessage": "En attendant, nous vous invitions à passer le mot sur les réseaux sociaux avec le hashtag #TreesForJane, et à écouter le message de Jane ci-dessous.",
-  "backToTreesForJane": "Retourner à Trees for Jane"
+  "backToTreesForJane": "Retourner à Trees for Jane",
+  "returnTo": "Retourner à {{domain}}"
 }

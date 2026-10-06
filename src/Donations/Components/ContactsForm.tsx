@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useMemo } from "react";
 import MaterialTextField from "../../Common/InputTypes/MaterialTextField";
 import AutoCompleteCountry from "../../Common/InputTypes/AutoCompleteCountry";
 import { useTranslation } from "next-i18next";
@@ -41,7 +41,7 @@ function ContactsForm(): ReactElement {
           client_id: process.env.ESRI_CLIENT_ID,
           client_secret: process.env.ESRI_CLIENT_SECRET,
         }
-      : {}
+      : {},
   );
   const {
     profile,
@@ -58,6 +58,8 @@ function ContactsForm(): ReactElement {
     setTaxIdentificationAvail,
     isPackageWanted,
     setIsPackageWanted,
+    isSupportedDonation,
+    getDonationBreakdown,
   } = React.useContext(QueryParamContext);
 
   const { isAuthenticated } = useAuth0();
@@ -92,7 +94,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     const fiteredCountry = COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
+      (country) => country.abbrev === contactDetails.country,
     );
     setPostalRegex(fiteredCountry[0]?.postal);
   }, [contactDetails.country]);
@@ -111,14 +113,14 @@ function ContactsForm(): ReactElement {
         query: { ...router.query, step: PAYMENT },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
   const [postalRegex, setPostalRegex] = React.useState(
     COUNTRY_ADDRESS_POSTALS.filter(
-      (country) => country.abbrev === contactDetails.country
-    )[0]?.postal
+      (country) => country.abbrev === contactDetails.country,
+    )[0]?.postal,
   );
 
   const changeCountry = (country: string) => {
@@ -132,7 +134,7 @@ function ContactsForm(): ReactElement {
 
   React.useEffect(() => {
     if (
-      projectDetails?.purpose === "funds" &&
+      projectDetails?.purpose === "membership" &&
       projectDetails.id === "proj_rLYELl1JpkT9sskba0sLPeKi" &&
       euCountries.includes(contactDetails.country)
     ) {
@@ -196,6 +198,16 @@ function ContactsForm(): ReactElement {
     }
   }, [projectDetails, country]);
 
+  const displayAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
+
   const { theme } = React.useContext(ThemeContext);
   let suggestion_counter = 0;
   return (
@@ -210,7 +222,7 @@ function ContactsForm(): ReactElement {
                   query: { ...router.query, step: DONATE },
                 },
                 undefined,
-                { shallow: true }
+                { shallow: true },
               );
             }}
             style={{ marginRight: "12px" }}
@@ -597,7 +609,7 @@ function ContactsForm(): ReactElement {
                   totalCost: getFormattedCurrency(
                     i18n.language,
                     currency,
-                    paymentSetup.unitCost * quantity
+                    displayAmount,
                   ),
                   frequency:
                     frequency === "once" ? "" : t(frequency).toLowerCase(),

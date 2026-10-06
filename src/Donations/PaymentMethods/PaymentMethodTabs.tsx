@@ -1,10 +1,8 @@
-import React, { Dispatch, ReactElement, SetStateAction } from "react";
+import React, { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 import CreditCard from "../../../public/assets/icons/donation/CreditCard";
-import GiroPayIcon from "../../../public/assets/icons/donation/GiroPay";
 import PaypalIcon from "../../../public/assets/icons/donation/PaypalIcon";
 import SepaIcon from "../../../public/assets/icons/donation/SepaIcon";
-import SofortIcon from "../../../public/assets/icons/donation/SofortIcon";
 import BankIcon from "../../../public/assets/icons/donation/BankIcon";
 import { QueryParamContext } from "../../Layout/QueryParamContext";
 import { formatAmountForStripe } from "../../Utils/stripe/stripeHelpers";
@@ -24,14 +22,12 @@ interface PaymentMethodTabsProps {
   paymentType: string;
   setPaymentType: Dispatch<SetStateAction<string>>;
   showPaypal?: boolean;
-  showGiroPay?: boolean;
   showSepa?: boolean;
-  showSofort?: boolean;
   showCC?: boolean;
   showNativePay?: boolean;
   onNativePaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => Promise<void>;
   showBankTransfer?: boolean;
 }
@@ -40,9 +36,7 @@ export default function PaymentMethodTabs({
   paymentType,
   setPaymentType,
   showPaypal,
-  showGiroPay,
   showSepa,
-  showSofort,
   showCC,
   showNativePay,
   onNativePaymentFunction,
@@ -52,7 +46,7 @@ export default function PaymentMethodTabs({
 
   const handleChange = (
     _event: React.MouseEvent<HTMLElement>,
-    newValue: string
+    newValue: string,
   ) => {
     setPaymentType(newValue);
   };
@@ -91,43 +85,51 @@ export default function PaymentMethodTabs({
     paymentSetup,
     quantity,
     frequency,
+    isSupportedDonation,
+    getDonationBreakdown,
+    stripePromise,
   } = React.useContext(QueryParamContext);
+
+  // Calculate the correct amount for payment processing
+  const paymentAmount = useMemo(() => {
+    if (!paymentSetup) return 0;
+
+    if (isSupportedDonation) {
+      const { totalAmount } = getDonationBreakdown();
+      return totalAmount;
+    }
+    return paymentSetup.unitCost * quantity;
+  }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
 
   let paymentLabel = "";
 
   if (paymentSetup && currency) {
     switch (projectDetails && projectDetails.purpose) {
+      // TODO: confirm labels for tree projects in supported donations
       case "trees":
         paymentLabel = t("treesInCountry", {
           treeCount: quantity,
         });
         break;
       case "funds":
+      case "academy":
+      case "forest-protection":
+      case "sponsorship":
+      case "membership":
+      case "endowment":
         paymentLabel = t("fundingPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "planet-cash":
         paymentLabel = t("pcashPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       case "bouquet":
       case "conservation":
         paymentLabel = t("bouquetPaymentLabel", {
-          amount: getFormattedCurrency(
-            i18n.language,
-            currency,
-            paymentSetup.unitCost * quantity
-          ),
+          amount: getFormattedCurrency(i18n.language, currency, paymentAmount),
         });
         break;
       default:
@@ -154,20 +156,6 @@ export default function PaymentMethodTabs({
           </button>
         )}
 
-        {showSofort && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "Sofort" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "Sofort")}
-            {...a11yProps("Sofort")}
-            data-test-id="sofortPayment"
-          >
-            <SofortIcon />
-            <CheckMark />
-          </button>
-        )}
-
         {showPaypal ? (
           <button
             className={`${"payment-method"} ${
@@ -180,19 +168,6 @@ export default function PaymentMethodTabs({
             <CheckMark />
           </button>
         ) : null}
-
-        {showGiroPay && (
-          <button
-            className={`${"payment-method"} ${
-              paymentType === "GiroPay" ? "payment-method-selected" : ""
-            }`}
-            onClick={(e) => handleChange(e, "GiroPay")}
-            {...a11yProps("GiroPay")}
-          >
-            <GiroPayIcon />
-            <CheckMark />
-          </button>
-        )}
 
         {showSepa && (
           <button
@@ -225,13 +200,13 @@ export default function PaymentMethodTabs({
           </button>
         )}
         {/*9 May 2023 - Apple Pay / Google Pay is disabled currently as it is not working correctly*/}
-        {showNativePay && (
+        {showNativePay && stripePromise !== null && (
           <NativePay
             country={country}
             currency={currency}
             amount={formatAmountForStripe(
-              paymentSetup.unitCost * quantity,
-              currency.toLowerCase()
+              paymentAmount,
+              currency.toLowerCase(),
             )}
             onPaymentFunction={onNativePaymentFunction}
             paymentSetup={paymentSetup}
@@ -239,6 +214,7 @@ export default function PaymentMethodTabs({
             isPaymentPage
             paymentLabel={paymentLabel}
             frequency={frequency}
+            stripePromise={stripePromise}
           />
         )}
       </div>

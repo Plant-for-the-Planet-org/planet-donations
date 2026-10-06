@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { supportedDonationConfig } from "./src/Utils/supportedDonationConfig";
+import {
+  parseProjectParam,
+  trimProjectIdentifier,
+} from "./src/Utils/projectIdentifier";
 
 const PUBLIC_FILE = /\.(.*)$/;
 const ALLOWED_LOCALES = ["en", "cs", "de", "it", "es", "fr", "pt-BR"];
 
 export async function middleware(
-  req: NextRequest
+  req: NextRequest,
 ): Promise<NextResponse | undefined> {
+  // Skip middleware for static files, API routes, and Next.js internals
   if (
     req.nextUrl.pathname.startsWith("/_next") ||
     req.nextUrl.pathname.includes("/api/") ||
@@ -14,23 +20,120 @@ export async function middleware(
     return;
   }
 
-  const localeParam = req.nextUrl.searchParams.get("locale");
-  const localeTestRegex = new RegExp("&?locale=" + localeParam); //looks for locale as a query param (optionally preceded by &)
-  const queryString = req.nextUrl.search.replace(localeTestRegex, "");
+  // Some link builders escape the `&` separators, so the rest of the query string arrives inside `to` (e.g. `?to=yucatan%26step=donate`).
+  // Split it back out before anything reads `tenant` or `locale`, otherwise those values stay trapped and the API gets a slug that cannot match.
+  const toParam = req.nextUrl.searchParams.get("to");
+  if (toParam) {
+    const parsedToParam = parseProjectParam(toParam);
+    const repairedIdentifier = trimProjectIdentifier(
+      parsedToParam ? parsedToParam.identifier : toParam,
+    );
+    if (repairedIdentifier !== toParam) {
+      const repairedParams = new URLSearchParams(req.nextUrl.searchParams);
+      repairedParams.set("to", repairedIdentifier);
+      // A parameter the link already states outright wins over one recovered from inside `to`
+      parsedToParam?.recovered.forEach((value, key) => {
+        if (!repairedParams.has(key)) {
+          repairedParams.append(key, value);
+        }
+      });
+      // Built from req.url so the locale prefix in the path is kept as it is
+      const repairedUrl = new URL(req.url);
+      repairedUrl.search = repairedParams.toString();
+      return NextResponse.redirect(repairedUrl);
+    }
+  }
 
-  // locale is removed from query parameters and user is redirected if the locale is supported
-  if (localeParam) {
-    if (ALLOWED_LOCALES.includes(localeParam)) {
-      return NextResponse.redirect(
-        new URL(`/${localeParam}${req.nextUrl.pathname}${queryString}`, req.url)
-      );
-    } else {
-      return NextResponse.redirect(
+  const localeParam = req.nextUrl.searchParams.get("locale");
+  const tenantParam = req.nextUrl.searchParams.get("tenant");
+
+  // Get current locale from Next.js (e.g., "en", "de", "es")
+  const currentLocale = req.nextUrl.locale || "en";
+
+  // Check if this tenant has language restrictions
+  if (tenantParam && supportedDonationConfig[tenantParam]) {
+    const tenantConfig = supportedDonationConfig[tenantParam];
+    const tenantSupportedLanguages = tenantConfig.languages;
+
+    // If current locale is not supported by this tenant, redirect
+    if (!tenantSupportedLanguages.includes(currentLocale)) {
+      const fallbackLocale = tenantSupportedLanguages[0] || "en";
+
+      const response = NextResponse.redirect(
         new URL(
-          `/${req.nextUrl.locale}${req.nextUrl.pathname}${queryString}`,
-          req.url
-        )
+          `/${fallbackLocale}${req.nextUrl.pathname}${req.nextUrl.search}`,
+          req.url,
+        ),
       );
+      // Overwrite the cookie so Next.js doesn't redirect back to the unsupported locale on the next request
+      response.cookies.set("NEXT_LOCALE", fallbackLocale, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
+    }
+  }
+
+  // Handle ?locale= query parameter (existing logic)
+  if (localeParam) {
+    const searchParams = new URLSearchParams(req.nextUrl.searchParams);
+    searchParams.delete("locale");
+    const queryString = searchParams.toString()
+      ? `?${searchParams.toString()}`
+      : "";
+
+    if (ALLOWED_LOCALES.includes(localeParam)) {
+      // Check if tenant restricts this locale
+      if (tenantParam && supportedDonationConfig[tenantParam]) {
+        const tenantConfig = supportedDonationConfig[tenantParam];
+        if (!tenantConfig.languages.includes(localeParam)) {
+          // Redirect to tenant's first supported language
+          const fallbackLocale = tenantConfig.languages[0] || "en";
+          const response = NextResponse.redirect(
+            new URL(
+              `/${fallbackLocale}${req.nextUrl.pathname}${queryString}`,
+              req.url,
+            ),
+          );
+          // Overwrite cookie to match the tenant fallback locale
+          response.cookies.set("NEXT_LOCALE", fallbackLocale, {
+            path: "/",
+            maxAge: 31536000,
+            sameSite: "lax",
+          });
+          return response;
+        }
+      }
+
+      // ?locale=en is an explicit instruction from the referring app and must take precedence over the user's NEXT_LOCALE cookie.
+      // Without setting the cookie here, Next.js reads the existing NEXT_LOCALE cookie (e.g. "de") on the redirected /en path and immediately overrides back to /de, creating an infinite loop.
+      const response = NextResponse.redirect(
+        new URL(
+          `/${localeParam}${req.nextUrl.pathname}${queryString}`,
+          req.url,
+        ),
+      );
+      response.cookies.set("NEXT_LOCALE", localeParam, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
+    } else {
+      // Invalid locale param — fall back to current locale
+      const response = NextResponse.redirect(
+        new URL(
+          `/${currentLocale}${req.nextUrl.pathname}${queryString}`,
+          req.url,
+        ),
+      );
+      response.cookies.set("NEXT_LOCALE", currentLocale, {
+        path: "/",
+        maxAge: 31536000,
+        sameSite: "lax",
+      });
+      return response;
     }
   }
 }

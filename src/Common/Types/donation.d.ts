@@ -10,15 +10,33 @@ export interface Metadata {
   welcomePackageStatus?: "draft";
 }
 
-export type DonationRequestData = {
-  purpose: ProjectPurpose;
-  project?: string;
+export interface LineItem {
+  project: string;
+  units?: number;
   amount: number;
+}
+
+export type BaseDonationRequest = {
   currency: string;
   donor: ContactDetails;
   frequency: string;
   metadata: Metadata;
-  quantity?: number;
   taxDeductionCountry?: string;
+};
+
+export type RegularDonationRequest = BaseDonationRequest & {
+  purpose: ProjectPurpose;
+  project: string;
+  amount: number;
+  units?: number;
   gift?: SentGift;
 };
+
+export type CompositeDonationRequest = BaseDonationRequest & {
+  purpose: "composite";
+  lineItems: LineItem[];
+};
+
+export type DonationRequestData =
+  | RegularDonationRequest
+  | CompositeDonationRequest;

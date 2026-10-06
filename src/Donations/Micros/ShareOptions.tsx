@@ -8,7 +8,6 @@ import React, {
 import EmailIcon from "../../../public/assets/icons/share/Email";
 import EmailSolid from "../../../public/assets/icons/share/EmailSolid";
 import FacebookIcon from "../../../public/assets/icons/share/Facebook";
-import TwitterIcon from "../../../public/assets/icons/share/Twitter";
 import DownloadIcon from "../../../public/assets/icons/share/Download";
 import DownloadSolid from "../../../public/assets/icons/share/DownloadSolid";
 import InstagramIcon from "../../../public/assets/icons/share/Instagram";
@@ -19,12 +18,14 @@ import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { ContactDetails } from "@planet-sdk/common";
 
 interface ShareOptionsProps {
-  treeCount: string;
+  unitsAsString: string | undefined;
+  unitType: "tree" | "m2" | "currency" | undefined;
   sendRef: () => RefObject<HTMLDivElement>;
   donor?: ContactDetails;
 }
 const ShareOptions = ({
-  treeCount,
+  unitsAsString,
+  unitType,
   sendRef,
   donor,
 }: ShareOptionsProps): ReactElement | null => {
@@ -35,13 +36,12 @@ const ShareOptions = ({
   useEffect(() => {
     if (donation) {
       setUrlToShare(
-        encodeURIComponent(`${window.location.origin}?context=${donation.id}`)
+        encodeURIComponent(`${window.location.origin}?context=${donation.id}`),
       );
     }
   }, [donation]);
 
   const titleToShare = ready ? t("donate:titleToShare") : "";
-  const linkToShare = "";
   let textToShare = "";
   // donor may be undefined or empty for legacy donations or redeem
   if (donor && (donor.companyname || donor.firstname)) {
@@ -56,7 +56,7 @@ const ShareOptions = ({
 
   const exportComponent = (
     node: RefObject<HTMLDivElement>,
-    fileName: string
+    fileName: string,
     // backgroundColor: string | null,
     // type: string
   ) => {
@@ -81,9 +81,7 @@ const ShareOptions = ({
 
   const exportComponentAsJPEG = (
     node: RefObject<HTMLDivElement>,
-    fileName = `My_${treeCount}_tree_donation.jpeg`
-    /* backgroundColor: string | null = null,
-    type = "image/jpeg" */
+    fileName: string,
   ) => {
     const modifiedFileName = fileName.replace(".", "");
     return exportComponent(node, modifiedFileName);
@@ -108,11 +106,12 @@ const ShareOptions = ({
       <button
         id={"shareButton"}
         onClick={() => {
+          const fileName =
+            unitsAsString && unitType && unitType !== "currency"
+              ? `My_${unitsAsString}_${unitType}_donation`
+              : "My_donation";
           if (sendRef) {
-            exportComponentAsJPEG(
-              sendRef(),
-              `My_${treeCount}_tree_donation.jpeg`
-            );
+            exportComponentAsJPEG(sendRef(), fileName);
           }
         }}
         onMouseOver={() => setCurrentHover(1)}
@@ -129,7 +128,7 @@ const ShareOptions = ({
         onClick={() =>
           donation &&
           shareClicked(
-            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`
+            `https://www.facebook.com/sharer.php?u=${urlToShare}&hashtag=%23StopTalkingStartPlanting`,
           )
         }
         onMouseOver={() => donation && setCurrentHover(2)}
@@ -148,21 +147,6 @@ const ShareOptions = ({
       >
         <InstagramIcon
           color={currentHover === 3 ? "#dd217b" : "backgroundColorDark"}
-        />
-      </button>
-
-      <button
-        id={"shareTwitter"}
-        onMouseOver={() => setCurrentHover(4)}
-        onClick={() =>
-          shareClicked(
-            `https://twitter.com/intent/tweet?hashtags=StopTalkingStartPlanting,TrillionTrees&url=${linkToShare}&text=${textToShare}`
-          )
-        }
-      >
-        <TwitterIcon
-          backGroundColor={currentHover === 4 ? "backgroundColorDark" : "#fff"}
-          fontColor={currentHover === 4 ? "#fff" : "backgroundColorDark"}
         />
       </button>
 

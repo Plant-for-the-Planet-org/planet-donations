@@ -17,6 +17,15 @@ import {
 import { SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { Dispatch, SetStateAction } from "react";
+import { Stripe as StripeJS } from "@stripe/stripe-js";
+
+export interface DonationBreakdown {
+  mainProjectAmount: number;
+  supportAmount: number;
+  totalAmount: number;
+  mainProjectQuantity: number;
+  supportProjectQuantity: number;
+}
 
 export default interface QueryParamContextInterface {
   isGift: boolean;
@@ -29,6 +38,8 @@ export default interface QueryParamContextInterface {
   setcountry: Dispatch<SetStateAction<string>>;
   paymentSetup: PaymentOptions | null;
   setpaymentSetup: Dispatch<SetStateAction<PaymentOptions | null>>;
+  stripePromise: Promise<StripeJS | null> | null;
+  setStripePromise: Dispatch<SetStateAction<Promise<StripeJS | null> | null>>;
   currency: string;
   setcurrency: Dispatch<SetStateAction<string>>;
   enabledCurrencies: CurrencyList | null;
@@ -71,8 +82,8 @@ export default interface QueryParamContextInterface {
   setIsPackageWanted: Dispatch<SetStateAction<boolean | null>>;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
-  tenant: string;
-  settenant: Dispatch<SetStateAction<string>>;
+  tenant: string | null;
+  setTenant: Dispatch<SetStateAction<string | null>>;
   selectedProjects: Array<Project>;
   setSelectedProjects: (selectedProjects: Array<Project>) => void;
   allProjects: Array<Project>;
@@ -80,10 +91,10 @@ export default interface QueryParamContextInterface {
   setallowTaxDeductionChange: Dispatch<SetStateAction<boolean>>;
   donationUid: string;
   setDonationUid: Dispatch<SetStateAction<string>>;
-  setshowErrorCard: Dispatch<SetStateAction<boolean>>;
+  setShowErrorCard: Dispatch<SetStateAction<boolean>>;
   transferDetails: BankTransferDetails | null;
   setTransferDetails: (transferDetails: BankTransferDetails | null) => void;
-  loadselectedProjects: () => Promise<void>;
+  loadSelectedProjects: () => Promise<void>;
   hideTaxDeduction: boolean;
   sethideTaxDeduction: Dispatch<SetStateAction<boolean>>;
   queryToken: string | null;
@@ -119,6 +130,10 @@ export default interface QueryParamContextInterface {
   setDonation: Dispatch<SetStateAction<Donation | null>>;
   paymentRequest: PaymentRequest | null;
   setPaymentRequest: Dispatch<SetStateAction<PaymentRequest | null>>;
+  // New supported donation properties
+  isSupportedDonation: boolean;
+  supportedProjectId: string | null;
+  getDonationBreakdown: () => DonationBreakdown;
   errors: SerializedError[] | null;
   setErrors: Dispatch<SetStateAction<SerializedError[] | null>>;
 }

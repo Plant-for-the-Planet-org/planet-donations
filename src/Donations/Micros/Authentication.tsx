@@ -24,7 +24,7 @@ function Authentication(): ReactElement {
   const {
     contactDetails,
     updateContactDetails,
-    setshowErrorCard,
+    setShowErrorCard,
     setqueryToken,
     queryToken,
     profile,
@@ -55,7 +55,7 @@ function Authentication(): ReactElement {
         const requestParams = {
           url: "/app/profile",
           token: token,
-          setshowErrorCard,
+          setShowErrorCard,
           tenant,
         };
         const profileResponse: { data: User } = await apiRequest(requestParams);

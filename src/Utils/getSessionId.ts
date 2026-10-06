@@ -1,4 +1,4 @@
-import { v1 } from "uuid";
+import { v7 as uuidV7 } from "uuid";
 
 /**
  * Async function to return a sessionId string
@@ -10,14 +10,14 @@ export default async function getsessionId(): Promise<string> {
     if (typeof window !== "undefined") {
       sessionId = localStorage.getItem("sessionId");
     } else {
-      sessionId = v1();
+      sessionId = uuidV7();
     }
     if (!sessionId) {
-      sessionId = v1();
+      sessionId = uuidV7();
       localStorage.setItem("sessionId", sessionId);
     }
   } else {
-    sessionId = v1();
+    sessionId = uuidV7();
     if (typeof window !== "undefined") {
       localStorage.setItem("sessionId", sessionId);
     }

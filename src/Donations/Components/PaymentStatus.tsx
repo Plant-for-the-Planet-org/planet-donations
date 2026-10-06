@@ -23,7 +23,7 @@ function ThankYou(): ReactElement {
   const {
     donationID,
     redirectstatus,
-    setshowErrorCard,
+    setShowErrorCard,
     tenant,
     transferDetails,
     donation,
@@ -36,7 +36,7 @@ function ThankYou(): ReactElement {
     try {
       const requestParams = {
         url: `/app/donations/${donationID}`,
-        setshowErrorCard,
+        setShowErrorCard,
         tenant,
         locale: i18n.language,
       };
@@ -84,7 +84,7 @@ function ThankYou(): ReactElement {
 
   const handleTextCopiedSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
+    reason?: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {
       return;

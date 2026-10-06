@@ -2,7 +2,6 @@ import { useStripe } from "@stripe/react-stripe-js";
 import { ReactElement, useContext, useEffect, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useTranslation } from "next-i18next";
-import getStripe from "../../Utils/stripe/getStripe";
 import AppleIcon from "../../../public/assets/icons/donation/ApplePayIcon";
 import GooglePayIcon from "../../../public/assets/icons/donation/GooglePayIcon";
 import themeProperties from "../../../styles/themeProperties";
@@ -23,7 +22,7 @@ interface PaymentButtonProps {
   amount: number;
   onPaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => Promise<void>;
   continueNext: () => void;
   isPaymentPage: boolean;
@@ -115,7 +114,7 @@ export const PaymentRequestCustomButton = ({
           onPaymentFunction(paymentMethod, paymentRequest);
           complete("success");
           setPaymentLoading(false);
-        }
+        },
       );
     }
     return () => {
@@ -236,13 +235,14 @@ interface NativePayProps {
   amount: number;
   onPaymentFunction: (
     paymentMethod: PaymentMethod,
-    paymentRequest: PaymentRequest
+    paymentRequest: PaymentRequest,
   ) => Promise<void>;
   paymentSetup: PaymentOptions;
   continueNext: () => void;
   isPaymentPage: boolean;
   paymentLabel: string;
   frequency: string | null;
+  stripePromise: Promise<Stripe | null>;
 }
 export const NativePay = ({
   country,
@@ -254,33 +254,14 @@ export const NativePay = ({
   isPaymentPage,
   paymentLabel,
   frequency,
+  stripePromise,
 }: NativePayProps): ReactElement => {
-  const { i18n } = useTranslation();
-  const [stripePromise, setStripePromise] =
-    useState<null | Promise<Stripe | null>>(() =>
-      getStripe(paymentSetup, i18n.language)
-    );
-
-  useEffect(() => {
-    const fetchStripeObject = async () => {
-      if (!stripePromise && paymentSetup) {
-        const res = () => getStripe(paymentSetup, i18n.language);
-        // When we have got the Stripe object, pass it into our useState.
-        setStripePromise(res);
-      }
-    };
-    fetchStripeObject();
-  }, [paymentSetup]);
-
   if (!stripePromise) {
     return <></>;
   }
 
   return (
-    <Elements
-      stripe={stripePromise}
-      key={paymentSetup?.gateways?.stripe?.authorization.accountId}
-    >
+    <Elements stripe={stripePromise}>
       <PaymentRequestCustomButton
         country={country}
         currency={currency}
