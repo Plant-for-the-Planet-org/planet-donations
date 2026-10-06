@@ -5,7 +5,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 const { i18n } = require("./next-i18next.config");
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require("@sentry/nextjs/config");
 
 const {
   SENTRY_ORG,
@@ -30,7 +30,9 @@ const sentryWebpackPluginOptions = {
   authToken: SENTRY_AUTH_TOKEN,
   org: SENTRY_ORG,
   project: SENTRY_PROJECT,
-  release: COMMIT_SHA,
+  release: { name: COMMIT_SHA },
+  // Only used for App Router navigations; this app uses the Pages Router.
+  suppressOnRouterTransitionStartWarning: true,
 };
 
 const basePath = "";

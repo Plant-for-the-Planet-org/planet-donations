@@ -31,8 +31,7 @@
     "@next/bundle-analyzer": "^10.1.3",
     "@paypal/react-paypal-js": "^8.9.2",
     "@planet-sdk/common": "^0.1.47",
-    "@sentry/nextjs": "^8.55.0",
-    "@sentry/webpack-plugin": "^2.22.7",
+    "@sentry/nextjs": "^11.4.0",
     "@sparticuz/chromium": "^133.0.0",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.13.2",
@@ -55,6 +54,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
     "@babel/plugin-transform-unicode-regex": "^7.22.5",
     "@hookform/devtools": "^4.3.1",
     "@types/dom-to-image": "^2.6.2",
