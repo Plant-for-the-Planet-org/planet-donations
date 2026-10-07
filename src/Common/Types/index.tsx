@@ -1,5 +1,5 @@
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
-import { OnApproveData } from "@paypal/paypal-js/types/components/buttons";
+import { OnApproveData } from "@paypal/paypal-js";
 import { Dispatch, SetStateAction } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";

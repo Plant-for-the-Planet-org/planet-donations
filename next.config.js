@@ -58,9 +58,6 @@ const hasAssetPrefix =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
-  serverRuntimeConfig: {
-    rootDir: __dirname,
-  },
   basePath,
   // your config for other plugins or the general next.js here...
   env: {
@@ -96,9 +93,6 @@ const nextConfig = {
   // Asset Prefix allows to use CDN for the generated js files
   // https://nextjs.org/docs/api-reference/next.config.js/cdn-support-with-asset-prefix
   i18n,
-  images: {
-    domains: ["cdn.plant-for-the-planet.org", "cdn.planetapp.workers.dev"],
-  },
 };
 
 module.exports = withSentryConfig(() => {

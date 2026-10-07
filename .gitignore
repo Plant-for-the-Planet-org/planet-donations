@@ -37,6 +37,10 @@ cypress.env.json
 # vercel
 .vercel
 
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
 /cypress/videos
 /cypress/screenshots
 /cypress/integration/examples

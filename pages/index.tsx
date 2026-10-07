@@ -25,6 +25,7 @@ import { NON_GIFTABLE_PROJECT_PURPOSES } from "src/Utils/projects/constants";
 import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 import { isValidProjectIdentifier } from "src/Utils/projectIdentifier";
+import nextI18NextConfig from "../next-i18next.config.js";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -543,11 +544,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     props: {
-      ...(await serverSideTranslations(locale, [
-        "common",
-        "country",
-        "donate",
-      ])),
+      // Pass the config in. Without it, next-i18next looks for next-i18next.config.js on disk, and that file is not in the Vercel function bundle.
+      ...(await serverSideTranslations(
+        locale,
+        ["common", "country", "donate"],
+        nextI18NextConfig,
+      )),
       donationStep: donationStep,
       showErrorCard: showErrorCard,
       projectDetails: projectDetails,
