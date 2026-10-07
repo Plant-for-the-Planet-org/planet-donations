@@ -21,7 +21,11 @@
       "cypress",
       "cypress-plugin-stripe-elements"
     ],
-    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"],
+      "public/*": ["./public/*"],
+      "styles/*": ["./styles/*"]
+    },
     "incremental": true
   },
   "exclude": [
