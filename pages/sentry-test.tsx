@@ -8,6 +8,7 @@ import {
   captureMessage,
   ErrorBoundary,
 } from "@sentry/nextjs";
+import nextI18NextConfig from "../next-i18next.config.js";
 
 function BrokenComponent(): ReactElement {
   throw new Error("Sentry test: error thrown while rendering a component");
@@ -137,10 +138,10 @@ export default SentryTest;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale || "en", [
-      "common",
-      "country",
-      "donate",
-    ])),
+    ...(await serverSideTranslations(
+      locale || "en",
+      ["common", "country", "donate"],
+      nextI18NextConfig,
+    )),
   },
 });
