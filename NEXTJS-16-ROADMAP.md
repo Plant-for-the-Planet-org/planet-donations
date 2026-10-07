@@ -46,6 +46,7 @@ Effort is for one developer and includes testing on a Vercel preview.
 - Phase 3, steps 1 to 4: Next 16.3.8 (`~16.3.8`), `--webpack` scripts, the `tsconfig.json` changes Next makes, and the PayPal type import fix.
 - `next-env.d.ts` is no longer tracked (Next rewrites it differently for `dev` and `build`), and `*.tsbuildinfo` is ignored.
 - `baseUrl` in `tsconfig.json` is replaced with `paths` for `src/*`, `public/*` and `styles/*` (TypeScript 6 deprecates `baseUrl`).
+- Every `serverSideTranslations` call now gets `next-i18next.config.js` passed in. Without it, `/` and `/auth` returned 500 on the Vercel preview ("next-i18next was unable to find a user config"), because the file is not in the function bundle. `next start` cannot show this, since it runs in the full project folder; a build with `output: "standalone"` can.
 
 Checked locally: clean `next build` passes, `tsc` shows the same 67 errors as `develop`, lint passes, and the redirect and SSR smoke tests match the trial. `/api/image` could not be tested on Windows and needs the Vercel preview.
 
