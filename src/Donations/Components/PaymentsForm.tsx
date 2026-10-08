@@ -78,6 +78,7 @@ function PaymentsForm(): ReactElement {
     utmMedium,
     utmSource,
     isPackageWanted,
+    welcomePackageLanguage,
     setPaymentRequest,
     isSupportedDonation,
     supportedProjectId,
@@ -171,6 +172,7 @@ function PaymentsForm(): ReactElement {
       utmMedium,
       utmSource,
       isPackageWanted,
+      welcomePackageLanguage,
       tenant,
       locale: i18n.language,
       // Add supported donation parameters

@@ -24,6 +24,7 @@ import {
   DonationRequestData,
   RegularDonationRequest,
 } from "src/Common/Types/donation";
+import { getWelcomePackageLanguageFromLocale } from "src/Utils/welcomePackageLanguage";
 import { PaymentMethod } from "@stripe/stripe-js/types/api/payment-methods";
 import { PaymentIntentResult, Stripe, StripeError } from "@stripe/stripe-js";
 import { Dispatch, SetStateAction } from "react";
@@ -119,6 +120,7 @@ export async function createDonationFunction({
   utmMedium,
   utmSource,
   isPackageWanted = false,
+  welcomePackageLanguage = null,
   tenant,
   locale,
   isSupportedDonation = false,
@@ -136,6 +138,7 @@ export async function createDonationFunction({
     isGift,
     giftDetails,
     frequency,
+    locale,
     amount,
     callbackUrl,
     callbackMethod,
@@ -143,6 +146,7 @@ export async function createDonationFunction({
     utmMedium,
     utmSource,
     isPackageWanted,
+    welcomePackageLanguage,
     isSupportedDonation,
     supportedProjectId,
     getDonationBreakdown,
@@ -191,6 +195,7 @@ export function createDonationData({
   isGift,
   giftDetails,
   frequency,
+  locale,
   amount,
   callbackUrl,
   callbackMethod,
@@ -198,6 +203,7 @@ export function createDonationData({
   utmMedium,
   utmSource,
   isPackageWanted,
+  welcomePackageLanguage,
   // Add new parameters for supported donations
   isSupportedDonation,
   supportedProjectId,
@@ -221,7 +227,11 @@ export function createDonationData({
       utm_campaign: utmCampaign,
       utm_medium: utmMedium,
       utm_source: utmSource,
-      ...(isPackageWanted === true && { welcomePackageStatus: "draft" }),
+      ...(isPackageWanted === true && {
+        welcomePackageStatus: "draft",
+        welcomePackageLanguage:
+          welcomePackageLanguage ?? getWelcomePackageLanguageFromLocale(locale),
+      }),
     },
     ...(taxDeductionCountry && { taxDeductionCountry }),
   };

@@ -459,10 +459,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   border: 1px solid $primaryColor;
   border-radius: 10px;
   padding: 10px;
-  > label {
+  > .welcome-package-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+  .welcome-package-content > label {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -473,6 +480,34 @@
     svg {
       width: 40px;
       height: auto;
+    }
+  }
+  .welcome-package-language {
+    // align with the label text (icon width + gap)
+    padding-left: 33px;
+    margin-top: 10px;
+    .welcome-package-language-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: $primaryFontColor;
+    }
+    .welcome-package-language-options {
+      flex-direction: row;
+      // keep options side by side; only drop to a new line if there is no room
+      flex-wrap: wrap;
+      column-gap: 12px;
+      .MuiRadio-root {
+        // tighter spacing between options (MUI default is 9px)
+        padding-top: 4px;
+        padding-bottom: 4px;
+      }
+      .MuiFormControlLabel-label {
+        // keep "EN - English" on one line
+        white-space: nowrap;
+        // match the welcomePackageConsent text instead of MUI's 1rem
+        font-size: inherit;
+        line-height: inherit;
+      }
     }
   }
 }
