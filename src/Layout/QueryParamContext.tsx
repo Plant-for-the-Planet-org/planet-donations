@@ -38,6 +38,7 @@ import {
   BankTransferDetails,
 } from "@planet-sdk/common/build/types/donation";
 import ErrorPopup from "src/Common/ErrorPopup/ErrorPopup";
+import { WelcomePackageLanguage } from "src/Common/Types/donation";
 import { APIError, handleError, SerializedError } from "@planet-sdk/common";
 import { PaymentRequest } from "@stripe/stripe-js/types/stripe-js/payment-request";
 import { createProjectDetails } from "src/Utils/createProjectDetails";
@@ -132,6 +133,8 @@ const QueryParamProvider = ({
   const [utmMedium, setUtmMedium] = useState("");
   const [utmSource, setUtmSource] = useState("");
   const [isPackageWanted, setIsPackageWanted] = useState<boolean | null>(null);
+  const [welcomePackageLanguage, setWelcomePackageLanguage] =
+    useState<WelcomePackageLanguage | null>(null);
 
   const [redirectstatus, setredirectstatus] = useState<string | null>(null);
 
@@ -505,6 +508,7 @@ const QueryParamProvider = ({
     contactDetails.country,
     contactDetails.companyname,
     isPackageWanted,
+    welcomePackageLanguage,
     isTaxDeductible,
   ]);
 
@@ -709,6 +713,8 @@ const QueryParamProvider = ({
         setUtmSource,
         isPackageWanted,
         setIsPackageWanted,
+        welcomePackageLanguage,
+        setWelcomePackageLanguage,
         isDirectDonation,
         setisDirectDonation,
         tenant,
