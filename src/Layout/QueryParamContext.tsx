@@ -109,6 +109,7 @@ const QueryParamProvider = ({
     message: "",
     type: null,
   });
+  const [selfGiftSlug, setSelfGiftSlug] = useState<string | null>(null);
 
   const [contactDetails, setContactDetails] = useState<ContactDetails>({
     firstname: "",
@@ -659,6 +660,41 @@ const QueryParamProvider = ({
       );
     }
   }, [profile?.email, contactDetails.email]);
+
+  // Drop a direct gift to the logged-in user's own profile
+  useEffect(() => {
+    if (
+      giftDetails.type !== "direct" ||
+      !profile?.id ||
+      giftDetails.recipient !== profile.id
+    )
+      return;
+
+    setIsGift(false);
+    setGiftDetails({
+      recipientName: "",
+      recipientEmail: "",
+      message: "",
+      type: null,
+    });
+    if (typeof router.query.s === "string") setSelfGiftSlug(router.query.s);
+  }, [profile?.id, giftDetails]);
+
+  // Wait until the token is gone from the URL: removing it is a separate navigation that copies the query, so removing `s` before it finishes lets it come back.
+  useEffect(() => {
+    if (
+      !selfGiftSlug ||
+      router.query.s !== selfGiftSlug ||
+      router.query.token
+    )
+      return;
+
+    const query = { ...router.query };
+    delete query.s;
+    router.replace({ pathname: router.pathname, query }, undefined, {
+      shallow: true,
+    });
+  }, [selfGiftSlug, router.query.s, router.query.token]);
 
   return (
     <QueryParamContext.Provider
