@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { NoGift } from "@planet-sdk/common/build/types/donation";
 import { isEmailValid } from "src/Utils/isEmailValid";
+import { isSelfGift } from "src/Utils/isSelfGift";
 import { isGiftMessageBlacklisted } from "src/Utils/isGiftMessageBlacklisted";
 import { GiftDetails } from "src/Common/Types";
 
@@ -208,7 +209,13 @@ export default function GiftForm(): ReactElement {
                           },
                           validate: {
                             emailInvalid: (value) =>
-                              value.length === 0 || isEmailValid(value),
+                              value.length === 0 ||
+                              isEmailValid(value) ||
+                              t("enterValidEmail"),
+                            notSelfGift: (value) =>
+                              !profile?.email ||
+                              !isSelfGift(value, profile.email) ||
+                              t("selfGift"),
                           },
                         }}
                         render={({ field: { onChange, value } }) => (
@@ -223,9 +230,7 @@ export default function GiftForm(): ReactElement {
                       />
                       {errors.recipientEmail && (
                         <div className={"form-errors"}>
-                          {errors.recipientEmail.type === "required"
-                            ? t("emailRequired")
-                            : t("enterValidEmail")}
+                          {errors.recipientEmail.message}
                         </div>
                       )}
                     </div>

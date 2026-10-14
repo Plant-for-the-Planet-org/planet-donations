@@ -17,6 +17,7 @@
   "giftMessage": "Gift Message",
   "giftMessageMaxError": "Gift message cannot exceed 250 characters",
   "giftNotification": "Gift Notification",
+  "selfGift": "You cannot send a gift to yourself",
   "continue": "Continue",
   "loginContinue": "Login & Continue",
   "verifyYourEmail": "Verify Your Email",
