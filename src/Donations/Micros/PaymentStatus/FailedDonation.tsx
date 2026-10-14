@@ -9,6 +9,7 @@ import InfoIcon from "public/assets/icons/InfoIcon";
 import RetryIcon from "public/assets/icons/RetryIcon";
 import { FetchedProjectDetails, GiftDetails } from "src/Common/Types";
 import { Donation } from "@planet-sdk/common/build/types/donation";
+import { getFundraiserId } from "src/Utils/fundraiserId";
 
 interface FailedDonationProps {
   donation: Donation;
@@ -43,6 +44,7 @@ function FailedDonation({
     setUtmCampaign,
     setUtmMedium,
     setUtmSource,
+    setFundraiserId,
     setredirectstatus,
     loadPaymentSetup,
   } = React.useContext(QueryParamContext);
@@ -113,6 +115,7 @@ function FailedDonation({
     setUtmCampaign(donation.metadata?.utm_campaign || "");
     setUtmMedium(donation.metadata?.utm_medium || "");
     setUtmSource(donation.metadata?.utm_source || "");
+    setFundraiserId(getFundraiserId(donation.metadata));
     setredirectstatus("");
     setdonationStep(3);
   }

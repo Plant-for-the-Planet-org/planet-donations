@@ -132,6 +132,7 @@ const QueryParamProvider = ({
   const [utmCampaign, setUtmCampaign] = useState("");
   const [utmMedium, setUtmMedium] = useState("");
   const [utmSource, setUtmSource] = useState("");
+  const [fundraiserId, setFundraiserId] = useState("");
   const [isPackageWanted, setIsPackageWanted] = useState<boolean | null>(null);
   const [welcomePackageLanguage, setWelcomePackageLanguage] =
     useState<WelcomePackageLanguage | null>(null);
@@ -711,6 +712,8 @@ const QueryParamProvider = ({
         setUtmMedium,
         utmSource,
         setUtmSource,
+        fundraiserId,
+        setFundraiserId,
         isPackageWanted,
         setIsPackageWanted,
         welcomePackageLanguage,
