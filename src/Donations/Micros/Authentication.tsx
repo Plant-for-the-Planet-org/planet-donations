@@ -131,9 +131,12 @@ function Authentication(): ReactElement {
     } else if (queryToken) {
       loadUserProfile();
     }
-    const queryParams = { ...router.query };
-    delete queryParams.token;
-    router.replace({ query: queryParams });
+    // Only when a token is present: this replace is not shallow, so each run fetches the page data again, and it copies the whole query, which can undo other URL changes.
+    if (router.query.token !== undefined) {
+      const queryParams = { ...router.query };
+      delete queryParams.token;
+      router.replace({ query: queryParams });
+    }
   }, [isAuthenticated, isLoading, queryToken]);
 
   const { t, i18n } = useTranslation("common");
