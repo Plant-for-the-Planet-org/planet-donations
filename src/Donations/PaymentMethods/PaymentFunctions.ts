@@ -119,6 +119,7 @@ export async function createDonationFunction({
   utmCampaign,
   utmMedium,
   utmSource,
+  fundraiserId,
   isPackageWanted = false,
   welcomePackageLanguage = null,
   tenant,
@@ -145,6 +146,7 @@ export async function createDonationFunction({
     utmCampaign,
     utmMedium,
     utmSource,
+    fundraiserId,
     isPackageWanted,
     welcomePackageLanguage,
     isSupportedDonation,
@@ -202,6 +204,7 @@ export function createDonationData({
   utmCampaign,
   utmMedium,
   utmSource,
+  fundraiserId,
   isPackageWanted,
   welcomePackageLanguage,
   // Add new parameters for supported donations
@@ -227,6 +230,7 @@ export function createDonationData({
       utm_campaign: utmCampaign,
       utm_medium: utmMedium,
       utm_source: utmSource,
+      ...(fundraiserId && { fundraiser: { id: fundraiserId } }),
       ...(isPackageWanted === true && {
         welcomePackageStatus: "draft",
         welcomePackageLanguage:
