@@ -9,6 +9,7 @@ export interface Metadata {
   utm_campaign?: string;
   utm_medium?: string;
   utm_source?: string;
+  fundraiser?: { id: string };
   welcomePackageStatus?: "draft";
   welcomePackageLanguage?: WelcomePackageLanguage;
 }
