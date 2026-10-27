@@ -46,6 +46,7 @@ Effort is for one developer and includes testing on a Vercel preview.
 - Phase 3, steps 1 to 4: Next 16.3.8 (`~16.3.8`), `--webpack` scripts, the `tsconfig.json` changes Next makes, and the PayPal type import fix.
 - `next-env.d.ts` is no longer tracked (Next rewrites it differently for `dev` and `build`), and `*.tsbuildinfo` is ignored.
 - `baseUrl` in `tsconfig.json` is replaced with `paths` for `src/*`, `public/*` and `styles/*` (TypeScript 6 deprecates `baseUrl`).
+- `package.json` has a `browserslist` field for the browser floor we already support (Safari 14.1+, Chrome and Edge 85+, Firefox 79+). See "Decisions needed".
 - Every `serverSideTranslations` call now gets `next-i18next.config.js` passed in. Without it, `/` and `/auth` returned 500 on the Vercel preview ("next-i18next was unable to find a user config"), because the file is not in the function bundle. `next start` cannot show this, since it runs in the full project folder; a build with `output: "standalone"` can.
 
 Checked locally: clean `next build` passes, `tsc` shows the same 67 errors as `develop`, lint passes, and the redirect and SSR smoke tests match the trial. `/api/image` could not be tested on Windows and needs the Vercel preview.
@@ -61,7 +62,7 @@ No code changes.
 1. Release PR #629 (`develop` → `main`, the merged Dependabot updates incl. axios 1.20). Check project load and donation creation on production.
 2. Review and merge PR #616 (`welcomePackageLanguage`), so it is tested on Next 14 and needs no rebase across the upgrade. Small conflict risk with Phase 2 (one import line in `QueryParamContext.tsx`).
 3. Close #621 and #613 (Dependabot `next` 16 bumps), with a link to this roadmap. They only change `package.json` and the lockfile, so their Vercel builds fail. #613 also has merge conflicts now.
-4. Decide the browser floor (see "Decisions needed"). Look at browser and OS data for the last 90 days in Vercel Analytics or Sentry. The decision must be ready before Phase 3, because Next 16's new default targets apply from the version bump, not from the bundler change.
+4. Decide the browser floor. Done: keep the floor production already has (see "Decisions needed").
 5. Check Vercel project settings: Node 22.x, build command `npm run build`, and `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `NEXT_PUBLIC_SENTRY_DSN` set for Production and Preview.
 6. Record a production baseline: Sentry error rate, Web Vitals, donation conversion, and screenshots of key screens in `en` and `de` on mobile and desktop.
 7. Agree on a release window. Avoid campaign peaks (for example December). Release early in the week, in working hours, with someone watching Sentry.
@@ -116,7 +117,7 @@ Steps 1 to 4 are done on `feature/nextjs-16`.
 2. Set scripts to `next dev --webpack` and `next build --webpack`.
 3. Run `npm run build` once. Commit the `tsconfig.json` changes Next makes (`moduleResolution: "bundler"`, `jsx: "react-jsx"`). Stop tracking `next-env.d.ts`, because Next rewrites it differently for `dev` and `build`.
 4. Fix the one new type error: in [src/Common/Types/index.tsx:2](src/Common/Types/index.tsx#L2), import `OnApproveData` from `"@paypal/paypal-js"` instead of `"@paypal/paypal-js/types/components/buttons"`.
-5. Apply the browser decision: either update [src/Utils/browsercheck.ts:49](src/Utils/browsercheck.ts#L49) to the new floor (today it only blocks Safari below 13), or add a `browserslist` field to `package.json` to keep older targets. Test an old Safari (below 16.4) on the preview.
+5. Apply the browser decision. Done: `browserslist` in `package.json` sets Safari 14.1+, iOS Safari 14.5+, Chrome and Edge 85+ and Firefox 79+. With it, the CSS output is the same as on `develop`, and the browser JavaScript needs nothing newer than production does today.
 6. Remove `experimental.instrumentationHook` if it was added in Phase 1. Check that `onRequestError` now reports SSR errors to Sentry.
 7. Keep `middleware.ts`. Expect a deprecation warning. The build also warns that Next's own code and Sentry's Edge code use Node.js APIs in the Edge bundle; check the middleware on the preview.
 8. From 16.3, `next dev` writes an `AGENTS.md` file when it detects a coding agent (it can be turned off with the `agentRules` option). Decide whether to commit or ignore it.
@@ -134,8 +135,8 @@ Steps 1 to 4 are done on `feature/nextjs-16`.
 ## Phase 4: Turbopack and SWC
 
 1. Remove `--webpack` from the scripts.
-2. Delete [.babelrc](.babelrc), `@babel/plugin-transform-unicode-regex` and `@babel/core`. The plugin is not needed for Next 16's browser targets (the `\p{L}` regexes in `ContactsForm.tsx` run natively).
-3. Repeat the old-browser test from Phase 3, since SWC now replaces Babel.
+2. Delete [.babelrc](.babelrc), `@babel/plugin-transform-unicode-regex` and `@babel/core`. The plugin is not needed for our `browserslist` targets (the `\p{L}` regexes in `ContactsForm.tsx` run natively from Safari 11.1).
+3. Check that SWC reads the same `browserslist` field: the CSS prefixes and the browser JavaScript should match the Phase 3 build. Test Safari 14.1 or iOS 14.5 if a device or emulator is available.
 4. Check that the build shows no `webpack config` error and no Babel message.
 5. Compare screenshots with the Phase 0 baseline. CSS order between global SCSS, CSS Modules, Emotion and styled-jsx can change with a new bundler.
 6. Repeat the Sentry checks from Phase 1 (Turbopack source maps).
@@ -222,8 +223,9 @@ Run all of it on the Vercel preview for Phases 3 and 4. For Phases 1, 2 and 5, r
 
 **Browsers** [Phases 3 and 4]
 
-- [ ] Latest Chrome, Firefox, Safari, Edge, iOS Safari 16.4+, Samsung Internet, Android Chrome.
-- [ ] The oldest agreed browser works, and one below it shows "browser not supported", not a blank page.
+- [ ] Latest Chrome, Firefox, Safari, Edge, iOS Safari, Samsung Internet, Android Chrome.
+- [ ] The oldest supported browser works: Safari 14.1 or iOS Safari 14.5, if a device or emulator is available.
+- Known gap, not a release blocker: below the floor the page stays blank instead of showing "browser not supported" (see "Decisions needed").
 
 **After each release**
 
@@ -246,7 +248,10 @@ Run all of it on the Vercel preview for Phases 3 and 4. For Phases 1, 2 and 5, r
 
 ## Decisions needed
 
-1. **Browser floor:** accept Next 16's default (Safari 16.4+, Chrome 111+), or keep older browsers with `browserslist`? Needs browser data, and must be decided before Phase 3.
+1. **Browser floor:** decided. Keep the floor production already has: Safari 14.1+, iOS Safari 14.5+, Chrome and Edge 85+, Firefox 79+.
+   - Why: `uuid` 14 (`??=`) and Sentry v11 (class fields) ship modern syntax that Next does not transpile, so production already needs these versions. A lower `browserslist` would not help, because the dependency code would still fail.
+   - Why not Next 16's default (Safari 16.4+, Chrome 111+): the browser JavaScript would stay the same, but the CSS would drop the `appearance`, `-moz-fit-content` and `-webkit-autofill` fallbacks. iPhones that cannot update past iOS 15 would see small visual changes. The `browserslist` field also stops future app code from silently raising the floor.
+   - Known gap: [src/Utils/browsercheck.ts](src/Utils/browsercheck.ts) runs inside the main JavaScript and only blocks Safari below 13. A browser below the floor cannot parse that JavaScript, so it gets a blank page, not the "browser not supported" message. This has been true since `uuid` 14 reached production. A fix is a small plain-JavaScript syntax check in `pages/_document.tsx`. Decide whether it is needed using Vercel Analytics data on browsers below the floor.
 2. **Path:** straight to Next 16 (recommended) or 15.5.x first?
 3. **PR #616:** merge before the upgrade (recommended) or after Phase 3?
 4. **Phases 3 and 4:** two releases (recommended) or one?
