@@ -4,7 +4,7 @@ const INVALID_DOMAIN_LIST = ["dummy.de", "example.com", "company.de"];
 
 export const isEmailValid = (value: string): boolean => {
   try {
-    const emailSchema = z.string().email();
+    const emailSchema = z.email();
     const parsedEmail = emailSchema.parse(value);
 
     const domain = parsedEmail.split("@")[1];
