@@ -20,6 +20,13 @@
     "node": "22.x",
     "npm": "10.x"
   },
+  "browserslist": [
+    "chrome >= 85",
+    "edge >= 85",
+    "firefox >= 79",
+    "safari >= 14.1",
+    "ios_saf >= 14.5"
+  ],
   "dependencies": {
     "@auth0/auth0-react": "^1.5.0",
     "@emotion/react": "^11.10.5",
