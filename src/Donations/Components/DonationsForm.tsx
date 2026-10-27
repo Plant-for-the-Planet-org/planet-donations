@@ -70,7 +70,9 @@ function DonationsForm(): ReactElement {
     utmCampaign,
     utmMedium,
     utmSource,
+    fundraiserId,
     isPackageWanted,
+    welcomePackageLanguage,
     setPaymentRequest,
     isSupportedDonation,
     supportedProjectId,
@@ -206,7 +208,9 @@ function DonationsForm(): ReactElement {
         utmCampaign,
         utmMedium,
         utmSource,
+        fundraiserId,
         isPackageWanted,
+        welcomePackageLanguage,
         isSupportedDonation,
         supportedProjectId,
         getDonationBreakdown,
@@ -317,6 +321,7 @@ function DonationsForm(): ReactElement {
         utm_campaign: utmCampaign,
         utm_medium: utmMedium,
         utm_source: utmSource,
+        ...(fundraiserId && { fundraiser: { id: fundraiserId } }),
       };
 
       // Determine if gift info is complete

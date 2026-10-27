@@ -26,6 +26,7 @@ import { supportedDonationConfig } from "src/Utils/supportedDonationConfig";
 import { DEFAULT_TENANT } from "src/Utils/defaultTenant";
 import { isValidProjectIdentifier } from "src/Utils/projectIdentifier";
 import nextI18NextConfig from "../next-i18next.config.js";
+import { getFundraiserId, isValidFundraiserId } from "src/Utils/fundraiserId";
 
 interface Props {
   projectDetails?: FetchedProjectDetails;
@@ -53,6 +54,7 @@ interface Props {
   utmCampaign: string;
   utmMedium: string;
   utmSource: string;
+  fundraiserId: string;
 }
 
 function index({
@@ -78,6 +80,7 @@ function index({
   utmCampaign,
   utmMedium,
   utmSource,
+  fundraiserId,
   projectDetails,
 }: Props): ReactElement {
   const {
@@ -105,6 +108,7 @@ function index({
     setUtmCampaign,
     setUtmMedium,
     setUtmSource,
+    setFundraiserId,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
 
@@ -131,6 +135,7 @@ function index({
     utmCampaign && setUtmCampaign(utmCampaign);
     utmMedium && setUtmMedium(utmMedium);
     utmSource && setUtmSource(utmSource);
+    fundraiserId && setFundraiserId(fundraiserId);
     setCountryCode({ setcountry, setcurrency, country });
     setTenant(tenant);
     // If gift details are present, initialize gift in context
@@ -247,6 +252,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let utmCampaign = "";
   let utmMedium = "";
   let utmSource = "";
+  let fundraiserId = "";
   const locale = context.locale || "en";
 
   function setShowErrorCard() {
@@ -354,6 +360,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           utmCampaign = donation.metadata.utm_campaign || "";
           utmMedium = donation.metadata.utm_medium || "";
           utmSource = donation.metadata.utm_source || "";
+          fundraiserId = getFundraiserId(donation.metadata);
         }
         // This will fetch the payment options
         try {
@@ -429,6 +436,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     utmMedium = context.query.utm_medium;
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
+  if (
+    typeof context.query.fundraiser_id === "string" &&
+    isValidFundraiserId(context.query.fundraiser_id)
+  )
+    fundraiserId = context.query.fundraiser_id;
 
   const isSupportedDonation =
     typeof context.query.tenant === "string" &&
@@ -577,6 +589,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       utmCampaign,
       utmMedium,
       utmSource,
+      fundraiserId,
     }, // will be passed to the page component as props
   };
 };

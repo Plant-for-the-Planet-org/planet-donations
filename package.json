@@ -13,8 +13,8 @@
     "prepare": "node ./husky-prepare.js"
   },
   "validate-branch-name": {
-    "pattern": "^(main|develop){1}$|^(feature|hotfix)/[a-z0-9-_]+$",
-    "errorMsg": "Invalid branch name. \n 1.Branch names can contain lowercase characters, numbers, hyphen and underscore. \n 2.Except for 'main' and 'develop', branch names must begin with 'feature/' or 'hotfix/' "
+    "pattern": "^(main|develop)$|^(feature|hotfix|fix)/[a-z0-9_-]+$|^dependabot/[a-z0-9_./-]+$|^snyk-[a-z0-9-]+$|^lingohub_language_update_[0-9-]+Z$",
+    "errorMsg": "Invalid branch name. \n 1.Branch names can contain lowercase characters, numbers, hyphen and underscore. \n 2.Except for 'main' and 'develop', branch names must begin with 'feature/', 'fix/' or 'hotfix/'. \n 3.Bot branches starting with 'dependabot/', 'snyk-' or 'lingohub_language_update_' are also allowed."
   },
   "engines": {
     "node": "22.x",
@@ -43,7 +43,7 @@
     "material-ui-popup-state": "^5.0.8",
     "next": "~16.3.8",
     "next-i18next": "^13.1.5",
-    "puppeteer-core": "^25.1.0",
+    "puppeteer-core": "^25.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.43.1",
@@ -51,7 +51,7 @@
     "sass": "^1.35.1",
     "styled-jsx": "^5.1.0",
     "uuid": "^14.0.0",
-    "zod": "^3.22.4"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

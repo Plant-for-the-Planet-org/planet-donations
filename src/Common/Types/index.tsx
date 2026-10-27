@@ -13,6 +13,7 @@ import {
   CurrencyCode,
 } from "@planet-sdk/common";
 import { DonationBreakdown } from "./QueryParamContextInterface";
+import { WelcomePackageLanguage } from "./donation";
 
 /** planet-donations only allows direct or invitation gifts */
 export interface DirectGiftDetails extends SentDirectGift {
@@ -61,7 +62,9 @@ export interface CreateDonationFunctionProps {
   utmCampaign?: string | undefined;
   utmMedium?: string | undefined;
   utmSource?: string | undefined;
+  fundraiserId?: string | undefined;
   isPackageWanted: boolean | null;
+  welcomePackageLanguage: WelcomePackageLanguage | null;
   tenant: string;
   locale: string;
   // Add supported donation parameters
@@ -116,13 +119,16 @@ export interface CreateDonationDataProps {
   isGift: boolean;
   giftDetails: GiftDetails | NoGift;
   frequency: string;
+  locale: string;
   amount?: number | null;
   callbackUrl: string | undefined;
   callbackMethod: string | undefined;
   utmCampaign: string | undefined;
   utmMedium: string | undefined;
   utmSource: string | undefined;
+  fundraiserId: string | undefined;
   isPackageWanted: boolean | null;
+  welcomePackageLanguage: WelcomePackageLanguage | null;
   isSupportedDonation?: boolean;
   supportedProjectId?: string | null;
   getDonationBreakdown?: () => DonationBreakdown;

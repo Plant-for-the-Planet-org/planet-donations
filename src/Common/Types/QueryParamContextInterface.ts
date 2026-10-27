@@ -6,6 +6,7 @@ import {
   PaymentOptions,
   PlanetCashSignupDetails,
 } from ".";
+import { WelcomePackageLanguage } from "./donation";
 import { ProjectMapInfo as Project } from "@planet-sdk/common/build/types/project";
 import { User } from "@planet-sdk/common/build/types/user";
 import {
@@ -78,8 +79,14 @@ export default interface QueryParamContextInterface {
   setUtmMedium: Dispatch<SetStateAction<string>>;
   utmSource: string;
   setUtmSource: Dispatch<SetStateAction<string>>;
+  fundraiserId: string;
+  setFundraiserId: Dispatch<SetStateAction<string>>;
   isPackageWanted: boolean | null;
   setIsPackageWanted: Dispatch<SetStateAction<boolean | null>>;
+  welcomePackageLanguage: WelcomePackageLanguage | null;
+  setWelcomePackageLanguage: Dispatch<
+    SetStateAction<WelcomePackageLanguage | null>
+  >;
   isDirectDonation: boolean;
   setisDirectDonation: Dispatch<SetStateAction<boolean>>;
   tenant: string | null;

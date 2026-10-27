@@ -19,6 +19,11 @@ import { AddressCandidate, GeocodeSuggestion } from "src/Common/Types/arcgis";
 import GiftIcon from "public/assets/icons/GiftIcon";
 import { euCountries } from "src/Utils/countryUtils";
 import { isEmailValid } from "src/Utils/isEmailValid";
+import { getWelcomePackageLanguageFromLocale } from "src/Utils/welcomePackageLanguage";
+import { WelcomePackageLanguage } from "src/Common/Types/donation";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import GreenRadio from "../../Common/InputTypes/GreenRadio";
 // import { DevTool } from "@hookform/devtools";
 
 interface FormData extends ContactDetails {
@@ -58,6 +63,8 @@ function ContactsForm(): ReactElement {
     setTaxIdentificationAvail,
     isPackageWanted,
     setIsPackageWanted,
+    welcomePackageLanguage,
+    setWelcomePackageLanguage,
     isSupportedDonation,
     getDonationBreakdown,
   } = React.useContext(QueryParamContext);
@@ -86,6 +93,7 @@ function ContactsForm(): ReactElement {
     reset,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     mode: "onTouched",
@@ -145,6 +153,18 @@ function ContactsForm(): ReactElement {
       setValue("isPackageWanted", false);
     }
   }, [projectDetails, contactDetails.country]);
+
+  // Preselect from the app locale. Keep the user's choice
+  // if one is already stored (e.g. coming back from the payment step).
+  React.useEffect(() => {
+    if (welcomePackageLanguage === null) {
+      setWelcomePackageLanguage(
+        getWelcomePackageLanguageFromLocale(i18n.language),
+      );
+    }
+  }, []);
+
+  const showWelcomePackageLanguage = watch("isPackageWanted") === true;
 
   const [addressSugggestions, setaddressSugggestions] = React.useState<
     GeocodeSuggestion[]
@@ -209,6 +229,10 @@ function ContactsForm(): ReactElement {
   }, [isSupportedDonation, getDonationBreakdown, paymentSetup, quantity]);
 
   const { theme } = React.useContext(ThemeContext);
+  const radioColor =
+    theme === "theme-light"
+      ? themeProperties.light.primaryFontColor
+      : themeProperties.dark.primaryFontColor;
   let suggestion_counter = 0;
   return (
     <div className="right-panel-container">
@@ -503,10 +527,50 @@ function ContactsForm(): ReactElement {
 
           {isEligibleForPackage && (
             <div className="welcome-package-toggle mt-20">
-              <label htmlFor="welcomePackage-toggle">
-                <GiftIcon color={themeProperties.light.secondaryColor} />
-                {t("welcomePackageConsent")}
-              </label>
+              <div className="welcome-package-content">
+                <label htmlFor="welcomePackage-toggle">
+                  <GiftIcon color={themeProperties.light.secondaryColor} />
+                  {t("welcomePackageConsent")}
+                </label>
+                {showWelcomePackageLanguage && (
+                  <div className="welcome-package-language">
+                    <p
+                      id="welcomePackageLanguage-title"
+                      className="welcome-package-language-title"
+                    >
+                      {t("welcomePackageLanguage")}
+                    </p>
+                    <RadioGroup
+                      row
+                      aria-labelledby="welcomePackageLanguage-title"
+                      name="welcomePackageLanguage"
+                      className="welcome-package-language-options"
+                      value={
+                        welcomePackageLanguage ??
+                        getWelcomePackageLanguageFromLocale(i18n.language)
+                      }
+                      onChange={(event) =>
+                        setWelcomePackageLanguage(
+                          event.target.value as WelcomePackageLanguage,
+                        )
+                      }
+                    >
+                      <FormControlLabel
+                        value="de"
+                        control={<GreenRadio sx={{ color: radioColor }} />}
+                        label={t("welcomePackageLanguageDe")}
+                        data-test-id="test-welcomePackageLanguage-de"
+                      />
+                      <FormControlLabel
+                        value="en"
+                        control={<GreenRadio sx={{ color: radioColor }} />}
+                        label={t("welcomePackageLanguageEn")}
+                        data-test-id="test-welcomePackageLanguage-en"
+                      />
+                    </RadioGroup>
+                  </div>
+                )}
+              </div>
               <Controller
                 name="isPackageWanted"
                 control={control}

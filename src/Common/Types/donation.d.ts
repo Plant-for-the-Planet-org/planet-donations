@@ -1,13 +1,17 @@
 import { ProjectPurpose, SentGift } from ".";
 import { ContactDetails } from "@planet-sdk/common";
 
+export type WelcomePackageLanguage = "en" | "de";
+
 export interface Metadata {
   callback_method?: string;
   callback_url?: string;
   utm_campaign?: string;
   utm_medium?: string;
   utm_source?: string;
+  fundraiser?: { id: string };
   welcomePackageStatus?: "draft";
+  welcomePackageLanguage?: WelcomePackageLanguage;
 }
 
 export interface LineItem {
