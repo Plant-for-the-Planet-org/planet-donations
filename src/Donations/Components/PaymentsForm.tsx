@@ -184,9 +184,14 @@ function PaymentsForm(): ReactElement {
     });
 
     if (router.query.to) {
-      router.replace({
-        query: { ...router.query, step: PAYMENT },
-      });
+      // Shallow, so the server does not send a new donationStep that resets the page to step 1
+      router.replace(
+        {
+          query: { ...router.query, step: PAYMENT },
+        },
+        undefined,
+        { shallow: true },
+      );
     }
     if (router.query.context) {
       router.replace({
