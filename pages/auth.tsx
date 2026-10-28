@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next/types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import AuthInterstitial from "src/Common/AuthInterstitial";
+import nextI18NextConfig from "../next-i18next.config.js";
 
 const AuthRedirect = (): ReactElement | null => {
   const router = useRouter();
@@ -27,11 +28,11 @@ export default AuthRedirect;
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale || "en", [
-        "common",
-        "country",
-        "donate",
-      ])),
+      ...(await serverSideTranslations(
+        locale || "en",
+        ["common", "country", "donate"],
+        nextI18NextConfig,
+      )),
     },
   };
 };

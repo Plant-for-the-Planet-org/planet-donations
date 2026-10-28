@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { GetStaticProps } from "next/types";
+import nextI18NextConfig from "../next-i18next.config.js";
 
 function Custom404(): ReactElement {
   const router = useRouter();
@@ -15,10 +16,10 @@ export default Custom404;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale || "en", [
-      "common",
-      "country",
-      "donate",
-    ])),
+    ...(await serverSideTranslations(
+      locale || "en",
+      ["common", "country", "donate"],
+      nextI18NextConfig,
+    )),
   },
 });
