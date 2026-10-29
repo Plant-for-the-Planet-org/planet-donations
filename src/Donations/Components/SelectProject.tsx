@@ -60,7 +60,10 @@ function SelectProject(): ReactElement {
   const donateToProject = (slug: string) => {
     // Not shallow: the server must return donationStep 1 now, as for a direct project link.
     // Otherwise a later server request returns 1 and pages/index.tsx resets the page to the donate step.
-    router.push({ query: { ...router.query, to: slug, step: DONATE } });
+    // A new project means a new donation, so drop the context of a donation that failed to load
+    const query = { ...router.query };
+    delete query.context;
+    router.push({ query: { ...query, to: slug, step: DONATE } });
   };
 
   return (selectedProjects && selectedProjects.length > 0) || searchValue ? (
