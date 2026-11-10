@@ -61,6 +61,9 @@ function Footer(): ReactElement {
     [parsedCallbackUrl, domain, donationStep],
   );
 
+  // Matches planet-webapp: the notice shows only when analytics runs. Payment provider cookies (Stripe, Google Pay) are left out on purpose for now.
+  const hasTracking = Boolean(process.env.NEXT_PUBLIC_GA_TRACKING_ID);
+
   return ready ? (
     <div className="footer">
       <div className="footer-container">
@@ -168,7 +171,7 @@ function Footer(): ReactElement {
         />
       </div>
       <div style={{ paddingTop: "10px", paddingBottom: "10px" }}></div>
-      <CookiePolicy />
+      {hasTracking && <CookiePolicy />}
     </div>
   ) : (
     <></>
