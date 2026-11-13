@@ -62,6 +62,8 @@ export interface CreateDonationFunctionProps {
   utmCampaign?: string | undefined;
   utmMedium?: string | undefined;
   utmSource?: string | undefined;
+  utmContent?: string | undefined;
+  utmTerm?: string | undefined;
   fundraiserId?: string | undefined;
   isPackageWanted: boolean | null;
   welcomePackageLanguage: WelcomePackageLanguage | null;
@@ -126,6 +128,8 @@ export interface CreateDonationDataProps {
   utmCampaign: string | undefined;
   utmMedium: string | undefined;
   utmSource: string | undefined;
+  utmContent: string | undefined;
+  utmTerm: string | undefined;
   fundraiserId: string | undefined;
   isPackageWanted: boolean | null;
   welcomePackageLanguage: WelcomePackageLanguage | null;
