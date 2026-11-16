@@ -132,7 +132,7 @@ function DonationsForm(): ReactElement {
     projectDetails,
     isGift,
     giftDetails,
-    hasPlanetCashGateway: paymentSetup?.gateways["planet-cash"] !== undefined,
+    planetCashGateway: paymentSetup?.gateways?.["planet-cash"],
     hasRecurringFrequenciesOnly:
       paymentSetup !== null && paymentSetup.frequencies["once"] === undefined,
   });

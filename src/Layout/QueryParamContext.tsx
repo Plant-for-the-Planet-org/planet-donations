@@ -544,20 +544,13 @@ const QueryParamProvider = ({
     paymentSetupCountry: string;
     shouldSetPaymentDetails?: boolean;
   }) => {
-    const token =
-      profile === null
-        ? null
-        : queryToken ||
-          (router.query.token as string) ||
-          (await getAccessTokenSilently());
-
     setIsPaymentOptionsLoading(true);
     try {
       const requestParams = {
         url: `/app/paymentOptions/${encodeURIComponent(projectGUID)}`,
         setShowErrorCard,
         queryParams: { country: paymentSetupCountry },
-        token,
+        // No token: payment options are public and cached. Send one only together with legacyPriceFor, which donate does not use.
         tenant: tenant || DEFAULT_TENANT,
         locale: i18n.language,
       };
