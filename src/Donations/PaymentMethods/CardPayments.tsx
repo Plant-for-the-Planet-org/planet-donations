@@ -11,6 +11,7 @@ import React, { Dispatch, ReactElement, SetStateAction } from "react";
 import { useTranslation } from "next-i18next";
 import themeProperties from "../../../styles/themeProperties";
 import { ThemeContext } from "../../../styles/themeContext";
+import InfoIcon from "../../../public/assets/icons/InfoIcon";
 import { QueryParamContext } from "src/Layout/QueryParamContext";
 import { ContactDetails } from "@planet-sdk/common";
 import {
@@ -211,7 +212,12 @@ function CardPayments({
 
   return ready ? (
     <div>
-      {paymentError && <div className={"paymentError"}>{paymentError}</div>}
+      {paymentError && (
+        <div className="mb-20 d-flex align-items-center callout-danger text-danger">
+          <InfoIcon />
+          {paymentError}
+        </div>
+      )}
 
       {
         <div id="card-element">

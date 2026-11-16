@@ -119,7 +119,12 @@ function SepaPayments({
 
   return ready ? (
     <div>
-      {paymentError && <div className={paymentError}>{paymentError}</div>}
+      {paymentError && (
+        <div className="mb-20 d-flex align-items-center callout-danger text-danger">
+          <InfoIcon />
+          {paymentError}
+        </div>
+      )}
 
       <div className={"disclaimer-container"}>
         <InfoIcon />
