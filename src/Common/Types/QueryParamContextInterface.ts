@@ -79,6 +79,10 @@ export default interface QueryParamContextInterface {
   setUtmMedium: Dispatch<SetStateAction<string>>;
   utmSource: string;
   setUtmSource: Dispatch<SetStateAction<string>>;
+  utmContent: string;
+  setUtmContent: Dispatch<SetStateAction<string>>;
+  utmTerm: string;
+  setUtmTerm: Dispatch<SetStateAction<string>>;
   fundraiserId: string;
   setFundraiserId: Dispatch<SetStateAction<string>>;
   isPackageWanted: boolean | null;

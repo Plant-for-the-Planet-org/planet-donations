@@ -44,6 +44,8 @@ function FailedDonation({
     setUtmCampaign,
     setUtmMedium,
     setUtmSource,
+    setUtmContent,
+    setUtmTerm,
     setFundraiserId,
     setredirectstatus,
     loadPaymentSetup,
@@ -115,6 +117,8 @@ function FailedDonation({
     setUtmCampaign(donation.metadata?.utm_campaign || "");
     setUtmMedium(donation.metadata?.utm_medium || "");
     setUtmSource(donation.metadata?.utm_source || "");
+    setUtmContent(donation.metadata?.utm_content || "");
+    setUtmTerm(donation.metadata?.utm_term || "");
     setFundraiserId(getFundraiserId(donation.metadata));
     setredirectstatus("");
     setdonationStep(3);

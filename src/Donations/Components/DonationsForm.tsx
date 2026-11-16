@@ -70,6 +70,8 @@ function DonationsForm(): ReactElement {
     utmCampaign,
     utmMedium,
     utmSource,
+    utmContent,
+    utmTerm,
     fundraiserId,
     isPackageWanted,
     welcomePackageLanguage,
@@ -208,6 +210,8 @@ function DonationsForm(): ReactElement {
         utmCampaign,
         utmMedium,
         utmSource,
+        utmContent,
+        utmTerm,
         fundraiserId,
         isPackageWanted,
         welcomePackageLanguage,
@@ -321,6 +325,8 @@ function DonationsForm(): ReactElement {
         utm_campaign: utmCampaign,
         utm_medium: utmMedium,
         utm_source: utmSource,
+        utm_content: utmContent,
+        utm_term: utmTerm,
         ...(fundraiserId && { fundraiser: { id: fundraiserId } }),
       };
 

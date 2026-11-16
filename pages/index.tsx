@@ -54,6 +54,8 @@ interface Props {
   utmCampaign: string;
   utmMedium: string;
   utmSource: string;
+  utmContent: string;
+  utmTerm: string;
   fundraiserId: string;
 }
 
@@ -80,6 +82,8 @@ function index({
   utmCampaign,
   utmMedium,
   utmSource,
+  utmContent,
+  utmTerm,
   fundraiserId,
   projectDetails,
 }: Props): ReactElement {
@@ -108,6 +112,8 @@ function index({
     setUtmCampaign,
     setUtmMedium,
     setUtmSource,
+    setUtmContent,
+    setUtmTerm,
     setFundraiserId,
     setprojectDetails,
   } = React.useContext(QueryParamContext);
@@ -135,6 +141,8 @@ function index({
     utmCampaign && setUtmCampaign(utmCampaign);
     utmMedium && setUtmMedium(utmMedium);
     utmSource && setUtmSource(utmSource);
+    utmContent && setUtmContent(utmContent);
+    utmTerm && setUtmTerm(utmTerm);
     fundraiserId && setFundraiserId(fundraiserId);
     setCountryCode({ setcountry, setcurrency, country });
     setTenant(tenant);
@@ -252,6 +260,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let utmCampaign = "";
   let utmMedium = "";
   let utmSource = "";
+  let utmContent = "";
+  let utmTerm = "";
   let fundraiserId = "";
   const locale = context.locale || "en";
 
@@ -360,6 +370,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           utmCampaign = donation.metadata.utm_campaign || "";
           utmMedium = donation.metadata.utm_medium || "";
           utmSource = donation.metadata.utm_source || "";
+          utmContent = donation.metadata.utm_content || "";
+          utmTerm = donation.metadata.utm_term || "";
           fundraiserId = getFundraiserId(donation.metadata);
         }
         // This will fetch the payment options
@@ -436,6 +448,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     utmMedium = context.query.utm_medium;
   if (typeof context.query.utm_source === "string")
     utmSource = context.query.utm_source;
+  if (typeof context.query.utm_content === "string")
+    utmContent = context.query.utm_content;
+  if (typeof context.query.utm_term === "string")
+    utmTerm = context.query.utm_term;
   if (
     typeof context.query.fundraiser_id === "string" &&
     isValidFundraiserId(context.query.fundraiser_id)
@@ -589,6 +605,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       utmCampaign,
       utmMedium,
       utmSource,
+      utmContent,
+      utmTerm,
       fundraiserId,
     }, // will be passed to the page component as props
   };

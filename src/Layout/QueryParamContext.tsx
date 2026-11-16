@@ -133,6 +133,8 @@ const QueryParamProvider = ({
   const [utmCampaign, setUtmCampaign] = useState("");
   const [utmMedium, setUtmMedium] = useState("");
   const [utmSource, setUtmSource] = useState("");
+  const [utmContent, setUtmContent] = useState("");
+  const [utmTerm, setUtmTerm] = useState("");
   // Kept until a full reload, so it can go with a donation to a different project if the user navigates to it. This is an acceptable edge case: a fundraiser's project can change at any time, so donate does not check that they match.
   const [fundraiserId, setFundraiserId] = useState("");
   const [isPackageWanted, setIsPackageWanted] = useState<boolean | null>(null);
@@ -747,6 +749,10 @@ const QueryParamProvider = ({
         setUtmMedium,
         utmSource,
         setUtmSource,
+        utmContent,
+        setUtmContent,
+        utmTerm,
+        setUtmTerm,
         fundraiserId,
         setFundraiserId,
         isPackageWanted,
