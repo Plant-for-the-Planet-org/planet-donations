@@ -266,10 +266,16 @@ export interface Offline {
 }
 
 export interface PlanetCashGateway {
-  account: string;
-  balance: number;
-  creditLimit: number;
-  available: number;
+  /** PlanetCash account countries allowed to pay for this project. An empty list means every country. Missing on older backend responses. */
+  countries?: string[];
+  /** @deprecated Older backends send these only for authenticated calls. Read the account from the profile instead. */
+  account?: string;
+  /** @deprecated See `account`. */
+  balance?: number;
+  /** @deprecated See `account`. */
+  creditLimit?: number;
+  /** @deprecated See `account`. */
+  available?: number;
 }
 
 export interface OptionsEntity {
