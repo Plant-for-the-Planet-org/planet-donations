@@ -412,7 +412,7 @@ const QueryParamProvider = ({
       }
     },
     1000,
-    [router.query.to, country, profile?.slug],
+    [router.query.to, country],
   );
 
   async function loadConfig() {
