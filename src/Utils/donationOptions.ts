@@ -52,8 +52,6 @@ export const isPlanetCashAllowed = ({
     !hasRecurringFrequenciesOnly &&
     projectDetails !== null &&
     PLANETCASH_ALLOWED_PROJECT_PURPOSES.includes(projectDetails.purpose) &&
-    projectDetails.taxDeductionCountries !== undefined &&
-    projectDetails.taxDeductionCountries.includes(profile.planetCash.country) &&
     !(isGift && giftDetails.recipientName === "")
   );
 };
