@@ -1,0 +1,29 @@
+name: 'Type check'
+# Report-only for now: not a required check. See docs/plans/testing-roadmap.md.
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+jobs:
+  typecheck:
+    name: 'tsc on Ubuntu'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout the repository'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'npm'
+
+      - name: 'Install Node Modules'
+        run: npm ci
+        env:
+          # tsc needs the Cypress types, not the Cypress app.
+          CYPRESS_INSTALL_BINARY: 0
+
+      - name: 'Check that no new type errors were added'
+        run: npm run typecheck:baseline
