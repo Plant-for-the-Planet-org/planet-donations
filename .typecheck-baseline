@@ -1,0 +1,67 @@
+pages/_app.tsx: TS2559: Type '{ children: Element; }' has no properties in common with type 'IntrinsicAttributes'.
+src/Common/AuthInterstitial/index.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Common/InputTypes/AutoCompleteCountry.tsx: TS2339: Property 'code' does not exist on type 'never'.
+src/Common/InputTypes/AutoCompleteCountry.tsx: TS2339: Property 'label' does not exist on type 'never'.
+src/Common/InputTypes/AutoCompleteCountry.tsx: TS2345: Argument of type 'CountryType' is not assignable to parameter of type 'SetStateAction<undefined>'.
+src/Common/InputTypes/AutoCompleteCountry.tsx: TS2345: Argument of type '{ code: string; label: string; phone: string; suggested?: undefined; } | { code: string; label: string; phone: string; suggested: boolean; }' is not assignable to parameter of type 'SetStateAction<undefined>'.
+src/Common/Types/index.tsx: TS2304: Cannot find name 'Nullable'.
+src/Donations/Components/ContactsForm.tsx: TS7016: Could not find a declaration file for module 'geocoder-arcgis'. 'node_modules/geocoder-arcgis/dist/index.js' implicitly has an 'any' type.
+src/Donations/Components/DonationsForm.tsx: TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+src/Donations/Components/DonationsForm.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/Components/DonationsForm.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/Components/DonationsForm.tsx: TS2339: Property '_activeBackingLibraryName' does not exist on type 'PaymentRequest'.
+src/Donations/Components/PaymentStatus.tsx: TS2345: Argument of type '{ url: string; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; tenant: string | null; locale: string; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/Components/PaymentsForm.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/Components/PaymentsForm.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/Components/PaymentsForm.tsx: TS2322: Type '{ paymentSetup: PaymentOptions; totalAmount: number; currency: string; donationID: string; payDonationFunction: (gateway: PaymentGateway, method: string, providerObject?: string | ... 3 more ... | undefined) => Promise<...>; setPaymentError: Dispatch<...>; }' is not assignable to type 'IntrinsicAttributes & Props'.
+src/Donations/Components/PaymentsForm.tsx: TS2339: Property '_activeBackingLibraryName' does not exist on type 'PaymentRequest'.
+src/Donations/Components/PaymentsForm.tsx: TS2345: Argument of type '{ url: string; data: { publish: boolean | null; }; method: "PUT"; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; tenant: string | null; locale: string; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/LeftPanel/LeftPanelContainer.tsx: TS2339: Property 'children' does not exist on type 'Props'.
+src/Donations/LeftPanel/LeftPanelHeader.tsx: TS2339: Property 'children' does not exist on type '{}'.
+src/Donations/LeftPanel/index.tsx: TS2322: Type 'boolean | null' is not assignable to type 'boolean'.
+src/Donations/LeftPanel/index.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/LeftPanel/index.tsx: TS2322: Type 'string | null' is not assignable to type 'string'.
+src/Donations/LeftPanel/index.tsx: TS2559: Type '{ children: (false | Element)[]; }' has no properties in common with type 'IntrinsicAttributes'.
+src/Donations/Micros/Authentication.tsx: TS2345: Argument of type '{ displayName: string; firstname: string; email: string; }' is not assignable to parameter of type 'User'.
+src/Donations/Micros/Authentication.tsx: TS2345: Argument of type '{ displayName: string; firstname: string; email: string; }' is not assignable to parameter of type 'User'.
+src/Donations/Micros/Authentication.tsx: TS2345: Argument of type '{ url: string; token: string; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; tenant: string | null; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/Micros/GiftForm.tsx: TS2367: This comparison appears to be unintentional because the types 'TreeProjectClassification | null | undefined' and '"membership"' have no overlap.
+src/Donations/Micros/PaymentStatus/FailedDonation.tsx: TS2339: Property 'lineItems' does not exist on type 'Donation'.
+src/Donations/Micros/PaymentStatus/TransferDetails.tsx: TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/Donations/Micros/PlanetCashSignup.tsx: TS2345: Argument of type '{ method: "POST"; url: string; token: string; data: { country: string; activate: boolean; }; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; tenant: string | null; locale: string; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/Micros/PlanetCashSignup.tsx: TS2345: Argument of type '{ method: "POST"; url: string; token: string; tenant: string | null; locale: string; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/Micros/PlanetCashSignup.tsx: TS2345: Argument of type '{ url: string; token: string; setShowErrorCard: React.Dispatch<React.SetStateAction<boolean>>; tenant: string | null; locale: string; }' is not assignable to parameter of type 'ExtendedRequestParams'.
+src/Donations/PaymentMethods/NewPaypal.tsx: TS2322: Type 'string | null' is not assignable to type 'string | undefined'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS18046: 'error' is of type 'unknown'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS2339: Property 'data' does not exist on type 'string | StripeError'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS2339: Property 'data' does not exist on type 'string | StripeError'.
+src/Donations/PaymentMethods/PaymentFunctions.ts: TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string | StripeError | undefined'.
+src/Donations/PaymentMethods/PaymentRequestCustomButton.tsx: TS2339: Property '_canMakePaymentAvailability' does not exist on type 'PaymentRequest'.
+src/Donations/PaymentMethods/PaymentRequestCustomButton.tsx: TS2339: Property '_canMakePaymentAvailability' does not exist on type 'PaymentRequest'.
+src/Donations/PaymentMethods/PaymentRequestCustomButton.tsx: TS2339: Property '_canMakePaymentAvailability' does not exist on type 'PaymentRequest'.
+src/Donations/PaymentMethods/PaymentRequestCustomButton.tsx: TS2339: Property 'hasRegisteredListener' does not exist on type 'PaymentRequest'.
+src/Layout/QueryParamContext.tsx: TS2345: Argument of type 'null' is not assignable to parameter of type 'QueryParamContextInterface'.
+src/Layout/index.tsx: TS2339: Property 'children' does not exist on type '{}'.
+src/Utils/browsercheck.ts: TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap.
+src/Utils/browsercheck.ts: TS2531: Object is possibly 'null'.
+src/Utils/browsercheck.ts: TS7006: Parameter 'a' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'a' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'a' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'a' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'b' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'b' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'b' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'b' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7006: Parameter 'object' implicitly has an 'any' type.
+src/Utils/browsercheck.ts: TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ "<": (a: any, b: any) => boolean; "<=": (a: any, b: any) => boolean; ">": (a: any, b: any) => boolean; ">=": (a: any, b: any) => boolean; }'.
+src/Utils/browsercheck.ts: TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ "<": (a: any, b: any) => boolean; "<=": (a: any, b: any) => boolean; ">": (a: any, b: any) => boolean; ">=": (a: any, b: any) => boolean; }'.
