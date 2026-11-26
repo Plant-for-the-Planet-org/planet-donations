@@ -30,6 +30,7 @@ Do not chase a coverage number. Cover the targets below, then add a test with ev
 - `npm run typecheck:baseline` runs `scripts/typecheck-baseline.mjs`. It fails only if there is a type error that is not in `.typecheck-baseline`, and prints just the new errors with their line numbers.
 - `.typecheck-baseline` lists the known errors, one per line, as `file: code: message`. Line numbers are left out, so editing a file does not make its old errors look new. The same error can be listed more than once, and each copy counts.
 - A PR that fixes one error and adds another still fails. Comparing counts alone would miss that.
+- One case is not caught: fixing an error and adding the exact same error (same file, code and message) elsewhere in that file. Without line numbers the two look the same. This is the cost of leaving line numbers out, and it is most likely in `PaymentFunctions.ts`, which has 11 identical `TS18046` errors.
 - `.github/workflows/typecheck.yml` runs the check on PRs to `develop` and `main`.
 - The list starts with 67 errors in 20 files. They were hidden because the build ignores type errors.
 - After fixing errors, run `npm run typecheck:baseline -- --update` and commit `.typecheck-baseline`. The PR diff then shows which errors were fixed. The check fails until you do, because a fixed error left in the list would let the same error come back unnoticed.
