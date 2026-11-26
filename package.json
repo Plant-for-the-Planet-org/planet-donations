@@ -10,7 +10,9 @@
     "lint:errors": "eslint pages src --quiet",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "prepare": "node ./husky-prepare.js"
+    "prepare": "node ./husky-prepare.js",
+    "typecheck": "tsc --noEmit",
+    "typecheck:baseline": "node scripts/typecheck-baseline.mjs"
   },
   "validate-branch-name": {
     "pattern": "^(main|develop)$|^(feature|hotfix|fix)/[a-z0-9_-]+$|^dependabot/[a-z0-9_./-]+$|^snyk-[a-z0-9-]+$|^lingohub_language_update_[0-9-]+Z$",
