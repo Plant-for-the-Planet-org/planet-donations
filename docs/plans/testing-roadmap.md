@@ -32,7 +32,7 @@ Do not chase a coverage number. Cover the targets below, then add a test with ev
 - A PR that fixes one error and adds another still fails. Comparing counts alone would miss that.
 - `.github/workflows/typecheck.yml` runs the check on PRs to `develop` and `main`.
 - The list starts with 67 errors in 20 files. They were hidden because the build ignores type errors.
-- After fixing errors, run `npm run typecheck:baseline -- --update` and commit `.typecheck-baseline`. The PR diff then shows which errors were fixed.
+- After fixing errors, run `npm run typecheck:baseline -- --update` and commit `.typecheck-baseline`. The PR diff then shows which errors were fixed. The check fails until you do, because a fixed error left in the list would let the same error come back unnoticed.
 - An added line in `.typecheck-baseline` means someone accepted a new error. Reviewers should question it. The only good reason is code moving between files, or a TypeScript upgrade that changes error wording.
 - `--update` refuses to run in CI, so CI can never accept a new error by itself.
 

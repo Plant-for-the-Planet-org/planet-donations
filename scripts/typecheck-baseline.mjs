@@ -81,7 +81,9 @@ if (added.length) {
 
 console.log("No new errors.");
 
+// A fixed error left in the list would let the same error come back unnoticed, so the list must be updated.
 if (fixed.length) {
-  console.log(`\nFixed ${fixed.length} error(s). Run \`npm run typecheck:baseline -- --update\` and commit .typecheck-baseline:\n`);
-  console.log(fixed.map((key) => `  ${key}`).join("\n"));
+  console.error(`\nFixed ${fixed.length} error(s), but they are still in .typecheck-baseline. Run \`npm run typecheck:baseline -- --update\` and commit .typecheck-baseline:\n`);
+  console.error(fixed.map((key) => `  ${key}`).join("\n"));
+  process.exit(1);
 }
